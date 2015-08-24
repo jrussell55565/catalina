@@ -19,7 +19,7 @@ $drivername = $_SESSION['drivername'];
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Attempt DEL</title>
+<title>Arrive Shipper</title>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -71,7 +71,7 @@ $drivername = $_SESSION['drivername'];
   <div class="content-wrapper"> 
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Attempted Delivery</h1>
+      <h1>Arrived to Shipper</h1>
       hwb: <?php echo $_GET[hwb]; ?>
       <ol class="breadcrumb">
         <li><a href="orders.php"><i class="fa fa-home"></i> Home</a></li>
@@ -166,9 +166,10 @@ $drivername = $_SESSION['drivername'];
                   </div></td>
               <tr>
                 <td>Trace Notes</td>
-                <td><textarea id="remarks" name="remarks" class="form-control" required placeholder="Please explain Attempt..." ></textarea></td>
+                <td>&nbsp;</td>
               </tr>
             </table>
+            <textarea id="remarks" name="remarks" class="form-control" placeholder="Please Note Arrival time on Original BOL. At shipper longer than 1 hour. Trace Note!!"></textarea>
             </div>
             <!-- /.box-body -->
             
@@ -181,13 +182,13 @@ $drivername = $_SESSION['drivername'];
               </div>
               <div class="box-body">
                 <table class="table table-bordered">
-                  <?php accessorials("DEL",basename(__FILE__),$username); ?>
+                  <?php accessorials("PU",basename(__FILE__),$username); ?>
                 </table>
               </div>
               <!-- /.box-body --> 
             </div>
             <div class="box-footer"> 
-             <input type="submit" class="btn btn-primary" name="btn_sourceform" value="Attempted Delivery"> </input>
+             <input type="submit" class="btn btn-primary" name="btn_sourceform" value="Arrived to Shipper"> </input>
              <input type="hidden" name="recordid" value="<?php echo $_GET[recordid];?>"> </input>
             </div>
             </div>
