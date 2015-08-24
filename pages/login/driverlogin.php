@@ -80,7 +80,7 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
                                       <div id="odo_error1" class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none;"></div>
                                       <div id="odo_error2" class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none;"></div>
                                     <input class="form-control" placeholder="Odometer" name="truck_odometer" type="number"
-                                    value='<?php if(isset($_SESSION['login_truckodometer'])){ echo $_SESSION['login_truckodometer']; }elseif (isset($_COOKIE['login_truckodometer'])){ echo $_COOKIE['login_truckodometer']; } ?>' data-toggle="popover" data-placement="top" data-content="It's okay to have the same odometer entry each day." data-trigger="focus"/>
+                                    value='<?php if(isset($_SESSION['login_truckodometer'])){ echo $_SESSION['login_truckodometer']; }elseif (isset($_COOKIE['login_truckodometer'])){ echo $_COOKIE['login_truckodometer']; } ?>' data-toggle="popover" data-placement="top" data-content="Update odometer at beginging of day, then it's okay to have the same odometer reading all day long." data-trigger="focus"/>
                                 </div>
                                 <div class="form-group">
                                     <label for="LoadPosition">Trailer Number</label>

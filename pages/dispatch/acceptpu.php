@@ -3,276 +3,260 @@ session_start();
 
 if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 {
-        header('Location: driverlogin.php');
+        header('Location: /pages/login/driverlogin.php');
 }
 
-include('global.php');
-include('functions.php');
-
+include($_SERVER['DOCUMENT_ROOT']."/dist/php/global.php");
 mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
 mysql_select_db($db_name) or DIE('Database name is not available!');
 
-$username = $_GET['username'];
-$hawbnumber = $_GET['hawbnumber'];
-$userid = $_GET['userid'];
+$username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
-$exportdest = $_GET['exportdest'];
-$recordid = $_GET['recordid'];
-$trailer = $_SESSION['trailer'];
 
-$sql = mysql_query("select pieces,pallets from dispatch WHERE recordID=$recordid");
-
-        while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-        {
-        $pieces = $row[pieces];
-        $pallets = $row[pallets];
-        }
-
-$sql = mysql_query("select FROM_UNIXTIME(arrivedShipperTime),arrivedShipperTime from dispatch WHERE recordID=$recordid");
-
-        while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-        {
-        	$arrivedTime = $row[0];
-        	$arrivedTimeUnix = $row[1];
-        }
-	$splitArrivedTime = explode(" ",$arrivedTime);
-	$duration = round((time() - $arrivedTimeUnix) / 60);
 ?>
 
-<!doctype html>
-<html lang="en-US">
+<!DOCTYPE html>
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="google-site-verification" content="Df_CpGSbb-SbsXqHJuSRIsNlNQdAFgfyYfZQfoFWauw" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Arrived to Shipper</title>
-<script type="text/javascript" src="http://use.typekit.com/uzj3iee.js"></script>
-<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-<link href="style.css" rel="stylesheet" type="text/css" media="screen" />
+<meta charset="UTF-8">
+<title>Accept PU</title>
+<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+<!-- Bootstrap 3.3.4 -->
+<link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<!-- Font Awesome Icons -->
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 
-<script type="text/javascript">jQuery(document).ready(function($) {$(".article_title").lettering("words").fitText(0.41);});</script>
+<!-- Ionicons -->
+<link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
 
-<style type="text/css" media="screen">
-.banner h1{display: inline-block;}
-body {background-color: #CCC;}
+<!-- Theme style -->
+<link href="<?php echo HTTP;?>/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+<link href="<?php echo HTTP;?>/dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
 
-.banner {
-	position: relative;
-	margin: 0 auto;
-	}
+<!-- Bootstrap time Picker -->
+<link href="<?php echo HTTP;?>/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
 
+<!-- Custom Catalina CSS -->
+<link href="<?php echo HTTP;?>/dist/css/catalina.css" rel="stylesheet" type="text/css" />
 
-::-moz-selection{text-shadow: none;background-color: #fff68c; color: #414141;}
-::selection {text-shadow: none;background-color: #fff68c; color: #414141;}
-body, #nav a, a.article_title, h3, a.fusiontext{color: #414141;}
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-.article_title  {
-	position: relative;
-	font-size: 50px;
-	line-height: 0.8;
-	font-weight: bold;
-	padding:12.25% 0 10%;
-	margin-left: auto;
-	margin-right: auto;
-	display: block;
-	float: none;
-}
+<script language="JavaScript">
+  function toggle(source) {
+  checkboxes = document.getElementsByName('chk_hawb[]');
+  for(var i in checkboxes)
+    checkboxes[i].checked = source.checked;
 
-.article blockquote p{
-	padding-left: 2.25em;
-	color: #666;
-	background:url('http://pcdn.paravel.netdna-cdn.com/wp-content/uploads/2014/03/bq-bg.png') repeat-y;
-}
-
-hr{
-	border: none;
-}
-
-hr:before{
-	content:'***';
-	text-align: center;
-	display: block;
-	margin-bottom:1.5em;
-	letter-spacing:0.125em;
-}
-
-.article .footnotes{
-	color: #666;
-	text-indent: 0;
-	margin-top: 0;
-	padding: 2em 0 0;
-}
-
-@media screen and (min-width: 25.000em) { /*400px*/
-	.article_title{
-		width: 80%;
-		max-width: 30rem;
-	}
-
-@media screen and (min-width: 50.000em) { /*800px*/
-	.article_title{
-		width: 70%;
-		max-width: 36rem;
-	}
-}
-
-@media screen and (min-width: 64.375em){ /*1030px*/
-	.article_title{
-		width: 60%;
-		max-width: 42.5rem;
-	}
-}
-</style>
-
-<!-- All in One SEO Pack 2.0.4.1 by Michael Torbert of Semper Fi Web Design[235,255] -->
-<meta name="keywords" content="drivers login" />
-<link rel='next' href='http://www.catalinacartage.com' />
-
-<link rel="canonical" href="http://catalinacartage.com" />
-<!-- /all in one seo pack -->
-<!-- /wordpress head --> 
-<script>
-if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
-    var msViewportStyle = document.createElement("style");
-    msViewportStyle.appendChild(
-        document.createTextNode(
-            "@-ms-viewport{width:auto!important}"
-        )
-    );
-    document.getElementsByTagName("head")[0].
-        appendChild(msViewportStyle);
-}
+  }
 </script>
-<script src="/wp-content/themes/elguapo/js/paravelplugins.js"></script>
-<script>
-  jQuery(document).ready(function($){
-    // Target your .container, .wrapper, .post, etc.
-    $(".container").fitVids();
-  });
-</script>
-
-<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-
-<style type="text/css">
-<!--
-.style1 {color: #FFFFFF}
--->
+<style>
+.btn-primary.active {
+	background-color: limegreen;
+}
 </style>
 </head>
-    <body onLoad="waitTimePU()">
-    <body class="home blog">
-<div id="pagewrap" class="clearfix">
-  <div class="container clearfix">
-    <header id="header">
-      <div id="nav">
-        <a title="Dispatch Board" class="tw" href="orders.php"><i data-icon="" aria-hidden="true"></i><img src="swoosh only.gif" width="100" height="60"><span class="screen-reader-text">Catalina Cartage</span></a>
-        <ul>
-          <li class="articles"><a title="Articles" href="orders.php">Home</a></li>
-          <li class="notes"><a title="Notes" href="/category/notes/">Notes</a></li>
-          <li class="info"><a title="Info" href="/info">Info</a></li>
-          <li class="search"><a title="Search"  href="/search/">Search</a></li>
-        </ul>
-      </div>
-    </header>
-  </div> <!-- end container -->
-
-  <section class="clearfix">
-    <div class="container">
-
-
-    <article class="post-6591 post type-post status-publish format-standard hentry category-articles tag-design tag-opinion tag-responsive article" id="post-6591">
-        <header class="postheader">
-            <div class="banner">
-                <h1>Accept Pick Up</h1>
-                            </div>
-        </header>
-      
-        <div class="grid-row centered">
-            <form id="arrivedtoshipper" name="arrivedtoshipper" method="post" action="export.php">
-      <table width="350" border="1">
-        <tr>
-          <td width="239">HWB
-            <input name="<?php echo constant('BX_HAWB'); ?>" type="text" id="<?php echo constant('BX_HAWB'); ?>" value="<?php echo $hawbnumber; ?>" size="12" readonly/>
-              <td colspan="2">
-              <td width="42">                  <td width="88" hidden="hidden"><label>
-                <input name="Status" type="text" id="Status" value="Accepted PU" size="15" readonly/>
-                <input type=hidden id="recordid" name="recordid" value="<?php echo "$recordid";?>" />
-                <input type=hidden id="exportdest" name="exportdest" value="<?php echo "$exportdest";?>" />
-                <input type=hidden id="formname" name="formname" value="<?php echo basename(__FILE__);?>" />
-                </label></td>
-        </tr>
-        <tr>
-          <td colspan="4">  <div align="center"></div>            <div align="center"><input type="submit" name="btn_sourceform" id="btn_sourceform" value="Accepted PU" /></div></td>
-        </tr>
-        <tr>
-          <td height="-2">Trace Notes:
-  <input name="<?php echo constant('BX_PUDN'); ?>" type="text" id="<?php echo constant('BX_PUDN'); ?>" value="<?php echo $drivername; ?>" size="12" /></td>
-          <td height="-2" colspan="3">&nbsp;</td>
-        </tr>
-        <tr>
-          <td height="5" colspan="4"><textarea name="Remarks" id="Remarks" cols="50" rows="5"></textarea></td>
-        </tr>
-        <tr>
-          <td colspan="2" ><label><span class="">Check below if service provided:</span></label></td>
-          <td width="53">&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-
-                <tr>
-          <td colspan="3"><div align="center"><input type="submit" name="btn_sourceform" id="btn_sourceform" value="Accepted PU" /></td>
-          </tr>
-        </table>
-</form>
-
-  <footer class="footer-meta">
-    <time pubdate></time>
-  </footer>
-        </p>
-        </div>
-    </article>
+<body class="skin-blue sidebar-mini">
+<div class="wrapper">
+  <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/header.php');?>
+  <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/sidebar.php');?>
+  
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper"> 
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>Accept  Pick Up</h1>
+      hwb: <?php echo $_GET[hwb]; ?>
+      <ol class="breadcrumb">
+        <li><a href="orders.php"><i class="fa fa-home"></i> Home</a></li>
+        <!--        <li><a href="#">Tables</a></li> -->
+        <li class="active">Pickup Confirmed</li>
+      </ol>
+    </section>
     
-    <nav class="pagination"></nav>
-    </div><!-- end .container -->
-</section><!-- end clearfix -->
-<!-- wordpress footer -->  <!-- /wordpress footer -->
-  <div class="container">
-    <footer id="footer">
-      <div class="grid-unit"><span class="twitter"><a href="dispatch.catalinacartage.com">Drivers Login Page</a></span></div><div class="grid-unit"><span class="paravel"><a href="www.catalinacartage.com">Catalina Cartage Home</a></span></div>
-    </footer>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="box">
+          <!-- /.box-header -->
+          <div class="box-body">
+          <form method="post" action="export.php">
+            <table class="table table-bordered">
+              <?php
+                     $recordid = $_GET['recordid'];
+                     $sql = "select pieces, pallets,
+                             FROM_UNIXTIME(arrivedShipperTime) as unix_arrivedshippertime,
+                             arrivedShipperTime from dispatch WHERE recordID=$recordid";
+                      $sql = mysql_query($sql);
+                      while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
+                      {
+                                $pieces = $row[pieces];
+                                $pallets = $row[pallets];
+                                $arrivedTime = $row[arrivedShipperTime];
+                                $arrivedTimeUnix = $row[unix_arrivedshippertime];
+                      }
+                      $splitArrivedTime = explode(" ",$arrivedTimeUnix);
+                      $duration = round((time() - $arrivedTimeUnix) / 60);
+                      mysql_free_result($sql);
+                      if ($pallets == 0 || $pallets == '') # pallets is zero or empty
+                      {
+                          $pallets = $pieces; # Set pallets to what pieces is
+                      }
+                    ?>
+              <tr>
+                <td>Arrive</td>
+                <td><input type="text" id="txt_arrivedTime" name="txt_arrivedTime"
+                    value="<?php echo $splitArrivedTime[1]; ?>" disabled class="form-control"></td>
+              </tr>
+              <tr>
+                <td>Pieces</td>
+                <td><input type="number" id="txt_pieces" name="txt_pieces"
+                    value="<?php echo $pallets; #Yup, use pallets;?>" class="form-control"></td>
+              </tr>
+              <tr>
+                <td>Pallets</td>
+                <td><input type="number" id="txt_pallets" name="txt_pallets"
+                    value="<?php echo $pallets; ?>" class="form-control"></td>
+              </tr>
+              <tr>
+                <td>Trace Note Time</td>
+                <td><div class="bootstrap-timepicker">
+                    <div class="bootstrap-timepicker-widget dropdown-menu">
+                      <table>
+                        <tbody>
+                          <tr>
+                            <td><a href="#" data-action="incrementHour"><i class="glyphicon glyphicon-chevron-up"></i></a></td>
+                            <td class="separator">&nbsp;</td>
+                            <td><a href="#" data-action="incrementMinute"><i class="glyphicon glyphicon-chevron-up"></i></a></td>
+                            <td class="separator">&nbsp;</td>
+                            <td class="meridian-column"><a href="#" data-action="toggleMeridian"><i class="glyphicon glyphicon-chevron-up"></i></a></td>
+                          </tr>
+                          <tr>
+                            <td><span class="bootstrap-timepicker-hour">07</span></td>
+                            <td class="separator">:</td>
+                            <td><span class="bootstrap-timepicker-minute">30</span></td>
+                            <td class="separator">&nbsp;</td>
+                            <td><span class="bootstrap-timepicker-meridian">AM</span></td>
+                          </tr>
+                          <tr>
+                            <td><a href="#" data-action="decrementHour"><i class="glyphicon glyphicon-chevron-down"></i></a></td>
+                            <td class="separator"></td>
+                            <td><a href="#" data-action="decrementMinute"><i class="glyphicon glyphicon-chevron-down"></i></a></td>
+                            <td class="separator">&nbsp;</td>
+                            <td><a href="#" data-action="toggleMeridian"><i class="glyphicon glyphicon-chevron-down"></i></a></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <input type="text" class="form-control timepicker" name="bx_localtime">
+                        <div class="input-group-addon"> <i class="fa fa-clock-o"></i> </div>
+                      </div>
+                      <!-- /.input group --> 
+                    </div>
+                    <!-- /.form group --> 
+                  </div></td>
+              <tr>
+                <td>Trace Notes</td>
+                <td><textarea id="remarks" name="remarks" class="form-control" placeholder="Thanks for letting dispatch know that you have accepted this Pickup."></textarea></td>
+              </tr>
+            </table>
+            </div>
+            <!-- /.box-body -->
+            
+            <div class="box collapsed-box">
+              <div class="box-header with-border">
+                <h3 class="box-title">Accessorials</h3>
+                <div class="box-tools pull-right">
+                  <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
+                </div>
+              </div>
+              <div class="box-body">
+                <table class="table table-bordered">
+                  <?php accessorials("PU",basename(__FILE__),$username); ?>
+                </table>
+              </div>
+              <!-- /.box-body --> 
+            </div>
+            <div class="box-footer"> 
+             <input type="submit" class="btn btn-primary" name="btn_sourceform" value="Accepted PU"> </input>
+             <input type="hidden" name="recordid" value="<?php echo $_GET[recordid];?>"> </input>
+            </div>
+            </div>
+          </form>
+          <!-- /.box --> 
+          <!-- /.box-header --> 
+        </div>
+      </div>
+    </section>
+    <!-- /.content --> 
   </div>
-</div><!-- end pagewrap -->
+  <!-- /.content-wrapper -->
 
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/footer.php');?>
 
-<script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-try {
-var pageTracker = _gat._getTracker("UA-3299532-15");
-pageTracker._trackPageview();
-} catch(err) {}</script>
-<script type="text/javascript" src="http://include.reinvigorate.net/re_.js"></script>
-<script type="text/javascript">
-try {
-reinvigorate.track("2540w-03j8d551b7");
-} catch(err) {}
-</script>
-<script type="text/javascript">
-(function(){
-  var fusion = document.createElement('script');
-  fusion.src = window.location.protocol + '//adn.fusionads.net/api/1.0/ad.js?zoneid=130&rand=' + Math.floor(Math.random()*9999999);
-  fusion.async = true;
-  document.getElementsByTagName('head')[0].appendChild(fusion);
-})();</script>
+  <!-- Control Sidebar -->
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/r_sidebar.php');?>
+  <!-- /.control-sidebar --> 
+  <!-- Add the sidebar's background. This div must be placed
+           immediately after the control sidebar -->
+  <div class='control-sidebar-bg'></div>
+</div>
+<!-- ./wrapper --> 
 
+<!-- jQuery 2.1.4 --> 
+<script src="<?php echo HTTP;?>/plugins/jQuery/jQuery-2.1.4.min.js"></script> 
+<!-- Bootstrap 3.3.2 JS --> 
+<script src="<?php echo HTTP;?>/bootstrap/js/bootstrap.min.js" type="text/javascript"></script> 
+<!-- Select2 --> 
+<script src="<?php echo HTTP;?>/plugins/select2/select2.full.min.js" type="text/javascript"></script> 
+<!-- InputMask --> 
+<script src="<?php echo HTTP;?>/plugins/input-mask/jquery.inputmask.js" type="text/javascript"></script> 
+<script src="<?php echo HTTP;?>/plugins/input-mask/jquery.inputmask.date.extensions.js" type="text/javascript"></script> 
+<script src="<?php echo HTTP;?>/plugins/input-mask/jquery.inputmask.extensions.js" type="text/javascript"></script> 
+<!-- date-range-picker --> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js" type="text/javascript"></script> 
+<script src="<?php echo HTTP;?>/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script> 
+<!-- bootstrap color picker --> 
+<script src="<?php echo HTTP;?>/plugins/colorpicker/bootstrap-colorpicker.min.js" type="text/javascript"></script> 
+
+<!-- bootstrap time picker --> 
+<script src="<?php echo HTTP;?>/plugins/timepicker/bootstrap-timepicker.js" type="text/javascript"></script> 
+<!-- Slimscroll --> 
+<script src="<?php echo HTTP;?>/plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script> 
+
+<!-- iCheck 1.0.1 --> 
+<script src="<?php echo HTTP;?>/plugins/iCheck/icheck.min.js" type="text/javascript"></script> 
+
+<!-- FastClick --> 
+<script src='<?php echo HTTP;?>/plugins/fastclick/fastclick.min.js'></script> 
+<!-- AdminLTE App --> 
+<script src="<?php echo HTTP;?>/dist/js/app.min.js" type="text/javascript"></script> 
+
+<!-- AdminLTE for demo purposes --> 
+<script src="<?php echo HTTP;?>/dist/js/demo.js" type="text/javascript"></script> 
+
+<!-- Page script --> 
+<script type="text/javascript">
+      $(function () {
+        //Timepicker
+        $(".timepicker").timepicker({
+          showInputs: false,
+          showMeridian: false,
+          minuteStep: 1
+        });
+      });
+    </script> 
+
+<!-- Catalina --> 
+<script src="<?php echo HTTP;?>/dist/js/catalina_timepicker.js" type="text/javascript"></script>
 </body>
 </html>
-<!-- Performance optimized by W3 Total Cache.
-
-Page Caching using disk: enhanced
-Database Caching using memcached
-Object Caching 492/536 objects using memcached
-Content Delivery Network via pcdn.paravel.netdna-cdn.com
-
- Served from: catalinacartage.com @ 2014-04-27 01:18:10 by W3 Total Cache -->

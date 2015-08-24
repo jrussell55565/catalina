@@ -34,7 +34,7 @@ $localdate 	= $_POST['bx_localdate'];
 $loadposition	= $_POST['LoadPosition'];
 $remarks	= $_POST['remarks'];
 $statustype	= $_POST['btn_sourceform'];
-$simplestatus	= $_POST['sel_quickStatus'];
+$simplestatus	= $_POST['StatusChange'];
 $pieces		= $_POST['txt_pieces'];
 $pallets	= $_POST['txt_pallets'];
 $podname        = $_POST['podName'];
@@ -99,7 +99,7 @@ switch ($statustype)
 	}
         break;
     case "Trace Note PU":
-	$status = "Trace note PU";
+	$status = "Trace Note PU";
 	$accessorials = processAccessorials($hawb,"PU",$username);
 	if ($remarks != '')
 		{
@@ -168,7 +168,7 @@ switch ($statustype)
 	}
 	    break;
     case "Trace Note DEL":
-	$status = "Trace note DEL";
+	$status = "Trace Note DEL";
 	$accessorials = processAccessorials($hawb,"DEL",$username);
 	if ($remarks != '')
 		{
