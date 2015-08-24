@@ -19,7 +19,7 @@ $drivername = $_SESSION['drivername'];
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Dashboard</title>
+<title>Shipments</title>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -336,46 +336,48 @@ $drivername = $_SESSION['drivername'];
                 $sql .= " ORDER BY str_to_date(hawbDate,'%c/%e/%Y') DESC";
                 $sql = mysql_query($sql);
 
-                # Purple (DBCCE6): Pickup; Green (E9FCE9): Delivered; Red (F8D0D8): Other
+                # Status: Red needs update(EF5350), Turquise (26A69A) Update not complete,
                 $array = array(
-               "Delivered" => "#E9FCE9",
-               "Picked UP" => "#DBCCE6",
-               "In Transit" => "#F8D0D8",
-               "Terminate at Origin" => "#F8D0D8",
-               "Dispatched" => "#F8D0D8",
-               "Booked" => "#F8D0D8",
-               "On Dock TUS" => "#F8D0D8",
-               "Freight At Dock" => "#F8D0D8",
-               "On Dock PHX" => "#F8D0D8",
-               "Dispatched Confirmed" => "#F8D0D8",
-               "CALL FOR APPOINTMENT" => "#F8D0D8",
-               "Out for Delivery" => "#F8D0D8",
-               "Need Routing" => "#F8D0D8",
-               "Need 2 Sch Appt" => "#F8D0D8",
-               "Hold For Routing" => "#F8D0D8",
-               "On Dock LAX" => "#F8D0D8",
-               "Verify Delivery Date" => "#F8D0D8",
-               "Arrived to Shipper" => "#F8D0D8",
-               "Ready To Invoice" => "#F8D0D8",
-               "On Hand Destination" => "#F8D0D8",
-               "Appointment Scheduled" => "#F8D0D8",
-               "ATTEMPT" => "#F8D0D8",
-               "Recovered" => "#F8D0D8",
-               "Verify Pickup Date" => "#F8D0D8",
-               "Refused" => "#F8D0D8",
-               "In Storage" => "#F8D0D8",
-               "Unable to Locate" => "#F8D0D8",
-               "Arrived to Consignee" => "#F8D0D8",
-               "APPT. SCHEDULED" => "#F8D0D8",
-               "Trailer Dropped" => "#F8D0D8",
-               "New Hwb" => "#F8D0D8",
-               "Attempted Delivery" => "#F8D0D8",
+               "Picked Up" => "#80CBC4",
+               "Trailer Dropped" => "#80CBC4",
+               "Trace Note PU" => "#FFB74D",
+               "Trace Note DEL" => "#FFB74D",
+               "Appointment Scheduled" => "#80CBC4",
+               "On Dock TUS" => "#80CBC4",
+               "Freight At Dock" => "#80CBC4",
+               "On Dock PHX" => "#80CBC4",
+               "In Transit" => "#80CBC4",
+               "On Dock LAX" => "#80CBC4",
+               "APPT. SCHEDULED" => "#80CBC4",
+               "Delivered" => "#71f971",
+               "Ready To Invoice" => "#71f971",
+               "Verify Pickup Date" => "#90A4AE",
+               "Hold For Routing" => "#90A4AE",
+               "Verify Delivery Date" => "#90A4AE",
+               "Recovered" => "#90A4AE",
+               "In Storage" => "#90A4AE",
                "Outside Carrier Scheduled" => "#F8D0D8",
-               "Attempted Pick Up" => "#F8D0D8",
                "Verify Shipment Assignment" => "#F8D0D8",
                "Left Apt Message" => "#F8D0D8",
-               "Trace note PU" => "#F8D0D8",
-               "Accepted PU" => "#F8D0D8",
+               "CALL FOR APPOINTMENT" => "#90A4AE",
+               "Need Routing" => "#90A4AE",
+               "Need 2 Sch Appt" => "#90A4AE",
+               "On Hand Destination" => "#90A4AE",
+               "ATTEMPT" => "#dd4b39",
+               "Attempted Delivery" => "#dd4b39",
+               "Unable to Locate" => "#dd4b39",
+               "New Hwb" => "#dd4b39",
+               "Booked" => "#dd4b39",
+               "Attempted Pick Up" => "#dd4b39",
+               "Refused" => "#dd4b39",
+               "Out for Delivery" => "#dd4b39",
+               "Terminate at Origin" => "#dd4b39",
+               "Accepted PU" => "#FFB74D",
+               "Accepted DEL" => "#FFB74D",
+               "Arrived to Consignee" => "#FFB74D",
+               "Dispatched" => "#FFB74D",
+               "Dispatched Confirmed" => "#FFB74D",
+               "Arrived to Shipper" => "#FFB74D",
                 );
                 $counter = 0;
                 while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
