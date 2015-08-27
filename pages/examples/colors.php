@@ -6,7 +6,7 @@ if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
         header('Location: /pages/login/driverlogin.php');
 }
 
-include("../examples/$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
+include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
 mysql_select_db($db_name) or DIE('Database name is not available!');
 
@@ -18,7 +18,7 @@ $drivername = $_SESSION['drivername'];
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Admin Control</title>
+<title>Dashboard</title>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -49,13 +49,10 @@ $drivername = $_SESSION['drivername'];
     <div class="content-wrapper"> 
       <!-- Content Header (Page header) -->
       <section class="content-header">
-        <h1> Admin Main</h1>
+        <h1> HWB Color Info</h1>
         <ol class="breadcrumb">
-          <li><a href="/pages/admin.php"><i class="fa fa-home"></i> Admin Home</a></li>
-          <li class="active">Edit Users</li>
-          <li class="active">All Shipments</li>
-          <li class="active">Accessorials Edit</li>
-          <li class="active">Drivers Locations</li>
+          <li><a href="/pages/dispatch/orders.php"><i class="fa fa-home"></i> Home</a></li>
+          <li class="active">HWB Color Info</li>
         </ol>
       </section>
       
@@ -65,13 +62,18 @@ $drivername = $_SESSION['drivername'];
         <div class="col-md-8">
           <div class="box">
             <div class="box-header with-border">
-              <h4 class="box-title"></h4>
+              <h4 class="box-title">Hello, Thank you for checking what the Colors mean.</h4>
+              <p>Red (warning) Driver update or Please call in Dispatch</p>
+              <p>Blue (neutral) Shipment not Finished Updates Needed from Dispatch or Driver needed</p>
+              <p>Orange (warning) Driver needs to update shipment.</p>
+              <p>Grey (Dispatch) Dispatch contacting Client for next action.</p>
+              <p>Green (Finished) All is done with shipment. Ok to Archive or Delete</p>
               <div class="box-tools">
                 <ul class="pagination pagination-sm no-margin pull-right">
                   <li>
-                   <a href="../examples/orders.php?gather=pu">Page1</a></li>
+                   <a href="#">Page1</a></li>
                   <li>
-                   <a href="../examples/orders.php?gather=del">Page2</a></li>
+                   <a href="#">Page2</a></li>
                 </ul>
               </div>
             </div>
