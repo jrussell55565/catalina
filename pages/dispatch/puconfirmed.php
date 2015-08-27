@@ -19,7 +19,7 @@ $drivername = $_SESSION['drivername'];
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Dashboard</title>
+<title>PU HWB</title>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -166,7 +166,7 @@ $drivername = $_SESSION['drivername'];
                   </div></td>
               <tr>
                 <td>Trace Notes</td>
-                <td><textarea id="remarks" name="remarks" class="form-control"></textarea></td>
+                <td><textarea id="remarks" name="remarks" class="form-control" placeholder="Don't forget accessorials. Check Piece and Pallet counts"></textarea></td>
               </tr>
             </table>
             </div>

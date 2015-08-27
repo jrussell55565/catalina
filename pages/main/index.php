@@ -223,6 +223,7 @@ $drivername = $_SESSION['drivername'];
 <!DOCTYPE html>
 <html>
 <head>
+<BASE href="http://dispatch.catalinacartage.com:8080">
 <meta charset="UTF-8">
 <title>Dashboard</title>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
@@ -271,11 +272,11 @@ $drivername = $_SESSION['drivername'];
           <div class="row">
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
-<a href="pages/dispatch/orders.php">
+<a href="/pages/dispatch/orders.php">
                  <span class="info-box-icon bg-aqua"><i class="fa fa-cog fa-spin"></i></span>
                 </a>
                 <div class="info-box-content">
-                  <span class="info-box-text"><a href="pages/dispatch/orders.php">Shipment boards</a></span><span class="info-box-number"> Todays Pickups: <?php echo "$pu_today_count";?><br>
+                  <span class="info-box-text"><a href="/pages/dispatch/orders.php">Shipment boards</a></span><span class="info-box-number"> Todays Pickups: <?php echo "$pu_today_count";?><br>
                     Todays Deliveries: <?php echo "$del_today_count";?> </span>
                 </div>
                 <!-- /.info-box-content -->
@@ -286,7 +287,7 @@ $drivername = $_SESSION['drivername'];
 
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
-<a href="pages/dispatch/vir.php" class="button animated rubberBand">
+<a href="/pages/dispatch/vir.php" class="button animated rubberBand">
 <style>
  a.button {
 	 -webkit-animation-duration: 5s;
@@ -297,7 +298,7 @@ $drivername = $_SESSION['drivername'];
                 <span class="info-box-icon bg-red"><i class="fa fa-wrench faa-wrench animated"></i></span>
 </a>
                 <div class="info-box-content">
-                  <span class="info-box-text"><a href="pages/dispatch/vir.php">Vehicle inspection Reports</a></span>
+                  <span class="info-box-text"><a href="/pages/dispatch/vir.php">Vehicle inspection Reports</a></span>
                   <span class="info-box-number">Todays VIRs: ?/PHP <br>
                   Total VIR's: ?/PHP</span>
                 </div><!-- /.info-box-content -->

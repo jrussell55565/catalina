@@ -234,9 +234,12 @@ if ($row['status'] == "Delivered")
               </div>
               <div class="input-group">
                 <div class="input-group-btn" style="padding-right: 5px;">
-                  <input type="submit" class="btn btn-primary" name="Change Status" value="Change Status" <?php echo $disabledButton;?>>
+                  <input type="submit" class="btn btn-primary" value="Change Status" <?php echo $disabledButton;?>>
                   </input>
+<<<<<<< HEAD
                    <input type="hidden" id="recordid" name="recordid" value='<?php echo $_GET['recordid'];?>' />
+=======
+>>>>>>> origin/master
                 </div>
                 <!-- /btn-group -->
                 <select class="form-control" name="sel_quickStatus" id="sel_quickStatus">
@@ -261,9 +264,14 @@ if ($row['status'] == "Delivered")
       <input type="text" name="txt_dispatch" id="txt_dispatch" class="input-group"/>
       </span><br>
       <?php }?>
+<<<<<<< HEAD
       <input type="submit" name="btn_submit" id="btn_submit" value="Email Dispatch" class="btn btn-primary"/>		      <input type="submit" name="btn_submit" id="btn_submit" value="Email Dispatch" class="btn btn-primary"/>
       <input type="hidden" id="hawbsearch" name="hawbsearch" value='<?php echo $_GET['hwb'];?>' />		      <input type="hidden" id="hawbsearch" name="hawbsearch" value='<?php echo "$hawb";?>' />
       <input type="hidden" id="recordid" name="recordid" value='<?php echo $_GET['recordid'];?>' />
+=======
+      <input type="submit" name="btn_submit" id="btn_submit" value="Email Dispatch" class="btn btn-primary"/>
+      <input type="hidden" id="hawbsearch" name="hawbsearch" value='<?php echo "$hawb";?>' />
+>>>>>>> origin/master
     </form>
     <?php } ?>
   </div>
