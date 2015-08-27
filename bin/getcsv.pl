@@ -8,10 +8,27 @@ use DBI;
 use Getopt::Long;
 
 # Command line variables
-our ($env, $wwwroot);
+our ($env, $wwwroot, $ftpusername, $ftppassword, $ftphost, $dbusername, $dbpassword, $dbname);
 GetOptions ("env=s" => \$env,
             "wwwroot=s" => \$wwwroot,
+            "ftpUsername=s" => \$ftpusername,
+            "ftpPassword=s" => \$ftppassword,
+            "ftpHost=s" => \$ftphost,
+            "dbUsername=s" => \$dbusername,
+            "dbPassword=s" => \$dbpassword,
+            "dbName=s" => \$dbname,
            );
+
+if ( (!$ftpusername) ||
+      (!$ftppassword) ||
+      (!$ftphost) ||
+      (!$dbusername) ||
+      (!$dbpassword) ||
+      (!$dbname) )
+    {
+        print "Missing argument.\n";
+        exit 1;
+    }
 
 if ($env eq '')
 {
@@ -37,12 +54,6 @@ if (! -d $wwwroot)
     exit 1;
 }
 
-our $ftphost 	= "ftp.trans-soft.net";
-our $ftpusername = "FS_ImageUpload";
-our $ftppassword = "FS441mage";
-our $dbname	= "catalina";
-our $dbusername	= "catalina";
-our $dbpassword	= "vawmIss6";
 our @ftproot	= ("CatalinaCartage");
 our @list = ();
 our $debug = 0;
