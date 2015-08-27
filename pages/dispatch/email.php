@@ -45,7 +45,7 @@ switch ($subject)
     		"Reply-To: $email" . "\r\n" .
     		"CC: $email" . "\r\n" .
     		'X-Mailer: PHP/' . phpversion();
-		$body = "HWB $hawb was not found in the Drivers Dispatch Board.\n"
+		$body = "HWB $hawb was not found in the Drivers Dispatch Board.\n";
                 $body .= "Driver $username was not able to find this shipment when trying to update.\n";
                 $body .= "Driver is near $dispatchRequest. ";
                 $body .= "Possibly the Shipper/Consignee or approximate location.\n";
