@@ -77,7 +77,6 @@ sub wanted
         {
             if ($file =~ /^"?QA.+/) 
             {
-                print $file;
                 $envOverride = "QA"; 
             }else{
                 $envOverride = "Production";
