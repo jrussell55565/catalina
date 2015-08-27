@@ -10,21 +10,8 @@ use Getopt::Long;
 
 # Command line variables
 our ($env, $wwwroot);
-GetOptions ("env=s" => \$env,
-            "wwwroot=s" => \$wwwroot,
+GetOptions ("wwwroot=s" => \$wwwroot,
            );
-
-if ($env eq '')
-{
-    print "Missing argument for --env.  Choose either Production or QA\n";
-    exit 1;
-}
-
-if ($env !~ /(Production|QA)/)
-{
-    print "Invalid argument for --env.  Choose either Production or QA\n";
-    exit 1;
-}
 
 if ($wwwroot eq '')
 {
@@ -51,6 +38,7 @@ find(\&wanted, $exportdir);
 
 sub wanted
 {
+        $envOverride = "Production";
 	if ($_ =~ /^\./)
 	{
 		return 0;
@@ -62,6 +50,7 @@ sub wanted
 	# Based on the file name, what dir is it going into?
 	my $exportdest = $_;
 	my $fileType;
+        my $envOverride;
 	$exportdest =~ /(accessorial|status)\+(\w+\d?)\+\d+/;
 	$fileType = $1;
 	$exportdest = $2;
@@ -82,7 +71,19 @@ sub wanted
 		case "JNAIRLAX2"{ $exportdest = "JNAirfreight" }
 		else		{ $exportdest = "CatalinaCartage" }
 	}
-	push_file($_,$fileType,$exportdest,$exportdir);
+        # Open the file and look at the hwb to determine if its prod or qa
+        open FD, "< $_" or die "Unable to open file ($_) for reading: $!\n";
+        foreach my $file (<FD>)
+        {
+            if ($file =~ /^"?QA.+/) 
+            {
+                print $file;
+                $envOverride = "QA"; 
+            }else{
+                $envOverride = "Production";
+            }
+        }
+	push_file($_,$fileType,$exportdest,$exportdir,$envOverride);
 }
 
 sub push_file
@@ -91,6 +92,7 @@ sub push_file
 	my $fileType = shift;
 	my $exportdest = shift;
 	my $exportdir = shift;
+        my $env = shift;
 	my $ftpPath;
 
 	if ($fileType =~ /accessorial/)
@@ -101,13 +103,13 @@ sub push_file
 	{
 		$ftpPath = "/DriverDispatch/$exportdest/$env/Inbound";
 	}
-	
+
 	my $ftp = Net::FTP->new("$ftphost", Debug => $debug) or {email_alert("Cannot connect to $ftphost: $@")};
 	$ftp->login("$ftpusername","$ftppassword") or {email_alert("Cannot login ",$ftp->message)};
 	$ftp->cwd("$ftpPath") or {email_alert("Cannot change working directory to $ftpPath", $ftp->message)};
 
 	$ftp->put("$filename") or {email_alert("Unable to upload a file $filename ", $ftp->message)};
-	$ftp->quit;
+        $ftp->quit;
 
 	system("/bin/mv $filename $wwwroot/export_backups");
 }
