@@ -38,7 +38,6 @@ find(\&wanted, $exportdir);
 
 sub wanted
 {
-        $envOverride = "Production";
 	if ($_ =~ /^\./)
 	{
 		return 0;
@@ -50,7 +49,7 @@ sub wanted
 	# Based on the file name, what dir is it going into?
 	my $exportdest = $_;
 	my $fileType;
-        my $envOverride;
+    my $envOverride;
 	$exportdest =~ /(accessorial|status)\+(\w+\d?)\+\d+/;
 	$fileType = $1;
 	$exportdest = $2;
