@@ -236,10 +236,7 @@ if ($row['status'] == "Delivered")
                 <div class="input-group-btn" style="padding-right: 5px;">
                   <input type="submit" class="btn btn-primary" value="Change Status" <?php echo $disabledButton;?>>
                   </input>
-<<<<<<< HEAD
                    <input type="hidden" id="recordid" name="recordid" value='<?php echo $_GET['recordid'];?>' />
-=======
->>>>>>> origin/master
                 </div>
                 <!-- /btn-group -->
                 <select class="form-control" name="sel_quickStatus" id="sel_quickStatus">
@@ -258,20 +255,17 @@ if ($row['status'] == "Delivered")
     <?php }else{ ?>
     <div class="alert alert-danger" role="alert"><?php if ($hwbnumber != ''){?>
     HWB Not Found. <?php }?> Request shipment below.</div>
-    <form id="SingleHWBEmail" name="SingleHWBEmail" method="post" action="email.php">
+    <form id="SingleHWBEmail" name="SingleHWBEmail" method="post" action="email.php" onSubmit="return missingHwbEmail()">
       <?php if ($hwbnumber == ''){?>
       <span><label for="txt_dispatch">Please enter shipper or consignee name, or approximate location</label><br>
+      <div id="email_error" class="alert alert-danger" role="alert" style="padding: 5px; text-align: center; display: none; width: 212px;"></div>
       <input type="text" name="txt_dispatch" id="txt_dispatch" class="input-group"/>
       </span><br>
       <?php }?>
-<<<<<<< HEAD
-      <input type="submit" name="btn_submit" id="btn_submit" value="Email Dispatch" class="btn btn-primary"/>		      <input type="submit" name="btn_submit" id="btn_submit" value="Email Dispatch" class="btn btn-primary"/>
-      <input type="hidden" id="hawbsearch" name="hawbsearch" value='<?php echo $_GET['hwb'];?>' />		      <input type="hidden" id="hawbsearch" name="hawbsearch" value='<?php echo "$hawb";?>' />
+      <input type="hidden" id="hawbsearch" name="hawbsearch" value='<?php echo $_GET['hwb'];?>' />
       <input type="hidden" id="recordid" name="recordid" value='<?php echo $_GET['recordid'];?>' />
-=======
       <input type="submit" name="btn_submit" id="btn_submit" value="Email Dispatch" class="btn btn-primary"/>
       <input type="hidden" id="hawbsearch" name="hawbsearch" value='<?php echo "$hawb";?>' />
->>>>>>> origin/master
     </form>
     <?php } ?>
   </div>
@@ -593,5 +587,8 @@ if ($row['status'] == "Delivered")
 
 <!-- Demo --> 
 <script src="<?php echo HTTP;?>/dist/js/demo.js" type="text/javascript"></script>
+
+<!-- Catalina Form -->
+<script src="<?php echo HTTP;?>/dist/js/catalina_formvalidate.js" type="text/javascript"></script>
 </body>
 </html>

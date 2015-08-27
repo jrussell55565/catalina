@@ -38,13 +38,17 @@ switch ($subject)
     		'X-Mailer: PHP/' . phpversion();
 		break;
 	case "Email Dispatch":
+                if ($hawb == '') { $hawb = 'Blank HWB'; }
 		$subject = "Driver Missing HWB";
 		$to	= "dispatch@catalinacartage.com";
 		$headers = "From: $email" . "\r\n" .
     		"Reply-To: $email" . "\r\n" .
     		"CC: $email" . "\r\n" .
     		'X-Mailer: PHP/' . phpversion();
-		$body = "HWB $hawb was not found in the Drivers Dispatch Board.\nDriver $username was not able to find this shipment when trying to update.\n";
+		$body = "HWB $hawb was not found in the Drivers Dispatch Board.\n"
+                $body .= "Driver $username was not able to find this shipment when trying to update.\n";
+                $body .= "Driver is near $dispatchRequest. ";
+                $body .= "Possibly the Shipper/Consignee or approximate location.\n";
 		$body .= "Please Send Agent Dispatch immediately so driver can update shipment accordingly.\n\n";
 		$body .= "Thank you";
 		break;
@@ -61,16 +65,6 @@ switch ($subject)
 		$body .= "Name: ".$_POST['DriverUserName']."\n";
 		$body .= "Number: ".$_POST['Phone']."\n";
                 break;
-	case "Email Dispatch":
-		$subject = "Request Shipments";
-		$to	= "dispatch@catalinacartage.com";
-		$headers = "From: $email" . "\r\n" .
-    		"Reply-To: $email" . "\r\n" .
-    		"CC: $email" . "\r\n" .
-    		"CC: dispatch@catalinacartage.com" . "\r\n" .
-    		'X-Mailer: PHP/' . phpversion();
-                $body = $dispatchRequest . "\n";
-		break;
 }
 
 if (! $body)
