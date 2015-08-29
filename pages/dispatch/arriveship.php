@@ -166,10 +166,9 @@ $drivername = $_SESSION['drivername'];
                   </div></td>
               <tr>
                 <td>Trace Notes</td>
-                <td>&nbsp;</td>
+                <td><textarea id="remarks" name="remarks" class="form-control" placeholder="Please Note Arrival time on Original BOL. At shipper longer than 1 hour. Trace Note!!"></textarea></td>
               </tr>
             </table>
-            <textarea id="remarks" name="remarks" class="form-control" placeholder="Please Note Arrival time on Original BOL. At shipper longer than 1 hour. Trace Note!!"></textarea>
             </div>
             <!-- /.box-body -->
             
