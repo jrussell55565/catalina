@@ -256,12 +256,10 @@ if ($row['status'] == "Delivered")
     <div class="alert alert-danger" role="alert"><?php if ($hwbnumber != ''){?>
     HWB Not Found. <?php }?> Request shipment below.</div>
     <form id="SingleHWBEmail" name="SingleHWBEmail" method="post" action="email.php" onSubmit="return missingHwbEmail()">
-      <?php if ($hwbnumber == ''){?>
       <span><label for="txt_dispatch">Please enter shipper or consignee name, or approximate location</label><br>
       <div id="email_error" class="alert alert-danger" role="alert" style="padding: 5px; text-align: center; display: none; width: 212px;"></div>
       <input type="text" name="txt_dispatch" id="txt_dispatch" class="input-group"/>
       </span><br>
-      <?php }?>
       <input type="hidden" id="hawbsearch" name="hawbsearch" value='<?php echo $_GET['hwb'];?>' />
       <input type="hidden" id="recordid" name="recordid" value='<?php echo $_GET['recordid'];?>' />
       <input type="submit" name="btn_submit" id="btn_submit" value="Email Dispatch" class="btn btn-primary"/>
