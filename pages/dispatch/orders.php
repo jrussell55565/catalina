@@ -310,19 +310,22 @@ $drivername = $_SESSION['drivername'];
                 <th style="width: 20px"><input type="checkbox" value="on" name="allbox" onclick="toggle(this)"/></th>
                 <th>HWB Number / Status</th>
                 <th>Info</th>
+                <th>Pickup / Due</th>
               </tr>
               <form method=post action="./processshipments.php">
                 <?php
                 $deliveryQuery = "delAgentDriverPhone=(select driverid from users where username=\"$username\")";
                 $pickupQuery = "puAgentDriverPhone=(select driverid from users where username=\"$username\")";
-                $sql = "select hawbNumber,recordID,shipperName,consigneeName,status from dispatch
+                $sql = "select hawbNumber,recordID,shipperName,consigneeName,status,hawbDate,dueDate from dispatch
                         where (";
                 if ($_GET['gather'] == "pu")
                 {
                   $sql .= $deliveryQuery . ")";
+                  $sql .= " AND str_to_date(dueDate,'%c/%e/%Y') = date(now())";
                 }elseif ($_GET['gather'] == "del")
                 {
                   $sql .= $pickupQuery . ")";
+                  $sql .= " AND str_to_date(hawbDate,'%c/%e/%Y') = date(now())";
                 }else{
                   $sql .= $deliveryQuery . " OR " . $pickupQuery . ")";
                 }
@@ -396,6 +399,19 @@ $drivername = $_SESSION['drivername'];
                     </td>
                     <td><span>Shipper: <?php echo "$row[shipperName]";?></span><br>
                       <span>Consignee: <?php echo "$row[consigneeName]";?></span><br></td>
+                    <td>
+                     <span>
+                      <?php if ($_GET['gather'] == "pu")
+                            { 
+                              echo $row['hawbDate'];
+                            } elseif ($_GET['gather'] == "del") 
+                            { 
+                              echo $row['dueDate'];
+                            }elseif ($_GET['gather'] == ""){
+                              echo $row['hawbDate'] . " <br> " . $row['dueDate'];
+                            }?>
+                     </span><br>
+                    </td>
                   </tr>
                 </div>
                 <?php
