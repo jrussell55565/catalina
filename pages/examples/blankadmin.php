@@ -14,216 +14,9 @@ $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
 
 ?>
-
-<?php
-                     $sql = "SELECT
-                      total_today.counts   AS total_today_count,
-                      pu_today.counts      AS pu_today_count,
-                      del_today.counts     AS del_today_count,
-                      total_alltime.counts AS total_alltime_count,
-                      pu_alltime.counts    AS pu_alltime_count,
-                      del_alltime.counts   AS del_alltime_count,
-                      archived.counts      AS archived_count
-                    FROM
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          AND str_to_date(hawbDate,'%c/%e/%Y') = CURDATE()
-                          AND deleted                          =\"F\"
-                          AND archived                         =\"F\"
-                          )
-                        OR
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username =\"$username\"
-                            )
-                          AND str_to_date(dueDate,'%c/%e/%Y') = CURDATE()
-                          AND deleted                         =\"F\"
-                          AND archived                        =\"F\"
-                          )
-                      )
-                      total_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          puAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND str_to_date(hawbDate,'%c/%e/%Y') = DATE(now())
-                        AND deleted                          =\"F\"
-                        AND archived                         =\"F\"
-                        AND deleted                          =\"F\"
-                        AND archived                         =\"F\"
-                      )
-                      pu_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          delAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND str_to_date(dueDate,'%c/%e/%Y') = DATE(now())
-                        AND deleted                         =\"F\"
-                        AND archived                        =\"F\"
-                        AND deleted                         =\"F\"
-                        AND archived                        =\"F\"
-                      )
-                      del_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          OR puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      total_alltime,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          puAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      pu_alltime,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          delAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      del_alltime,
-                      (
-                      SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          OR puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"T\"
-                      )
-                      archived";
-
-                      $sql = mysql_query($sql);
-                      while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-                      {
-                        $total_today_count   = $row[total_today_count];
-                        $pu_today_count      = $row[pu_today_count];
-                        $del_today_count     = $row[del_today_count];
-                        $total_alltime_count = $row[total_alltime_count];
-                        $pu_alltime_count    = $row[pu_alltime_count];
-                        $del_alltime_count   = $row[del_alltime_count];
-                        $archived_count      = $row[archived_count];
-                      }
-                      mysql_free_result($sql);
-?>
-
-
 <!DOCTYPE html>
 <html>
 <head>
-<BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
 <title>Dashboard</title>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
@@ -245,13 +38,13 @@ $drivername = $_SESSION['drivername'];
         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-<link rel="stylesheet" href="/dist/css/animate.css">
+<link rel="stylesheet" href="http://dispatch.catalinacartage.com:8080/dist/css/animate.css">
 </head>
 <body class="skin-blue sidebar-mini">
 <div class="wrapper">
 <?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/header.php');?>
 <?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/sidebar.php');?>
-
+   
     <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -259,7 +52,7 @@ $drivername = $_SESSION['drivername'];
           <h1>
             Catalina Dashboard
             <small>1.0.</small></h1>
-
+            
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
             <li class="active">Dashboard</li>
@@ -269,15 +62,16 @@ $drivername = $_SESSION['drivername'];
         <!-- Main content -->
         <section class="content">
           <!-- Info boxes -->
+          <!-- Shipment Boards -->
           <div class="row">
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
-<a href="/pages/dispatch/orders.php">
+<a href="pages/dispatch/orders.php">
                  <span class="info-box-icon bg-aqua"><i class="fa fa-cog fa-spin"></i></span>
-                </a>
+                </a>               
                 <div class="info-box-content">
-                  <span class="info-box-text"><a href="/pages/dispatch/orders.php">Shipment boards</a></span><span class="info-box-number"> Todays Pickups: <?php echo "$pu_today_count";?><br>
-                    Todays Deliveries: <?php echo "$del_today_count";?> </span>
+                <span class="info-box-text"><a href="pages/dispatch/orders.php">View  / EDIT / Export All DISPATCHES</a></span><span class="info-box-number">  Todays  PU:  <?php echo "$pu_today_count";?><br>
+                    Todays DEL:   <?php echo "$del_today_count";?></span>
                 </div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
@@ -287,7 +81,7 @@ $drivername = $_SESSION['drivername'];
 
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
-<a href="/pages/dispatch/vir.php" class="button animated rubberBand">
+<a href="pages/dispatch/vir.php" class="button animated rubberBand">
 <style>
  a.button {
 	 -webkit-animation-duration: 5s;
@@ -296,12 +90,12 @@ $drivername = $_SESSION['drivername'];
  }
 </style>
                 <span class="info-box-icon bg-red"><i class="fa fa-wrench faa-wrench animated"></i></span>
-</a>
+</a>               
                 <div class="info-box-content">
-                  <span class="info-box-text"><a href="/pages/dispatch/vir.php">Vehicle inspection Reports</a></span>
-                  <span class="info-box-number">Todays VIRs: ?/PHP <br>
-                  Total VIR's: ?/PHP</span>
-                </div><!-- /.info-box-content -->
+                  <span class="info-box-text"><a href="pages/dispatch/vir.php">View / EDIT / EXPORT DRIVERS VIRs</a></span>
+                  <span class="info-box-number">                  Total VIR's Reported: ?/PHP</span>
+                </div>
+                <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
 
@@ -317,16 +111,19 @@ $drivername = $_SESSION['drivername'];
 	 -webkit-animation-delay: 1s;
 	 -webkit-animation-iteration-count: infinite;
  }
-</style>
+</style>              
                 <span class="info-box-icon bg-green"><i class="fa fa-tachometer"></i></span>
+                </a>
                 <div class="info-box-content">
-                  <span class="info-box-text">Fuel</span>
-                  <span class="info-box-number">Todays Fuel: ?/PHP
-                  <br>
-                  Total Fuel: ?/PHP  </span>
-                </div><!-- /.info-box-content -->
+                <span class="info-box-text"><a href="pages/dispatch/vir.php">VIEW / EDIT / EXPORT FUEL LOGS</a></span>
+                  <span class="info-box-number">                  Total Fuel Reported: ?/PHP  </span>
+                </div>
+                <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
+
+
+
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
 <a href="pages/tables/ifta.php" class="button3 animated jello">
@@ -338,36 +135,106 @@ $drivername = $_SESSION['drivername'];
  }
 </style>
                <span class="info-box-icon bg-yellow"><i class="fa fa-newspaper-o"></i></span>
-
+</a>
                 <div class="info-box-content">
-                  <span class="info-box-text">IFTA Reports</span>
-                  <span class="info-box-number">Todays IFTA: ?/PHP<br>
-                  Total IFTA Reports: ?/PHP </span>
+                <span class="info-box-text"><a href="pages/dispatch/vir.php">VIEW / EDIT / EXPORT IFTA Reports</a></span>
+                  <span class="info-box-number">                  Total IFTA Reports: ?/PHP </span>
                 </div><!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
+            
+
+
+
+            
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+<a href="pages/tables/ifta.php" class="button3 animated jello">
+<style>
+ a.button3 {
+	 -webkit-animation-duration: 3s;
+	 -webkit-animation-delay: 1s;
+	 -webkit-animation-iteration-count: infinite;
+ }
+</style>
+               <span class="info-box-icon bg-blue"><i class="fa fa-newspaper-o"></i></span>
+</a>
+
+                <div class="info-box-content">
+                  <span class="info-box-text"><a href="pages/dispatch/vir.php">VIEW / EDIT / EXPORT DOT Saftey Report</a></span>
+                  <span class="info-box-number">                  Import Reports Here</span>
+                </div>
+                <!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->            
+            
+
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+<a href="pages/tables/ifta.php" class="button3 animated jello">
+<style>
+ a.button3 {
+	 -webkit-animation-duration: 3s;
+	 -webkit-animation-delay: 1s;
+	 -webkit-animation-iteration-count: infinite;
+ }
+</style>
+               <span class="info-box-icon bg-blue"><i class="fa fa-newspaper-o"></i></span>
+               </a>
+                <div class="info-box-content">
+                  <span class="info-box-text"><a href="pages/dispatch/adminusers.php">VIEW / Edit / EXPORT  VIR</a></span>
+                  <span class="info-box-number">                  PU &amp; DEL </span>
+                </div>
+                <!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+
+
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+<a href="pages/tables/ifta.php" class="button3 animated jello">
+<style>
+ a.button3 {
+	 -webkit-animation-duration: 3s;
+	 -webkit-animation-delay: 1s;
+	 -webkit-animation-iteration-count: infinite;
+ }
+</style>
+               <span class="info-box-icon bg-blue"><i class="fa fa-newspaper-o"></i></span>
+               </a>
+                <div class="info-box-content">
+                  <span class="info-box-text"><a href="pages/dispatch/adminusers.php">VIEW / EDIT / eXPORT HWB Accessorials</a></span><span class="info-box-number">PU &amp; DEL</span></div>
+                <!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->            
+            
+
+
+            
+            
+            
+
 <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
-<a href="pages/tables/saftey.php" class="button4 animated zoomIn">
+<a href="pages/dispatch/adminusers.php" class="button4 animated bounce">
 <style>
  a.button4 {
 	 -webkit-animation-duration: 3s;
 	 -webkit-animation-delay: 1s;
 	 -webkit-animation-iteration-count: infinite;
  }
-
 </style>
-               <span class="info-box-icon bg-blue"><i class="fa fa-road"></i></span>
-
+               <span class="info-box-icon bg-blue"><i class="fa fa-users"></i></span>
+               </a>
                 <div class="info-box-content">
-                  <span class="info-box-text">DOT Saftey Report</span>
-                  <span class="info-box-number">Uploaed Monthly                  </span>
+                  <span class="info-box-text"><a href="pages/dispatch/adminusers.php">VIEW / EDIT / EXPORT New Users</a></span>
+                  <span class="info-box-number">View all User Profiles                  </span>
                 </div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.info-box -->
           </div><!-- /.row -->
-</a>
+          
           <div class="row">
             <div class="col-md-12">
               <div class="box">
@@ -393,7 +260,7 @@ $drivername = $_SESSION['drivername'];
                     <div class="col-md-8">
                       <p class="text-center">
                      <!-- Add PHP Session to populate Current year -->
-                        <strong>Shipment Updates: PHP? Current Year</strong>:</p>
+                        <strong>Shipment Updates: PHP? Current Year</strong>:</p> 
                     <div class="chart">
                         <!-- Sales Chart Canvas -->
                         <canvas id="salesChart" height="180"></canvas>
@@ -402,22 +269,22 @@ $drivername = $_SESSION['drivername'];
                     <div class="col-md-4">
                       <p class="text-center">
                         <strong>Monthly Stats For: <span class="box-title"><?php echo "$drivername"; ?></span></strong></p>
-
-
+                      
+                      
                       <div class="progress-group">
                         <span class="progress-text">  Total Shipments Dispatched</span><span class="progress-number"><b>100</span>
                         <div class="progress sm">
                           <div class="progress-bar progress-bar-blue" style="width: 80%"></div>
-
-
-
-
+                          
+                          
+                          
+                          
                         </div>
                       </div><!-- /.progress-group -->
-
-
-
-
+                      
+                      
+                      
+                      
                       <div class="progress-group">
                         <span class="progress-text">  Total Updateded Shipments</span><span class="progress-number"><b>80</span>
                         <div class="progress sm">
@@ -549,7 +416,7 @@ $drivername = $_SESSION['drivername'];
                             <span class='direct-chat-name pull-left'>Alexander Pierce</span>
                             <span class='direct-chat-timestamp pull-right'>23 Jan 2:00 pm</span>
                           </div><!-- /.direct-chat-info -->
-                          <img class="direct-chat-img" src="/dist/img/user1-128x128.jpg" alt="message user image" /><!-- /.direct-chat-img -->
+                          <img class="direct-chat-img" src="dist/img/user1-128x128.jpg" alt="message user image" /><!-- /.direct-chat-img -->
                           <div class="direct-chat-text">
                             Is this template really for free? That's unbelievable!
                           </div><!-- /.direct-chat-text -->
@@ -561,7 +428,7 @@ $drivername = $_SESSION['drivername'];
                             <span class='direct-chat-name pull-right'>Sarah Bullock</span>
                             <span class='direct-chat-timestamp pull-left'>23 Jan 2:05 pm</span>
                           </div><!-- /.direct-chat-info -->
-                          <img class="direct-chat-img" src="/dist/img/user3-128x128.jpg" alt="message user image" /><!-- /.direct-chat-img -->
+                          <img class="direct-chat-img" src="dist/img/user3-128x128.jpg" alt="message user image" /><!-- /.direct-chat-img -->
                           <div class="direct-chat-text">
                             You better believe it!
                           </div><!-- /.direct-chat-text -->
@@ -573,7 +440,7 @@ $drivername = $_SESSION['drivername'];
                             <span class='direct-chat-name pull-left'>Alexander Pierce</span>
                             <span class='direct-chat-timestamp pull-right'>23 Jan 5:37 pm</span>
                           </div><!-- /.direct-chat-info -->
-                          <img class="direct-chat-img" src="/dist/img/user1-128x128.jpg" alt="message user image" /><!-- /.direct-chat-img -->
+                          <img class="direct-chat-img" src="dist/img/user1-128x128.jpg" alt="message user image" /><!-- /.direct-chat-img -->
                           <div class="direct-chat-text">
                             Working with AdminLTE on a great new app! Wanna join?
                           </div><!-- /.direct-chat-text -->
@@ -585,7 +452,7 @@ $drivername = $_SESSION['drivername'];
                             <span class='direct-chat-name pull-right'>Sarah Bullock</span>
                             <span class='direct-chat-timestamp pull-left'>23 Jan 6:10 pm</span>
                           </div><!-- /.direct-chat-info -->
-                          <img class="direct-chat-img" src="/dist/img/user3-128x128.jpg" alt="message user image" /><!-- /.direct-chat-img -->
+                          <img class="direct-chat-img" src="dist/img/user3-128x128.jpg" alt="message user image" /><!-- /.direct-chat-img -->
                           <div class="direct-chat-text">
                             I would love to.
                           </div><!-- /.direct-chat-text -->
@@ -599,7 +466,7 @@ $drivername = $_SESSION['drivername'];
                         <ul class='contacts-list'>
                           <li>
                             <a href='#'>
-                              <img class='contacts-list-img' src='/dist/img/user1-128x128.jpg'/>
+                              <img class='contacts-list-img' src='dist/img/user1-128x128.jpg'/>
                               <div class='contacts-list-info'>
                                 <span class='contacts-list-name'>
                                   Count Dracula
@@ -611,7 +478,7 @@ $drivername = $_SESSION['drivername'];
                           </li><!-- End Contact Item -->
                           <li>
                             <a href='#'>
-                              <img class='contacts-list-img' src='/dist/img/user7-128x128.jpg'/>
+                              <img class='contacts-list-img' src='dist/img/user7-128x128.jpg'/>
                               <div class='contacts-list-info'>
                                 <span class='contacts-list-name'>
                                   Sarah Doe
@@ -623,7 +490,7 @@ $drivername = $_SESSION['drivername'];
                           </li><!-- End Contact Item -->
                           <li>
                             <a href='#'>
-                              <img class='contacts-list-img' src='/dist/img/user3-128x128.jpg'/>
+                              <img class='contacts-list-img' src='dist/img/user3-128x128.jpg'/>
                               <div class='contacts-list-info'>
                                 <span class='contacts-list-name'>
                                   Nadia Jolie
@@ -635,7 +502,7 @@ $drivername = $_SESSION['drivername'];
                           </li><!-- End Contact Item -->
                           <li>
                             <a href='#'>
-                              <img class='contacts-list-img' src='/dist/img/user5-128x128.jpg'/>
+                              <img class='contacts-list-img' src='dist/img/user5-128x128.jpg'/>
                               <div class='contacts-list-info'>
                                 <span class='contacts-list-name'>
                                   Nora S. Vans
@@ -647,7 +514,7 @@ $drivername = $_SESSION['drivername'];
                           </li><!-- End Contact Item -->
                           <li>
                             <a href='#'>
-                              <img class='contacts-list-img' src='/dist/img/user6-128x128.jpg'/>
+                              <img class='contacts-list-img' src='dist/img/user6-128x128.jpg'/>
                               <div class='contacts-list-info'>
                                 <span class='contacts-list-name'>
                                   John K.
@@ -659,7 +526,7 @@ $drivername = $_SESSION['drivername'];
                           </li><!-- End Contact Item -->
                           <li>
                             <a href='#'>
-                              <img class='contacts-list-img' src='/dist/img/user8-128x128.jpg'/>
+                              <img class='contacts-list-img' src='dist/img/user8-128x128.jpg'/>
                               <div class='contacts-list-info'>
                                 <span class='contacts-list-name'>
                                   Kenneth M.
@@ -699,42 +566,42 @@ $drivername = $_SESSION['drivername'];
                     <div class="box-body no-padding">
                       <ul class="users-list clearfix">
                         <li>
-                          <img src="/dist/img/user1-128x128.jpg" alt="User Image"/>
+                          <img src="dist/img/user1-128x128.jpg" alt="User Image"/>
                           <a class="users-list-name" href="#">Alexander Pierce</a>
                           <span class="users-list-date">Today</span>
                         </li>
                         <li>
-                          <img src="/dist/img/user8-128x128.jpg" alt="User Image"/>
+                          <img src="dist/img/user8-128x128.jpg" alt="User Image"/>
                           <a class="users-list-name" href="#">Norman</a>
                           <span class="users-list-date">Yesterday</span>
                         </li>
                         <li>
-                          <img src="/dist/img/user7-128x128.jpg" alt="User Image"/>
+                          <img src="dist/img/user7-128x128.jpg" alt="User Image"/>
                           <a class="users-list-name" href="#">Jane</a>
                           <span class="users-list-date">12 Jan</span>
                         </li>
                         <li>
-                          <img src="/dist/img/user6-128x128.jpg" alt="User Image"/>
+                          <img src="dist/img/user6-128x128.jpg" alt="User Image"/>
                           <a class="users-list-name" href="#">John</a>
                           <span class="users-list-date">12 Jan</span>
                         </li>
                         <li>
-                          <img src="/dist/img/user2-160x160.jpg" alt="User Image"/>
+                          <img src="dist/img/user2-160x160.jpg" alt="User Image"/>
                           <a class="users-list-name" href="#">Alexander</a>
                           <span class="users-list-date">13 Jan</span>
                         </li>
                         <li>
-                          <img src="/dist/img/user5-128x128.jpg" alt="User Image"/>
+                          <img src="dist/img/user5-128x128.jpg" alt="User Image"/>
                           <a class="users-list-name" href="#">Sarah</a>
                           <span class="users-list-date">14 Jan</span>
                         </li>
                         <li>
-                          <img src="/dist/img/user4-128x128.jpg" alt="User Image"/>
+                          <img src="dist/img/user4-128x128.jpg" alt="User Image"/>
                           <a class="users-list-name" href="#">Nora</a>
                           <span class="users-list-date">15 Jan</span>
                         </li>
                         <li>
-                          <img src="/dist/img/user3-128x128.jpg" alt="User Image"/>
+                          <img src="dist/img/user3-128x128.jpg" alt="User Image"/>
                           <a class="users-list-name" href="#">Nadia</a>
                           <span class="users-list-date">15 Jan</span>
                         </li>
@@ -925,7 +792,7 @@ $drivername = $_SESSION['drivername'];
                   <ul class="products-list product-list-in-box">
                     <li class="item">
                       <div class="product-img">
-                        <img src="/dist/img/default-50x50.gif" alt="Product Image"/>
+                        <img src="dist/img/default-50x50.gif" alt="Product Image"/>
                       </div>
                       <div class="product-info">
                         <a href="javascript::;" class="product-title">Samsung TV <span class="label label-warning pull-right">$1800</span></a>
@@ -936,7 +803,7 @@ $drivername = $_SESSION['drivername'];
                     </li><!-- /.item -->
                     <li class="item">
                       <div class="product-img">
-                        <img src="/dist/img/default-50x50.gif" alt="Product Image"/>
+                        <img src="dist/img/default-50x50.gif" alt="Product Image"/>
                       </div>
                       <div class="product-info">
                         <a href="javascript::;" class="product-title">Bicycle <span class="label label-info pull-right">$700</span></a>
@@ -947,7 +814,7 @@ $drivername = $_SESSION['drivername'];
                     </li><!-- /.item -->
                     <li class="item">
                       <div class="product-img">
-                        <img src="/dist/img/default-50x50.gif" alt="Product Image"/>
+                        <img src="dist/img/default-50x50.gif" alt="Product Image"/>
                       </div>
                       <div class="product-info">
                         <a href="javascript::;" class="product-title">Xbox One <span class="label label-danger pull-right">$350</span></a>
@@ -958,7 +825,7 @@ $drivername = $_SESSION['drivername'];
                     </li><!-- /.item -->
                     <li class="item">
                       <div class="product-img">
-                        <img src="/dist/img/default-50x50.gif" alt="Product Image"/>
+                        <img src="dist/img/default-50x50.gif" alt="Product Image"/>
                       </div>
                       <div class="product-info">
                         <a href="javascript::;" class="product-title">PlayStation 4 <span class="label label-success pull-right">$399</span></a>
@@ -988,23 +855,23 @@ $drivername = $_SESSION['drivername'];
 
 <!-- Control Sidebar -->
 <?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/r_sidebar.php');?>
-<!-- /.control-sidebar -->
+<!-- /.control-sidebar --> 
 <!-- Add the sidebar's background. This div must be placed
            immediately after the control sidebar -->
 <div class='control-sidebar-bg'></div>
 </div>
-<!-- ./wrapper -->
+<!-- ./wrapper --> 
 
-<!-- jQuery 2.1.4 -->
-<script src="<?php echo HTTP;?>/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-<!-- Bootstrap 3.3.2 JS -->
-<script src="<?php echo HTTP;?>/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<!-- Slimscroll -->
-<script src="<?php echo HTTP;?>/plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-<!-- FastClick -->
-<script src='<?php echo HTTP;?>/plugins/fastclick/fastclick.min.js'></script>
-<!-- AdminLTE App -->
-<script src="<?php echo HTTP;?>/dist/js/app.min.js" type="text/javascript"></script>
+<!-- jQuery 2.1.4 --> 
+<script src="<?php echo HTTP;?>/plugins/jQuery/jQuery-2.1.4.min.js"></script> 
+<!-- Bootstrap 3.3.2 JS --> 
+<script src="<?php echo HTTP;?>/bootstrap/js/bootstrap.min.js" type="text/javascript"></script> 
+<!-- Slimscroll --> 
+<script src="<?php echo HTTP;?>/plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script> 
+<!-- FastClick --> 
+<script src='<?php echo HTTP;?>/plugins/fastclick/fastclick.min.js'></script> 
+<!-- AdminLTE App --> 
+<script src="<?php echo HTTP;?>/dist/js/app.min.js" type="text/javascript"></script> 
 
 <!-- Demo -->
 <script src="<?php echo HTTP;?>/dist/js/demo.js" type="text/javascript"></script>

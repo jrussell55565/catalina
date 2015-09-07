@@ -42,7 +42,7 @@ $queryCount = mysql_num_rows($sql);
 <html>
 <head>
 <meta charset="UTF-8">
-<title>HWB Info</title>
+<title>Dashboard</title>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -118,93 +118,68 @@ if ($row['status'] == "Delivered")
         </tr>
       <tbody>
         <tr>
-          <td><form method="GET" action="tracepu.php">
-            <input type="hidden" id="hwb" name="hwb"
+          <td><input type="hidden" id="hwb" name="hwb"
                            value="<?php echo $row['hawbNumber'];?>">
-            <input type="hidden" id="recordid" name="recordid"
+            <input type="hidden" id="hdn_traceNotePickup" name="hdn_traceNotePickup"
                             value="<?php echo $row['recordID'];?>">
             <input type="submit" class="btn btn-danger btn-sm" id="btn_traceNotePickup"
-                            value="Trace Note Pick Up" <?php echo $disabledButton;?>>
-            </input>
-            </form>
-          </td>
-          <td><form method="GET" action="tracedel.php">
-            <input type="hidden" id="hwb" name="hwb"
+                            value="Trace Notes Pick Up" <?php echo $disabledButton;?>>
+            </input></td>
+          <td><input type="hidden" id="hwb" name="hwb"
                            value="<?php echo $row['hawbNumber'];?>">
-            <input type="hidden" id="recordid" name="recordid"
+            <input type="hidden" id="hdn_traceNoteDelivery" name="hdn_traceNoteDelivery"
                             value="<?php echo $row['recordID'];?>">
             <input type="submit" class="btn btn-danger btn-sm" id="btn_traceNoteDelivery"
-                            value="Trace Note Delivery" <?php echo $disabledButton;?>>
-            </input>
-            </form>
-          </td>
+                            value="Trace Notes Delivery" <?php echo $disabledButton;?>>
+            </input></td>
         </tr>
         <tr>
-          <td><form method="GET" action="acceptpu.php">
-            <input type="hidden" id="hwb" name="hwb"
+          <td><input type="hidden" id="hwb" name="hwb"
                            value="<?php echo $row['hawbNumber'];?>">
-            <input type="hidden" id="recordid" name="recordid"
+            <input type="hidden" id="hdn_acceptPickup" name="hdn_acceptPickup"
                             value="<?php echo $row['recordID'];?>">
             <input type="submit" class="btn btn-danger btn-sm" id="btn_acceptPickup"
                             value="Accept Pick Up" <?php echo $disabledButton;?>>
-            </input>
-            </form>
-          </td>
-          <td><form method="GET" action="acceptdel.php">
-            <input type="hidden" id="hwb" name="hwb"
+            </input></td>
+          <td><input type="hidden" id="hwb" name="hwb"
                            value="<?php echo $row['hawbNumber'];?>">
-            <input type="hidden" id="recordid" name="recordid"
+            <input type="hidden" id="hdn_acceptDelivery" name="hdn_acceptDelivery"
                             value="<?php echo $row['recordID'];?>">
             <input type="submit" class="btn btn-danger btn-sm" id="btn_acceptDelivery"
                             value="Accept Delivery" <?php echo $disabledButton;?>>
-            </input>
-            </form>
-          </td>
+            </input></td>
         </tr>
         <tr>
-          <td><form method="GET" action="arriveship.php">
-            <input type="hidden" id="hwb" name="hwb"
+          <td><input type="hidden" id="hwb" name="hwb"
                            value="<?php echo $row['hawbNumber'];?>">
-            <input type="hidden" id="recordid" name="recordid"
+            <input type="hidden" id="hdn_arrivedShipper" name="hdn_arrivedShipper"
                             value="<?php echo $row['recordID'];?>">
             <input type="submit" class="btn btn-danger btn-sm" id="btn_arrivedShipper"
                             value="Arrived to shipper" <?php echo $disabledButton;?>>
-            </input>
-            </form>
-          </td>
-          <td><form method="GET" action="arrivecon.php">
-            <input type="hidden" id="hwb" name="hwb"
+            </input></td>
+          <td><input type="hidden" id="hwb" name="hwb"
                            value="<?php echo $row['hawbNumber'];?>">
-            <input type="hidden" id="recordid" name="recordid"
+            <input type="hidden" id="hdn_arrivedConsignee" name="hdn_arrivedConsignee"
                             value="<?php echo $row['recordID'];?>">
             <input type="submit" class="btn btn-danger btn-sm" id="btn_arrivedConsignee"
                            value="Arrived to consignee" <?php echo $disabledButton;?>>
-            </input>
-            </form>
-          </td>
+            </input></td>
         </tr>
         <tr>
-
-          <td><form method="GET" action="attemptpu.php">
-            <input type="hidden" id="hwb" name="hwb"
+          <td><input type="hidden" id="hwb" name="hwb"
                            value="<?php echo $row['hawbNumber'];?>">
-            <input type="hidden" id="recordid" name="recordid"
-                            value="<?php echo $row['recordID'];?>">
+            <input type="hidden" id="hdn_attemptPu" name="hdn_attemptPu"
+                           value="<?php echo $row['recordID'];?>">
             <input type="submit" class="btn btn-danger btn-sm" id="btn_attemptPu"
                           value="Attempt Pickup" <?php echo $disabledButton;?>>
-            </input>
-          </form>          
-         </td          
-          ><td><form method="GET" action="attemptdel.php">
-            <input type="hidden" id="hwb" name="hwb"
+            </input></td>
+          <td><input type="hidden" id="hwb" name="hwb"
                            value="<?php echo $row['hawbNumber'];?>">
-            <input type="hidden" id="recordid" name="recordid"
-                            value="<?php echo $row['recordID'];?>">
+            <input type="hidden" id="hdn_attemptDel" name="hdn_attemptDel"
+                           value="<?php echo $row['recordID'];?>">
             <input type="submit" class="btn btn-danger btn-sm" id="btn_attemptDel"
                           value="Attempt Delivery" <?php echo $disabledButton;?>>
-            </input>
-            </form>
-          </td>
+            </input></td>
         </tr>
         <tr>
           <td><form method="GET" action="puconfirmed.php">
@@ -215,13 +190,12 @@ if ($row['status'] == "Delivered")
               <input type="submit" class="btn btn-danger btn-sm" id="btn_pickedUp"
                             value="Picked Up" <?php echo $disabledButton;?>>
               </input>
-            </form>
-          </td>
+            </form></td>
           <td><form method="GET" action="delconfirmed.php">
-            <input type="hidden" id="hwb" name="hwb"
+              <input type="hidden" id="hwb" name="hwb"
                            value="<?php echo $row['hawbNumber'];?>">
-            <input type="hidden" id="recordid" name="recordid"
-                            value="<?php echo $row['recordID'];?>">
+              <input type="hidden" id="recordid" name="recordid"
+                           value="<?php echo $row['recordID'];?>">
               <input type="submit" class="btn btn-danger btn-sm" id="btn_delivered"
                            value="Delivered" <?php echo $disabledButton;?>>
               </input>
@@ -245,7 +219,7 @@ if ($row['status'] == "Delivered")
                   <option>Trailer Dropped</option>
                   <option>Reject Pickup / Delivery</option>
                   <option>Refused</option>
-                  <option selected>Freight At Dock</option>
+                  <option>Freight At Dock</option>
                 </select>
               </div>
             </form></td>
