@@ -63,12 +63,13 @@ $drivername = $_SESSION['drivername'];
           <div class="box">
             <div class="box-header with-border">
               <h4 class="box-title">Hello, Thank you for checking what the Colors mean.</h4>
+              <p>&nbsp;</p>
               <p>Red (warning) Driver update or Please call in Dispatch</p>
               <p>Blue (neutral) Shipment not Finished Updates Needed from Dispatch or Driver needed</p>
               <p>Orange (warning) Driver needs to update shipment.</p>
               <p>Grey (Dispatch) Dispatch contacting Client for next action.</p>
               <p>Green (Finished) All is done with shipment. Ok to Archive or Delete</p>
-              <div class="box-tools">
+<!-- comment out               <div class="box-tools">
                 <ul class="pagination pagination-sm no-margin pull-right">
                   <li>
                    <a href="#">Page1</a></li>
@@ -76,6 +77,7 @@ $drivername = $_SESSION['drivername'];
                    <a href="#">Page2</a></li>
                 </ul>
               </div>
+              -->
             </div>
             <!-- /.box-header -->
             <div class="box-body no-padding">
