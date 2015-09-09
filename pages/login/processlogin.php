@@ -191,7 +191,7 @@ function checkOdometerIncrements($driver, $truck, $truckOdometer)
     if ($row['difference'] < 1)
     {
         # Looks like the odometer reading has not increased
-        $errors['odometer_inc'] = "The odometer reading has not increased.";
+        #$errors['odometer_inc'] = "The odometer reading has not increased.";
         processErrors($errors);
     }
 }
