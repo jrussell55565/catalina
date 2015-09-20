@@ -213,12 +213,12 @@ function setCookies($login_username,$login_password,$login_truckid,$login_traile
 {
     date_default_timezone_set("America/Phoenix");
     $timestamp = strtotime('tomorrow, midnight') - 1;
-    setcookie("login_truckid", $login_truckid,$timestamp);
-    setcookie("login_trailerid", $login_trailerid,$timestamp);
-    setcookie("login_rentaltruck", $login_rentaltruck,$timestamp);
-    setcookie("login_truckodometer", $login_truckodometer,$timestamp);
+    setcookie("login_truckid", $login_truckid,$timestamp,'/');
+    setcookie("login_trailerid", $login_trailerid,$timestamp,'/');
+    setcookie("login_rentaltruck", $login_rentaltruck,$timestamp,'/');
+    setcookie("login_truckodometer", $login_truckodometer,$timestamp,'/');
     $timestamp = strtotime('+6 month');
-    setcookie("login_username", $login_username,$timestamp);
-    setcookie("login_password", $login_password,$timestamp);
+    setcookie("login_username", $login_username,$timestamp,'/');
+    setcookie("login_password", $login_password,$timestamp,'/');
 }
 ?>
