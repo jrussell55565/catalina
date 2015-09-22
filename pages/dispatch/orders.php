@@ -379,6 +379,7 @@ $drivername = $_SESSION['drivername'];
                "Accepted PU" => "#FFB74D",
                "Accepted DEL" => "#FFB74D",
                "Arrived To Consignee" => "#FFB74D",
+			   "Arrived to Consignee" => "#FFB74D",
                "Dispatched" => "#FFB74D",
                "Dispatched Confirmed" => "#FFB74D",
                "Arrived to Shipper" => "#FFB74D",
