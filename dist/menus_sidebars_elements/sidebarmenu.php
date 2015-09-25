@@ -4,9 +4,9 @@
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="/pages/main/index.php"><i class="fa fa-circle-o"></i> Dashboard</a></li>
-                <li class="active"><a href="/pages/dispatch/orders.php"><i class="fa fa-circle-o"></i> Shipment Boards</a></li>
-                <li class="active"><a href="/pages/main/vir.php"><i class="fa fa-circle-o"></i> Vehicle Inspections</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/main/index.php"><i class="fa fa-circle-o"></i> Dashboard</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php"><i class="fa fa-circle-o"></i> Shipment Boards</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/main/vir.php"><i class="fa fa-circle-o"></i> Vehicle Inspections</a></li>
                 <li class="active"><a href="#"><i class="fa fa-circle-o"></i> Fuel Reporting</a></li>
                 <li class="active"><a href="#"><i class="fa fa-circle-o"></i> Ifta Repoprting</a></li>
                 <li class="active"><a href="#"><i class="fa fa-circle-o"></i> Saftey Reports</a></li>
