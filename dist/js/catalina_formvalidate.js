@@ -1,10 +1,12 @@
 function validateLogin()
 {
-    var trailer=document.forms["Driverlogin"]["LoadPosition"].value
-    var truck=document.forms["Driverlogin"]["TruckID"].value
-    var admin=document.forms["Driverlogin"]["AdminLogin"].checked
-    var odo=document.forms["Driverlogin"]["truck_odometer"].value;
+  var trailer=document.forms["Driverlogin"]["LoadPosition"].value
+  var truck=document.forms["Driverlogin"]["TruckID"].value
+  var admin=document.forms["Driverlogin"]["AdminLogin"].checked
+  var odo=document.forms["Driverlogin"]["truck_odometer"].value;
 
+  if (admin === False)
+  {
     if (odo == truck)
     {
       document.getElementById("odo_error1").innerHTML = "Truck and odometers values must be different";
@@ -25,18 +27,19 @@ function validateLogin()
     }
     if ((trailer==null || trailer=="") && (admin!=true))
     {
-	if(truck>1 && truck<3999)
-	{
+	  if(truck>1 && truck<3999)
+	  {
 	    document.forms["Driverlogin"]["LoadPosition"].value = truck;
-            return true;
-	}
-	if (truck>=4000 && truck<7999)
-	{
+        return true;
+	  }
+	  if (truck>=4000 && truck<7999)
+	  {
           document.getElementById("truck_error").innerHTML = "A trailer number is required";
           document.getElementById("truck_error").style.display = 'block';
           return false;
-	}
+	  }
     }
+  }
 }
 
 function validateForm()
