@@ -57,6 +57,13 @@ $deldriv = "";
 # Remove CRLF from Remarks
 $remarks = str_replace (array("\r\n", "\n", "\r"), ' ', $remarks);
 
+# If the statustype is NOT delivered then we'll just reset podDate and podTime to empty
+if ($statustype != 'Delivered')
+{
+    $poddate = '';
+    $podtime = '';
+}
+
 switch ($statustype)
 {
     case "Arrived to Shipper":
@@ -209,7 +216,7 @@ usleep(100);
 # Status.csv
 $tmpfnameStatus = "status+"."$exportdest+".microtime(true);
 $fpStatus = fopen($_SERVER['DOCUMENT_ROOT']."/exports/$tmpfnameStatus.csv", 'w');
-fwrite($fpStatus, "HWB,Status,PODName,PODDate,PodTime,Pcs,ReWeigh,Load Position,PickupConfirmed,PickupTime,Remarks,Driver,Remark Type,Remark Date,Remark Time,Delivery Driver,pallets\n\"$hawb\",\"$status\",\"$podname\",\"$poddate\",\"$podtime\",\"$pcs\",\"$reweigh\",\"".$_SESSION['truckid']."|".$_SESSION['trailerid']."\",\"$puconf\",\"$putime\",\"$remarks\",\"$drivername\",\"$remtype\",\"$remdate\",\"$remtime\",\"$deldriv\",\"$pallets\"");
+fwrite($fpStatus, "HWB,Status,PODName,PODDate,PodTime,Pcs,ReWeigh,Load Position,PickupConfirmed,PickupTime,Remarks,Driver,Remark Type,Remark Date,Remark Time,Delivery Driver,pallets\n\"$hawb\",\"$status\",\"$podname\",\"$poddate\",\"$podtime\",\"$pieces\",\"$reweigh\",\"".$_SESSION['truckid']."|".$_SESSION['trailerid']."\",\"$puconf\",\"$putime\",\"$remarks\",\"$drivername\",\"$remtype\",\"$remdate\",\"$remtime\",\"$deldriv\",\"$pallets\"");
 fclose($fpStatus);
 
 mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
