@@ -16,15 +16,16 @@ mysql_select_db($db_name) or DIE('Database name is not available!');
 # Get some db values
 $recordid = $_POST[recordid];
 $sql = "select 
-        hawbNumber, PUAgentDriverName, COALESCE(puAgentCode,'CATTUS1'),
+        hawbNumber, PUAgentDriverName, delAgentDriverName, COALESCE(puAgentCode,'CATTUS1') puAgentCode,
         date_format(str_to_date(dueDate, '%c/%e/%Y'),'%c/%e/%Y') dueDate
         from dispatch where recordId = $recordid";
 
 $row = mysql_fetch_array(mysql_query($sql),MYSQL_BOTH);
-$hawb       = $row[0];
-$drivername = $row[1];
-$exportdest = $row[2];
-$dueDate    = $row[3];
+$hawb       = $row['hawbNumber'];
+$drivername = $row['PUAgentDriverName'];
+$delDriver  = $row['delAgentDriverName']
+$exportdest = $row['puAgentCode'];
+$dueDate    = $row['dueDate'];
 
 $username	= $_SESSION['userid'];
 
@@ -156,7 +157,7 @@ switch ($statustype)
 	$accessorials = processAccessorials($hawb,"DEL",$username);
 	if ($remarks != '')
 		{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$delDriver has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
 	}
         break;
     case "Refused":
@@ -184,7 +185,7 @@ switch ($statustype)
 	$accessorials = processAccessorials($hawb,"DEL",$username);
 	if ($remarks != '')
 	{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$delDriver has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
 	}
         break;
 }
