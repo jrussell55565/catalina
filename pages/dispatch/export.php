@@ -23,7 +23,7 @@ $sql = "select
 $row = mysql_fetch_array(mysql_query($sql),MYSQL_BOTH);
 $hawb       = $row['hawbNumber'];
 $drivername = $row['PUAgentDriverName'];
-$delDriver  = $row['delAgentDriverName']
+$delDriver  = $row['delAgentDriverName'];
 $exportdest = $row['puAgentCode'];
 $dueDate    = $row['dueDate'];
 
