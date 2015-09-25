@@ -55,8 +55,8 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
                                     <div class="panel-body">
                                     <?php if ($_GET['return'] == 'true'){ ?>
                                       <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center">
-                                        An email was sent to dispatch requesting a new password.
-                                      </div>
+                                        An email was sent to dispatch requesting your password.
+                                      <a href="http://dispatch.catalinacartage.com">Login Page</a></div>
                                     <?php }else{ ?>
                                     Enter your username and dispatch will send your password to the email account associated with this username.
                                     <input type="hidden" id="forgotPassword" name="forgotPassword" value="true">

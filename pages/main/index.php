@@ -299,8 +299,8 @@ $drivername = $_SESSION['drivername'];
 </a>
                 <div class="info-box-content">
                   <span class="info-box-text"><a href="/pages/dispatch/vir.php">Vehicle inspection Reports</a></span>
-                  <span class="info-box-number">Todays VIRs: ?/PHP <br>
-                  Total VIR's: ?/PHP</span>
+                  <span class="info-box-number">Todays VIRs: 1 <br>
+                  Total VIR's: 136</span>
                 </div><!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
