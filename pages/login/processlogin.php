@@ -30,16 +30,46 @@ $_SESSION['login_truckodometer'] = $truckOdometer;
 $_SESSION['truckid'] = $truckId;
 $_SESSION['trailerid'] = $trailerId;
 
+# setup the database connection
+mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
+mysql_select_db($db_name) or DIE('Database name is not available!');
+
+# First, if we've gotten here via the forgotPassword page then we'll just 
+# validate and skip the rest
+
+if ($_POST['forgotPassword'] == 'true')
+{
+    $forgottenUser = $_POST['DriverUserName'];
+    $sql = "SELECT email FROM users WHERE username = '" . mysql_real_escape_string($forgottenUser) . "'"; 
+    $login = mysql_query($sql);
+    if (!$login) {
+        die('Invalid query: ' . mysql_error());
+    }
+    if (mysql_num_rows($login) == 1)
+    {
+        $row = mysql_fetch_array($login, MYSQL_BOTH);
+        $forgottenEmail = $row['email'];
+        sendEmail('dispatch@catalinacartage.com',"Password Request","$forgottenUser has requested a new password.\r\nPlease send a new password to $forgottenEmail");
+    }
+    header("Location: /pages/login/forgot.php?return=true");
+}
+
+// Check username and password match
+if (mysql_num_rows($login) == 1)
+{
+        while ($row = mysql_fetch_array($login, MYSQL_BOTH))
+        {
+}
+
+$login = mysql_query($sql);
+}
+
 if ($admin)
 {
 	$admin = "1";
 }else{
 	$admin = "0";
 }
-
-# setup the database connection
-mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
-mysql_select_db($db_name) or DIE('Database name is not available!');
 
 if ($admin == 0)
 {
