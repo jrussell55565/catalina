@@ -22,7 +22,7 @@ $sql = "select
 
 $row = mysql_fetch_array(mysql_query($sql),MYSQL_BOTH);
 $hawb       = $row['hawbNumber'];
-$drivername = $row['PUAgentDriverName'];
+$puDriver   = $row['PUAgentDriverName'];
 $delDriver  = $row['delAgentDriverName'];
 $exportdest = $row['puAgentCode'];
 $dueDate    = $row['dueDate'];
@@ -67,134 +67,157 @@ if ($statustype != 'Delivered')
 switch ($statustype)
 {
     case "Arrived to Shipper":
-	$status = "Arrived to Shipper";
-	$accessorials = processAccessorials($hawb,"PU",$username);
-	if ($remarks != '')
-		{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
-	}
-        break;
+	    $status = "Arrived to Shipper";
+	    $accessorials = processAccessorials($hawb,"PU",$username);
+        $drivername = $puDriver;
+	    if ($remarks != '')
+	    {
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+	    }
+    break;
+
     case "Accepted PU":
-	$status = "Accepted PU";
-	$accessorials = processAccessorials($hawb,"PU",$username);
-	if ($remarks != '')
+	    $status = "Accepted PU";
+	    $accessorials = processAccessorials($hawb,"PU",$username);
+        $drivername = $puDriver;
+	    if ($remarks != '')
 		{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
-	}
-        break;
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+	    }
+    break;
+
     case "Arrived to Consignee":
         $status = "Arrived To Consignee";
-	$accessorials = processAccessorials($hawb,"DEL",$username);
-	if ($remarks != '')
+	    $accessorials = processAccessorials($hawb,"DEL",$username);
+        $drivername = $delDriver;
+	    if ($remarks != '')
 		{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
 	}
-        break;
+    break;
+
     case "Accepted DEL":
-	$status = "Accepted DEL";
-	$accessorials = processAccessorials($hawb,"PU",$username);
-	if ($remarks != '')
-		{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
-	}
-        break;
+	    $status = "Accepted DEL";
+	    $accessorials = processAccessorials($hawb,"PU",$username);
+        $drivername = $delDriver;
+	    if ($remarks != '')
+		    {
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+	    }
+    break;
+
     case "Reject PU DEL":
-	$status = "Reject PU DEL";
-	$accessorials = processAccessorials($hawb,"PU",$username);
-	if ($remarks != '')
-		{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
-	}
-        break;
+	    $status = "Reject PU DEL";
+	    $accessorials = processAccessorials($hawb,"PU",$username);
+	    if ($remarks != '')
+		    {
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+	    }
+    break;
+
     case "Trace Note PU":
-	$status = "Trace Note PU";
-	$accessorials = processAccessorials($hawb,"PU",$username);
-	if ($remarks != '')
+	    $status = "Trace Note PU";
+	    $accessorials = processAccessorials($hawb,"PU",$username);
+        $drivername = $puDriver;
+	    if ($remarks != '')
 		{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
-	}
-		break;
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+	    }
+	break;
+
     case "Freight At Dock":
         $status = "Freight At Dock";
-	if ($_POST['formname'] == "FreightAtDock.php")
-	{
-		$accessorials = processAccessorials($hawb,"PU",$username);
-	}else{
-		$accessorials = processAccessorials($hawb,"DEL",$username);
-	}
-	if ($remarks != '')
+	    if ($_POST['formname'] == "FreightAtDock.php")
+	    {
+		    $accessorials = processAccessorials($hawb,"PU",$username);
+	    }else{
+		    $accessorials = processAccessorials($hawb,"DEL",$username);
+	    }
+	    if ($remarks != '')
 		{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
-	}
-		break;
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+	    }
+	break;
+
     case "Trailer Dropped":
         $status = "Trailer Dropped";
-	if ($_POST['formname'] == "TrailerDroppedPU.php")
-	{
-		$accessorials = processAccessorials($hawb,"PU",$username);
-	}else{
-		$accessorials = processAccessorials($hawb,"DEL",$username);
-	}
-	if ($remarks != '')
+	    if ($_POST['formname'] == "TrailerDroppedPU.php")
+	    {
+		    $accessorials = processAccessorials($hawb,"PU",$username);
+	    }else{
+		    $accessorials = processAccessorials($hawb,"DEL",$username);
+	    }
+	    if ($remarks != '')
 		{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
-	}
-        break;
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+	    }
+    break;
+
     case "Picked Up":
         $status = "Picked Up";
-	$puconf = "X";
-	$putime = $localtime;
-	$accessorials = processAccessorials($hawb,"PU",$username);
+	    $puconf = "X";
+	    $putime = $localtime;
+	    $accessorials = processAccessorials($hawb,"PU",$username);
+        $drivername = $puDriver;
 
-	if ($remarks != '')
-	{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
-	}
+	    if ($remarks != '')
+	    {
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+	    }
 	break;
+
     case "Attempted Pick Up":
         $status = "Attempted Pick Up";
-	$accessorials = processAccessorials($hawb,"PU",$username);
-	if ($remarks != '')
+	    $accessorials = processAccessorials($hawb,"PU",$username);
+        $drivername = $puDriver;
+	    if ($remarks != '')
 		{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
-	}
-        break;
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+	    }
+    break;
+
     case "Attempted Delivery":
         $status = "Attempted Delivery";
-	$accessorials = processAccessorials($hawb,"DEL",$username);
-	if ($remarks != '')
+	    $accessorials = processAccessorials($hawb,"DEL",$username);
+        $drivername = $delDriver;
+	    if ($remarks != '')
 		{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$delDriver has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
-	}
-        break;
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$delDriver has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+	    }
+    break;
+
     case "Refused":
         $status = "Refused";
-	$accessorials = processAccessorials($hawb,"DEL",$username);
-	if ($remarks != '')
+	    $accessorials = processAccessorials($hawb,"DEL",$username);
+	    if ($remarks != '')
 		{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
-	}
-	    break;
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+	    }
+	break;
+
     case "Trace Note DEL":
-	$status = "Trace Note DEL";
-	$accessorials = processAccessorials($hawb,"DEL",$username);
-	if ($remarks != '')
+	    $status = "Trace Note DEL";
+	    $accessorials = processAccessorials($hawb,"DEL",$username);
+        $drivername = $delDriver;
+	    if ($remarks != '')
 		{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
 	}
-        break;
+    break;
+
     case "Delivered":
         $status = "Delivered";
         # Form checking.
         if ($podname == '') { returnWithError($recordid,'/pages/dispatch/delconfirmed.php','podName'); }
         if ($pieces < 1) { returnWithError($recordid,'/pages/dispatch/delconfirmed.php','pieces'); }
 
-	$accessorials = processAccessorials($hawb,"DEL",$username);
-	if ($remarks != '')
-	{
-		sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$delDriver has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
-	}
-        break;
+	    $accessorials = processAccessorials($hawb,"DEL",$username);
+        $drivername = $delDriver;
+	    if ($remarks != '')
+	    {
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$delDriver has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+	    }
+    break;
 }
 
 # For the simple status change
