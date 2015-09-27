@@ -215,7 +215,7 @@ switch ($statustype)
         $drivername = $delDriver;
 	    if ($remarks != '')
 	    {
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$delDriver has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
 	    }
     break;
 }
