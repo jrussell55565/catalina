@@ -48,6 +48,12 @@ if ($wwwroot eq '')
     exit 1;
 }
 
+if (! -d "$wwwroot/imports/")
+{
+    print "$wwwroot/imports/ does not exist\n";
+    exit 1;
+}
+
 if (! -d $wwwroot)
 {
     print "Invalid path for --wwwroot\n";
@@ -56,7 +62,7 @@ if (! -d $wwwroot)
 
 our @ftproot	= ("CatalinaCartage");
 our @list = ();
-our $debug = 0;
+our $debug = 1;
 
 get_file();
 

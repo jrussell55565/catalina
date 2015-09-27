@@ -42,6 +42,12 @@ if (! -d $wwwroot)
     exit 1;
 }
 
+if (! -d "$wwwroot/exports/")
+{
+    print "$wwwroot/exports/ does not exist\n";
+    exit 1;
+}
+
 our $exportdir  = "$wwwroot/exports";
 our $debug = 0;
 
