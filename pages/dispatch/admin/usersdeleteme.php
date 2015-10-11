@@ -443,7 +443,12 @@ $drivername = $_SESSION['drivername'];
             <div class="col-md-12">
               <div class="box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Add Edit Drivers: <?php echo "$drivername"; ?></h3>
+                  <h3 class="box-title">User Administration: 
+                    <input type="submit" name="Add New User" id="Add New User" value="Add New User">
+                    <label for="search"></label>
+                    <input type="text" name="search" id="search">
+                    <input type="submit" name="Search" id="Search" value="Search Users">
+                  </h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <div class="btn-group">
@@ -460,41 +465,185 @@ $drivername = $_SESSION['drivername'];
                   </div>
                 </div><!-- /.box-header --><!-- ./box-body -->
                 <div class="box-footer">
-                Driver Name
-
-Login
-
-Pass
-
-Email
-
-AltE
-
-V Text
-
-AltV
-
-Driver ID
-
-Admin
-
-Add
-
-Delete
-                  <table width="878" border="1" id="Users">
+                  <table width="826" height="747" border="1" id="Users">
                     <tr>
-                      <td width="72">Driver Name</td>
-                      <td width="72">Login</td>
-                      <td width="72">Pass</td>
-                      <td>Email</td>
-                      <td>AltE</td>
-                      <td width="120">V Text</td>
-                      <td width="34">AltV</td>
-                      <td width="144">Driver ID</td>
-                      <td width="51">Admin</td>
-                      <td width="38">Add</td>
-                      <td width="281">Delete</td>
+                      <td height="741"><table width="711" border="1">
+                        <tr>
+                          <td width="99" height="28"><span class="text-center">First Name</span></td>
+                          <td width="429"><span class="text-center">
+                            <input type="text" name="firstname" id="firstname">
+                          </span></td>
+                          <td width="161">Show DB User ID</td>
+                        </tr>
+                        <tr>
+                          <td height="42"><span class="text-center">Last Name:</span></td>
+                          <td><span class="text-center">
+                            <input type="text" name="lastname" id="lastname">
+                          </span></td>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td><span class="text-center">Login:</span></td>
+                          <td><span class="text-center">
+                            <input type="text" name="loginid" id="loginid">
+                          </span></td>
+                          <td>Must Match TS</td>
+                        </tr>
+                        <tr>
+                          <td>Password:</td>
+                          <td><label for="password"></label>
+                            <input type="text" name="password" id="password"></td>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td>Phone #</td>
+                          <td><label for="driverid"></label>
+                            <input type="text" name="driverid" id="driverid">
+                            This is also Driver ID in DB </td>
+                          <td>Must Match TS</td>
+                        </tr>
+                        <tr>
+                          <td>Email</td>
+                          <td><input name="email" type="text" id="email" size="40">
+                            <input type="submit" name="Test SMS2" id="Test SMS2" value="Test Email"></td>
+                          <td><input type="checkbox" name="Email Alerts" id="Email Alerts">
+                            <label for="Email Alerts">Email Alerts</label></td>
+                        </tr>
+                        <tr>
+                          <td>Vtext</td>
+                          <td><p>
+                            <label for="vtext"></label>
+                            <input type="text" name="vtext" id="vtext">
+                            <label for="Cell Providors"></label>
+                            <select name="Cell Providors" id="Cell Providors">
+                              <option value="">--- None Available --</option>
+                              <option value="@message.alltel.com">Alltel (@message.alltel.com)</option>
+                              <option value="@txt.att.net">AT&amp;T (formerly Cingular) (@txt.att.net)</option>
+                              <option value="@mms.att.net">AT&amp;T (Smartphone) (@mms.att.net)</option>
+                              <option value="@cingularme.com">AT&amp;T (formerly Cingular) (@cingularme.com)</option>
+                              <option value="@myboostmobile.com">Boost Mobile (@myboostmobile.com)</option>
+                              <option value="@messaging.nextel.com">Nextel (now Sprint Nextel) (@messaging.nextel.com)</option>
+                              <option value="@messaging.sprintpcs.com">Sprint PCS (now Sprint Nextel) (@messaging.sprintpcs.com)</option>
+                              <option value="@pm.sprint.com">Sprint (Smartphone) (@pm.sprint.com)</option>
+                              <option value="@tmomail.net">T-Mobile (@tmomail.net)</option>
+                              <option value="@email.uscc.net">US Cellular (@email.uscc.net)</option>
+                              <option value="@vtext.com" selected>Verizon (@vtext.com)</option>
+                              <option value="@vzwpix.com">Verizon (Smartphone) (@vzwpix.com)</option>
+                              <option value="@vmobl.com">Virgin Mobile USA (@vmobl.com)</option>
+                              <option value="@mmst5.tracfone.com">Tracfone (prepaid) (@mmst5.tracfone.com)</option>
+                              <option value="@vtext.com">Straight Talk (@vtext.com)</option>
+                              <option value="@page.att.net">AT&amp;T Enterprise Paging (@page.att.net)</option>
+                              <option value="@cingularme.com">Cingular (Postpaid) (@cingularme.com)</option>
+                              <option value="@mymetropcs.com">MetroPCS (@mymetropcs.com)</option>
+                              <option value="@qwestmp.com">Qwest (@qwestmp.com)</option>
+                              <option value="@cingularme.com">Cingular (GoPhone prepaid) (@cingularme.com)</option>
+                              <option value="@cingularme.com">7-11 Speakout (USA GSM) (@cingularme.com)</option>
+                              <option value="@messaging.nextel.com">Nextel (United States) (@messaging.nextel.com)</option>
+                              <option value="@txt.bell.ca">Bell Mobility &amp; Solo Mobile (Canada) (@txt.bell.ca)</option>
+                              <option value="@fido.ca">Fido (Canada) (@fido.ca)</option>
+                              <option value="@msg.koodomobile.com">Koodo Mobile (Canada) (@msg.koodomobile.com)</option>
+                              <option value="@text.mtsmobility.com">MTS (Canada) (@text.mtsmobility.com)</option>
+                              <option value="@txt.bell.ca">President&#x27;s Choice (Canada) (@txt.bell.ca)</option>
+                              <option value="@pcs.rogers.com">Rogers (Canada) (@pcs.rogers.com)</option>
+                              <option value="@sms.sasktel.com">Sasktel (Canada) (@sms.sasktel.com)</option>
+                              <option value="@msg.telus.com">Telus Mobility (Canada) (@msg.telus.com)</option>
+                              <option value="@airtelkk.com">Airtel (Karnataka, India) (@airtelkk.com)</option>
+                              <option value="@sms.airtelmontana.com">Airtel Wireless (Montana, USA) (@sms.airtelmontana.com)</option>
+                              <option value="@msg.acsalaska.com">Alaska Communications Systems (@msg.acsalaska.com)</option>
+                              <option value="@text.aql.com">Aql (@text.aql.com)</option>
+                              <option value="@tachyonsms.co.uk">BigRedGiant Mobile Solutions (@tachyonsms.co.uk)</option>
+                              <option value="@bplmobile.com">BPL Mobile (Mumbai, India) (@bplmobile.com)</option>
+                              <option value="@cellcom.quiktxt.com">Cellcom (@cellcom.quiktxt.com)</option>
+                              <option value="@mobile.celloneusa.com">Cellular One (Dobson) (@mobile.celloneusa.com)</option>
+                              <option value="@text.cellonenation.net">Cellular One (Alternate) (@text.cellonenation.net)</option>
+                              <option value="@cwemail.com">Centennial Wireless (@cwemail.com)</option>
+                              <option value="@clarotorpedo.com.br">Claro (Brasil) (@clarotorpedo.com.br)</option>
+                              <option value="@ideasclaro-ca.com">Claro (Nicaragua) (@ideasclaro-ca.com)</option>
+                              <option value="@comcel.com.co">Comcel (@comcel.com.co)</option>
+                              <option value="@sms.mycricket.com">Cricket (@sms.mycricket.com)</option>
+                              <option value="@cspire1.com">C-Spire (@cspire1.com)</option>
+                              <option value="@sms.ctimovil.com.ar">CTI (@sms.ctimovil.com.ar)</option>
+                              <option value="@emtelworld.net">Emtel (Mauritius) (@emtelworld.net)</option>
+                              <option value="@msg.gci.net">General Communications Inc. (@msg.gci.net)</option>
+                              <option value="@msg.globalstarusa.com">Globalstar (satellite) (@msg.globalstarusa.com)</option>
+                              <option value="@messaging.sprintpcs.com">Helio (@messaging.sprintpcs.com)</option>
+                              <option value="@ivctext.com">Illinois Valley Cellular (@ivctext.com)</option>
+                              <option value="@msg.iridium.com">Iridium (satellite) (@msg.iridium.com)</option>
+                              <option value="@rek2.com.mx">Iusacell (@rek2.com.mx)</option>
+                              <option value="@sms.lmt.lv">LMT (Latvia) (@sms.lmt.lv)</option>
+                              <option value="@sms.mymeteor.ie">Meteor (Ireland) (@sms.mymeteor.ie)</option>
+                              <option value="@sms.spicenepal.com">Mero Mobile (Nepal) 977 (@sms.spicenepal.com)</option>
+                              <option value="@sms.movistar.net.ar">Movicom (Argentina) (@sms.movistar.net.ar)</option>
+                              <option value="@sms.mobitel.lk">Mobitel (Sri Lanka) (@sms.mobitel.lk)</option>
+                              <option value="@movistar.com.co">Movistar (Colombia) (@movistar.com.co)</option>
+                              <option value="@sms.co.za">MTN (South Africa) (@sms.co.za)</option>
+                              <option value="@nextel.net.ar">Nextel (Argentina) TwoWay.11 (@nextel.net.ar)</option>
+                              <option value="@pcs.ntelos.com">Ntelos (@pcs.ntelos.com)</option>
+                              <option value="@orange.pl">Orange Polska (Poland) (@orange.pl)</option>
+                              <option value="@alertas.personal.com.ar">Personal (Argentina) (@alertas.personal.com.ar)</option>
+                              <option value="@text.plusgsm.pl">Plus GSM (Poland) +48 (@text.plusgsm.pl)</option>
+                              <option value="@slinteractive.com.au">SL Interactive (Australia) (@slinteractive.com.au)</option>
+                              <option value="@mas.aw">Setar Mobile email (Aruba) 297+ (@mas.aw)</option>
+                              <option value="@tms.suncom.com">Suncom (@tms.suncom.com)</option>
+                              <option value="@sms.t-mobile.at">T-Mobile (Austria) (@sms.t-mobile.at)</option>
+                              <option value="@t-mobile.uk.net">T-Mobile (UK) (@t-mobile.uk.net)</option>
+                              <option value="@sms.thumbcellular.com">Thumb Cellular (@sms.thumbcellular.com)</option>
+                              <option value="@sms.tigo.com.co">Tigo (Formerly Ola) (@sms.tigo.com.co)</option>
+                              <option value="@utext.com">Unicel (@utext.com)</option>
+                              <option value="@vmobile.ca">Virgin Mobile (Canada) (@vmobile.ca)</option>
+                              <option value="@voda.co.za">Vodacom (South Africa) (@voda.co.za)</option>
+                              <option value="@sms.vodafone.it">Vodafone (Italy) (@sms.vodafone.it)</option>
+                              <option value="@sms.ycc.ru">YCC (@sms.ycc.ru)</option>
+                              <option value="@mobipcs.net">MobiPCS (Hawaii only) (@mobipcs.net)</option>
+                            </select>
+                          </p>
+                            <p>
+                              <input type="submit" name="Test SMS" id="Test SMS" value="Test SMS">
+                            </p></td>
+                          <td><input type="checkbox" name="vtext" id="vtext">
+                            <label for="vtext">Text Alerts</label></td>
+                        </tr>
+                        <tr>
+                          <td>Photo</td>
+                          <td>Make sure to set Limts to Image size on import. 160 x 160
+                            <form method="post" action="file-upload-1.htm" name="submit" enctype="multipart/form-data">
+                              <input type="file" name="fileField">
+                              <br />
+                              <input type="submit" name="submit" value="Submit">
+                            </form></td>
+                          <td><img src="/githubproject8080/catalina/dist/img/userimages/nophotoavailable.JPG" width="160" height="160"></td>
+                        </tr>
+                        <tr>
+                          <td>Access Roll</td>
+                          <td><select name="usertype" id="usertype">
+                            <option value="1">Administrator</option>
+                            <option value="2">Manager</option>
+                            <option value="0" selected>Basic User</option>
+                          </select></td>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td>Active</td>
+                          <td><select name="usertype2" id="usertype2">
+                            <option selected>active</option>
+                            <option>innactive</option>
+                          </select></td>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td>Start Date</td>
+                          <td>&nbsp;</td>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td height="47">&nbsp;</td>
+                          <td>&nbsp;</td>
+                          <td><input type="submit" name="Submit" id="Submit" value="Update User Info"></td>
+                        </tr>
+                      </table></td>
                     </tr>
+
+<!-- /.Old PHP Code from Previous Users Menu 
                     <?php
 		$result = mysql_query("SELECT * FROM users ORDER BY drivername");
 		$counter = 0;
@@ -564,39 +713,12 @@ Delete
 			
 		}
 		?>
+-->        
                     <form id="usermanagement_add" name="usermanagement_add" method="post" action="useractions.php">
-                      <tr>
-                        <td><label>
-                          <input name="driver_name" type="text" id="driver_name" size="12" />
-                        </label></td>
-                        <td><label>
-                          <input name="driver_login" type="text" id="driver_login" size="12"  />
-                        </label></td>
-                        <td><label>
-                          <input name="driver_password" type="text" id="driver_password" size="12"/>
-                        </label></td>
-                        <td width="120"><label>
-                          <input name="driver_email" type="text" id="driver_email" size="20" />
-                        </label></td>
-                        <td width="33"><input type="checkbox" name="ck_emailupdate" id="ck_emailupdate" /></td>
-                        <td><label>
-                          <input name="driver_vtext" type="text" id="driver_vtext" size="20" />
-                        </label></td>
-                        <td><input type="checkbox" name="ck_vtextupdate" id="ck_vtextupdate" /></td>
-                        <td><label>
-                          <input name="driver_ID" type="text" id="driver_ID" size="20"  />
-                        </label></td>
-                        <td><label>
-                          <input name="driver_admin" type="checkbox" id="driver_admin" />
-                        </label></td>
-                        <td><input name="btn_submit" value="Add" type="submit" id="btn_submit" /></td>
-                        <td>&nbsp;</td>
                     </form>
-  </tr>
-  
                   </table>
-<div class="row">
-              <div class="col-sm-3 col-xs-6">
+                  <div class="row">
+<div class="col-sm-3 col-xs-6">
                       <div class="description-block border-right">
                         <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
                         <h5 class="description-header">4210</h5>
@@ -624,61 +746,11 @@ Delete
                         <span class="description-text">GOAL COMPLETIONS</span>
                       </div><!-- /.description-block -->
                     </div>
-                  </div><!-- /.row -->
+                </div><!-- /.row -->
                 </div><!-- /.box-footer -->
               </div><!-- /.box -->
             </div><!-- /.col -->
-          </div><!-- /.row -->
-          
-   Shipment Updates: PHP? Current Year:
-
-
-
-
-
-Monthly Stats For: 
-
-Total Shipments Dispatched100 
-
-
-
-
-
-Total Updateded Shipments80 
-
-
-
-
-
-Vehicle Inspections Score ?/? 
-
-
-
-
-
-Fuel Entries Score ?/? 
-
-
-
-
-
-IFTA Entries Score ?/? 
-
-
-
-
-
-
-
-
-
-
-
-       
-          
-          
-
-            <!-- PAGE CONTENT HERE -->
+          </div><!-- /.row --><!-- PAGE CONTENT HERE -->
 
             <!-- END PAGE CONTENT HERE -->
 

@@ -92,7 +92,7 @@ $drivername = $_SESSION['drivername'];
                 <span class="info-box-icon bg-red"><i class="fa fa-wrench faa-wrench animated"></i></span>
 </a>               
                 <div class="info-box-content">
-                  <span class="info-box-text"><a href="pages/dispatch/vir.php">View / EDIT / EXPORT DRIVERS VIRs</a></span>
+                  <span class="info-box-text"><a href="pages/dispatch/vir.php">VIEW / EDIT / EXPORT DRIVERS VIRs</a></span>
                   <span class="info-box-number">                  Total VIR's Reported: ?/PHP</span>
                 </div>
                 <!-- /.info-box-content -->
@@ -203,7 +203,7 @@ $drivername = $_SESSION['drivername'];
                <span class="info-box-icon bg-blue"><i class="fa fa-newspaper-o"></i></span>
                </a>
                 <div class="info-box-content">
-                  <span class="info-box-text"><a href="pages/dispatch/adminusers.php">VIEW / EDIT / eXPORT HWB Accessorials</a></span><span class="info-box-number">PU &amp; DEL</span></div>
+                  <span class="info-box-text"><a href="pages/dispatch/adminusers.php">VIEW / EDIT / EXPORT HWB Accessorials</a></span><span class="info-box-number">PU &amp; DEL</span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->            
@@ -239,7 +239,7 @@ $drivername = $_SESSION['drivername'];
             <div class="col-md-12">
               <div class="box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Yearly Stats For: <?php echo "$drivername"; ?></h3>
+                  <h3 class="box-title">User Info: <?php echo "$drivername"; ?> <span class="progress-text"></span></h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <div class="btn-group">

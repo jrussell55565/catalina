@@ -39,7 +39,6 @@ $drivername = $_SESSION['drivername'];
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 <link rel="stylesheet" href="http://dispatch.catalinacartage.com:8080/dist/css/animate.css">
-<link href="../../dist/css/AdminLTE.css" rel="stylesheet" type="text/css">
 </head>
 <body class="skin-blue sidebar-mini">
 <div class="wrapper">
@@ -67,166 +66,136 @@ $drivername = $_SESSION['drivername'];
           <div class="row">
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
-<a href="/pages/dispatch/orders.php">
+<a href="pages/dispatch/orders.php">
                  <span class="info-box-icon bg-aqua"><i class="fa fa-cog fa-spin"></i></span>
                 </a>               
                 <div class="info-box-content">
-<span class="info-box-text"><a href="/pages/dispatch/orders.php">Combined Load Boards</a></span><span class="info-box-number">  Todays  PU:  <?php echo "$pu_today_count";?><br>
-                    Todays DEL:   <?php echo "$del_today_count";?></span>
-                </div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
-
-
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="pages/dispatch/vir.php" class="button animated rubberBand">
-<style>
+                  <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                      <div class="info-box-content"><span class="info-box-text"><a href="/pages/dispatch/orders.php">Combined Load Boards</a></span><span class="info-box-number"> Todays  PU: <?php echo "$pu_today_count";?><br>
+                        Todays DEL: <?php echo "$del_today_count";?></span></div>
+                      <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box"> <a href="pages/dispatch/vir.php" class="button animated rubberBand">
+                      <style>
  a.button {
 	 -webkit-animation-duration: 5s;
 	 -webkit-animation-delay: 1s;
 	 -webkit-animation-iteration-count: infinite;
  }
-</style>
-                <span class="info-box-icon bg-red"><i class="fa fa-wrench faa-wrench animated"></i></span>
-</a>               
-                <div class="info-box-content">
-                  <p><span class="info-box-text"><a href="pages/dispatch/vir.php">Combined   VIRs</a></span>
-                    <span class="info-box-number">                   Todays  VIRS:  <?php echo "$pu_today_count";?><br>
-Last 8 days VIRS: <?php echo "$del_today_count";?></span></p>
-</div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
-
-            <!-- fix for small devices only -->
-            <div class="clearfix visible-sm-block"></div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="pages/tables/fuel.php" class="button2 animated zoomIn">
-<style>
+                  </style>
+                      <span class="info-box-icon bg-red"><i class="fa fa-wrench faa-wrench animated"></i></span></a>
+                      <div class="info-box-content">
+                        <p><span class="info-box-text"><a href="pages/dispatch/vir.php">Combined   VIRs</a></span> <span class="info-box-number"> Todays  VIRS: <?php echo "$pu_today_count";?><br>
+                          Last 8 days VIRS: <?php echo "$del_today_count";?></span></p>
+                      </div>
+                      <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                  </div>
+                  <!-- /.col -->
+                  <!-- fix for small devices only -->
+                  <div class="clearfix visible-sm-block"></div>
+                  <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box"> <a href="pages/tables/fuel.php" class="button2 animated zoomIn">
+                      <style>
  a.button2 {
 	 -webkit-animation-duration: 6s;
 	 -webkit-animation-delay: 1s;
 	 -webkit-animation-iteration-count: infinite;
  }
-</style>              
-                <span class="info-box-icon bg-green"><i class="fa fa-tachometer"></i></span>
-                </a>
-                <div class="info-box-content">
-                <span class="info-box-text"><a href="pages/dispatch/vir.php">Combined Fuel Logs</a></span><span class="info-box-number">Todays  Fuel: <?php echo "$pu_today_count";?><br>
-Last 8 days Fuel: <?php echo "$del_today_count";?></span></div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
-
-
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="pages/tables/ifta.php" class="button3 animated jello">
-<style>
+                  </style>
+                      <span class="info-box-icon bg-green"><i class="fa fa-tachometer"></i></span></a>
+                      <div class="info-box-content"> <span class="info-box-text"><a href="pages/dispatch/vir.php">Combined Fuel Logs</a></span><span class="info-box-number">Todays  Fuel: <?php echo "$pu_today_count";?><br>
+                        Last 8 days Fuel: <?php echo "$del_today_count";?></span></div>
+                      <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box"> <a href="pages/tables/ifta.php" class="button3 animated jello">
+                      <style>
  a.button3 {
 	 -webkit-animation-duration: 3s;
 	 -webkit-animation-delay: 1s;
 	 -webkit-animation-iteration-count: infinite;
  }
-</style>
-               <span class="info-box-icon bg-yellow"><i class="fa fa-newspaper-o"></i></span>
-</a>
-                <div class="info-box-content">
-                <span class="info-box-text"><a href="pages/dispatch/vir.php">Combined  IFTA Reports</a></span><span class="info-box-number">Todays  IFTA: <?php echo "$pu_today_count";?><br>
-Last 8 days IFTA: <?php echo "$del_today_count";?></span></div><!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
-            
-
-
-
-            
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="pages/tables/ifta.php" class="button3 animated pulse">
-<style>
+                  </style>
+                      <span class="info-box-icon bg-yellow"><i class="fa fa-newspaper-o"></i></span></a>
+                      <div class="info-box-content"> <span class="info-box-text"><a href="pages/dispatch/vir.php">Combined  IFTA Reports</a></span><span class="info-box-number">Todays  IFTA: <?php echo "$pu_today_count";?><br>
+                        Last 8 days IFTA: <?php echo "$del_today_count";?></span></div>
+                      <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box"> <a href="pages/tables/ifta.php" class="button3 animated pulse">
+                      <style>
  a.button3 {
 	 -webkit-animation-duration: 3s;
 	 -webkit-animation-delay: 1s;
 	 -webkit-animation-iteration-count: infinite;
  }
-</style>
-               <span class="info-box-icon bg-blue"><i class="fa fa-bank"></i></span>
-</a>
-
-                <div class="info-box-content">
-                  <span class="info-box-text"><a href="pages/dispatch/vir.php">Combined  DOT Saftey Report</a></span>
-                <span class="info-box-number">                  Import Export Reports</span></div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->            
-            
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="pages/tables/ifta.php" class="button3 animated pulse">
-<style>
+                  </style>
+                      <span class="info-box-icon bg-blue"><i class="fa fa-bank"></i></span></a>
+                      <div class="info-box-content"> <span class="info-box-text"><a href="pages/dispatch/vir.php">Combined  DOT Saftey Report</a></span> <span class="info-box-number"> Import Export Reports</span></div>
+                      <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box"> <a href="pages/tables/ifta.php" class="button3 animated pulse">
+                      <style>
  a.button3 {
 	 -webkit-animation-duration: 3s;
 	 -webkit-animation-delay: 1s;
 	 -webkit-animation-iteration-count: infinite;
  }
-</style>
-               <span class="info-box-icon bg-purple"><i class="fa fa-map-marker"></i></span>
-               </a>
-                <div class="info-box-content">
-                  <span class="info-box-text"><a href="pages/dispatch/adminusers.php">Locate Drivers</a></span><span class="info-box-number"> Import Export Locations</span></div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
-
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="pages/tables/ifta.php" class="button3 animated tada">
-<style>
+                  </style>
+                      <span class="info-box-icon bg-purple"><i class="fa fa-map-marker"></i></span></a>
+                      <div class="info-box-content"> <span class="info-box-text"><a href="pages/dispatch/adminusers.php">Locate Drivers</a></span><span class="info-box-number"> Import Export Locations</span></div>
+                      <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box"> <a href="pages/tables/ifta.php" class="button3 animated tada">
+                      <style>
  a.button3 {
 	 -webkit-animation-duration: 3s;
 	 -webkit-animation-delay: 1s;
 	 -webkit-animation-iteration-count: infinite;
  }
-</style>
-               <span class="info-box-icon bg-#607D8B"><i class="fa fa-check-square-o"></i></span>
-               </a>
-                <div class="info-box-content">
-                  <span class="info-box-text"><a href="pages/dispatch/adminusers.php"> Edit Accessorials</a></span><span class="info-box-number">                   Import Export Reports</span></div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->            
-            
-
-
-            
-            
-            
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="/pages/dispatch/admin/users.php" class="button4 animated pulse">
-<style>
+                  </style>
+                      <span class="info-box-icon bg-#607D8B"><i class="fa fa-check-square-o"></i></span></a>
+                      <div class="info-box-content"> <span class="info-box-text"><a href="pages/dispatch/adminusers.php"> Edit Accessorials</a></span><span class="info-box-number"> Import Export Reports</span></div>
+                      <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box"> <a href="/pages/dispatch/admin/users.php" class="button4 animated pulse">
+                      <style>
  a.button4 {
 	 -webkit-animation-duration: 3s;
 	 -webkit-animation-delay: 1s;
 	 -webkit-animation-iteration-count: infinite;
  }
-</style>
-               <span class="info-box-icon bg-brown"><i class="fa fa-users"></i></span>
-               </a>
-                <div class="info-box-content">
-                  <span class="info-box-text"><a href="/pages/dispatch/admin/users.php"> Edit Users</a></span>
-                  <span class="info-box-number">Edit All <a href="/pages/dispatch/admin/userstemp.php">Temp Edit User Page</a></span><span class="info-box-number"><br>
-                  </span></div>
+                  </style>
+                      <span class="info-box-icon bg-brown"><i class="fa fa-users"></i></span></a>
+                      <div class="info-box-content"> <span class="info-box-text"><a href="/pages/dispatch/admin/users.php"> Edit Users</a></span> <span class="info-box-number">Edit All User </span></div>
+                    </div>
+                  </div>
+              </div></div></div><div class="col-md-3 col-sm-6 col-xs-12"><div class="info-box">
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.info-box -->
@@ -236,17 +205,18 @@ Last 8 days IFTA: <?php echo "$del_today_count";?></span></div><!-- /.info-box-c
             <div class="col-md-12">
               <div class="box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Current  Stats  All Drivers:
-                    </h3><div class="box-tools pull-right">
+                  <h3 class="box-title">User Profile<?php echo "$drivername"; ?> (use profile clicked on)...</h3>
+                  <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <div class="btn-group">
                       <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
                       <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
+                        <li><a href="#">Export Driver Stats</a></li>
+                        <li><a href="#">Schedule Email Exports</a></li>
+<!-- /.box-header       <li><a href="#">Something else here</a></li>
                         <li class="divider"></li>
                         <li><a href="#">Separated link</a></li>
+                      --> 
                       </ul>
                     </div>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -255,71 +225,286 @@ Last 8 days IFTA: <?php echo "$del_today_count";?></span></div><!-- /.info-box-c
                 <div class="box-body">
                   <div class="row">
                     <div class="col-md-8">
-                      <p class="text-center">
-                     <!-- Add PHP Session to populate Current year -->
-                        <strong>Shipment Updates: PHP? Current Year</strong>:</p> 
+<!-- Not Center      <p class="text-center">
+ -->
+                     <!-- Add PHP Session to populate Current year--> <strong>User Info</strong></p> 
+                      <table width="711" border="1">
+                        <tr>
+                          <td width="99" height="28"><span class="text-center">First Name</span></td>
+                          <td width="429"><span class="text-center">
+                            <input type="text" name="firstname" id="firstname">
+                          </span></td>
+                          <td width="161">&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td height="42"><span class="text-center">Last Name:</span></td>
+                          <td><span class="text-center">
+                            <input type="text" name="lastname" id="lastname">
+                          </span></td>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td><span class="text-center">Login:</span></td>
+                          <td><span class="text-center">
+                            <input type="text" name="loginid" id="loginid">
+                          <a href="../login/driverlogin.php">Login in as this user</a></span></td>
+                          <td>Must Match TS</td>
+                        </tr>
+                        <tr>
+                          <td>Password:</td>
+                          <td><label for="password"></label>
+                          <input type="text" name="password" id="password"></td>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td>Phone #</td>
+                          <td><label for="driverid"></label>
+                          <input type="text" name="driverid" id="driverid">
+                          This is also Driver ID in DB </td>
+                          <td>Must Match TS</td>
+                        </tr>
+                        <tr>
+                          <td>Email</td>
+                          <td><input name="email" type="text" id="email" size="40"></td>
+                          <td><input type="checkbox" name="Email Alerts" id="Email Alerts">
+                          <label for="Email Alerts">Email Alerts</label></td>
+                        </tr>
+                        <tr>
+                          <td>Vtext</td>
+                          <td><p>
+                            <label for="vtext"></label>
+                            <input type="text" name="vtext" id="vtext">
+                            <label for="Cell Providors"></label>
+                            <select name="Cell Providors" id="Cell Providors">
+                              <option value="">--- None Available --</option>		
+                              <option value="@message.alltel.com">Alltel (@message.alltel.com)</option>
+                              <option value="@txt.att.net">AT&amp;T (formerly Cingular) (@txt.att.net)</option>
+                              <option value="@mms.att.net">AT&amp;T (Smartphone) (@mms.att.net)</option>
+                              <option value="@cingularme.com">AT&amp;T (formerly Cingular) (@cingularme.com)</option>
+                              <option value="@myboostmobile.com">Boost Mobile (@myboostmobile.com)</option>
+                              <option value="@messaging.nextel.com">Nextel (now Sprint Nextel) (@messaging.nextel.com)</option>
+                              <option value="@messaging.sprintpcs.com">Sprint PCS (now Sprint Nextel) (@messaging.sprintpcs.com)</option>
+                              <option value="@pm.sprint.com">Sprint (Smartphone) (@pm.sprint.com)</option>
+                              <option value="@tmomail.net">T-Mobile (@tmomail.net)</option>
+                              <option value="@email.uscc.net">US Cellular (@email.uscc.net)</option>
+                              <option value="@vtext.com" selected>Verizon (@vtext.com)</option>
+                              <option value="@vzwpix.com">Verizon (Smartphone) (@vzwpix.com)</option>
+                              <option value="@vmobl.com">Virgin Mobile USA (@vmobl.com)</option>
+                              <option value="@mmst5.tracfone.com">Tracfone (prepaid) (@mmst5.tracfone.com)</option>
+                              <option value="@vtext.com">Straight Talk (@vtext.com)</option>
+                              <option value="@page.att.net">AT&amp;T Enterprise Paging (@page.att.net)</option>
+                              <option value="@cingularme.com">Cingular (Postpaid) (@cingularme.com)</option>
+                              <option value="@mymetropcs.com">MetroPCS (@mymetropcs.com)</option>
+                              <option value="@qwestmp.com">Qwest (@qwestmp.com)</option>
+                              <option value="@cingularme.com">Cingular (GoPhone prepaid) (@cingularme.com)</option>
+                              <option value="@cingularme.com">7-11 Speakout (USA GSM) (@cingularme.com)</option>
+                              <option value="@messaging.nextel.com">Nextel (United States) (@messaging.nextel.com)</option>
+                              <option value="@txt.bell.ca">Bell Mobility &amp; Solo Mobile (Canada) (@txt.bell.ca)</option>
+                              <option value="@fido.ca">Fido (Canada) (@fido.ca)</option>
+                              <option value="@msg.koodomobile.com">Koodo Mobile (Canada) (@msg.koodomobile.com)</option>
+                              <option value="@text.mtsmobility.com">MTS (Canada) (@text.mtsmobility.com)</option>
+                              <option value="@txt.bell.ca">President&#x27;s Choice (Canada) (@txt.bell.ca)</option>
+                              <option value="@pcs.rogers.com">Rogers (Canada) (@pcs.rogers.com)</option>
+                              <option value="@sms.sasktel.com">Sasktel (Canada) (@sms.sasktel.com)</option>
+                              <option value="@msg.telus.com">Telus Mobility (Canada) (@msg.telus.com)</option>
+                              <option value="@airtelkk.com">Airtel (Karnataka, India) (@airtelkk.com)</option>
+                              <option value="@sms.airtelmontana.com">Airtel Wireless (Montana, USA) (@sms.airtelmontana.com)</option>
+                              <option value="@msg.acsalaska.com">Alaska Communications Systems (@msg.acsalaska.com)</option>
+                              <option value="@text.aql.com">Aql (@text.aql.com)</option>
+                              <option value="@tachyonsms.co.uk">BigRedGiant Mobile Solutions (@tachyonsms.co.uk)</option>
+                              <option value="@bplmobile.com">BPL Mobile (Mumbai, India) (@bplmobile.com)</option>
+                              <option value="@cellcom.quiktxt.com">Cellcom (@cellcom.quiktxt.com)</option>
+                              <option value="@mobile.celloneusa.com">Cellular One (Dobson) (@mobile.celloneusa.com)</option>
+                              <option value="@text.cellonenation.net">Cellular One (Alternate) (@text.cellonenation.net)</option>
+                              <option value="@cwemail.com">Centennial Wireless (@cwemail.com)</option>
+                              <option value="@clarotorpedo.com.br">Claro (Brasil) (@clarotorpedo.com.br)</option>
+                              <option value="@ideasclaro-ca.com">Claro (Nicaragua) (@ideasclaro-ca.com)</option>
+                              <option value="@comcel.com.co">Comcel (@comcel.com.co)</option>
+                              <option value="@sms.mycricket.com">Cricket (@sms.mycricket.com)</option>
+                              <option value="@cspire1.com">C-Spire (@cspire1.com)</option>
+                              <option value="@sms.ctimovil.com.ar">CTI (@sms.ctimovil.com.ar)</option>
+                              <option value="@emtelworld.net">Emtel (Mauritius) (@emtelworld.net)</option>
+                              <option value="@msg.gci.net">General Communications Inc. (@msg.gci.net)</option>
+                              <option value="@msg.globalstarusa.com">Globalstar (satellite) (@msg.globalstarusa.com)</option>
+                              <option value="@messaging.sprintpcs.com">Helio (@messaging.sprintpcs.com)</option>
+                              <option value="@ivctext.com">Illinois Valley Cellular (@ivctext.com)</option>
+                              <option value="@msg.iridium.com">Iridium (satellite) (@msg.iridium.com)</option>
+                              <option value="@rek2.com.mx">Iusacell (@rek2.com.mx)</option>
+                              <option value="@sms.lmt.lv">LMT (Latvia) (@sms.lmt.lv)</option>
+                              <option value="@sms.mymeteor.ie">Meteor (Ireland) (@sms.mymeteor.ie)</option>
+                              <option value="@sms.spicenepal.com">Mero Mobile (Nepal) 977 (@sms.spicenepal.com)</option>
+                              <option value="@sms.movistar.net.ar">Movicom (Argentina) (@sms.movistar.net.ar)</option>
+                              <option value="@sms.mobitel.lk">Mobitel (Sri Lanka) (@sms.mobitel.lk)</option>
+                              <option value="@movistar.com.co">Movistar (Colombia) (@movistar.com.co)</option>
+                              <option value="@sms.co.za">MTN (South Africa) (@sms.co.za)</option>
+                              <option value="@nextel.net.ar">Nextel (Argentina) TwoWay.11 (@nextel.net.ar)</option>
+                              <option value="@pcs.ntelos.com">Ntelos (@pcs.ntelos.com)</option>
+                              <option value="@orange.pl">Orange Polska (Poland) (@orange.pl)</option>
+                              <option value="@alertas.personal.com.ar">Personal (Argentina) (@alertas.personal.com.ar)</option>
+                              <option value="@text.plusgsm.pl">Plus GSM (Poland) +48 (@text.plusgsm.pl)</option>
+                              <option value="@slinteractive.com.au">SL Interactive (Australia) (@slinteractive.com.au)</option>
+                              <option value="@mas.aw">Setar Mobile email (Aruba) 297+ (@mas.aw)</option>
+                              <option value="@tms.suncom.com">Suncom (@tms.suncom.com)</option>
+                              <option value="@sms.t-mobile.at">T-Mobile (Austria) (@sms.t-mobile.at)</option>
+                              <option value="@t-mobile.uk.net">T-Mobile (UK) (@t-mobile.uk.net)</option>
+                              <option value="@sms.thumbcellular.com">Thumb Cellular (@sms.thumbcellular.com)</option>
+                              <option value="@sms.tigo.com.co">Tigo (Formerly Ola) (@sms.tigo.com.co)</option>
+                              <option value="@utext.com">Unicel (@utext.com)</option>
+                              <option value="@vmobile.ca">Virgin Mobile (Canada) (@vmobile.ca)</option>
+                              <option value="@voda.co.za">Vodacom (South Africa) (@voda.co.za)</option>
+                              <option value="@sms.vodafone.it">Vodafone (Italy) (@sms.vodafone.it)</option>
+                              <option value="@sms.ycc.ru">YCC (@sms.ycc.ru)</option>
+                              <option value="@mobipcs.net">MobiPCS (Hawaii only) (@mobipcs.net)</option>
+                            </select>
+                          </p>
+                          <p>
+                            <input type="submit" name="Test SMS" id="Test SMS" value="Test SMS">
+                          </p></td>
+                          <td><input type="checkbox" name="vtext" id="vtext">
+                          <label for="vtext">Text Alerts</label></td>
+                        </tr>
+                        <tr>
+                          <td>Photo</td>
+                          <td>Make sure to set Limts to Image size on import. <form method="post" action="file-upload-1.htm" name="submit" enctype="multipart/form-data">
+                            <input type="file" name="fileField"><br />
+  <input type="submit" name="submit" value="Submit">
+</form></td>
+                          <td><img src="../../dist/img/userimages/jrussellimg.jpg" width="160" height="160"></td>
+                        </tr>
+                        <tr>
+                          <td>Access Roll</td>
+                          <td><select name="usertype" id="usertype">
+                            <option value="1">Administrator</option>
+                            <option value="2">Manager</option>
+                            <option value="0">Employee</option>
+                          </select></td>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td>Active</td>
+                          <td><select name="usertype2" id="usertype2">
+                            <option selected>active</option>
+                            <option>innactive</option>
+</select></td>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td>Start Date</td>
+                          <td>&nbsp;</td>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td height="47">&nbsp;</td>
+                          <td>&nbsp;</td>
+                          <td><input type="submit" name="Submit" id="Submit" value="Submit">
+                          Update User</td>
+                        </tr>
+                      </table>
+                      <p class="text-center"><!-- Sales Chart Canvas 
                     <div class="chart">
                         <!-- Sales Chart Canvas -->
-                        <canvas id="salesChart" height="180"></canvas>
-                      </div><!-- /.chart-responsive -->
-                    </div><!-- /.col -->
+<!-- Sales Chart Canvas                       
+                      <canvas id="salesChart" height="180"></canvas>
+                      </div><!-- /.chart-responsive --></p>
+                    </div>
+                    <!-- /.col 
                     <div class="col-md-4">
+-->
+
                       <p class="text-center">
-                        <strong>Monthly Stats For: <span class="box-title"><?php echo "$drivername"; ?></span></strong></p>
+                    <strong>Driver Stats For: <span class="box-title"><?php echo "$drivername"; ?></span></strong> Current Driver</p>
                       
                       
                       <div class="progress-group">
-                        <span class="progress-text">  Total Shipments Dispatched</span><span class="progress-number"><b>100</span>
+                        <span class="progress-text">  Total HWB'S Dispatched todate</span><span class="progress-number"><b>100</span>
                         <div class="progress sm">
                           <div class="progress-bar progress-bar-blue" style="width: 80%"></div>
-                          
-                          
-                          
-                          
                         </div>
                       </div><!-- /.progress-group -->
-                      
-                      
-                      
-                      
-                      <div class="progress-group">
-                        <span class="progress-text">  Total Updateded Shipments</span><span class="progress-number"><b>80</span>
+                     <div class="progress-group">
+                        <span class="progress-text">  Total Updates</span><span class="progress-number"><b>80</span>
                         <div class="progress sm">
                           <div class="progress-bar progress-bar-green" style="width: 60%"></div>
                         </div>
-                      </div><!-- /.progress-group -->
+                    </div><!-- /.progress-group -->
                       <div class="progress-group">
-                        <span class="progress-text">Vehicle Inspections Score</span>
-                        <span class="progress-number"><b>?</b>/?</span>
+                        <span class="progress-text">Vehicle Inspections Total</span>
+                        <span class="progress-number"><b>80</span>
                         <div class="progress sm">
                           <div class="progress-bar progress-bar-red" style="width: 80%"></div>
                         </div>
                       </div><!-- /.progress-group -->
                       <div class="progress-group">
-                        <span class="progress-text">Fuel Entries Score</span>
-                        <span class="progress-number"><b>?</b>/?</span>
+                        <span class="progress-text">Fuel Entries </span>
                         <div class="progress sm">
                           <div class="progress-bar progress-bar-green" style="width: 80%"></div>
                         </div>
-                      </div><!-- /.progress-group -->
-                      <div class="progress-group">
-                        <span class="progress-text">IFTA Entries Score</span>
-                        <span class="progress-number"><b>?</b>/?</span>
-                        <div class="progress sm">
-                          <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
-                        </div>
-                      </div><!-- /.progress-group -->
-                    </div><!-- /.col -->
-                  </div><!-- /.row -->
-                </div><!-- ./box-body -->
+                    </div><!-- /.progress-group -->
+                    <div class="progress-group">
+                        <span class="progress-text">IFTA Entries</span>
+                      <div class="progress sm">
+                        <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+                      </div>
+                  </div><!-- /.progress-group -->
+                  <div class="progress-group">
+                  <table width="521" border="1">
+                    <tr>
+                      <td width="214">Scheduled Reports</td>
+                      <td width="171">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td><label for="reporttype"></label>
+                        <select name="reporttype" id="reporttype">
+                          <option>Dispatch Report</option>
+                      </select>
+                        Select Report</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td><label for="reportexporttype"></label>
+                        <select name="reportexporttype" id="reportexporttype">
+                          <option selected>PDF</option>
+                          <option>CSV</option>
+                          <option>Excel</option>
+                      </select>
+                        Report Output</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td><label for="reportfrequency"></label>
+                        <select name="reportfrequency" id="reportfrequency">
+                          <option>Select Frequency</option>
+                          <option>Daily</option>
+                          <option>Weekly</option>
+                          <option>Monthly</option>
+                      </select> 
+                        How often</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td><label for="Duration"></label>
+                        <select name="Duration" id="Duration">
+                          <option>One Day</option>
+                          <option>One Week</option>
+                          <option>One Month</option>
+                      </select> 
+                      Report Time Frame</td>
+                      <td><input type="submit" name="Email" id="Email" value="Submit"></td>
+                    </tr>
+                  </table>
+                  </div><!-- /.progress-group -->
+                  </div><!-- /.col -->
+                </div><!-- /.row -->
+              </div><!-- ./box-body -->
                 <div class="box-footer">
                   <div class="row">
                     <div class="col-sm-3 col-xs-6">
                       <div class="description-block border-right">
                         <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
                         <h5 class="description-header">4210</h5>
-                        <span class="description-text">Total Updates</span>
-                      </div><!-- /.description-block -->
+                        <span class="description-text">Dispatch to Updates %</span>
+                      </div>
+                      <!-- /.description-block -->
                     </div><!-- /.col -->
                     <div class="col-sm-3 col-xs-6">
                       <div class="description-block border-right">
