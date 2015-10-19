@@ -12,6 +12,8 @@
                 <li class="active"><a href="#"><i class="fa fa-circle-o"></i> Saftey Reports</a></li>
             </ul>
   </li>
+
+
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-files-o"></i>
@@ -25,6 +27,26 @@
                 <li><a href="/pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
               </ul>
             </li>
+
+
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-files-o"></i>
+              <span> Driver Information</span>
+              <span class="label label-primary pull-right">2</span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="/pages/info/kingpin.php"><i class="fa fa-circle-o"></i> King Pin Settings</a></li>
+                <li><a href="/pages/info/inspectiontypes.php"><i class="fa fa-circle-o"></i>Inspection Types</a></li>
+                <li><a href="/pages/layout/boxed.html"><i class="fa fa-circle-o"></i>IFTA Trip Sheets</a></li>
+                <li><a href="/pages/layout/fixed.html"><i class="fa fa-circle-o"></i>Chain Laws Soon</a></li>
+                <li><a href="/pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i>PreTrips Soon</a></li>
+              </ul>
+  </li>
+
+
+
+            
             <li>
               <a href="/pages/widgets.html">
                 <i class="fa fa-th"></i> <span>Widgets</span> <small class="label pull-right bg-green">new</small>
