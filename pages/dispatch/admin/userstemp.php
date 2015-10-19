@@ -571,7 +571,7 @@ $drivername = $_SESSION['drivername'];
                         <td><input name="btn_submit" value="Add" type="submit" id="btn_submit" /></td>
                         <td>&nbsp;</td>
                     </form>
-  </tr>
+
   
                   </table>
                   <div class="row">

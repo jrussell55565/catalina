@@ -609,7 +609,7 @@ $drivername = $_SESSION['drivername'];
                 <div class="box-footer">
                   <table width="826" height="343" border="1" id="Users">
                     <tr>
-                      <td height="337"><a href="edituser.php"><img src="../../../dist/img/userimages/useradminexample1.jpg" width="1366" height="768"></a></td>
+                      <td height="337"><a href="edituser.php"><img src="../../../dist/img/userimages/userstats.jpg" width="1366" height="768"></a></td>
                     </tr>
 
 <!-- /.Old PHP Code from Previous Users Menu 

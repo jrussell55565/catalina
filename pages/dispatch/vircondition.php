@@ -56,6 +56,7 @@ $trailerid = $_SESSION['trailerId'];
         <ol class="breadcrumb">
           <li><a href="orders.php"><i class="fa fa-home"></i> Home</a></li>
           <li class="active">Vehicle Inspection Report</li>
+          <li class="active">Vehicle Condition Report</li>
         </ol>
       </section>
       
@@ -87,7 +88,7 @@ $trailerid = $_SESSION['trailerId'];
           <!-- Default box -->
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">Vechicle Inspection Report</h3>
+              <h3 class="box-title">Tractor Condition  Report</h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                 <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
@@ -100,8 +101,7 @@ $trailerid = $_SESSION['trailerId'];
                     <td colspan="4">Start Time:
 <input name="<?php echo constant('BX_LT'); ?>" type="text" id="<?php echo constant('BX_LT'); ?>" value="<?php echo $localtime; ?>" size="8"/>
                       Date
-                      <input name="<?php echo constant('BX_LD'); ?>" type="text" id="<?php echo constant('BX_LD'); ?>" value="<?php echo $localdate; ?>" size="8" readonly="readonly"/>
-                    <span class="active"><?php echo "$TruckId"; ?></span></tr>
+                      <input name="<?php echo constant('BX_LD'); ?>" type="text" id="<?php echo constant('BX_LD'); ?>" value="<?php echo $localdate; ?>" size="8" readonly="readonly"/></tr>
                   <tr>
                     <td>Truck
                     <td><input name="<?php echo constant('truckId'); ?>2" type="text" id="<?php echo constant('truckId'); ?>" value="<?php echo $truckId; ?>" size="8" readonly="readonly" />                    
@@ -194,7 +194,7 @@ Post Trip:
                     </div>                  
                   </tr>
                   <tr>
-                    <td colspan="4"><div align="center"> <A HREF="#submitvir">VIR OK, Tires OK / Go To Submit</A></div>                  
+                    <td colspan="4"><div align="center"> <A HREF="#submitvir">Tires OK/ Go To Submit</A></div>                  
                   </tr>
                 </table>
               </form>

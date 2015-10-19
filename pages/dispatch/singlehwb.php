@@ -313,7 +313,7 @@ if ($row['status'] == "Delivered")
                 </tr>
                 <tr role="row" class="odd">
                   <td><label>Contact</label></td>
-                  <td><?php echo "$row[shipperPhone]"; ?></td>
+                  <td><?php echo "$row[shipperContact]"; ?></td>
                 </tr>
                 <tr role="row" class="even">
                   <td><label>Phone</label></td>
@@ -324,24 +324,28 @@ if ($row['status'] == "Delivered")
                   <td><?php echo "$row[puRemarks]"; ?></td>
                 </tr>
                 <tr role="row" class="even">
+                  <td><label>Pieces</label></td>
+                  <td><?php echo "$row[pieces]"; ?></td>
+                </tr>
+                <tr role="row" class="even">
                   <td><label>Pallets</label></td>
                   <td><?php echo "$row[pallets]"; ?></td>
                 </tr>
                 <tr role="row" class="odd">
-                  <td><label>Re Weigh</label></td>
-                  <td></td>
-                </tr>
-                <tr role="row" class="even">
-                  <td><label>Appointment Notes</label></td>
-                  <td></td>
+                  <td><label>Weight</label></td>
+                  <td><?php echo "$row[weight]"; ?></td>
                 </tr>
                 <tr role="row" class="odd">
-                  <td><label>Shipper Assmb</label></td>
+                  <td><label>Appointment Notes</label></td>
+                  <td><?php echo "$row[appNotes]"; ?></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td><label>Shipper Assembly</label></td>
                   <td><?php echo "$row[shipperAssembly]"; ?></td>
                 </tr>
                 <tr role="row" class="even">
                   <td><label>Agent Code</label></td>
-                  <td><?php echo "$puAgentCode"; ?></td>
+                  <td><?php echo "$row[puAgentCode]"; ?></td>
                 </tr>
                 <tr role="row" class="odd">
                   <td><label>Agent Name</label></td>
@@ -431,6 +435,18 @@ if ($row['status'] == "Delivered")
                   <tr role="row" class="even">
                     <td><label>Delivery Appt Required</label></td>
                     <td><?php echo "$row[appDate]"; ?></td>
+                  </tr>
+                  <tr role="row" class="even">
+                    <td><label>Pieces</label></td>
+                    <td><?php echo "$row[pieces]"; ?></td>
+                  </tr>
+                  <tr role="row" class="even">
+                    <td><label>Pallets</label></td>
+                    <td><?php echo "$row[pallets]"; ?></td>
+                  </tr>
+                  <tr role="row" class="odd">
+                    <td><label>Weight</label></td>
+                    <td><?php echo "$row[weight]"; ?></td>
                   </tr>
                   <tr role="row" class="odd">
                     <td><label>Appt Time</label></td>
