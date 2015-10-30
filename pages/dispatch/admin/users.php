@@ -12,7 +12,7 @@ mysql_select_db($db_name) or DIE('Database name is not available!');
 
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
-
+print_r($_POST);
 # Let's do some form processing
 if(isset($_POST['submit'])) 
 { 
@@ -21,6 +21,7 @@ if(isset($_POST['submit']))
   if ($_POST['quietTimeVal2'] == '') { $_POST['quietTimeVal2'] = 'NULL'; }
   if ($_POST['startDate'] == '') { $_POST['startDate'] = 'NULL'; }
   if ($_POST['departureDate'] == '') { $_POST['departureDate'] = 'NULL'; }
+  if ($_POST['driverLicenseExpire'] == '') { $_POST['driverLicenseExpire'] = 'NULL'; }
 
   $sql = "UPDATE users SET
   fname = '$_POST[fname]',
@@ -35,19 +36,36 @@ if(isset($_POST['submit']))
   zipcode = '$_POST[zip]',
   title = '$_POST[jobTitle]',
   email = '$_POST[email]',
+  vtext = $_POST[vtext],
   quiet_time_begin = $_POST[quietTimeVal1],
   quiet_time_end = $_POST[quietTimeVal2],
   ssn = '$_POST[ssn]',
-  med_expire_dt = '$_POST[medicalCard]',
+  driver_license_n = $_POST[driverLicense],
+  driver_license_exp = $_POST[driverLicenseExpire],
   driverid = $_POST[mobilePhone],
-  contract = '$_POST[contract]',
   start_dt = $_POST[startDate],
   depart_dt = $_POST[departureDate],
+  depart_reason = $_POST[departureReason],
   username = '$_POST[username]',
-  password = '$_POST[password]'
+  password = '$_POST[password]',
+  med_card_exp = $_POST[medCardExpire],
+  mvr_renewal = $_POST[mvrRenewal],
+  emerg_contact_name = $_POST[emergencyContact],
+  emerg_contact_phone = $_POST[emergencyPhone],
+  tsa_sta = $_POST[tsa],
+  timecard = $_POST[timecard],
+  notes = $_POST[miscDetails],
   WHERE id = $_POST[id]";
 
   mysql_query($sql);
+
+  $sql = "UPDATE contracts SET
+  contract = '$_POST[contract]'
+  WHERE id = $_POST[id]";
+
+  $sql = "INSERT INTO emp_salary
+   (driver_driverid,salary) VALUES ($_POST[mobilePhone],$_POST[salary])";
+
 }
 ?>
 <!DOCTYPE html>
@@ -362,7 +380,8 @@ if(isset($_POST['submit']))
    <table>
     <tr>
      <td rowspan="3">
-       <img src="/dist/img/user1-128x128.jpg"/>
+       <div><img style="display: block; margin: 0 auto;" src="/dist/img/user1-128x128.jpg"/></div>
+       <div><input id="input-4" type="file" multiple=true class="file-loading"></div>
      </td>
      <td style="padding: 5px">
       <label for="fname">First Name</label>
@@ -378,15 +397,25 @@ if(isset($_POST['submit']))
      </td>
      <td style="padding: 5px">
       <label for="status">User Status</label>
-      <input type="text" class="form-control" name="status" id="status" placeholder="" value="<?php echo $row['status'];?>">
+       <select class="form-control" name="status" id="status">
+         <option value="Active" <?php if ($row['status'] == 'Active') { echo " selected "; }?>>Active</option>
+         <option value="Inactive"<?php if ($row['status'] == 'Inactive') { echo " selected "; }?>>Inactive</option>
+       </select> 
      </td>
      <td style="padding: 5px">
       <label for="role">Access Role</label>
-      <input type="text" class="form-control" name="role" id="role" placeholder="" value="<?php echo $row['role'];?>">
+       <select class="form-control" name="role" id="role">
+         <option value="Employee" <?php if ($row['role'] == 'Employee') { echo " selected "; }?>>Employee</option>
+         <option value="Manager"<?php if ($row['status'] == 'Manager') { echo " selected "; }?>>Manager</option>
+         <option value="Admin"<?php if ($row['status'] == 'Admin') { echo " selected "; }?>>Admin</option>
+       </select> 
      </td>
      <td style="padding: 5px">
       <label for="office">Office Location</label>
-      <input type="text" class="form-control" name="office" id="office" placeholder="" value="<?php echo $row['office'];?>">
+       <select class="form-control" name="office" id="office">
+         <option value="PHX" <?php if ($row['status'] == 'PHX') { echo " selected "; }?>>PHX</option>
+         <option value="TUS"<?php if ($row['status'] == 'TUS') { echo " selected "; }?>>TUS</option>
+       </select> 
      </td>
     </tr>
     <tr>
@@ -412,7 +441,12 @@ if(isset($_POST['submit']))
      </td>
      <td style="padding: 5px">
       <label for="jobTitle">Job Title</label>
-      <input type="text" class="form-control" name="jobTitle" id="jobTitle" placeholder="" value="<?php echo $row['title'];?>">
+       <select class="form-control" name="jobTitle" id="jobTitle">
+         <option value="Office" <?php if ($row['status'] == 'Office') { echo " selected "; }?>>Office</option>
+         <option value="Dispatch"<?php if ($row['status'] == 'Dispatch') { echo " selected "; }?>>Dispatch</option>
+         <option value="Accounting" <?php if ($row['status'] == 'Accounting') { echo " selected "; }?>>Accounting</option>
+         <option value="Driver"<?php if ($row['status'] == 'Driver') { echo " selected "; }?>>Driver</option>
+       </select> 
      </td>
     </tr>
     <tr>
@@ -421,12 +455,24 @@ if(isset($_POST['submit']))
       <input type="email" class="form-control" name="email" id="email" placeholder="" value="<?php echo $row['email'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="emailUpdates">Email Updates</label>
-      <input type="checkbox" class="form-control" name="emailUpdates" id="emailUpdates" placeholder="" value="<?php echo $row['email'];?>">
+      <label for="vtext">Vtext</label>
+      <input type="vtext" class="form-control" name="vtext" id="vtext" placeholder="" value="<?php echo $row['vtext'];?>">
+     </td>
+     <td style="padding: 5px">
+       <label for="emailUpdates">Email Updates</label>
+      <div class="btn-group" data-toggle="buttons">
+       <label class="btn btn-primary btn-med">Email Updates
+         <input type="checkbox" class="form-control" name="ck_userOptions[]" value="ck_userOptions[]" placeholder="" value="<?php echo $row['email'];?>">
+       </label>
+      </div>
      </td>
      <td style="padding: 5px">
       <label for="textUpdates">Text Updates</label>
-      <input type="checkbox" class="form-control" name="textUpdates" id="textUpdates" placeholder="" value="<?php echo $row['email'];?>">
+      <div class="btn-group" data-toggle="buttons">
+       <label class="btn btn-primary btn-med">Text Updates
+        <input type="checkbox" class="form-control" name="ck_userOptions[]" name="textUpdates" id="textUpdates" placeholder="" value="<?php echo $row['email'];?>">
+       </label>
+      </div>
      </td>
      <td style="padding: 5px">
       <label for="quietTimeVal1">Quiet Time (start)</label>
@@ -436,15 +482,23 @@ if(isset($_POST['submit']))
       <label for="quietTimeVal2">Quiet Time (end)</label>
       <input type="text" class="form-control" name="quietTimeVal2" id="quietTimeVal2" placeholder="" value="<?php echo $row['quiet_time'];?>">
      </td>
+    </tr>
+    <tr>
      <td style="padding: 5px">
       <label for="ssn">SSN</label>
       <input type="text" class="form-control" name="ssn" id="ssn" placeholder="" value="<?php echo $row['ssn'];?>">
      </td>
-    </tr>
-    <tr>
      <td style="padding: 5px">
-      <label for="medicalCard">MC Expiry Date</label>
-      <input type="text" class="form-control" name="medicalCard" id="medicalCard" placeholder="" value="<?php echo $row['med_expire_dt'];?>">
+      <label for="dob">DOB</label>
+      <input type="text" class="form-control" name="dob" id="dob" placeholder="" value="<?php echo $row['dob'];?>">
+     </td>
+     <td style="padding: 5px">
+      <label for="driverLicense">Driver License No.</label>
+      <input type="text" class="form-control" name="driverLicense" id="driverLicense" placeholder="" value="<?php echo $row['driver_license_n'];?>">
+     </td>
+     <td style="padding: 5px">
+      <label for="driverLicenseExpire">Driver License Exp.</label>
+      <input type="text" class="form-control" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="" value="<?php echo $row['driver_license_exp'];?>">
      </td>
      <td style="padding: 5px">
       <label for="mobilePhone">Mobile Phone</label>
@@ -458,9 +512,15 @@ if(isset($_POST['submit']))
       <label for="startDate">Start Date</label>
       <input type="text" class="form-control" name="startDate" id="startDate" placeholder="" value="<?php echo $row['start_date'];?>">
      </td>
+    </tr>
+    <tr>
      <td style="padding: 5px">
       <label for="departureDate">Departure Date</label>
       <input type="text" class="form-control" name="departureDate" id="departureDate" placeholder="" value="<?php echo $row['start_date'];?>">
+     </td>
+     <td style="padding: 5px">
+      <label for="departureReason">Departure Reason</label>
+      <input type="text" class="form-control" name="departureReason" id="departureReason" placeholder="" value="<?php echo $row['depart_reason'];?>">
      </td>
      <td style="padding: 5px">
       <label for="username">Username</label>
@@ -469,6 +529,40 @@ if(isset($_POST['submit']))
      <td style="padding: 5px">
       <label for="password">Password</label>
       <input type="text" class="form-control" name="password" id="password" placeholder="" value="<?php echo $row['password'];?>">
+     </td>
+     <td style="padding: 5px">
+      <label for="medCardExpire">Medical Card Expiration Date</label>
+      <input type="text" class="form-control" name="medCardExpire" id="medCardExpire" placeholder="" value="<?php echo $row['med_card_exp'];?>">
+     </td>
+     <td style="padding: 5px">
+      <label for="mvrRenewal">MVR Renewal Date</label>
+      <input type="text" class="form-control" name="mvrRenewal" id="mvrRenewal" placeholder="" value="<?php echo $row['mvr_renewal'];?>">
+     </td>
+     <td style="padding: 5px">
+      <label for="salary">Hourly Salary</label>
+      <input type="text" class="form-control" name="salary" id="salary" placeholder="" value="<?php echo $salary['salary'];?>">
+     </td>
+    </tr>
+    <tr>
+     <td style="padding: 5px">
+      <label for="emergencyContact">Emergency Contact</label>
+      <input type="text" class="form-control" name="emergencyContact" id="emergencyContact" placeholder="" value="<?php echo $row['emerg_contact_name'];?>">
+     </td>
+     <td style="padding: 5px">
+      <label for="emergencyPhone">Emergency Contact Phone</label>
+      <input type="text" class="form-control" name="emergencyPhone" id="emergencyPhone" placeholder="" value="<?php echo $row['emerg_contact_phone'];?>">
+     </td>
+     <td style="padding: 5px">
+      <label for="tsa">TSA-STA</label>
+      <input type="text" class="form-control" name="tsa" id="tsa" placeholder="" value="<?php echo $row['tsa_sta'];?>">
+     </td>
+     <td style="padding: 5px">
+      <label for="timeCard">Time Card</label>
+      <input type="text" class="form-control" name="timeCard" id="timeCard" placeholder="" value="<?php echo $row['timecard'];?>">
+     </td>
+     <td style="padding: 5px" colspan="3">
+      <label for="miscDetails">Notes</label>
+      <textarea class="form-control" name="miscDetails" id="miscDetails" placeholder="" value="<?php echo $row['notes'];?>" style="padding-top: 0px; padding-bottom: 0px; height: 34px;"></textarea>
      </td>
     </tr>
     <tr>
