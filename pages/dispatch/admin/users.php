@@ -12,6 +12,43 @@ mysql_select_db($db_name) or DIE('Database name is not available!');
 
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
+
+# Let's do some form processing
+if(isset($_POST['submit'])) 
+{ 
+  # Set some NULL defaults for dates
+  if ($_POST['quietTimeVal1'] == '') { $_POST['quietTimeVal1'] = 'NULL'; }
+  if ($_POST['quietTimeVal2'] == '') { $_POST['quietTimeVal2'] = 'NULL'; }
+  if ($_POST['startDate'] == '') { $_POST['startDate'] = 'NULL'; }
+  if ($_POST['departureDate'] == '') { $_POST['departureDate'] = 'NULL'; }
+
+  $sql = "UPDATE users SET
+  fname = '$_POST[fname]',
+  mname = '$_POST[mname]',
+  lname = '$_POST[lname]',
+  status = '$_POST[status]',
+  role = '$_POST[role]',
+  office = '$_POST[office]',
+  addr1 = '$_POST[addr1]',
+  addr2 = '$_POST[addr2]',
+  city = '$_POST[city]',
+  zipcode = '$_POST[zip]',
+  title = '$_POST[jobTitle]',
+  email = '$_POST[email]',
+  quiet_time_begin = $_POST[quietTimeVal1],
+  quiet_time_end = $_POST[quietTimeVal2],
+  ssn = '$_POST[ssn]',
+  med_expire_dt = '$_POST[medicalCard]',
+  driverid = $_POST[mobilePhone],
+  contract = '$_POST[contract]',
+  start_dt = $_POST[startDate],
+  depart_dt = $_POST[departureDate],
+  username = '$_POST[username]',
+  password = '$_POST[password]'
+  WHERE id = $_POST[id]";
+
+  mysql_query($sql);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -243,20 +280,61 @@ $drivername = $_SESSION['drivername'];
 <table class="table table-striped">
  <thead>
   <tr>
+    <?php
+      # Defaults
+      $orderName = 'desc';
+      $glyphName = "top";
+      $orderStatus = 'desc';
+      $glyphStatus = "top";
+      $orderSql = "ORDER BY drivername ASC";
+
+      if ($_GET['sort'] == 'name')
+      {
+        if ($_GET['order'] == 'desc')
+        {
+          $orderName = 'asc';
+          $glyphName = "bottom";
+          $orderSql = "ORDER BY drivername DESC";
+        }
+        if ($_GET['order'] == 'asc')
+        {
+          $orderName = 'desc';
+          $glyphName = "top";
+          $orderSql = "ORDER BY drivername ASC";
+        }
+      }
+      if ($_GET['sort'] == 'status')
+      {
+        if ($_GET['order'] == 'desc')
+        {
+          $orderStatus = 'asc';
+          $glyphStatus = "bottom";
+          $orderSql = "ORDER BY status DESC";
+        }
+        if ($_GET['order'] == 'asc')
+        {
+          $orderStatus = 'desc';
+          $glyphStatus = "top";
+          $orderSql = "ORDER BY status ASC";
+        }
+      }
+    ?>
     <th> </th>
-    <th>Name</th>
+    <th>Name <a href="?sort=name&order=<?php echo $orderName;?>">
+             <i class="glyphicon glyphicon-triangle-<?php echo $glyphName;?>"></i></a></th>
     <th>Login As</th>
     <th>Title</th>
     <th>Office</th>
     <th>Phone Number</th>
     <th>Login</th>
     <th>Password</th>
-    <th>Status</th>
+    <th>Status <a href="?sort=status&order=<?php echo $orderStatus;?>">
+               <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>
   </tr>
  </thead>
  <tbody>
 <?php
-                      $sql = "SELECT * FROM users";
+                      $sql = "SELECT * FROM users $orderSql";
                       $sql = mysql_query($sql);
                       while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
                       {
@@ -280,6 +358,7 @@ $drivername = $_SESSION['drivername'];
 <tr class="collapse" id="<?php echo $row['username'];?>_details">
 <td colspan="9">
   <div class="well">
+   <form role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
    <table>
     <tr>
      <td rowspan="3">
@@ -287,117 +366,119 @@ $drivername = $_SESSION['drivername'];
      </td>
      <td style="padding: 5px">
       <label for="fname">First Name</label>
-      <input type="text" class="form-control" id="fname" placeholder="" value="<?php echo $row['fname'];?>">
+      <input type="text" class="form-control" name="fname" id="fname" placeholder="" value="<?php echo $row['fname'];?>">
      </td>
      <td style="padding: 5px">
       <label for="mname">Middle Name</label>
-      <input type="text" class="form-control" id="mname" placeholder="" value="<?php echo $row['mname'];?>">
+      <input type="text" class="form-control" name="mname" id="mname" placeholder="" value="<?php echo $row['mname'];?>">
      </td>
      <td style="padding: 5px">
       <label for="lname">Last Name</label>
-      <input type="text" class="form-control" id="lname" placeholder="" value="<?php echo $row['lname'];?>">
+      <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="<?php echo $row['lname'];?>">
      </td>
      <td style="padding: 5px">
       <label for="status">User Status</label>
-      <input type="text" class="form-control" id="status" placeholder="" value="<?php echo $row['status'];?>">
+      <input type="text" class="form-control" name="status" id="status" placeholder="" value="<?php echo $row['status'];?>">
      </td>
      <td style="padding: 5px">
       <label for="role">Access Role</label>
-      <input type="text" class="form-control" id="role" placeholder="" value="<?php echo $row['role'];?>">
+      <input type="text" class="form-control" name="role" id="role" placeholder="" value="<?php echo $row['role'];?>">
      </td>
      <td style="padding: 5px">
       <label for="office">Office Location</label>
-      <input type="text" class="form-control" id="office" placeholder="" value="<?php echo $row['office'];?>">
+      <input type="text" class="form-control" name="office" id="office" placeholder="" value="<?php echo $row['office'];?>">
      </td>
     </tr>
     <tr>
      <td style="padding: 5px">
       <label for="addr1">Home Address 1</label>
-      <input type="text" class="form-control" id="addr1" placeholder="" value="<?php echo $row['addr1'];?>">
+      <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $row['addr1'];?>">
      </td>
      <td style="padding: 5px">
       <label for="addr2">Home Address 2</label>
-      <input type="text" class="form-control" id="addr2" placeholder="" value="<?php echo $row['addr2'];?>">
+      <input type="text" class="form-control" name="addr2" id="addr2" placeholder="" value="<?php echo $row['addr2'];?>">
      </td>
      <td style="padding: 5px">
       <label for="city">Home City</label>
-      <input type="text" class="form-control" id="city" placeholder="" value="<?php echo $row['city'];?>">
+      <input type="text" class="form-control" name="city" id="city" placeholder="" value="<?php echo $row['city'];?>">
      </td>
      <td style="padding: 5px">
       <label for="state">Home State</label>
-      <input type="text" class="form-control" id="state" placeholder="" value="<?php echo $row['state'];?>">
+      <input type="text" class="form-control" name="state" id="state" placeholder="" value="<?php echo $row['state'];?>">
      </td>
      <td style="padding: 5px">
       <label for="zip">Home Zip</label>
-      <input type="text" class="form-control" id="zip" placeholder="" value="<?php echo $row['zipcode'];?>">
+      <input type="text" class="form-control" name="zip" id="zip" placeholder="" value="<?php echo $row['zipcode'];?>">
      </td>
      <td style="padding: 5px">
       <label for="jobTitle">Job Title</label>
-      <input type="text" class="form-control" id="jobTitle" placeholder="" value="<?php echo $row['title'];?>">
+      <input type="text" class="form-control" name="jobTitle" id="jobTitle" placeholder="" value="<?php echo $row['title'];?>">
      </td>
     </tr>
     <tr>
      <td style="padding: 5px">
       <label for="email">Email</label>
-      <input type="email" class="form-control" id="email" placeholder="" value="<?php echo $row['email'];?>">
+      <input type="email" class="form-control" name="email" id="email" placeholder="" value="<?php echo $row['email'];?>">
      </td>
      <td style="padding: 5px">
       <label for="emailUpdates">Email Updates</label>
-      <input type="checkbox" class="form-control" id="emailUpdates" placeholder="" value="<?php echo $row['email'];?>">
+      <input type="checkbox" class="form-control" name="emailUpdates" id="emailUpdates" placeholder="" value="<?php echo $row['email'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="emailUpdates">Text Updates</label>
-      <input type="checkbox" class="form-control" id="emailUpdates" placeholder="" value="<?php echo $row['email'];?>">
+      <label for="textUpdates">Text Updates</label>
+      <input type="checkbox" class="form-control" name="textUpdates" id="textUpdates" placeholder="" value="<?php echo $row['email'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="quietTimeVal1">Quiet Time (begining)</label>
-      <input type="text" class="form-control" id="quietTimeVal1" placeholder="" value="<?php echo $row['quiet_time'];?>">
+      <label for="quietTimeVal1">Quiet Time (start)</label>
+      <input type="text" class="form-control" name="quietTimeVal1" id="quietTimeVal1" placeholder="" value="<?php echo $row['quiet_time'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="quietTimeVal2">Quiet Time (ending)</label>
-      <input type="text" class="form-control" id="quietTimeVal2" placeholder="" value="<?php echo $row['quiet_time'];?>">
+      <label for="quietTimeVal2">Quiet Time (end)</label>
+      <input type="text" class="form-control" name="quietTimeVal2" id="quietTimeVal2" placeholder="" value="<?php echo $row['quiet_time'];?>">
      </td>
      <td style="padding: 5px">
       <label for="ssn">SSN</label>
-      <input type="text" class="form-control" id="ssn" placeholder="" value="<?php echo $row['ssn'];?>">
+      <input type="text" class="form-control" name="ssn" id="ssn" placeholder="" value="<?php echo $row['ssn'];?>">
      </td>
     </tr>
     <tr>
      <td style="padding: 5px">
       <label for="medicalCard">MC Expiry Date</label>
-      <input type="text" class="form-control" id="medicalCard" placeholder="" value="<?php echo $row['med_expire_dt'];?>">
+      <input type="text" class="form-control" name="medicalCard" id="medicalCard" placeholder="" value="<?php echo $row['med_expire_dt'];?>">
      </td>
      <td style="padding: 5px">
       <label for="mobilePhone">Mobile Phone</label>
-      <input type="text" class="form-control" id="mobilePhone" placeholder="" value="<?php echo $row['driverid'];?>">
+      <input type="text" class="form-control" name="mobilePhone" id="mobilePhone" placeholder="" value="<?php echo $row['driverid'];?>">
      </td>
      <td style="padding: 5px">
       <label for="contract">Contract</label>
-      <input type="text" class="form-control" id="contract" placeholder="" value="<?php echo $row['contract'];?>">
+      <input type="text" class="form-control" name="contract" id="contract" placeholder="" value="<?php echo $row['contract'];?>">
      </td>
      <td style="padding: 5px">
       <label for="startDate">Start Date</label>
-      <input type="text" class="form-control" id="startDate" placeholder="" value="<?php echo $row['start_date'];?>">
+      <input type="text" class="form-control" name="startDate" id="startDate" placeholder="" value="<?php echo $row['start_date'];?>">
      </td>
      <td style="padding: 5px">
       <label for="departureDate">Departure Date</label>
-      <input type="text" class="form-control" id="departureDate" placeholder="" value="<?php echo $row['start_date'];?>">
+      <input type="text" class="form-control" name="departureDate" id="departureDate" placeholder="" value="<?php echo $row['start_date'];?>">
      </td>
      <td style="padding: 5px">
       <label for="username">Username</label>
-      <input type="text" class="form-control" id="username" placeholder="" value="<?php echo $row['username'];?>">
+      <input type="text" class="form-control" name="username" id="username" placeholder="" value="<?php echo $row['username'];?>">
      </td>
      <td style="padding: 5px">
       <label for="password">Password</label>
-      <input type="text" class="form-control" id="password" placeholder="" value="<?php echo $row['password'];?>">
+      <input type="text" class="form-control" name="password" id="password" placeholder="" value="<?php echo $row['password'];?>">
      </td>
     </tr>
     <tr>
      <td style="padding: 5px">
-       <input type="submit" class="btn btn-primary" value="Update">
+       <input type="submit" name="submit" class="btn btn-primary" value="Update">
+       <input type="hidden" name="id" class="btn btn-primary" value="<?php echo $row['id'];?>">
      </td>
     </tr>
    </table>
+   </form>
   </div>
 </td>
 </tr>
