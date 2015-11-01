@@ -1254,10 +1254,12 @@ a:focus {
 }
 .form-group.has-warning label {
   color: #f39c12;
+  /* used to be color #f39c12 Changed back from f8fb02 Bright Yellow*/
 }
 .form-group.has-warning .form-control {
   border-color: #f39c12 !important;
   box-shadow: none;
+  /* used to be color #f39c12 Changed back from f8fb02 Bright Yellow*/
 }
 .form-group.has-error label {
   color: #dd4b39;
@@ -3996,6 +3998,7 @@ fieldset[disabled] .btn-vk.active {
 .label-waring,
 .modal-warning .modal-body {
   background-color: #f39c12 !important;
+    /* used to be color #f39c12 Changed back from f8fb02 Bright Yellow*/
 }
 .bg-aqua,
 .callout.callout-info,

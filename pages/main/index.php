@@ -266,113 +266,18 @@ $drivername = $_SESSION['drivername'];
           </ol>
         </section>
 
-        <!-- Main content -->
-        <section class="content">
-          <!-- Info boxes -->
-          <div class="row">
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="/pages/dispatch/orders.php">
-                 <span class="info-box-icon bg-aqua"><i class="fa fa-cog fa-spin"></i></span>
-                </a>
-                <div class="info-box-content">
-                  <span class="info-box-text"><a href="/pages/dispatch/orders.php">Shipment boards</a></span><span class="info-box-number"> Todays Pickups: <?php echo "$pu_today_count";?><br>
-                    Todays Deliveries: <?php echo "$del_today_count";?> </span>
-                </div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
+<!-- Animated Top Menu Insert PHP Reference to /wwwlive/dist/menus_sidebars_elements  -->
+
+<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/topmenuanimation.php');?>
+
+<!-- End Animated Top Menu -->  
 
 
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="/pages/dispatch/vir.php" class="button animated rubberBand">
-<style>
- a.button {
-	 -webkit-animation-duration: 5s;
-	 -webkit-animation-delay: 1s;
-	 -webkit-animation-iteration-count: infinite;
- }
-</style>
-                <span class="info-box-icon bg-red"><i class="fa fa-wrench faa-wrench animated"></i></span>
-</a>
-                <div class="info-box-content">
-                  <span class="info-box-text"><a href="/pages/dispatch/vir.php">Vehicle inspection Reports</a></span>
-                  <span class="info-box-number">Todays VIRs: 1 <br>
-                  Total VIR's: 136</span>
-                </div><!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
-
-            <!-- fix for small devices only -->
-            <div class="clearfix visible-sm-block"></div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="pages/tables/fuel.php" class="button2 animated zoomIn">
-<style>
- a.button2 {
-	 -webkit-animation-duration: 6s;
-	 -webkit-animation-delay: 1s;
-	 -webkit-animation-iteration-count: infinite;
- }
-</style>
-                <span class="info-box-icon bg-green"><i class="fa fa-tachometer"></i></span>
-                <div class="info-box-content">
-                  <span class="info-box-text">Fuel</span>
-                  <span class="info-box-number">Todays Fuel: ?/PHP
-                  <br>
-                  Total Fuel: ?/PHP  </span>
-                </div><!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="pages/tables/ifta.php" class="button3 animated jello">
-<style>
- a.button3 {
-	 -webkit-animation-duration: 3s;
-	 -webkit-animation-delay: 1s;
-	 -webkit-animation-iteration-count: infinite;
- }
-</style>
-               <span class="info-box-icon bg-yellow"><i class="fa fa-newspaper-o"></i></span>
-
-                <div class="info-box-content">
-                  <span class="info-box-text">IFTA Reports</span>
-                  <span class="info-box-number">Todays IFTA: ?/PHP<br>
-                  Total IFTA Reports: ?/PHP </span>
-                </div><!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
-<div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="pages/tables/saftey.php" class="button4 animated zoomIn">
-<style>
- a.button4 {
-	 -webkit-animation-duration: 3s;
-	 -webkit-animation-delay: 1s;
-	 -webkit-animation-iteration-count: infinite;
- }
-
-</style>
-               <span class="info-box-icon bg-blue"><i class="fa fa-road"></i></span>
-
-                <div class="info-box-content">
-                  <span class="info-box-text">DOT Saftey Report</span>
-                  <span class="info-box-number">Uploaed Monthly                  </span>
-                </div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.info-box -->
-          </div><!-- /.row -->
-</a>
           <div class="row">
             <div class="col-md-12">
               <div class="box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Yearly Stats For: <?php echo "$drivername"; ?></h3>
+                  <h3 class="box-title">Company Updates: Welcome <?php echo "$drivername"; ?><img src="../../dist/img/userimages/indexpageideas.jpg" width="1550"></h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <div class="btn-group">
@@ -387,102 +292,13 @@ $drivername = $_SESSION['drivername'];
                     </div>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                   </div>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <div class="row">
-                    <div class="col-md-8">
-                      <p class="text-center">
-                     <!-- Add PHP Session to populate Current year -->
-                        <strong>Shipment Updates: PHP? Current Year</strong>:</p>
-                    <div class="chart">
-                        <!-- Sales Chart Canvas -->
-                        <canvas id="salesChart" height="180"></canvas>
-                      </div><!-- /.chart-responsive -->
-                    </div><!-- /.col -->
-                    <div class="col-md-4">
-                      <p class="text-center">
-                        <strong>Monthly Stats For: <span class="box-title"><?php echo "$drivername"; ?></span></strong></p>
+                </div><!-- /.box-header --><!-- ./box-body -->
 
-
-                      <div class="progress-group">
-                        <span class="progress-text">  Total Shipments Dispatched</span><span class="progress-number"><b>100</span>
-                        <div class="progress sm">
-                          <div class="progress-bar progress-bar-blue" style="width: 80%"></div>
-
-
-
-
-                        </div>
-                      </div><!-- /.progress-group -->
-
-
-
-
-                      <div class="progress-group">
-                        <span class="progress-text">  Total Updateded Shipments</span><span class="progress-number"><b>80</span>
-                        <div class="progress sm">
-                          <div class="progress-bar progress-bar-green" style="width: 60%"></div>
-                        </div>
-                      </div><!-- /.progress-group -->
-                      <div class="progress-group">
-                        <span class="progress-text">Vehicle Inspections Score</span>
-                        <span class="progress-number"><b>?</b>/?</span>
-                        <div class="progress sm">
-                          <div class="progress-bar progress-bar-red" style="width: 80%"></div>
-                        </div>
-                      </div><!-- /.progress-group -->
-                      <div class="progress-group">
-                        <span class="progress-text">Fuel Entries Score</span>
-                        <span class="progress-number"><b>?</b>/?</span>
-                        <div class="progress sm">
-                          <div class="progress-bar progress-bar-green" style="width: 80%"></div>
-                        </div>
-                      </div><!-- /.progress-group -->
-                      <div class="progress-group">
-                        <span class="progress-text">IFTA Entries Score</span>
-                        <span class="progress-number"><b>?</b>/?</span>
-                        <div class="progress sm">
-                          <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
-                        </div>
-                      </div><!-- /.progress-group -->
-                    </div><!-- /.col -->
-                  </div><!-- /.row -->
-                </div><!-- ./box-body -->
                 <div class="box-footer">
-                  <div class="row">
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                        <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
-                        <h5 class="description-header">4210</h5>
-                        <span class="description-text">Total Updates</span>
-                      </div><!-- /.description-block -->
-                    </div><!-- /.col -->
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                        <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
-                        <h5 class="description-header">8390</h5>
-                        <span class="description-text">TOTAL Dispached</span>
-                      </div><!-- /.description-block -->
-                    </div><!-- /.col -->
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                        <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
-                        <h5 class="description-header">50.01%</h5>
-                        <span class="description-text">TOTAL %</span>
-                      </div><!-- /.description-block -->
-                    </div><!-- /.col -->
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block">
-                        <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
-                        <h5 class="description-header">1200</h5>
-                        <span class="description-text">GOAL COMPLETIONS</span>
-                      </div><!-- /.description-block -->
-                    </div>
-                  </div><!-- /.row -->
-                </div><!-- /.box-footer -->
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-          </div><!-- /.row -->
+                </div class="box-footer">
+
+
+
 
           <!-- Main row -->
           <div class="row">
@@ -497,35 +313,59 @@ $drivername = $_SESSION['drivername'];
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                   </div>
                 </div><!-- /.box-header -->
-                <div class="box-body no-padding">
+                <div class="box-body">
                   <div class="row">
-                    <div class="col-md-9 col-sm-8">
-                      <div class="pad">
-                        <!-- Map will be created here -->
-                        <div id="world-map-markers" style="height: 325px;"></div>
+                    <div class="col-md-8">
+                      <p class="text-center">
+                        <!-- Add PHP Session to populate Current year -->
+                        <strong>Shipment Updates: PHP? Current Year</strong>:</p>
+<!-- Sales Chart Canvas
+                      <div class="chart">
+                        <!-- Sales Chart Canvas 
+                        <canvas id="salesChart" height="180"></canvas>
                       </div>
-                    </div><!-- /.col -->
-                    <div class="col-md-3 col-sm-4">
-                      <div class="pad box-pane-right bg-green" style="min-height: 280px">
-                        <div class="description-block margin-bottom">
-                          <div class="sparkbar pad" data-color="#fff">90,70,90,70,75,80,70</div>
-                          <h5 class="description-header">8390</h5>
-                          <span class="description-text">Visits</span>
-                        </div><!-- /.description-block -->
-                        <div class="description-block margin-bottom">
-                          <div class="sparkbar pad" data-color="#fff">90,50,90,70,61,83,63</div>
-                          <h5 class="description-header">30%</h5>
-                          <span class="description-text">Referrals</span>
-                        </div><!-- /.description-block -->
-                        <div class="description-block">
-                          <div class="sparkbar pad" data-color="#fff">90,50,90,70,61,83,63</div>
-                          <h5 class="description-header">70%</h5>
-                          <span class="description-text">Organic</span>
-                        </div><!-- /.description-block -->
+                      
+                      <!-- /.chart-responsive -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-4">
+                      <p class="text-center"> <strong>Monthly Stats For: <span class="box-title"><?php echo "$drivername"; ?></span></strong></p>
+                      <div class="progress-group"> <span class="progress-text"> Total Shipments Dispatched</span><span class="progress-number"><b>100</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-blue" style="width: 80%"></div>
+                        </div>
                       </div>
-                    </div><!-- /.col -->
-                  </div><!-- /.row -->
-                </div><!-- /.box-body -->
+                      <!-- /.progress-group -->
+                      <div class="progress-group"> <span class="progress-text"> Total Updateded Shipments</span><span class="progress-number"><b>80</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-green" style="width: 60%"></div>
+                        </div>
+                      </div>
+                      <!-- /.progress-group -->
+                      <div class="progress-group"> <span class="progress-text">Vehicle Inspections Score</span> <span class="progress-number"><b>?</b>/?</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+                        </div>
+                      </div>
+                      <!-- /.progress-group -->
+                      <div class="progress-group"> <span class="progress-text">Fuel Entries Score</span> <span class="progress-number"><b>?</b>/?</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                        </div>
+                      </div>
+                      <!-- /.progress-group -->
+                      <div class="progress-group"> <span class="progress-text">IFTA Entries Score</span> <span class="progress-number"><b>?</b>/?</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+                        </div>
+                      </div>
+                      <!-- /.progress-group -->
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+                </div>
+                <!-- /.box-body -->
               </div><!-- /.box -->
               <div class="row">
                 <div class="col-md-6">
@@ -666,7 +506,81 @@ $drivername = $_SESSION['drivername'];
                                   <small class='contacts-list-date pull-right'>1/4/2015</small>
                                 </span>
                                 <span class='contacts-list-msg'>Never mind I found...</span>
+                              </div>
+                              
+                              
+                            <a href='#'>
+                              <img class='contacts-list-img' src='/dist/img/user1-128x128.jpg'/>
+                              <div class='contacts-list-info'>
+                                <span class='contacts-list-name'>
+                                  Count Dracula
+                                  <small class='contacts-list-date pull-right'>2/28/2015</small>
+                                </span>
+                                <span class='contacts-list-msg'>How have you been? I was...</span>
                               </div><!-- /.contacts-list-info -->
+                            </a>
+                          </li><!-- End Contact Item -->
+                          <li>
+                            <a href='#'>
+                              <img class='contacts-list-img' src='/dist/img/user7-128x128.jpg'/>
+                              <div class='contacts-list-info'>
+                                <span class='contacts-list-name'>
+                                  Sarah Doe
+                                  <small class='contacts-list-date pull-right'>2/23/2015</small>
+                                </span>
+                                <span class='contacts-list-msg'>I will be waiting for...</span>
+                              </div><!-- /.contacts-list-info -->
+                            </a>
+                          </li><!-- End Contact Item -->
+                          <li>
+                            <a href='#'>
+                              <img class='contacts-list-img' src='/dist/img/user3-128x128.jpg'/>
+                              <div class='contacts-list-info'>
+                                <span class='contacts-list-name'>
+                                  Nadia Jolie
+                                  <small class='contacts-list-date pull-right'>2/20/2015</small>
+                                </span>
+                                <span class='contacts-list-msg'>I'll call you back at...</span>
+                              </div><!-- /.contacts-list-info -->
+                            </a>
+                          </li><!-- End Contact Item -->
+                          <li>
+                            <a href='#'>
+                              <img class='contacts-list-img' src='/dist/img/user5-128x128.jpg'/>
+                              <div class='contacts-list-info'>
+                                <span class='contacts-list-name'>
+                                  Nora S. Vans
+                                  <small class='contacts-list-date pull-right'>2/10/2015</small>
+                                </span>
+                                <span class='contacts-list-msg'>Where is your new...</span>
+                              </div><!-- /.contacts-list-info -->
+                            </a>
+                          </li><!-- End Contact Item -->
+                          <li>
+                            <a href='#'>
+                              <img class='contacts-list-img' src='/dist/img/user6-128x128.jpg'/>
+                              <div class='contacts-list-info'>
+                                <span class='contacts-list-name'>
+                                  John K.
+                                  <small class='contacts-list-date pull-right'>1/27/2015</small>
+                                </span>
+                                <span class='contacts-list-msg'>Can I take a look at...</span>
+                              </div><!-- /.contacts-list-info -->
+                            </a>
+                          </li><!-- End Contact Item -->
+                          <li>
+                            <a href='#'>
+                              <img class='contacts-list-img' src='/dist/img/user8-128x128.jpg'/>
+                              <div class='contacts-list-info'>
+                                <span class='contacts-list-name'>
+                                  Kenneth M.
+                                  <small class='contacts-list-date pull-right'>1/4/2015</small>
+                                </span>
+                                <span class='contacts-list-msg'>Never mind I found...</span>
+                              </div>                              
+                              
+                              
+                              <!-- /.contacts-list-info -->
                             </a>
                           </li><!-- End Contact Item -->
                         </ul><!-- /.contatcts-list -->

@@ -87,7 +87,7 @@ $trailerid = $_SESSION['trailerId'];
           <!-- Default box -->
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">Vechicle Inspection Report</h3>
+              <h3 class="box-title">Vechicle Inspection Quick Report</h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                 <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
@@ -105,84 +105,83 @@ $trailerid = $_SESSION['trailerId'];
                   <tr>
                     <td>Truck
                     <td><input name="<?php echo constant('truckId'); ?>2" type="text" id="<?php echo constant('truckId'); ?>" value="<?php echo $truckId; ?>" size="8" readonly="readonly" />                    
-                    <td colspan="2"><a href="vir.php"> Previous Inspections</a>                      </tr>
+                    <td colspan="2"><a href="vir_previous_truck.php"> Previous VIR</a> <font color="red">(Red!)</font>                     </tr>
                   <tr>
                     <td>Trailer
                     <td><input name="<?php echo constant('BX_LP'); ?>2" type="text" id="<?php echo constant('BX_LP'); ?>2" value="<?php echo $trailer; ?>" size="8" readonly="readonly" />                    
-                    <td colspan="2"><a href="vir.php">Previous Inspections </a>                      </tr>
+                    <td colspan="2"><a href="vir_previous_trailer.php">Previous VIR</a> <font color="orange">(Yellow!)</font></tr>
                   <tr>
                     <td colspan="4"><div align="center">Pre Trip:
-                        <input type="checkbox" name="cbpretrip2" value="cbpretrip" id="cbpretrip2"/>
-Post Trip:
-<input type="checkbox" name="cbposttrip2" value="cbposttrip" id="cbposttrip2"/>
+                        <input type="checkbox" name="cb_pretrip" value="cb_pretrip" id="cb_pretrip"/>
+														Post Trip:
+						<input type="checkbox" name="cb_posttrip" value="cb_posttrip" id="cb_posttrip"/>
                     </div>                  </tr>
                   <tr>
                     <td><div align="center">Truck Type</div>                        
-                  <td colspan="3"><div align="center">Condition of Vehicle</div>                  </tr>
+                  <td colspan="3"><div align="center">VIR Conditions &amp; Tires</div>                  </tr>
                   <tr>
-                    <td width="87"><a href="vir.php"><img src="images/semiboxsprintersm.gif" alt="Semi" width="78" height="52"></a>                  
-                    <td width="68" bgcolor="#33FF00">
+                    <td width="82"><a href="vir.php"><img src="images/semiboxsprintersm.gif" alt="Semi" width="78" height="52"></a>                  
+                    <td width="63" bgcolor="#33FF00">
                     
                         <div align="center">Green
-                        <input type="checkbox" name="cbgreensemi" id="cbgreensemi">
-                        <label for="cbgreensemi"></label>
+                        <input type="checkbox" name="cb_vir_truck_green" id="cb_vir_truck_green">
+                        <label for="cb_vir_truck_green"></label>
                         </div>
                         
-                    <td width="72" bgcolor="#FFFF00"><div align="center">Yellow
-                        <input type="checkbox" name="cbyellowsemi" id="cbyellowsemi">
-                        <label for="cbyellowsemi"></label>
+                    <td width="82" bgcolor="#FFFF00"><div align="center">Yellow
+                        <input type="checkbox" name="cb_vir_truck_yellow" id="cb_vir_truck_yellow">
+                        <label for="cb_vir_truck_yellow"></label>
                     </div>
                     <td width="56" bgcolor="#FF0000"><div align="center">Red
-                        <input type="checkbox" name="cbredsemi" id="cbredsemi">
-                        <label for="cbredsemi"></label>
+                        <input type="checkbox" name="cb_vir_truck_red" id="cb_vir_truck_red">
+                      <label for="cb_vir_truck_red"></label>
                     </div>                    
                   </tr>
                   <tr>
                     <td><img src="../images/smalltires.gif" width="25" height="25" alt="tire"><img src="../images/smalltires.gif" width="25" height="25" alt="tire"><img src="../images/smalltires.gif" width="25" height="25" alt="tire">
                     <td bgcolor="#33FF00">
                       <div align="center">Green
-                        <input type="checkbox" name="cbgreentrailer" id="cbgreentrailer">
-                        <label for="cbgreentrailer"></label>
+                        <input type="checkbox" name="cb_truck_tires_green" id="cb_truck_tires_green">
+                        <label for="cb_truck_tires_green"></label>
                       </div>
-                      
                     <td bgcolor="#FFFF00"><div align="center">Yellow
-                      <input type="checkbox" name="cbyellowtrailer" id="cbyellowtrailer">
-                      <label for="cbyellowtrailer"></label>
+                        <input type="checkbox" name="cb_truck_tires_yellow" id="cb_truck_tires_yellow">            
+						<label for="cb_truck_tires_yellow"></label>
                     </div>                    
                     <td bgcolor="#FF0000"><div align="center">Red
-                      <input type="checkbox" name="cbredtrailer" id="cbredtrailer">
-                      <label for="cbredsemi2"></label>
+                      <input type="checkbox" name="cb_truck_tires_red" id="cb_truck_tires_red">
+                      <label for="cb_trucktires_red"></label>
                     </div>                    </tr>
                   <tr>
                     <td><a href="vir.php"><img src="../images/trailer.gif" alt="Trailer" width="77" height="38"></a>
                     <td bgcolor="#33FF00">
                       <div align="center">Green
-                        <input type="checkbox" name="cbgreenboxtruck" id="cbgreenboxtruck">
-                        <label for="cbgreenboxtruck"></label>
+                        <input type="checkbox" name="cb_trailer_green" id="cb_trailer_green">
+                        <label for="cb_trailer_green"></label>
                       </div>
                     <td bgcolor="#FFFF00"><div align="center">Yellow
-                      <input type="checkbox" name="cbyellowboxtruck" id="cbyellowboxtruck">
-                      <label for="cbyellowboxtruck"></label>
+                        <input type="checkbox" name="cb_trailer_yellow" id="cb_trailer_yellow">
+                      <label for="cb_trailer_yellow"></label>
                     </div>                    
                     <td bgcolor="#FF0000"><div align="center">Red
-                      <input type="checkbox" name="cbredboxtruck" id="cbredboxtruck">
-                      <label for="cbredsemi3"></label>
+                      <input type="checkbox" name="cb_trailer_red" id="cb_trailer_red">
+                      <label for="cb_trailer_red"></label>
                     </div>                    </tr>
                   <tr>
                     <td><img src="../images/smalltires.gif" width="25" height="25" alt="tire"><img src="../images/smalltires.gif" width="25" height="25" alt="tire"><img src="../images/smalltires.gif" width="25" height="25" alt="tire">
                     <td bgcolor="#33FF00">
 
                       <div align="center">Green
-                        <input type="checkbox" name="cbgreensprinter" id="cbgreensprinter">
-                        <label for="cbgreensprinter"></label>
+                        <input type="checkbox" name="cb_trailer_tires_green" id="cb_trailer_tires_green">
+                        <label for="cb_trailer_tires_green"></label>
                       </div>
                     <td bgcolor="#FFFF00"><div align="center">Yellow
-                      <input type="checkbox" name="cbyellowsprinter" id="cbyellowsprinter">
-                      <label for="cbyellowsprinter"></label>
+                      <input type="checkbox" name="cb_trailer_tires_yellow" id="cb_trailer_tires_yellow">
+                      <label for="cb_trailer_tires_yellow"></label>
                     </div>                  
                     <td bgcolor="#FF0000"><div align="center">Red
-                      <input type="checkbox" name="cbredsprinter" id="cbredsprinter">
-                      <label for="cbredsprinter"></label>
+                      <input type="checkbox" name="cb_trailer_tires_red" id="cb_trailer_tires_red">
+                      <label for="cb_trailer_tires_red"></label>
                     </div>                  
                   </tr>
                   <tr>
@@ -190,7 +189,7 @@ Post Trip:
                   </tr>
                   <tr>
                     <td colspan="4"><div align="center">
-                      <textarea name="textarea2" id="textarea2" cols="43" rows="3"></textarea>
+                      <textarea name="vir_notes_quick_report" id="vir_notes_quick_report"  cols="43" rows="3" placeholder="Please type notes for any items needing attention!"></textarea>
                     </div>                  
                   </tr>
                   <tr>
@@ -199,10 +198,375 @@ Post Trip:
                 </table>
               </form>
             </div><!-- /.box-body -->
-            <div class="box-footer">Not All Green? Additional Items below Necessary!</div>
+            <div class="box-footer">Not All Green? Add Items Below!</div>
             <!-- /.box-footer-->
           </div><!-- /.box -->
 
+
+
+
+
+
+          <!-- Default box -->
+<!--          <div class="box"> -->
+<!--Remove the div Class "box" above and add below primary collapsed -->
+     <div class="box box-primary collapsed-box">  
+            <div class="box-header with-border">
+              <h3 class="box-title"><img src="../images/semismall.gif" alt="tire"> Truck VIR  <img src="../images/boxtrucksmall.gif" alt="tire"><img src="../images/sprintersmall.gif" alt="tire"></h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <div class="box-body">
+              <form name="form1" method="post" action="">
+                <table width="310" height="399" border="1">
+                  <tr>
+                    <td colspan="3"><div align="center">Please Note Issues with Truck</div>                    </tr>
+                  <tr>
+                    <td colspan="3"><div align="center">
+                      <p><a href="vir.php"><img src="images/semiboxsprinter.gif" alt="Semi" width="225" height="147"></a></p>
+                      <p>Maybe we can do this like the accessorials</p>
+                    </div>                    
+                  </tr>
+                  <tr>
+                    <td height="24" colspan="3"><div align="center">Tractor</div>                                        
+                  </tr>
+                  <tr>
+                  <td width="51"><input type="checkbox" name="air_compressor" id="air_compressor">
+                    <label for="blank"></label>
+                  <td width="243">Air Compressor                                    </tr>
+                  <tr>
+                    <td><input type="checkbox" name="air_lines" id="air_lines">                  
+                    <td>Air Lines                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="air_conditioning" id="air_conditioning">                    
+                    <td>A/C Issues                  
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="alternator" id="alternator">                  
+                    <td>Alternator                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="battery" id="battery">                  
+                    <td>Battery                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="body" id="body">                  
+                    <td>Body                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="break_accessories" id="break_accessorids">                  
+                    <td>Brake Accessories</tr>
+                  <tr>
+                    <td><input type="checkbox" name="breakes" id="breaks">
+                    <td>Brakes</tr>
+                  <tr>
+                    <td><input type="checkbox" name="clutch" id="clutch">                  
+                    <td>Clutch                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="defroster" id="defroster">                  
+                    <td>Defroster                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="drive_line" id="drive_line">                  
+                    <td>Drive Line                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="engine" id="engine">                  
+                    <td>Engine                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="exhaust" id="exhaust">                  
+                    <td>Exhaust                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="fifth_wheel" id="fifth_wheel">                  
+                    <td>Fifth Wheel                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="front_axel" id="front_axel">                  
+                    <td>Front Axle                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="fuel_tanks" id="fuel_tanks">                  
+                    <td>Fuel Tanks                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="heater" id="heater">                  
+                    <td>Heater                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="horn" id="horn">                  
+                    <td>Horn                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="lights" id="lights">                  
+                    <td>Lights: Head,Stop,Tail,Dash,Turn                   
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="mirrors" id="mirrors">                  
+                    <td>Mirrors                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="muffler" id="muffler">                  
+                    <td>Muffler                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="oil_pressure" id="oil_pressure">                  
+                    <td>Oil Pressure                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="radiator" id="radiator">                  
+                    <td>Radiator                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="rear_end" id="rear_end">                  
+                    <td>Rear End                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="reflectors" id="reflectors">                  
+                    <td>Reflectors                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="safety_equipment" id="saftety_equipment">                  
+                    <td>Safety Equipment, Fire Ext.,triangles,fuses</tr>
+                  <tr>
+                    <td><input type="checkbox" name="springs" id="springs">                  
+                    <td>Springs</tr>
+                  <tr>
+                    <td><input type="checkbox" name="starter" id="blank27">                  
+                    <td>Starter                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank28" id="blank28">                  
+                    <td>Steering                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank29" id="blank29">                  
+                    <td>Tires                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank30" id="blank30">                  
+                    <td>Tire Chains                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank31" id="blank31">                  
+                    <td>Transmission</tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank32" id="blank32">                  
+                    <td>Wheels                  
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank33" id="blank33">                  
+                    <td>Windows                  
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank34" id="blank34">                  
+                    <td>Windshield                  
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank35" id="blank35">                  
+                    <td>Other: Please make Note below</tr>
+                  <tr>
+                  <td colspan="2">                  <div align="center">
+                    <textarea name="vir_detailed_truck" id="vir_detailed_truck" cols="43" rows="3"></textarea>
+                  </div>                  <div align="center">
+                    <input type="checkbox" />Truck VIR Condition Satisfactory
+                  </div>
+                  </tr>
+                </table>
+              </form>
+              
+            </div><!-- /.box-body -->
+            <div class="box-footer">Vir Additional info on Yellow or Red + Condition &amp; Notes</div>
+            <!-- /.box-footer-->
+          </div><!-- /.box -->
+
+
+
+
+
+
+          <!-- Default box -->
+<!--          <div class="box"> -->
+<!--Remove the div Class "box" above and add below primary collapsed -->
+     <div class="box box-primary collapsed-box">  
+            <div class="box-header with-border">
+              <h3 class="box-title"><img src="../images/trailersmall.gif" alt="tire"> Trailer VIR <img src="../images/trailersmall.gif" alt="tire"></h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+              </div>
+        </div>
+            <div class="box-body">
+              <form name="form1" method="post" action="">
+                <table width="310" height="399" border="1">
+                  <tr>
+                    <td colspan="3"><div align="center">Please Note Issues with Truck</div>                    </tr>
+                  <tr>
+                    <td colspan="3"><div align="center">
+                      <p><a href="vir.php"><img src="images/semiboxsprinter.gif" alt="Semi" width="225" height="147"></a></p>
+                      <p>Maybe we can do this like the accessorials</p>
+                    </div>                    
+                  </tr>
+                  <tr>
+                    <td height="24" colspan="3"><div align="center">Tractor</div>                                        
+                  </tr>
+                  <tr>
+                  <td width="51"><input type="checkbox" name="air_compressor" id="air_compressor">
+                    <label for="blank"></label>
+                  <td width="243">Air Compressor                                    </tr>
+                  <tr>
+                    <td><input type="checkbox" name="air_lines" id="air_lines">                  
+                    <td>Air Lines                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="air_conditioning" id="air_conditioning">                    
+                    <td>A/C Issues                  
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="alternator" id="alternator">                  
+                    <td>Alternator                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="battery" id="battery">                  
+                    <td>Battery                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="body" id="body">                  
+                    <td>Body                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="break_accessories" id="break_accessorids">                  
+                    <td>Brake Accessories</tr>
+                  <tr>
+                    <td><input type="checkbox" name="breakes" id="breaks">
+                    <td>Brakes</tr>
+                  <tr>
+                    <td><input type="checkbox" name="clutch" id="clutch">                  
+                    <td>Clutch                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="defroster" id="defroster">                  
+                    <td>Defroster                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="drive_line" id="drive_line">                  
+                    <td>Drive Line                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="engine" id="engine">                  
+                    <td>Engine                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="exhaust" id="exhaust">                  
+                    <td>Exhaust                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="fifth_wheel" id="fifth_wheel">                  
+                    <td>Fifth Wheel                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="front_axel" id="front_axel">                  
+                    <td>Front Axle                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="fuel_tanks" id="fuel_tanks">                  
+                    <td>Fuel Tanks                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="heater" id="heater">                  
+                    <td>Heater                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="horn" id="horn">                  
+                    <td>Horn                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="lights" id="lights">                  
+                    <td>Lights: Head,Stop,Tail,Dash,Turn                   
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="mirrors" id="mirrors">                  
+                    <td>Mirrors                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="muffler" id="muffler">                  
+                    <td>Muffler                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="oil_pressure" id="oil_pressure">                  
+                    <td>Oil Pressure                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="radiator" id="radiator">                  
+                    <td>Radiator                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="rear_end" id="rear_end">                  
+                    <td>Rear End                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="reflectors" id="reflectors">                  
+                    <td>Reflectors                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="safety_equipment" id="saftety_equipment">                  
+                    <td>Safety Equipment, Fire Ext.,triangles,fuses</tr>
+                  <tr>
+                    <td><input type="checkbox" name="springs" id="springs">                  
+                    <td>Springs</tr>
+                  <tr>
+                    <td><input type="checkbox" name="starter" id="blank27">                  
+                    <td>Starter                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank28" id="blank28">                  
+                    <td>Steering                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank29" id="blank29">                  
+                    <td>Tires                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank30" id="blank30">                  
+                    <td>Tire Chains                    
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank31" id="blank31">                  
+                    <td>Transmission</tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank32" id="blank32">                  
+                    <td>Wheels                  
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank33" id="blank33">                  
+                    <td>Windows                  
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank34" id="blank34">                  
+                    <td>Windshield                  
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" name="blank35" id="blank35">                  
+                    <td>Other: Please make Note below</tr>
+                  <tr>
+                  <td colspan="2">                  <div align="center">
+                    <textarea name="vir_detailed_truck" id="vir_detailed_truck" cols="43" rows="3"></textarea>
+                  </div>                  <div align="center">
+                    <input type="checkbox" />Truck VIR Condition Satisfactory
+                  </div>
+                  </tr>
+                </table>
+              </form>
+              
+            </div><!-- /.box-body -->
+            <div class="box-footer">Vir Additional info on Yellow or Red + Condition &amp; Notes</div>
+            <!-- /.box-footer-->
+          </div><!-- /.box -->
 
 
 
@@ -212,7 +576,7 @@ Post Trip:
 <!--Remove the div Class "box" above and add below primary collapsed -->
       <div class="box box-primary collapsed-box">
             <div class="box-header with-border">
-              <h3 class="box-title">Tires Semi + Trailer Combo <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
+              <h3 class="box-title"><img src="../images/smalltires.gif" width="25" height="25" alt="tire"> Semi/trailer tires <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
                 <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
@@ -220,7 +584,7 @@ Post Trip:
             </div>
             <div class="box-body">
               <form name="form1" method="post" action="">
-                <table width="311" height="1094" border="1">
+                <table width="311" height="1223" border="1">
                   <tr>
                     <td height="24" colspan="4"><div align="center"> Truck &amp; Trailer Tires (Combo)</div>                    </tr>
                   <tr>
@@ -231,7 +595,7 @@ Post Trip:
                   </tr>
                   <tr>
                     <td width="91" height="86">                    <div align="center">
-                      <p>TD Steer
+                      <p>D Steer
                         <select name="Conditions4" id="Conditions4">
                           <option selected>Exellent</option>
                           <option>Ok</option>
@@ -267,9 +631,9 @@ Post Trip:
                     <td width="93" rowspan="7">
                     <img src="../images/semiandtrailertop.gif" width="115" height="868">                    
                     <td width="93" height="86"><div align="center">
-                      <p>TP Steer                      
-                        <select name="Conditions5" id="Conditions6">
-                          <option selected>Exellent</option>
+                      <p>P Steer
+<select name="Conditions5" id="Conditions6">
+                      <option selected>Exellent</option>
                           <option>Ok</option>
                           <option>Poor</option>
                           <option>Red Tag</option>
@@ -302,12 +666,12 @@ Post Trip:
                     </div>                                                            
                   </tr>
                   <tr>
-                    <td height="50">
+                    <td height="77">
                     <td>                                                            
                   </tr>
                   <tr>
                     <td height="117"><div align="center">
-                      <p>TD Front
+                      <p>A1 D Front
                         <select name="Conditions25" id="Conditions26">
                           <option selected>Exellent</option>
                           <option>Ok</option>
@@ -346,7 +710,7 @@ Post Trip:
                         </select>
                     </div>                  
                     <td><div align="center">
-                      <p>TP Front
+                      <p>A1 P Front
                         <select name="Conditions" id="Conditions2">
                           <option selected>Exellent</option>
                           <option>Ok</option>
@@ -386,7 +750,7 @@ Post Trip:
                   </div>                    </tr>
                   <tr>
                     <td height="117"><div align="center">
-                      <p>TD
+                      <p>A2 D
                         Rear
                         <select name="Conditions28" id="Conditions35">
                           <option selected>Exellent</option>
@@ -428,7 +792,7 @@ Post Trip:
                       </p>
                     </div>
                     <td height="117"><div align="center">
-                      <p>TP Rear
+                      <p>A2 P Rear
                         <select name="Conditions27" id="Conditions32">
                           <option selected>Exellent</option>
                           <option>Ok</option>
@@ -473,7 +837,7 @@ Post Trip:
                     <td height="186"></tr>
                   <tr>
                     <td height="123"><div align="center">
-                      <p>TRD Front
+                      <p>TA1D Front
                         <select name="Conditions32" id="Conditions47">
                       <option selected>Exellent</option>
                           <option>Ok</option>
@@ -514,7 +878,7 @@ Post Trip:
                       </p>
                     </div>                  
                     <td height="123"><div align="center">
-                      <p>TRP Front
+                      <p>TA1P Front
                           <select name="Conditions31" id="Conditions44">
                           <option selected>Exellent</option>
                           <option>Ok</option>
@@ -557,7 +921,7 @@ Post Trip:
                   </tr>
                   <tr>
                     <td height="117"><div align="center">
-                      <p>TRD Rear
+                      <p>TA2D Rear
                         <select name="Conditions29" id="Conditions38">
                           <option selected>Exellent</option>
                           <option>Ok</option>
@@ -598,9 +962,9 @@ Post Trip:
                       </p>
                     </div>                  
                     <td height="117"><div align="center">
-                      <p>TRP Rear
-                          <select name="Conditions30" id="Conditions41">
-                          <option selected>Exellent</option>
+                      <p>TA2P Rear
+                        <select name="Conditions30" id="Conditions41">
+                      <option selected>Exellent</option>
                           <option>Ok</option>
                           <option>Poor</option>
                           <option>Red Tag</option>
@@ -666,7 +1030,7 @@ Post Trip:
 <!--Remove the div Class "box" above and add below primary collapsed -->
       <div class="box box-primary collapsed-box">  
             <div class="box-header with-border">
-              <h3 class="box-title">Tires  Trailer Only <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
+              <h3 class="box-title"><img src="../images/smalltires.gif" width="25" height="25" alt="tire"> Trailer Tires <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
                 <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
@@ -698,7 +1062,7 @@ Post Trip:
                     <td height="24"></tr>
                   <tr>
                     <td height="159"><div align="center">
-                      <p>TD Front
+                      <p>TA1D Front
                         <select name="Conditions3" id="Conditions">
                           <option selected>Exellent</option>
                           <option>Ok</option>
@@ -739,7 +1103,7 @@ Post Trip:
                       </p>
                     </div>
                     <td height="159"><div align="center">
-                      <p>TP Front
+                      <p>TA1P Front
                         <select name="Conditions11" id="Conditions14">
                           <option selected>Exellent</option>
                           <option>Ok</option>
@@ -781,7 +1145,7 @@ Post Trip:
                     </div>                    </tr>
                   <tr>
                     <td height="24"><div align="center">
-                      <p>TD Rear
+                      <p>TA2D Rear
                         <select name="Conditions12" id="Conditions17">
                           <option selected>Exellent</option>
                           <option>Ok</option>
@@ -822,7 +1186,7 @@ Post Trip:
                       </p>
                     </div>                    
                     <td height="24"><div align="center">
-                      <p>TP Rear
+                      <p>TA2P Rear
                         <select name="Conditions13" id="Conditions20">
                           <option selected>Exellent</option>
                           <option>Ok</option>
@@ -895,7 +1259,7 @@ Post Trip:
 <!--Remove the div Class "box" above and add below primary collapsed -->
     <div class="box box-primary collapsed-box">  
             <div class="box-header with-border">
-              <h3 class="box-title">Tires Box Truck <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
+              <h3 class="box-title"><img src="../images/smalltires.gif" width="25" height="25" alt="tire">  Boxtruck tires<img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
                 <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
@@ -1080,7 +1444,7 @@ Post Trip:
 <!--Remove the div Class "box" above and add below primary collapsed -->
      <div class="box box-primary collapsed-box">  
             <div class="box-header with-border">
-              <h3 class="box-title">Tires  Sprinter <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
+              <h3 class="box-title"><img src="../images/smalltires.gif" width="25" height="25" alt="tire">   Sprinter tires <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
                 <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
@@ -1271,7 +1635,7 @@ Check To Confirm Sprinter Tire Inspection </div>
                   <tr>
                     <td colspan="2"><img src="../images/finish.jpg" alt="Submit" width="310" height="152"></td>
                   <tr>
-                    <td colspan="2"><table width="310" border="1">
+                    <td height="85" colspan="2"><table width="310" border="1">
                     </table>
                       <div align="center">Additional Notes: <?php echo "$drivername"; ?> </div>
                       <div align="center">
@@ -1279,15 +1643,31 @@ Check To Confirm Sprinter Tire Inspection </div>
                       </div></td>
                   </tr>
                   <tr>
+                    <td >
+                    <!-- /.Please insert running current time here  On submit us that date time -->
+                    <div align="center">End Time:
+                        <input name="<?php echo constant('BX_LT'); ?>2" type="text" id="<?php echo constant('BX_LT'); ?>2" value="<?php echo $localtime; ?>" size="8"/>
+                    Date: 
+                    <input name="<?php echo constant('BX_LD'); ?>2" type="text" id="<?php echo constant('BX_LD'); ?>2" value="<?php echo $localdate; ?>" size="8" readonly="readonly"/>
+                    </div></td>
+                   
+                  </tr>
+                  <tr>
                     <td ><div align="center">
                       <input type="submit" name="submitvir" id="submitvir" value="Submit Inspection" />
                     </div></td>
+                  </tr>
+                  <tr>
+                    <td ><div align="center">You will be sent and email of this inspection! </div></td>
                   </tr>
                 </table>
               </form>
               
             </div><!-- /.box-body -->
-            <div class="box-footer"><a href="https://www.fmcsa.dot.gov/regulations/title49/section/396.11"> Read before submit: 396.11 DVIR FMCSA Rules</a></div>
+            <div class="box-footer">
+              <p><a href="https://www.fmcsa.dot.gov/regulations/title49/section/396.11"> Read before Sending Inspaection:</a></p>
+              <p><a href="https://www.fmcsa.dot.gov/regulations/title49/section/396.11"> 396.11 DVIR FMCSA Rules</a></p>
+            </div>
             <!-- /.box-footer-->
           </div><!-- /.box -->
 

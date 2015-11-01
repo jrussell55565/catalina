@@ -13,7 +13,7 @@
             </ul>
   </li>
 
-
+<!-- Remove Below
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-files-o"></i>
@@ -27,13 +27,13 @@
                 <li><a href="/pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
               </ul>
             </li>
-
+-->
 
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-files-o"></i>
-              <span> Driver Information</span>
-              <span class="label label-primary pull-right">2</span>
+              <span> Driver Info</span>
+              <span class="label label-primary pull-right">5</span>
               </a>
               <ul class="treeview-menu">
                 <li><a href="/pages/info/kingpin.php"><i class="fa fa-circle-o"></i> King Pin Settings</a></li>
@@ -46,12 +46,14 @@
 
 
 
-            
+<!-- Remove Below            
             <li>
               <a href="/pages/widgets.html">
                 <i class="fa fa-th"></i> <span>Widgets</span> <small class="label pull-right bg-green">new</small>
               </a>
             </li>
+           
+            
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-pie-chart"></i>
@@ -107,12 +109,16 @@
                 <small class="label pull-right bg-red">3</small>
               </a>
             </li>
+--> 
+
             <li>
               <a href="/pages/mailbox/mailbox.html">
                 <i class="fa fa-envelope"></i> <span>Mailbox</span>
                 <small class="label pull-right bg-yellow">12</small>
               </a>
             </li>
+
+<!-- Remove Below 
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-folder"></i> <span>Examples</span>
@@ -158,3 +164,5 @@
             <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
           </ul>
         </section>
+
+-->
