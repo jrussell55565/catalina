@@ -403,161 +403,65 @@ $trailerid = $_SESSION['trailerId'];
         </div>
             <div class="box-body">
               <form name="form1" method="post" action="">
-                <table width="310" height="399" border="1">
+                <table width="306" height="399" border="1">
                   <tr>
                     <td colspan="3"><div align="center">Please Note Issues with Truck</div>                    </tr>
                   <tr>
                     <td colspan="3"><div align="center">
-                      <p><a href="vir.php"><img src="images/semiboxsprinter.gif" alt="Semi" width="225" height="147"></a></p>
+                      <p><span class="box-title"><img src="../images/trailer.gif" alt="tire" width="241" height="91"></span></p>
                       <p>Maybe we can do this like the accessorials</p>
                     </div>                    
                   </tr>
                   <tr>
-                    <td height="24" colspan="3"><div align="center">Tractor</div>                                        
+                    <td height="24" colspan="3"><div align="center">Trailer</div>                                        
                   </tr>
                   <tr>
-                  <td width="51"><input type="checkbox" name="air_compressor" id="air_compressor">
-                    <label for="blank"></label>
-                  <td width="243">Air Compressor                                    </tr>
-                  <tr>
-                    <td><input type="checkbox" name="air_lines" id="air_lines">                  
-                    <td>Air Lines                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="air_conditioning" id="air_conditioning">                    
-                    <td>A/C Issues                  
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="alternator" id="alternator">                  
-                    <td>Alternator                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="battery" id="battery">                  
-                    <td>Battery                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="body" id="body">                  
-                    <td>Body                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="break_accessories" id="break_accessorids">                  
-                    <td>Brake Accessories</tr>
-                  <tr>
-                    <td><input type="checkbox" name="breakes" id="breaks">
-                    <td>Brakes</tr>
+                  <td width="64">                                                                                                                        <input type="checkbox" name="breakes" id="breaks">                    <td width="226">Brake Connections</tr>
                   <tr>
                     <td><input type="checkbox" name="clutch" id="clutch">                  
-                    <td>Clutch                    
-                  </tr>
+                    <td>Brakes</tr>
                   <tr>
                     <td><input type="checkbox" name="defroster" id="defroster">                  
-                    <td>Defroster                    
-                  </tr>
+                    <td><p>Coupling devices                    </p></tr>
                   <tr>
                     <td><input type="checkbox" name="drive_line" id="drive_line">                  
-                    <td>Drive Line                    
-                  </tr>
+                    <td>Doors</tr>
                   <tr>
                     <td><input type="checkbox" name="engine" id="engine">                  
-                    <td>Engine                    
+                    <td>Floors                    
                   </tr>
                   <tr>
                     <td><input type="checkbox" name="exhaust" id="exhaust">                  
-                    <td>Exhaust                    
-                  </tr>
+                    <td>Hitch</tr>
                   <tr>
                     <td><input type="checkbox" name="fifth_wheel" id="fifth_wheel">                  
-                    <td>Fifth Wheel                    
+                    <td>King Pin                    
                   </tr>
                   <tr>
                     <td><input type="checkbox" name="front_axel" id="front_axel">                  
-                    <td>Front Axle                    
-                  </tr>
+                    <td>Landing Gear</tr>
                   <tr>
                     <td><input type="checkbox" name="fuel_tanks" id="fuel_tanks">                  
-                    <td>Fuel Tanks                    
-                  </tr>
+                    <td>Lights: Stop,Tail,Dash,Turn, Running</tr>
                   <tr>
                     <td><input type="checkbox" name="heater" id="heater">                  
-                    <td>Heater                    
-                  </tr>
+                    <td>Roof</tr>
                   <tr>
                     <td><input type="checkbox" name="horn" id="horn">                  
-                    <td>Horn                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="lights" id="lights">                  
-                    <td>Lights: Head,Stop,Tail,Dash,Turn                   
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="mirrors" id="mirrors">                  
-                    <td>Mirrors                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="muffler" id="muffler">                  
-                    <td>Muffler                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="oil_pressure" id="oil_pressure">                  
-                    <td>Oil Pressure                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="radiator" id="radiator">                  
-                    <td>Radiator                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="rear_end" id="rear_end">                  
-                    <td>Rear End                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="reflectors" id="reflectors">                  
-                    <td>Reflectors                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="safety_equipment" id="saftety_equipment">                  
-                    <td>Safety Equipment, Fire Ext.,triangles,fuses</tr>
-                  <tr>
-                    <td><input type="checkbox" name="springs" id="springs">                  
                     <td>Springs</tr>
                   <tr>
-                    <td><input type="checkbox" name="starter" id="blank27">                  
-                    <td>Starter                    
-                  </tr>
+                    <td><input type="checkbox" name="lights" id="lights">                  
+                    <td>Tires</tr>
                   <tr>
-                    <td><input type="checkbox" name="blank28" id="blank28">                  
-                    <td>Steering                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank29" id="blank29">                  
-                    <td>Tires                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank30" id="blank30">                  
-                    <td>Tire Chains                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank31" id="blank31">                  
-                    <td>Transmission</tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank32" id="blank32">                  
-                    <td>Wheels                  
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank33" id="blank33">                  
-                    <td>Windows                  
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank34" id="blank34">                  
-                    <td>Windshield                  
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank35" id="blank35">                  
-                    <td>Other: Please make Note below</tr>
+                    <td>
+                    <input type="checkbox" name="blank35" id="blank35">                  
+                  <td>                  Other: Please make Note below</tr>
                   <tr>
                   <td colspan="2">                  <div align="center">
                     <textarea name="vir_detailed_truck" id="vir_detailed_truck" cols="43" rows="3"></textarea>
                   </div>                  <div align="center">
-                    <input type="checkbox" />Truck VIR Condition Satisfactory
+                    <input type="checkbox" />
+                    Trailer VIR Condition Satisfactory
                   </div>
                   </tr>
                 </table>

@@ -146,9 +146,9 @@ Flag  notification:  <span class="label label-danger">
               </li>
               <!-- Menu Body -->
               <li class="user-body">
-                <div class="col-xs-4 text-center"> <a href="#">Stats</a> </div>
-                <div class="col-xs-4 text-center"> <a href="#">Messages</a> </div>
-                <div class="col-xs-4 text-center"> <a href="#">VIRS</a> </div>
+                <div class="col-xs-4 text-center"> <a href="#"> Stats</a> </div>
+                <div class="col-xs-4 text-center"> <a href="#"> Messages</a> </div>
+                <div class="col-xs-4 text-center"> <a href="#"> VIRS</a> </div>
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">

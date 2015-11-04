@@ -108,7 +108,7 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
                                     <label>
                                         <input name="AdminLogin" id="AdminLogin" type="checkbox" value="admin">Administrative Login
                                     </label>
-                              / <a href="pages/login/forgot.php">Forgot Password</a></div>
+                              / <a href="/pages/login/forgot.php">Forgot Password</a></div>
                                 <input type="submit" class="btn btn-lg btn-success btn-block" value="Login">
                             </fieldset>
                         </form>

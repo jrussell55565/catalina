@@ -283,9 +283,9 @@ $drivername = $_SESSION['drivername'];
               <div class="box-tools">
                 <ul class="pagination pagination-sm no-margin pull-right">
                   <li <?php if ($_GET['gather'] == 'pu') { echo "class=\"active\""; }?>>
-                   <a href="orders.php?gather=pu">Pickup <?php echo "$pu_today_count";?></a></li>
+                   <a href="orders.php?gather=pu">Pickups <?php echo "$pu_today_count";?></a></li>
                   <li <?php if ($_GET['gather'] == 'del') { echo "class=\"active\""; }?>>
-                   <a href="orders.php?gather=del">Delivery <?php echo "$del_today_count";?></a></li>
+                   <a href="orders.php?gather=del">Deliveries <?php echo "$del_today_count";?></a></li>
                   <li <?php if ($_GET['gather'] == '') { echo "class=\"active\""; }?>>
                    <a href="orders.php">Both <?php echo "$total_today_count";?></a></li>
                   <li <?php if ($_GET[gather] == 'archived') { echo "class=\"active\""; }?>>
@@ -374,6 +374,7 @@ $drivername = $_SESSION['drivername'];
                "Booked" => "#dd4b39",
                "Attempted Pick Up" => "#dd4b39",
                "Refused" => "#dd4b39",
+			   "Reject PU DEL" => "#dd4b39",
                "Out for Delivery" => "#dd4b39",
                "Terminate at Origin" => "#dd4b39",
                "Accepted PU" => "#FFB74D",

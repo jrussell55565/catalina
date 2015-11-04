@@ -107,7 +107,7 @@ Last 8 days IFTA: <?php echo "$del_today_count";?></span></div><!-- /.info-box-c
 
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
-<a href="/pages/tables/location.php" class="button3 animated pulse">
+<a href="/pages/dispatch/location.php" class="button3 animated pulse">
 <style>
  a.button3 {
 	 -webkit-animation-duration: 3s;
@@ -118,7 +118,7 @@ Last 8 days IFTA: <?php echo "$del_today_count";?></span></div><!-- /.info-box-c
                <span class="info-box-icon bg-purple"><i class="fa fa-map-marker"></i></span>
                </a>
                 <div class="info-box-content">
-                  <span class="info-box-text"><a href="/pages/tables/location.php">Locate Users</a></span><span class="info-box-number"> See where other drivers are</span></div>
+                  <span class="info-box-text"><a href="/pages/dispatch/location.php">Locate Users</a></span><span class="info-box-number"> See where other drivers are</span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->

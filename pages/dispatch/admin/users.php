@@ -12,61 +12,7 @@ mysql_select_db($db_name) or DIE('Database name is not available!');
 
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
-print_r($_POST);
-# Let's do some form processing
-if(isset($_POST['submit'])) 
-{ 
-  # Set some NULL defaults for dates
-  if ($_POST['quietTimeVal1'] == '') { $_POST['quietTimeVal1'] = 'NULL'; }
-  if ($_POST['quietTimeVal2'] == '') { $_POST['quietTimeVal2'] = 'NULL'; }
-  if ($_POST['startDate'] == '') { $_POST['startDate'] = 'NULL'; }
-  if ($_POST['departureDate'] == '') { $_POST['departureDate'] = 'NULL'; }
-  if ($_POST['driverLicenseExpire'] == '') { $_POST['driverLicenseExpire'] = 'NULL'; }
 
-  $sql = "UPDATE users SET
-  fname = '$_POST[fname]',
-  mname = '$_POST[mname]',
-  lname = '$_POST[lname]',
-  status = '$_POST[status]',
-  role = '$_POST[role]',
-  office = '$_POST[office]',
-  addr1 = '$_POST[addr1]',
-  addr2 = '$_POST[addr2]',
-  city = '$_POST[city]',
-  zipcode = '$_POST[zip]',
-  title = '$_POST[jobTitle]',
-  email = '$_POST[email]',
-  vtext = $_POST[vtext],
-  quiet_time_begin = $_POST[quietTimeVal1],
-  quiet_time_end = $_POST[quietTimeVal2],
-  ssn = '$_POST[ssn]',
-  driver_license_n = $_POST[driverLicense],
-  driver_license_exp = $_POST[driverLicenseExpire],
-  driverid = $_POST[mobilePhone],
-  start_dt = $_POST[startDate],
-  depart_dt = $_POST[departureDate],
-  depart_reason = $_POST[departureReason],
-  username = '$_POST[username]',
-  password = '$_POST[password]',
-  med_card_exp = $_POST[medCardExpire],
-  mvr_renewal = $_POST[mvrRenewal],
-  emerg_contact_name = $_POST[emergencyContact],
-  emerg_contact_phone = $_POST[emergencyPhone],
-  tsa_sta = $_POST[tsa],
-  timecard = $_POST[timecard],
-  notes = $_POST[miscDetails],
-  WHERE id = $_POST[id]";
-
-  mysql_query($sql);
-
-  $sql = "UPDATE contracts SET
-  contract = '$_POST[contract]'
-  WHERE id = $_POST[id]";
-
-  $sql = "INSERT INTO emp_salary
-   (driver_driverid,salary) VALUES ($_POST[mobilePhone],$_POST[salary])";
-
-<<<<<<< HEAD
 # Let's do some form processing
 if(isset($_POST['submit'])) 
 { 
@@ -121,8 +67,6 @@ print_r($_POST);
   $sql = "INSERT INTO emp_salary
    (driver_driverid,salary) VALUES ($_POST[mobilePhone],$_POST[salary])";
 
-=======
->>>>>>> origin/master
 }
 ?>
 <!DOCTYPE html>
@@ -169,7 +113,6 @@ print_r($_POST);
           </ol>
         </section>
 
-<<<<<<< HEAD
 <!-- Animated Top Menu Insert PHP Reference to /wwwlive/dist/menus_sidebars_elements  -->
 
 <?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/topmenuadminanimation.php');?>
@@ -177,189 +120,12 @@ print_r($_POST);
 <!-- End Animated Top Menu -->
           
   
-=======
-        <!-- Main content -->
-        <section class="content">
-          <!-- Info boxes -->
-          <!-- Shipment Boards -->
-          <div class="row">
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="/pages/dispatch/orders.php">
-                 <span class="info-box-icon bg-aqua"><i class="fa fa-cog fa-spin"></i></span>
-                </a>               
-                <div class="info-box-content">
-                <span class="info-box-text"><a href="/pages/dispatch/orders.php">View  / EDIT / Export All DISPATCHES</a></span><span class="info-box-number">  Todays  PU:  <?php echo "$pu_today_count";?><br>
-                    Todays DEL:   <?php echo "$del_today_count";?></span>
-                </div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
-
-
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="../../../../linux8080/pages/dispatch/vir.php" class="button animated rubberBand">
-<style>
- a.button {
-	 -webkit-animation-duration: 5s;
-	 -webkit-animation-delay: 1s;
-	 -webkit-animation-iteration-count: infinite;
- }
-</style>
-                <span class="info-box-icon bg-red"><i class="fa fa-wrench faa-wrench animated"></i></span>
-</a>               
-                <div class="info-box-content">
-                  <span class="info-box-text"><a href="/pages/dispatch/vir.php">View / EDIT / EXPORT DRIVERS VIRs</a></span>
-                  <span class="info-box-number">                  Total VIR's Reported: ?/PHP</span>
-                </div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
-
-            <!-- fix for small devices only -->
-            <div class="clearfix visible-sm-block"></div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="../../../../linux8080/pages/tables/fuel.php" class="button2 animated zoomIn">
-<style>
- a.button2 {
-	 -webkit-animation-duration: 6s;
-	 -webkit-animation-delay: 1s;
-	 -webkit-animation-iteration-count: infinite;
- }
-</style>              
-                <span class="info-box-icon bg-green"><i class="fa fa-tachometer"></i></span>
-                </a>
-                <div class="info-box-content">
-                <span class="info-box-text"><a href="../../../../linux8080/pages/dispatch/vir.php">VIEW / EDIT / EXPORT FUEL LOGS</a></span>
-                  <span class="info-box-number">                  Total Fuel Reported: ?/PHP  </span>
-                </div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
-
-
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="../../../../linux8080/pages/tables/ifta.php" class="button3 animated jello">
-<style>
- a.button3 {
-	 -webkit-animation-duration: 3s;
-	 -webkit-animation-delay: 1s;
-	 -webkit-animation-iteration-count: infinite;
- }
-</style>
-               <span class="info-box-icon bg-yellow"><i class="fa fa-newspaper-o"></i></span>
-</a>
-                <div class="info-box-content">
-                <span class="info-box-text"><a href="../../../../linux8080/pages/dispatch/vir.php">VIEW / EDIT / EXPORT IFTA Reports</a></span>
-                  <span class="info-box-number">                  Total IFTA Reports: ?/PHP </span>
-                </div><!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
-            
-
-
-
-            
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="../../../../linux8080/pages/tables/ifta.php" class="button3 animated jello">
-<style>
- a.button3 {
-	 -webkit-animation-duration: 3s;
-	 -webkit-animation-delay: 1s;
-	 -webkit-animation-iteration-count: infinite;
- }
-</style>
-               <span class="info-box-icon bg-blue"><i class="fa fa-newspaper-o"></i></span>
-</a>
-
-                <div class="info-box-content">
-                  <span class="info-box-text"><a href="../../../../linux8080/pages/dispatch/vir.php">VIEW / EDIT / EXPORT DOT Saftey Report</a></span>
-                  <span class="info-box-number">                  Import Reports Here</span>
-                </div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->            
-            
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="../../../../linux8080/pages/tables/ifta.php" class="button3 animated jello">
-<style>
- a.button3 {
-	 -webkit-animation-duration: 3s;
-	 -webkit-animation-delay: 1s;
-	 -webkit-animation-iteration-count: infinite;
- }
-</style>
-               <span class="info-box-icon bg-blue"><i class="fa fa-newspaper-o"></i></span>
-               </a>
-                <div class="info-box-content">
-                  <span class="info-box-text"><a href="../../../../linux8080/pages/dispatch/adminusers.php">VIEW / Edit / EXPORT  VIR</a></span>
-                  <span class="info-box-number">                  PU &amp; DEL </span>
-                </div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
-
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="../../../../linux8080/pages/tables/ifta.php" class="button3 animated jello">
-<style>
- a.button3 {
-	 -webkit-animation-duration: 3s;
-	 -webkit-animation-delay: 1s;
-	 -webkit-animation-iteration-count: infinite;
- }
-</style>
-               <span class="info-box-icon bg-blue"><i class="fa fa-newspaper-o"></i></span>
-               </a>
-                <div class="info-box-content">
-                  <span class="info-box-text"><a href="../../../../linux8080/pages/dispatch/adminusers.php">VIEW / EDIT / eXPORT HWB Accessorials</a></span><span class="info-box-number">PU &amp; DEL</span></div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->            
-            
-
-
-            
-            
-            
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-<a href="/pages/dispatch/adminusers.php" class="button4 animated bounce">
-<style>
- a.button4 {
-	 -webkit-animation-duration: 3s;
-	 -webkit-animation-delay: 1s;
-	 -webkit-animation-iteration-count: infinite;
- }
-</style>
-               <span class="info-box-icon bg-blue"><i class="fa fa-users"></i></span>
-               </a>
-                <div class="info-box-content">
-                  <span class="info-box-text"><a href="/pages/dispatch/adminusers.php">VIEW / EDIT / EXPORT New Users</a></span>
-                  <span class="info-box-number">View all User Profiles                  </span>
-                </div>
-                <!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.info-box -->
-          </div><!-- /.row -->
->>>>>>> origin/master
           
           <div class="row">
             <div class="col-md-12">
               <div class="box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Users</h3>
+                  <h3 class="box-title">Add New User (Admin Access Only)</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
 <table class="table table-striped">
@@ -529,11 +295,7 @@ print_r($_POST);
        <label for="emailUpdates">Email Updates</label>
       <div class="btn-group" data-toggle="buttons">
        <label class="btn btn-primary btn-med">Email Updates
-<<<<<<< HEAD
          <input type="checkbox" class="form-control" name="emailUpdates" id="emailUpdates" placeholder="" value="">
-=======
-         <input type="checkbox" class="form-control" name="ck_userOptions[]" value="ck_userOptions[]" placeholder="" value="<?php echo $row['email'];?>">
->>>>>>> origin/master
        </label>
       </div>
      </td>
