@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 {
         header('Location: /pages/login/driverlogin.php');
@@ -35,7 +34,7 @@ $localdate 	= $_POST['bx_localdate'];
 $loadposition	= $_POST['LoadPosition'];
 $remarks	= $_POST['remarks'];
 $statustype	= $_POST['btn_sourceform'];
-$simplestatus	= $_POST['StatusChange'];
+$simplestatus	= $_POST['sel_quickStatus'];
 $pieces		= $_POST['txt_pieces'];
 $pallets	= $_POST['txt_pallets'];
 $podname        = $_POST['podName'];
@@ -225,13 +224,18 @@ if (isset($simplestatus))
 {
 	$status = $simplestatus;
 	$statustype = $simplestatus;
+    $doNotSendAccessorial = 0;
 }
 
-# Accessorials.csv
-$tmpfnameAccessorial = "accessorial+"."$exportdest+".microtime(true);
-$fpAccessorial = fopen($_SERVER['DOCUMENT_ROOT']."/exports/$tmpfnameAccessorial.csv", 'w');
-fwrite($fpAccessorial, "HWB,Type,RevenueChargeName,RevenueChargeAmount\r\n$accessorials");
-fclose($fpAccessorial);
+# Skip the accessorials if we're just doing a simple status change
+if (! isset($doNotSendAccessorial))
+{
+    # Accessorials.csv
+    $tmpfnameAccessorial = "accessorial+"."$exportdest+".microtime(true);
+    $fpAccessorial = fopen($_SERVER['DOCUMENT_ROOT']."/exports/$tmpfnameAccessorial.csv", 'w');
+    fwrite($fpAccessorial, "HWB,Type,RevenueChargeName,RevenueChargeAmount\r\n$accessorials");
+    fclose($fpAccessorial);
+}
 
 # Sleep slightly to ensure different file names.
 usleep(100);

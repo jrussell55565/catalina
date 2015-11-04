@@ -235,6 +235,7 @@ if ($row['status'] == "Delivered")
               <div class="input-group">
                 <div class="input-group-btn" style="padding-right: 5px;">
                   <input type="submit" class="btn btn-primary" value="Change Status" <?php echo $disabledButton;?>>
+                  <input type="hidden" id="recordid" name="recordid" value="<?php echo $row['recordID'];?>">
                   </input>
                 </div>
                 <!-- /btn-group -->
