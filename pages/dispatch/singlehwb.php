@@ -259,7 +259,7 @@ if ($row['status'] == "Delivered")
       <input type="text" name="txt_dispatch" id="txt_dispatch" class="input-group" required/>
       </span><br>
       <input type="submit" name="btn_submit" id="btn_submit" value="Email Dispatch" class="btn btn-primary"/>
-      <input type="hidden" id="hawbsearch" name="hawbsearch" value='<?php echo "$hawb";?>' />
+      <input type="hidden" id="hawbsearch" name="hawbsearch" value='<?php echo "$_GET[hwb]";?>' />
     </form>
     <?php } ?>
   </div>
