@@ -50,15 +50,15 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
                         <form role="form" id="forgotPassword" name="forgotPassword" method="post" action="/pages/login/processlogin.php">
                             <fieldset>
                                 <div class="form-group">
-                                    <label for="DriverUserName">Username</label>
-                                    <input class="form-control" placeholder="Username" name="DriverUserName" type="text" autofocus value=''>
+                                    <label for="DriverUserName">Username or Email</label>
+                                    <input class="form-control" placeholder="Username or Email" name="DriverUserName" type="text" autofocus value=''>
                                     <div class="panel-body">
                                     <?php if ($_GET['return'] == 'true'){ ?>
                                       <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center">
                                         An email was sent to dispatch requesting your password.
-                                      <a href="http://dispatch.catalinacartage.com">Login Page</a></div>
+                                      <a href="<?php echo HTTP;?>/pages/login/driverlogin.php">Login Page</a></div>
                                     <?php }else{ ?>
-                                    Enter your username and dispatch will send your password to the email account associated with this username.
+                                    <p>Enter your username or email address and dispatch will send your password to the email account associated with this username.</p>
                                     <input type="hidden" id="forgotPassword" name="forgotPassword" value="true">
                                     <?php } ?>
                                     </div>

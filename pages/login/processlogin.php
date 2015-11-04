@@ -40,7 +40,11 @@ mysql_select_db($db_name) or DIE('Database name is not available!');
 if ($_POST['forgotPassword'] == 'true')
 {
     $forgottenUser = $_POST['DriverUserName'];
-    $sql = "SELECT email FROM users WHERE username = '" . mysql_real_escape_string($forgottenUser) . "'"; 
+    $sql = "SELECT username,email,password FROM users WHERE 
+            lower(username) = lower('" . mysql_real_escape_string($forgottenUser) . "')
+            or
+            lower(email) = lower('" . mysql_real_escape_string($forgottenUser) . "')";
+
     $login = mysql_query($sql);
     if (!$login) {
         die('Invalid query: ' . mysql_error());
@@ -48,8 +52,13 @@ if ($_POST['forgotPassword'] == 'true')
     if (mysql_num_rows($login) == 1)
     {
         $row = mysql_fetch_array($login, MYSQL_BOTH);
+        $forgottenUser = $row['username'];
         $forgottenEmail = $row['email'];
-        sendEmail('dispatch@catalinacartage.com',"Password Request","$forgottenUser has requested a new password.\r\nPlease send a new password to $forgottenEmail");
+        $password = $row['password'];
+        sendEmail('dispatch@catalinacartage.com',"Password Request","$forgottenUser has forgotten their current username or password.\r\n
+        Username: $forgottenUser\r\n
+        Email: $forgottenEmail\r\n
+        Password: $password\r\n");
     }
     header("Location: /pages/login/forgot.php?return=true");
 }
