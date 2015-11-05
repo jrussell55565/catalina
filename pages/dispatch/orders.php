@@ -308,21 +308,22 @@ $drivername = $_SESSION['drivername'];
               <table class="table">
               <tr>
                 <th style="width: 20px"><input type="checkbox" value="on" name="allbox" onclick="toggle(this)"/></th>
-                <th>HWB Number / Status</th>
-                <th>Info</th>
-                <th>Pickup / Due</th>
+                <th>HWB#:Drivers</th>
+                <th></th>
+                <th>STS:PU/DEL</th>
+                <th>PCS/WT</th>
               </tr>
               <form method=post action="./processshipments.php">
                 <?php
                 $deliveryQuery = "delAgentDriverPhone=(select driverid from users where username=\"$username\")";
                 $pickupQuery = "puAgentDriverPhone=(select driverid from users where username=\"$username\")";
-                $sql = "select hawbNumber,recordID,shipperName,consigneeName,status,hawbDate,dueDate from dispatch
+                $sql = "select hawbNumber,recordID,shipperName,consigneeName,status,hawbDate,dueDate,delAgentDriverName,puAgentDriverName,pieces,weight from dispatch
                         where (";
-                if ($_GET['gather'] == "pu")
+                if ($_GET['gather'] == "del")
                 {
                   $sql .= $deliveryQuery . ")";
                   $sql .= " AND str_to_date(dueDate,'%c/%e/%Y') = date(now())";
-                }elseif ($_GET['gather'] == "del")
+                }elseif ($_GET['gather'] == "pu")
                 {
                   $sql .= $pickupQuery . ")";
                   $sql .= " AND str_to_date(hawbDate,'%c/%e/%Y') = date(now())";
@@ -396,15 +397,26 @@ $drivername = $_SESSION['drivername'];
                      <span>
                       <input type="hidden" id="<?php echo "order[$counter][hawb]"; ?>" name="<?php echo "order[$counter][hawb]"; ?>" value="<?php echo "$row[hawbNumber]";?>" />
                       <a href="singlehwb.php?hwb=<?php echo "$row[hawbNumber]"; ?>&amp;recordid=<?php echo "$row[recordID]"; ?>"><?php echo "$row[hawbNumber]"; ?></a><br>
-                      <?php echo "$row[status]";?>
+                      PU:<?php echo "$row[puAgentDriverName]";?>
+                     </span>
+
+                     <br>
+                      DEL:<?php echo "$row[delAgentDriverName]";?>
                      </span>
                     </td>
-                    <td><span>Shipper: <?php echo "$row[shipperName]";?></span><br>
-                      <span>Consignee: <?php echo "$row[consigneeName]";?></span><br></td>
+                    <td><td style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    <span><?php echo "$row[status]";?></span><br>
+                    <span>PU: <?php echo "$row[shipperName]";?></span><br>
+                    <span>DEL: <?php echo "$row[consigneeName]";?></span><br></td>
+<!-- Bootstrap 3.3.4 
+                    <td><span>PU<?php echo "$row[puAgentDriverName]";?></span><br>
+                      <span>DEL: <?php echo "$row[delAgentDriverName]";?></span><br></td> -->
                     <td>
                      <span>
+                     <?php echo "$row[pieces]"; ?> / <?php echo "$row[weight]"; ?>
+                     <br>
                       <?php if ($_GET['gather'] == "pu")
-                            { 
+							{ 
                               echo $row['hawbDate'];
                             } elseif ($_GET['gather'] == "del") 
                             { 

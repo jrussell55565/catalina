@@ -95,7 +95,7 @@ $trailerid = $_SESSION['trailerId'];
             </div>
             <div class="box-body">
               <form name="form1" method="post" action="">
-                <table width="311" border="1">
+                <table width="313" border="1">
                   <tr>
                     <td colspan="4">Start Time:
 <input name="<?php echo constant('BX_LT'); ?>" type="text" id="<?php echo constant('BX_LT'); ?>" value="<?php echo $localtime; ?>" size="8"/>
@@ -103,8 +103,8 @@ $trailerid = $_SESSION['trailerId'];
                       <input name="<?php echo constant('BX_LD'); ?>" type="text" id="<?php echo constant('BX_LD'); ?>" value="<?php echo $localdate; ?>" size="8" readonly="readonly"/>
                     <span class="active"><?php echo "$TruckId"; ?></span></tr>
                   <tr>
-                    <td>Truck
-                    <td><input name="<?php echo constant('truckId'); ?>2" type="text" id="<?php echo constant('truckId'); ?>" value="<?php echo $truckId; ?>" size="8" readonly="readonly" />                    
+                    <td width="95">Truck
+                    <td width="72"><input name="<?php echo constant('truckId'); ?>2" type="text" id="<?php echo constant('truckId'); ?>" value="<?php echo $truckId; ?>" size="8" readonly="readonly" />                    
                     <td colspan="2"><a href="vir_previous_truck.php"> Previous VIR</a> <font color="red">(Red!)</font>                     </tr>
                   <tr>
                     <td>Trailer
@@ -117,83 +117,119 @@ $trailerid = $_SESSION['trailerId'];
 						<input type="checkbox" name="cb_posttrip" value="cb_posttrip" id="cb_posttrip"/>
                     </div>                  </tr>
                   <tr>
-                    <td><div align="center">Truck Type</div>                        
-                  <td colspan="3"><div align="center">VIR Conditions &amp; Tires</div>                  </tr>
+                    <td colspan="4"><div align="center">Truck Type</div>                        
+                  <div align="center"></div>                  </tr>
                   <tr>
-                    <td width="82"><a href="vir.php"><img src="images/semiboxsprintersm.gif" alt="Semi" width="78" height="52"></a>                  
-                    <td width="63" bgcolor="#33FF00">
-                    
-                        <div align="center">Green
-                        <input type="checkbox" name="cb_vir_truck_green" id="cb_vir_truck_green">
-                        <label for="cb_vir_truck_green"></label>
-                        </div>
-                        
-                    <td width="82" bgcolor="#FFFF00"><div align="center">Yellow
-                        <input type="checkbox" name="cb_vir_truck_yellow" id="cb_vir_truck_yellow">
-                        <label for="cb_vir_truck_yellow"></label>
-                    </div>
-                    <td width="56" bgcolor="#FF0000"><div align="center">Red
-                        <input type="checkbox" name="cb_vir_truck_red" id="cb_vir_truck_red">
-                      <label for="cb_vir_truck_red"></label>
-                    </div>                    
+                    <td>
+                    <div align="center"><span class="box-title"><img src="../images/semismall.gif" alt="tire"></span></div>                    
+                    <td colspan="2">
+                    <div align="center"><span class="box-title"><img src="../images/boxtrucksmall.gif" alt="tire"></span></div>                    
+                    <td width="100">
+                  <div align="center"><span class="box-title"><img src="../images/sprintersmall.gif" alt="tire"></span></div>                  
                   </tr>
                   <tr>
-                    <td><img src="../images/smalltires.gif" width="25" height="25" alt="tire"><img src="../images/smalltires.gif" width="25" height="25" alt="tire"><img src="../images/smalltires.gif" width="25" height="25" alt="tire">
-                    <td bgcolor="#33FF00">
-                      <div align="center">Green
-                        <input type="checkbox" name="cb_truck_tires_green" id="cb_truck_tires_green">
-                        <label for="cb_truck_tires_green"></label>
-                      </div>
-                    <td bgcolor="#FFFF00"><div align="center">Yellow
-                        <input type="checkbox" name="cb_truck_tires_yellow" id="cb_truck_tires_yellow">            
-						<label for="cb_truck_tires_yellow"></label>
+                    <td><div align="center">
+                      <input type="radio" name="trucktype" id="type_semi" value="type_semi">
+                      <label for="type_semi"></label>
+                    </div>                      <td colspan="2"><div align="center">
+                      <input type="radio" name="trucktype" id="type_boxtruck" value="type_boxtruck">
+                      <label for="type_boxtruck"></label>
                     </div>                    
+                    <div align="center"></div>                                        
+                    <td><div align="center">
+                      <input type="radio" name="trucktype" id="type_sprinter" value="type_sprinter">
+                      <label for="type_sprinter"></label>
+                    </div>                  
+                  </tr>
+                </table>
+                <table width="313" border="1">
+                  <tr>
+                    <td height="10" colspan="4">
+                    <div align="center"><label for="cb_trailer_tires_green"></label>VIR Conditions &amp; Tires</div>
+                  </tr>
+                  <tr>
+                    <td width="83">Truck
+                    <td width="64" bgcolor="#33FF00"><div align="center">Green
+                        <input type="radio" name="truckvir" id="truck_green" value="truck_green">
+                        <label for="truck_green"></label>
+                      <label for="truck_green"></label>
+                    </div>
+                    <td width="66" bgcolor="#FFFF00"><div align="center">Yellow
+                        <input type="radio" name="truckvir" id="truck_yellow" value="truck_yellow">
+                        <label for="truck_yellow"></label>
+                    </div>
+                    <td width="62" bgcolor="#FF0000"><div align="center">Red
+                        <input type="radio" name="truckvir" id="truck_red" value="truck_red">
+                      <label for="truck_red"></label>
+                    </div>
+                  </tr>
+                  <tr>
+                    <td>Truck <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
+                    <td bgcolor="#33FF00"><div align="center">Green
+                        <input type="radio" name="radio" id="truck_tires_green" value="truck_tires_red">
+                        <label for="truck_tires_red"></label>
+                      <label for="cb_trailer_tires_green"></label>
+                    </div>
+                    <td bgcolor="#FFFF00"><div align="center">Yellow
+                        <input type="radio" name="radio" id="truck_tires_yellow" value="truck_tires_yellow">
+                        <label for="truck_tires_yellow"></label>
+                    </div>
                     <td bgcolor="#FF0000"><div align="center">Red
-                      <input type="checkbox" name="cb_truck_tires_red" id="cb_truck_tires_red">
-                      <label for="cb_trucktires_red"></label>
-                    </div>                    </tr>
+                      <label for="cb_trailer_tires_red"></label>
+                      <input type="radio" name="radio" id="truck_tires_red" value="truck_tires_red">
+                      <label for="truck_tires_red"></label>
+                    </div>
+                  </tr>
                   <tr>
                     <td><a href="vir.php"><img src="../images/trailer.gif" alt="Trailer" width="77" height="38"></a>
-                    <td bgcolor="#33FF00">
-                      <div align="center">Green
-                        <input type="checkbox" name="cb_trailer_green" id="cb_trailer_green">
-                        <label for="cb_trailer_green"></label>
-                      </div>
+                    <td bgcolor="#33FF00"><div align="center">Green
+                      
+                      <label for="cb_trailer_green3"></label>
+                      <input type="radio" name="trailervir" id="trailer_green" value="trailer_green">
+                      <label for="trailer_vir_green"></label>
+                    </div>
                     <td bgcolor="#FFFF00"><div align="center">Yellow
-                        <input type="checkbox" name="cb_trailer_yellow" id="cb_trailer_yellow">
-                      <label for="cb_trailer_yellow"></label>
-                    </div>                    
+                      
+                      <label for="cb_trailer_yellow3"></label>
+                      <input type="radio" name="trailervir" id="trailer_yellow" value="trailer_yellow">
+                      <label for="trailer_yellow"></label>
+                    </div>
                     <td bgcolor="#FF0000"><div align="center">Red
-                      <input type="checkbox" name="cb_trailer_red" id="cb_trailer_red">
-                      <label for="cb_trailer_red"></label>
-                    </div>                    </tr>
-                  <tr>
-                    <td><img src="../images/smalltires.gif" width="25" height="25" alt="tire"><img src="../images/smalltires.gif" width="25" height="25" alt="tire"><img src="../images/smalltires.gif" width="25" height="25" alt="tire">
-                    <td bgcolor="#33FF00">
-
-                      <div align="center">Green
-                        <input type="checkbox" name="cb_trailer_tires_green" id="cb_trailer_tires_green">
-                        <label for="cb_trailer_tires_green"></label>
-                      </div>
-                    <td bgcolor="#FFFF00"><div align="center">Yellow
-                      <input type="checkbox" name="cb_trailer_tires_yellow" id="cb_trailer_tires_yellow">
-                      <label for="cb_trailer_tires_yellow"></label>
-                    </div>                  
-                    <td bgcolor="#FF0000"><div align="center">Red
-                      <input type="checkbox" name="cb_trailer_tires_red" id="cb_trailer_tires_red">
-                      <label for="cb_trailer_tires_red"></label>
-                    </div>                  
+                        <input type="radio" name="trailervir" id="trailer_red" value="trailer_red">
+                        <label for="trailer_red"></label>
+                      <label for="cb_trailer_red3"></label>
+                    </div>
                   </tr>
                   <tr>
-                    <td colspan="4"><div align="center">Enter Any Notes Below</div>                  
+                    <td>Trailer <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
+                    <td bgcolor="#33FF00"><div align="center">Green
+                      
+                      <label for="cb_trailer_tires_green3"></label>
+                      <input type="radio" name="trailertires" id="trailer_tires_green" value="trailer_tires_green">
+                      <label for="trailer_tires_green"></label>
+                    </div>
+                    <td bgcolor="#FFFF00"><div align="center">Yellow
+                        <input type="radio" name="trailertires" id="trailer_tires_yellow" value="trailer_tires_yellow">
+                        <label for="trailer_tires_yellow"></label>
+                      <label for="cb_trailer_tires_yellow3"></label>
+                    </div>
+                    <td bgcolor="#FF0000"><div align="center">Red
+                      
+                        <input type="radio" name="trailertires" id="trailer_tires_red" value="trailer_tires_red">
+                        <label for="trailer_tires_red"></label>
+                      <label for="cb_trailer_tires_red3"></label>
+                    </div>
+                  </tr>
+                  <tr>
+                    <td colspan="4"><div align="center">Enter Additional Notes below</div></td>
                   </tr>
                   <tr>
                     <td colspan="4"><div align="center">
-                      <textarea name="vir_notes_quick_report" id="vir_notes_quick_report"  cols="43" rows="3" placeholder="Please type notes for any items needing attention!"></textarea>
-                    </div>                  
+                      <textarea name="vir_notes_quick_report2" id="vir_notes_quick_report2"  cols="43" rows="3" placeholder="Please type notes for any items needing attention!"></textarea>
+                    </div></td>
                   </tr>
                   <tr>
-                    <td colspan="4"><div align="center"> <A HREF="#submitvir">VIR OK, Tires OK / Go To Submit</A></div>                  
+                    <td colspan="4"><A HREF="#submitvir"></A>                      <div align="center"> <A HREF="#submitvir">VIR OK, Tires OK / Go To Submit</A></div></td>
                   </tr>
                 </table>
               </form>
