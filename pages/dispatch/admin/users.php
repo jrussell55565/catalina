@@ -16,56 +16,162 @@ $drivername = $_SESSION['drivername'];
 # Let's do some form processing
 if(isset($_POST['submit'])) 
 { 
-print_r($_POST);
-  # Set some NULL defaults for dates
-  if ($_POST['quietTimeVal1'] == '') { $_POST['quietTimeVal1'] = 'NULL'; }
-  if ($_POST['quietTimeVal2'] == '') { $_POST['quietTimeVal2'] = 'NULL'; }
-  if ($_POST['startDate'] == '') { $_POST['startDate'] = 'NULL'; }
-  if ($_POST['departureDate'] == '') { $_POST['departureDate'] = 'NULL'; }
-  if ($_POST['driverLicenseExpire'] == '') { $_POST['driverLicenseExpire'] = 'NULL'; }
+#print_r($_POST);
+print_r($_FILES);
 
+if (empty($_POST['fname'])) { $fname = 'NULL'; }else{ $fname = "\"$_POST[fname]\""; }
+if (empty($_POST['mname'])) { $mname = 'NULL'; }else{ $mname = "\"$_POST[mname]\"";}
+if (empty($_POST['lname'])) { $lname = 'NULL'; }else{ $lname = "\"$_POST[lname]\"";}
+if (empty($_POST['status'])) { $status = 'NULL'; }else{ $status = "\"$_POST[status]\"";}
+if (empty($_POST['role'])) { $role = 'NULL'; }else{ $role = "\"$_POST[role]\"";}
+if (empty($_POST['office'])) { $office = 'NULL'; }else{ $office = "\"$_POST[office]\"";}
+if (empty($_POST['addr1'])) { $addr1 = 'NULL'; }else{ $addr1 = "\"$_POST[addr1]\"";}
+if (empty($_POST['addr2'])) { $addr2 = 'NULL'; }else{ $addr2 = "\"$_POST[addr2]\"";}
+if (empty($_POST['city'])) { $city = 'NULL'; }else{ $city = "\"$_POST[city]\"";}
+if (empty($_POST['state'])) { $state = 'NULL'; }else{ $state = "\"$_POST[state]\"";}
+if (empty($_POST['zip'])) { $zipcode = 'NULL'; }else{ $zipcode = "\"$_POST[zip]\"";}
+if (empty($_POST['jobTitle'])) { $title = 'NULL'; }else{ $title = "\"$_POST[jobTitle]\"";}
+if (empty($_POST['email'])) { $email = 'NULL'; }else{ $email = "\"$_POST[email]\"";}
+if (empty($_POST['vtext'])) { $vtext = 'NULL'; }else{ $vtext = "\"$_POST[vtext]\"";}
+if (empty($_POST['quietTimeVal1'])) { $quiet_time_begin = 'NULL'; }else{ $quiet_time_begin = "\"$_POST[quietTimeVal1]\"";}
+if (empty($_POST['quietTimeVal2'])) { $quiet_time_end = 'NULL'; }else{ $quiet_time_end = "\"$_POST[quietTimeVal2]\"";}
+if (empty($_POST['ssn'])) { $ssn = 'NULL'; }else{ $ssn = "\"$_POST[ssn]\"";}
+if (empty($_POST['dob'])) { $dob = 'NULL'; }else{ $dob = "str_to_date('$_POST[dob]', '%m/%d/%Y')";}
+if (empty($_POST['driverLicense'])) { $driver_license_n = 'NULL'; }else{ $driver_license_n = "\"$_POST[driverLicense]\"";}
+if (empty($_POST['driverLicenseExpire'])) { $driver_license_exp = 'NULL'; }else{ $driver_license_exp = "str_to_date('$_POST[driverLicenseExpire]', '%m/%d/%Y')";}
+if (empty($_POST['mobilePhone'])) { $driverid = 'NULL'; }else{ $driverid = "\"$_POST[mobilePhone]\"";}
+if (empty($_POST['startDate'])) { $start_dt = 'NULL'; }else{ $start_dt = "str_to_date('$_POST[startDate]', '%m/%d/%Y')";}
+if (empty($_POST['departureDate'])) { $depart_dt = 'NULL'; }else{ $depart_dt = "str_to_date('$_POST[departureDate]', '%m/%d/%Y')";}
+if (empty($_POST['departureReason'])) { $depart_reason = 'NULL'; }else{ $depart_reason = "\"$_POST[departureReason]\"";}
+if (empty($_POST['username'])) { $username = 'NULL'; }else{ $username = "\"$_POST[username]\"";}
+if (empty($_POST['password'])) { $password = 'NULL'; }else{ $password = "\"$_POST[password]\"";}
+if (empty($_POST['medCardExpire'])) { $med_card_exp = 'NULL'; }else{ $med_card_exp = "str_to_date('$_POST[medCardExpire]', '%m/%d/%Y')";}
+if (empty($_POST['salary'])) { $salary = 'NULL'; }else{ $salary = "\"$_POST[salary]\"";}
+if (empty($_POST['emergencyContact'])) { $emerg_contact_name = 'NULL'; }else{ $emerg_contact_name = "\"$_POST[emergencyContact]\"";}
+if (empty($_POST['emergencyPhone'])) { $emerg_contact_phone = 'NULL'; }else{ $emerg_contact_phone = "\"$_POST[emergencyPhone]\"";}
+if (empty($_POST['tsa'])) { $tsa_sta = 'NULL'; }else{ $tsa_sta = "\"$_POST[tsa]\"";}
+if (empty($_POST['contract'])) { $contract = 'NULL'; }else{ $contract = "\"$_POST[contract]\"";}
+if (empty($_POST['fuelcard'])) { $fuelcard = 'NULL'; }else{ $fuelcard = "\"$_POST[fuelcard]\"";}
+if (empty($_POST['miscDetails'])) { $notes = 'NULL'; }else{ $notes = "\"$_POST[miscDetails]\"";}
+$updateUser = $_POST['username'];
+
+# Image Uploads
+if (! empty($_FILES["fileToUpload"]["name"]))
+{
+  # File upload logic
+  $target_dir = $_SERVER['DOCUMENT_ROOT'] . "/dist/img/userimages/";
+  $target_file = $target_dir . $updateUser . "_avatar";
+  $uploadOk = 0;
+  // Check if image file is a actual image or fake image
+
+  $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+  if($check === false) {
+    header("Location: /pages/dispatch/admin/users.php?error=upload");
+  }else{
+    $uploadOk = 1;
+  }
+  // Check file size
+  if ($_FILES["fileToUpload"]["size"] > 500000) {
+    header("Location: /pages/dispatch/admin/users.php?error=size");
+  }else{
+    $uploadOk = 1;
+  }
+  // Allow certain file formats
+  if (exif_imagetype($_FILES["fileToUpload"]["tmp_name"]) != IMAGETYPE_GIF
+  && exif_imagetype($_FILES["fileToUpload"]["tmp_name"]) != IMAGETYPE_JPEG
+  && exif_imagetype($_FILES["fileToUpload"]["tmp_name"]) != IMAGETYPE_PNG
+  ) {
+    header("Location: /pages/dispatch/admin/users.php?error=type");
+  }else{
+    $uploadOk = 1;
+  }
+  // Check if $uploadOk is set to 0 by an error
+  if ($uploadOk == 1)
+  {
+    # resize the image
+    $resizedImage = new Imagick($_FILES["fileToUpload"]["tmp_name"]);
+    $resizedImage->resizeImage(160,0,Imagick::FILTER_LANCZOS,1);
+    $resizedImage->writeImage($_FILES["fileToUpload"]["tmp_name"]);
+    $resizedImage->destroy(); 
+    if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file))
+    {
+      header("Location: /pages/dispatch/admin/users.php?error=move");
+    }
+  }
+}
+
+# PDF Uploads
+if (! empty($_FILES["contractUpload"]["name"]))
+{
+  # File upload logic
+  $target_dir = "/dist/img/userpdf/";
+  $target_file = $target_dir . time() . "_contract.pdf";
+  # Check that the mime type is pdf
+  if ($_FILES["contractUpload"]["type"] == "application/pdf")
+  {
+    if (move_uploaded_file($_FILES["contractUpload"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . $target_file))
+    {
+      $sql = "UPDATE users SET
+         contract = '$target_file'
+         WHERE id = $_POST[id]";
+         mysql_query($sql);
+    }
+  }
+}
+
+if (! empty($_FILES["fuelUpload"]["name"]))
+{
+  # File upload logic
+  $target_dir = "/dist/img/userpdf/";
+  $target_file = $target_dir . time() . "_fuel.pdf";
+  # Check that the mime type is pdf
+  if ($_FILES["fuelUpload"]["type"] == "application/pdf")
+  {
+    if (move_uploaded_file($_FILES["fuelUpload"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . $target_file))
+    {
+      $sql = "UPDATE users SET
+         fuelcard = '$target_file'
+         WHERE id = $_POST[id]";
+         mysql_query($sql);
+    }
+  }
+}
   $sql = "UPDATE users SET
-  fname = '$_POST[fname]',
-  mname = '$_POST[mname]',
-  lname = '$_POST[lname]',
-  status = '$_POST[status]',
-  role = '$_POST[role]',
-  office = '$_POST[office]',
-  addr1 = '$_POST[addr1]',
-  addr2 = '$_POST[addr2]',
-  city = '$_POST[city]',
-  zipcode = '$_POST[zip]',
-  title = '$_POST[jobTitle]',
-  email = '$_POST[email]',
-  vtext = $_POST[vtext],
-  quiet_time_begin = ".(empty($_POST['quietTimeVal1'])? 'NULL': $_POST['quietTimeVal1']).",
-  quiet_time_end = ".(empty($_POST['quietTimeVal2'])? 'NULL': $_POST['quietTimeVal2']).",
-  ssn = '$_POST[ssn]',
-  driver_license_n = $_POST[driverLicense],
-  driver_license_exp = $_POST[driverLicenseExpire],
-  driverid = $_POST[mobilePhone],
-  start_dt = $_POST[startDate],
-  depart_dt = $_POST[departureDate],
-  depart_reason = $_POST[departureReason],
-  username = '$_POST[username]',
-  password = '$_POST[password]',
-  med_card_exp = $_POST[medCardExpire],
-  mvr_renewal = $_POST[mvrRenewal],
-  emerg_contact_name = $_POST[emergencyContact],
-  emerg_contact_phone = $_POST[emergencyPhone],
-  tsa_sta = $_POST[tsa],
-  timecard = $_POST[timecard],
-  notes = $_POST[miscDetails],
+   fname = $fname,
+   mname = $mname,
+   lname = $lname,
+   status = $status,
+   role = $role,
+   office = $office,
+   addr1 = $addr1,
+   addr2 = $addr2,
+   city = $city,
+   state = $state,
+   zipcode = $zipcode,
+   title = $title,
+   email = $email,
+   vtext = $vtext,
+   quiet_time_begin = $quiet_time_begin,
+   quiet_time_end = $quiet_time_end,
+   ssn = $ssn,
+   dob = $dob,
+   driver_license_n = $driver_license_n,
+   driver_license_exp = $driver_license_exp,
+   driverid = $driverid,
+   start_dt = $start_dt,
+   depart_dt = $depart_dt,
+   depart_reason = $depart_reason,
+   username = $username,
+   password = $password,
+   med_card_exp = $med_card_exp,
+   salary = $salary,
+   emerg_contact_name = $emerg_contact_name,
+   emerg_contact_phone = $emerg_contact_phone,
+   tsa_sta = $tsa_sta,
+   notes = $notes
   WHERE id = $_POST[id]";
 
   mysql_query($sql);
-
-  $sql = "UPDATE contracts SET
-  contract = '$_POST[contract]'
-  WHERE id = $_POST[id]";
-
-  $sql = "INSERT INTO emp_salary
-   (driver_driverid,salary) VALUES ($_POST[mobilePhone],$_POST[salary])";
 
 }
 ?>
@@ -97,8 +203,8 @@ print_r($_POST);
 </head>
 <body class="skin-blue sidebar-mini">
 <div class="wrapper">
-<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/header.php');?>
-<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/sidebar.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/header.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/sidebar.php');?>
    
     <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
@@ -115,7 +221,7 @@ print_r($_POST);
 
 <!-- Animated Top Menu Insert PHP Reference to /wwwlive/dist/menus_sidebars_elements  -->
 
-<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/topmenuadminanimation.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/topmenuadminanimation.php');?>
 
 <!-- End Animated Top Menu -->
           
@@ -185,8 +291,47 @@ print_r($_POST);
  </thead>
  <tbody>
 <?php
-                      $sql = "SELECT * FROM users $orderSql";
+                      $sql = "SELECT 
+                              id,
+                              username,
+                              drivername,
+                              fname,
+                              mname,
+                              lname,
+                              status,
+                              role,
+                              office,
+                              addr1,
+                              addr2,
+                              city,
+                              state,
+                              zipcode,
+                              title,
+                              email,
+                              vtext,
+                              quiet_time_begin,
+                              quiet_time_end,
+                              ssn,
+                              date_format(dob,'%m/%d/%Y') as dob,
+                              driver_license_n,
+                              date_format(driver_license_exp,'%m/%d/%Y') as driver_license_exp,
+                              driverid,
+                              date_format(start_dt,'%m/%d/%Y') as start_dt,
+                              date_format(depart_dt,'%m/%d/%Y') as depart_dt,
+                              depart_reason,
+                              username,
+                              password,
+                              date_format(med_card_exp,'%m/%d/%Y') as med_card_exp,
+                              salary,
+                              emerg_contact_name,
+                              emerg_contact_phone,
+                              tsa_sta,
+                              contract,
+                              fuelcard,
+                              notes
+                               FROM users $orderSql";
                       $sql = mysql_query($sql);
+
                       while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
                       {
 ?>
@@ -209,12 +354,13 @@ print_r($_POST);
 <tr class="collapse" id="<?php echo $row['username'];?>_details">
 <td colspan="9">
   <div class="well">
-   <form role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+   <form enctype="multipart/form-data" role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
    <table>
     <tr>
      <td rowspan="3">
-       <div><img style="display: block; margin: 0 auto;" src="/dist/img/user1-128x128.jpg"/></div>
-       <div><input id="input-4" type="file" multiple=true class="file-loading"></div>
+       <div><img style="display: block; margin: 0 auto;" 
+             src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $row['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $row['username'] . "_avatar";}else{ echo HTTP."/dist/img/avatar.png"; }?>"/></div>
+       <div><input id="fileToUpload" name="fileToUpload" type="file" multiple=true class="file-loading"></div>
      </td>
      <td style="padding: 5px">
       <label for="fname">First Name</label>
@@ -229,35 +375,34 @@ print_r($_POST);
       <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="<?php echo $row['lname'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="status">User Status</label>
+      <label for="status">Status</label>
        <select class="form-control" name="status" id="status">
          <option value="Active" <?php if ($row['status'] == 'Active') { echo " selected "; }?>>Active</option>
          <option value="Inactive"<?php if ($row['status'] == 'Inactive') { echo " selected "; }?>>Inactive</option>
        </select> 
      </td>
      <td style="padding: 5px">
-      <label for="role">Access Role</label>
+      <label for="role">Role</label>
        <select class="form-control" name="role" id="role">
          <option value="Employee" <?php if ($row['role'] == 'Employee') { echo " selected "; }?>>Employee</option>
-         <option value="Manager"<?php if ($row['status'] == 'Manager') { echo " selected "; }?>>Manager</option>
-         <option value="Admin"<?php if ($row['status'] == 'Admin') { echo " selected "; }?>>Admin</option>
+         <option value="Admin"<?php if ($row['role'] == 'Admin') { echo " selected "; }?>>Admin</option>
        </select> 
      </td>
      <td style="padding: 5px">
-      <label for="office">Office Location</label>
+      <label for="office">Office</label>
        <select class="form-control" name="office" id="office">
-         <option value="PHX" <?php if ($row['status'] == 'PHX') { echo " selected "; }?>>PHX</option>
-         <option value="TUS"<?php if ($row['status'] == 'TUS') { echo " selected "; }?>>TUS</option>
+         <option value="PHX" <?php if ($row['office'] == 'PHX') { echo " selected "; }?>>PHX</option>
+         <option value="TUS"<?php if ($row['office'] == 'TUS') { echo " selected "; }?>>TUS</option>
        </select> 
      </td>
     </tr>
     <tr>
      <td style="padding: 5px">
-      <label for="addr1">Home Address 1</label>
+      <label for="addr1">Home Addr 1</label>
       <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $row['addr1'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="addr2">Home Address 2</label>
+      <label for="addr2">Home Addr 2</label>
       <input type="text" class="form-control" name="addr2" id="addr2" placeholder="" value="<?php echo $row['addr2'];?>">
      </td>
      <td style="padding: 5px">
@@ -273,12 +418,12 @@ print_r($_POST);
       <input type="text" class="form-control" name="zip" id="zip" placeholder="" value="<?php echo $row['zipcode'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="jobTitle">Job Title</label>
+      <label for="jobTitle">Title</label>
        <select class="form-control" name="jobTitle" id="jobTitle">
-         <option value="Office" <?php if ($row['status'] == 'Office') { echo " selected "; }?>>Office</option>
-         <option value="Dispatch"<?php if ($row['status'] == 'Dispatch') { echo " selected "; }?>>Dispatch</option>
-         <option value="Accounting" <?php if ($row['status'] == 'Accounting') { echo " selected "; }?>>Accounting</option>
-         <option value="Driver"<?php if ($row['status'] == 'Driver') { echo " selected "; }?>>Driver</option>
+         <option value="Office" <?php if ($row['title'] == 'Office') { echo " selected "; }?>>Office</option>
+         <option value="Dispatch"<?php if ($row['title'] == 'Dispatch') { echo " selected "; }?>>Dispatch</option>
+         <option value="Accounting" <?php if ($row['title'] == 'Accounting') { echo " selected "; }?>>Accounting</option>
+         <option value="Driver"<?php if ($row['title'] == 'Driver') { echo " selected "; }?>>Driver</option>
        </select> 
      </td>
     </tr>
@@ -292,7 +437,7 @@ print_r($_POST);
       <input type="vtext" class="form-control" name="vtext" id="vtext" placeholder="" value="<?php echo $row['vtext'];?>">
      </td>
      <td style="padding: 5px">
-       <label for="emailUpdates">Email Updates</label>
+       <label for="emailUpdates">&zwnj;</label>
       <div class="btn-group" data-toggle="buttons">
        <label class="btn btn-primary btn-med">Email Updates
          <input type="checkbox" class="form-control" name="emailUpdates" id="emailUpdates" placeholder="" value="">
@@ -300,20 +445,70 @@ print_r($_POST);
       </div>
      </td>
      <td style="padding: 5px">
-      <label for="textUpdates">Text Updates</label>
+      <label for="textUpdates">&zwnj;</label>
       <div class="btn-group" data-toggle="buttons">
        <label class="btn btn-primary btn-med">Text Updates
-        <input type="checkbox" class="form-control" name="ck_userOptions[]" name="textUpdates" id="textUpdates" placeholder="" value="<?php echo $row['email'];?>">
+        <input type="checkbox" class="form-control" name="textUpdates" id="textUpdates" placeholder="" value="<?php echo $row['email'];?>">
        </label>
       </div>
      </td>
      <td style="padding: 5px">
-      <label for="quietTimeVal1">Quiet Time (start)</label>
-      <input type="text" class="form-control" name="quietTimeVal1" id="quietTimeVal1" placeholder="" value="<?php echo $row['quiet_time'];?>">
+      <label for="quietTimeVal1">Quiet (start)</label>
+       <select class="form-control" name="quietTimeVal1" id="quietTimeVal1">
+         <option value="00:00" <?php if ($row['quiet_time_begin'] == '00:00') { echo " selected "; }?>>00:00</option>
+         <option value="01:00" <?php if ($row['quiet_time_begin'] == '01:00') { echo " selected "; }?>>01:00</option>
+         <option value="02:00" <?php if ($row['quiet_time_begin'] == '02:00') { echo " selected "; }?>>02:00</option>
+         <option value="03:00" <?php if ($row['quiet_time_begin'] == '03:00') { echo " selected "; }?>>03:00</option>
+         <option value="04:00" <?php if ($row['quiet_time_begin'] == '04:00') { echo " selected "; }?>>04:00</option>
+         <option value="05:00" <?php if ($row['quiet_time_begin'] == '05:00') { echo " selected "; }?>>05:00</option>
+         <option value="06:00" <?php if ($row['quiet_time_begin'] == '06:00') { echo " selected "; }?>>06:00</option>
+         <option value="07:00" <?php if ($row['quiet_time_begin'] == '07:00') { echo " selected "; }?>>07:00</option>
+         <option value="08:00" <?php if ($row['quiet_time_begin'] == '08:00') { echo " selected "; }?>>08:00</option>
+         <option value="09:00" <?php if ($row['quiet_time_begin'] == '09:00') { echo " selected "; }?>>09:00</option>
+         <option value="10:00" <?php if ($row['quiet_time_begin'] == '10:00') { echo " selected "; }?>>10:00</option>
+         <option value="11:00" <?php if ($row['quiet_time_begin'] == '11:00') { echo " selected "; }?>>11:00</option>
+         <option value="12:00" <?php if ($row['quiet_time_begin'] == '12:00') { echo " selected "; }?>>12:00</option>
+         <option value="13:00" <?php if ($row['quiet_time_begin'] == '13:00') { echo " selected "; }?>>13:00</option>
+         <option value="14:00" <?php if ($row['quiet_time_begin'] == '14:00') { echo " selected "; }?>>14:00</option>
+         <option value="15:00" <?php if ($row['quiet_time_begin'] == '15:00') { echo " selected "; }?>>15:00</option>
+         <option value="16:00" <?php if ($row['quiet_time_begin'] == '16:00') { echo " selected "; }?>>16:00</option>
+         <option value="17:00" <?php if ($row['quiet_time_begin'] == '17:00') { echo " selected "; }?>>17:00</option>
+         <option value="18:00" <?php if ($row['quiet_time_begin'] == '18:00') { echo " selected "; }?>>18:00</option>
+         <option value="19:00" <?php if ($row['quiet_time_begin'] == '19:00') { echo " selected "; }?>>19:00</option>
+         <option value="20:00" <?php if ($row['quiet_time_begin'] == '20:00') { echo " selected "; }?>>20:00</option>
+         <option value="21:00" <?php if ($row['quiet_time_begin'] == '21:00') { echo " selected "; }?>>21:00</option>
+         <option value="22:00" <?php if ($row['quiet_time_begin'] == '22:00') { echo " selected "; }?>>22:00</option>
+         <option value="23:00" <?php if ($row['quiet_time_begin'] == '23:00') { echo " selected "; }?>>23:00</option>
+      </select>
      </td>
      <td style="padding: 5px">
-      <label for="quietTimeVal2">Quiet Time (end)</label>
-      <input type="text" class="form-control" name="quietTimeVal2" id="quietTimeVal2" placeholder="" value="<?php echo $row['quiet_time'];?>">
+      <label for="quietTimeVal2">Quiet (end)</label>
+       <select class="form-control" name="quietTimeVal2" id="quietTimeVal2">
+         <option value="00:00" <?php if ($row['quiet_time_end'] == '00:00') { echo " selected "; }?>>00:00</option>
+         <option value="01:00" <?php if ($row['quiet_time_end'] == '01:00') { echo " selected "; }?>>01:00</option>
+         <option value="02:00" <?php if ($row['quiet_time_end'] == '02:00') { echo " selected "; }?>>02:00</option>
+         <option value="03:00" <?php if ($row['quiet_time_end'] == '03:00') { echo " selected "; }?>>03:00</option>
+         <option value="04:00" <?php if ($row['quiet_time_end'] == '04:00') { echo " selected "; }?>>04:00</option>
+         <option value="05:00" <?php if ($row['quiet_time_end'] == '05:00') { echo " selected "; }?>>05:00</option>
+         <option value="06:00" <?php if ($row['quiet_time_end'] == '06:00') { echo " selected "; }?>>06:00</option>
+         <option value="07:00" <?php if ($row['quiet_time_end'] == '07:00') { echo " selected "; }?>>07:00</option>
+         <option value="08:00" <?php if ($row['quiet_time_end'] == '08:00') { echo " selected "; }?>>08:00</option>
+         <option value="09:00" <?php if ($row['quiet_time_end'] == '09:00') { echo " selected "; }?>>09:00</option>
+         <option value="10:00" <?php if ($row['quiet_time_end'] == '10:00') { echo " selected "; }?>>10:00</option>
+         <option value="11:00" <?php if ($row['quiet_time_end'] == '11:00') { echo " selected "; }?>>11:00</option>
+         <option value="12:00" <?php if ($row['quiet_time_end'] == '12:00') { echo " selected "; }?>>12:00</option>
+         <option value="13:00" <?php if ($row['quiet_time_end'] == '13:00') { echo " selected "; }?>>13:00</option>
+         <option value="14:00" <?php if ($row['quiet_time_end'] == '14:00') { echo " selected "; }?>>14:00</option>
+         <option value="15:00" <?php if ($row['quiet_time_end'] == '15:00') { echo " selected "; }?>>15:00</option>
+         <option value="16:00" <?php if ($row['quiet_time_end'] == '16:00') { echo " selected "; }?>>16:00</option>
+         <option value="17:00" <?php if ($row['quiet_time_end'] == '17:00') { echo " selected "; }?>>17:00</option>
+         <option value="18:00" <?php if ($row['quiet_time_end'] == '18:00') { echo " selected "; }?>>18:00</option>
+         <option value="19:00" <?php if ($row['quiet_time_end'] == '19:00') { echo " selected "; }?>>19:00</option>
+         <option value="20:00" <?php if ($row['quiet_time_end'] == '20:00') { echo " selected "; }?>>20:00</option>
+         <option value="21:00" <?php if ($row['quiet_time_end'] == '21:00') { echo " selected "; }?>>21:00</option>
+         <option value="22:00" <?php if ($row['quiet_time_end'] == '22:00') { echo " selected "; }?>>22:00</option>
+         <option value="23:00" <?php if ($row['quiet_time_end'] == '23:00') { echo " selected "; }?>>23:00</option>
+       </select>
      </td>
     </tr>
     <tr>
@@ -323,36 +518,32 @@ print_r($_POST);
      </td>
      <td style="padding: 5px">
       <label for="dob">DOB</label>
-      <input type="text" class="form-control" name="dob" id="dob" placeholder="" value="<?php echo $row['dob'];?>">
+      <input type="text" class="form-control" name="dob" id="dob" placeholder="mm/dd/yyyy" value="<?php echo $row['dob'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="driverLicense">Driver License No.</label>
+      <label for="driverLicense">License No.</label>
       <input type="text" class="form-control" name="driverLicense" id="driverLicense" placeholder="" value="<?php echo $row['driver_license_n'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="driverLicenseExpire">Driver License Exp.</label>
-      <input type="text" class="form-control" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="" value="<?php echo $row['driver_license_exp'];?>">
+      <label for="driverLicenseExpire">License Exp.</label>
+      <input type="text" class="form-control" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['driver_license_exp'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="mobilePhone">Mobile Phone</label>
+      <label for="mobilePhone">Mobile</label>
       <input type="text" class="form-control" name="mobilePhone" id="mobilePhone" placeholder="" value="<?php echo $row['driverid'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="contract">Contract</label>
-      <input type="text" class="form-control" name="contract" id="contract" placeholder="" value="<?php echo $row['contract'];?>">
+      <label for="startDate">Start Date</label>
+      <input type="text" class="form-control" name="startDate" id="startDate" placeholder="mm/dd/yyyy" value="<?php echo $row['start_dt'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="startDate">Start Date</label>
-      <input type="text" class="form-control" name="startDate" id="startDate" placeholder="" value="<?php echo $row['start_date'];?>">
+      <label for="departureDate">Depart Date</label>
+      <input type="text" class="form-control" data-date-format="mm/dd/yyyy" name="departureDate" id="departureDate" placeholder="mm/dd/yyyy" value="<?php echo $row['depart_dt'];?>">
      </td>
     </tr>
     <tr>
      <td style="padding: 5px">
-      <label for="departureDate">Departure Date</label>
-      <input type="text" class="form-control" name="departureDate" id="departureDate" placeholder="" value="<?php echo $row['start_date'];?>">
-     </td>
-     <td style="padding: 5px">
-      <label for="departureReason">Departure Reason</label>
+      <label for="departureReason">Depart Reason</label>
       <input type="text" class="form-control" name="departureReason" id="departureReason" placeholder="" value="<?php echo $row['depart_reason'];?>">
      </td>
      <td style="padding: 5px">
@@ -364,34 +555,26 @@ print_r($_POST);
       <input type="text" class="form-control" name="password" id="password" placeholder="" value="<?php echo $row['password'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="medCardExpire">Medical Card Expiration Date</label>
-      <input type="text" class="form-control" name="medCardExpire" id="medCardExpire" placeholder="" value="<?php echo $row['med_card_exp'];?>">
+      <label for="medCardExpire">Med Exp Date</label>
+      <input type="text" class="form-control" name="medCardExpire" id="medCardExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['med_card_exp'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="mvrRenewal">MVR Renewal Date</label>
-      <input type="text" class="form-control" name="mvrRenewal" id="mvrRenewal" placeholder="" value="<?php echo $row['mvr_renewal'];?>">
+      <label for="salary">Salary</label>
+      <input type="text" class="form-control" name="salary" id="salary" placeholder="" value="<?php echo $row['salary'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="salary">Hourly Salary</label>
-      <input type="text" class="form-control" name="salary" id="salary" placeholder="" value="<?php echo $salary['salary'];?>">
-     </td>
-    </tr>
-    <tr>
-     <td style="padding: 5px">
-      <label for="emergencyContact">Emergency Contact</label>
-      <input type="text" class="form-control" name="emergencyContact" id="emergencyContact" placeholder="" value="<?php echo $row['emerg_contact_name'];?>">
-     </td>
-     <td style="padding: 5px">
-      <label for="emergencyPhone">Emergency Contact Phone</label>
+      <label for="emergencyPhone">Emerg Phone</label>
       <input type="text" class="form-control" name="emergencyPhone" id="emergencyPhone" placeholder="" value="<?php echo $row['emerg_contact_phone'];?>">
      </td>
      <td style="padding: 5px">
       <label for="tsa">TSA-STA</label>
       <input type="text" class="form-control" name="tsa" id="tsa" placeholder="" value="<?php echo $row['tsa_sta'];?>">
      </td>
+    </tr>
+    <tr>
      <td style="padding: 5px">
-      <label for="timeCard">Time Card</label>
-      <input type="text" class="form-control" name="timeCard" id="timeCard" placeholder="" value="<?php echo $row['timecard'];?>">
+      <label for="emergencyContact">Emerg Contact</label>
+      <input type="text" class="form-control" name="emergencyContact" id="emergencyContact" placeholder="" value="<?php echo $row['emerg_contact_name'];?>">
      </td>
      <td style="padding: 5px" colspan="3">
       <label for="miscDetails">Notes</label>
@@ -399,9 +582,22 @@ print_r($_POST);
      </td>
     </tr>
     <tr>
+     <td colspan="1" style="padding: 5px">
+      <label for="contract">Contract</label>
+      <a href="<?php if (isset($row['contract'])) { echo HTTP . $row['contract']; }?>" target="_blank"><?php if (isset($row['contract'])) { echo $row['contract']; }?></a>
+      <div><input id="contractUpload" name="contractUpload" type="file" multiple=true class="file-loading"></div>
+     </td>
+     <td colspan="1" style="padding: 5px">
+      <label for="fuelcard">Fuel Card</label>
+      <a href="<?php if (isset($row['fuelcard'])) { echo HTTP . $row['fuelcard']; }?>" target="_blank"><?php if (isset($row['fuelcard'])) { echo $row['fuelcard']; }?></a>
+      <div><input id="fuelUpload" name="fuelUpload" type="file" multiple=true class="file-loading"></div>
+     </td>
+    </tr>
+    <tr>
      <td style="padding: 5px">
        <input type="submit" name="submit" class="btn btn-primary" value="Update">
        <input type="hidden" name="id" class="btn btn-primary" value="<?php echo $row['id'];?>">
+       <input type="hidden" name="username" class="btn btn-primary" value="<?php echo $row['username'];?>">
      </td>
     </tr>
    </table>
@@ -429,10 +625,10 @@ print_r($_POST);
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
 
-<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/footer.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/footer.php');?>
 
 <!-- Control Sidebar -->
-<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/r_sidebar.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/r_sidebar.php');?>
 <!-- /.control-sidebar --> 
 <!-- Add the sidebar's background. This div must be placed
            immediately after the control sidebar -->
