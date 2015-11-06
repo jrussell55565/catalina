@@ -122,6 +122,8 @@ if (mysql_num_rows($login) == 1)
                 $_SESSION['drivername'] = $row['drivername'];
                 $_SESSION['email']      = $row['email'];
                 $_SESSION['username']      = $row['username'];
+                $_SESSION['fname']      = $row['fname'];
+                $_SESSION['lname']      = $row['lname'];
         }
   
         # Check that the odometer is increasing (not for admins)
