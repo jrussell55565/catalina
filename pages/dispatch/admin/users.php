@@ -63,14 +63,15 @@ if (empty($_POST['tsa'])) { $tsa_sta = 'NULL'; }else{ $tsa_sta = "\"$_POST[tsa]\
 if (empty($_POST['contract'])) { $contract = 'NULL'; }else{ $contract = "\"$_POST[contract]\"";}
 if (empty($_POST['fuelcard'])) { $fuelcard = 'NULL'; }else{ $fuelcard = "\"$_POST[fuelcard]\"";}
 if (empty($_POST['miscDetails'])) { $notes = 'NULL'; }else{ $notes = "\"$_POST[miscDetails]\"";}
-if (empty($_POST['username'])) { $formUsername = 'NULL'; }else{ $formUsername = "\"$_POST[username]\"";}
+if (empty($_POST['tsName'])) { $tsName = 'NULL'; }else{ $tsName = "\"$_POST[tsName]\"";}
+if (empty($_POST['tsPhone'])) { $tsPhone = 'NULL'; }else{ $tsPhone = "$_POST[tsPhone]";}
 
 # Image Uploads
 if (! empty($_FILES["fileToUpload"]["name"]))
 {
   # File upload logic
   $target_dir = $_SERVER['DOCUMENT_ROOT'] . "/dist/img/userimages/";
-  $target_file = $target_dir . $formUsername . "_avatar";
+  $target_file = $target_dir . str_replace('"','',$formUsername) . "_avatar";
   $uploadOk = 0;
   // Check if image file is a actual image or fake image
 
@@ -164,7 +165,9 @@ if (! empty($_FILES["fileToUpload"]["name"]))
    emerg_contact_name = $emerg_contact_name,
    emerg_contact_phone = $emerg_contact_phone,
    tsa_sta = $tsa_sta,
-   notes = $notes
+   notes = $notes,
+   ts_phone = $tsPhone,
+   ts_name = $tsName
   WHERE id = $id";
   #print "$sql<br>\n\n";
   mysql_query($sql);
@@ -313,13 +316,13 @@ if (! empty($_FILES["fuelUpload"]["name"]))
     <th>Name <a href="?sort=name&order=<?php echo $orderName;?>">
              <i class="glyphicon glyphicon-triangle-<?php echo $glyphName;?>"></i></a></th>
     <th>Login As</th>
+    <th>Status <a href="?sort=status&order=<?php echo $orderStatus;?>">
+               <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>
     <th>Title</th>
     <th>Office</th>
     <th>Phone Number</th>
     <th>Login</th>
     <th>Password</th>
-    <th>Status <a href="?sort=status&order=<?php echo $orderStatus;?>">
-               <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>
   </tr>
  </thead>
  <tbody>
@@ -363,6 +366,8 @@ if (! empty($_FILES["fuelUpload"]["name"]))
                               tsa_sta,
                               contract,
                               fuelcard,
+                              ts_name,
+                              ts_phone,
                               notes
                                FROM users $orderSql";
                       $sql = mysql_query($sql);
@@ -376,23 +381,15 @@ if (! empty($_FILES["fuelUpload"]["name"]))
 <div style="float:right;width:20%;"><a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse" 
   href="#<?php echo $row['username'];?>_details"aria-expanded="false" aria-controls="<?php echo $row['username'];?>_details">
   </a></div>
-<!-- Change Chevron -->
-<script>
-$('.collapse').on('shown.bs.collapse', function(){
-$(this).parent().find(".glyphicon-chevron-right").removeClass("glyphicon-chevron-right").addClass("glyphicon-minus");
-}).on('hidden.bs.collapse', function(){
-$(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
-});
-</script>
 </td>
 <td><a href="<?php echo $_SERVER['PHP_SELF'];?>?action=loginas&username=<?php echo $row['username'];?>&drivername=<?php echo $row['drivername'];?>">
     <i class="glyphicon glyphicon-lock"></i></a></td>
+<td><?php echo $row['status'];?></td>
 <td><?php echo $row['title'];?></td>
 <td><?php echo $row['office'];?></td>
 <td><?php echo $row['driverid'];?></td>
 <td><?php echo $row['username'];?></td>
 <td><?php echo $row['password'];?></td>
-<td><?php echo $row['status'];?></td>
 </tr>
 <tr class="collapse" id="<?php echo $row['username'];?>_details">
 <td colspan="9">
@@ -1008,6 +1005,15 @@ $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClas
 
 <!-- Demo -->
 <script src="<?php echo HTTP;?>/dist/js/demo.js" type="text/javascript"></script>
+
+<!-- Change Chevron -->
+<script>
+//$('.collapse').on('shown.bs.collapse', function(){
+//$(this).parent().find(".glyphicon-chevron-right").removeClass("glyphicon-chevron-right").addClass("glyphicon-minus");
+//}).on('hidden.bs.collapse', function(){
+//$(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+//});
+</script>
 
 </body>
 </html>
