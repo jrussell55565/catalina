@@ -1,6 +1,13 @@
 <?php 
 function accessorials($accessorialType,$srcPage,$username)
 {
+   if ($accessorialType == 'Truck')
+   {
+      $ckPrefix = 'truck_';
+   }elseif($accessorialType = 'Trailer'){
+      $ckPrefix = 'trailer_';
+   }
+
 	$sql = mysql_query("select * FROM accessorials WHERE acc_type = \"$accessorialType\" ORDER BY revenue_charge");
         while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
         {
@@ -10,7 +17,7 @@ function accessorials($accessorialType,$srcPage,$username)
                 if (preg_match('/^ck_/',$row['input_type']))
                 {
                 	$visibility = '';
-                	$input_type = "type=\"checkbox\" name=\"ck_accessorials[]\" id=\"ck_accessorials[]\" value=\"$row[revenue_charge]\" autocomplete=\"off\"";
+                	$input_type = "type=\"checkbox\" name=\"".$ckPrefix."ck_accessorials[]\" id=\"".$ckPrefix."ck_accessorials[]\" value=\"$row[revenue_charge]\" autocomplete=\"off\"";
                 }elseif (preg_match('/^txt_/',$row['input_type'])){
                         $visibility = '';
                         $input_type = "type=\"text\" name=\"bx_accessorials[$row[revenue_charge]]\" id=\"bx_accessorials[$row[revenue_charge]]\"\" value=\"\"";
@@ -18,10 +25,10 @@ function accessorials($accessorialType,$srcPage,$username)
 			# If the input is hidden and the page matches then
 			# we set the input type html.  Otherwise
 			# we just skip this part.
-			if ($row[src_page] == $srcPage)
+			if ($row['src_page'] == $srcPage)
 			{
-                        	$visibility = 'hidden';
-                        	$input_type = "type=\"checkbox\" name=\"ck_accessorials[]\" id=\"ck_accessorials[]\" value=\"$row[revenue_charge]\" checked";
+                $visibility = 'hidden';
+                $input_type = "type=\"checkbox\" name=\"ck_accessorials[]\" id=\"ck_accessorials[]\" value=\"$row[revenue_charge]\" checked";
 			}else{
 				$visibility = 'hidden';
 				$input_type = "type=\"checkbox\" name=\"NULL\" id=\"NULL\"";
@@ -31,7 +38,7 @@ function accessorials($accessorialType,$srcPage,$username)
                 if (preg_match('/checkbox/', $input_type))
                 {
                     echo "<div class=\"btn-group\" data-toggle=\"buttons\">";
-                    echo "<label class=\"btn btn-primary btn-sm\">";
+                    echo "<label class=\"btn btn-primary btn-sm\" $colorOverride>";
                 }
                 echo "<input $input_type/>$row[revenue_charge]\n";
                 if (preg_match('/checkbox/', $input_type))
