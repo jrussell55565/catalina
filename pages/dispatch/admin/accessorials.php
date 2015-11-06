@@ -40,7 +40,7 @@ $drivername = $_SESSION['drivername'];
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-<link rel="stylesheet" href="http://dispatch.catalinacartage.com:8080/dist/css/animate.css">
+<link rel="stylesheet" href="<?php echo HTTP;?>/dist/css/animate.css">
 <link href="../../dist/css/AdminLTE.css" rel="stylesheet" type="text/css">
 </head>
 <body class="skin-blue sidebar-mini">
