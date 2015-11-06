@@ -13,11 +13,16 @@ mysql_select_db($db_name) or DIE('Database name is not available!');
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
 
+if ($_GET['action'] == 'loginas')
+{
+  $_SESSION['userid'] = $_GET['username'];
+  $_SESSION['drivername'] = $_GET['drivername'];
+  header("Location: /pages/main/index.php");
+}
+
 # Let's do some form processing
 if(isset($_POST['submit'])) 
 { 
-#print_r($_POST);
-#print_r($_FILES);
 
 $id = $_POST['id'];
 $formDrivername = $_POST['fname'] . $_POST['lname'];
@@ -226,7 +231,7 @@ if (! empty($_FILES["fuelUpload"]["name"]))
         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-<link rel="stylesheet" href="http://dispatch.catalinacartage.com:8080/dist/css/animate.css">
+<link rel="stylesheet" href="<?php echo HTTP;?>/dist/css/animate.css">
 </head>
 <body class="skin-blue sidebar-mini">
 <div class="wrapper">
@@ -258,7 +263,7 @@ if (! empty($_FILES["fuelUpload"]["name"]))
             <div class="col-md-12">
               <div class="box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Add New User (Admin Access Only)</h3>
+                  <h3 class="box-title">Users</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
 <table class="table table-striped">
@@ -360,7 +365,6 @@ if (! empty($_FILES["fuelUpload"]["name"]))
                               notes
                                FROM users $orderSql";
                       $sql = mysql_query($sql);
-
                       while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
                       {
 ?>
@@ -380,7 +384,8 @@ $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClas
 });
 </script>
 </td>
-<td><a href="#"><i class="glyphicon glyphicon-lock"></i></a></td>
+<td><a href="<?php echo $_SERVER['PHP_SELF'];?>?action=loginas&username=<?php echo $row['username'];?>&drivername=<?php echo $row['drivername'];?>">
+    <i class="glyphicon glyphicon-lock"></i></a></td>
 <td><?php echo $row['title'];?></td>
 <td><?php echo $row['office'];?></td>
 <td><?php echo $row['driverid'];?></td>
