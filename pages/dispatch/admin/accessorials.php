@@ -45,8 +45,8 @@ $drivername = $_SESSION['drivername'];
 </head>
 <body class="skin-blue sidebar-mini">
 <div class="wrapper">
-<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/header.php');?>
-<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/sidebar.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/header.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/sidebar.php');?>
    
     <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
@@ -90,31 +90,31 @@ $drivername = $_SESSION['drivername'];
                 </div><!-- /.box-header --><!-- ./box-body -->
                 <div class="box-footer">
                   <div id="mainContent">
-                    <table width="700" border="1" id="Users">
+                    <table class="table" id="Users">
                       <tr>
-                        <td width="201">Revenue Charge Name</td>
-                        <td width="91">Type</td>
-                        <td width="165">Rev Charge Amount</td>
-                        <td width="83">Box, txt, or hidden</td>
-                        <td width="83">Page</td>
-                        <td width="188">Options</td>
+                        <td>Revenue Charge Name</td>
+                        <td>Type</td>
+                        <td>Rev Charge Amount</td>
+                        <td>Box, txt, or hidden</td>
+                        <td>Page</td>
+                        <td>Options</td>
                       </tr>
                       <form id="accessorials_add" name="accessorials_add" method="post" action="accessorialactions.php">
                         <tr>
-                          <td><input name="revenue_charge" type="text" id="revenue_charge" size="30" /></td>
-                          <td><label for="revenue_charge"></label>
-                            <select name="acc_type" id="acc_type">
+                          <td><input name="revenue_charge" type="text" id="revenue_charge" class="form-control" /></td>
+                          <td>
+                            <select class="form-control" name="acc_type" id="acc_type">
                               <option selected="selected">PU</option>
                               <option>DEL</option>
                               <option>REVENUE</option>
                             </select></td>
-                          <td><input name="revenue_amount" type="text" id="revenue_amount"/></td>
-                          <td><select name="checkortext" id="checkortext">
+                          <td><input name="revenue_amount" type="text" id="revenue_amount" class="form-control"/></td>
+                          <td><select name="checkortext" id="checkortext" class="form-control">
                             <option selected="selected">Check Box</option>
                             <option>Text Field</option>
                             <option>Hidden Field</option>
                           </select></td>
-                          <td><select name="srcPage" id="srcPage">
+                          <td><select name="srcPage" id="srcPage" class="form-control">
                             <option selected="selected"></option>
                             <option>puconfirmed.php</option>
                             <option>delconfirmed.php</option>
@@ -126,7 +126,7 @@ $drivername = $_SESSION['drivername'];
                             <option>AttemptPU.php</option>
                             <option>ArrivedtoShipper.php</option>
                           </select></td>
-                          <td><input name="btn_submit" value="Add" type="submit" id="btn_submit" />
+                          <td><input name="btn_submit" value="Add" type="submit" id="btn_submit" class="btn btn-primary"/>
                           <input type="hidden" name="hdn_accessorials"/>
                           </td>
                       </form>
@@ -139,9 +139,9 @@ $drivername = $_SESSION['drivername'];
                       <form id="accessorials_del" name="accessorials_del" method="post" action="accessorialactions.php">
                         <tr>
                           <td><input type="hidden" name="acc_itemnum" value="<?php echo "$row[acc_itemnum]";?>">
-                            <input name="revenue_charge" type="text" id="revenue_charge" size="30" value="<?php echo "$row[revenue_charge]";?>"></td>
-                          <td><label for="revenue_charge"></label>
-                            <select name="acc_type" id="acc_type">
+                            <input name="revenue_charge" type="text" id="revenue_charge" size="30" value="<?php echo "$row[revenue_charge]";?>" class="form-control"></td>
+                          <td>
+                            <select name="acc_type" id="acc_type" class="form-control">
                               <?php
 			switch ($row['acc_type'])
 			{
@@ -170,9 +170,9 @@ $drivername = $_SESSION['drivername'];
 			?>
                             </select></td>
                           <td><label>
-                            <input name="revenue_amount" type="text" id="revenue_amount" value=<?php echo "$row[revenue_amount]";?>>
+                            <input name="revenue_amount" type="text" id="revenue_amount" value=<?php echo "$row[revenue_amount]";?> class="form-control">
                           </label></td>
-                          <td><select name="checkortext" id="checkortext">
+                          <td><select name="checkortext" id="checkortext" class="form-control">
                             <?php
 			if (preg_match('/^ck_/',$row['input_type']))
 			{ ?>
@@ -193,7 +193,7 @@ $drivername = $_SESSION['drivername'];
                             <option >Check Box</option>
                             <?php } ?>
                           </select></td>
-                          <td><select name="src_page" id="src_page">
+                          <td><select name="src_page" id="src_page" class="form-control">
                             <option selected="selected"><?php echo $row['src_page'];?></option>
                             <option>puconfirmed.php</option>
                             <option>delconfirmed.php</option>
@@ -205,9 +205,9 @@ $drivername = $_SESSION['drivername'];
                             <option>AttemptPU.php</option>
                             <option>ArrivedtoShipper.php</option>
                           </select></td>
-                          <td><input name="btn_submit" value="Delete" type="submit" id="btn_submit" />
+                          <td><input name="btn_submit" value="Delete" type="submit" id="btn_submit" class="btn btn-danger"/>
                           <input type="hidden" name="hdn_accessorials"/>
-                            <input name="btn_submit" value="Update" type="submit" id="btn_submit" /></td>
+                            <input name="btn_submit" value="Update" type="submit" id="btn_submit" class="btn btn-primary"/></td>
                       </form>
                       <?php
 		}
