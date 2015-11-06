@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
+if ($_SESSION['login'] != 1)
 {
         header('Location: /pages/login/driverlogin.php');
 }
@@ -17,6 +17,7 @@ if ($_GET['action'] == 'loginas')
 {
   $_SESSION['userid'] = $_GET['username'];
   $_SESSION['drivername'] = $_GET['drivername'];
+  $_SESSION['login'] = 2;
   header("Location: /pages/main/index.php");
 }
 
