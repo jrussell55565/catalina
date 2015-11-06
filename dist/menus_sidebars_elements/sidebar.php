@@ -4,7 +4,7 @@
   <section class="sidebar">
     <!-- Sidebar user panel -->
     <div class="user-panel">
-      <div class="pull-left image"> <img src="<?php echo HTTP;?>/dist/img/usernophoto.jpg" class="img-circle" alt="User Image" /> </div>
+      <div class="pull-left image"> <img src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; }?>" class="img-circle" alt="User Image" /> </div>
       <div class="pull-left info">
         <p><?php echo "$drivername"; ?></p>
         <a href="#"><i class="fa fa-circle text-success"></i> Online</a> </div>
