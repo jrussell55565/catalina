@@ -251,7 +251,14 @@ $trailerid = $_SESSION['trailerid'];
             </table>
         </div>
         <!-- /.box-body -->
-        <div class="box-footer">Not All Green? Add Items Below!</div>
+        <div class="box-footer">
+         <div class="vir">
+         Not All Green? Add Items Below!
+         </div>
+         <div class="virconfirmation">
+         Choose a truck type to continue.
+         </div>
+        </div>
         <!-- /.box-footer-->
       </div>
       <!-- /.box -->
@@ -259,7 +266,7 @@ $trailerid = $_SESSION['trailerid'];
       <!-- Default box -->
       <!--          <div class="box"> -->
       <!--Remove the div Class "box" above and add below primary collapsed -->
-      <div name="div_truck_vir" id="div_truck_vir" class="box box-primary collapsed-box">
+      <div name="div_truck_vir" id="div_truck_vir" class="box box-primary collapsed-box vir truckvir">
         <div class="box-header with-border">
           <h3 class="box-title"><img src="../images/semismall.gif" alt="tire"> Truck VIR <img src="../images/boxtrucksmall.gif" alt="tire"><img src="../images/sprintersmall.gif" alt="tire"></h3>
           <div class="box-tools pull-right">
@@ -1155,7 +1162,7 @@ $trailerid = $_SESSION['trailerid'];
       <!-- /.box -->
 
       <!-- Default box -->
-      <div class="box">
+      <div class="box vir virsubmit">
         <!--Remove the div Class "box" above and add below primary collapsed -->
         <!--      <div class="box box-primary collapsed-box"> -->
         <div class="box-header with-border">
@@ -1254,14 +1261,23 @@ $(document).ready(function(){
         if($(this).attr("value")=="combo"){
             $(".vir").not(".combo").hide();
             $(".combo").show();
+            $(".truckvir").show();
+            $(".virsubmit").show();
+            $(".virconfirmation").hide();
         }
         if($(this).attr("value")=="boxtruck"){
             $(".vir").not(".boxtruck").hide();
             $(".boxtruck").show();
+            $(".truckvir").show();
+            $(".virsubmit").show();
+            $(".virconfirmation").hide();
         }
         if($(this).attr("value")=="sprinter"){
             $(".vir").not(".sprinter").hide();
             $(".sprinter").show();
+            $(".truckvir").show();
+            $(".virsubmit").show();
+            $(".virconfirmation").hide();
         }
     });
 });
