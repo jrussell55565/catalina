@@ -138,10 +138,10 @@ Flag  notification:  <span class="label label-danger">
             </ul>
           </li>
           <!-- User Account: style can be found in dropdown.less Add in PHP to look at Image file for Driver Image-->
-          <li class="dropdown user user-menu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img src="<?php echo HTTP;?>/dist/img/usernophoto.jpg" class="user-image" alt="User Image"/> <span class="hidden-xs"><?php echo "$drivername"; ?></span></a>
+          <li class="dropdown user user-menu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; }?>" class="user-image" alt="User Image"/> <span class="hidden-xs"><?php echo "$drivername"; ?></span></a>
             <ul class="dropdown-menu">
               <!-- User image -->
-              <li class="user-header"> <img src="<?php echo HTTP;?>/dist/img/usernophoto.jpg" class="img-circle" alt="User Image" />
+              <li class="user-header"> <img src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; }?>" class="img-circle" alt="User Image" />
                 <p> <?php echo "$drivername"; ?> </p>
               </li>
               <!-- Menu Body -->
