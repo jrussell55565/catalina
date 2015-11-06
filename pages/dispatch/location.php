@@ -93,6 +93,7 @@ if (isset($_GET['exportDisplay']))
       header('Cache-Control: must-revalidate');
       header('Pragma: public');
       header('Content-Length: ' . filesize($fileDir . $fileName));
+      header ("Content-Disposition:attachment; filename=\"$fileName\"");
       readfile($fileDir . $fileName);
       unlink($fileDir . $fileName);
   }
@@ -389,9 +390,9 @@ if (isset($_GET['exportDisplay']))
               <form class="form" method="get" action="">
               <div class="box-body">
                <div class="input-daterange input-group" id="datepicker" style="width: 25%;">
-                <input type="text" class="input-sm form-control datepicker" name="start" data-date-format="mm/dd/yyyy"/>
+                <input type="text" class="input-sm form-control datepicker" name="start" data-date-format="mm/dd/yyyy"/ required>
                 <span class="input-group-addon">to</span>
-                <input type="text" class="input-sm form-control datepicker" name="end" data-date-format="mm/dd/yyyy"/>
+                <input type="text" class="input-sm form-control datepicker" name="end" data-date-format="mm/dd/yyyy"/ required>
                </div>
                 <div class="input-group" style="margin-top: 5px">
                  <label class="radio-inline">
@@ -491,7 +492,6 @@ if (isset($_GET['exportDisplay']))
     startDate: "2015-01-01",
     todayBtn: "linked",
     autoclose: true,
-    todayHighlight: true,
     datesDisabled: '0',
     todayHighlight: true,
     });
