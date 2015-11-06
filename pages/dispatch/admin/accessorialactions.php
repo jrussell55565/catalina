@@ -19,15 +19,29 @@ if ($revenue_amount == '')
 {
 	$revenue_amount = 0;
 }
-$input_type = $_POST['checkortext'];
 
-if ($input_type == "Check Box")
+
+if (isset($_POST['hdn_accessorials']))
 {
+  $input_type = $_POST['checkortext'];
+  if ($input_type == "Check Box")
+  {
 	$input_type = "ck_".str_replace(' ','_',$revenue_charge);
-}elseif ($input_type == "Text Field"){
+  }elseif ($input_type == "Text Field"){
 	$input_type = "bx_".str_replace(' ','_',$revenue_charge);;
-}else{
+  }else{
 	$input_type = "hdn_".str_replace(' ','_',$revenue_charge);;
+  }
+
+  $returnPage = "accessorials.php";
+}
+
+if (isset($_POST['hdn_vir']))
+{
+  $src_page = "VIR";
+  $input_type = "ck_".str_replace(' ','_',$revenue_charge);
+
+  $returnPage = "adminvir.php";
 }
 
 switch ($_POST['btn_submit'])
@@ -53,5 +67,5 @@ if (!$output)
 		unset($_SESSION['dberror']);
 	}
 }
-header("Location: accessorials.php");
+header("Location: $returnPage");
 ?>

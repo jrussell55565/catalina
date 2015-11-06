@@ -15,210 +15,6 @@ $drivername = $_SESSION['drivername'];
 
 ?>
 
-<?php
-                     $sql = "SELECT
-                      total_today.counts   AS total_today_count,
-                      pu_today.counts      AS pu_today_count,
-                      del_today.counts     AS del_today_count,
-                      total_alltime.counts AS total_alltime_count,
-                      pu_alltime.counts    AS pu_alltime_count,
-                      del_alltime.counts   AS del_alltime_count,
-                      archived.counts      AS archived_count
-                    FROM
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          AND str_to_date(hawbDate,'%c/%e/%Y') = CURDATE()
-                          AND deleted                          =\"F\"
-                          AND archived                         =\"F\"
-                          )
-                        OR
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username =\"$username\"
-                            )
-                          AND str_to_date(dueDate,'%c/%e/%Y') = CURDATE()
-                          AND deleted                         =\"F\"
-                          AND archived                        =\"F\"
-                          )
-                      )
-                      total_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          puAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND str_to_date(hawbDate,'%c/%e/%Y') = DATE(now())
-                        AND deleted                          =\"F\"
-                        AND archived                         =\"F\"
-                        AND deleted                          =\"F\"
-                        AND archived                         =\"F\"
-                      )
-                      pu_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          delAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND str_to_date(dueDate,'%c/%e/%Y') = DATE(now())
-                        AND deleted                         =\"F\"
-                        AND archived                        =\"F\"
-                        AND deleted                         =\"F\"
-                        AND archived                        =\"F\"
-                      )
-                      del_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          OR puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      total_alltime,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          puAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      pu_alltime,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          delAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      del_alltime,
-                      (
-                      SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          OR puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"T\"
-                      )
-                      archived";
-
-                      $sql = mysql_query($sql);
-                      while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-                      {
-                        $total_today_count   = $row[total_today_count];
-                        $pu_today_count      = $row[pu_today_count];
-                        $del_today_count     = $row[del_today_count];
-                        $total_alltime_count = $row[total_alltime_count];
-                        $pu_alltime_count    = $row[pu_alltime_count];
-                        $del_alltime_count   = $row[del_alltime_count];
-                        $archived_count      = $row[archived_count];
-                      }
-                      mysql_free_result($sql);
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -267,7 +63,7 @@ $drivername = $_SESSION['drivername'];
         </section>
 
 <!-- Animated Top Menu Insert PHP Reference to /wwwlive/dist/menus_sidebars_elements  -->
-<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/topmenuadminanimation.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/topmenuadminanimation.php');?>
 <!-- End Animated Top Menu -->
 
 
@@ -276,7 +72,7 @@ $drivername = $_SESSION['drivername'];
             <div class="col-md-12">
               <div class="box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">User Administration: Temp Page</h3>
+                  <h3 class="box-title">Accessorials</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <div class="btn-group">
@@ -330,7 +126,9 @@ $drivername = $_SESSION['drivername'];
                             <option>AttemptPU.php</option>
                             <option>ArrivedtoShipper.php</option>
                           </select></td>
-                          <td><input name="btn_submit" value="Add" type="submit" id="btn_submit" /></td>
+                          <td><input name="btn_submit" value="Add" type="submit" id="btn_submit" />
+                          <input type="hidden" name="hdn_accessorials"/>
+                          </td>
                       </form>
                       <?php
                 $result = mysql_query("SELECT * FROM accessorials ORDER BY acc_type,revenue_charge");
@@ -408,6 +206,7 @@ $drivername = $_SESSION['drivername'];
                             <option>ArrivedtoShipper.php</option>
                           </select></td>
                           <td><input name="btn_submit" value="Delete" type="submit" id="btn_submit" />
+                          <input type="hidden" name="hdn_accessorials"/>
                             <input name="btn_submit" value="Update" type="submit" id="btn_submit" /></td>
                       </form>
                       <?php
@@ -419,36 +218,7 @@ $drivername = $_SESSION['drivername'];
                     </h2>
                     <!-- end #mainContent -->
                   </div>
-                  <div class="row">
-<div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                        <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
-                        <h5 class="description-header">4210</h5>
-                        <span class="description-text">Total Updates</span>
-                      </div><!-- /.description-block -->
-              </div><!-- /.col -->
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                        <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
-                        <h5 class="description-header">8390</h5>
-                        <span class="description-text">TOTAL Dispached</span>
-                      </div><!-- /.description-block -->
-                    </div><!-- /.col -->
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block border-right">
-                        <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
-                        <h5 class="description-header">50.01%</h5>
-                        <span class="description-text">TOTAL %</span>
-                      </div><!-- /.description-block -->
-                    </div><!-- /.col -->
-                    <div class="col-sm-3 col-xs-6">
-                      <div class="description-block">
-                        <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
-                        <h5 class="description-header">1200</h5>
-                        <span class="description-text">GOAL COMPLETIONS</span>
-                      </div><!-- /.description-block -->
-                    </div>
-            </div><!-- /.row -->
+                 </div><!-- /.row -->
                 </div><!-- /.box-footer -->
               </div><!-- /.box -->
             </div><!-- /.col -->
@@ -470,10 +240,10 @@ $drivername = $_SESSION['drivername'];
   <!-- /.content --> 
 </div>
 <!-- /.content-wrapper -->
-<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/footer.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/footer.php');?>
 
 <!-- Control Sidebar -->
-<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/r_sidebar.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/r_sidebar.php');?>
 <!-- /.control-sidebar --> 
 <!-- Add the sidebar's background. This div must be placed
            immediately after the control sidebar -->
