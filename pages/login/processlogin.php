@@ -104,7 +104,8 @@ if ($admin == 0)
 
 // Retrieve username and password from database according to user's input
 $sql = "SELECT * FROM users WHERE (username = '" . mysql_real_escape_string($userName) . "') 
-        and (password = '" . mysql_real_escape_string($password) . "')";
+        and (password = '" . mysql_real_escape_string($password) . "')
+        and status = 'Active'";
 
 $login = mysql_query($sql);
 if (!$login) {
