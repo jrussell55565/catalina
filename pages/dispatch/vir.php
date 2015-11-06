@@ -12,9 +12,9 @@ mysql_select_db($db_name) or DIE('Database name is not available!');
 
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
-$truckid = $_SESSION['truckId'];
-$trailerid = $_SESSION['trailerId'];
-
+$truckid = $_SESSION['truckid'];
+$trailerid = $_SESSION['trailerid'];
+print_r($_SESSION);
 
 ?>
 <!DOCTYPE html>
@@ -98,23 +98,25 @@ $trailerid = $_SESSION['trailerId'];
                 <table width="313" border="1">
                   <tr>
                     <td colspan="4">Start Time:
-<input name="<?php echo constant('BX_LT'); ?>" type="text" id="<?php echo constant('BX_LT'); ?>" value="<?php echo $localtime; ?>" size="8"/>
+<input name="insp_start_time" type="text" id="insp_start_time" value="<?php echo $localtime; ?>" size="8"/>
                       Date
-                      <input name="<?php echo constant('BX_LD'); ?>" type="text" id="<?php echo constant('BX_LD'); ?>" value="<?php echo $localdate; ?>" size="8" readonly="readonly"/>
-                    <span class="active"><?php echo "$TruckId"; ?></span></tr>
+                      <input name="insp_date" type="text" id="insp_date" value="<?php echo $localdate; ?>" size="8" readonly="readonly"/>
+                    <span class="active"><?php echo "$truck_number"; ?></span></tr>
                   <tr>
                     <td width="95">Truck
-                    <td width="72"><input name="<?php echo constant('truckId'); ?>2" type="text" id="<?php echo constant('truckId'); ?>" value="<?php echo $truckId; ?>" size="8" readonly="readonly" />                    
-                    <td colspan="2"><a href="vir_previous_truck.php"> Previous VIR</a> <font color="red">(Red!)</font>                     </tr>
+                    <td width="72"><input name="<?php echo $truckid; ?>2" type="text" id="<?php echo ('truck_number'); ?>" value="<?php echo $truckid; ?>" size="8" readonly="readonly" />                    
+                    <td colspan="2"><a href="vir_previous_truck.php"> Previous VIR</a></tr>
                   <tr>
                     <td>Trailer
-                    <td><input name="<?php echo constant('BX_LP'); ?>2" type="text" id="<?php echo constant('BX_LP'); ?>2" value="<?php echo $trailer; ?>" size="8" readonly="readonly" />                    
-                    <td colspan="2"><a href="vir_previous_trailer.php">Previous VIR</a> <font color="orange">(Yellow!)</font></tr>
+                    <td><input name="<?php echo ('trailer_number'); ?>" type="text" id="<?php echo('trailer_number'); ?>2" value="<?php echo $trailerid; ?>" size="8" readonly="readonly" />
+                    <td colspan="2"><a href="vir_previous_trailer.php">Previous VIR</a></tr>
                   <tr>
                     <td colspan="4"><div align="center">Pre Trip:
-                        <input type="checkbox" name="cb_pretrip" value="cb_pretrip" id="cb_pretrip"/>
-														Post Trip:
-						<input type="checkbox" name="cb_posttrip" value="cb_posttrip" id="cb_posttrip"/>
+                        <input type="radio" name="preorposttrip" id="vir_pretrip" value="vir_pretrip">
+                      <label for="vir_pretrip"></label>
+Post Trip:
+<input type="radio" name="preorposttrip" id="vir_posttrip" value="vir_posttrip">
+<label for="vir_posttrip"></label>
                     </div>                  </tr>
                   <tr>
                     <td colspan="4"><div align="center">Truck Type</div>                        
@@ -145,30 +147,28 @@ $trailerid = $_SESSION['trailerId'];
                 <table width="313" border="1">
                   <tr>
                     <td height="10" colspan="4">
-                    <div align="center"><label for="cb_trailer_tires_green"></label>VIR Conditions &amp; Tires</div>
+                    <div align="center"><label for="VIR Conditions &amp; Tires"></label>VIR Conditions &amp; Tires</div>
                   </tr>
                   <tr>
                     <td width="83">Truck
                     <td width="64" bgcolor="#33FF00"><div align="center">Green
-                        <input type="radio" name="truckvir" id="truck_green" value="truck_green">
-                        <label for="truck_green"></label>
-                      <label for="truck_green"></label>
+                        <input type="radio" name="vir_truck_green" id="vir_truck_green" value="vir_truck_green">
+                        <label for="vir_truck_green"></label>
                     </div>
                     <td width="66" bgcolor="#FFFF00"><div align="center">Yellow
-                        <input type="radio" name="truckvir" id="truck_yellow" value="truck_yellow">
-                        <label for="truck_yellow"></label>
+                        <input type="radio" name="vir_truck_yellow" id="vir_truck_yellow" value="vir_truck_yellow">
+                        <label for="vir_truck_yellow"></label>
                     </div>
                     <td width="62" bgcolor="#FF0000"><div align="center">Red
-                        <input type="radio" name="truckvir" id="truck_red" value="truck_red">
-                      <label for="truck_red"></label>
+                        <input type="radio" name="vir_truck_red" id="vir_truck_red" value="vir_truck_red">
+                      <label for="vir_truck_red"></label>
                     </div>
                   </tr>
                   <tr>
                     <td>Truck <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
                     <td bgcolor="#33FF00"><div align="center">Green
-                        <input type="radio" name="radio" id="truck_tires_green" value="truck_tires_red">
-                        <label for="truck_tires_red"></label>
-                      <label for="cb_trailer_tires_green"></label>
+                        <input type="radio" name="truck_tires_green" id="truck_tires_green" value="truck_tires_red">
+                        <label for="truck_tires_green"></label>
                     </div>
                     <td bgcolor="#FFFF00"><div align="center">Yellow
                         <input type="radio" name="radio" id="truck_tires_yellow" value="truck_tires_yellow">
@@ -185,14 +185,14 @@ $trailerid = $_SESSION['trailerId'];
                     <td bgcolor="#33FF00"><div align="center">Green
                       
                       <label for="cb_trailer_green3"></label>
-                      <input type="radio" name="trailervir" id="trailer_green" value="trailer_green">
+                      <input type="radio" name="trailer_vir_green" id="trailer_vir_green" value="trailer_vir_green">
                       <label for="trailer_vir_green"></label>
                     </div>
                     <td bgcolor="#FFFF00"><div align="center">Yellow
                       
                       <label for="cb_trailer_yellow3"></label>
-                      <input type="radio" name="trailervir" id="trailer_yellow" value="trailer_yellow">
-                      <label for="trailer_yellow"></label>
+                      <input type="radio" name="trailer_vir_yellow" id="trailer_vir_yellow" value="trailer_vir_yellow">
+                      <label for="trailer_vir_yellow"></label>
                     </div>
                     <td bgcolor="#FF0000"><div align="center">Red
                         <input type="radio" name="trailervir" id="trailer_red" value="trailer_red">
@@ -205,19 +205,17 @@ $trailerid = $_SESSION['trailerId'];
                     <td bgcolor="#33FF00"><div align="center">Green
                       
                       <label for="cb_trailer_tires_green3"></label>
-                      <input type="radio" name="trailertires" id="trailer_tires_green" value="trailer_tires_green">
+                      <input type="radio" name="trailer_vir_tires_green" id="trailer_vir_tires_green" value="trailer_vir_tires_green">
                       <label for="trailer_tires_green"></label>
                     </div>
                     <td bgcolor="#FFFF00"><div align="center">Yellow
-                        <input type="radio" name="trailertires" id="trailer_tires_yellow" value="trailer_tires_yellow">
-                        <label for="trailer_tires_yellow"></label>
-                      <label for="cb_trailer_tires_yellow3"></label>
+                        <input type="radio" name="trailer_vir_tires_yellow" id="trailer_vir_tires_yellow" value="trailer_vir_tires_yellow">
+                        <label for="trailer_vir_tires_yellow"></label>
                     </div>
                     <td bgcolor="#FF0000"><div align="center">Red
                       
-                        <input type="radio" name="trailertires" id="trailer_tires_red" value="trailer_tires_red">
-                        <label for="trailer_tires_red"></label>
-                      <label for="cb_trailer_tires_red3"></label>
+                        <input type="radio" name="trailer_vir_tires_red" id="trailer_vir_tires_red" value="trailer_vir_tires_red">
+                        <label for="trailer_vir_tires_red"></label>
                     </div>
                   </tr>
                   <tr>
@@ -262,7 +260,6 @@ $trailerid = $_SESSION['trailerId'];
                   <tr>
                     <td colspan="3"><div align="center">
                       <p><a href="vir.php"><img src="images/semiboxsprinter.gif" alt="Semi" width="225" height="147"></a></p>
-                      <p>Maybe we can do this like the accessorials</p>
                     </div>                    
                   </tr>
                   <tr>
@@ -445,7 +442,6 @@ $trailerid = $_SESSION['trailerId'];
                   <tr>
                     <td colspan="3"><div align="center">
                       <p><span class="box-title"><img src="../images/trailer.gif" alt="tire" width="241" height="91"></span></p>
-                      <p>Maybe we can do this like the accessorials</p>
                     </div>                    
                   </tr>
                   <tr>
@@ -491,7 +487,7 @@ $trailerid = $_SESSION['trailerId'];
                   <tr>
                     <td>
                     <input type="checkbox" name="blank35" id="blank35">                  
-                  <td>                  Other: Please make Note below</tr>
+                  <td>                  Other: Please make Notes below</tr>
                   <tr>
                   <td colspan="2">                  <div align="center">
                     <textarea name="vir_detailed_truck" id="vir_detailed_truck" cols="43" rows="3"></textarea>
@@ -516,7 +512,7 @@ $trailerid = $_SESSION['trailerId'];
 <!--Remove the div Class "box" above and add below primary collapsed -->
       <div class="box box-primary collapsed-box">
             <div class="box-header with-border">
-              <h3 class="box-title"><img src="../images/smalltires.gif" width="25" height="25" alt="tire"> Semi/trailer tires <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
+              <h3 class="box-title"><img src="../images/smalltires.gif" width="25" height="25" alt="tire"> Truck Tires <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
                 <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
@@ -524,7 +520,7 @@ $trailerid = $_SESSION['trailerId'];
             </div>
             <div class="box-body">
               <form name="form1" method="post" action="">
-                <table width="311" height="1223" border="1">
+                <table width="311" height="720" border="1">
                   <tr>
                     <td height="24" colspan="4"><div align="center"> Truck &amp; Trailer Tires (Combo)</div>                    </tr>
                   <tr>
@@ -568,8 +564,7 @@ $trailerid = $_SESSION['trailerId'];
                         </select>
                       </p>
                     </div>
-                    <td width="93" rowspan="7">
-                    <img src="../images/semiandtrailertop.gif" width="115" height="868">                    
+                    <td width="93" rowspan="5"><img src="../images/semitopview.gif" width="121" height="404">
                     <td width="93" height="86"><div align="center">
                       <p>P Steer
 <select name="Conditions5" id="Conditions6">
@@ -606,7 +601,7 @@ $trailerid = $_SESSION['trailerId'];
                     </div>                                                            
                   </tr>
                   <tr>
-                    <td height="77">
+                    <td height="23">
                     <td>                                                            
                   </tr>
                   <tr>
@@ -773,176 +768,7 @@ $trailerid = $_SESSION['trailerId'];
                       </p>
                     </div>                    </tr>
                   <tr>
-                    <td height="186">
-                    <td height="186"></tr>
-                  <tr>
-                    <td height="123"><div align="center">
-                      <p>TA1D Front
-                        <select name="Conditions32" id="Conditions47">
-                      <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions32" id="Conditions48">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>95</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>85</option>
-                          <option>75</option>
-                          <option>70</option>
-                          <option>65</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>55</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions32" id="Conditions49">
-                          <option selected>Both</option>
-                          <option>Outside</option>
-                          <option>Inside</option>
-                        </select>
-                      </p>
-                    </div>                  
-                    <td height="123"><div align="center">
-                      <p>TA1P Front
-                          <select name="Conditions31" id="Conditions44">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions31" id="Conditions45">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>95</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>85</option>
-                          <option>75</option>
-                          <option>70</option>
-                          <option>65</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>55</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions31" id="Conditions46">
-                          <option selected>Both</option>
-                          <option>Outside</option>
-                          <option>Inside</option>
-                        </select>
-                      </p>
-                    </div>                    
-                  </tr>
-                  <tr>
-                    <td height="117"><div align="center">
-                      <p>TA2D Rear
-                        <select name="Conditions29" id="Conditions38">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions29" id="Conditions39">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>95</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>85</option>
-                          <option>75</option>
-                          <option>70</option>
-                          <option>65</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>55</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions29" id="Conditions40">
-                          <option selected>Both</option>
-                          <option>Outside</option>
-                          <option>Inside</option>
-                        </select>
-                      </p>
-                    </div>                  
-                    <td height="117"><div align="center">
-                      <p>TA2P Rear
-                        <select name="Conditions30" id="Conditions41">
-                      <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions30" id="Conditions42">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>95</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>85</option>
-                          <option>75</option>
-                          <option>70</option>
-                          <option>65</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>55</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions30" id="Conditions43">
-                          <option selected>Both</option>
-                          <option>Outside</option>
-                          <option>Inside</option>
-                        </select>
-                      </p>
-                    </div>                    
-                  </tr>
+                    <td height="23">                                        <td></tr>
                   <tr>
                   <td height="24" colspan="3"><div align="center"> Enter Notes Below</div>                  </tr>
                   <tr>
@@ -952,7 +778,7 @@ $trailerid = $_SESSION['trailerId'];
                   <tr>
                     <td height="24" colspan="3"><div align="center">
                       <input type="checkbox" />
-                      Confirm Semi &amp; Semi Tire Inspection</div>                  
+                      Confirm TruckTire Inspection</div>                  
                   </tr>
                 </table>
               </form>
@@ -1605,7 +1431,7 @@ Check To Confirm Sprinter Tire Inspection </div>
               
             </div><!-- /.box-body -->
             <div class="box-footer">
-              <p><a href="https://www.fmcsa.dot.gov/regulations/title49/section/396.11"> Read before Sending Inspaection:</a></p>
+              <p><a href="https://www.fmcsa.dot.gov/regulations/title49/section/396.11"> Read before Sending Inspection:</a></p>
               <p><a href="https://www.fmcsa.dot.gov/regulations/title49/section/396.11"> 396.11 DVIR FMCSA Rules</a></p>
             </div>
             <!-- /.box-footer-->
