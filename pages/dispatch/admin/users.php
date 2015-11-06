@@ -372,7 +372,7 @@ if (! empty($_FILES["fuelUpload"]["name"]))
 <tr>
 <td><a href="#"><i class="glyphicon glyphicon-user"></i></a></td>
 <td>
-<div style="float:left;width:80%;"><?php echo $row['drivername'];?></div>
+<div style="float:left;width:80%;"><?php echo $row['fname'] . " " . $row['lname'];?></div>
 <div style="float:right;width:20%;"><a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse" 
   href="#<?php echo $row['username'];?>_details"aria-expanded="false" aria-controls="<?php echo $row['username'];?>_details">
   </a></div>
@@ -641,6 +641,16 @@ $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClas
      <td style="padding: 5px" colspan="3">
       <label for="miscDetails">Notes</label>
       <textarea class="form-control" name="miscDetails" id="miscDetails" placeholder="" value="<?php echo $row['notes'];?>" style="padding-top: 0px; padding-bottom: 0px; height: 34px;"></textarea>
+     </td>
+    </tr>
+    <tr>
+     <td style="padding: 5px">
+      <label for="tsPhone">TS Phone</label>
+      <input type="text" class="form-control" name="tsPhone" id="tsPhone" placeholder="" value="<?php echo $row['ts_phone'];?>">
+     </td>
+     <td style="padding: 5px">
+      <label for="tsName">TS Name</label>
+      <input type="text" class="form-control" name="tsName" id="tsName" placeholder="" value="<?php echo $row['ts_name'];?>">
      </td>
     </tr>
     <tr>
