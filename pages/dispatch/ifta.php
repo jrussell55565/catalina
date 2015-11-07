@@ -14,7 +14,9 @@ $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
 $truckid = $_SESSION['truckid'];
 $trailerid = $_SESSION['trailerid'];
-print_r($_SESSION);
+
+$us_state_abbrevs = array('AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM', 'FL', 'GA', 'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MH', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VI', 'VA', 'WA', 'WV', 'WI', 'WY');
+
 
 ?>
 <!DOCTYPE html>
@@ -45,14 +47,14 @@ print_r($_SESSION);
 </head>
 <body class="skin-blue sidebar-mini">
 <div class="wrapper">
-<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/header.php');?>
-<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/sidebar.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/header.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/sidebar.php');?>
    
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper"> 
       <!-- Content Header (Page header) -->
       <section class="content-header">
-        <h1> VIR AND TIRES</h1>
+        <h1>IFTA</h1>
         <ol class="breadcrumb">
           <li><a href="orders.php"><i class="fa fa-home"></i> Home</a></li>
           <li class="active">Vehicle Inspection Report</li>
@@ -94,25 +96,35 @@ print_r($_SESSION);
               </div>
             </div>
             <div class="box-body">
-              <form name="form1" method="post" action="">
+              <form name="frm_ifta_previous" method="get" action="processifta.php">
+                    <input type="submit" name="load_ifta" id="load_ifta" value="Load Previous Trip" />
+              </form>
+              <form name="frm_ifta" method="post" action="processifta.php">
                 <table width="690" border="1">
                   <tr>
-                    <td colspan="3">Please fill out trip report below to match the hand written Fuel Report</td>
+                    <td colspan="4">Please fill out trip report below to match the hand written Fuel Report</td>
                   </tr>
                   <tr>
-                    <td width="286">Tractor
-                      <input name="<?php echo constant('BX_TI'); ?>" type="text" id="<?php echo constant('BX_TI'); ?>" value="<?php echo $truck; ?>" size="4" readonly="readonly" />
+                    <td >Tractor
+                      <input name="truck_number" type="text" id="truck_number" value="<?php echo $_SESSION['truckid']; ?>" size="10" readonly="readonly" />
+                    </td>
+<td>
 Trailer
-<input name="<?php echo constant('BX_LP'); ?>" type="text" id="<?php echo constant('BX_LP'); ?>6" value="<?php echo $trailer; ?>" size="4" readonly="readonly" /></td>
-                    <td width="388" colspan="2">HWB/Trip# 
-                    <input name="ifta_trip_num" type="text" id="ifta_trip_num" value="ifta_trip_num" size="12"></td>
+<input name="trailer_number" type="text" id="trailer_number" value="<?php echo $_SESSION['trailerid']; ?>" readonly /></td>
+<input name="truck_rental" type="hidden" id="trailer_rental" value="<?php echo $_SESSION['truckrental']; ?>" readonly /></td>
+</td>
+                    <td width="388">Trip# 
+                    <input name="trip_num" type="text" id="trip_num" value="<?php echo $_GET['tripno'];?>" size="12" required></td>
+                    <td width="388">Trip Start Odometer
+                    <?php
+                     $sql = "select start_odometer from ifta where trip_num = '$_GET[tripno]' LIMIT 1";
+                     $startOdometer = mysql_result(mysql_query($sql),0);
+                    ?>
+                    <input name="start_odometer" type="text" id="start_odometer" value="<?php echo $startOdometer;?>" size="12" 
+                     <?php if ($startOdometer != '') { echo 'readonly'; }else{ echo  'required'; }?>></td>
                   </tr>
                   <tr>
-                    <td>                    Enter Trip Details Below </td>
-                    <td colspan="2"><a href="loadtrip.php">
-                      <input type="submit" name="btn_ifta_newtrip" id="btn_ifta_newtrip" value="Start New Trip" />
-                    <input type="submit" name="btn_cleariftafields2" id="btn_cleariftafields2" value="Load Trip" />
-                    </a></td>
+                    <td colspan="4">                    Enter Trip Details Below </td>
                   </tr>
                 </table>
   <table width="1012" height="136" border="1">
@@ -123,37 +135,107 @@ Trailer
                     <td width="167">
                     <td colspan="2">
                     Starting OD
-                    <td width="48"><input name="Truck_Odometer23" type="text" id="Truck_Odometer23" size="15">
+                    <td width="48">
                     <td width="85">
-                    <td width="92">
-                    <td width="88">
-        <td width="90" colspan="3"></tr>
+        <td>
+        </tr>
                   <tr>
                     <td height="42" >Date </td>
                     <td >Driver</td>
                     <td >HWB</td>
                     <td >Routes Hwys</td>
-                    <td width="48" >State Exit</td>
-                    <td width="64" >State Enter</td>
+                    <td width="48" >State Exit
+                    </td>
+                    <td width="64" >State Enter
+                    </td>
                     <td >Enter OD Reading at state line</td>
                     <td ><p>Total Miles</p></td>
                     <td >Status:</td>
-                    <td >Update </td>
-                    <td >Delete </td>
                   </tr>
+                  <?php
+                  if (isset($_GET['tripno']))
+                  {
+                    $sql = "SELECT id,trip_num,truck_number,trailer_number,truck_rental,drivername,
+                            COALESCE(start_odometer,0) as start_odometer,
+                            date_trip,hwb,route,st_exit,st_enter,state_line_odometer,trip_sts,end_odometer
+                            FROM ifta WHERE trip_num = '$_GET[tripno]' order by id ASC";
+                    $sql = mysql_query($sql); 
+                  }
+                  $index = 0;
+                  while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
+                  {
+                  ?> 
                   <tr>
-                    <td height="28" ><input name="<?php echo constant('BX_LD'); ?>4" type="text" id="<?php echo constant('BX_LD'); ?>4" value="<?php echo $localdateYear; ?>" size="8"/></td>
+                    <td height="28" >
+                     <input name="date_trip[]" type="text" id="date_trip[]" value="<?php echo (isset($row['date_trip'])? date("m/d/Y", strtotime($row['date_trip'])) : $localdateYear) ;?>" size="8"/>
+                     <input name="id_trip[]" type="hidden" id="id_trip[]" value="<?php echo $row['id'];?>">
+                    </td>
                     <td ><?php echo "$drivername"; ?></td>
                     <td ><label for="iftahwb"></label>
-                    <input name="iftahwb" type="text" id="iftahwb" size="15"></td>
-                    <td ><input name="ifta_route" type="text" id="ifta_route" size="30"></td>
-                    <td ><input name="ifta_st_exit" type="text" id="ifta_st_exit" size="8"></td>
-                    <td ><input name="ifta_st_enter" type="text" id="ifta_st_enter" size="8"></td>
-                    <td ><input name="ifta_enter_st_od" type="text" id="ifta_enter_st_od" size="15"></td>
-                    <td ><input name="ifta_add_st_miles" type="text" id="ifta_add_st_miles" value="100" size="10"></td>
-                    <td ><input name="ifta_trip_sts" type="text" id="ifta_trip_sts" value="blank or saved or finalized" size="12"></td>
-                    <td ><input type="submit" name="btn_ifta_update_item" id="btn_updateiftaitem7" value="Update" /></td>
-                    <td ><input type="submit" name="btn_ifta_delete_item" id="btn_deleteiftaitem7" value="Delete" /></td>
+                    <input name="hwb[]" type="text" id="hwb[]" size="15" value="<?php echo $row['hwb'];?>" required></td>
+                    <td ><input name="route[]" type="text" id="route[]" size="30" value="<?php echo $row['route'];?>" required></td>
+                    <td >
+                    <select name="st_exit[]" id="st_exit[]" value="<?php echo $row['st_exit'];?>">
+                    <?php
+                     foreach ($us_state_abbrevs as $state) { ?>
+                       <option <?php if ($row['st_exit'] == "$state") { echo "selected"; }?>><?php echo $state;?></option>
+                     <?php } ?>
+                    </select>
+                    </td>
+                    <td >
+                    <select name="st_enter[]" id="st_enter[]" value="<?php echo $row['st_enter'];?>">
+                    <?php
+                     foreach ($us_state_abbrevs as $state) { ?>
+                       <option <?php if ($row['st_enter'] == "$state") { echo "selected"; }?>><?php echo $state;?></option>
+                     <?php } ?>
+                    </select>
+                    </td>
+                    <td >
+                     <input name="state_line_odometer[]" type="number" id="state_line_odometer[]" size="15" value="<?php echo $row['state_line_odometer'];?>" required>
+                    </td>
+                    <?php
+                     # If this is the first record then find the difference
+                     # between state_line_odometer - start_odometer
+                     if ($index == 0)
+                     {
+                       $totalMiles = $row['state_line_odometer'] - $row['start_odometer'];
+                     }
+                       $index++;
+                    ?>
+                    <td ><input name="total_miles[]" type="hidden" id="total_miles[]" size="10" value="<?php echo $totalMiles;?>" readonly></td>
+                    <td ><input name="trip_sts[]" type="text" id="trip_sts[]" size="12" value="<?php echo $row['trip_sts'];?>" readonly></td>
+                  </tr>
+                <?php
+                }
+                ?>
+                 <tr>
+                    <td height="28" >
+                     <input name="date_trip[]" type="text" id="date_trip[]" value="<?php echo $localdateYear ;?>" size="8"/>
+                     <input name="id_trip[]" type="hidden" id="id_trip[]" value="">
+                    </td>
+                    <td ><?php echo "$drivername"; ?></td>
+                    <td ><label for="iftahwb"></label>
+                    <input name="hwb[]" type="text" id="hwb[]" size="15" value="" required></td>
+                    <td ><input name="route[]" type="text" id="route[]" size="30" value="" required></td>
+                    <td >
+                    <select name="st_exit[]" id="st_exit[]" value="">
+                    <?php
+                     foreach ($us_state_abbrevs as $state) { ?>
+                       <option><?php echo $state;?></option>
+                     <?php } ?>
+                    </select>
+                    </td>
+                    <td >
+                    <select name="st_enter[]" id="st_enter[]">
+                    <?php
+                     foreach ($us_state_abbrevs as $state) { ?>
+                       <option><?php echo $state;?></option>
+                     <?php } ?>
+                    </select>
+                    </td>
+                    <td ><input name="state_line_odometer[]" type="number" id="state_line_odometer[]" size="15" value="" required></td>
+                    <td ><input name="total_miles[]" type="number" id="total_miles[]" size="10" value="" readonly></td>
+                    <td ><input name="trip_sts[]" type="text" id="trip_sts[]" size="12" value="" readonly></td>
                   </tr>
                   <tr>
                     <td height="28" >&nbsp;</td>
@@ -163,13 +245,12 @@ Trailer
                     <td >&nbsp;</td>
                     <td >&nbsp;</td>
                     <td >Ending Odometer
-                    <input name="ifta_end_od" type="text" id="ifta_end_od" size="15"></td>
+                    <input name="end_odometer[]" type="number" id="end_odometer[]" size="15" value="<?php echo $row['end_odometer'];?>"></td>
                     <td >TMFT
-                    <input name="ifta_add_all_st_miles" type="text" id="ifta_add_all_st_miles" size="10"></td>
-                    <td >&nbsp;</td>
-                    <td ><input type="submit" name="btn_addiftafields" id="btn_addiftafields" value="Add Miles" /></td>
+                    <input name="total_trip_miles[]" type="number" id="total_trip_miles[]" size="10" value="<?php echo $row['total_trip_miles'];?>"></td>
                     <td >&nbsp;</td>
                   </tr>
+
               </table>
               <table width="799" border="1">
                 <tr>
@@ -178,7 +259,6 @@ Trailer
                 </tr>
                 <tr>
                   <td colspan="7">Enter Fuel Details Below
-                    <input type="submit" name="btn_cleariftafields3" id="btn_cleariftafields3" value="Clear Fields" />
                     <a href="loadtrip.php">View Past Fuel</a></td>
                 </tr>
                 <tr>
@@ -190,72 +270,76 @@ Trailer
                   <td>Current Truck Miles</td>
                   <td width="202">Total $ Reciept</td>
                 </tr>
+                  <?php
+                  if (isset($_GET['tripno']))
+                  {
+                    $sql = "SELECT id,date_fuel,fuel_invoice_no,fuel_type,fuel_gallons,fuel_st,
+                            fuel_odometer,fuel_receipt_total
+                            FROM ifta WHERE trip_num = '$_GET[tripno]' order by id ASC";
+                    $sql = mysql_query($sql);
+                  while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
+                  {
+                  ?> 
                 <tr>
-                  <td><input name="<?php echo constant('BX_LD'); ?>6" type="text" id="<?php echo constant('BX_LD'); ?>6" value="<?php echo $localdateYear; ?>" size="8"/></td>
+                  <td>
+                   <input name="date_fuel[]" type="text" id="date_fuel[]" value="<?php echo (isset($row['date_fuel'])? date("m/d/Y", strtotime($row['date_fuel'])) : $localdateYear) ;?>" size="8"/>
+                   <input name="id_fuel[]" type="hidden" id="id_fuel[]" value="<?php echo $row['id'];?>">
+                  </td>
                   <td><label for="fuel_invoice"></label>
-                  <input type="text" name="fuel_invoice" id="fuel_invoice"></td>
-                  <td><select name="ifta_fuel_type" id="ifta_fuel_type">
+                  <input type="text" name="fuel_invoice_no[]" id="fuel_invoice_no[]" value="<?php echo $row['fuel_invoice_no'];?>"></td>
+                  <td><select name="fuel_type[]" id="fuel_type[]">
                     <option>FuelType</option>
-                    <option selected>diesel</option>
+                    <option <?php if ($row['fuel_type'] == "diesel") { echo "selected"; }?>>diesel</option>
+                    <option <?php if ($row['fuel_type'] == "unlead") { echo "selected"; }?>>unlead</option>
+                    <option <?php if ($row['fuel_type'] == "biodiesel") { echo "selected"; }?>>biodiesel</option>
+                    <option <?php if ($row['fuel_type'] == "refer") { echo "selected"; }?>>refer</option>
+                  </select></td>
+                  <td><input name="fuel_gallons[]" type="number" id="fuel_gallons[]" size="8" value="<?php echo $row['fuel_gallons'];?>"></td>
+                  <td><select name="fuel_st[]" id="fuel_st[]" value="<?php echo $row['fuel_st'];?>">
+                    <option>State</option>
+                     <?php foreach ($us_state_abbrevs as $state) {?>
+                       <option <?php if ($row['fuel_st'] == "$state") { echo "selected"; }?>><?php echo $state;?></option>
+                     <?php } ?>
+                  </select></td>
+                  <td><input name="fuel_odometer[]" type="text" id="fuel_odometer[]" size="15" value="<?php echo $row['fuel_odometer'];?>"></td>
+                  <td><input name="fuel_receipt_total[]" type="text" id="fuel_receipt_total[]" size="15" value="<?php echo $row['fuel_receipt_total'];?>"></td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr>
+                <?php
+                }
+               }
+                ?>
+               <tr>
+                  <td>
+                   <input name="date_fuel[]" type="text" id="date_fuel[]" value="<?php echo $localdateYear ;?>" size="8"/>
+                   <input name="id_fuel[]" type="hidden" id="id_fuel[]" value="">
+                  </td>
+                  <td><label for="fuel_invoice"></label>
+                  <input type="text" name="fuel_invoice_no[]" id="fuel_invoice_no[]" value=""></td>
+                  <td><select name="fuel_type[]" id="fuel_type[]">
+                    <option>FuelType</option>
+                    <option>diesel</option>
                     <option>unlead</option>
                     <option>biodiesel</option>
                     <option>refer</option>
                   </select></td>
-                  <td><input name="ifta_fuel_gallons" type="text" id="ifta_fuel_gallons" size="8"></td>
-                  <td><select name="ifta_gallons_st" id="ifta_gallons_st">
+                  <td><input name="fuel_gallons[]" type="number" id="fuel_gallons[]" size="8" value=""></td>
+                  <td><select name="fuel_st[]" id="fuel_st[]" value="">
                     <option>State</option>
-                    <option>AL</option>
-                    <option>AK</option>
-                    <option>AZ</option>
-                    <option>AR</option>
-                    <option>CA</option>
-                    <option>CO</option>
-                    <option>CT</option>
-                    <option>DE</option>
-                    <option>FL</option>
-                    <option>GA</option>
-                    <option>ID</option>
-                    <option>IL</option>
-                    <option>IN</option>
-                    <option>IA</option>
-                    <option>KS</option>
-                    <option>KY</option>
-                    <option>LA</option>
-                    <option>ME</option>
-                    <option>MD</option>
-                    <option>MA</option>
-                    <option>MI</option>
-                    <option>MN</option>
-                    <option>MS</option>
-                    <option>MO</option>
-                    <option>MT</option>
-                    <option>NE</option>
-                    <option>NV</option>
-                    <option>NH</option>
-                    <option>NJ</option>
-                    <option>NM</option>
-                    <option>NY</option>
-                    <option>NC</option>
-                    <option>ND</option>
-                    <option>OH</option>
-                    <option>OK</option>
-                    <option>OR</option>
-                    <option>PA</option>
-                    <option>RI</option>
-                    <option>SC</option>
-                    <option>SD</option>
-                    <option>TN</option>
-                    <option>TX</option>
-                    <option>UT</option>
-                    <option>VT</option>
-                    <option>VA</option>
-                    <option>WA</option>
-                    <option>WV</option>
-                    <option>WI</option>
-                    <option>WY</option>
+                     <?php foreach ($us_state_abbrevs as $state) {?>
+                       <option><?php echo $state;?></option>
+                     <?php } ?>
                   </select></td>
-                  <td><input name="ifta_fueling_miles" type="text" id="ifta_fueling_miles" size="15"></td>
-                  <td><input name="fuel_reciept_total" type="text" id="Truck_Odometer17" size="15"></td>
+                  <td><input name="fuel_odometer[]" type="text" id="fuel_odometer[]" size="15" value=""></td>
+                  <td><input name="fuel_receipt_total[]" type="text" id="fuel_receipt_total[]" size="15" value=""></td>
                 </tr>
                 <tr>
                   <td>&nbsp;</td>
@@ -264,8 +348,9 @@ Trailer
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
-                  <td><input type="submit" name="btn_addiftafields2" id="btn_addiftafields2" value="Add Reciept" /></td>
+                  <td>&nbsp;</td>
                 </tr>
+
               </table>
               <table width="647" border="1">
                 <tr>
@@ -280,93 +365,97 @@ Trailer
                   <td>Permit #</td>
                   <td>Total Receipt</td>
                 </tr>
+                  <?php
+                  if (isset($_GET['tripno']))
+                  {
+                    $sql = "SELECT id,date_permit,permit_type,permit_st,permit_no,permit_receipt
+                            FROM ifta WHERE trip_num = '$_GET[tripno]' order by id ASC";
+                    $sql = mysql_query($sql);
+                  while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
+                  {
+                  ?> 
                 <tr>
-                  <td><input name="<?php echo constant('BX_LD'); ?>7" type="text" id="<?php echo constant('BX_LD'); ?>8" value="<?php echo $localdateYear; ?>" size="8"/></td>
-                  <td><select name="States10" id="States12">
-                    <option selected>no permit</option>
+                  <td>
+                   <input name="date_permit[]" type="text" id="date_permit[]" value="<?php echo (isset($row['date_permit'])? date("m/d/Y", strtotime($row['date_permit'])) : $localdateYear) ;?>" size="8"/>
+                   <input name="id_permit[]" type="hidden" id="id_permit[]" value="<?php echo $row['id'];?>">
+                  </td>
+                  <td><select name="permit_type[]" id="permit_type[]">
+                    <option <?php if ($row['permit_type'] == "no permit") { echo "selected"; }?>>no permit</option>
+                    <option <?php if ($row['permit_type'] == "annual") { echo "selected"; }?>>annual</option>
+                    <option <?php if ($row['permit_type'] == "1 time") { echo "selected"; }?>>1 time</option>
+                    <option <?php if ($row['permit_type'] == "oversized") { echo "selected"; }?>>oversized</option>
+                    <option <?php if ($row['permit_type'] == "overweight") { echo "selected"; }?>>overweight</option>
+                  </select></td>
+                  <td>
+                   <select name="permit_st[]" id="permit_st[]">
+                    <option>State</option>
+                    <?php
+                     foreach ($us_state_abbrevs as $state) { ?>
+                       <option <?php if ($row['permit_st'] == "$state") { echo "selected"; }?>><?php echo $state;?></option>
+                     <?php } ?>
+                  </select></td>
+                  <td><input name="permit_no[]" type="text" id="permit_no[]" size="15" value="<?php echo $row['permit_no'];?>"></td>
+                  <td><input name="permit_receipt[]" type="text" id="permit_receipt[]" size="15" value="<?php echo $row['permit_receipt'];?>"></td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr>
+               </tr>
+                <?php
+                }
+               }
+                ?>
+                <tr>
+                  <td>
+                   <input name="date_permit[]" type="text" id="date_permit[]" value="<?php echo $localdateYear ;?>" size="8"/>
+                   <input name="id_permit[]" type="hidden" id="id_permit[]" value="">
+                  </td>
+                  <td><select name="permit_type[]" id="permit_type[]">
+                    <option>no permit</option>
                     <option>annual</option>
                     <option>1 time</option>
                     <option>oversized</option>
                     <option>overweight</option>
                   </select></td>
-                  <td><select name="States10" id="States14">
+                  <td>
+                   <select name="permit_st[]" id="permit_st[]">
                     <option>State</option>
-                    <option>AL</option>
-                    <option>AK</option>
-                    <option>AZ</option>
-                    <option>AR</option>
-                    <option>CA</option>
-                    <option>CO</option>
-                    <option>CT</option>
-                    <option>DE</option>
-                    <option>FL</option>
-                    <option>GA</option>
-                    <option>ID</option>
-                    <option>IL</option>
-                    <option>IN</option>
-                    <option>IA</option>
-                    <option>KS</option>
-                    <option>KY</option>
-                    <option>LA</option>
-                    <option>ME</option>
-                    <option>MD</option>
-                    <option>MA</option>
-                    <option>MI</option>
-                    <option>MN</option>
-                    <option>MS</option>
-                    <option>MO</option>
-                    <option>MT</option>
-                    <option>NE</option>
-                    <option>NV</option>
-                    <option>NH</option>
-                    <option>NJ</option>
-                    <option>NM</option>
-                    <option>NY</option>
-                    <option>NC</option>
-                    <option>ND</option>
-                    <option>OH</option>
-                    <option>OK</option>
-                    <option>OR</option>
-                    <option>PA</option>
-                    <option>RI</option>
-                    <option>SC</option>
-                    <option>SD</option>
-                    <option>TN</option>
-                    <option>TX</option>
-                    <option>UT</option>
-                    <option>VT</option>
-                    <option>VA</option>
-                    <option>WA</option>
-                    <option>WV</option>
-                    <option>WI</option>
-                    <option>WY</option>
+                    <?php
+                     foreach ($us_state_abbrevs as $state) { ?>
+                       <option><?php echo $state;?></option>
+                     <?php } ?>
                   </select></td>
-                  <td><input name="Truck_Odometer16" type="text" id="Truck_Odometer20" size="15"></td>
-                  <td><input name="Truck_Odometer16" type="text" id="Truck_Odometer21" size="15"></td>
+                  <td><input name="permit_no[]" type="text" id="permit_no[]" size="15" value=""></td>
+                  <td><input name="permit_receipt[]" type="text" id="permit_receipt[]" size="15" value=""></td>
                 </tr>
                 <tr>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
-                  <td><input type="submit" name="btn_addiftafields3" id="btn_addiftafields3" value="Add Permit" /></td>
+                  <td>&nbsp;</td>
                 </tr>
+               </tr>
+
               </table>
               <p>&nbsp;</p>
               <table width="794" border="1">
                   <tr>
-                    <td width="348">&nbsp;</td>
-                    <td width="161"><input type="submit" name="btn_fuel2" id="btn_fuel2" value="Submit Fuel" />
-                    <input type="submit" name="btn_permitstolls2" id="btn_permitstolls2" value="Submit Permits" /></td>
+                    <td>
+                    <input type="submit" name="btn_submit_all" id="btn_submit_all" value="Update All" />
+                    Finalize:
+                    <input type="checkbox" name="finalize" id="finalize">
+                    </td>
                 </tr>
-                  <tr>
-                    <td>Finalize  Print &amp; Email Above Trip: <?php echo "$tripname"; ?></td>
-                    <td><input type="submit" name="btn_sendfinalizeifta" id="btn_sendfinalizeifta" value="Finalize Trip" /></td>
-                  </tr>
       </table>
+      </form>
                 <p>&nbsp;</p>
             </div><!-- /.box-body -->
-            <div class="box-footer">Footer</div>
+            <div class="box-footer"></div>
             <!-- /.box-footer-->
           </div><!-- /.box -->
 
@@ -375,1201 +464,10 @@ Trailer
 
 
 
-          <!-- Default box -->
-<!--          <div class="box"> -->
-<!--Remove the div Class "box" above and add below primary collapsed -->
-     <div class="box box-primary collapsed-box">  
-            <div class="box-header with-border">
-              <h3 class="box-title"><img src="../images/semismall.gif" alt="tire"> Truck VIR  <img src="../images/boxtrucksmall.gif" alt="tire"><img src="../images/sprintersmall.gif" alt="tire"></h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <div class="box-body">
-              <form name="form1" method="post" action="">
-                <table width="310" height="399" border="1">
-                  <tr>
-                    <td colspan="3"><div align="center">Please Note Issues with Truck</div>                    </tr>
-                  <tr>
-                    <td colspan="3"><div align="center">
-                      <p><a href="vir.php"><img src="images/semiboxsprinter.gif" alt="Semi" width="225" height="147"></a></p>
-                    </div>                    
-                  </tr>
-                  <tr>
-                    <td height="24" colspan="3"><div align="center">Tractor</div>                                        
-                  </tr>
-                  <tr>
-                  <td width="51"><input type="checkbox" name="air_compressor" id="air_compressor">
-                    <label for="blank"></label>
-                  <td width="243">Air Compressor                                    </tr>
-                  <tr>
-                    <td><input type="checkbox" name="air_lines" id="air_lines">                  
-                    <td>Air Lines                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="air_conditioning" id="air_conditioning">                    
-                    <td>A/C Issues                  
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="alternator" id="alternator">                  
-                    <td>Alternator                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="battery" id="battery">                  
-                    <td>Battery                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="body" id="body">                  
-                    <td>Body                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="break_accessories" id="break_accessorids">                  
-                    <td>Brake Accessories</tr>
-                  <tr>
-                    <td><input type="checkbox" name="breakes" id="breaks">
-                    <td>Brakes</tr>
-                  <tr>
-                    <td><input type="checkbox" name="clutch" id="clutch">                  
-                    <td>Clutch                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="defroster" id="defroster">                  
-                    <td>Defroster                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="drive_line" id="drive_line">                  
-                    <td>Drive Line                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="engine" id="engine">                  
-                    <td>Engine                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="exhaust" id="exhaust">                  
-                    <td>Exhaust                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="fifth_wheel" id="fifth_wheel">                  
-                    <td>Fifth Wheel                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="front_axel" id="front_axel">                  
-                    <td>Front Axle                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="fuel_tanks" id="fuel_tanks">                  
-                    <td>Fuel Tanks                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="heater" id="heater">                  
-                    <td>Heater                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="horn" id="horn">                  
-                    <td>Horn                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="lights" id="lights">                  
-                    <td>Lights: Head,Stop,Tail,Dash,Turn                   
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="mirrors" id="mirrors">                  
-                    <td>Mirrors                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="muffler" id="muffler">                  
-                    <td>Muffler                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="oil_pressure" id="oil_pressure">                  
-                    <td>Oil Pressure                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="radiator" id="radiator">                  
-                    <td>Radiator                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="rear_end" id="rear_end">                  
-                    <td>Rear End                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="reflectors" id="reflectors">                  
-                    <td>Reflectors                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="safety_equipment" id="saftety_equipment">                  
-                    <td>Safety Equipment, Fire Ext.,triangles,fuses</tr>
-                  <tr>
-                    <td><input type="checkbox" name="springs" id="springs">                  
-                    <td>Springs</tr>
-                  <tr>
-                    <td><input type="checkbox" name="starter" id="blank27">                  
-                    <td>Starter                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank28" id="blank28">                  
-                    <td>Steering                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank29" id="blank29">                  
-                    <td>Tires                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank30" id="blank30">                  
-                    <td>Tire Chains                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank31" id="blank31">                  
-                    <td>Transmission</tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank32" id="blank32">                  
-                    <td>Wheels                  
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank33" id="blank33">                  
-                    <td>Windows                  
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank34" id="blank34">                  
-                    <td>Windshield                  
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="blank35" id="blank35">                  
-                    <td>Other: Please make Note below</tr>
-                  <tr>
-                  <td colspan="2">                  <div align="center">
-                    <textarea name="vir_detailed_truck" id="vir_detailed_truck" cols="43" rows="3"></textarea>
-                  </div>                  <div align="center">
-                    <input type="checkbox" />Truck VIR Condition Satisfactory
-                  </div>
-                  </tr>
-                </table>
-              </form>
-              
-            </div><!-- /.box-body -->
-            <div class="box-footer">Vir Additional info on Yellow or Red + Condition &amp; Notes</div>
-            <!-- /.box-footer-->
-          </div><!-- /.box -->
+    
 
 
 
-
-
-
-          <!-- Default box -->
-<!--          <div class="box"> -->
-<!--Remove the div Class "box" above and add below primary collapsed -->
-     <div class="box box-primary collapsed-box">  
-            <div class="box-header with-border">
-              <h3 class="box-title"><img src="../images/trailersmall.gif" alt="tire"> Trailer VIR <img src="../images/trailersmall.gif" alt="tire"></h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-              </div>
-        </div>
-            <div class="box-body">
-              <form name="form1" method="post" action="">
-                <table width="306" height="399" border="1">
-                  <tr>
-                    <td colspan="3"><div align="center">Please Note Issues with Truck</div>                    </tr>
-                  <tr>
-                    <td colspan="3"><div align="center">
-                      <p><span class="box-title"><img src="../images/trailer.gif" alt="tire" width="241" height="91"></span></p>
-                    </div>                    
-                  </tr>
-                  <tr>
-                    <td height="24" colspan="3"><div align="center">Trailer</div>                                        
-                  </tr>
-                  <tr>
-                  <td width="64">                                                                                                                        <input type="checkbox" name="breakes" id="breaks">                    <td width="226">Brake Connections</tr>
-                  <tr>
-                    <td><input type="checkbox" name="clutch" id="clutch">                  
-                    <td>Brakes</tr>
-                  <tr>
-                    <td><input type="checkbox" name="defroster" id="defroster">                  
-                    <td><p>Coupling devices                    </p></tr>
-                  <tr>
-                    <td><input type="checkbox" name="drive_line" id="drive_line">                  
-                    <td>Doors</tr>
-                  <tr>
-                    <td><input type="checkbox" name="engine" id="engine">                  
-                    <td>Floors                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="exhaust" id="exhaust">                  
-                    <td>Hitch</tr>
-                  <tr>
-                    <td><input type="checkbox" name="fifth_wheel" id="fifth_wheel">                  
-                    <td>King Pin                    
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" name="front_axel" id="front_axel">                  
-                    <td>Landing Gear</tr>
-                  <tr>
-                    <td><input type="checkbox" name="fuel_tanks" id="fuel_tanks">                  
-                    <td>Lights: Stop,Tail,Dash,Turn, Running</tr>
-                  <tr>
-                    <td><input type="checkbox" name="heater" id="heater">                  
-                    <td>Roof</tr>
-                  <tr>
-                    <td><input type="checkbox" name="horn" id="horn">                  
-                    <td>Springs</tr>
-                  <tr>
-                    <td><input type="checkbox" name="lights" id="lights">                  
-                    <td>Tires</tr>
-                  <tr>
-                    <td>
-                    <input type="checkbox" name="blank35" id="blank35">                  
-                  <td>                  Other: Please make Notes below</tr>
-                  <tr>
-                  <td colspan="2">                  <div align="center">
-                    <textarea name="vir_detailed_truck" id="vir_detailed_truck" cols="43" rows="3"></textarea>
-                  </div>                  <div align="center">
-                    <input type="checkbox" />
-                    Trailer VIR Condition Satisfactory
-                  </div>
-                  </tr>
-                </table>
-              </form>
-              
-            </div><!-- /.box-body -->
-            <div class="box-footer">Vir Additional info on Yellow or Red + Condition &amp; Notes</div>
-            <!-- /.box-footer-->
-          </div><!-- /.box -->
-
-
-
-
-<!-- Default box -->
-<!-- Default box <div class="box">       -->           
-<!--Remove the div Class "box" above and add below primary collapsed -->
-      <div class="box box-primary collapsed-box">
-            <div class="box-header with-border">
-              <h3 class="box-title"><img src="../images/smalltires.gif" width="25" height="25" alt="tire"> Truck Tires <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <div class="box-body">
-              <form name="form1" method="post" action="">
-                <table width="311" height="720" border="1">
-                  <tr>
-                    <td height="24" colspan="4"><div align="center"> Truck &amp; Trailer Tires (Combo)</div>                    </tr>
-                  <tr>
-                    <td height="88" colspan="4"><div align="center"><a href="VIR.php"><img src="../images/tires.gif" alt="" width="150" height="147"></a></div>                    
-                  </tr>
-                  <tr>
-                    <td height="24" colspan="4"><div align="center"> Select the Closest PSI @ Pretrip</div>                                        
-                  </tr>
-                  <tr>
-                    <td width="91" height="86">                    <div align="center">
-                      <p>D Steer
-                        <select name="Conditions4" id="Conditions4">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions4" id="Conditions5">
-<option>125</option>
-<option>120</option>
-<option>115</option>
-<option>110</option>
-<option selected>105</option>
-<option>100</option>
-<option>95</option>
-<option>90</option>
-<option>80</option>
-<option>85</option>
-<option>75</option>
-<option>70</option>
-<option>65</option>
-<option>60</option>
-<option>50</option>
-<option>55</option>
-<option>40</option>
-<option>30</option>
-<option>20</option>
-<option>10</option>
-                        </select>
-                      </p>
-                    </div>
-                    <td width="93" rowspan="5"><img src="../images/semitopview.gif" width="121" height="404">
-                    <td width="93" height="86"><div align="center">
-                      <p>P Steer
-<select name="Conditions5" id="Conditions6">
-                      <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions18" id="Conditions23">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option selected>105</option>
-                          <option>100</option>
-                          <option>95</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>85</option>
-                          <option>75</option>
-                          <option>70</option>
-                          <option>65</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>55</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                    </div>                                                            
-                  </tr>
-                  <tr>
-                    <td height="23">
-                    <td>                                                            
-                  </tr>
-                  <tr>
-                    <td height="117"><div align="center">
-                      <p>A1 D Front
-                        <select name="Conditions25" id="Conditions26">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions25" id="Conditions27">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>95</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>85</option>
-                          <option>75</option>
-                          <option>70</option>
-                          <option>65</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>55</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                        <select name="Conditions25" id="Conditions28">
-                          <option selected>Both</option>
-                          <option>Outside</option>
-                          <option>Inside</option>
-                        </select>
-                    </div>                  
-                    <td><div align="center">
-                      <p>A1 P Front
-                        <select name="Conditions" id="Conditions2">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions" id="Conditions3">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>95</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>85</option>
-                          <option>75</option>
-                          <option>70</option>
-                          <option>65</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>55</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                      <select name="Conditions" id="Conditions29">
-                        <option selected>Both</option>
-                        <option>Outside</option>
-                        <option>Inside</option>
-                      </select>
-                  </div>                    </tr>
-                  <tr>
-                    <td height="117"><div align="center">
-                      <p>A2 D
-                        Rear
-                        <select name="Conditions28" id="Conditions35">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions28" id="Conditions36">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>95</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>85</option>
-                          <option>75</option>
-                          <option>70</option>
-                          <option>65</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>55</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions28" id="Conditions37">
-                          <option selected>Both</option>
-                          <option>Outside</option>
-                          <option>Inside</option>
-                        </select>
-                      </p>
-                    </div>
-                    <td height="117"><div align="center">
-                      <p>A2 P Rear
-                        <select name="Conditions27" id="Conditions32">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions27" id="Conditions33">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>95</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>85</option>
-                          <option>75</option>
-                          <option>70</option>
-                          <option>65</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>55</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions27" id="Conditions34">
-                          <option selected>Both</option>
-                          <option>Outside</option>
-                          <option>Inside</option>
-                        </select>
-                      </p>
-                    </div>                    </tr>
-                  <tr>
-                    <td height="23">                                        <td></tr>
-                  <tr>
-                  <td height="24" colspan="3"><div align="center"> Enter Notes Below</div>                  </tr>
-                  <tr>
-                    <td height="24" colspan="3"><div align="center">
-                      <textarea name="textarea" id="textarea" cols="43" rows="3"></textarea>
-                  </div>                    </tr>
-                  <tr>
-                    <td height="24" colspan="3"><div align="center">
-                      <input type="checkbox" />
-                      Confirm TruckTire Inspection</div>                  
-                  </tr>
-                </table>
-              </form>
-              
-            </div><!-- /.box-body -->
-            <div class="box-footer">Vir Additional info on Yellow or Red + Condition &amp; Notes</div>
-            <!-- /.box-footer-->
-          </div><!-- /.box -->
-
-
-
-
-          <!-- Default box -->
-<!--          <div class="box"> -->
-<!--Remove the div Class "box" above and add below primary collapsed -->
-      <div class="box box-primary collapsed-box">  
-            <div class="box-header with-border">
-              <h3 class="box-title"><img src="../images/smalltires.gif" width="25" height="25" alt="tire"> Trailer Tires <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <div class="box-body">
-              <form name="form1" method="post" action="">
-                <table width="311" height="928" border="1">
-                  <tr>
-                    <td height="24" colspan="4"><div align="center"> Trailer Tires (If Swap Trailer during the day)</div>                    
-                  </tr>
-                  <tr>
-                    <td height="88" colspan="4"><div align="center"><a href="VIR.php"><img src="../images/tires.gif" alt="" width="150" height="147"></a></div>                    
-                  </tr>
-                  <tr>
-                    <td height="24" colspan="4"><div align="center"> Select the Closest PSI @ Pretrip</div>                                        
-                  </tr>
-                  <tr>
-                    <td width="91" height="164">
-                    <td width="93" rowspan="5">
-                    <img src="../images/traileronly.gif" width="115" height="597">                    
-                    <td width="93">                  </tr>
-                  <tr>
-                    <td height="101">                  
-                    <td width="93">                    
-                  </tr>
-                  <tr>
-                    <td height="24">
-                    <td height="24"></tr>
-                  <tr>
-                    <td height="159"><div align="center">
-                      <p>TA1D Front
-                        <select name="Conditions3" id="Conditions">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions3" id="Conditions12">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>95</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>85</option>
-                          <option>75</option>
-                          <option>70</option>
-                          <option>65</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>55</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions3" id="Conditions13">
-                          <option selected>Both</option>
-                          <option>Outside</option>
-                          <option>Inside</option>
-                        </select>
-                      </p>
-                    </div>
-                    <td height="159"><div align="center">
-                      <p>TA1P Front
-                        <select name="Conditions11" id="Conditions14">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions11" id="Conditions15">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>95</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>85</option>
-                          <option>75</option>
-                          <option>70</option>
-                          <option>65</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>55</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions11" id="Conditions16">
-                          <option selected>Both</option>
-                          <option>Outside</option>
-                          <option>Inside</option>
-                        </select>
-                      </p>
-                    </div>                    </tr>
-                  <tr>
-                    <td height="24"><div align="center">
-                      <p>TA2D Rear
-                        <select name="Conditions12" id="Conditions17">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions12" id="Conditions18">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>95</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>85</option>
-                          <option>75</option>
-                          <option>70</option>
-                          <option>65</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>55</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions12" id="Conditions19">
-                          <option selected>Both</option>
-                          <option>Outside</option>
-                          <option>Inside</option>
-                        </select>
-                      </p>
-                    </div>                    
-                    <td height="24"><div align="center">
-                      <p>TA2P Rear
-                        <select name="Conditions13" id="Conditions20">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions13" id="Conditions21">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>95</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>85</option>
-                          <option>75</option>
-                          <option>70</option>
-                          <option>65</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>55</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions13" id="Conditions22">
-                          <option selected>Both</option>
-                          <option>Outside</option>
-                          <option>Inside</option>
-                        </select>
-                      </p>
-                    </div>                  
-                  </tr>
-                  <tr>
-                  <td height="25" colspan="3"><div align="center"> Enter Notes Below</div>                  </tr>
-                  <tr>
-                    <td height="24" colspan="3"><div align="center">
-                      <textarea name="textarea3" id="textarea3" cols="43" rows="3"></textarea>
-                    </div>                    </tr>
-                  <tr>
-                    <td height="24" colspan="3"><div align="center">
-                      <input type="checkbox" />
-                      Confirm Additinal Trailer Tire Inspection</div>                  
-                  </tr>
-                </table>
-              </form>
-              
-            </div><!-- /.box-body -->
-            <div class="box-footer">Vir Additional info on Yellow or Red + Condition &amp; Notes</div>
-            <!-- /.box-footer-->
-          </div><!-- /.box -->
-
-
-
-
-
-
-
-
-
-          <!-- Default box -->
-<!--          <div class="box"> -->
-<!--Remove the div Class "box" above and add below primary collapsed -->
-    <div class="box box-primary collapsed-box">  
-            <div class="box-header with-border">
-              <h3 class="box-title"><img src="../images/smalltires.gif" width="25" height="25" alt="tire">  Boxtruck tires<img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <div class="box-body">
-              <form name="form1" method="post" action="">
-                <table width="311" height="584" border="1">
-                  <tr>
-                    <td colspan="4"><div align="center"> Tire Inspection</div>                    </tr>
-                  <tr>
-                    <td colspan="4"><div align="center"><a href="VIR.php"><img src="../images/tires.gif" alt="" width="150" height="147"></a></div>                    
-                  </tr>
-                  <tr>
-                    <td height="24" colspan="4"><div align="center"> Select the Closest PSI @ Pretrip</div>                                        
-                  </tr>
-                  <tr>
-                    <td width="91" height="86">                    <div align="center">
-                      <p>BTD Steer
-                        <select name="Conditions4" id="Conditions4">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions4" id="Conditions5">
-<option>125</option>
-<option>120</option>
-<option>115</option>
-<option>110</option>
-<option selected>105</option>
-<option>100</option>
-<option>90</option>
-<option>80</option>
-<option>70</option>
-<option>60</option>
-<option>50</option>
-<option>40</option>
-<option>30</option>
-<option>20</option>
-<option>10</option>
-                        </select>
-                      </p>
-                    </div>
-                    <td width="93" height="149" rowspan="4"><img src="../images/Box_Truck_Top.gif" width="121" height="336">                                        
-                    <td width="93" height="86"><div align="center">
-                      <p>BTP Steer                      
-                        <select name="Conditions5" id="Conditions6">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions6" id="Conditions7">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option selected>105</option>
-                          <option>100</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>70</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                    </div>                                                            
-                  </tr>
-                  <tr>
-                    <td height="113">                                                            
-                    <td height="113">                                                            
-                  </tr>
-                  <tr>
-                    <td height="71"><div align="center">
-                      <p>BTD Drive
-                        <select name="Conditions7" id="Conditions8">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions9" id="Conditions9">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>70</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions23" id="Conditions24">
-                          <option selected>Both</option>
-                          <option>Outside</option>
-                          <option>Inside</option>
-                        </select>
-                      </p>
-                    </div>                                                            
-                    <td height="71"><div align="center">
-                      <p>BTPF Drive
-                        <select name="Conditions8" id="Conditions10">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions10" id="Conditions11">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>70</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions24" id="Conditions25">
-                          <option selected>Both</option>
-                          <option>Outside</option>
-                          <option>Inside</option>
-                        </select>
-                      </p>
-                    </div>                                                            
-                  </tr>
-                  <tr>
-                    <td height="86">
-                    <td height="86"></tr>
-                  <tr>
-                    <td height="24" colspan="3"><div align="center">
-                      <textarea name="textarea5" id="textarea5" cols="43" rows="3"></textarea>
-                  </div>                    </tr>
-                  <tr>
-                    <td height="24" colspan="3"><div align="center">
-                      <input type="checkbox" />
-                      Confirm Box Truck Tire Inspection</div>                  
-                  </tr>
-                </table>
-              </form>
-              
-            </div><!-- /.box-body -->
-            <div class="box-footer">Vir Additional info on Yellow or Red + Condition &amp; Notes</div>
-            <!-- /.box-footer-->
-          </div><!-- /.box -->
-
-
-
-
-
-          <!-- Default box -->
-<!--          <div class="box"> -->
-<!--Remove the div Class "box" above and add below primary collapsed -->
-     <div class="box box-primary collapsed-box">  
-            <div class="box-header with-border">
-              <h3 class="box-title"><img src="../images/smalltires.gif" width="25" height="25" alt="tire">   Sprinter tires <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <div class="box-body">
-              <form name="form1" method="post" action="">
-                <table width="314" height="488" border="1">
-                  <tr>
-                    <td colspan="4"><div align="center"> Tire Inspection Sprinter</div>                    </tr>
-                  <tr>
-                    <td colspan="4"><div align="center"><a href="VIR.php"><img src="../images/tires.gif" alt="" width="150" height="147"></a></div>                    
-                  </tr>
-                  <tr>
-                    <td height="24" colspan="4"><div align="center"> Select the Closest PSI @ Pretrip</div>                                        
-                  </tr>
-                  <tr>
-                    <td width="91" height="149">                    <div align="center">
-                      <p>SD Steer
-                        <select name="Conditions4" id="Conditions4">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions4" id="Conditions5">
-<option>125</option>
-<option>120</option>
-<option>115</option>
-<option>110</option>
-<option selected>105</option>
-<option>100</option>
-<option>90</option>
-<option>80</option>
-<option>70</option>
-<option>60</option>
-<option>50</option>
-<option>40</option>
-<option>30</option>
-<option>20</option>
-<option>10</option>
-                        </select>
-                      </p>
-                    </div>
-                    <td width="105" height="149" rowspan="4"><img src="../images/sprintertop.gif" width="105" height="248">                                        
-                    <td width="96" height="149"><div align="center">
-                      <p>SP Steer                      
-                        <select name="Conditions5" id="Conditions6">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions6" id="Conditions7">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option selected>105</option>
-                          <option>100</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>70</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                    </div>                                                            
-                  </tr>
-                  <tr>
-                    <td height="24">                                                            
-                    <td height="24">                                                            
-                  </tr>
-                  <tr>
-                    <td height="71"><div align="center">
-                      <p>SD
-                        R
-                        <select name="Conditions7" id="Conditions8">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions9" id="Conditions9">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>70</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                    </div>                                                            
-                    <td height="71"><div align="center">
-                      <p>SP R
-                        <select name="Conditions8" id="Conditions10">
-                          <option selected>Exellent</option>
-                          <option>Ok</option>
-                          <option>Poor</option>
-                          <option>Red Tag</option>
-                        </select>
-                      </p>
-                      <p>
-                        <select name="Conditions10" id="Conditions11">
-                          <option>125</option>
-                          <option>120</option>
-                          <option>115</option>
-                          <option>110</option>
-                          <option>105</option>
-                          <option selected>100</option>
-                          <option>90</option>
-                          <option>80</option>
-                          <option>70</option>
-                          <option>60</option>
-                          <option>50</option>
-                          <option>40</option>
-                          <option>30</option>
-                          <option>20</option>
-                          <option>10</option>
-                        </select>
-                      </p>
-                    </div>                                                            
-                  </tr>
-                  <tr>
-                    <td height="86">
-                    <td height="86"></tr>
-                  <tr>
-                  <td height="24" colspan="3"><div align="center">
-                    <textarea name="textarea6" id="textarea6" cols="43" rows="3"></textarea>
-                  </div>                  </tr>
-                  <tr>
-                    <td colspan="3"><div align="center">
-                      <input type="checkbox" />
-Check To Confirm Sprinter Tire Inspection </div>                    
-                    </tr>
-                </table>
-              </form>
-              
-            </div><!-- /.box-body -->
-            <div class="box-footer">Vir Additional info on Yellow or Red + Condition &amp; Notes</div>
-            <!-- /.box-footer-->
-          </div><!-- /.box -->
-
-
-
-
-
-
-<!-- Default box -->
-          <div class="box">
-<!--Remove the div Class "box" above and add below primary collapsed -->
-<!--      <div class="box box-primary collapsed-box"> --> 
-            <div class="box-header with-border">
-              <h3 class="box-title">Submit Inspections</h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <div class="box-body">
-              <form name="form1" method="post" action="">
-                <table width="318" border="1">
-                  <tr>
-                    <td width="306" colspan="3"><div align="center"> Submit VIR &amp; Tire Report</div>
-                      <div align="center"></div>
-                      <div align="center">
-                      <div align="center"></div>
-                  </tr>
-                  <tr>
-                    <td colspan="2"><img src="../images/finish.jpg" alt="Submit" width="310" height="152"></td>
-                  <tr>
-                    <td height="85" colspan="2"><table width="310" border="1">
-                    </table>
-                      <div align="center">Additional Notes: <?php echo "$drivername"; ?> </div>
-                      <div align="center">
-                        <textarea name="textarea4" id="textarea4" cols="43" rows="3"></textarea>
-                      </div></td>
-                  </tr>
-                  <tr>
-                    <td >
-                    <!-- /.Please insert running current time here  On submit us that date time -->
-                    <div align="center">End Time:
-                        <input name="<?php echo constant('BX_LT'); ?>2" type="text" id="<?php echo constant('BX_LT'); ?>2" value="<?php echo $localtime; ?>" size="8"/>
-                    Date: 
-                    <input name="<?php echo constant('BX_LD'); ?>2" type="text" id="<?php echo constant('BX_LD'); ?>2" value="<?php echo $localdate; ?>" size="8" readonly="readonly"/>
-                    </div></td>
-                   
-                  </tr>
-                  <tr>
-                    <td ><div align="center">
-                      <input type="submit" name="submitvir" id="submitvir" value="Submit Inspection" />
-                    </div></td>
-                  </tr>
-                  <tr>
-                    <td ><div align="center">You will be sent and email of this inspection! </div></td>
-                  </tr>
-                </table>
-              </form>
-              
-            </div><!-- /.box-body -->
-            <div class="box-footer">
-              <p><a href="https://www.fmcsa.dot.gov/regulations/title49/section/396.11"> Read before Sending Inspection:</a></p>
-              <p><a href="https://www.fmcsa.dot.gov/regulations/title49/section/396.11"> 396.11 DVIR FMCSA Rules</a></p>
-            </div>
-            <!-- /.box-footer-->
-          </div><!-- /.box -->
 
 
 
@@ -1592,10 +490,10 @@ Check To Confirm Sprinter Tire Inspection </div>
   <!-- /.content --> 
 </div>
 <!-- /.content-wrapper -->
-<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/footer.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/footer.php');?>
 
 <!-- Control Sidebar -->
-<?php require($_SERVER[DOCUMENT_ROOT].'/dist/menus_sidebars_elements/r_sidebar.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/r_sidebar.php');?>
 <!-- /.control-sidebar --> 
 <!-- Add the sidebar's background. This div must be placed
            immediately after the control sidebar -->
