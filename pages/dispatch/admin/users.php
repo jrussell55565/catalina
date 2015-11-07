@@ -22,6 +22,17 @@ if ($_GET['action'] == 'loginas')
   header("Location: /pages/main/index.php");
 }
 
+# If we're submitted a POST request and it has an email or vtext then
+# we'll send out a test message
+if (isset($_POST['testVtext']))
+{
+  sendEmail($_POST['testVtext'],"Testing Vtext","This is a test message.");
+}
+if (isset($_POST['testEmail']))
+{
+  sendEmail($_POST['testEmail'],"Testing Vtext","This is a test message.");
+}
+
 # Let's do some form processing
 if(isset($_POST['submit'])) 
 { 
@@ -404,72 +415,72 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 <tr class="collapse" id="<?php echo $row['username'];?>_details">
 <td colspan="9">
   <div class="well">
-   <form enctype="multipart/form-data" role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-   <table>
-    <tr>
-     <td rowspan="3">
-       <div><img style="display: block; margin: 0 auto;" 
-             src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $row['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $row['username'] . "_avatar";}else{ echo HTTP."/dist/img/avatar.png"; }?>"/></div>
-       <div><input id="fileToUpload" name="fileToUpload" type="file" multiple=true class="file-loading"></div>
-     </td>
-     <td style="padding: 5px">
-      <label for="fname">First Name</label>
-      <input type="text" class="form-control" name="fname" id="fname" placeholder="" value="<?php echo $row['fname'];?>">
-     </td>
-     <td style="padding: 5px">
-      <label for="mname">Middle Name</label>
-      <input type="text" class="form-control" name="mname" id="mname" placeholder="" value="<?php echo $row['mname'];?>">
-     </td>
-     <td style="padding: 5px">
-      <label for="lname">Last Name</label>
-      <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="<?php echo $row['lname'];?>">
-     </td>
-     <td style="padding: 5px">
-      <label for="status">Status</label>
-       <select class="form-control" name="status" id="status" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-         <option value="Active" <?php if ($row['status'] == 'Active') { echo " selected "; }?>>Active</option>
-         <option value="Inactive"<?php if ($row['status'] == 'Inactive') { echo " selected "; }?>>Inactive</option>
-       </select> 
-     </td>
-     <td style="padding: 5px">
-      <label for="role">Role</label>
-       <select class="form-control" name="role" id="role" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-         <option value="Employee" <?php if ($row['role'] == 'Employee') { echo " selected "; }?>>Employee</option>
-         <option value="Admin"<?php if ($row['role'] == 'Admin') { echo " selected "; }?>>Admin</option>
-       </select> 
-     </td>
-     <td style="padding: 5px">
-      <label for="office">Office</label>
-       <select class="form-control" name="office" id="office" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-         <option value="PHX" <?php if ($row['office'] == 'PHX') { echo " selected "; }?>>PHX</option>
-         <option value="TUS"<?php if ($row['office'] == 'TUS') { echo " selected "; }?>>TUS</option>
-       </select> 
-     </td>
-    </tr>
-    <tr>
-     <td style="padding: 5px">
-      <label for="addr1">Home Addr 1</label>
-      <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $row['addr1'];?>">
-     </td>
-     <td style="padding: 5px">
-      <label for="addr2">Home Addr 2</label>
-      <input type="text" class="form-control" name="addr2" id="addr2" placeholder="" value="<?php echo $row['addr2'];?>">
-     </td>
-     <td style="padding: 5px">
-      <label for="city">Home City</label>
-      <input type="text" class="form-control" name="city" id="city" placeholder="" value="<?php echo $row['city'];?>">
-     </td>
-     <td style="padding: 5px">
-      <label for="state">Home State</label>
-      <input type="text" class="form-control" name="state" id="state" placeholder="" value="<?php echo $row['state'];?>">
-     </td>
-     <td style="padding: 5px">
-      <label for="zip">Home Zip</label>
-      <input type="text" class="form-control" name="zip" id="zip" placeholder="" value="<?php echo $row['zipcode'];?>">
-     </td>
-     <td style="padding: 5px">
-      <label for="jobTitle">Title</label>
-       <select class="form-control" name="jobTitle" id="jobTitle" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+<form enctype="multipart/form-data" role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<table>
+<tr>
+ <td rowspan="3">
+   <div><img style="display: block; margin: 0 auto;" 
+         src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $row['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $row['username'] . "_avatar";}else{ echo HTTP."/dist/img/avatar.png"; }?>"/></div>
+   <div><input id="fileToUpload" name="fileToUpload" type="file" multiple=true class="file-loading"></div>
+ </td>
+ <td style="padding: 5px">
+  <label for="fname">First Name</label>
+  <input type="text" class="form-control" name="fname" id="fname" placeholder="" value="<?php echo $row['fname'];?>">
+ </td>
+ <td style="padding: 5px">
+  <label for="mname">Middle Name</label>
+  <input type="text" class="form-control" name="mname" id="mname" placeholder="" value="<?php echo $row['mname'];?>">
+ </td>
+ <td style="padding: 5px">
+  <label for="lname">Last Name</label>
+  <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="<?php echo $row['lname'];?>">
+ </td>
+ <td style="padding: 5px">
+  <label for="status">Status</label>
+   <select class="form-control" name="status" id="status" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+     <option value="Active" <?php if ($row['status'] == 'Active') { echo " selected "; }?>>Active</option>
+     <option value="Inactive"<?php if ($row['status'] == 'Inactive') { echo " selected "; }?>>Inactive</option>
+   </select> 
+ </td>
+ <td style="padding: 5px">
+  <label for="role">Role</label>
+   <select class="form-control" name="role" id="role" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+     <option value="Employee" <?php if ($row['role'] == 'Employee') { echo " selected "; }?>>Employee</option>
+     <option value="Admin"<?php if ($row['role'] == 'Admin') { echo " selected "; }?>>Admin</option>
+   </select> 
+ </td>
+ <td style="padding: 5px">
+  <label for="office">Office</label>
+   <select class="form-control" name="office" id="office" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+     <option value="PHX" <?php if ($row['office'] == 'PHX') { echo " selected "; }?>>PHX</option>
+     <option value="TUS"<?php if ($row['office'] == 'TUS') { echo " selected "; }?>>TUS</option>
+   </select> 
+ </td>
+</tr>
+<tr>
+ <td style="padding: 5px">
+  <label for="addr1">Home Addr 1</label>
+  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $row['addr1'];?>">
+ </td>
+ <td style="padding: 5px">
+  <label for="addr2">Home Addr 2</label>
+  <input type="text" class="form-control" name="addr2" id="addr2" placeholder="" value="<?php echo $row['addr2'];?>">
+ </td>
+ <td style="padding: 5px">
+  <label for="city">Home City</label>
+  <input type="text" class="form-control" name="city" id="city" placeholder="" value="<?php echo $row['city'];?>">
+ </td>
+ <td style="padding: 5px">
+  <label for="state">Home State</label>
+  <input type="text" class="form-control" name="state" id="state" placeholder="" value="<?php echo $row['state'];?>">
+ </td>
+ <td style="padding: 5px">
+  <label for="zip">Home Zip</label>
+  <input type="text" class="form-control" name="zip" id="zip" placeholder="" value="<?php echo $row['zipcode'];?>">
+ </td>
+ <td style="padding: 5px">
+  <label for="jobTitle">Title</label>
+   <select class="form-control" name="jobTitle" id="jobTitle" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
          <option value="Office" <?php if ($row['title'] == 'Office') { echo " selected "; }?>>Office</option>
          <option value="Dispatch"<?php if ($row['title'] == 'Dispatch') { echo " selected "; }?>>Dispatch</option>
          <option value="Accounting" <?php if ($row['title'] == 'Accounting') { echo " selected "; }?>>Accounting</option>
@@ -483,7 +494,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
       <input type="email" class="form-control" name="email" id="email" placeholder="" value="<?php echo $row['email'];?>">
      </td>
      <td style="padding: 5px">
-       <label for="emailUpdates" style="margin-top: 8px; margin-bottom: 0px;">Enable &amp; Test</label>
+       <label for="emailUpdates" style="margin-top: 8px; margin-bottom: 0px;">Enable</label>
 
 <table>
 <tr><td>
@@ -494,9 +505,6 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
   </div>
       </div>
 </td>
-<td>
-<input type="button" class="btn btn-info" value="Send Test" id="testEmail" name="testEmail">
-</td>
 </tr></table>
 
      </td>
@@ -505,7 +513,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
       <input type="vtext" class="form-control" name="vtext" id="vtext" placeholder="" value="<?php echo $row['vtext'];?>">
      </td>
      <td style="padding: 5px">
-      <label for="textUpdates" style="margin-top: 8px; margin-bottom: 0px;">Enable &amp; Test</label>
+      <label for="textUpdates" style="margin-top: 8px; margin-bottom: 0px;">Enable</label>
 <table>
 <tr><td>
       <div class="checkbox">
@@ -514,9 +522,6 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
     </label>
   </div>
       </div>
-</td>
-<td>
-<input type="button" class="btn btn-info" value="Send Test" id="testVtext" name="testVtext">
 </td>
 </tr></table>
 
@@ -680,6 +685,17 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
     </tr>
    </table>
    </form>
+   <form  class="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+   <table>
+   <tr>
+     <td style="padding: 5px">
+      <button type="submit" class="btn btn-info" value="<?php echo $row['email'];?>" id="testEmail" name="testEmail" formaction="<?php echo $_SERVER['PHP_SELF']; ?>" formmethod="post">Test Email</button>
+      <button type="submit" class="btn btn-info" value="<?php echo $row['vtext'];?>" id="testVtext" name="testVtext" formaction="<?php echo $_SERVER['PHP_SELF']; ?>" formmethod="post">Test Text</button>
+      </form>
+     </td>
+   </tr>
+  </table>
+  </form>
   </div>
 </td>
 </tr>
@@ -792,7 +808,7 @@ if ($_SESSION['login'] == 1)
       <input type="email" class="form-control" name="email" id="email" placeholder="" value="">
      </td>
      <td style="padding: 5px">
-       <label for="emailUpdates" style="margin-top: 8px; margin-bottom: 0px;">Enable &amp; Test</label>
+       <label for="emailUpdates" style="margin-top: 8px; margin-bottom: 0px;">Enable</label>
 
 <table>
 <tr><td>
@@ -803,9 +819,6 @@ if ($_SESSION['login'] == 1)
   </div>
       </div>
 </td>
-<td>
-<input type="button" class="btn btn-info" value="Send Test" id="testEmail" name="testEmail">
-</td>
 </tr></table>
 
      </td>
@@ -814,7 +827,7 @@ if ($_SESSION['login'] == 1)
       <input type="vtext" class="form-control" name="vtext" id="vtext" placeholder="" value="">
      </td>
      <td style="padding: 5px">
-      <label for="textUpdates" style="margin-top: 8px; margin-bottom: 0px;">Enable &amp; Test</label>
+      <label for="textUpdates" style="margin-top: 8px; margin-bottom: 0px;">Enable</label>
 <table>
 <tr><td>
       <div class="checkbox">
@@ -823,9 +836,6 @@ if ($_SESSION['login'] == 1)
     </label>
   </div>
       </div>
-</td>
-<td>
-<input type="button" class="btn btn-info" value="Send Test" id="testVtext" name="testVtext">
 </td>
 </tr></table>
 
