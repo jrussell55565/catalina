@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if ($_SESSION['login'] != 1)
+if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 {
         header('Location: /pages/login/driverlogin.php');
 }
@@ -16,6 +16,7 @@ $drivername = $_SESSION['drivername'];
 if ($_GET['action'] == 'loginas')
 {
   $_SESSION['userid'] = $_GET['username'];
+  $_SESSION['username'] = $_GET['username'];
   $_SESSION['drivername'] = $_GET['drivername'];
   $_SESSION['login'] = 2;
   header("Location: /pages/main/index.php");
@@ -62,9 +63,9 @@ if (empty($_POST['emergencyPhone'])) { $emerg_contact_phone = 'NULL'; }else{ $em
 if (empty($_POST['tsa'])) { $tsa_sta = 'NULL'; }else{ $tsa_sta = "\"$_POST[tsa]\"";}
 if (empty($_POST['contract'])) { $contract = 'NULL'; }else{ $contract = "\"$_POST[contract]\"";}
 if (empty($_POST['fuelcard'])) { $fuelcard = 'NULL'; }else{ $fuelcard = "\"$_POST[fuelcard]\"";}
-if (empty($_POST['miscDetails'])) { $notes = 'NULL'; }else{ $notes = "\"$_POST[miscDetails]\"";}
+if (empty($_POST['notes'])) { $notes = 'NULL'; }else{ $notes = "\"$_POST[notes]\"";}
 if (empty($_POST['tsName'])) { $tsName = 'NULL'; }else{ $tsName = "\"$_POST[tsName]\"";}
-if (empty($_POST['tsPhone'])) { $tsPhone = 'NULL'; }else{ $tsPhone = "$_POST[tsPhone]";}
+if (empty($_POST['tsPhone'])) { $tsPhone = 'NULL'; }else{ $tsPhone = $_POST['tsPhone'];}
 
 # Image Uploads
 if (! empty($_FILES["fileToUpload"]["name"]))
@@ -327,52 +328,61 @@ if (! empty($_FILES["fuelUpload"]["name"]))
  </thead>
  <tbody>
 <?php
-                      $sql = "SELECT 
-                              id,
-                              username,
-                              drivername,
-                              fname,
-                              mname,
-                              lname,
-                              status,
-                              role,
-                              office,
-                              addr1,
-                              addr2,
-                              city,
-                              state,
-                              zipcode,
-                              title,
-                              email,
-                              emailupdate,
-                              vtext,
-                              vtextupdate,
-                              quiet_time_begin,
-                              quiet_time_end,
-                              ssn,
-                              date_format(dob,'%m/%d/%Y') as dob,
-                              driver_license_n,
-                              date_format(driver_license_exp,'%m/%d/%Y') as driver_license_exp,
-                              driverid,
-                              date_format(start_dt,'%m/%d/%Y') as start_dt,
-                              date_format(depart_dt,'%m/%d/%Y') as depart_dt,
-                              depart_reason,
-                              username,
-                              password,
-                              date_format(med_card_exp,'%m/%d/%Y') as med_card_exp,
-                              salary,
-                              emerg_contact_name,
-                              emerg_contact_phone,
-                              tsa_sta,
-                              contract,
-                              fuelcard,
-                              ts_name,
-                              ts_phone,
-                              notes
-                               FROM users $orderSql";
-                      $sql = mysql_query($sql);
-                      while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-                      {
+# If non-admin logs in then only show their info
+if ($_SESSION['login'] == 2)
+{
+  $predicate = " WHERE username = '$_SESSION[username]'";
+}
+$sql = "SELECT 
+     id,
+     username,
+     drivername,
+     fname,
+     mname,
+     lname,
+     status,
+     role,
+     office,
+     addr1,
+     addr2,
+     city,
+     state,
+     zipcode,
+     title,
+     email,
+     emailupdate,
+     vtext,
+     vtextupdate,
+     quiet_time_begin,
+     quiet_time_end,
+     ssn,
+     date_format(dob,'%m/%d/%Y') as dob,
+     driver_license_n,
+     date_format(driver_license_exp,'%m/%d/%Y') as driver_license_exp,
+     driverid,
+     date_format(start_dt,'%m/%d/%Y') as start_dt,
+     date_format(depart_dt,'%m/%d/%Y') as depart_dt,
+     depart_reason,
+     username,
+     password,
+     date_format(med_card_exp,'%m/%d/%Y') as med_card_exp,
+     salary,
+     emerg_contact_name,
+     emerg_contact_phone,
+     tsa_sta,
+     contract,
+     fuelcard,
+     ts_name,
+     ts_phone,
+     notes
+      FROM users 
+    $predicate
+$orderSql";
+  #print "$sql<br>\n\n";
+
+$sql = mysql_query($sql);
+while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
+{
 ?>
 <tr>
 <td><a href="#"><i class="glyphicon glyphicon-user"></i></a></td>
@@ -416,21 +426,21 @@ if (! empty($_FILES["fuelUpload"]["name"]))
      </td>
      <td style="padding: 5px">
       <label for="status">Status</label>
-       <select class="form-control" name="status" id="status">
+       <select class="form-control" name="status" id="status" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
          <option value="Active" <?php if ($row['status'] == 'Active') { echo " selected "; }?>>Active</option>
          <option value="Inactive"<?php if ($row['status'] == 'Inactive') { echo " selected "; }?>>Inactive</option>
        </select> 
      </td>
      <td style="padding: 5px">
       <label for="role">Role</label>
-       <select class="form-control" name="role" id="role">
+       <select class="form-control" name="role" id="role" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
          <option value="Employee" <?php if ($row['role'] == 'Employee') { echo " selected "; }?>>Employee</option>
          <option value="Admin"<?php if ($row['role'] == 'Admin') { echo " selected "; }?>>Admin</option>
        </select> 
      </td>
      <td style="padding: 5px">
       <label for="office">Office</label>
-       <select class="form-control" name="office" id="office">
+       <select class="form-control" name="office" id="office" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
          <option value="PHX" <?php if ($row['office'] == 'PHX') { echo " selected "; }?>>PHX</option>
          <option value="TUS"<?php if ($row['office'] == 'TUS') { echo " selected "; }?>>TUS</option>
        </select> 
@@ -459,7 +469,7 @@ if (! empty($_FILES["fuelUpload"]["name"]))
      </td>
      <td style="padding: 5px">
       <label for="jobTitle">Title</label>
-       <select class="form-control" name="jobTitle" id="jobTitle">
+       <select class="form-control" name="jobTitle" id="jobTitle" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
          <option value="Office" <?php if ($row['title'] == 'Office') { echo " selected "; }?>>Office</option>
          <option value="Dispatch"<?php if ($row['title'] == 'Dispatch') { echo " selected "; }?>>Dispatch</option>
          <option value="Accounting" <?php if ($row['title'] == 'Accounting') { echo " selected "; }?>>Accounting</option>
@@ -500,7 +510,7 @@ if (! empty($_FILES["fuelUpload"]["name"]))
 <tr><td>
       <div class="checkbox">
     <label>
-      <input name="vtextEnabled" id="vtextEnabled" type="checkbox" value="on" <?php if ($row['vtextupdate'] == "1") { echo "checked"; }?>>
+      <input name="vtextEnabled" id="vtextEnabled" type="checkbox" value="on" <?php if ($row['vtextupdate'] == "1") { echo "checked"; }?> <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
     </label>
   </div>
       </div>
@@ -573,19 +583,19 @@ if (! empty($_FILES["fuelUpload"]["name"]))
     <tr>
      <td style="padding: 5px">
       <label for="ssn">SSN</label>
-      <input type="text" class="form-control" name="ssn" id="ssn" placeholder="" value="<?php echo $row['ssn'];?>">
+      <input type="text" class="form-control" name="ssn" id="ssn" placeholder="" value="<?php echo $row['ssn'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="dob">DOB</label>
-      <input type="text" class="form-control" name="dob" id="dob" placeholder="mm/dd/yyyy" value="<?php echo $row['dob'];?>">
+      <input type="text" class="form-control" name="dob" id="dob" placeholder="mm/dd/yyyy" value="<?php echo $row['dob'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="driverLicense">License No.</label>
-      <input type="text" class="form-control" name="driverLicense" id="driverLicense" placeholder="" value="<?php echo $row['driver_license_n'];?>">
+      <input type="text" class="form-control" name="driverLicense" id="driverLicense" placeholder="" value="<?php echo $row['driver_license_n'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="driverLicenseExpire">License Exp.</label>
-      <input type="text" class="form-control" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['driver_license_exp'];?>">
+      <input type="text" class="form-control" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['driver_license_exp'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="mobilePhone">Mobile</label>
@@ -593,21 +603,21 @@ if (! empty($_FILES["fuelUpload"]["name"]))
      </td>
      <td style="padding: 5px">
       <label for="startDate">Start Date</label>
-      <input type="text" class="form-control" name="startDate" id="startDate" placeholder="mm/dd/yyyy" value="<?php echo $row['start_dt'];?>">
+      <input type="text" class="form-control" name="startDate" id="startDate" placeholder="mm/dd/yyyy" value="<?php echo $row['start_dt'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="departureDate">Depart Date</label>
-      <input type="text" class="form-control" data-date-format="mm/dd/yyyy" name="departureDate" id="departureDate" placeholder="mm/dd/yyyy" value="<?php echo $row['depart_dt'];?>">
+      <input type="text" class="form-control" data-date-format="mm/dd/yyyy" name="departureDate" id="departureDate" placeholder="mm/dd/yyyy" value="<?php echo $row['depart_dt'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
      </td>
     </tr>
     <tr>
      <td style="padding: 5px">
       <label for="departureReason">Depart Reason</label>
-      <input type="text" class="form-control" name="departureReason" id="departureReason" placeholder="" value="<?php echo $row['depart_reason'];?>">
+      <input type="text" class="form-control" name="departureReason" id="departureReason" placeholder="" value="<?php echo $row['depart_reason'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="username">Username</label>
-      <input type="text" class="form-control" name="username" id="username" placeholder="" value="<?php echo $row['username'];?>">
+      <input type="text" class="form-control" name="username" id="username" placeholder="" value="<?php echo $row['username'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="password">Password</label>
@@ -615,11 +625,11 @@ if (! empty($_FILES["fuelUpload"]["name"]))
      </td>
      <td style="padding: 5px">
       <label for="medCardExpire">Med Exp Date</label>
-      <input type="text" class="form-control" name="medCardExpire" id="medCardExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['med_card_exp'];?>">
+      <input type="text" class="form-control" name="medCardExpire" id="medCardExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['med_card_exp'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="salary">Salary</label>
-      <input type="text" class="form-control" name="salary" id="salary" placeholder="" value="<?php echo $row['salary'];?>">
+      <input type="text" class="form-control" name="salary" id="salary" placeholder="" value="<?php echo $row['salary'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="emergencyPhone">Emerg Phone</label>
@@ -627,7 +637,7 @@ if (! empty($_FILES["fuelUpload"]["name"]))
      </td>
      <td style="padding: 5px">
       <label for="tsa">TSA-STA</label>
-      <input type="text" class="form-control" name="tsa" id="tsa" placeholder="" value="<?php echo $row['tsa_sta'];?>">
+      <input type="text" class="form-control" name="tsa" id="tsa" placeholder="" value="<?php echo $row['tsa_sta'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
      </td>
     </tr>
     <tr>
@@ -637,29 +647,29 @@ if (! empty($_FILES["fuelUpload"]["name"]))
      </td>
      <td style="padding: 5px" colspan="3">
       <label for="miscDetails">Notes</label>
-      <textarea class="form-control" name="miscDetails" id="miscDetails" placeholder="" value="<?php echo $row['notes'];?>" style="padding-top: 0px; padding-bottom: 0px; height: 34px;"></textarea>
+      <textarea class="form-control" name="notes" id="notes" placeholder="" value="" style="padding-top: 0px; padding-bottom: 0px; height: 34px;" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>><?php echo $row['notes'];?></textarea>
      </td>
     </tr>
     <tr>
      <td style="padding: 5px">
       <label for="tsPhone">TS Phone</label>
-      <input type="text" class="form-control" name="tsPhone" id="tsPhone" placeholder="" value="<?php echo $row['ts_phone'];?>">
+      <input type="text" class="form-control" name="tsPhone" id="tsPhone" placeholder="" value="<?php echo $row['ts_phone'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="tsName">TS Name</label>
-      <input type="text" class="form-control" name="tsName" id="tsName" placeholder="" value="<?php echo $row['ts_name'];?>">
+      <input type="text" class="form-control" name="tsName" id="tsName" placeholder="" value="<?php echo $row['ts_name'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
      </td>
     </tr>
     <tr>
      <td colspan="1" style="padding: 5px">
       <label for="contract">Contract</label>
       <a href="<?php if (isset($row['contract'])) { echo HTTP . $row['contract']; }?>" target="_blank"><?php if (isset($row['contract'])) { echo $row['contract']; }?></a>
-      <div><input id="contractUpload" name="contractUpload" type="file" multiple=true class="file-loading"></div>
+      <div><input id="contractUpload" name="contractUpload" type="file" multiple=true class="file-loading" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>></div>
      </td>
      <td colspan="1" style="padding: 5px">
       <label for="fuelcard">Fuel Card</label>
       <a href="<?php if (isset($row['fuelcard'])) { echo HTTP . $row['fuelcard']; }?>" target="_blank"><?php if (isset($row['fuelcard'])) { echo $row['fuelcard']; }?></a>
-      <div><input id="fuelUpload" name="fuelUpload" type="file" multiple=true class="file-loading"></div>
+      <div><input id="fuelUpload" name="fuelUpload" type="file" multiple=true class="file-loading" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>></div>
      </td>
     </tr>
     <tr>
@@ -677,6 +687,10 @@ if (! empty($_FILES["fuelUpload"]["name"]))
                       }
                       mysql_free_result($sql);
 ?>
+<?php
+if ($_SESSION['login'] == 1)
+{
+?>
 <tr>
 <td><a href="#"><i class="glyphicon glyphicon-user"></i></a></td>
 <td>
@@ -693,6 +707,9 @@ if (! empty($_FILES["fuelUpload"]["name"]))
 <td></td>
 <td></td>
 </tr>
+<?php
+}
+?>
 <tr class="collapse" id="addUser_details">
 <td colspan="9">
   <div class="well">
@@ -970,7 +987,6 @@ if (! empty($_FILES["fuelUpload"]["name"]))
                 </div><!-- ./box-body -->
                </div><!-- /.col -->
           </div><!-- /.row -->
-
           <!-- Main row -->
           <div class="row">
             <!-- Left col -->
