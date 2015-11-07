@@ -53,10 +53,14 @@ function accessorials($accessorialType,$srcPage,$username)
 	echo "<tr><td><input type=hidden name=username value=$username ></td></tr>\n";
 }
 
-function sendEmail($to, $subject, $body)
+function sendEmail($to, $subject, $body, $cc)
 {
-	$headers = "From: noreply@catalinacartage.com" . "\r\n" .
-        'X-Mailer: PHP/' . phpversion();
+  $headers = "From: noreply@catalinacartage.com" . "\r\n" .
+             'X-Mailer: PHP/' . phpversion() . "\r\n";
+  if (isset($cc))
+  {
+    $headers .= "CC: $cc\r\n";
+  }
 	mail($to, $subject, $body, $headers);
 }
 
