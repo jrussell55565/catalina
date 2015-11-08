@@ -150,7 +150,7 @@ Last 8 days IFTA: <?php echo "$del_today_count";?></span></div><!-- /.info-box-c
 
 <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
-<a href="<?php echo HTTP;?>/pages/dispatch/userprofile.php" class="button4 animated pulse">
+<a href="<?php echo HTTP;?>/pages/dispatch/admin/users.php" class="button4 animated pulse">
 <style>
  a.button4 {
 	 -webkit-animation-duration: 3s;
@@ -161,7 +161,7 @@ Last 8 days IFTA: <?php echo "$del_today_count";?></span></div><!-- /.info-box-c
                <span class="info-box-icon bg-brown"><i class="fa fa-users"></i></span>
                </a>
                 <div class="info-box-content">
-                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/userprofile.php"> My Profile &amp; Messages</a></span>
+                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/users.php"> My Profile &amp; Messages</a></span>
                   <span class="info-box-number">Contact Other Users</span><span class="info-box-number"><br>
                 </span></div>
                 <!-- /.info-box-content -->
