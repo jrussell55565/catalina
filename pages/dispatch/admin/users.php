@@ -181,7 +181,6 @@ if (! empty($_FILES["fileToUpload"]["name"]))
    ts_phone = $tsPhone,
    ts_name = $tsName
   WHERE id = $id";
-  #print "$sql<br>\n\n";
   mysql_query($sql);
 
 # PDF Uploads
@@ -437,23 +436,23 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
  </td>
  <td style="padding: 5px">
   <label for="status">Status</label>
-   <select class="form-control" name="status" id="status" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     <option value="Active" <?php if ($row['status'] == 'Active') { echo " selected "; }?>>Active</option>
-     <option value="Inactive"<?php if ($row['status'] == 'Inactive') { echo " selected "; }?>>Inactive</option>
+   <select class="form-control" name="status" id="status">
+     <option value="Active" <?php if ($row['status'] == 'Active') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Active</option>
+     <option value="Inactive"<?php if ($row['status'] == 'Inactive') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Inactive</option>
    </select> 
  </td>
  <td style="padding: 5px">
   <label for="role">Role</label>
-   <select class="form-control" name="role" id="role" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     <option value="Employee" <?php if ($row['role'] == 'Employee') { echo " selected "; }?>>Employee</option>
-     <option value="Admin"<?php if ($row['role'] == 'Admin') { echo " selected "; }?>>Admin</option>
+   <select class="form-control" name="role" id="role">
+     <option value="Employee" <?php if ($row['role'] == 'Employee') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Employee</option>
+     <option value="Admin"<?php if ($row['role'] == 'Admin') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Admin</option>
    </select> 
  </td>
  <td style="padding: 5px">
   <label for="office">Office</label>
-   <select class="form-control" name="office" id="office" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     <option value="PHX" <?php if ($row['office'] == 'PHX') { echo " selected "; }?>>PHX</option>
-     <option value="TUS"<?php if ($row['office'] == 'TUS') { echo " selected "; }?>>TUS</option>
+   <select class="form-control" name="office" id="office">
+     <option value="PHX" <?php if ($row['office'] == 'PHX') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>PHX</option>
+     <option value="TUS"<?php if ($row['office'] == 'TUS') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>TUS</option>
    </select> 
  </td>
 </tr>
@@ -480,11 +479,11 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
  </td>
  <td style="padding: 5px">
   <label for="jobTitle">Title</label>
-   <select class="form-control" name="jobTitle" id="jobTitle" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-         <option value="Office" <?php if ($row['title'] == 'Office') { echo " selected "; }?>>Office</option>
-         <option value="Dispatch"<?php if ($row['title'] == 'Dispatch') { echo " selected "; }?>>Dispatch</option>
-         <option value="Accounting" <?php if ($row['title'] == 'Accounting') { echo " selected "; }?>>Accounting</option>
-         <option value="Driver"<?php if ($row['title'] == 'Driver') { echo " selected "; }?>>Driver</option>
+   <select class="form-control" name="jobTitle" id="jobTitle">
+         <option value="Office" <?php if ($row['title'] == 'Office') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Office</option>
+         <option value="Dispatch"<?php if ($row['title'] == 'Dispatch') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Dispatch</option>
+         <option value="Accounting" <?php if ($row['title'] == 'Accounting') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Accounting</option>
+         <option value="Driver"<?php if ($row['title'] == 'Driver') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Driver</option>
        </select> 
      </td>
     </tr>
@@ -518,7 +517,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 <tr><td>
       <div class="checkbox">
     <label>
-      <input name="vtextEnabled" id="vtextEnabled" type="checkbox" value="on" <?php if ($row['vtextupdate'] == "1") { echo "checked"; }?> <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+      <input name="vtextEnabled" id="vtextEnabled" type="checkbox" value="on" <?php if ($row['vtextupdate'] == "1") { echo "checked"; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>
     </label>
   </div>
       </div>
@@ -588,19 +587,19 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
     <tr>
      <td style="padding: 5px">
       <label for="ssn">SSN</label>
-      <input type="text" class="form-control" name="ssn" id="ssn" placeholder="" value="<?php echo $row['ssn'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+      <input type="text" class="form-control" name="ssn" id="ssn" placeholder="" value="<?php echo $row['ssn'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="dob">DOB</label>
-      <input type="text" class="form-control" name="dob" id="dob" placeholder="mm/dd/yyyy" value="<?php echo $row['dob'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+      <input type="text" class="form-control" name="dob" id="dob" placeholder="mm/dd/yyyy" value="<?php echo $row['dob'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="driverLicense">License No.</label>
-      <input type="text" class="form-control" name="driverLicense" id="driverLicense" placeholder="" value="<?php echo $row['driver_license_n'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+      <input type="text" class="form-control" name="driverLicense" id="driverLicense" placeholder="" value="<?php echo $row['driver_license_n'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="driverLicenseExpire">License Exp.</label>
-      <input type="text" class="form-control" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['driver_license_exp'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+      <input type="text" class="form-control" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['driver_license_exp'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="mobilePhone">Mobile</label>
@@ -608,21 +607,21 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
      </td>
      <td style="padding: 5px">
       <label for="startDate">Start Date</label>
-      <input type="text" class="form-control" name="startDate" id="startDate" placeholder="mm/dd/yyyy" value="<?php echo $row['start_dt'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+      <input type="text" class="form-control" name="startDate" id="startDate" placeholder="mm/dd/yyyy" value="<?php echo $row['start_dt'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="departureDate">Depart Date</label>
-      <input type="text" class="form-control" data-date-format="mm/dd/yyyy" name="departureDate" id="departureDate" placeholder="mm/dd/yyyy" value="<?php echo $row['depart_dt'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+      <input type="text" class="form-control" data-date-format="mm/dd/yyyy" name="departureDate" id="departureDate" placeholder="mm/dd/yyyy" value="<?php echo $row['depart_dt'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
     </tr>
     <tr>
      <td style="padding: 5px">
       <label for="departureReason">Depart Reason</label>
-      <input type="text" class="form-control" name="departureReason" id="departureReason" placeholder="" value="<?php echo $row['depart_reason'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+      <input type="text" class="form-control" name="departureReason" id="departureReason" placeholder="" value="<?php echo $row['depart_reason'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="username">Username</label>
-      <input type="text" class="form-control" name="username" id="username" placeholder="" value="<?php echo $row['username'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+      <input type="text" class="form-control" name="username" id="username" placeholder="" value="<?php echo $row['username'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="password">Password</label>
@@ -630,11 +629,11 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
      </td>
      <td style="padding: 5px">
       <label for="medCardExpire">Med Exp Date</label>
-      <input type="text" class="form-control" name="medCardExpire" id="medCardExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['med_card_exp'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+      <input type="text" class="form-control" name="medCardExpire" id="medCardExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['med_card_exp'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="salary">Salary</label>
-      <input type="text" class="form-control" name="salary" id="salary" placeholder="" value="<?php echo $row['salary'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+      <input type="text" class="form-control" name="salary" id="salary" placeholder="" value="<?php echo $row['salary'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="emergencyPhone">Emerg Phone</label>
@@ -642,7 +641,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
      </td>
      <td style="padding: 5px">
       <label for="tsa">TSA-STA</label>
-      <input type="text" class="form-control" name="tsa" id="tsa" placeholder="" value="<?php echo $row['tsa_sta'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+      <input type="text" class="form-control" name="tsa" id="tsa" placeholder="" value="<?php echo $row['tsa_sta'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
     </tr>
     <tr>
@@ -652,17 +651,17 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
      </td>
      <td style="padding: 5px" colspan="3">
       <label for="miscDetails">Notes</label>
-      <textarea class="form-control" name="notes" id="notes" placeholder="" value="" style="padding-top: 0px; padding-bottom: 0px; height: 34px;" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>><?php echo $row['notes'];?></textarea>
+      <textarea class="form-control" name="notes" id="notes" placeholder="" value="" style="padding-top: 0px; padding-bottom: 0px; height: 34px;" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>><?php echo $row['notes'];?></textarea>
      </td>
     </tr>
     <tr>
      <td style="padding: 5px">
       <label for="tsPhone">TS Phone</label>
-      <input type="text" class="form-control" name="tsPhone" id="tsPhone" placeholder="" value="<?php echo $row['ts_phone'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+      <input type="text" class="form-control" name="tsPhone" id="tsPhone" placeholder="" value="<?php echo $row['ts_phone'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="tsName">TS Name</label>
-      <input type="text" class="form-control" name="tsName" id="tsName" placeholder="" value="<?php echo $row['ts_name'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
+      <input type="text" class="form-control" name="tsName" id="tsName" placeholder="" value="<?php echo $row['ts_name'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
     </tr>
     <tr>
