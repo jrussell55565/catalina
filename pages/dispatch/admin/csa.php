@@ -259,11 +259,11 @@ if (! empty($_FILES["fuelUpload"]["name"]))
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            CSA Scores</h1>
+            Admin Dashboard</h1>
             
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
-            <li class="active">CSA Scores</li>
+            <li class="active">Dashboard</li>
           </ol>
         </section>
 
@@ -279,10 +279,21 @@ if (! empty($_FILES["fuelUpload"]["name"]))
             <div class="col-md-12">
               <div class="box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">CSA Inspections + Non Reported Issues</h3>
+                  <h3 class="box-title">CSA Data</h3>
+<span class="label label-default" style="background-color: transparent;">
+<div class="box-tools pull-right">
+            <ul class="pagination pagination-sm no-margin pull-right">
+  <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?page=1">1</a></li>
+  <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?page=2">2</a></li>
+  <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?page=3">3</a></li>
+  <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?page=4">4</a></li>
+  <li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?page=5">5</a></li>
+</ul>
+</span>
+          </div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
-<table width="631" class="table table-striped">
+<table class="table table-striped">
  <thead>
   <tr>
     <?php
@@ -324,18 +335,8 @@ if (! empty($_FILES["fuelUpload"]["name"]))
         }
       }
     ?>
-    <th width="61"> </th>
-    <th width="47">Name <a href="?sort=name&order=<?php echo $orderName;?>">
-             <i class="glyphicon glyphicon-triangle-<?php echo $glyphName;?>"></i></a></th>
-    <th width="154">ViDate</th>
-    <th width="39">State<a href="?sort=status&order=<?php echo $orderStatus;?>">
-               <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>
-    <th width="39">Basic</th>
-    <th width="53">VGroup</th>
-    <th width="35">Code</th>
-    <th width="64">Violation Weight</th>
-    <th width="38">Time WT</th>
-    <th width="57">Your Score</th>
+    <th>Name</th>
+    <th>Score</th>
   </tr>
  </thead>
  <tbody>
@@ -345,51 +346,8 @@ if ($_SESSION['login'] == 2)
 {
   $predicate = " WHERE username = '$_SESSION[username]'";
 }
-$sql = "SELECT 
-     id,
-     username,
-     drivername,
-     fname,
-     mname,
-     lname,
-     status,
-     role,
-     office,
-     addr1,
-     addr2,
-     city,
-     state,
-     zipcode,
-     title,
-     email,
-     emailupdate,
-     vtext,
-     vtextupdate,
-     quiet_time_begin,
-     quiet_time_end,
-     ssn,
-     date_format(dob,'%m/%d/%Y') as dob,
-     driver_license_n,
-     date_format(driver_license_exp,'%m/%d/%Y') as driver_license_exp,
-     driverid,
-     date_format(start_dt,'%m/%d/%Y') as start_dt,
-     date_format(depart_dt,'%m/%d/%Y') as depart_dt,
-     depart_reason,
-     username,
-     password,
-     date_format(med_card_exp,'%m/%d/%Y') as med_card_exp,
-     salary,
-     emerg_contact_name,
-     emerg_contact_phone,
-     tsa_sta,
-     contract,
-     fuelcard,
-     ts_name,
-     ts_phone,
-     notes
-      FROM users 
-    $predicate
-$orderSql";
+$sql = "
+select distinct first_name,last_name from csadata ORDER BY 1";
   #print "$sql<br>\n\n";
 
 $sql = mysql_query($sql);
@@ -397,306 +355,78 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 {
 ?>
 <tr>
-<td><a href="#"><i class="glyphicon glyphicon-user"></i></a></td>
 <td>
-<div style="float:left;width:80%;"><?php echo $row['first_name'] . " " . $row['last_name'];?></div>
-<div style="float:right;width:20%;"><a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse" 
-  href="#<?php echo $row['username'];?>_details"aria-expanded="false" aria-controls="<?php echo $row['username'];?>_details">
+<div style="float:left;width:20%;"><?php echo $row['first_name'] . " " . $row['last_name'];?></div>
+<div style="float:right;width:80%;"><a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse" 
+  href="#<?php echo $row['last_name'];?>_details"aria-expanded="false" aria-controls="<?php echo $row['last_name'];?>_details">
   </a></div>
 </td>
-<td><?php echo $row['csa_date'];?></td>
-<td><?php echo $row['level'];?></td>
-<td><?php echo $row['basic'];?></td>
-<td><?php echo $row['violation_group'];?></td>
-<td><?php echo $row['code'];?></td>
-<td><?php echo $row['violation_weight'];?></td>
-<td><?php echo $row['time_weight'];?></td>
-<td>10</td>
+<td><?php echo $row['date'];?></td>
+<td><?php echo $row['score'];?></td>
 </tr>
-<tr class="collapse" id="<?php echo $row['username'];?>_details">
+<tr class="collapse" id="<?php echo $row['last_name'];?>_details">
 <td colspan="9">
   <div class="well">
 <form enctype="multipart/form-data" role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <table>
 <tr>
- <td rowspan="3">
+<!-- <td rowspan="2">
    <div><img style="display: block; margin: 0 auto;" 
-         src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $row['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $row['username'] . "_avatar";}else{ echo HTTP."/dist/img/avatar.png"; }?>"/></div>
-   <div><input id="fileToUpload" name="fileToUpload" type="file" multiple=true class="file-loading"></div>
+         src="<?php #if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $row['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $row['username'] . "_avatar";}else{ echo HTTP."/dist/img/avatar.png"; }?>"/></div>
+ </td> -->
+ <?php $sqlDetails = "SELECT * from csadata WHERE first_name = '" . $row['first_name'] . "' AND last_name = '" . $row['last_name'] . "'";
+       $sqlDetails = mysql_query($sqlDetails);
+       while ($rowDetails = mysql_fetch_array($sqlDetails, MYSQL_BOTH))
+       { 
+ ?>
+ <td style="padding: 5px">
+  <label for="status">Violation Date</label>
+  <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="<?php echo $rowDetails['date'];?>" readonly>
  </td>
  <td style="padding: 5px">
-  <label for="fname">First Name</label>
-  <input type="text" class="form-control" name="fname" id="fname" placeholder="" value="<?php echo $row['fname'];?>">
+  <label for="status">Violation Category</label>
+  <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="<?php echo $rowDetails['basic'];?>" readonly>
  </td>
  <td style="padding: 5px">
-  <label for="mname">Middle Name</label>
-  <input type="text" class="form-control" name="mname" id="mname" placeholder="" value="<?php echo $row['mname'];?>">
+  <label for="addr1">Violation Group</label>
+  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $rowDetails['violation_group'];?>" readonly>
  </td>
  <td style="padding: 5px">
-  <label for="lname">Last Name</label>
-  <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="<?php echo $row['lname'];?>">
+  <label for="addr1">Violation Code</label>
+  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $rowDetails['code'];?>" readonly>
  </td>
  <td style="padding: 5px">
-  <label for="status">Status</label>
-   <select class="form-control" name="status" id="status" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     <option value="Active" <?php if ($row['status'] == 'Active') { echo " selected "; }?>>Active</option>
-     <option value="Inactive"<?php if ($row['status'] == 'Inactive') { echo " selected "; }?>>Inactive</option>
-   </select> 
+  <label for="addr1">Violation Weight</label>
+  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $rowDetails['violation_weight'];?>" readonly>
  </td>
  <td style="padding: 5px">
-  <label for="role">Role</label>
-   <select class="form-control" name="role" id="role" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     <option value="Employee" <?php if ($row['role'] == 'Employee') { echo " selected "; }?>>Employee</option>
-     <option value="Admin"<?php if ($row['role'] == 'Admin') { echo " selected "; }?>>Admin</option>
-   </select> 
+  <label for="addr1">Time Weight</label>
+  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $rowDetails['time_weight'];?>" readonly>
  </td>
- <td style="padding: 5px">
-  <label for="office">Office</label>
-   <select class="form-control" name="office" id="office" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     <option value="PHX" <?php if ($row['office'] == 'PHX') { echo " selected "; }?>>PHX</option>
-     <option value="TUS"<?php if ($row['office'] == 'TUS') { echo " selected "; }?>>TUS</option>
-   </select> 
+ <td style="padding: 5px" colspan="2">
+  <label for="addr1">Description</label>
+  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $rowDetails['description'];?>" readonly>
+ </td>
+ <td style="padding: 5px" colspan="2">
+  <label for="addr1">Co-Driver</label>
+  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $rowDetails['co_driver_first_name'] . ' ' . $rowDetails['co_driver_last_name'];?>" readonly>
+ </td>
+ <td style="padding: 5px" colspan="2">
+  <label for="addr1">Score</label>
+  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="1" readonly>
  </td>
 </tr>
-<tr>
- <td style="padding: 5px">
-  <label for="addr1">Home Addr 1</label>
-  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $row['addr1'];?>">
- </td>
- <td style="padding: 5px">
-  <label for="addr2">Home Addr 2</label>
-  <input type="text" class="form-control" name="addr2" id="addr2" placeholder="" value="<?php echo $row['addr2'];?>">
- </td>
- <td style="padding: 5px">
-  <label for="city">Home City</label>
-  <input type="text" class="form-control" name="city" id="city" placeholder="" value="<?php echo $row['city'];?>">
- </td>
- <td style="padding: 5px">
-  <label for="state">Home State</label>
-  <input type="text" class="form-control" name="state" id="state" placeholder="" value="<?php echo $row['state'];?>">
- </td>
- <td style="padding: 5px">
-  <label for="zip">Home Zip</label>
-  <input type="text" class="form-control" name="zip" id="zip" placeholder="" value="<?php echo $row['zipcode'];?>">
- </td>
- <td style="padding: 5px">
-  <label for="jobTitle">Title</label>
-   <select class="form-control" name="jobTitle" id="jobTitle" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-         <option value="Office" <?php if ($row['title'] == 'Office') { echo " selected "; }?>>Office</option>
-         <option value="Dispatch"<?php if ($row['title'] == 'Dispatch') { echo " selected "; }?>>Dispatch</option>
-         <option value="Accounting" <?php if ($row['title'] == 'Accounting') { echo " selected "; }?>>Accounting</option>
-         <option value="Driver"<?php if ($row['title'] == 'Driver') { echo " selected "; }?>>Driver</option>
-       </select> 
-     </td>
-    </tr>
-    <tr>
+ <?php
+ }
+ mysql_free_result($sqlDetails);
+ ?>
+   <tr>
      <td style="padding: 5px">
-      <label for="email">Email</label>
-      <input type="email" class="form-control" name="email" id="email" placeholder="" value="<?php echo $row['email'];?>">
-     </td>
-     <td style="padding: 5px">
-       <label for="emailUpdates" style="margin-top: 8px; margin-bottom: 0px;">Enable</label>
-
-<table>
-<tr><td>
-      <div class="checkbox">
-    <label>
-      <input name="emailEnabled" id="emailEnabled" type="checkbox" value="on" <?php if ($row['emailupdate'] == "1") { echo "checked"; }?>>
-    </label>
-  </div>
-      </div>
-</td>
-</tr></table>
-
-     </td>
-     <td style="padding: 5px">
-      <label for="vtext">Vtext</label>
-      <input type="vtext" class="form-control" name="vtext" id="vtext" placeholder="" value="<?php echo $row['vtext'];?>">
-     </td>
-     <td style="padding: 5px">
-      <label for="textUpdates" style="margin-top: 8px; margin-bottom: 0px;">Enable</label>
-<table>
-<tr><td>
-      <div class="checkbox">
-    <label>
-      <input name="vtextEnabled" id="vtextEnabled" type="checkbox" value="on" <?php if ($row['vtextupdate'] == "1") { echo "checked"; }?> <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-    </label>
-  </div>
-      </div>
-</td>
-</tr></table>
-
-     </td>
-     <td style="padding: 5px">
-      <label for="quietTimeVal1">Quiet (start)</label>
-       <select class="form-control" name="quietTimeVal1" id="quietTimeVal1">
-         <option value="00:00" <?php if ($row['quiet_time_begin'] == '00:00') { echo " selected "; }?>>00:00</option>
-         <option value="01:00" <?php if ($row['quiet_time_begin'] == '01:00') { echo " selected "; }?>>01:00</option>
-         <option value="02:00" <?php if ($row['quiet_time_begin'] == '02:00') { echo " selected "; }?>>02:00</option>
-         <option value="03:00" <?php if ($row['quiet_time_begin'] == '03:00') { echo " selected "; }?>>03:00</option>
-         <option value="04:00" <?php if ($row['quiet_time_begin'] == '04:00') { echo " selected "; }?>>04:00</option>
-         <option value="05:00" <?php if ($row['quiet_time_begin'] == '05:00') { echo " selected "; }?>>05:00</option>
-         <option value="06:00" <?php if ($row['quiet_time_begin'] == '06:00') { echo " selected "; }?>>06:00</option>
-         <option value="07:00" <?php if ($row['quiet_time_begin'] == '07:00') { echo " selected "; }?>>07:00</option>
-         <option value="08:00" <?php if ($row['quiet_time_begin'] == '08:00') { echo " selected "; }?>>08:00</option>
-         <option value="09:00" <?php if ($row['quiet_time_begin'] == '09:00') { echo " selected "; }?>>09:00</option>
-         <option value="10:00" <?php if ($row['quiet_time_begin'] == '10:00') { echo " selected "; }?>>10:00</option>
-         <option value="11:00" <?php if ($row['quiet_time_begin'] == '11:00') { echo " selected "; }?>>11:00</option>
-         <option value="12:00" <?php if ($row['quiet_time_begin'] == '12:00') { echo " selected "; }?>>12:00</option>
-         <option value="13:00" <?php if ($row['quiet_time_begin'] == '13:00') { echo " selected "; }?>>13:00</option>
-         <option value="14:00" <?php if ($row['quiet_time_begin'] == '14:00') { echo " selected "; }?>>14:00</option>
-         <option value="15:00" <?php if ($row['quiet_time_begin'] == '15:00') { echo " selected "; }?>>15:00</option>
-         <option value="16:00" <?php if ($row['quiet_time_begin'] == '16:00') { echo " selected "; }?>>16:00</option>
-         <option value="17:00" <?php if ($row['quiet_time_begin'] == '17:00') { echo " selected "; }?>>17:00</option>
-         <option value="18:00" <?php if ($row['quiet_time_begin'] == '18:00') { echo " selected "; }?>>18:00</option>
-         <option value="19:00" <?php if ($row['quiet_time_begin'] == '19:00') { echo " selected "; }?>>19:00</option>
-         <option value="20:00" <?php if ($row['quiet_time_begin'] == '20:00') { echo " selected "; }?>>20:00</option>
-         <option value="21:00" <?php if ($row['quiet_time_begin'] == '21:00') { echo " selected "; }?>>21:00</option>
-         <option value="22:00" <?php if ($row['quiet_time_begin'] == '22:00') { echo " selected "; }?>>22:00</option>
-         <option value="23:00" <?php if ($row['quiet_time_begin'] == '23:00') { echo " selected "; }?>>23:00</option>
-      </select>
-     </td>
-     <td style="padding: 5px">
-      <label for="quietTimeVal2">Quiet (end)</label>
-       <select class="form-control" name="quietTimeVal2" id="quietTimeVal2">
-         <option value="00:00" <?php if ($row['quiet_time_end'] == '00:00') { echo " selected "; }?>>00:00</option>
-         <option value="01:00" <?php if ($row['quiet_time_end'] == '01:00') { echo " selected "; }?>>01:00</option>
-         <option value="02:00" <?php if ($row['quiet_time_end'] == '02:00') { echo " selected "; }?>>02:00</option>
-         <option value="03:00" <?php if ($row['quiet_time_end'] == '03:00') { echo " selected "; }?>>03:00</option>
-         <option value="04:00" <?php if ($row['quiet_time_end'] == '04:00') { echo " selected "; }?>>04:00</option>
-         <option value="05:00" <?php if ($row['quiet_time_end'] == '05:00') { echo " selected "; }?>>05:00</option>
-         <option value="06:00" <?php if ($row['quiet_time_end'] == '06:00') { echo " selected "; }?>>06:00</option>
-         <option value="07:00" <?php if ($row['quiet_time_end'] == '07:00') { echo " selected "; }?>>07:00</option>
-         <option value="08:00" <?php if ($row['quiet_time_end'] == '08:00') { echo " selected "; }?>>08:00</option>
-         <option value="09:00" <?php if ($row['quiet_time_end'] == '09:00') { echo " selected "; }?>>09:00</option>
-         <option value="10:00" <?php if ($row['quiet_time_end'] == '10:00') { echo " selected "; }?>>10:00</option>
-         <option value="11:00" <?php if ($row['quiet_time_end'] == '11:00') { echo " selected "; }?>>11:00</option>
-         <option value="12:00" <?php if ($row['quiet_time_end'] == '12:00') { echo " selected "; }?>>12:00</option>
-         <option value="13:00" <?php if ($row['quiet_time_end'] == '13:00') { echo " selected "; }?>>13:00</option>
-         <option value="14:00" <?php if ($row['quiet_time_end'] == '14:00') { echo " selected "; }?>>14:00</option>
-         <option value="15:00" <?php if ($row['quiet_time_end'] == '15:00') { echo " selected "; }?>>15:00</option>
-         <option value="16:00" <?php if ($row['quiet_time_end'] == '16:00') { echo " selected "; }?>>16:00</option>
-         <option value="17:00" <?php if ($row['quiet_time_end'] == '17:00') { echo " selected "; }?>>17:00</option>
-         <option value="18:00" <?php if ($row['quiet_time_end'] == '18:00') { echo " selected "; }?>>18:00</option>
-         <option value="19:00" <?php if ($row['quiet_time_end'] == '19:00') { echo " selected "; }?>>19:00</option>
-         <option value="20:00" <?php if ($row['quiet_time_end'] == '20:00') { echo " selected "; }?>>20:00</option>
-         <option value="21:00" <?php if ($row['quiet_time_end'] == '21:00') { echo " selected "; }?>>21:00</option>
-         <option value="22:00" <?php if ($row['quiet_time_end'] == '22:00') { echo " selected "; }?>>22:00</option>
-         <option value="23:00" <?php if ($row['quiet_time_end'] == '23:00') { echo " selected "; }?>>23:00</option>
-       </select>
-     </td>
-    </tr>
-    <tr>
-     <td style="padding: 5px">
-      <label for="ssn">SSN</label>
-      <input type="text" class="form-control" name="ssn" id="ssn" placeholder="" value="<?php echo $row['ssn'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     </td>
-     <td style="padding: 5px">
-      <label for="dob">DOB</label>
-      <input type="text" class="form-control" name="dob" id="dob" placeholder="mm/dd/yyyy" value="<?php echo $row['dob'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     </td>
-     <td style="padding: 5px">
-      <label for="driverLicense">License No.</label>
-      <input type="text" class="form-control" name="driverLicense" id="driverLicense" placeholder="" value="<?php echo $row['driver_license_n'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     </td>
-     <td style="padding: 5px">
-      <label for="driverLicenseExpire">License Exp.</label>
-      <input type="text" class="form-control" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['driver_license_exp'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     </td>
-     <td style="padding: 5px">
-      <label for="mobilePhone">Mobile</label>
-      <input type="text" class="form-control" name="mobilePhone" id="mobilePhone" placeholder="" value="<?php echo $row['driverid'];?>">
-     </td>
-     <td style="padding: 5px">
-      <label for="startDate">Start Date</label>
-      <input type="text" class="form-control" name="startDate" id="startDate" placeholder="mm/dd/yyyy" value="<?php echo $row['start_dt'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     </td>
-     <td style="padding: 5px">
-      <label for="departureDate">Depart Date</label>
-      <input type="text" class="form-control" data-date-format="mm/dd/yyyy" name="departureDate" id="departureDate" placeholder="mm/dd/yyyy" value="<?php echo $row['depart_dt'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     </td>
-    </tr>
-    <tr>
-     <td style="padding: 5px">
-      <label for="departureReason">Depart Reason</label>
-      <input type="text" class="form-control" name="departureReason" id="departureReason" placeholder="" value="<?php echo $row['depart_reason'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     </td>
-     <td style="padding: 5px">
-      <label for="username">Username</label>
-      <input type="text" class="form-control" name="username" id="username" placeholder="" value="<?php echo $row['username'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     </td>
-     <td style="padding: 5px">
-      <label for="password">Password</label>
-      <input type="text" class="form-control" name="password" id="password" placeholder="" value="<?php echo $row['password'];?>">
-     </td>
-     <td style="padding: 5px">
-      <label for="medCardExpire">Med Exp Date</label>
-      <input type="text" class="form-control" name="medCardExpire" id="medCardExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['med_card_exp'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     </td>
-     <td style="padding: 5px">
-      <label for="salary">Salary</label>
-      <input type="text" class="form-control" name="salary" id="salary" placeholder="" value="<?php echo $row['salary'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     </td>
-     <td style="padding: 5px">
-      <label for="emergencyPhone">Emerg Phone</label>
-      <input type="text" class="form-control" name="emergencyPhone" id="emergencyPhone" placeholder="" value="<?php echo $row['emerg_contact_phone'];?>">
-     </td>
-     <td style="padding: 5px">
-      <label for="tsa">TSA-STA</label>
-      <input type="text" class="form-control" name="tsa" id="tsa" placeholder="" value="<?php echo $row['tsa_sta'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     </td>
-    </tr>
-    <tr>
-     <td style="padding: 5px">
-      <label for="emergencyContact">Emerg Contact</label>
-      <input type="text" class="form-control" name="emergencyContact" id="emergencyContact" placeholder="" value="<?php echo $row['emerg_contact_name'];?>">
-     </td>
-     <td style="padding: 5px" colspan="3">
-      <label for="miscDetails">Notes</label>
-      <textarea class="form-control" name="notes" id="notes" placeholder="" value="" style="padding-top: 0px; padding-bottom: 0px; height: 34px;" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>><?php echo $row['notes'];?></textarea>
-     </td>
-    </tr>
-    <tr>
-     <td style="padding: 5px">
-      <label for="tsPhone">TS Phone</label>
-      <input type="text" class="form-control" name="tsPhone" id="tsPhone" placeholder="" value="<?php echo $row['ts_phone'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     </td>
-     <td style="padding: 5px">
-      <label for="tsName">TS Name</label>
-      <input type="text" class="form-control" name="tsName" id="tsName" placeholder="" value="<?php echo $row['ts_name'];?>" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>>
-     </td>
-    </tr>
-    <tr>
-     <td colspan="1" style="padding: 5px">
-      <label for="contract">Contract</label>
-      <a href="<?php if (isset($row['contract'])) { echo HTTP . $row['contract']; }?>" target="_blank"><?php if (isset($row['contract'])) { echo $row['contract']; }?></a>
-      <div><input id="contractUpload" name="contractUpload" type="file" multiple=true class="file-loading" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>></div>
-     </td>
-     <td colspan="1" style="padding: 5px">
-      <label for="fuelcard">Fuel Card</label>
-      <a href="<?php if (isset($row['fuelcard'])) { echo HTTP . $row['fuelcard']; }?>" target="_blank"><?php if (isset($row['fuelcard'])) { echo $row['fuelcard']; }?></a>
-      <div><input id="fuelUpload" name="fuelUpload" type="file" multiple=true class="file-loading" <?php if ($_SESSION['login'] == 2) { echo 'disabled'; }?>></div>
-     </td>
-    </tr>
-    <tr>
-     <td style="padding: 5px">
-       <input type="submit" name="submit" class="btn btn-primary" value="Update">
-       <input type="hidden" name="id" class="btn btn-primary" value="<?php echo $row['id'];?>">
+       <input type="submit" name="submit" class="btn btn-primary" value="Submit">
      </td>
     </tr>
    </table>
    </form>
-   <form  class="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-   <table>
-   <tr>
-     <td style="padding: 5px">
-      <button type="submit" class="btn btn-info" value="<?php echo $row['email'];?>" id="testEmail" name="testEmail" formaction="<?php echo $_SERVER['PHP_SELF']; ?>" formmethod="post">Test Email</button>
-      <button type="submit" class="btn btn-info" value="<?php echo $row['vtext'];?>" id="testVtext" name="testVtext" formaction="<?php echo $_SERVER['PHP_SELF']; ?>" formmethod="post">Test Text</button>
-      </form>
-     </td>
-   </tr>
-  </table>
-  </form>
   </div>
 </td>
 </tr>
@@ -704,295 +434,6 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
                       }
                       mysql_free_result($sql);
 ?>
-<?php
-if ($_SESSION['login'] == 1)
-{
-?>
-<tr>
-<td><a href="#"><i class="glyphicon glyphicon-user"></i></a></td>
-<td>
-<div style="float:left;width:80%;">Add User</div>
-<div style="float:right;width:20%;"><a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse"
-  href="#addUser_details"aria-expanded="false" aria-controls="addUser_details">
-  </a></div>
-</td>
-<td><a href="#"><i class="glyphicon glyphicon-lock"></i></a></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<?php
-}
-?>
-<tr class="collapse" id="addUser_details">
-<td colspan="9">
-  <div class="well">
-   <form enctype="multipart/form-data" role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-   <table>
-    <tr>
-     <td rowspan="3">
-       <div><img style="display: block; margin: 0 auto;"
-             src="<?php echo HTTP."/dist/img/avatar.png";?>"/></div>
-       <div><input id="fileToUpload" name="fileToUpload" type="file" multiple=true class="file-loading"></div>
-     </td>
-     <td style="padding: 5px">
-      <label for="fname">First Name</label>
-      <input type="text" class="form-control" name="fname" id="fname" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="mname">Middle Name</label>
-      <input type="text" class="form-control" name="mname" id="mname" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="lname">Last Name</label>
-      <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="status">Status</label>
-       <select class="form-control" name="status" id="status">
-         <option value="Active">Active</option>
-         <option value="Inactive">Inactive</option>
-       </select>
-     </td>
-     <td style="padding: 5px">
-      <label for="role">Role</label>
-       <select class="form-control" name="role" id="role">
-         <option value="Employee">Employee</option>
-         <option value="Admin">Admin</option>
-       </select>
-     </td>
-     <td style="padding: 5px">
-      <label for="office">Office</label>
-       <select class="form-control" name="office" id="office">
-         <option value="PHX">PHX</option>
-         <option value="TUS">TUS</option>
-       </select>
-     </td>
-    </tr>
-    <tr>
-     <td style="padding: 5px">
-      <label for="addr1">Home Addr 1</label>
-      <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="addr2">Home Addr 2</label>
-      <input type="text" class="form-control" name="addr2" id="addr2" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="city">Home City</label>
-      <input type="text" class="form-control" name="city" id="city" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="state">Home State</label>
-      <input type="text" class="form-control" name="state" id="state" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="zip">Home Zip</label>
-      <input type="text" class="form-control" name="zip" id="zip" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="jobTitle">Title</label>
-       <select class="form-control" name="jobTitle" id="jobTitle">
-         <option value="Office">Office</option>
-         <option value="Dispatch">Dispatch</option>
-         <option value="Accounting">Accounting</option>
-         <option value="Driver">Driver</option>
-       </select>
-     </td>
-    </tr>
-    <tr>
-     <td style="padding: 5px">
-      <label for="email">Email</label>
-      <input type="email" class="form-control" name="email" id="email" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-       <label for="emailUpdates" style="margin-top: 8px; margin-bottom: 0px;">Enable</label>
-
-<table>
-<tr><td>
-      <div class="checkbox">
-    <label>
-      <input name="emailEnabled" id="emailEnabled" type="checkbox" value="on" >
-    </label>
-  </div>
-      </div>
-</td>
-</tr></table>
-
-     </td>
-     <td style="padding: 5px">
-      <label for="vtext">Vtext</label>
-      <input type="vtext" class="form-control" name="vtext" id="vtext" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="textUpdates" style="margin-top: 8px; margin-bottom: 0px;">Enable</label>
-<table>
-<tr><td>
-      <div class="checkbox">
-    <label>
-      <input name="vtextEnabled" id="vtextEnabled" type="checkbox" value="on" >
-    </label>
-  </div>
-      </div>
-</td>
-</tr></table>
-
-     </td>
-     <td style="padding: 5px">
-      <label for="quietTimeVal1">Quiet (start)</label>
-       <select class="form-control" name="quietTimeVal1" id="quietTimeVal1">
-         <option value="00:00">00:00</option>
-         <option value="01:00">01:00</option>
-         <option value="02:00">02:00</option>
-         <option value="03:00">03:00</option>
-         <option value="04:00">04:00</option>
-         <option value="05:00">05:00</option>
-         <option value="06:00">06:00</option>
-         <option value="07:00">07:00</option>
-         <option value="08:00">08:00</option>
-         <option value="09:00">09:00</option>
-         <option value="10:00">10:00</option>
-         <option value="11:00">11:00</option>
-         <option value="12:00">12:00</option>
-         <option value="13:00">13:00</option>
-         <option value="14:00">14:00</option>
-         <option value="15:00">15:00</option>
-         <option value="16:00">16:00</option>
-         <option value="17:00">17:00</option>
-         <option value="18:00">18:00</option>
-         <option value="19:00">19:00</option>
-         <option value="20:00">20:00</option>
-         <option value="21:00">21:00</option>
-         <option value="22:00">22:00</option>
-         <option value="23:00">23:00</option>
-      </select>
-     </td>
-     <td style="padding: 5px">
-      <label for="quietTimeVal2">Quiet (end)</label>
-       <select class="form-control" name="quietTimeVal2" id="quietTimeVal2">
-         <option value="00:00">00:00</option>
-         <option value="01:00">01:00</option>
-         <option value="02:00">02:00</option>
-         <option value="03:00">03:00</option>
-         <option value="04:00">04:00</option>
-         <option value="05:00">05:00</option>
-         <option value="06:00">06:00</option>
-         <option value="07:00">07:00</option>
-         <option value="08:00">08:00</option>
-         <option value="09:00">09:00</option>
-         <option value="10:00">10:00</option>
-         <option value="11:00">11:00</option>
-         <option value="12:00">12:00</option>
-         <option value="13:00">13:00</option>
-         <option value="14:00">14:00</option>
-         <option value="15:00">15:00</option>
-         <option value="16:00">16:00</option>
-         <option value="17:00">17:00</option>
-         <option value="18:00">18:00</option>
-         <option value="19:00">19:00</option>
-         <option value="20:00">20:00</option>
-         <option value="21:00">21:00</option>
-         <option value="22:00">22:00</option>
-         <option value="23:00">23:00</option>
-       </select>
-     </td>
-    </tr>
-    <tr>
-     <td style="padding: 5px">
-      <label for="ssn">SSN</label>
-      <input type="text" class="form-control" name="ssn" id="ssn" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="dob">DOB</label>
-      <input type="text" class="form-control" name="dob" id="dob" placeholder="mm/dd/yyyy" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="driverLicense">License No.</label>
-      <input type="text" class="form-control" name="driverLicense" id="driverLicense" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="driverLicenseExpire">License Exp.</label>
-      <input type="text" class="form-control" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="mobilePhone">Mobile</label>
-      <input type="text" class="form-control" name="mobilePhone" id="mobilePhone" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="startDate">Start Date</label>
-      <input type="text" class="form-control" name="startDate" id="startDate" placeholder="mm/dd/yyyy" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="departureDate">Depart Date</label>
-      <input type="text" class="form-control" data-date-format="mm/dd/yyyy" name="departureDate" id="departureDate" placeholder="mm/dd/yyyy" value="">
-     </td>
-    </tr>
-    <tr>
-     <td style="padding: 5px">
-      <label for="departureReason">Depart Reason</label>
-      <input type="text" class="form-control" name="departureReason" id="departureReason" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="username">Username</label>
-      <input type="text" class="form-control" name="username" id="username" placeholder="" value="foo" required>
-     </td>
-     <td style="padding: 5px">
-      <label for="password">Password</label>
-      <input type="text" class="form-control" name="password" id="password" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="medCardExpire">Med Exp Date</label>
-      <input type="text" class="form-control" name="medCardExpire" id="medCardExpire" placeholder="mm/dd/yyyy" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="salary">Salary</label>
-      <input type="text" class="form-control" name="salary" id="salary" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="emergencyPhone">Emerg Phone</label>
-      <input type="text" class="form-control" name="emergencyPhone" id="emergencyPhone" placeholder="" value="">
-     </td>
-     <td style="padding: 5px">
-      <label for="tsa">TSA-STA</label>
-      <input type="text" class="form-control" name="tsa" id="tsa" placeholder="" value="">
-     </td>
-    </tr>
-    <tr>
-     <td style="padding: 5px">
-      <label for="emergencyContact">Emerg Contact</label>
-      <input type="text" class="form-control" name="emergencyContact" id="emergencyContact" placeholder="" value="">
-     </td>
-     <td style="padding: 5px" colspan="3">
-      <label for="miscDetails">Notes</label>
-      <textarea class="form-control" name="miscDetails" id="miscDetails" placeholder="" value="" style="padding-top: 0px; padding-bottom: 0px; height: 34px;"></textarea>
-     </td>
-    </tr>
-    <tr>
-     <td colspan="1" style="padding: 5px">
-      <label for="contract">Contract</label>
-      <a href=""></a>
-      <div><input id="contractUpload" name="contractUpload" type="file" multiple=true class="file-loading"></div>
-     </td>
-     <td colspan="1" style="padding: 5px">
-      <label for="fuelcard">Fuel Card</label>
-      <a href="" target="_blank"></a>
-      <div><input id="fuelUpload" name="fuelUpload" type="file" multiple=true class="file-loading"></div>
-     </td>
-    </tr>
-    <tr>
-     <td style="padding: 5px">
-       <input type="submit" name="submit" class="btn btn-primary" value="Add">
-       <input type="hidden" name="id" class="btn btn-primary" value="">
-     </td>
-    </tr>
-   </table>
-   </form>
-  </div>
-</td>
-</tr>
 </tbody>
 </table>
                 </div><!-- ./box-body -->
