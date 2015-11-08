@@ -246,11 +246,11 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
   {
     if (isset($_POST['sendEmail']))
     {
-      sendEmail($row['email'],$message); 
+      sendEmail($row['email'],'Broadcast Message',$message); 
     } 
     if (isset($_POST['sendText']))
     {
-      sendEmail($row['vtext'],$message); 
+      sendEmail($row['vtext'],'Broadcast Message',$message); 
     }
   }
   mysql_free_result($sql);
@@ -362,7 +362,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 <span class="input-group-addon" style="border: 0px; background: transparent">
  <img width="50px" src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; }?>" class="img-circle" alt="User Image" />
 </span>
-<input type="text" class="form-control" name="message" id="fname" placeholder="Share an update..." value="<?php echo $row['fname'];?>" required >
+<input type="text" class="form-control" name="message" id="message" placeholder="Share an update..." value="" required >
 <div class="input-group-inline">
 <select class="form-control" style="width: 33%; margin-top:5px" name="audience">
 <option>All</option>
