@@ -72,6 +72,31 @@ $drivername = $_SESSION['drivername'];
       <!-- Main content -->
       <section class="content">
                <?php
+                     # if we're an admin then get all the orders
+                     if ($_SESSION['login'] == 1)
+                     {
+                       $puPredicate = '1 = 1';
+                       $delPredicate = '1 = 1';
+                     }elseif ($_SESSION['login'] == 2){
+                       $puPredicate = "puAgentDriverPhone=
+                            (
+                              SELECT
+                                driverid
+                              FROM
+                                users
+                              WHERE
+                                username=\"$username\"
+                             )";
+                       $delPredicate = "delAgentDriverPhone=
+                            (
+                              SELECT
+                                driverid
+                              FROM
+                                users
+                              WHERE
+                                username=\"$username\"
+                            )";
+                     }
                      $sql = "SELECT
                       total_today.counts   AS total_today_count,
                       pu_today.counts      AS pu_today_count,
@@ -88,30 +113,14 @@ $drivername = $_SESSION['drivername'];
                           dispatch
                         WHERE
                           (
-                            puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
+                            $puPredicate
                           AND str_to_date(hawbDate,'%c/%e/%Y') = CURDATE()
                           AND deleted                          =\"F\"
                           AND archived                         =\"F\"
                           )
                         OR
                           (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username =\"$username\"
-                            )
+                           $delPredicate
                           AND str_to_date(dueDate,'%c/%e/%Y') = CURDATE()
                           AND deleted                         =\"F\"
                           AND archived                        =\"F\"
@@ -124,15 +133,7 @@ $drivername = $_SESSION['drivername'];
                         FROM
                           dispatch
                         WHERE
-                          puAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
+                        $puPredicate  
                         AND str_to_date(hawbDate,'%c/%e/%Y') = DATE(now())
                         AND deleted                          =\"F\"
                         AND archived                         =\"F\"
@@ -146,15 +147,7 @@ $drivername = $_SESSION['drivername'];
                         FROM
                           dispatch
                         WHERE
-                          delAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
+                        $delPredicate 
                         AND str_to_date(dueDate,'%c/%e/%Y') = DATE(now())
                         AND deleted                         =\"F\"
                         AND archived                        =\"F\"
@@ -169,24 +162,9 @@ $drivername = $_SESSION['drivername'];
                           dispatch
                         WHERE
                           (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          OR puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
+                            $delPredicate
+                            OR 
+                            $puPredicate
                           )
                         AND deleted =\"F\"
                         AND archived=\"F\"
@@ -198,15 +176,7 @@ $drivername = $_SESSION['drivername'];
                         FROM
                           dispatch
                         WHERE
-                          puAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
+                        $puPredicate
                         AND deleted =\"F\"
                         AND archived=\"F\"
                       )
@@ -217,15 +187,7 @@ $drivername = $_SESSION['drivername'];
                         FROM
                           dispatch
                         WHERE
-                          delAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
+                        $delPredicate 
                         AND deleted =\"F\"
                         AND archived=\"F\"
                       )
@@ -237,30 +199,15 @@ $drivername = $_SESSION['drivername'];
                           dispatch
                         WHERE
                           (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          OR puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
+                          $delPredicate 
+                          OR
+                          $puPredicate 
                           )
                         AND deleted =\"F\"
                         AND archived=\"T\"
                       )
                       archived";
-                  
+
                       $sql = mysql_query($sql);
                       while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
                       {
@@ -317,6 +264,12 @@ $drivername = $_SESSION['drivername'];
                 <?php
                 $deliveryQuery = "delAgentDriverPhone=(select driverid from users where username=\"$username\")";
                 $pickupQuery = "puAgentDriverPhone=(select driverid from users where username=\"$username\")";
+                # if we're an admin then get all the orders (so override the variables we just made above)
+                if ($_SESSION['login'] == 1)
+                {
+                  $deliveryQuery = "1 = 1";
+                  $pickupQuery   = "1 = 1";
+                }
                 $sql = "select hawbNumber,recordID,shipperName,consigneeName,status,hawbDate,dueDate,delAgentDriverName,puAgentDriverName,pieces,weight from dispatch
                         where (";
                 if ($_GET['gather'] == "del")
