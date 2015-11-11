@@ -4,7 +4,7 @@ function accessorials($accessorialType,$srcPage,$username)
    if ($accessorialType == 'Truck')
    {
       $ckPrefix = 'truck_';
-   }elseif($accessorialType = 'Trailer'){
+   }elseif($accessorialType == 'Trailer'){
       $ckPrefix = 'trailer_';
    }
 
