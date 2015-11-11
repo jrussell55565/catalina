@@ -137,8 +137,6 @@ $drivername = $_SESSION['drivername'];
                         AND str_to_date(hawbDate,'%c/%e/%Y') = DATE(now())
                         AND deleted                          =\"F\"
                         AND archived                         =\"F\"
-                        AND deleted                          =\"F\"
-                        AND archived                         =\"F\"
                       )
                       pu_today,
                       (
@@ -149,8 +147,6 @@ $drivername = $_SESSION['drivername'];
                         WHERE
                         $delPredicate 
                         AND str_to_date(dueDate,'%c/%e/%Y') = DATE(now())
-                        AND deleted                         =\"F\"
-                        AND archived                        =\"F\"
                         AND deleted                         =\"F\"
                         AND archived                        =\"F\"
                       )
