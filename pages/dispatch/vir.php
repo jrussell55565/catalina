@@ -73,7 +73,7 @@ $trailerid = $_SESSION['trailerid'];
     <section class="content-header">
       <h1> VIR AND TIRES</h1>
       <ol class="breadcrumb">
-        <li><a href="orders.php"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="/pages/main/index.php"><i class="fa fa-home"></i> Home</a></li>
         <li class="active">Vehicle Inspection Report</li>
       </ol>
     </section>
@@ -174,31 +174,31 @@ $trailerid = $_SESSION['trailerid'];
               <tr>
                 <td width="83">Truck
                 <td width="64" bgcolor="#33FF00"><div align="center">Green
-                    <input type="radio" name="vir_truck[]" id="vir_truck[]" value="green" checked>
+                    <input type="radio" name="vir_truck[]" id="vir_truck[]" value="Green,(No Issues)" checked>
                     <label for="vir_truck_green"></label>
                   </div>
                 <td width="66" bgcolor="#FFFF00"><div align="center">Yellow
-                    <input type="radio" name="vir_truck[]" id="vir_truck[]" value="yellow">
+                    <input type="radio" name="vir_truck[]" id="vir_truck[]" value="Yellow,(Reporting Problems)">
                     <label for="vir_truck_yellow"></label>
                   </div>
                 <td width="62" bgcolor="#FF0000"><div align="center">Red
-                    <input type="radio" name="vir_truck[]" id="vir_truck[]" value="red">
+                    <input type="radio" name="vir_truck[]" id="vir_truck[]" value="Red,(Do Not Operate)">
                     <label for="vir_truck_red"></label>
                   </div>
               </tr>
               <tr>
                 <td>Truck <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
                 <td bgcolor="#33FF00"><div align="center">Green
-                    <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire[]" value="green" checked>
+                    <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire[]" value="Green,(No Issues)" checked>
                     <label for="truck_tires_green"></label>
                   </div>
                 <td bgcolor="#FFFF00"><div align="center">Yellow
-                    <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire[]" value="yellow">
+                    <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire[]" value="Yellow,(Reporting Problems)">
                     <label for="truck_tires_yellow"></label>
                   </div>
                 <td bgcolor="#FF0000"><div align="center">Red
                     <label for="cb_trailer_tires_red"></label>
-                    <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire[]" value="red">
+                    <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire[]" value="Red,(Do Not Operate)">
                     <label for="truck_tires_red"></label>
                   </div>
               </tr>
@@ -206,16 +206,16 @@ $trailerid = $_SESSION['trailerid'];
                 <td><a href="vir.php"><img src="../images/trailer.gif" alt="Trailer" width="77" height="38"></a>
                 <td bgcolor="#33FF00"><div align="center">Green
                     <label for="cb_trailer_green3"></label>
-                    <input type="radio" name="vir_trailer[]" id="vir_trailer[]" value="green" checked>
+                    <input type="radio" name="vir_trailer[]" id="vir_trailer[]" value="Green,(No Issues)" checked>
                     <label for="vir_trailer_green"></label>
                   </div>
                 <td bgcolor="#FFFF00"><div align="center">Yellow
                     <label for="cb_trailer_yellow3"></label>
-                    <input type="radio" name="vir_trailer[]" id="vir_trailer[]" value="yellow">
+                    <input type="radio" name="vir_trailer[]" id="vir_trailer[]" value="Yellow,(Reporting Problems)">
                     <label for="vir_trailer_yellow"></label>
                   </div>
                 <td bgcolor="#FF0000"><div align="center">Red
-                    <input type="radio" name="vir_trailer[]" id="vir_trailer[]" value="red">
+                    <input type="radio" name="vir_trailer[]" id="vir_trailer[]" value="Red,(Do Not Operate)">
                     <label for="vir_trailer_red"></label>
                     <label for="cb_trailer_red3"></label>
                   </div>
@@ -224,15 +224,15 @@ $trailerid = $_SESSION['trailerid'];
                 <td>Trailer <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
                 <td bgcolor="#33FF00"><div align="center">Green
                     <label for="cb_trailer_tires_green3"></label>
-                    <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire[]" value="green" checked>
+                    <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire[]" value="Green,(No Issues)" checked>
                     <label for="trailer_tires_green"></label>
                   </div>
                 <td bgcolor="#FFFF00"><div align="center">Yellow
-                    <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire[]" value="yellow">
+                    <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire[]" value="Yellow,(Reporting Problems)">
                     <label for="trailer_vir_tires_yellow"></label>
                   </div>
                 <td bgcolor="#FF0000"><div align="center">Red
-                    <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire[]" value="red">
+                    <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire[]" value="Red,(Do Not Operate)">
                     <label for="trailer_vir_tires_red"></label>
                   </div>
               </tr>
@@ -1214,7 +1214,11 @@ $trailerid = $_SESSION['trailerid'];
       </div>
       <!-- /.box -->
 
-      <!-- END PAGE CONTENT HERE -->
+
+
+
+
+<!-- END PAGE CONTENT HERE -->
 
     </div>
     <!-- /.box -->

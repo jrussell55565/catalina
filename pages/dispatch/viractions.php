@@ -14,6 +14,7 @@ $insp_start_time = $_POST['insp_start_time'];
 $insp_end_time = localtime();
 $insp_end_time = $insp_end_time[2] . ":" . $insp_end_time[1] . ":" . $insp_end_time[0];
 $insp_date = $_POST['insp_date'];
+$insp_type = $_POST['insp_type'];
 $truck_number = $_POST['truck_number'];
 $trailer_number = $_POST['trailer_number'];
 $preorposttrip = $_POST['preorposttrip'];
@@ -130,6 +131,7 @@ $truck_number,
 '$vir_truck',
 '$truck_vir_items',
 '$vir_notes_detailed_truck',
+'$vir_notes_quick_report',
 '$truck_tires_driverside_steer',
 '$truck_tires_passenger_steer',
 '$truck_tires_driverside_ax1front',
@@ -158,42 +160,42 @@ mysql_query($sql);
 $to = "trucks@catalinacartage.com";
 $subject = "VIR Truck $truck_number / $trailer_number";
 $body = <<<EOT
-Date: $insp_date
 Driver: $username
-Time Start: $insp_start_time
-Time End : $insp_end_time
-Truck: $truck_number
-Trailer: $trailer_number
+Inspection Type: $preorposttrip 
 Truck Type: $trucktype
+Truck: $truck_number, $vir_truck 
+Trailer: $trailer_number, $vir_trailer
 
-Conditions: Truck $truck_number
-$vir_truck
-Items Marked: Truck $truck_number
+Date: $insp_date,Start Time: $insp_start_time,End Time : $insp_end_time
+
+$truck_number is, $vir_truck
+Items Marked:
 $truck_vir_items
-Truck Vir Notes:
-$vir_notes_detailed_truck
 
-Truck Tire Conditions: Truck $truck_number
+Additional Notes For Truck:
+$vir_notes_detailed_truck	/ $vir_notes_quick_report
 
-Drivers Side Steer,$truck_tires_driverside_steer
-Passenger Side Steer: $truck_tires_driverside_steer
-Drivers Side Front Drive: $truck_tires_driverside_ax1front
-Passenger Side Front Drive: $truck_tires_passenger_ax1front
-Drivers Side Rear Drive: $truck_tires_driverside_ax2rear
-Passenger Side Rear Drive: $truck_tires_passenger_ax2rear
+Truck $truck_number Tire Conditions:
+DRIVER Steer,$truck_tires_driverside_steer
+PASSENGER Steer: $truck_tires_driverside_steer
+Axel 1DRIVER: $truck_tires_driverside_ax1front
+Axel 1PASSENGER: $truck_tires_passenger_ax1front
+Axel 2DRIVER: $truck_tires_driverside_ax2rear
+Axel 2PASSENGER: $truck_tires_passenger_ax2rear
 
-Conditions: Trailer: $trailer_number
-$vir_trailer
-Items Marked: Trailer $trailer_number
+Trailer $trailer_number $vir_trailer reported below:
+Items Marked:
 $trailer_vir_items
-Trailer Vir Notes:
+
+Additional Notes For Trailer:
 $vir_notes_detailed_trailer
 
-Trailer Tire Conditions: Trailer $trailer_number
-Drivers Side Front Drive: $trailer_tires_driverside_ax1front
-Passenger Side Front Drive: $trailer_tires_passenger_ax1front
-Drivers Side Rear Drive: $trailer_tires_driverside_ax2rear
-Passenger Side Rear Drive: $trailer_tires_passenger_ax2rear
+Trailer $trailer_number Tire Conditions:
+Axel 1DRIVER: $trailer_tires_driverside_ax1front
+Axel 1PASSENGER: $trailer_tires_passenger_ax1front
+AXEL 2DRIVER: $trailer_tires_driverside_ax2rear
+AXEL 2PASSENGER: $trailer_tires_passenger_ax2rear
+
 EOT;
 
 sendEmail($to,$subject,$body,$_SESSION['email']);

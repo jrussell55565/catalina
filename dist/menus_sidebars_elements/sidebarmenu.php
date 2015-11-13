@@ -32,15 +32,17 @@
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-files-o"></i>
-              <span> Driver Info</span>
-              <span class="label label-primary pull-right">5</span>
+              <span> Helpfull Info For Drivers</span>
+              <span class="label label-primary pull-right"><!-- Remove Below 5 --></span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="/pages/info/kingpin.php"><i class="fa fa-circle-o"></i> King Pin Settings</a></li>
-                <li><a href="/pages/info/inspectiontypes.php"><i class="fa fa-circle-o"></i>Inspection Types</a></li>
-                <li><a href="/pages/layout/boxed.html"><i class="fa fa-circle-o"></i>IFTA Trip Sheets</a></li>
-                <li><a href="/pages/layout/fixed.html"><i class="fa fa-circle-o"></i>Chain Laws Soon</a></li>
-                <li><a href="/pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i>PreTrips Soon</a></li>
+                <li><a href="/pages/info/loadboardinfo.php"><i class="fa fa-circle-o"></i>Load Board Info</a></li>
+                <li><a href="/pages/info/virinfo.php"><i class="fa fa-circle-o"></i>VIR Info</a></li>
+                <li><a href="/pages/info/kingpin.php"><i class="fa fa-circle-o"></i> King Pin Settings Info</a></li>
+                <li><a href="/pages/info/inspectiontypes.php"><i class="fa fa-circle-o"></i>DOT Inspection Info</a></li>
+                <li><a href="/pages/layout/boxed.html"><i class="fa fa-circle-o"></i>IFTA Trip Info</a></li>
+                <li><a href="/pages/layout/fixed.html"><i class="fa fa-circle-o"></i>Chain Laws Info</a></li>
+                <li><a href="/pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i></a></li>
               </ul>
   </li>
 
@@ -114,26 +116,62 @@
             <li>
               <a href="/pages/mailbox/mailbox.html">
                 <i class="fa fa-envelope"></i> <span>Mailbox</span>
-                <small class="label pull-right bg-yellow">12</small>
+                <small class="label pull-right bg-yellow">5</small>
+              </a>
+            </li>
+                        
+            <li>
+              <a href="/pages/mailbox/notifications.html">
+                <i class="fa fa-bell"></i> <span>Notifications</span>
+                <small class="label pull-right bg-blue">19</small>
               </a>
             </li>
 
-<!-- Remove Below 
+            <li>
+              <a href="/pages/mailbox/alerts.html">
+                <i class="fa fa-flag"></i> <span>Alerts</span>
+                <small class="label pull-right bg-red">6</small>
+              </a>
+            </li>
+
+
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-folder"></i> <span>Examples</span>
+                <i class="fa fa-folder"></i> <span>Admin Links</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="/pages/examples/invoice.html"><i class="fa fa-circle-o"></i> Invoice</a></li>
-                <li><a href="/pages/examples/login.html"><i class="fa fa-circle-o"></i> Login</a></li>
-                <li><a href="/pages/examples/register.html"><i class="fa fa-circle-o"></i> Register</a></li>
-                <li><a href="/pages/examples/lockscreen.html"><i class="fa fa-circle-o"></i> Lockscreen</a></li>
-                <li><a href="/pages/examples/404.html"><i class="fa fa-circle-o"></i> 404 Error</a></li>
-                <li><a href="/pages/examples/500.html"><i class="fa fa-circle-o"></i> 500 Error</a></li>
-                <li><a href="/pages/examples/blank.html"><i class="fa fa-circle-o"></i> Blank Page</a></li>
+                <li><a href="/pages/dispatch/orders.php"><i class="fa fa-circle-o"></i> Load Boards All</a></li>
+                <li><a href="/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i> Admin VIRs All </a></li>
+                <li><a href="/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i> Company Stats All</a></li>
+                <li><a href="/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i> Admin IFTA All</a></li>
+                <li><a href="/pages/dispatch/admin/csa.php"><i class="fa fa-circle-o"></i> Admin DOT Safety All</a></li>
+                <li><a href="/pages/examples/500.html"><i class="fa fa-circle-o"></i> Admin Edit Accessorials</a></li>
+                <li><a href="/pages/examples/blank.html"><i class="fa fa-circle-o"></i> Admin Edit VIR Accs</a></li>
+                <li><a href="/pages/dispatch/admin/users.php"><i class="fa fa-circle-o"></i> Edit All Users</a></li>
               </ul>
             </li>
+            
+<!-- Remove Below  Before I got rid of the links for old stuff.            
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-folder"></i> <span>Admin Links</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="/pages/examples/invoice.html"><i class="fa fa-circle-o"></i> Load Boards All</a></li>
+                <li><a href="/pages/examples/login.html"><i class="fa fa-circle-o"></i> Admin VIRs All </a></li>
+                <li><a href="/pages/examples/register.html"><i class="fa fa-circle-o"></i> Company Stats All</a></li>
+                <li><a href="/pages/examples/lockscreen.html"><i class="fa fa-circle-o"></i> Admin IFTA All</a></li>
+                <li><a href="/pages/examples/404.html"><i class="fa fa-circle-o"></i> Admin DOT Safety All</a></li>
+                <li><a href="/pages/examples/500.html"><i class="fa fa-circle-o"></i> Admin Edit Accessorials</a></li>
+                <li><a href="/pages/examples/blank.html"><i class="fa fa-circle-o"></i> Admin Edit VIR Accs</a></li>
+              </ul>
+            </li>
+-->            
+            
+            
+<!-- Remove Below         
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-share"></i> <span>Multilevel</span>
@@ -157,6 +195,10 @@
                 <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
               </ul>
             </li>
+            
+           
+            
+            
             <li><a href="documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
             <li class="header">LABELS</li>
             <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>

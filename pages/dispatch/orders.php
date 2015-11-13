@@ -63,7 +63,7 @@ $drivername = $_SESSION['drivername'];
         <h1> Shipment Boards</h1>
         <a href="/pages/examples/colors.php">What do the colors mean Click here? </a>
         <ol class="breadcrumb">
-          <li><a href="orders.php"><i class="fa fa-home"></i> Home</a></li>
+          <li><a href="/pages/main/index.php"><i class="fa fa-home"></i>Home</a></li>
           <!--        <li><a href="#">Tables</a></li> -->
           <li class="active">Shipments</li>
         </ol>

@@ -12,6 +12,7 @@ mysql_select_db($db_name) or DIE('Database name is not available!');
 
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
+$role = $_SESSION['role'];
 
 ?>
 
@@ -300,7 +301,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
             <small>1.0.</small></h1>
 
           <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="/pages/main/index.php"><i class="fa fa-home"></i> Home</a></li>
             <li class="active">Dashboard</li>
           </ol>
         </section>
