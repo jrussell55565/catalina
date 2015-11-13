@@ -7,7 +7,7 @@
       <div class="pull-left image"> <img src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; }?>" class="img-circle" alt="User Image" /> </div>
       <div class="pull-left info">
         <p><?php echo "$drivername"; ?></p>
-        <a href="#"><i class="fa fa-circle text-success"></i> Online</a><?php echo "$role"; ?></div>
+        <a href="#"><i class="fa fa-circle text-success"></i> Online <?php if ($_SESSION['login'] == 1) { echo "(Admin)"; }?></a></div>
     </div>
     <!-- search form -->
     <form action="#" method="get" class="sidebar-form">
