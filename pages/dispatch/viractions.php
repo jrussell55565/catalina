@@ -10,6 +10,7 @@ mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to ho
 mysql_select_db($db_name) or DIE('Database name is not available!');
 
 # VIR POST variables
+$trucktype = $_POST['trucktype'];
 $insp_start_time = $_POST['insp_start_time'];
 $insp_end_time = localtime();
 $insp_end_time = $insp_end_time[2] . ":" . $insp_end_time[1] . ":" . $insp_end_time[0];
@@ -18,10 +19,10 @@ $insp_type = $_POST['insp_type'];
 $truck_number = $_POST['truck_number'];
 $trailer_number = $_POST['trailer_number'];
 $preorposttrip = $_POST['preorposttrip'];
-$vir_truck = $_POST['vir_truck'][0];
-$vir_truck_tire = $_POST['vir_truck_tire'][0];
-$vir_trailer = $_POST['vir_trailer'][0];
-$vir_trailer_tire = $_POST['vir_trailer_tire'][0];
+$truck_vir_condition = $_POST['vir_truck'][0];
+$truck_vir_condition_tire = $_POST['vir_truck_tire'][0];
+$trailer_vir_condition = $_POST['vir_trailer'][0];
+$trailer_vir_condition_tire = $_POST['vir_trailer_tire'][0];
 $vir_notes_quick_report = $_POST['vir_notes_quick_report'];
 $vir_notes_finish = $_POST['vir_notes_finish'];
 $vir_notes_detailed_truck = $_POST['vir_notes_detailed_truck'];
@@ -30,7 +31,6 @@ $truck_tires_notes = $_POST['truck_tires_notes_'.$trucktype];
 $trailer_tires_notes = $_POST['trailer_tires_notes_trailer'];
 $username = $_POST['username'];
 $vir_detailed_truck = $_POST['vir_detailed_truck'];
-$trucktype = $_POST['trucktype'];
 
 $truck_tires_driverside_steer = $_POST['truck_tires_driverside_steer_'.$trucktype];
 $truck_tires_driverside_steer_pressure = $_POST['truck_tires_driverside_steer_pressure_'.$trucktype];
@@ -117,7 +117,36 @@ foreach ($_POST['trailer_ck_accessorials'] as $key => $val)
 $trailer_vir_items = rtrim($trailer_vir_items,",");
 
 $sql = "INSERT INTO virs (
-insp_date,insp_start_time,insp_end_time,insp_duration,insp_type,driver_name,vir_points,truck_number,truck_vir_condition,truck_vir_items,truck_vir_notes,truck_tires_driverside_steer,truck_tires_passenger_steer,truck_tires_driverside_ax1front,truck_tires_passenger_ax1front,truck_tires_driverside_ax2rear,truck_tires_passenger_ax2rear,truck_tires_notes,trailer_number,trailer_vir_condition,trailer_vir_items,trailer_vir_notes,trailer_tires_driverside_ax1front,trailer_tires_passenger_ax1front,trailer_tires_driverside_ax2rear,trailer_tires_passenger_ax2rear,trailer_tires_notes,vir_finish_notes)
+insp_date, /* str_to_date('\$insp_date','%m/%d/%y') = str_to_date('$insp_date','%m/%d/%y') */
+insp_start_time, /* \$insp_start_time = $insp_start_time */
+insp_end_time, /* CURTIME() */
+insp_duration, /* subtime(curtime(),'\$insp_start_time') = subtime(curtime(),'$insp_start_time') */
+insp_type, /* \$preorposttrip = $preorposttrip */
+driver_name, /* \$username = $username */
+vir_points, /* 1 */
+truck_number, /* \$truck_number = $truck_number */
+truck_vir_condition, /* \$truck_vir_condition = $truck_vir_condition */ 
+truck_vir_items, /* \$truck_vir_items = $truck_vir_items */
+truck_vir_notes, /* \$vir_notes_detailed_truck = $vir_notes_detailed_truck */
+vir_notes_quick_report, /* \$vir_notes_quick_report = $vir_notes_quick_report */
+truck_tires_driverside_steer, /* \$truck_tires_driverside_steer = $truck_tires_driverside_steer */
+truck_tires_passenger_steer, /* \$truck_tires_passenger_steer = $truck_tires_passenger_steer */
+truck_tires_driverside_ax1front, /* \$truck_tires_driverside_ax1front = $truck_tires_driverside_ax1front */
+truck_tires_passenger_ax1front, /* \$truck_tires_passenger_ax1front = $truck_tires_passenger_ax1front */
+truck_tires_driverside_ax2rear, /* \$truck_tires_driverside_ax2rear = $truck_tires_driverside_ax2rear */
+truck_tires_passenger_ax2rear, /* \$truck_tires_passenger_ax2rear = $truck_tires_passenger_ax2rear */
+truck_tires_notes, /* \$truck_tires_notes = $truck_tires_notes */
+trailer_number, /* \$trailer_number = $trailer_number */
+trailer_vir_condition,  /* \$trailer_vir_condition = $trailer_vir_condition */
+trailer_vir_items, /* \$trailer_vir_items = $trailer_vir_items */
+trailer_vir_notes, /* \$vir_notes_detailed_trailer = $vir_notes_detailed_trailer */
+trailer_tires_driverside_ax1front, /* \$trailer_tires_driverside_ax1front = $trailer_tires_driverside_ax1front */
+trailer_tires_passenger_ax1front, /* \$trailer_tires_passenger_ax1front = $trailer_tires_passenger_ax1front */
+trailer_tires_driverside_ax2rear, /* \$trailer_tires_driverside_ax2rear = $trailer_tires_driverside_ax2rear */
+trailer_tires_passenger_ax2rear, /* \$trailer_tires_passenger_ax2rear = $trailer_tires_passenger_ax2rear */
+trailer_tires_notes, /* \$trailer_tires_notes = $trailer_tires_notes */
+vir_finish_notes /* \$vir_notes_finish = $vir_notes_finish */,
+trucktype) /* \$trucktype = $trucktype */
 VALUES
 (
 str_to_date('$insp_date','%m/%d/%y'),
@@ -128,7 +157,7 @@ subtime(curtime(),'$insp_start_time'),
 '$username',
 1,
 $truck_number,
-'$vir_truck',
+'$truck_vir_condition',
 '$truck_vir_items',
 '$vir_notes_detailed_truck',
 '$vir_notes_quick_report',
@@ -140,7 +169,7 @@ $truck_number,
 '$truck_tires_passenger_ax2rear',
 '$truck_tires_notes',
 $trailer_number,
-'$vir_trailer',
+'$trailer_vir_condition',
 '$trailer_vir_items',
 '$vir_notes_detailed_trailer',
 '$trailer_tires_driverside_ax1front',
@@ -148,10 +177,12 @@ $trailer_number,
 '$trailer_tires_driverside_ax2rear',
 '$trailer_tires_passenger_ax2rear',
 '$trailer_tires_notes',
-'$vir_notes_finish'
+'$vir_notes_finish',
+'$trucktype'
 )";
 
-#print $sql;
+print $sql."\n\n";
+print_r($_POST); exit;
 mysql_query($sql);
 
 # Send the email out
@@ -163,12 +194,12 @@ $body = <<<EOT
 Driver: $username
 Inspection Type: $preorposttrip 
 Truck Type: $trucktype
-Truck: $truck_number, $vir_truck 
-Trailer: $trailer_number, $vir_trailer
+Truck: $truck_number, $truck_vir_condition 
+Trailer: $trailer_number, $trailer_vir_condition
 
 Date: $insp_date,Start Time: $insp_start_time,End Time : $insp_end_time
 
-$truck_number is, $vir_truck
+$truck_number is, $truck_vir_condition
 Items Marked:
 $truck_vir_items
 
@@ -183,7 +214,7 @@ Axel 1PASSENGER: $truck_tires_passenger_ax1front
 Axel 2DRIVER: $truck_tires_driverside_ax2rear
 Axel 2PASSENGER: $truck_tires_passenger_ax2rear
 
-Trailer $trailer_number $vir_trailer reported below:
+Trailer $trailer_number $trailer_vir_condition reported below:
 Items Marked:
 $trailer_vir_items
 
