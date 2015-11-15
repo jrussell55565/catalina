@@ -181,8 +181,8 @@ $trailer_number,
 '$trucktype'
 )";
 
-print $sql."\n\n";
-print_r($_POST); exit;
+#print $sql."\n\n";
+#print_r($_POST); exit;
 mysql_query($sql);
 
 # Send the email out
