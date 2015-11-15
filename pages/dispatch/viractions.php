@@ -203,27 +203,25 @@ Date: $insp_date,Start Time: $insp_start_time,End Time : $insp_end_time
 Please read below for more details:
 $truck_number condition, $truck_vir_condition, $vir_notes_detailed_truck Items Marked below:
 $truck_vir_items
-
 Truck $truck_number Tire Conditions:
 (Driver Side Truck)
-DRIVER Steer,$truck_tires_driverside_steer
-Axel 1DRIVER: $truck_tires_driverside_ax1front
-Axel 2DRIVER: $truck_tires_driverside_ax2rear
+STEER,$truck_tires_driverside_steer
+fRONT DRIVE: $truck_tires_driverside_ax1front
+REAR DRIVE: $truck_tires_driverside_ax2rear
 (Passenger Side Truck)
 PASSENGER Steer: $truck_tires_driverside_steer
-Axel 1PASSENGER: $truck_tires_passenger_ax1front
-Axel 2PASSENGER: $truck_tires_passenger_ax2rear
+FRONT DRIVE: $truck_tires_passenger_ax1front
+REAR DRIVE: $truck_tires_passenger_ax2rear
 
 Trailer condition $trailer_number $trailer_vir_condition, $vir_notes_detailed_trailer Items Marked below:
 $trailer_vir_items
-
 Trailer $trailer_number Tire Conditions:
 (Driver Side Trailer)
-Axel 1DRIVER: $trailer_tires_driverside_ax1front
-AXEL 2DRIVER: $trailer_tires_driverside_ax2rear
+FRONT AXEL: $trailer_tires_driverside_ax1front
+REAR AXEL: $trailer_tires_driverside_ax2rear
 (Passenger Side Trailer)
-Axel 1PASSENGER: $trailer_tires_passenger_ax1front
-AXEL 2PASSENGER: $trailer_tires_passenger_ax2rear
+FRONT AXEL: $trailer_tires_passenger_ax1front
+REAR AXEL: $trailer_tires_passenger_ax2rear
 
 EOT;
 

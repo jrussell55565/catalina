@@ -197,7 +197,7 @@ $trailerid = $_SESSION['trailerid'];
 
                 <td colspan="2"><div>Vir Additional info on Yellow or Red + Condition &amp; Notes</div>
                   <div>
-                    <textarea name="vir_notes_detailed_truck" id="vir_notes_detailed_truck" cols="43" rows="3">Add Truck VIR Note Here:</textarea>
+                    <textarea name="vir_notes_detailed_truck" id="vir_notes_detailed_truck" cols="43" rows="3">Truck VIR Note:</textarea>
                   </div></td>
               </tr>
             </table>
@@ -224,7 +224,7 @@ $trailerid = $_SESSION['trailerid'];
 
                 <td colspan="2"><div>Vir Additional info on Yellow or Red + Condition &amp; Notes</div>
                   <div>
-                    <textarea name="vir_notes_detailed_trailer" id="vir_notes_detailed_trailer" cols="43" rows="3">Add Trailer VIR Note Here:</textarea>
+                    <textarea name="vir_notes_detailed_trailer" id="vir_notes_detailed_trailer" cols="43" rows="3">Trailer VIR Note:</textarea>
                   </div></td>
               </tr>
             </table>
@@ -505,7 +505,7 @@ $trailerid = $_SESSION['trailerid'];
               </tr>
               <tr>
                 <td height="24" colspan="3"><div align="center">
-                    <textarea name="truck_tires_notes_combo" id="truck_tires_notes_combo" cols="43" rows="3">Add Truck Tires Note here:</textarea>
+                    <textarea name="truck_tires_notes_combo" id="truck_tires_notes_combo" cols="43" rows="3">Truck Tires Note:</textarea>
                   </div>
               </tr>
             </table>
@@ -724,7 +724,7 @@ $trailerid = $_SESSION['trailerid'];
               </tr>
               <tr>
                 <td height="24" colspan="3"><div align="center">
-                    <textarea name="trailer_tires_notes_trailer" id="trailer_tires_notes_trailer" cols="43" rows="3">Add Trailer Tire Note here:</textarea>
+                    <textarea name="trailer_tires_notes_trailer" id="trailer_tires_notes_trailer" cols="43" rows="3">Trailer Tire Note:</textarea>
                   </div>
               </tr>
             </table>
@@ -902,7 +902,7 @@ $trailerid = $_SESSION['trailerid'];
               </tr>
               <tr>
                 <td height="24" colspan="3"><div align="center">
-                    <textarea name="truck_tires_notes_boxtruck" id="truck_tires_notes_boxtruck" cols="43" rows="3">Add Box Truck Tire Note Here:</textarea>
+                    <textarea name="truck_tires_notes_boxtruck" id="truck_tires_notes_boxtruck" cols="43" rows="3">BT Tire Note:</textarea>
                   </div>
               </tr>
             </table>
@@ -1067,7 +1067,7 @@ $trailerid = $_SESSION['trailerid'];
               </tr>
               <tr>
                 <td height="24" colspan="3"><div align="center">
-                    <textarea name="truck_tires_notes_sprinter" id="truck_tires_notes_sprinter" cols="43" rows="3">Add Sprinter Tire Note Here:</textarea>
+                    <textarea name="truck_tires_notes_sprinter" id="truck_tires_notes_sprinter" cols="43" rows="3">Sprinter Tire Note:</textarea>
                   </div>
               </tr>
             </table>
@@ -1166,7 +1166,7 @@ $trailerid = $_SESSION['trailerid'];
               </tr>
               <tr>
                 <td colspan="4"><div align="center">
-                  <textarea name="vir_notes_quick_report" id="vir_notes_quick_report"  cols="43" rows="3" placeholder="Please type notes for any items needing attention!">Add Quick Note Here:</textarea>
+                  <textarea name="vir_notes_quick_report" id="vir_notes_quick_report"  cols="43" rows="3" placeholder="Please type notes for any items needing attention!">Quick:</textarea>
                 </div></td>
               </tr>
               <tr>
@@ -1188,7 +1188,7 @@ $trailerid = $_SESSION['trailerid'];
                   </table>
                   <div align="center">Additional Notes: <?php echo "$drivername"; ?> </div>
                   <div align="center">
-                    <textarea name="vir_notes_finish" id="vir_notes_finish" cols="43" rows="3">Add Final Note here:</textarea>
+                    <textarea name="vir_notes_finish" id="vir_notes_finish" cols="43" rows="3">Final Note:</textarea>
                   </div></td>
               </tr>
               <tr>
