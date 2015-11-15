@@ -196,35 +196,33 @@ Inspection Type: $preorposttrip
 Truck Type: $trucktype
 Truck: $truck_number, $truck_vir_condition 
 Trailer: $trailer_number, $trailer_vir_condition
-
+Quick Notes: $vir_notes_quick_report
+Finish Notes: $vir_notes_finish
 Date: $insp_date,Start Time: $insp_start_time,End Time : $insp_end_time
 
-$truck_number is, $truck_vir_condition
-Items Marked:
+Please read below for more details:
+$truck_number condition, $truck_vir_condition, $vir_notes_detailed_truck Items Marked below:
 $truck_vir_items
 
-Additional Notes For Truck:
-$vir_notes_detailed_truck	/ $vir_notes_quick_report
-
 Truck $truck_number Tire Conditions:
+(Driver Side Truck)
 DRIVER Steer,$truck_tires_driverside_steer
-PASSENGER Steer: $truck_tires_driverside_steer
 Axel 1DRIVER: $truck_tires_driverside_ax1front
-Axel 1PASSENGER: $truck_tires_passenger_ax1front
 Axel 2DRIVER: $truck_tires_driverside_ax2rear
+(Passenger Side Truck)
+PASSENGER Steer: $truck_tires_driverside_steer
+Axel 1PASSENGER: $truck_tires_passenger_ax1front
 Axel 2PASSENGER: $truck_tires_passenger_ax2rear
 
-Trailer $trailer_number $trailer_vir_condition reported below:
-Items Marked:
+Trailer condition $trailer_number $trailer_vir_condition, $vir_notes_detailed_trailer Items Marked below:
 $trailer_vir_items
 
-Additional Notes For Trailer:
-$vir_notes_detailed_trailer
-
 Trailer $trailer_number Tire Conditions:
+(Driver Side Trailer)
 Axel 1DRIVER: $trailer_tires_driverside_ax1front
-Axel 1PASSENGER: $trailer_tires_passenger_ax1front
 AXEL 2DRIVER: $trailer_tires_driverside_ax2rear
+(Passenger Side Trailer)
+Axel 1PASSENGER: $trailer_tires_passenger_ax1front
 AXEL 2PASSENGER: $trailer_tires_passenger_ax2rear
 
 EOT;

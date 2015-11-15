@@ -133,8 +133,8 @@ $trailerid = $_SESSION['trailerid'];
               </tr>
               <tr>
                 <td colspan="4"><div align="center">Pre Trip:
-                    <input type="radio" name="preorposttrip" id="preorposttrip" value="vir_pretrip" checked>
-                    <label for="vir_pretrip"></label>
+                    <input name="preorposttrip" type="radio" id="preorposttrip" value="vir_pretrip" checked >
+                  <label for="vir_pretrip"></label>
                     Post Trip:
                     <input type="radio" name="preorposttrip" id="preorposttrip" value="vir_posttrip">
                     <label for="vir_posttrip"></label>
@@ -165,91 +165,7 @@ $trailerid = $_SESSION['trailerid'];
                   </div>
               </tr>
             </table>
-            <table width="313" border="1">
-              <tr>
-                <td height="10" colspan="4"><div align="center">
-                    <label for="VIR Conditions &amp; Tires"></label>
-                    VIR Conditions &amp; Tires</div>
-              </tr>
-              <tr>
-                <td width="83">Truck
-                <td width="64" bgcolor="#33FF00"><div align="center">Green
-                    <input type="radio" name="vir_truck[]" id="vir_truck[]" value="Green,(No Issues)" checked>
-                    <label for="vir_truck_green"></label>
-                  </div>
-                <td width="66" bgcolor="#FFFF00"><div align="center">Yellow
-                    <input type="radio" name="vir_truck[]" id="vir_truck[]" value="Yellow,(Reporting Problems)">
-                    <label for="vir_truck_yellow"></label>
-                  </div>
-                <td width="62" bgcolor="#FF0000"><div align="center">Red
-                    <input type="radio" name="vir_truck[]" id="vir_truck[]" value="Red,(Do Not Operate)">
-                    <label for="vir_truck_red"></label>
-                  </div>
-              </tr>
-              <tr>
-                <td>Truck <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
-                <td bgcolor="#33FF00"><div align="center">Green
-                    <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire[]" value="Green,(No Issues)" checked>
-                    <label for="truck_tires_green"></label>
-                  </div>
-                <td bgcolor="#FFFF00"><div align="center">Yellow
-                    <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire[]" value="Yellow,(Reporting Problems)">
-                    <label for="truck_tires_yellow"></label>
-                  </div>
-                <td bgcolor="#FF0000"><div align="center">Red
-                    <label for="cb_trailer_tires_red"></label>
-                    <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire[]" value="Red,(Do Not Operate)">
-                    <label for="truck_tires_red"></label>
-                  </div>
-              </tr>
-              <tr>
-                <td><a href="vir.php"><img src="../images/trailer.gif" alt="Trailer" width="77" height="38"></a>
-                <td bgcolor="#33FF00"><div align="center">Green
-                    <label for="cb_trailer_green3"></label>
-                    <input type="radio" name="vir_trailer[]" id="vir_trailer[]" value="Green,(No Issues)" checked>
-                    <label for="vir_trailer_green"></label>
-                  </div>
-                <td bgcolor="#FFFF00"><div align="center">Yellow
-                    <label for="cb_trailer_yellow3"></label>
-                    <input type="radio" name="vir_trailer[]" id="vir_trailer[]" value="Yellow,(Reporting Problems)">
-                    <label for="vir_trailer_yellow"></label>
-                  </div>
-                <td bgcolor="#FF0000"><div align="center">Red
-                    <input type="radio" name="vir_trailer[]" id="vir_trailer[]" value="Red,(Do Not Operate)">
-                    <label for="vir_trailer_red"></label>
-                    <label for="cb_trailer_red3"></label>
-                  </div>
-              </tr>
-              <tr>
-                <td>Trailer <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
-                <td bgcolor="#33FF00"><div align="center">Green
-                    <label for="cb_trailer_tires_green3"></label>
-                    <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire[]" value="Green,(No Issues)" checked>
-                    <label for="trailer_tires_green"></label>
-                  </div>
-                <td bgcolor="#FFFF00"><div align="center">Yellow
-                    <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire[]" value="Yellow,(Reporting Problems)">
-                    <label for="trailer_vir_tires_yellow"></label>
-                  </div>
-                <td bgcolor="#FF0000"><div align="center">Red
-                    <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire[]" value="Red,(Do Not Operate)">
-                    <label for="trailer_vir_tires_red"></label>
-                  </div>
-              </tr>
-              <tr>
-                <td colspan="4"><div align="center">Enter Additional Notes below</div></td>
-              </tr>
-              <tr>
-                <td colspan="4"><div align="center">
-                    <textarea name="vir_notes_quick_report" id="vir_notes_quick_report"  cols="43" rows="3" placeholder="Please type notes for any items needing attention!"></textarea>
-                  </div></td>
-              </tr>
-              <tr>
-                <td colspan="4"><A HREF="#submitvir"></A>
-                  <div align="center"> <A HREF="#submitvir">VIR OK, Tires OK / Go To Submit</A></div></td>
-              </tr>
-            </table>
-        </div>
+            </div>
         <!-- /.box-body -->
         <div class="box-footer">
          <div class="vir">
@@ -268,7 +184,8 @@ $trailerid = $_SESSION['trailerid'];
       <!--Remove the div Class "box" above and add below primary collapsed -->
       <div name="div_truck_vir" id="div_truck_vir" class="box box-primary collapsed-box vir truckvir">
         <div class="box-header with-border">
-          <h3 class="box-title"><img src="../images/semismall.gif" alt="tire"> Truck VIR <img src="../images/boxtrucksmall.gif" alt="tire"><img src="../images/sprintersmall.gif" alt="tire"></h3>
+          <h3 class="box-title"><img src="../images/semismall.gif" alt="tire"> Truck Inspection <img src="../images/boxtrucksmall.gif" alt="tire">
+          <!--Removed Sprinter Image on Header Box <img src="../images/sprintersmall.gif" alt="tire">--></h3>
           <div class="box-tools pull-right">
             <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
             <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
@@ -280,7 +197,7 @@ $trailerid = $_SESSION['trailerid'];
 
                 <td colspan="2"><div>Vir Additional info on Yellow or Red + Condition &amp; Notes</div>
                   <div>
-                    <textarea name="vir_notes_detailed_truck" id="vir_notes_detailed_truck" cols="43" rows="3"></textarea>
+                    <textarea name="vir_notes_detailed_truck" id="vir_notes_detailed_truck" cols="43" rows="3">Add Truck VIR Note Here:</textarea>
                   </div></td>
               </tr>
             </table>
@@ -295,7 +212,7 @@ $trailerid = $_SESSION['trailerid'];
       <!--Remove the div Class "box" above and add below primary collapsed -->
       <div name="div_trailer_vir" id="div_trailer_vir" class="box box-primary collapsed-box vir combo">
         <div class="box-header with-border">
-          <h3 class="box-title"><img src="../images/trailersmall.gif" alt="tire"> Trailer VIR <img src="../images/trailersmall.gif" alt="tire"></h3>
+          <h3 class="box-title"><img src="../images/trailersmall.gif" alt="tire"> Trailer Inspection <img src="../images/trailersmall.gif" alt="tire"></h3>
           <div class="box-tools pull-right">
             <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
             <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
@@ -307,7 +224,7 @@ $trailerid = $_SESSION['trailerid'];
 
                 <td colspan="2"><div>Vir Additional info on Yellow or Red + Condition &amp; Notes</div>
                   <div>
-                    <textarea name="vir_notes_detailed_trailer" id="vir_notes_detailed_trailer" cols="43" rows="3"></textarea>
+                    <textarea name="vir_notes_detailed_trailer" id="vir_notes_detailed_trailer" cols="43" rows="3">Add Trailer VIR Note Here:</textarea>
                   </div></td>
               </tr>
             </table>
@@ -588,7 +505,7 @@ $trailerid = $_SESSION['trailerid'];
               </tr>
               <tr>
                 <td height="24" colspan="3"><div align="center">
-                    <textarea name="truck_tires_notes_combo" id="truck_tires_notes_combo" cols="43" rows="3"></textarea>
+                    <textarea name="truck_tires_notes_combo" id="truck_tires_notes_combo" cols="43" rows="3">Add Truck Tires Note here:</textarea>
                   </div>
               </tr>
             </table>
@@ -807,7 +724,7 @@ $trailerid = $_SESSION['trailerid'];
               </tr>
               <tr>
                 <td height="24" colspan="3"><div align="center">
-                    <textarea name="trailer_tires_notes_trailer" id="trailer_tires_notes_trailer" cols="43" rows="3"></textarea>
+                    <textarea name="trailer_tires_notes_trailer" id="trailer_tires_notes_trailer" cols="43" rows="3">Add Trailer Tire Note here:</textarea>
                   </div>
               </tr>
             </table>
@@ -985,7 +902,7 @@ $trailerid = $_SESSION['trailerid'];
               </tr>
               <tr>
                 <td height="24" colspan="3"><div align="center">
-                    <textarea name="truck_tires_notes_boxtruck" id="truck_tires_notes_boxtruck" cols="43" rows="3"></textarea>
+                    <textarea name="truck_tires_notes_boxtruck" id="truck_tires_notes_boxtruck" cols="43" rows="3">Add Box Truck Tire Note Here:</textarea>
                   </div>
               </tr>
             </table>
@@ -1150,7 +1067,7 @@ $trailerid = $_SESSION['trailerid'];
               </tr>
               <tr>
                 <td height="24" colspan="3"><div align="center">
-                    <textarea name="truck_tires_notes_sprinter" id="truck_tires_notes_sprinter" cols="43" rows="3"></textarea>
+                    <textarea name="truck_tires_notes_sprinter" id="truck_tires_notes_sprinter" cols="43" rows="3">Add Sprinter Tire Note Here:</textarea>
                   </div>
               </tr>
             </table>
@@ -1173,6 +1090,90 @@ $trailerid = $_SESSION['trailerid'];
           </div>
         </div>
         <div class="box-body">
+            <table width="313" border="1">
+              <tr>
+                <td height="10" colspan="4"><div align="center">
+                  <label for="VIR Conditions &amp; Tires"></label>
+                  VIR Conditions &amp; Tires</div>
+              </tr>
+              <tr>
+                <td width="83">Truck
+                <td width="64" bgcolor="#33FF00"><div align="center">Green
+                  <input type="radio" name="vir_truck[]" id="vir_truck[]" value="Green,(No Issues)">
+                  <label for="vir_truck_green"></label>
+                </div>
+                <td width="66" bgcolor="#FFFF00"><div align="center">Yellow
+                  <input type="radio" name="vir_truck[]" id="vir_truck[]" value="Yellow,(Reporting Problems)">
+                  <label for="vir_truck_yellow"></label>
+                </div>
+                <td width="62" bgcolor="#FF0000"><div align="center">Red
+                  <input name="vir_truck[]" type="radio" id="vir_truck[]" value="Red,(Do Not Operate)" checked>
+                  <label for="vir_truck_red"></label>
+                </div>
+              </tr>
+              <tr>
+                <td>Truck <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
+                <td bgcolor="#33FF00"><div align="center">Green
+                  <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire[]" value="Green,(No Issues)">
+                  <label for="truck_tires_green"></label>
+                </div>
+                <td bgcolor="#FFFF00"><div align="center">Yellow
+                  <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire[]" value="Yellow,(Reporting Problems)">
+                  <label for="truck_tires_yellow"></label>
+                </div>
+                <td bgcolor="#FF0000"><div align="center">Red
+                  <label for="cb_trailer_tires_red"></label>
+                  <input name="vir_truck_tire[]" type="radio" id="vir_truck_tire[]" value="Red,(Do Not Operate)" checked>
+                  <label for="truck_tires_red"></label>
+                </div>
+              </tr>
+              <tr>
+                <td><a href="vir.php"><img src="../images/trailer.gif" alt="Trailer" width="77" height="38"></a>
+                <td bgcolor="#33FF00"><div align="center">Green
+                  <label for="cb_trailer_green3"></label>
+                  <input type="radio" name="vir_trailer[]" id="vir_trailer[]" value="Green,(No Issues)">
+                  <label for="vir_trailer_green"></label>
+                </div>
+                <td bgcolor="#FFFF00"><div align="center">Yellow
+                  <label for="cb_trailer_yellow3"></label>
+                  <input type="radio" name="vir_trailer[]" id="vir_trailer[]" value="Yellow,(Reporting Problems)">
+                  <label for="vir_trailer_yellow"></label>
+                </div>
+                <td bgcolor="#FF0000"><div align="center">Red
+                  <input name="vir_trailer[]" type="radio" id="vir_trailer[]" value="Red,(Do Not Operate)" checked>
+                  <label for="vir_trailer_red"></label>
+                  <label for="cb_trailer_red3"></label>
+                </div>
+              </tr>
+              <tr>
+                <td>Trailer <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
+                <td bgcolor="#33FF00"><div align="center">Green
+                  <label for="cb_trailer_tires_green3"></label>
+                  <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire[]" value="Green,(No Issues)">
+                  <label for="trailer_tires_green"></label>
+                </div>
+                <td bgcolor="#FFFF00"><div align="center">Yellow
+                  <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire[]" value="Yellow,(Reporting Problems)">
+                  <label for="trailer_vir_tires_yellow"></label>
+                </div>
+                <td bgcolor="#FF0000"><div align="center">Red
+                  <input name="vir_trailer_tire[]" type="radio" id="vir_trailer_tire[]" value="Red,(Do Not Operate)" checked>
+                  <label for="trailer_vir_tires_red"></label>
+                </div>
+              </tr>
+              <tr>
+                <td colspan="4"><div align="center">Enter Additional Notes below</div></td>
+              </tr>
+              <tr>
+                <td colspan="4"><div align="center">
+                  <textarea name="vir_notes_quick_report" id="vir_notes_quick_report"  cols="43" rows="3" placeholder="Please type notes for any items needing attention!">Add Quick Note Here:</textarea>
+                </div></td>
+              </tr>
+              <tr>
+                <td colspan="4"><A HREF="#submitvir"></A>
+                  <div align="center"> <A HREF="#submitvir">VIR OK, Tires OK / Go To Submit</A></div></td>
+              </tr>
+            </table>
             <table width="318" border="1">
               <tr>
                 <td width="306" colspan="3"><div align="center"> Submit VIR &amp; Tire Report</div>
@@ -1187,7 +1188,7 @@ $trailerid = $_SESSION['trailerid'];
                   </table>
                   <div align="center">Additional Notes: <?php echo "$drivername"; ?> </div>
                   <div align="center">
-                    <textarea name="vir_notes_finish" id="vir_notes_finish" cols="43" rows="3"></textarea>
+                    <textarea name="vir_notes_finish" id="vir_notes_finish" cols="43" rows="3">Add Final Note here:</textarea>
                   </div></td>
               </tr>
               <tr>

@@ -8,9 +8,9 @@
                  <span class="info-box-icon bg-aqua"><i class="fa fa-cog fa-spin"></i></span>
                 </a>               
             <div class="info-box-content">
-			     <span class="info-box-text"><a href="/pages/dispatch/orders.php">Load Board</a></span><span class="info-box-number">  Todays  PU:  <?php echo "$pu_today_count";?><br>
-                Todays DEL:   <?php echo "$del_today_count";?></span></div>
-                <!-- /.info-box-content -->
+			     <span class="info-box-text"><a href="/pages/dispatch/orders.php">Load Board</a></span><span class="info-box-number">Todays PU:<?php echo "$pu_today_count";?><br>
+                 Todays DEL:   <?php echo "$del_today_count";?></span></div>
+                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
 
