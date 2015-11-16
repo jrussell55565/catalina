@@ -17,7 +17,6 @@ $insp_end_time = $insp_end_time[2] . ":" . $insp_end_time[1] . ":" . $insp_end_t
 $insp_date = $_POST['insp_date'];
 $insp_type = $_POST['insp_type'];
 $truck_number = $_POST['truck_number'];
-$truckodometer = $_POST["truck_odometer"];
 $trailer_number = $_POST['trailer_number'];
 $preorposttrip = $_POST['preorposttrip'];
 $truck_vir_condition = $_POST['vir_truck'][0];
@@ -126,7 +125,6 @@ insp_type, /* \$preorposttrip = $preorposttrip */
 driver_name, /* \$username = $username */
 vir_points, /* 1 */
 truck_number, /* \$truck_number = $truck_number */
-truckOdometer, /* \$truckOdometer = $truck_odometer */
 truck_vir_condition, /* \$truck_vir_condition = $truck_vir_condition */ 
 truck_vir_items, /* \$truck_vir_items = $truck_vir_items */
 truck_vir_notes, /* \$vir_notes_detailed_truck = $vir_notes_detailed_truck */
@@ -159,7 +157,6 @@ subtime(curtime(),'$insp_start_time'),
 '$username',
 1,
 $truck_number,
-$truck_odometer,
 '$truck_vir_condition',
 '$truck_vir_items',
 '$vir_notes_detailed_truck',
@@ -190,42 +187,49 @@ mysql_query($sql);
 
 # Send the email out
 # Reset the trucktype if it's 'combo'
-($trucktype == 'combo' ? $trucktype = 'semi' : $trucktype = $trucktype);
+($trucktype = 'combo' ? $trucktype = 'Semi + Trailer' : $trucktype = $trucktype);
 $to = "trucks@catalinacartage.com";
-$subject = "VIR Truck $truck_number / Truck Odometer $truckOdometer / Trailer $trailer_number";
+$subject = "VIR $truck_number / $trailer_number / $preorposttrip";
 $body = <<<EOT
 Driver: $username
-Inspection Type: $preorposttrip 
 Truck Type: $trucktype
 Truck: $truck_number, $truck_vir_condition 
-Reported Miles: $truck_Odometer
 Trailer: $trailer_number, $trailer_vir_condition
-Quick Notes: $vir_notes_quick_report
-Finish Notes: $vir_notes_finish
-Date: $insp_date,Start Time: $insp_start_time,End Time : $insp_end_time
+Date: $insp_date
+Start Time: $insp_start_time
+End Time  : $insp_end_time
 
-Please read below for more details:
-$truck_number condition, $truck_vir_condition, $vir_notes_detailed_truck Items Marked below:
+$truck_number : $truck_vir_condition
+Items Marked:
 $truck_vir_items
-Truck $truck_number Tire Conditions:
-(Driver Side Truck)
-STEER,$truck_tires_driverside_steer
-fRONT DRIVE: $truck_tires_driverside_ax1front
-REAR DRIVE: $truck_tires_driverside_ax2rear
-(Passenger Side Truck)
-PASSENGER Steer: $truck_tires_driverside_steer
-FRONT DRIVE: $truck_tires_passenger_ax1front
-REAR DRIVE: $truck_tires_passenger_ax2rear
 
-Trailer condition $trailer_number $trailer_vir_condition, $vir_notes_detailed_trailer Items Marked below:
+Additional Driver Notes For $truck_number:
+$vir_notes_detailed_truck $vir_notes_quick_report
+
+$truck_number Tire Conditions (Drivers Side):
+Steer,$truck_tires_driverside_steer
+Axel 1: $truck_tires_driverside_ax1front
+Axel 2: $truck_tires_driverside_ax2rear
+
+$truck_number Tire Conditions (Passenger Side):
+Steer: $truck_tires_driverside_steer
+Axel 1: $truck_tires_passenger_ax1front
+Axel 2: $truck_tires_passenger_ax2rear
+
+$trailer_number $trailer_vir_condition:
+Items Marked:
 $trailer_vir_items
-Trailer $trailer_number Tire Conditions:
-(Driver Side Trailer)
-FRONT AXEL: $trailer_tires_driverside_ax1front
-REAR AXEL: $trailer_tires_driverside_ax2rear
-(Passenger Side Trailer)
-FRONT AXEL: $trailer_tires_passenger_ax1front
-REAR AXEL: $trailer_tires_passenger_ax2rear
+
+Additional Driver Notes For Trailer:
+$vir_notes_detailed_trailer
+
+$trailer_number Tire Conditions (Drivers Side):
+Axel 1: $trailer_tires_driverside_ax1front
+AXEL 2: $trailer_tires_driverside_ax2rear
+
+$trailer_number Tire Conditions (Passenger Side):
+Axel 1: $trailer_tires_passenger_ax1front
+AXEL 2: $trailer_tires_passenger_ax2rear
 
 EOT;
 
