@@ -112,7 +112,7 @@ $trailerid = $_SESSION['trailerid'];
           </div>
         </div>
         <div class="box-body">
-          <form class="form" name="virForm" method="post" action="viractions.php">
+          <form class="form" name="virForm" id="virForm" method="post" action="viractions.php" onsubmit="return validateSubmit(this);">
             <table width="313" border="1">
               <tr>
                 <td colspan="4">Start Time:
@@ -133,12 +133,13 @@ $trailerid = $_SESSION['trailerid'];
               </tr>
               <tr>
                 <td colspan="4"><div align="center">Pre Trip:
-                    <input name="preorposttrip" type="radio" id="preorposttrip" value="vir_pretrip" checked >
+                    <input name="preorposttrip" type="radio" id="pretrip" value="vir_pretrip">
                   <label for="vir_pretrip"></label>
                     Post Trip:
-                    <input type="radio" name="preorposttrip" id="preorposttrip" value="vir_posttrip">
+                    <input type="radio" name="preorposttrip" id="posttrip" value="vir_posttrip">
                     <label for="vir_posttrip"></label>
                   </div>
+                  <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none" id="preorpostdiv">Choose pre-trip or post-trip</div>
               </tr>
               <tr>
                 <td colspan="4"><div align="center">Truck Type</div>
@@ -151,16 +152,16 @@ $trailerid = $_SESSION['trailerid'];
               </tr>
               <tr>
                 <td><div align="center">
-                    <input type="radio" name="trucktype" id="trucktype" value="combo">
+                    <input type="radio" name="trucktype" id="trucktype_combo" value="combo">
                     <label for="type_semi"></label>
                   </div>
                 <td colspan="2"><div align="center">
-                    <input type="radio" name="trucktype" id="trucktype" value="boxtruck">
+                    <input type="radio" name="trucktype" id="trucktype_boxtruck" value="boxtruck">
                     <label for="type_boxtruck"></label>
                   </div>
                   <div align="center"></div>
                 <td><div align="center">
-                    <input type="radio" name="trucktype" id="trucktype" value="sprinter">
+                    <input type="radio" name="trucktype" id="trucktype_sprinter" value="sprinter">
                     <label for="type_sprinter"></label>
                   </div>
               </tr>
@@ -1099,31 +1100,31 @@ $trailerid = $_SESSION['trailerid'];
               <tr>
                 <td width="83">Truck
                 <td width="64" bgcolor="#33FF00"><div align="center">Green
-                  <input type="radio" name="vir_truck[]" id="vir_truck[]" value="Green,(No Issues)">
+                  <input type="radio" name="vir_truck[]" id="vir_truck_green" value="Green,(No Issues)">
                   <label for="vir_truck_green"></label>
                 </div>
                 <td width="66" bgcolor="#FFFF00"><div align="center">Yellow
-                  <input type="radio" name="vir_truck[]" id="vir_truck[]" value="Yellow,(Reporting Problems)">
+                  <input type="radio" name="vir_truck[]" id="vir_truck_yellow" value="Yellow,(Reporting Problems)">
                   <label for="vir_truck_yellow"></label>
                 </div>
                 <td width="62" bgcolor="#FF0000"><div align="center">Red
-                  <input name="vir_truck[]" type="radio" id="vir_truck[]" value="Red,(Do Not Operate)" checked>
+                  <input name="vir_truck[]" type="radio" id="vir_truck_red" value="Red,(Do Not Operate)" >
                   <label for="vir_truck_red"></label>
                 </div>
               </tr>
               <tr>
                 <td>Truck <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
                 <td bgcolor="#33FF00"><div align="center">Green
-                  <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire[]" value="Green,(No Issues)">
+                  <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire_green" value="Green,(No Issues)">
                   <label for="truck_tires_green"></label>
                 </div>
                 <td bgcolor="#FFFF00"><div align="center">Yellow
-                  <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire[]" value="Yellow,(Reporting Problems)">
+                  <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire_yellow" value="Yellow,(Reporting Problems)">
                   <label for="truck_tires_yellow"></label>
                 </div>
                 <td bgcolor="#FF0000"><div align="center">Red
                   <label for="cb_trailer_tires_red"></label>
-                  <input name="vir_truck_tire[]" type="radio" id="vir_truck_tire[]" value="Red,(Do Not Operate)" checked>
+                  <input name="vir_truck_tire[]" type="radio" id="vir_truck_tire_red" value="Red,(Do Not Operate)" >
                   <label for="truck_tires_red"></label>
                 </div>
               </tr>
@@ -1131,16 +1132,16 @@ $trailerid = $_SESSION['trailerid'];
                 <td><a href="vir.php"><img src="../images/trailer.gif" alt="Trailer" width="77" height="38"></a>
                 <td bgcolor="#33FF00"><div align="center">Green
                   <label for="cb_trailer_green3"></label>
-                  <input type="radio" name="vir_trailer[]" id="vir_trailer[]" value="Green,(No Issues)">
+                  <input type="radio" name="vir_trailer[]" id="vir_trailer_green" value="Green,(No Issues)">
                   <label for="vir_trailer_green"></label>
                 </div>
                 <td bgcolor="#FFFF00"><div align="center">Yellow
                   <label for="cb_trailer_yellow3"></label>
-                  <input type="radio" name="vir_trailer[]" id="vir_trailer[]" value="Yellow,(Reporting Problems)">
+                  <input type="radio" name="vir_trailer[]" id="vir_trailer_yellow" value="Yellow,(Reporting Problems)">
                   <label for="vir_trailer_yellow"></label>
                 </div>
                 <td bgcolor="#FF0000"><div align="center">Red
-                  <input name="vir_trailer[]" type="radio" id="vir_trailer[]" value="Red,(Do Not Operate)" checked>
+                  <input name="vir_trailer[]" type="radio" id="vir_trailer_red" value="Red,(Do Not Operate)" >
                   <label for="vir_trailer_red"></label>
                   <label for="cb_trailer_red3"></label>
                 </div>
@@ -1149,17 +1150,22 @@ $trailerid = $_SESSION['trailerid'];
                 <td>Trailer <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
                 <td bgcolor="#33FF00"><div align="center">Green
                   <label for="cb_trailer_tires_green3"></label>
-                  <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire[]" value="Green,(No Issues)">
+                  <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire_green" value="Green,(No Issues)">
                   <label for="trailer_tires_green"></label>
                 </div>
                 <td bgcolor="#FFFF00"><div align="center">Yellow
-                  <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire[]" value="Yellow,(Reporting Problems)">
+                  <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire_yellow" value="Yellow,(Reporting Problems)">
                   <label for="trailer_vir_tires_yellow"></label>
                 </div>
                 <td bgcolor="#FF0000"><div align="center">Red
-                  <input name="vir_trailer_tire[]" type="radio" id="vir_trailer_tire[]" value="Red,(Do Not Operate)" checked>
+                  <input name="vir_trailer_tire[]" type="radio" id="vir_trailer_tire_red" value="Red,(Do Not Operate)" >
                   <label for="trailer_vir_tires_red"></label>
                 </div>
+              </tr>
+              <tr>
+               <td colspan="4">
+                  <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none" id="generalStatus"></div>
+               </td>
               </tr>
               <tr>
                 <td colspan="4"><div align="center">Enter Additional Notes below</div></td>
@@ -1263,29 +1269,88 @@ $trailerid = $_SESSION['trailerid'];
 <script type="text/javascript">
 $(document).ready(function(){
     $('input[type="radio"]').click(function(){
-        if($(this).attr("value")=="combo"){
+        if($(this).attr("value")=="combo")
+        {
+          if ((document.getElementById('pretrip').checked) || (document.getElementById('posttrip').checked))
+          {
             $(".vir").not(".combo").hide();
             $(".combo").show();
             $(".truckvir").show();
             $(".virsubmit").show();
             $(".virconfirmation").hide();
+          }else{
+            $('#preorpostdiv').css('display', 'block');
+            $(this).prop('checked', false);
+          }
         }
         if($(this).attr("value")=="boxtruck"){
+          if ((document.getElementById('pretrip').checked) || (document.getElementById('posttrip').checked))
+          {
             $(".vir").not(".boxtruck").hide();
             $(".boxtruck").show();
             $(".truckvir").show();
             $(".virsubmit").show();
             $(".virconfirmation").hide();
+          }else{
+            $('#preorpostdiv').css('display', 'block');
+            $(this).prop('checked', false);
+          }
         }
         if($(this).attr("value")=="sprinter"){
+          if ((document.getElementById('pretrip').checked) || (document.getElementById('posttrip').checked))
+          {
             $(".vir").not(".sprinter").hide();
             $(".sprinter").show();
             $(".truckvir").show();
             $(".virsubmit").show();
             $(".virconfirmation").hide();
+          }else{
+            $('#preorpostdiv').css('display', 'block');
+            $(this).prop('checked', false);
+          }
         }
     });
 });
+
+function validateSubmit( obj ){
+    if(!$('#vir_truck_green').is(':checked') &&
+       !$('#vir_truck_yellow').is(':checked') && 
+       !$('#vir_truck_red').is(':checked'))
+    {
+      $('#generalStatus').html("Choose an option for truck condition")
+      $('#generalStatus').css('display', 'block');
+      return false
+    }
+    if(!$('#vir_truck_tire_green').is(':checked') &&
+       !$('#vir_truck_tire_yellow').is(':checked') && 
+       !$('#vir_truck_tire_red').is(':checked'))
+    {
+      $('#generalStatus').html("Choose an option for truck tire conditions")
+      $('#generalStatus').css('display', 'block');
+      return false
+    }
+    // Now only check the following if a semi was selected
+    if($('#trucktype_combo').is(':checked'))
+    {
+        if(!$('#vir_trailer_green').is(':checked') &&
+           !$('#vir_trailer_yellow').is(':checked') && 
+           !$('#vir_trailer_red').is(':checked'))
+        {
+           $('#generalStatus').html("Choose an option for trailer condition")
+           $('#generalStatus').css('display', 'block');
+           return false
+        }
+        if(!$('#vir_trailer_tire_green').is(':checked') &&
+           !$('#vir_trailer_tire_yellow').is(':checked') && 
+           !$('#vir_trailer_tire_red').is(':checked'))
+        {
+           $('#generalStatus').html("Choose an option for trailer tire conditions")
+           $('#generalStatus').css('display', 'block');
+           return false
+        }
+    }
+    return true
+}
 </script>
 </body>
 </html>
