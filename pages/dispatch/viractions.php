@@ -201,35 +201,35 @@ End Time  : $insp_end_time
 
 General Notes: $vir_notes_finish
 
-$truck_number : $truck_vir_condition
+$truck_number: $truck_vir_condition
 Items Marked:
 $truck_vir_items
 
 Additional Driver Notes For $truck_number:
 $vir_notes_detailed_truck $vir_notes_quick_report
 
-$truck_number Tire Conditions (Drivers Side):
+$truck_number: Tire Conditions (Drivers Side):
 Steer,$truck_tires_driverside_steer
 Axel 1: $truck_tires_driverside_ax1front
 Axel 2: $truck_tires_driverside_ax2rear
 
-$truck_number Tire Conditions (Passenger Side):
+$truck_number: Tire Conditions (Passenger Side):
 Steer: $truck_tires_driverside_steer
 Axel 1: $truck_tires_passenger_ax1front
 Axel 2: $truck_tires_passenger_ax2rear
 
-$trailer_number $trailer_vir_condition:
+$trailer_number: $trailer_vir_condition:
 Items Marked:
 $trailer_vir_items
 
 Additional Driver Notes For Trailer:
 $vir_notes_detailed_trailer
 
-$trailer_number Tire Conditions (Drivers Side):
+$trailer_number: Tire Conditions (Drivers Side):
 Axel 1: $trailer_tires_driverside_ax1front
 AXEL 2: $trailer_tires_driverside_ax2rear
 
-$trailer_number Tire Conditions (Passenger Side):
+$trailer_number: Tire Conditions (Passenger Side):
 Axel 1: $trailer_tires_passenger_ax1front
 AXEL 2: $trailer_tires_passenger_ax2rear
 
