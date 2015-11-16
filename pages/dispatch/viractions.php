@@ -199,6 +199,8 @@ Date: $insp_date
 Start Time: $insp_start_time
 End Time  : $insp_end_time
 
+General Notes: $vir_notes_finish
+
 $truck_number : $truck_vir_condition
 Items Marked:
 $truck_vir_items
