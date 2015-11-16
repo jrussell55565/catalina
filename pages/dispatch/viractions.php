@@ -190,7 +190,7 @@ mysql_query($sql);
 
 # Send the email out
 # Reset the trucktype if it's 'combo'
-($trucktype = 'combo' ? $trucktype = 'semi' : $trucktype = $trucktype);
+($trucktype == 'combo' ? $trucktype = 'semi' : $trucktype = $trucktype);
 $to = "trucks@catalinacartage.com";
 $subject = "VIR Truck $truck_number / Truck Odometer $truckOdometer / Trailer $trailer_number";
 $body = <<<EOT
