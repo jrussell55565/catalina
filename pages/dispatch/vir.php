@@ -145,7 +145,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                   <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none" id="preorpostdiv">Choose pre-trip or post-trip</div>
               </tr>
               <tr>
-                <td colspan="4"><div align="center">Truck Type (Box/Sprinter Not Working Use Semi)</div>
+                <td colspan="4"><div align="center">Truck Type</div>
                   <div align="center"></div>
               </tr>
               <tr>
@@ -159,18 +159,15 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                     <label for="type_semi"></label>
                   </div>
                 <td colspan="2"><div align="center">
-<!-- PAGE CONTENT HERE 
                   <input type="radio" name="trucktype" id="trucktype_boxtruck" value="boxtruck" onclick="this.checked=false;
 alert('Sorry, this option is not available / Please select Semi For Pre or Post Trip till we get this is issue fixed!')">
                   <label for="type_boxtruck"></label>
                   </div>
-                  
                   <div align="center"></div>
                 <td><div align="center">
                     <input type="radio" name="trucktype" id="trucktype_sprinter" value="sprinter" onclick="this.checked=false;
 alert('Sorry, this option is not available / Please select Semi For Pre or Post Trip till we get this is issue fixed!')">
                     <label for="type_sprinter"></label>
---> 
                   </div>
               </tr>
             </table>
@@ -1187,8 +1184,12 @@ alert('Sorry, this option is not available / Please select Semi For Pre or Post 
               </tr>
 <!--  Removing the Fields for Quick Green Yellow Selections For lazy drivers -->
               <tr>
-                <td><A HREF="#submitvir"></A>
-                  <div align="center"></div></td>
+               <td>
+                  <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none" id="generalStatus"></div>
+               </td>
+              </tr>
+              <tr>
+                <td><div align="center"></div></td>
               </tr>
             </table>
             <table width="318" border="1">
