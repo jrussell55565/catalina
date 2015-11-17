@@ -126,7 +126,7 @@ insp_type, /* \$preorposttrip = $preorposttrip */
 driver_name, /* \$username = $username */
 vir_points, /* 1 */
 truck_number, /* \$truck_number = $truck_number */
-truckOdometer, /* \$truckOdometer = $truck_odometer */
+truck_odometer, /* \$truckodometer = $truckodometer */
 truck_vir_condition, /* \$truck_vir_condition = $truck_vir_condition */ 
 truck_vir_items, /* \$truck_vir_items = $truck_vir_items */
 truck_vir_notes, /* \$vir_notes_detailed_truck = $vir_notes_detailed_truck */
@@ -159,7 +159,7 @@ subtime(curtime(),'$insp_start_time'),
 '$username',
 1,
 $truck_number,
-$truck_odometer,
+$truckodometer,
 '$truck_vir_condition',
 '$truck_vir_items',
 '$vir_notes_detailed_truck',
@@ -192,40 +192,49 @@ mysql_query($sql);
 # Reset the trucktype if it's 'combo'
 ($trucktype == 'combo' ? $trucktype = 'semi' : $trucktype = $trucktype);
 $to = "trucks@catalinacartage.com";
-$subject = "VIR Truck $truck_number / Truck Odometer $truckOdometer / Trailer $trailer_number";
+$subject = "VIR $truck_number / $trailer_number / $preorposttrip";
 $body = <<<EOT
 Driver: $username
-Inspection Type: $preorposttrip 
 Truck Type: $trucktype
-Truck: $truck_number, $truck_vir_condition 
-Reported Miles: $truck_Odometer
+Truck: $truck_number, $truck_vir_condition
 Trailer: $trailer_number, $trailer_vir_condition
-Quick Notes: $vir_notes_quick_report
-Finish Notes: $vir_notes_finish
-Date: $insp_date,Start Time: $insp_start_time,End Time : $insp_end_time
+Date: $insp_date
+Start Time: $insp_start_time
+End Time  : $insp_end_time
 
-Please read below for more details:
-$truck_number condition, $truck_vir_condition, $vir_notes_detailed_truck Items Marked below:
+General Notes: $vir_notes_finish
+
+$truck_number: $truck_vir_condition
+Items Marked:
 $truck_vir_items
-Truck $truck_number Tire Conditions:
-(Driver Side Truck)
-STEER,$truck_tires_driverside_steer
-fRONT DRIVE: $truck_tires_driverside_ax1front
-REAR DRIVE: $truck_tires_driverside_ax2rear
-(Passenger Side Truck)
-PASSENGER Steer: $truck_tires_driverside_steer
-FRONT DRIVE: $truck_tires_passenger_ax1front
-REAR DRIVE: $truck_tires_passenger_ax2rear
 
-Trailer condition $trailer_number $trailer_vir_condition, $vir_notes_detailed_trailer Items Marked below:
+Additional Driver Notes For $truck_number:
+$vir_notes_detailed_truck $vir_notes_quick_report
+
+$truck_number: Tire Conditions (Drivers Side):
+Steer,$truck_tires_driverside_steer
+Axel 1: $truck_tires_driverside_ax1front
+Axel 2: $truck_tires_driverside_ax2rear
+
+$truck_number: Tire Conditions (Passenger Side):
+Steer: $truck_tires_driverside_steer
+Axel 1: $truck_tires_passenger_ax1front
+Axel 2: $truck_tires_passenger_ax2rear
+
+$trailer_number: $trailer_vir_condition:
+Items Marked:
 $trailer_vir_items
-Trailer $trailer_number Tire Conditions:
-(Driver Side Trailer)
-FRONT AXEL: $trailer_tires_driverside_ax1front
-REAR AXEL: $trailer_tires_driverside_ax2rear
-(Passenger Side Trailer)
-FRONT AXEL: $trailer_tires_passenger_ax1front
-REAR AXEL: $trailer_tires_passenger_ax2rear
+
+Additional Driver Notes For Trailer:
+$vir_notes_detailed_trailer
+
+$trailer_number: Tire Conditions (Drivers Side):
+Axel 1: $trailer_tires_driverside_ax1front
+AXEL 2: $trailer_tires_driverside_ax2rear
+
+$trailer_number: Tire Conditions (Passenger Side):
+Axel 1: $trailer_tires_passenger_ax1front
+AXEL 2: $trailer_tires_passenger_ax2rear
 
 EOT;
 

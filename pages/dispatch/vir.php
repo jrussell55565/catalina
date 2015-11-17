@@ -12,8 +12,9 @@ mysql_select_db($db_name) or DIE('Database name is not available!');
 
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
-$truckid = $_SESSION['truckid'];
-$trailerid = $_SESSION['trailerid'];
+$truckid = $_COOKIE['login_truckid'];
+$trailerid = $_COOKIE['login_trailerid'];
+$truckOdometer = $_COOKIE['login_truckodometer'];
 
 ?>
 <!DOCTYPE html>
@@ -128,7 +129,9 @@ $trailerid = $_SESSION['trailerid'];
               </tr>
               <tr>
                 <td>Trailer
-                <td><input name="trailer_number" type="text" id="trailer_number" value="<?php echo $trailerid; ?>" size="8" readonly />
+                <td><input name="trailer_number" type="text" id="trailer_number" value="<?php echo $trailerid; ?>" size="8" readonly>
+                <input name="truck_odometer" type="hidden" id="truck_odometer" value="<?php echo $truckOdometer; ?>" size="8" readonly>
+                </td>
                 <td colspan="2"><a href="vir_previous_trailer.php">Previous VIR</a>
               </tr>
               <tr>
