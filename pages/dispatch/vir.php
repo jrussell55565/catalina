@@ -136,10 +136,10 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
               </tr>
               <tr>
                 <td colspan="4"><div align="center">Pre Trip:
-                    <input name="preorposttrip" type="radio" id="pretrip" value="Pre Trip">
+                    <input name="preorposttrip" type="radio" id="pretrip" value="vir_pretrip">
                   <label for="vir_pretrip"></label>
                     Post Trip:
-                    <input type="radio" name="preorposttrip" id="posttrip" value="Post Trip">
+                    <input type="radio" name="preorposttrip" id="posttrip" value="vir_posttrip">
                     <label for="vir_posttrip"></label>
                   </div>
                   <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none" id="preorpostdiv">Choose pre-trip or post-trip</div>
@@ -1094,7 +1094,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
           </div>
         </div>
         <div class="box-body">
-            <table width="318" border="1">
+            <table width="313" border="1">
               <tr>
                 <td height="10" colspan="4"><div align="center">
                   <label for="VIR Conditions &amp; Tires"></label>
@@ -1103,31 +1103,31 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
               <tr>
                 <td width="83">Truck
                 <td width="64" bgcolor="#33FF00"><div align="center">Green
-                  <input type="radio" name="vir_truck[]" id="vir_truck_green" value="No Truck Issues">
+                  <input type="radio" name="vir_truck[]" id="vir_truck_green" value="Green,(No Issues)">
                   <label for="vir_truck_green"></label>
                 </div>
                 <td width="66" bgcolor="#FFFF00"><div align="center">Yellow
-                  <input type="radio" name="vir_truck[]" id="vir_truck_yellow" value="Reporting Truck Issues">
+                  <input type="radio" name="vir_truck[]" id="vir_truck_yellow" value="Yellow,(Reporting Problems)">
                   <label for="vir_truck_yellow"></label>
                 </div>
                 <td width="62" bgcolor="#FF0000"><div align="center">Red
-                  <input name="vir_truck[]" type="radio" id="vir_truck_red" value="Truck Is Red Tagged" >
+                  <input name="vir_truck[]" type="radio" id="vir_truck_red" value="Red,(Do Not Operate)" >
                   <label for="vir_truck_red"></label>
                 </div>
               </tr>
               <tr>
                 <td>Truck <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
                 <td bgcolor="#33FF00"><div align="center">Green
-                  <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire_green" value="No Truck Tire Issues">
+                  <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire_green" value="Green,(No Issues)">
                   <label for="truck_tires_green"></label>
                 </div>
                 <td bgcolor="#FFFF00"><div align="center">Yellow
-                  <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire_yellow" value="Reporting Truck Tire Issues">
+                  <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire_yellow" value="Yellow,(Reporting Problems)">
                   <label for="truck_tires_yellow"></label>
                 </div>
                 <td bgcolor="#FF0000"><div align="center">Red
                   <label for="cb_trailer_tires_red"></label>
-                  <input name="vir_truck_tire[]" type="radio" id="vir_truck_tire_red" value="Truck Tires Red Tagged" >
+                  <input name="vir_truck_tire[]" type="radio" id="vir_truck_tire_red" value="Red,(Do Not Operate)" >
                   <label for="truck_tires_red"></label>
                 </div>
               </tr>
@@ -1135,16 +1135,16 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td><a href="vir.php"><img src="../images/trailer.gif" alt="Trailer" width="77" height="38"></a>
                 <td bgcolor="#33FF00"><div align="center">Green
                   <label for="cb_trailer_green3"></label>
-                  <input type="radio" name="vir_trailer[]" id="vir_trailer_green" value="No Trailer Issues">
+                  <input type="radio" name="vir_trailer[]" id="vir_trailer_green" value="Green,(No Issues)">
                   <label for="vir_trailer_green"></label>
                 </div>
                 <td bgcolor="#FFFF00"><div align="center">Yellow
                   <label for="cb_trailer_yellow3"></label>
-                  <input type="radio" name="vir_trailer[]" id="vir_trailer_yellow" value="Reporting Trailer Issues">
+                  <input type="radio" name="vir_trailer[]" id="vir_trailer_yellow" value="Yellow,(Reporting Problems)">
                   <label for="vir_trailer_yellow"></label>
                 </div>
                 <td bgcolor="#FF0000"><div align="center">Red
-                  <input name="vir_trailer[]" type="radio" id="vir_trailer_red" value="Trailer Red Tagged" >
+                  <input name="vir_trailer[]" type="radio" id="vir_trailer_red" value="Red,(Do Not Operate)" >
                   <label for="vir_trailer_red"></label>
                   <label for="cb_trailer_red3"></label>
                 </div>
@@ -1153,15 +1153,15 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td>Trailer <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
                 <td bgcolor="#33FF00"><div align="center">Green
                   <label for="cb_trailer_tires_green3"></label>
-                  <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire_green" value="No Trailer Tire Issues">
+                  <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire_green" value="Green,(No Issues)">
                   <label for="trailer_tires_green"></label>
                 </div>
                 <td bgcolor="#FFFF00"><div align="center">Yellow
-                  <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire_yellow" value="Reporting Trailer Tire Issues">
+                  <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire_yellow" value="Yellow,(Reporting Problems)">
                   <label for="trailer_vir_tires_yellow"></label>
                 </div>
                 <td bgcolor="#FF0000"><div align="center">Red
-                  <input name="vir_trailer_tire[]" type="radio" id="vir_trailer_tire_red" value="Trailer Tires Red Tagged" >
+                  <input name="vir_trailer_tire[]" type="radio" id="vir_trailer_tire_red" value="Red,(Do Not Operate)" >
                   <label for="trailer_vir_tires_red"></label>
                 </div>
               </tr>
@@ -1171,37 +1171,33 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                </td>
               </tr>
               <tr>
-<!-- /.Quick Notes 
                 <td colspan="4"><div align="center">Enter Additional Notes below</div></td>
               </tr>
               <tr>
-
-                <td colspan="4"><div align="center">      
+                <td colspan="4"><div align="center">
                   <textarea name="vir_notes_quick_report" id="vir_notes_quick_report"  cols="43" rows="3" placeholder="Please type notes for any items needing attention!">Quick:</textarea>
                 </div></td>
               </tr>
-              
               <tr>
                 <td colspan="4"><A HREF="#submitvir"></A>
                   <div align="center"> <A HREF="#submitvir">VIR OK, Tires OK / Go To Submit</A></div></td>
               </tr>
--->
             </table>
             <table width="318" border="1">
               <tr>
-                <td width="306" colspan="3"><div align="center"> Submit VIR &amp; Tire Reports</div>
+                <td width="306" colspan="3"><div align="center"> Submit VIR &amp; Tire Report</div>
                   <div align="center"></div>
                   <div align="center">
                   <div align="center"></div>
               </tr>
               <tr>
-                <td colspan="2"><img src="../images/finish.jpg" alt="Submit" width="316" height="152"></td>
+                <td colspan="2"><img src="../images/finish.jpg" alt="Submit" width="310" height="152"></td>
               <tr>
                 <td height="85" colspan="2"><table width="310" border="1">
                   </table>
-                  <div align="center">General Notes: <?php echo "$drivername"; ?> </div>
+                  <div align="center">Additional Notes: <?php echo "$drivername"; ?> </div>
                   <div align="center">
-                    <textarea name="vir_notes_finish" id="vir_notes_finish" cols="43" rows="4">General Notes:</textarea>
+                    <textarea name="vir_notes_finish" id="vir_notes_finish" cols="43" rows="3">Final Note:</textarea>
                   </div></td>
               </tr>
               <tr>
