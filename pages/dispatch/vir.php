@@ -279,7 +279,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
   <tr>
     <td width="52" height="4" bgcolor="#33FF00"><div align="center">Green 
                   <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire_green" value="Green,(No Issues)">
-                  <label for="vir_truck_tires_green"></label></td>
+                  <label for="vir_truck_tire_green"></label></td>
     <td width="54" height="4" bgcolor="#FFFF00"><div align="center">Yellow
                   <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire_yellow" value="Yellow,(Reporting Problems)">
                   <label for="vir_truck_tires_yellow"></label></td>
@@ -814,15 +814,15 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
            <table width="200" border="1">
   <tr>
     <td width="52" height="4" bgcolor="#33FF00"><div align="center">Green 
-                  <input type="radio" name="vir_truck_tire[]" id="vir_truck_tires_green" value="Green,(No Issues)">
+                  <input type="radio" name="vir_truck_tire[]" id="vir_box_tire_green" value="Green,(No Issues)">
                   <label for="vir_truck_tire"></label></td>
                   
     <td width="54" height="4" bgcolor="#FFFF00"><div align="center">Yellow
-                  <input type="radio" name="vir_truck_tire[]" id="truck_tires_yellow" value="Yellow,(Reporting Problems)">
+                  <input type="radio" name="vir_truck_tire[]" id="truck_box_tire_yellow" value="Yellow,(Reporting Problems)">
                   <label for="vir_trailer_tire"></label></td>
                   
     <td width="45" height="4" bgcolor="#FF0000"><div align="center">Red
-                  <input name="vir_truck_tire[]" type="radio" id="truck_tires_red" value="Red,(Do Not Operate)" >
+                  <input name="vir_truck_tire[]" type="radio" id="truck_box_tire_red" value="Red,(Do Not Operate)" >
                   <label for="vir_truck_tire"></label></td>
   </tr>
 </table>       
@@ -1010,13 +1010,13 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                      <table width="200" border="1">
   <tr>
     <td width="52" height="4" bgcolor="#33FF00"><div align="center">Green 
-                  <input type="radio" name="vir_trailer_tire[]" id="vir_truck_tires_green" value="Green,(No Issues)">
+                  <input type="radio" name="vir_trailer_tire[]" id="vir_sprinter_tire_green" value="Green,(No Issues)">
                   <label for="vir_trailer_tire"></label></td>
     <td width="54" height="4" bgcolor="#FFFF00"><div align="center">Yellow
-                  <input type="radio" name="vir_trailer_tire[]" id="truck_tires_yellow" value="Yellow,(Reporting Problems)">
+                  <input type="radio" name="vir_trailer_tire[]" id="truck_sprinter_tire_yellow" value="Yellow,(Reporting Problems)">
                   <label for="vir_trailer_tire"></label></td>
     <td width="45" height="4" bgcolor="#FF0000"><div align="center">Red
-                  <input name="vir_trailer_tire[]" type="radio" id="truck_tires_red" value="Red,(Do Not Operate)" >
+                  <input name="vir_trailer_tire[]" type="radio" id="truck_sprinter_tire_red" value="Red,(Do Not Operate)" >
                   <label for="vir_trailer_tire"></label></td>
   </tr>
 </table>
@@ -1193,98 +1193,6 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
           </div>
         </div>
         <div class="box-body">
-            <table width="313" border="1">
-              <tr>
-                <td height="10" colspan="4"><div align="center">
-                  <label for="VIR Conditions &amp; Tires"></label>
-                  VIR Conditions &amp; Tires</div>
-              </tr>
-<!--  Removing the Fields for Quick Green Yellow Selections For lazy drivers -->
-              <tr>
-                <td width="83">Truck
-                <td width="64" bgcolor="#33FF00"><div align="center">Green
-                  <input type="radio" name="vir_truck[]" id="vir_truck_green" value="Green,(No Issues)">
-                  <label for="vir_truck_green"></label>
-                </div>
-                <td width="66" bgcolor="#FFFF00"><div align="center">Yellow
-                  <input type="radio" name="vir_truck[]" id="vir_truck_yellow" value="Yellow,(Reporting Problems)">
-                  <label for="vir_truck_yellow"></label>
-                </div>
-                <td width="62" bgcolor="#FF0000"><div align="center">Red
-                  <input name="vir_truck[]" type="radio" id="vir_truck_red" value="Red,(Do Not Operate)" >
-                  <label for="vir_truck_red"></label>
-                </div>
-              </tr>
-              <tr>
-                <td>Truck <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
-                <td bgcolor="#33FF00"><div align="center">Green
-                  <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire_green" value="Green,(No Issues)">
-                  <label for="truck_tires_green"></label>
-                </div>
-                <td bgcolor="#FFFF00"><div align="center">Yellow
-                  <input type="radio" name="vir_truck_tire[]" id="vir_truck_tire_yellow" value="Yellow,(Reporting Problems)">
-                  <label for="truck_tires_yellow"></label>
-                </div>
-                <td bgcolor="#FF0000"><div align="center">Red
-                  <label for="cb_trailer_tires_red"></label>
-                  <input name="vir_truck_tire[]" type="radio" id="vir_truck_tire_red" value="Red,(Do Not Operate)" >
-                  <label for="truck_tires_red"></label>
-                </div>
-              </tr>
-              <tr>
-                <td><a href="vir.php"><img src="../images/trailer.gif" alt="Trailer" width="77" height="38"></a>
-                <td bgcolor="#33FF00"><div align="center">Green
-                  <label for="cb_trailer_green3"></label>
-                  <input type="radio" name="vir_trailer[]" id="vir_trailer_green" value="Green,(No Issues)">
-                  <label for="vir_trailer_green"></label>
-                </div>
-                <td bgcolor="#FFFF00"><div align="center">Yellow
-                  <label for="cb_trailer_yellow3"></label>
-                  <input type="radio" name="vir_trailer[]" id="vir_trailer_yellow" value="Yellow,(Reporting Problems)">
-                  <label for="vir_trailer_yellow"></label>
-                </div>
-                <td bgcolor="#FF0000"><div align="center">Red
-                  <input name="vir_trailer[]" type="radio" id="vir_trailer_red" value="Red,(Do Not Operate)" >
-                  <label for="vir_trailer_red"></label>
-                  <label for="cb_trailer_red3"></label>
-                </div>
-              </tr>
-              <tr>
-                <td>Trailer <img src="../images/smalltires.gif" width="25" height="25" alt="tire">
-                <td bgcolor="#33FF00"><div align="center">Green
-
-                  <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire_green" value="Green,(No Issues)">
-                  <label for="trailer_tire_green"></label>
-                </div>
-                <td bgcolor="#FFFF00"><div align="center">Yellow
-                  <input type="radio" name="vir_trailer_tire[]" id="vir_trailer_tire_yellow" value="Yellow,(Reporting Problems)">
-                  <label for="trailer_vir_tire_yellow"></label>
-                </div>
-                <td bgcolor="#FF0000"><div align="center">Red
-                  <input name="vir_trailer_tire[]" type="radio" id="vir_trailer_tire_red" value="Red,(Do Not Operate)" >
-                  <label for="trailer_vir_tire_red"></label>
-                </div>
-              </tr>
-              <tr>
-               <td colspan="4">
-                  <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none" id="generalStatus"></div>
-               </td>
-              </tr>
-              <tr>
-                <td colspan="4"><div align="center">Enter Additional Notes below</div></td>
-              </tr>
-            
-              
-              <tr>
-                <td colspan="4"><div align="center">
-                  <textarea name="vir_notes_quick_report" id="vir_notes_quick_report"  cols="43" rows="3" placeholder="Please type notes for any items needing attention!">Quick:</textarea>
-                </div></td>
-              </tr>
-              <tr>
-                <td colspan="4"><A HREF="#submitvir"></A>
-                  <div align="center"> <A HREF="#submitvir">VIR OK, Tires OK / Go To Submit</A></div></td>
-              </tr>
-            </table>
             <table width="318" border="1">
               <tr>
                 <td width="306" colspan="3"><div align="center"> Submit VIR &amp; Tire Report</div>
@@ -1296,10 +1204,13 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td colspan="2"><img src="../images/finish.jpg" alt="Submit" width="310" height="152"></td>
               <tr>
                 <td height="85" colspan="2"><table width="310" border="1">
+               <td colspan="4">
+                  <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none" id="generalStatus"></div>
+               </td>
                   </table>
                   <div align="center">Additional Notes: <?php echo "$drivername"; ?> </div>
                   <div align="center">
-                    <textarea name="vir_notes_finish" id="vir_notes_finish" cols="43" rows="3">Final Note:</textarea>
+                    <textarea name="vir_notes_finish" id="vir_notes_finish" cols="43" rows="3" placeholder="Enter final notes here"></textarea>
                   </div></td>
               </tr>
               <tr>
@@ -1419,24 +1330,48 @@ $(document).ready(function(){
 
 function validateSubmit( obj ){
     if(!$('#vir_truck_green').is(':checked') &&
-       !$('#vir_truck_yellow').is(':checked') && 
+       !$('#vir_truck_yellow').is(':checked') &&
        !$('#vir_truck_red').is(':checked'))
     {
-      $('#generalStatus').html("One or More condition(s) NOT CHECKED")
+      $('#generalStatus').html("Must specify truck condition")
       $('#generalStatus').css('display', 'block');
       return false
     }
-    if(!$('#vir_truck_tire_green').is(':checked') &&
-       !$('#vir_truck_tire_yellow').is(':checked') && 
-       !$('#vir_truck_tire_red').is(':checked'))
+    // Check for sprinter
+    if($('#trucktype_sprinter').is(':checked'))
     {
-      $('#generalStatus').html("Choose an option for truck tire conditions")
-      $('#generalStatus').css('display', 'block');
-      return false
+      if(!$('#vir_sprinter_tire_green').is(':checked') &&
+       !$('#vir_sprinter_tire_yellow').is(':checked') &&
+       !$('#vir_sprinter_tire_red').is(':checked'))
+      {
+       $('#generalStatus').html("Choose an option for truck tire conditions")
+       $('#generalStatus').css('display', 'block');
+       return false
+      }
+    }
+    // Check for boxtruck
+    if($('#trucktype_boxtruck').is(':checked'))
+    {
+      if(!$('#vir_box_tire_green').is(':checked') &&
+       !$('#vir_box_tire_yellow').is(':checked') &&
+       !$('#vir_box_tire_red').is(':checked'))
+      {
+       $('#generalStatus').html("Choose an option for truck tire conditions")
+       $('#generalStatus').css('display', 'block');
+       return false
+      }
     }
     // Now only check the following if a semi was selected
     if($('#trucktype_combo').is(':checked'))
     {
+        if(!$('#vir_truck_tire_green').is(':checked') &&
+           !$('#vir_truck_tire_yellow').is(':checked') && 
+           !$('#vir_truck_tire_red').is(':checked'))
+        {
+          $('#generalStatus').html("Choose an option for truck tire conditions")
+          $('#generalStatus').css('display', 'block');
+          return false
+        }
         if(!$('#vir_trailer_green').is(':checked') &&
            !$('#vir_trailer_yellow').is(':checked') && 
            !$('#vir_trailer_red').is(':checked'))
