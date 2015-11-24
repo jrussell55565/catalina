@@ -139,9 +139,9 @@ if (mysql_num_rows($login) == 1)
         $output = mysql_query($sql);
 
         # Insert into the login_capture table
-        $sql = "INSERT INTO login_capture (driver_driverid, truck_number, trailer_number, rental, truck_odometer)
+        $sql = "INSERT INTO login_capture (driver_driverid, drivername, truck_number, trailer_number, rental, truck_odometer)
                 VALUES
-                ((SELECT driverid from users WHERE username = '$userName'), 
+                ((SELECT driverid from users WHERE username = '$userName'), '$userName',
                 $truckId, $trailerId, '$rentalTruck',$truckOdometer)";
 
         $output = mysql_query($sql);
