@@ -158,7 +158,7 @@ if (mysql_num_rows($login) == 1)
                 if ($admin == 1)
                 {
                         $_SESSION['login'] = 1;
-                        header('Location: /pages/main/adminindex.php');
+                        header('Location: /pages/main/index.php');
                 }else{
                         $_SESSION['login'] = 2;
                         header('Location: /pages/main/index.php');

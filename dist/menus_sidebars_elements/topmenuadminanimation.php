@@ -31,8 +31,7 @@
 </a>               
                 <div class="info-box-content">
                   <p><span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/adminvir.php">Combined   VIRs</a></span>
-                    <span class="info-box-number">                   Todays  VIRS:  <?php echo "$pu_today_count";?><br>
-Last 8 days VIRS: <?php echo "$del_today_count";?></span></p>
+                    <span class="info-box-number">Today: <?php echo $virs_daily_count;?> of 2<br>Last 8 days: <?php echo $virs_weekly_count;?> of 16</span></p>
 </div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->

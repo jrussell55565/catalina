@@ -24,7 +24,9 @@ $role = $_SESSION['role'];
                       total_alltime.counts AS total_alltime_count,
                       pu_alltime.counts    AS pu_alltime_count,
                       del_alltime.counts   AS del_alltime_count,
-                      archived.counts      AS archived_count
+                      archived.counts      AS archived_count,
+                      virs_daily.count     AS virs_daily_count,
+                      virs_weekly.count    AS virs_weekly_count
                     FROM
                       (
                         SELECT
@@ -204,18 +206,38 @@ $role = $_SESSION['role'];
                         AND deleted =\"F\"
                         AND archived=\"T\"
                       )
-                      archived";
+                      archived,
+                     (
+                      SELECT
+                          COUNT(*) AS count
+                        FROM
+                          virs
+                        WHERE
+                        driver_name=\"$username\"
+                        AND insp_date = date(now())
+                      ) virs_daily,
+                      (
+                      SELECT
+                          COUNT(*) AS count
+                        FROM
+                          virs
+                        WHERE
+                        driver_name=\"$username\"
+                        AND insp_date BETWEEN date(now()) AND date(now()) - INTERVAL 8 DAY
+                      ) virs_weekly";
 
                       $sql = mysql_query($sql);
                       while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
                       {
-                        $total_today_count   = $row[total_today_count];
-                        $pu_today_count      = $row[pu_today_count];
-                        $del_today_count     = $row[del_today_count];
-                        $total_alltime_count = $row[total_alltime_count];
-                        $pu_alltime_count    = $row[pu_alltime_count];
-                        $del_alltime_count   = $row[del_alltime_count];
-                        $archived_count      = $row[archived_count];
+                        $total_today_count   = $row['total_today_count'];
+                        $pu_today_count      = $row['pu_today_count'];
+                        $del_today_count     = $row['del_today_count'];
+                        $total_alltime_count = $row['total_alltime_count'];
+                        $pu_alltime_count    = $row['pu_alltime_count'];
+                        $del_alltime_count   = $row['del_alltime_count'];
+                        $archived_count      = $row['archived_count'];
+                        $virs_daily_count    = $row['virs_daily_count'];
+                        $virs_weekly_count   = $row['virs_weekly_count'];
                       }
                       mysql_free_result($sql);
 

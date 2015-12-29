@@ -30,7 +30,7 @@
 </a>               
                 <div class="info-box-content">
                   <p><span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/vir.php">VIRs</a></span>
-                    <span class="info-box-number">Todays  VIRS: X <?php echo "$vir_today_count";?> <br>Last 8 days VIRS: X</span></p>
+                    <span class="info-box-number">Today: <?php echo $virs_daily_count;?> of 2<br>Last 8 days: <?php echo $virs_weekly_count;?> of 16</span></p>
 				</div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
