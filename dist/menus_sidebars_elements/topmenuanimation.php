@@ -8,7 +8,7 @@
                  <span class="info-box-icon bg-aqua"><i class="fa fa-cog fa-spin"></i></span>
                 </a>               
             <div class="info-box-content">
-			     <span class="info-box-text"><a href="/pages/dispatch/orders.php">Load Board</a></span><span class="info-box-number">Todays PU:<?php echo "$pu_today_count";?><br>
+			     <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php">Load Board</a></span><span class="info-box-number">Todays PU:<?php echo "$pu_today_count";?><br>
                  Todays DEL:   <?php echo "$del_today_count";?></span></div>
                  <!-- /.info-box-content -->
               </div><!-- /.info-box -->
@@ -52,7 +52,7 @@ a.button2 {
                 <span class="info-box-icon bg-green"><i class="fa fa-tachometer"></i></span>
                 </a>
                 <div class="info-box-content">
-                <span class="info-box-text"><a href="/pages/dispatch/costats.php">Company Stats</a> / <a href="/pages/dispatch/userstats.php">User Stats</a></span>
+                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/costats.php">Company Stats</a> / <a href="<?php echo HTTP;?>/pages/dispatch/userstats.php">User Stats</a></span>
                 <span class="info-box-number">Todays Stats: X
                 <br>Last 30 days Stats: X</span></div>
                 <!-- /.info-box-content -->
