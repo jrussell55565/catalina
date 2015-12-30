@@ -77,6 +77,12 @@ if (empty($_POST['fuelcard'])) { $fuelcard = 'NULL'; }else{ $fuelcard = "\"$_POS
 if (empty($_POST['notes'])) { $notes = 'NULL'; }else{ $notes = "\"$_POST[notes]\"";}
 if (empty($_POST['tsName'])) { $tsName = 'NULL'; }else{ $tsName = "\"$_POST[tsName]\"";}
 if (empty($_POST['tsPhone'])) { $tsPhone = 'NULL'; }else{ $tsPhone = $_POST['tsPhone'];}
+if (empty($_POST['vir_pretrip_time'])) { $vir_pretrip_time = 'NULL'; }else{ $vir_pretrip_time = "\"$_POST[vir_pretrip_time]\"";}
+if (empty($_POST['vir_posttrip_time'])) { $vir_posttrip_time = 'NULL'; }else{ $vir_posttrip_time = "\"$_POST[vir_posttrip_time]\"";}
+if (isset($_POST['vir_vtextEnabled']) && $_POST['vir_vtextEnabled'] == 'on') { $vir_vtextEnabled = '"1"'; }else{ $vir_vtextEnabled = '"0"';}
+if (isset($_POST['vir_emailEnabled']) && $_POST['vir_emailEnabled'] == 'on') { $vir_emailEnabled = '"1"'; }else{ $vir_emailEnabled = '"0"';}
+if (empty($_POST['vir_pre_message'])) { $vir_pre_message = 'NULL'; }else{ $vir_pre_message = "\"$_POST[vir_pre_message]\"";}
+if (empty($_POST['vir_post_message'])) { $vir_post_message = 'NULL'; }else{ $vir_post_message = "\"$_POST[vir_post_message]\"";}
 
 # Image Uploads
 if (! empty($_FILES["fileToUpload"]["name"]))
@@ -179,8 +185,15 @@ if (! empty($_FILES["fileToUpload"]["name"]))
    tsa_sta = $tsa_sta,
    notes = $notes,
    ts_phone = $tsPhone,
-   ts_name = $tsName
+   ts_name = $tsName,
+   vir_pretrip_time = $vir_pretrip_time,
+   vir_posttrip_time = $vir_posttrip_time,
+   vir_vtext_enabled = $vir_vtextEnabled,
+   vir_email_enabled = $vir_emailEnabled,
+   vir_pretrip_message = $vir_pre_message,
+   vir_posttrip_message = $vir_post_message
   WHERE id = $id";
+
   mysql_query($sql);
 
 # PDF Uploads
@@ -384,12 +397,16 @@ $sql = "SELECT
      fuelcard,
      ts_name,
      ts_phone,
-     notes
+     notes,
+     vir_pretrip_time,
+     vir_posttrip_time,
+     vir_vtext_enabled,
+     vir_email_enabled,
+     vir_pretrip_message,
+     vir_posttrip_message
       FROM users 
     $predicate
 $orderSql";
-  #print "$sql<br>\n\n";
-
 $sql = mysql_query($sql);
 while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 {
@@ -664,6 +681,96 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
       <input type="text" class="form-control" name="tsName" id="tsName" placeholder="" value="<?php echo $row['ts_name'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
     </tr>
+<tr>
+     <td style="padding: 5px">
+      <label for="vir_pretrip_time">VIR Pretrip</label>
+       <select class="form-control" name="vir_pretrip_time" id="vir_pretrip_time">
+         <option value="00:00" <?php if ($row['vir_pretrip_time'] == '00:00') { echo " selected "; }?>>00:00</option>
+         <option value="01:00" <?php if ($row['vir_pretrip_time'] == '01:00') { echo " selected "; }?>>01:00</option>
+         <option value="02:00" <?php if ($row['vir_pretrip_time'] == '02:00') { echo " selected "; }?>>02:00</option>
+         <option value="03:00" <?php if ($row['vir_pretrip_time'] == '03:00') { echo " selected "; }?>>03:00</option>
+         <option value="04:00" <?php if ($row['vir_pretrip_time'] == '04:00') { echo " selected "; }?>>04:00</option>
+         <option value="05:00" <?php if ($row['vir_pretrip_time'] == '05:00') { echo " selected "; }?>>05:00</option>
+         <option value="06:00" <?php if ($row['vir_pretrip_time'] == '06:00') { echo " selected "; }?>>06:00</option>
+         <option value="07:00" <?php if ($row['vir_pretrip_time'] == '07:00') { echo " selected "; }?>>07:00</option>
+         <option value="08:00" <?php if ($row['vir_pretrip_time'] == '08:00') { echo " selected "; }?>>08:00</option>
+         <option value="09:00" <?php if ($row['vir_pretrip_time'] == '09:00') { echo " selected "; }?>>09:00</option>
+         <option value="10:00" <?php if ($row['vir_pretrip_time'] == '10:00') { echo " selected "; }?>>10:00</option>
+         <option value="11:00" <?php if ($row['vir_pretrip_time'] == '11:00') { echo " selected "; }?>>11:00</option>
+         <option value="12:00" <?php if ($row['vir_pretrip_time'] == '12:00') { echo " selected "; }?>>12:00</option>
+         <option value="13:00" <?php if ($row['vir_pretrip_time'] == '13:00') { echo " selected "; }?>>13:00</option>
+         <option value="14:00" <?php if ($row['vir_pretrip_time'] == '14:00') { echo " selected "; }?>>14:00</option>
+         <option value="15:00" <?php if ($row['vir_pretrip_time'] == '15:00') { echo " selected "; }?>>15:00</option>
+         <option value="16:00" <?php if ($row['vir_pretrip_time'] == '16:00') { echo " selected "; }?>>16:00</option>
+         <option value="17:00" <?php if ($row['vir_pretrip_time'] == '17:00') { echo " selected "; }?>>17:00</option>
+         <option value="18:00" <?php if ($row['vir_pretrip_time'] == '18:00') { echo " selected "; }?>>18:00</option>
+         <option value="19:00" <?php if ($row['vir_pretrip_time'] == '19:00') { echo " selected "; }?>>19:00</option>
+         <option value="20:00" <?php if ($row['vir_pretrip_time'] == '20:00') { echo " selected "; }?>>20:00</option>
+         <option value="21:00" <?php if ($row['vir_pretrip_time'] == '21:00') { echo " selected "; }?>>21:00</option>
+         <option value="22:00" <?php if ($row['vir_pretrip_time'] == '22:00') { echo " selected "; }?>>22:00</option>
+         <option value="23:00" <?php if ($row['vir_pretrip_time'] == '23:00') { echo " selected "; }?>>23:00</option>
+      </select>
+     </td>
+     <td style="padding: 5px">
+      <label for="vir_posttrip_time">VIR Posttrip</label>
+       <select class="form-control" name="vir_posttrip_time" id="vir_posttrip_time">
+         <option value="00:00" <?php if ($row['vir_posttrip_time'] == '00:00') { echo " selected "; }?>>00:00</option>
+         <option value="01:00" <?php if ($row['vir_posttrip_time'] == '01:00') { echo " selected "; }?>>01:00</option>
+         <option value="02:00" <?php if ($row['vir_posttrip_time'] == '02:00') { echo " selected "; }?>>02:00</option>
+         <option value="03:00" <?php if ($row['vir_posttrip_time'] == '03:00') { echo " selected "; }?>>03:00</option>
+         <option value="04:00" <?php if ($row['vir_posttrip_time'] == '04:00') { echo " selected "; }?>>04:00</option>
+         <option value="05:00" <?php if ($row['vir_posttrip_time'] == '05:00') { echo " selected "; }?>>05:00</option>
+         <option value="06:00" <?php if ($row['vir_posttrip_time'] == '06:00') { echo " selected "; }?>>06:00</option>
+         <option value="07:00" <?php if ($row['vir_posttrip_time'] == '07:00') { echo " selected "; }?>>07:00</option>
+         <option value="08:00" <?php if ($row['vir_posttrip_time'] == '08:00') { echo " selected "; }?>>08:00</option>
+         <option value="09:00" <?php if ($row['vir_posttrip_time'] == '09:00') { echo " selected "; }?>>09:00</option>
+         <option value="10:00" <?php if ($row['vir_posttrip_time'] == '10:00') { echo " selected "; }?>>10:00</option>
+         <option value="11:00" <?php if ($row['vir_posttrip_time'] == '11:00') { echo " selected "; }?>>11:00</option>
+         <option value="12:00" <?php if ($row['vir_posttrip_time'] == '12:00') { echo " selected "; }?>>12:00</option>
+         <option value="13:00" <?php if ($row['vir_posttrip_time'] == '13:00') { echo " selected "; }?>>13:00</option>
+         <option value="14:00" <?php if ($row['vir_posttrip_time'] == '14:00') { echo " selected "; }?>>14:00</option>
+         <option value="15:00" <?php if ($row['vir_posttrip_time'] == '15:00') { echo " selected "; }?>>15:00</option>
+         <option value="16:00" <?php if ($row['vir_posttrip_time'] == '16:00') { echo " selected "; }?>>16:00</option>
+         <option value="17:00" <?php if ($row['vir_posttrip_time'] == '17:00') { echo " selected "; }?>>17:00</option>
+         <option value="18:00" <?php if ($row['vir_posttrip_time'] == '18:00') { echo " selected "; }?>>18:00</option>
+         <option value="19:00" <?php if ($row['vir_posttrip_time'] == '19:00') { echo " selected "; }?>>19:00</option>
+         <option value="20:00" <?php if ($row['vir_posttrip_time'] == '20:00') { echo " selected "; }?>>20:00</option>
+         <option value="21:00" <?php if ($row['vir_posttrip_time'] == '21:00') { echo " selected "; }?>>21:00</option>
+         <option value="22:00" <?php if ($row['vir_posttrip_time'] == '22:00') { echo " selected "; }?>>22:00</option>
+         <option value="23:00" <?php if ($row['vir_posttrip_time'] == '23:00') { echo " selected "; }?>>23:00</option>
+      </select>
+     </td>
+<td style="padding: 5px"><label for="vir_text_updates" style="margin-top: 8px; margin-bottom: 0px;">VIR Text</label>
+  <table>
+    <tr>
+      <td><div class="checkbox">
+          <label>
+            <input name="vir_vtextEnabled" id="vir_vtextEnabled" type="checkbox" value="on" <?php if ($row['vir_vtext_enabled'] == "1") { echo "checked"; }?>>
+          </label>
+        </div>
+        </div></td>
+    </tr>
+  </table></td>
+<td style="padding: 5px"><label for="vir_email_updates" style="margin-top: 8px; margin-bottom: 0px;">VIR Email</label>
+  <table>
+    <tr>
+      <td><div class="checkbox">
+          <label>
+            <input name="vir_emailEnabled" id="vir_emailEnabled" type="checkbox" value="on" <?php if ($row['vir_email_enabled'] == "1") { echo "checked"; }?>>
+          </label>
+        </div>
+        </div></td>
+    </tr>
+  </table></td>
+     <td style="padding: 5px">
+      <label for="vir_pre_message">VIR Pre Message</label>
+      <input type="text" class="form-control" name="vir_pre_message" id="vir_pre_message" placeholder="" value="<?php echo $row['vir_pretrip_message'];?>">
+     </td>
+     <td style="padding: 5px">
+      <label for="vir_post_message">VIR Post Message</label>
+      <input type="text" class="form-control" name="vir_post_message" id="vir_post_message" placeholder="" value="<?php echo $row['vir_posttrip_message'];?>">
+     </td>
+</tr>
     <tr>
      <td colspan="1" style="padding: 5px">
       <label for="contract">Contract</label>
@@ -968,6 +1075,96 @@ if ($_SESSION['login'] == 1)
       <textarea class="form-control" name="miscDetails" id="miscDetails" placeholder="" value="" style="padding-top: 0px; padding-bottom: 0px; height: 34px;"></textarea>
      </td>
     </tr>
+<tr>
+     <td style="padding: 5px">
+      <label for="vir_pretrip_time">VIR Pretrip</label>
+       <select class="form-control" name="vir_pretrip_time" id="vir_pretrip_time">
+         <option value="00:00">00:00</option>
+         <option value="01:00">01:00</option>
+         <option value="02:00">02:00</option>
+         <option value="03:00">03:00</option>
+         <option value="04:00">04:00</option>
+         <option value="05:00">05:00</option>
+         <option value="06:00">06:00</option>
+         <option value="07:00">07:00</option>
+         <option value="08:00">08:00</option>
+         <option value="09:00">09:00</option>
+         <option value="10:00">10:00</option>
+         <option value="11:00">11:00</option>
+         <option value="12:00">12:00</option>
+         <option value="13:00">13:00</option>
+         <option value="14:00">14:00</option>
+         <option value="15:00">15:00</option>
+         <option value="16:00">16:00</option>
+         <option value="17:00">17:00</option>
+         <option value="18:00">18:00</option>
+         <option value="19:00">19:00</option>
+         <option value="20:00">20:00</option>
+         <option value="21:00">21:00</option>
+         <option value="22:00">22:00</option>
+         <option value="23:00">23:00</option>
+      </select>
+     </td>
+     <td style="padding: 5px">
+      <label for="vir_posttrip_time">VIR Posttrip</label>
+       <select class="form-control" name="vir_posttrip_time" id="vir_posttrip_time">
+         <option value="00:00">00:00</option>
+         <option value="01:00">01:00</option>
+         <option value="02:00">02:00</option>
+         <option value="03:00">03:00</option>
+         <option value="04:00">04:00</option>
+         <option value="05:00">05:00</option>
+         <option value="06:00">06:00</option>
+         <option value="07:00">07:00</option>
+         <option value="08:00">08:00</option>
+         <option value="09:00">09:00</option>
+         <option value="10:00">10:00</option>
+         <option value="11:00">11:00</option>
+         <option value="12:00">12:00</option>
+         <option value="13:00">13:00</option>
+         <option value="14:00">14:00</option>
+         <option value="15:00">15:00</option>
+         <option value="16:00">16:00</option>
+         <option value="17:00">17:00</option>
+         <option value="18:00">18:00</option>
+         <option value="19:00">19:00</option>
+         <option value="20:00">20:00</option>
+         <option value="21:00">21:00</option>
+         <option value="22:00">22:00</option>
+         <option value="23:00">23:00</option>
+      </select>
+     </td>
+<td style="padding: 5px"><label for="vir_text_updates" style="margin-top: 8px; margin-bottom: 0px;">VIR Text</label>
+  <table>
+    <tr>
+      <td><div class="checkbox">
+          <label>
+            <input name="vir_vtextEnabled" id="vir_vtextEnabled" type="checkbox" value="on" >
+          </label>
+        </div>
+        </div></td>
+    </tr>
+  </table></td>
+<td style="padding: 5px"><label for="vir_email_updates" style="margin-top: 8px; margin-bottom: 0px;">VIR Email</label>
+  <table>
+    <tr>
+      <td><div class="checkbox">
+          <label>
+            <input name="vir_emailEnabled" id="vir_emailEnabled" type="checkbox" value="on" >
+          </label>
+        </div>
+        </div></td>
+    </tr>
+  </table></td>
+     <td style="padding: 5px">
+      <label for="vir_pre_message">VIR Pre Message</label>
+      <input type="text" class="form-control" name="vir_pre_message" id="vir_pre_message" placeholder="" value="">
+     </td>
+     <td style="padding: 5px">
+      <label for="vir_post_message">VIR Post Message</label>
+      <input type="text" class="form-control" name="vir_post_message" id="vir_post_message" placeholder="" value="">
+     </td>
+</tr>
     <tr>
      <td colspan="1" style="padding: 5px">
       <label for="contract">Contract</label>
