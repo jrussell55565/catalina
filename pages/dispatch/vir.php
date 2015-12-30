@@ -125,14 +125,24 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
               <tr>
                 <td width="95">Truck
                 <td width="72"><input name="truck_number" type="text" id="truck_number" value="<?php echo $truckid; ?>" size="8" readonly />
-                <td colspan="2"><a href="vir_previous_truck.php"> Previous VIR</a>
+                <?php
+                $statement = "SELECT truck_vir_condition from virs WHERE truck_number = $truckid ORDER BY vir_itemnum DESC LIMIT 1";
+                $record = mysql_query($statement);
+                $record = mysql_fetch_array($record);
+                ?>
+                <td colspan="2"><a href="vir_previous.php"> Previous VIR </a><?php echo explode(',',$record[0])[0];?>
               </tr>
               <tr>
                 <td>Trailer
                 <td><input name="trailer_number" type="text" id="trailer_number" value="<?php echo $trailerid; ?>" size="8" readonly>
                 <input name="truck_odometer" type="hidden" id="truck_odometer" value="<?php echo $truckOdometer; ?>" size="8" readonly>
                 </td>
-                <td colspan="2"><a href="vir_previous_trailer.php">Previous VIR</a>
+                <?php
+                $statement = "SELECT trailer_vir_condition from virs WHERE trailer_number = $trailerid ORDER BY vir_itemnum DESC LIMIT 1";
+                $record = mysql_query($statement);
+                $record = mysql_fetch_array($record);
+                ?>
+                <td colspan="2"><a href="vir_previous.php">Previous VIR </a><?php echo explode(',',$record[0])[0];?>
               </tr>
               <tr>
                 <td colspan="4"><div align="center">Pre Trip:
