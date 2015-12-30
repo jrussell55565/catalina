@@ -1286,6 +1286,15 @@ $(document).ready(function(){
         {
             $("#truck_tire_inspection_virs").hide();
         }
+        // Open the div if a yellow/red trailer tire vir was selected
+        if($(this).attr("id")=="vir_trailer_tire_yellow" || $(this).attr("id")=="vir_trailer_tire_red")
+        {
+            $("#trailer_tire_inspection_virs").show();
+        }
+        if($(this).attr("id")=="vir_trailer_tire_green")
+        {
+            $("#trailer_tire_inspection_virs").hide();
+        }
         // Open the div if a yellow/red boxtruck tire vir was selected
         if($(this).attr("id")=="vir_box_tire_yellow" || $(this).attr("id")=="vir_box_tire_red")
         {
