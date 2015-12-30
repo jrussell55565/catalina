@@ -19,6 +19,10 @@ $sql = "select
         date_format(str_to_date(dueDate, '%c/%e/%Y'),'%c/%e/%Y') dueDate
         from dispatch where recordId = $recordid";
 
+$statement = 'SELECT drivername from users where username = "'.$_SESSION['userid'].'"';
+$drivername = mysql_fetch_array(mysql_query($statement),MYSQL_BOTH);
+$drivername = $drivername[0];
+
 $row = mysql_fetch_array(mysql_query($sql),MYSQL_BOTH);
 $hawb       = $row['hawbNumber'];
 $puDriver   = $row['PUAgentDriverName'];
@@ -248,15 +252,38 @@ fclose($fpStatus);
 
 mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
 mysql_select_db($db_name) or DIE('Database name is not available!');
-
-
-// Retrieve username and password from database according to user's input
-$accessorial_override = processAccessorials($hawb,'OVER',$username,1);
 mysql_query("UPDATE dispatch SET status=\"$statustype\", modifiedDate = now() WHERE recordID=$recordid");
-mysql_query("
-INSERT INTO driverexport (hawbNumber,driver,status,hawbDate,dueDate,date,trace_notes,accessorials,pieces,pallets)
-VALUES (\"$hawb\",\"$drivername\",\"$status\",(select str_to_date(hawbDate,'%c/%e/%Y') as hawbDate from dispatch WHERE hawbNumber=\"$hawb\"),(select str_to_date(dueDate,'%c/%e/%Y') as dueDate from dispatch WHERE hawbNumber=\"$hawb\"),now(),\"$remarks\",\"$accessorial_override\",$pieces,$pallets)"
-);
+
+# Insert into the driverexport TABLE
+if ($remarks != '')
+{
+  $trace_notes = '"'.$remarks.'"';
+}else{
+  $trace_notes = 'NULL';
+}
+
+$accessorial_override = processAccessorials($hawb,'OVER',$username,1);
+
+if ($accessorial_override != '')
+{
+  $accessorial_override = '"'.$accessorial_override.'"';
+}else{
+  $accessorial_override = 'NULL';
+}
+
+if ($pieces == '')
+{
+  $pieces = 'NULL';
+}
+
+if ($pallets == '')
+{
+  $pallets = 'NULL';
+}
+
+$statement = "INSERT INTO driverexport (hawbNumber,driver,status,hawbDate,dueDate,date,trace_notes,accessorials,pieces,pallets)
+VALUES (\"$hawb\",\"$drivername\",\"$status\",(select str_to_date(hawbDate,'%c/%e/%Y') as hawbDate from dispatch WHERE hawbNumber=\"$hawb\"),(select str_to_date(dueDate,'%c/%e/%Y') as dueDate from dispatch WHERE hawbNumber=\"$hawb\"),now(),$trace_notes,$accessorial_override,$pieces,$pallets)";
+mysql_query($statement);
 
 // If the status update was Arrived To Consignee then update the DB with the time
 if ($status == "Arrived To Consignee")
