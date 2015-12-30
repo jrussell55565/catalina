@@ -91,30 +91,20 @@ $drivername = $_SESSION['drivername'];
             <table class="table table-bordered">
               <?php
                      $recordid = $_GET['recordid'];
-                     $sql = "select pieces, pallets,
-                             FROM_UNIXTIME(arrivedShipperTime) as unix_arrivedshippertime,
-                             arrivedShipperTime from dispatch WHERE recordID=$recordid";
+                     $sql = "select pieces, pallets
+                             from dispatch WHERE recordID=$recordid";
                       $sql = mysql_query($sql);
                       while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
                       {
                                 $pieces = $row[pieces];
                                 $pallets = $row[pallets];
-                                $arrivedTime = $row[arrivedShipperTime];
-                                $arrivedTimeUnix = $row[unix_arrivedshippertime];
                       }
-                      $splitArrivedTime = explode(" ",$arrivedTimeUnix);
-                      $duration = round((time() - $arrivedTimeUnix) / 60);
                       mysql_free_result($sql);
                       if ($pallets == 0 || $pallets == '') # pallets is zero or empty
                       {
                           $pallets = $pieces; # Set pallets to what pieces is
                       }
                     ?>
-              <tr>
-                <td>Arrive</td>
-                <td><input type="text" id="txt_arrivedTime" name="txt_arrivedTime"
-                    value="<?php echo $splitArrivedTime[1]; ?>" disabled class="form-control"></td>
-              </tr>
               <tr>
                 <td>Pieces</td>
                 <td><input type="number" id="txt_pieces" name="txt_pieces"

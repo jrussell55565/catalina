@@ -101,70 +101,22 @@ $drivername = $_SESSION['drivername'];
                      $recordid = $_GET['recordid'];
                      $sql = "select pieces, pallets, 
                              date_format(str_to_date(dueDate, '%c/%e/%Y'),'%c/%e/%Y') dueDate, 
-                             (select date_format(curdate(),'%c/%e/%Y') from dual) as currentDate,
-                             FROM_UNIXTIME(arrivedShipperTime) as unix_arrivedshippertime,
-                             arrivedShipperTime from dispatch WHERE recordID=$recordid";
+                             (select date_format(curdate(),'%c/%e/%Y') from dual) as currentDate
+                             from dispatch WHERE recordID=$recordid";
                       $sql = mysql_query($sql);
                       while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
                       {
                                 $pieces = $row[pieces];
                                 $pallets = $row[pallets];
-                                $arrivedTime = $row[arrivedShipperTime];
-                                $arrivedTimeUnix = $row[unix_arrivedshippertime];
                                 $dueDate = $row[dueDate];
                                 $currentDate = $row[currentDate];
                       }
-                      $splitArrivedTime = explode(" ",$arrivedTimeUnix);
-                      $duration = round((time() - $arrivedTimeUnix) / 60);
                       mysql_free_result($sql);
 					  if ($pallets == 0 || $pallets == '') # pallets is zero or empty		
                       {		
                           $pallets = $pieces; # Set pallets to what pieces is		
                       }
                     ?>
-              <tr>
-                <td>Arrive</td>
-                <td>
-                  <div class="bootstrap-timepicker">
-                    <div class="bootstrap-timepicker-widget dropdown-menu">
-                      <table>
-                        <tbody>
-                          <tr>
-                            <td><a href="#" data-action="incrementHour"><i class="glyphicon glyphicon-chevron-up"></i></a></td>
-                            <td class="separator">&nbsp;</td>
-                            <td><a href="#" data-action="incrementMinute"><i class="glyphicon glyphicon-chevron-up"></i></a></td>
-                            <td class="separator">&nbsp;</td>
-                            <td class="meridian-column"><a href="#" data-action="toggleMeridian"><i class="glyphicon glyphicon-chevron-up"></i></a></td>
-                          </tr>
-                          <tr>
-                            <td><span class="bootstrap-timepicker-hour">07</span></td>
-                            <td class="separator">:</td>
-                            <td><span class="bootstrap-timepicker-minute">30</span></td>
-                            <td class="separator">&nbsp;</td>
-                            <td><span class="bootstrap-timepicker-meridian">AM</span></td>
-                          </tr>
-                          <tr>
-                            <td><a href="#" data-action="decrementHour"><i class="glyphicon glyphicon-chevron-down"></i></a></td>
-                            <td class="separator"></td>
-                            <td><a href="#" data-action="decrementMinute"><i class="glyphicon glyphicon-chevron-down"></i></a></td>
-                            <td class="separator">&nbsp;</td>
-                            <td><a href="#" data-action="toggleMeridian"><i class="glyphicon glyphicon-chevron-down"></i></a></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="form-group">
-                      <div class="input-group">
-                        <input type="text" class="form-control arrivedtimepicker" name="txt_arrivedTime"
-                           id="txt_arrivedTime">
-                        <div class="input-group-addon"> <i class="fa fa-clock-o"></i> </div>
-                      </div>
-                      <!-- /.input group -->
-                    </div>
-                    <!-- /.form group -->
-                  </div>
-                </td>
-              </tr>
               <tr>
                 <td>Pieces</td>
                 <td><input type="number" id="txt_pieces" name="txt_pieces"
