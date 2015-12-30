@@ -245,7 +245,7 @@ if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
           <td width="65">&nbsp;</td>
           <td>&nbsp;</td>
         </tr>
-	<?php accessorials("PU",basename(__FILE__),$_GET['username']); ?>
+	<?php accessorials("DEL",basename(__FILE__),$_GET['username']); ?>
                 <tr>
           <td colspan="3"><div align="center"><input type="submit" name="btn_sourceform" id="btn_sourceform" value="Trace Note DEL" /></td>
           </tr>

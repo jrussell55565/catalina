@@ -28,7 +28,7 @@ $sql = mysql_query("select pieces,pallets from dispatch WHERE recordID=$recordid
         $pallets = $row[pallets];
         }
 
-$sql = mysql_query("select FROM_UNIXTIME(arrivedConsigneeTime),arrivedConsigneeTime from dispatch WHERE recordID=$recordid");
+$sql = mysql_query("select FROM_UNIXTIME(arrivedShipperTime),arrivedShipperTime from dispatch WHERE recordID=$recordid");
 
         while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
         {
@@ -45,7 +45,7 @@ $sql = mysql_query("select FROM_UNIXTIME(arrivedConsigneeTime),arrivedConsigneeT
 <meta charset="UTF-8" />
 <meta name="google-site-verification" content="Df_CpGSbb-SbsXqHJuSRIsNlNQdAFgfyYfZQfoFWauw" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Arrived to Consignee</title>
+<title>Trace Note PU</title>
 <script type="text/javascript" src="http://use.typekit.com/uzj3iee.js"></script>
 <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 <link href="style.css" rel="stylesheet" type="text/css" media="screen" />
@@ -183,24 +183,24 @@ if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
     <article class="post-6591 post type-post status-publish format-standard hentry category-articles tag-design tag-opinion tag-responsive article" id="post-6591">
         <header class="postheader">
             <div class="banner">
-                <h1>Arrived to Consignee</h1>
+                <h1>Trace Note PU Update</h1>
                             </div>
         </header>
       
         <div class="grid-row centered">
-            <form id="Arrivedtoconsignee" name="arrivedtoconsignee" method="post" action="export.php">
+            <form id="arrivedtoshipper" name="arrivedtoshipper" method="post" action="export.php">
       <table width="350" border="1">
         <tr>
-          <td width="153">
-            Action Time
-              <input name="<?php echo constant('BX_LT'); ?>" type="text" id="<?php echo constant('BX_LT'); ?>" value="<?php echo $localtime; ?>" size="10"/>
+          <td width="162">
+            Trace NoteTime
+              <input name="Arrival Time" type="text" id="Arrival Time" value="<?php echo $splitArrivedTime[1]; ?>" size="6" readonly="readonly" />
             <label></label>
             <td colspan="2">
               Duration
               <input name="ShipperDuration" type="text" id="ShipperDuration" value="<?php echo $duration; ?>" size="4" readonly="readonly" />
-            <td width="-2" height="26">
+            <td width="-2" height="-1">
             <td width="86" rowspan="2" hidden="hidden"><label>
-              <input name="Status" type="text" id="Status" value="Arrived to Consignee" size="15" readonly/>
+              <input name="Status" type="text" id="Status" value="Trace Note PU" size="15" readonly/>
               <input type=hidden id="recordid" name="recordid" value="<?php echo "$recordid";?>" />
               <input type=hidden id="exportdest" name="exportdest" value="<?php echo "$exportdest";?>" />
 	      <input type=hidden id="formname" name="formname" value="<?php echo basename(__FILE__);?>" />
@@ -223,12 +223,12 @@ if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
         </tr>
         <tr>
           <td height="-2" colspan="4">  <div align="center">
-            HWB 
-            <input name="<?php echo constant('BX_HAWB'); ?>" type="text" id="<?php echo constant('BX_HAWB'); ?>" value="<?php echo $hawbnumber; ?>" size="12" readonly/>
+             HWB
+             <input name="<?php echo constant('BX_HAWB'); ?>" type="text" id="<?php echo constant('BX_HAWB'); ?>" value="<?php echo $hawbnumber; ?>" size="12" readonly/>
 </div></td>
           </tr>
         <tr>
-          <td colspan="4"><div align="center"><input type="submit" name="btn_sourceform" id="btn_sourceform" value="Arrived to Consignee" /></div></td>
+          <td colspan="4"><div align="center"><input type="submit" name="btn_sourceform" id="btn_sourceform" value="Trace Note PU" /></div></td>
         </tr>
         
         <tr>
@@ -242,12 +242,12 @@ if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
         </tr>
         <tr>
           <td colspan="2" ><label><span class="">Check below if service provided:</span></label></td>
-          <td width="69">&nbsp;</td>
+          <td width="65">&nbsp;</td>
           <td>&nbsp;</td>
         </tr>
-		<?php accessorials("DEL",basename(__FILE__),$_GET['username']); ?>
-	        <tr>
-          <td colspan="3"><div align="center"><input type="submit" name="btn_sourceform" id="btn_sourceform" value="Arrived to Consignee" /></td>
+	<?php accessorials("PU",basename(__FILE__),$_GET['username']); ?>
+                <tr>
+          <td colspan="3"><div align="center"><input type="submit" name="btn_sourceform" id="btn_sourceform" value="Trace Note PU" /></td>
           </tr>
         </table>
 </form>
