@@ -188,7 +188,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
       <!--Remove the div Class "box" above and add below primary collapsed -->
       <div name="div_truck_vir" id="div_truck_vir" class="box box-primary collapsed-box vir truckvir">
         <div class="box-header with-border">
-          <h3 class="box-title"><img src="../images/semismall.gif" alt="tire"> Truck Inspection <img src="../images/boxtrucksmall.gif" alt="tire">
+          <h3 class="box-title"><img src="../images/semismall.gif" alt="tire">Truck Inspection <img src="../images/boxtrucksmall.gif" alt="tire">
           <table width="200" border="1">
               <tr>
                 <td width="52" height="4"  bgcolor="#33FF00"><div align="center">Green
@@ -207,18 +207,14 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
 </table>
 
           <!--Removed Sprinter Image on Header Box <img src="../images/sprintersmall.gif" alt="tire">--></h3>
-          <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
-            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-          </div>
         </div>
-        <div class="box-body">
+        <div class="box-body" id="truck_inspection_virs">
             <table class="table">
               <?php accessorials("Truck",basename(__FILE__),$username); ?>
 
                 <td colspan="2"><div>Vir Additional info on Yellow or Red + Condition &amp; Notes</div>
                   <div>
-                    <textarea name="vir_notes_detailed_truck" id="vir_notes_detailed_truck" cols="43" rows="3">Truck VIR Note:</textarea>
+                    <textarea name="vir_notes_detailed_truck" id="vir_notes_detailed_truck" cols="43" rows="3" placeholder="Truck VIR Note"></textarea>
                   </div></td>
               </tr>
             </table>
@@ -247,18 +243,14 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                   <label for="vir_truck_red"></label></td>
   </tr>
 </table>          
-          <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
-            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-          </div>
         </div>
-        <div class="box-body">
+        <div class="box-body" id="trailer_inspection_virs">
             <table class="table">
               <?php accessorials("Trailer",basename(__FILE__),$username); ?>
 
                 <td colspan="2"><div>Vir Additional info on Yellow or Red + Condition &amp; Notes</div>
                   <div>
-                    <textarea name="vir_notes_detailed_trailer" id="vir_notes_detailed_trailer" cols="43" rows="3">Trailer VIR Note:</textarea>
+                    <textarea name="vir_notes_detailed_trailer" id="vir_notes_detailed_trailer" cols="43" rows="3" placeholder="Trailer VIR Note"></textarea>
                   </div></td>
               </tr>
             </table>
@@ -290,12 +282,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
 </table>
 
           
-          <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
-            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-          </div>
         </div>
-        <div class="box-body">
+        <div class="box-body" id="truck_tire_inspection_virs">
             <table width="311" height="720" border="1">
               <tr>
                 <td height="24" colspan="4"><div align="center"> Truck &amp; Trailer Tires (Combo)</div>
@@ -555,7 +543,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
               </tr>
               <tr>
                 <td height="24" colspan="3"><div align="center">
-                    <textarea name="truck_tires_notes_combo" id="truck_tires_notes_combo" cols="43" rows="3">Truck Tires Note:</textarea>
+                    <textarea name="truck_tires_notes_combo" id="truck_tires_notes_combo" cols="43" rows="3" placeholder="Truck Tires Note"></textarea>
                   </div>
               </tr>
             </table>
@@ -590,12 +578,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
 </table>
 
 
-          <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
-            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-          </div>
         </div>
-        <div class="box-body">
+        <div class="box-body" id="trailer_tire_inspection_virs">
             <table width="311" height="928" border="1">
               <tr>
                 <td height="24" colspan="4"><div align="center">(Pre trip again when Changing Trailers)</div>
@@ -792,7 +776,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
               </tr>
               <tr>
                 <td height="24" colspan="3"><div align="center">
-                    <textarea name="trailer_tires_notes_trailer" id="trailer_tires_notes_trailer" cols="43" rows="3">Trailer Tire Note:</textarea>
+                    <textarea name="trailer_tires_notes_trailer" id="trailer_tires_notes_trailer" cols="43" rows="3" placeholder="Trailer Tire Note"></textarea>
                   </div>
               </tr>
             </table>
@@ -810,7 +794,6 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
         <div class="box-header with-border">
           <h3 class="box-title"><img src="../images/smalltires.gif" width="25" height="25" alt="tire"> Boxtruck Tires<img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
           
- <!--Insert Green Yellow Red Selections here for Box Truck -->  Testing GYR Box Truck here
            <table width="200" border="1">
   <tr>
     <td width="52" height="4" bgcolor="#33FF00"><div align="center">Green 
@@ -818,21 +801,17 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                   <label for="vir_truck_tire"></label></td>
                   
     <td width="54" height="4" bgcolor="#FFFF00"><div align="center">Yellow
-                  <input type="radio" name="vir_truck_tire[]" id="truck_box_tire_yellow" value="Yellow,(Reporting Problems)">
+                  <input type="radio" name="vir_truck_tire[]" id="vir_box_tire_yellow" value="Yellow,(Reporting Problems)">
                   <label for="vir_trailer_tire"></label></td>
                   
     <td width="45" height="4" bgcolor="#FF0000"><div align="center">Red
-                  <input name="vir_truck_tire[]" type="radio" id="truck_box_tire_red" value="Red,(Do Not Operate)" >
+                  <input name="vir_truck_tire[]" type="radio" id="vir_box_tire_red" value="Red,(Do Not Operate)" >
                   <label for="vir_truck_tire"></label></td>
   </tr>
 </table>       
           
-          <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
-            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-          </div>
         </div>
-        <div class="box-body">
+        <div class="box-body" id="boxtruck_tire_inspection_virs">
             <table width="311" height="584" border="1">
               <tr>
                 <td colspan="4"><div align="center"> Tire Inspection</div>
@@ -988,7 +967,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
               </tr>
               <tr>
                 <td height="24" colspan="3"><div align="center">
-                    <textarea name="truck_tires_notes_boxtruck" id="truck_tires_notes_boxtruck" cols="43" rows="3">BT Tire Note:</textarea>
+                    <textarea name="truck_tires_notes_boxtruck" id="truck_tires_notes_boxtruck" cols="43" rows="3" placeholder="BT Tire Note"></textarea>
                   </div>
               </tr>
             </table>
@@ -1006,28 +985,23 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
         <div class="box-header with-border">
           <h3 class="box-title"><img src="../images/smalltires.gif" width="25" height="25" alt="tire"> Sprinter tires <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
           
- <!--Insert Green Yellow Red Selections here for Sprinter -->  Testing GYR Sprinter Here              
                      <table width="200" border="1">
   <tr>
     <td width="52" height="4" bgcolor="#33FF00"><div align="center">Green 
                   <input type="radio" name="vir_trailer_tire[]" id="vir_sprinter_tire_green" value="Green,(No Issues)">
                   <label for="vir_trailer_tire"></label></td>
     <td width="54" height="4" bgcolor="#FFFF00"><div align="center">Yellow
-                  <input type="radio" name="vir_trailer_tire[]" id="truck_sprinter_tire_yellow" value="Yellow,(Reporting Problems)">
+                  <input type="radio" name="vir_trailer_tire[]" id="vir_sprinter_tire_yellow" value="Yellow,(Reporting Problems)">
                   <label for="vir_trailer_tire"></label></td>
     <td width="45" height="4" bgcolor="#FF0000"><div align="center">Red
-                  <input name="vir_trailer_tire[]" type="radio" id="truck_sprinter_tire_red" value="Red,(Do Not Operate)" >
+                  <input name="vir_trailer_tire[]" type="radio" id="vir_sprinter_tire_red" value="Red,(Do Not Operate)" >
                   <label for="vir_trailer_tire"></label></td>
   </tr>
 </table>
           
           
-          <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
-            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-          </div>
         </div>
-        <div class="box-body">
+        <div class="box-body" id="sprinter_tire_inspection_virs">
             <table width="314" height="488" border="1">
               <tr>
                 <td colspan="4"><div align="center"> Tire Inspection Sprinter</div>
@@ -1170,7 +1144,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
               </tr>
               <tr>
                 <td height="24" colspan="3"><div align="center">
-                    <textarea name="truck_tires_notes_sprinter" id="truck_tires_notes_sprinter" cols="43" rows="3">Sprinter Tire Note:</textarea>
+                    <textarea name="truck_tires_notes_sprinter" id="truck_tires_notes_sprinter" cols="43" rows="3" placeholder="Sprinter Tire Note"></textarea>
                   </div>
               </tr>
             </table>
@@ -1285,6 +1259,52 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
 <script type="text/javascript">
 $(document).ready(function(){
     $('input[type="radio"]').click(function(){
+        // Open the div if a yellow/red truck vir was selected
+        if($(this).attr("id")=="vir_truck_yellow" || $(this).attr("id")=="vir_truck_red")
+        {
+            $("#truck_inspection_virs").show();
+        }
+        if($(this).attr("id")=="vir_truck_green")
+        {
+            $("#truck_inspection_virs").hide();
+        }
+        // Open the div if a yellow/red trailer vir was selected
+        if($(this).attr("id")=="vir_trailer_yellow" || $(this).attr("id")=="vir_trailer_red")
+        {
+            $("#trailer_inspection_virs").show();
+        }
+        if($(this).attr("id")=="vir_trailer_green")
+        {
+            $("#trailer_inspection_virs").hide();
+        }
+        // Open the div if a yellow/red truck tire vir was selected
+        if($(this).attr("id")=="vir_truck_tire_yellow" || $(this).attr("id")=="vir_truck_tire_red")
+        {
+            $("#truck_tire_inspection_virs").show();
+        }
+        if($(this).attr("id")=="vir_truck_tire_green")
+        {
+            $("#truck_tire_inspection_virs").hide();
+        }
+        // Open the div if a yellow/red boxtruck tire vir was selected
+        if($(this).attr("id")=="vir_box_tire_yellow" || $(this).attr("id")=="vir_box_tire_red")
+        {
+            $("#boxtruck_tire_inspection_virs").show();
+        }
+        if($(this).attr("id")=="vir_box_tire_green")
+        {
+            $("#boxtruck_tire_inspection_virs").hide();
+        }
+        // Open the div if a yellow/red trailer tire vir was selected
+        if($(this).attr("id")=="vir_sprinter_tire_yellow" || $(this).attr("id")=="vir_sprinter_tire_red")
+        {
+            $("#sprinter_tire_inspection_virs").show();
+        }
+        if($(this).attr("id")=="vir_sprinter_tire_green")
+        {
+            $("#sprinter_tire_inspection_virs").hide();
+        }
+
         if($(this).attr("value")=="combo")
         {
           if ((document.getElementById('pretrip').checked) || (document.getElementById('posttrip').checked))
@@ -1344,7 +1364,7 @@ function validateSubmit( obj ){
        !$('#vir_sprinter_tire_yellow').is(':checked') &&
        !$('#vir_sprinter_tire_red').is(':checked'))
       {
-       $('#generalStatus').html("Choose an option for truck tire conditions")
+       $('#generalStatus').html("Choose an option for sprinter tire conditions")
        $('#generalStatus').css('display', 'block');
        return false
       }
@@ -1356,7 +1376,7 @@ function validateSubmit( obj ){
        !$('#vir_box_tire_yellow').is(':checked') &&
        !$('#vir_box_tire_red').is(':checked'))
       {
-       $('#generalStatus').html("Choose an option for truck tire conditions")
+       $('#generalStatus').html("Choose an option for boxtruck tire conditions")
        $('#generalStatus').css('display', 'block');
        return false
       }
@@ -1389,6 +1409,83 @@ function validateSubmit( obj ){
            return false
         }
     }
+    if($('#vir_truck_yellow').is(':checked') || $('#vir_truck_red').is(':checked'))
+    {
+        var truck_vir = [];
+        $.each($("input[name='truck_ck_accessorials[]']:checked"), function(){            
+            truck_vir.push($(this).val());
+        });
+        if (truck_vir.length == 0)
+        {
+          $('#generalStatus').html("Please select an issue when marking truck as yellow or red.")
+          $('#generalStatus').css('display', 'block');
+          return false
+        }
+    }
+    if($('#vir_trailer_yellow').is(':checked') || $('#vir_trailer_red').is(':checked'))
+    {
+        var trailer_vir = [];
+        $.each($("input[name='trailer_ck_accessorials[]']:checked"), function(){            
+            trailer_vir.push($(this).val());
+        });
+        if (trailer_vir.length == 0)
+        {
+          $('#generalStatus').html("Please select an issue when marking trailer as yellow or red.")
+          $('#generalStatus').css('display', 'block');
+          return false
+        }
+    }
+    if($('#vir_truck_tire_yellow').is(':checked') || $('#vir_truck_tire_red').is(':checked'))
+    {
+        if($('#truck_tires_driverside_steer_combo option:selected').text() == 'Excellent' &&
+           $('#truck_tires_passenger_steer_combo option:selected').text() == 'Excellent' &&
+           $('#truck_tires_driverside_ax1front_combo option:selected').text() == 'Excellent' &&
+           $('#truck_tires_passenger_ax1front_combo option:selected').text() == 'Excellent' &&
+           $('#truck_tires_driverside_ax2rear_combo option:selected').text() == 'Excellent' &&
+           $('#truck_tires_passenger_ax2rear_combo option:selected').text() == 'Excellent')
+          {
+            $('#generalStatus').html("Select an appropriate tire status when marking truck tire as yellow or red.");
+            $('#generalStatus').css('display', 'block');
+            return false
+           }
+    }
+    if($('#vir_trailer_tire_yellow').is(':checked') || $('#vir_trailer_tire_red').is(':checked'))
+    {
+        if($('#trailer_tires_driverside_ax1front_trailer option:selected').text() == 'Excellent' &&
+           $('#trailer_tires_passenger_ax1front_trailer option:selected').text() == 'Excellent' &&
+           $('#trailer_tires_driverside_ax2rear_trailer option:selected').text() == 'Excellent' &&
+           $('#trailer_tires_passenger_ax2rear_trailer option:selected').text() == 'Excellent')
+          {
+            $('#generalStatus').html("Select an appropriate tire status when marking trailer tire as yellow or red.");
+            $('#generalStatus').css('display', 'block');
+            return false
+           }
+    }
+    if($('#vir_box_tire_yellow').is(':checked') || $('#vir_box_tire_red').is(':checked'))
+    {
+        if($('#truck_tires_driverside_steer_boxtruck option:selected').text() == 'Excellent' &&
+           $('#truck_tires_passenger_steer_boxtruck option:selected').text() == 'Excellent' &&
+           $('#truck_tires_driverside_ax1front_boxtruck option:selected').text() == 'Excellent' &&
+           $('#truck_tires_passenger_ax1front_boxtruck option:selected').text() == 'Excellent')
+          {
+            $('#generalStatus').html("Select an appropriate tire status when marking boxtruck tire as yellow or red.");
+            $('#generalStatus').css('display', 'block');
+            return false
+           }
+    }
+    if($('#vir_sprinter_tire_yellow').is(':checked') || $('#vir_sprinter_tire_red').is(':checked'))
+    {
+        if($('#truck_tires_driverside_steer_sprinter option:selected').text() == 'Excellent' &&
+           $('#truck_tires_passenger_steer_sprinter option:selected').text() == 'Excellent' &&
+           $('#truck_tires_driverside_ax1front_sprinter option:selected').text() == 'Excellent' &&
+           $('#truck_tires_passenger_ax1front_sprinter option:selected').text() == 'Excellent')
+          {
+            $('#generalStatus').html("Select an appropriate tire status when marking sprinter tire as yellow or red.");
+            $('#generalStatus').css('display', 'block');
+            return false
+           }
+    }
+
     return true
 }
 </script>
