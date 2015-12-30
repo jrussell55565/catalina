@@ -193,8 +193,8 @@ if ($row['status'] == "Delivered")
             <input type="submit" class="btn btn-danger btn-sm" id="btn_attemptPu"
                           value="Attempt Pickup" <?php echo $disabledButton;?>>
             </input>
-          </form>          
-         </td          
+          </form>
+         </td
           ><td><form method="GET" action="attemptdel.php">
             <input type="hidden" id="hwb" name="hwb"
                            value="<?php echo $row['hawbNumber'];?>">
@@ -265,6 +265,57 @@ if ($row['status'] == "Delivered")
     <?php } ?>
   </div>
 </div>
+<div class="box collapsed-box">
+      <div class="box-header">
+        <h3 class="box-title">HWB Trace Notes</h3>
+        <div class="box-tools pull-right">
+          <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
+        </div>
+      </div>
+      <div class="box-body">
+        <div id="tracenotesDetails_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+          <div class="row">
+            <div class="col-md-8" style="width: 100%;">
+          <div class="table-responsive">
+              <div>
+              <?php
+              $sql = "SELECT * FROM driverexport WHERE hawbNumber = \"$hwbnumber\"
+                      order by id desc";
+              ?>
+              <table id="tracenotesDetails" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="tracenotesDetails_info">
+                <tbody>
+                  <tr role="row" class="odd">
+                    <td><label>Name</label></td>
+                    <td><label>Date</label></td>
+                    <td><label>State Change</label></td>
+                    <td><label>Trace Notes</label></td>
+                    <td><label>Accessorials</label></td>
+                    <td><label>Pieces / Pallets</label></td>
+                  </tr>
+              <?php
+              $result = mysql_query($sql);
+              while ($export_row = mysql_fetch_array($result, MYSQL_BOTH))
+              {
+              ?>
+                  <tr role="row" class="even">
+                    <td><?php echo "$export_row[driver]";?></td>
+                    <td><?php echo "$export_row[date]";?></td>
+                    <td><?php echo "$export_row[status]";?></td>
+                    <td><?php echo "$export_row[trace_notes]";?></td>
+                    <td><?php echo "$export_row[accessorials]";?></td>
+                    <td><?php echo "$export_row[pieces] / $export_row[pallets]";?></td>
+                  </tr>
+               <?php
+               }
+               ?>
+                </tbody>
+              </table>
+            </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
 <div class="box collapsed-box">
   <div class="box-header">
     <h3 class="box-title">Pickup Details</h3>
@@ -371,9 +422,10 @@ if ($row['status'] == "Delivered")
           </div>
         </div>
       </div>
-      <!-- /.box-body --> 
+      <!-- /.box-body -->
     </div>
   </div>
+  
   <div class="box collapsed-box">
     <div class="box-header">
       <h3 class="box-title">Delivery Details</h3>
@@ -489,7 +541,7 @@ if ($row['status'] == "Delivered")
           </div>
         </div>
       </div>
-      <!-- /.box-body --> 
+      <!-- /.box-body -->
     </div>
     <div class="box collapsed-box">
       <div class="box-header">
@@ -570,33 +622,33 @@ if ($row['status'] == "Delivered")
      </div>
     </div>
     </section>
-    <!-- /.content --> 
+    <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  
+
   <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/footer.php');?>
-  
+
   <!-- Control Sidebar -->
   <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/r_sidebar.php');?>
-  <!-- /.control-sidebar --> 
+  <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
            immediately after the control sidebar -->
   <div class='control-sidebar-bg'></div>
 </div>
-<!-- ./wrapper --> 
+<!-- ./wrapper -->
 
-<!-- jQuery 2.1.4 --> 
-<script src="<?php echo HTTP;?>/plugins/jQuery/jQuery-2.1.4.min.js"></script> 
-<!-- Bootstrap 3.3.2 JS --> 
-<script src="<?php echo HTTP;?>/bootstrap/js/bootstrap.min.js" type="text/javascript"></script> 
-<!-- SlimScroll --> 
-<script src="<?php echo HTTP;?>/plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script> 
-<!-- FastClick --> 
-<script src='<?php echo HTTP;?>/plugins/fastclick/fastclick.min.js'></script> 
-<!-- AdminLTE App --> 
-<script src="<?php echo HTTP;?>/dist/js/app.min.js" type="text/javascript"></script> 
+<!-- jQuery 2.1.4 -->
+<script src="<?php echo HTTP;?>/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<!-- Bootstrap 3.3.2 JS -->
+<script src="<?php echo HTTP;?>/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<!-- SlimScroll -->
+<script src="<?php echo HTTP;?>/plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<!-- FastClick -->
+<script src='<?php echo HTTP;?>/plugins/fastclick/fastclick.min.js'></script>
+<!-- AdminLTE App -->
+<script src="<?php echo HTTP;?>/dist/js/app.min.js" type="text/javascript"></script>
 
-<!-- Demo --> 
+<!-- Demo -->
 <script src="<?php echo HTTP;?>/dist/js/demo.js" type="text/javascript"></script>
 </body>
 </html>
