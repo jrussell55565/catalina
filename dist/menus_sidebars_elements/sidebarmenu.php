@@ -1,15 +1,18 @@
           <ul class="sidebar-menu">
             <li class="active treeview">
               <a href="#">
-                <i class="fa fa-dashboard"></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
+                <i class="fa fa-dashboard"></i> <span>Main Menu</span> <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="<?php echo HTTP;?>/pages/main/index.php"><i class="fa fa-circle-o"></i> Dashboard</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php"><i class="fa fa-circle-o"></i> Shipment Boards</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/main/vir.php"><i class="fa fa-circle-o"></i> Vehicle Inspections</a></li>
-                <li class="active"><a href="#"><i class="fa fa-circle-o"></i> Fuel Reporting</a></li>
-                <li class="active"><a href="#"><i class="fa fa-circle-o"></i> Ifta Repoprting</a></li>
-                <li class="active"><a href="#"><i class="fa fa-circle-o"></i> Saftey Reports</a></li>
+                <li class="active"><a href="/pages/main/index.php"><i class="fa fa-circle-o"></i> Dashboard</a></li>
+                <li class="active"><a href="/pages/dispatch/orders.php"><i class="fa fa-circle-o"></i> Load Board</a></li>
+                <li class="active"><a href="/pages/dispatch/vir.php"><i class="fa fa-circle-o"></i> VIR Reporting</a></li>
+                <li class="active"><a href="/pages/dispatch/vir_review.php"><i class="fa fa-circle-o"></i> VIR Review</a></li>
+                <li class="active"><a href="/pages/dispatch/userstats.php"><i class="fa fa-circle-o"></i> User Stats</a></li>
+                <li class="active"><a href="/pages/dispatch/ifta.php"><i class="fa fa-circle-o"></i> Ifta Reporting</a></li>
+                <li class="active"><a href="/pages/dispatch/admin/csa.php"><i class="fa fa-circle-o"></i> DOT Saftey</a></li>
+                <li class="active"><a href="/pages/dispatch/location.php"><i class="fa fa-circle-o"></i> Locate Users</a></li>
+                <li class="active"><a href="/pages/dispatch/logintrace.php"><i class="fa fa-circle-o"></i> Login Trace</a></li>
             </ul>
   </li>
 
@@ -32,7 +35,7 @@
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-files-o"></i>
-              <span> Helpfull Info For Drivers</span>
+              <span>  Info Links For Drivers</span>
               <span class="label label-primary pull-right"><!-- Remove Below 5 --></span>
               </a>
               <ul class="treeview-menu">

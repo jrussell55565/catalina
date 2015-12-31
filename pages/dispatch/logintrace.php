@@ -113,7 +113,7 @@ if (isset($_GET['exportDisplay']))
     }
     </style>
 
-    <title>Location</title>
+    <title>Trace Login</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.4 -->
     <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -277,13 +277,12 @@ if (isset($_GET['exportDisplay']))
         
         <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/topmenuanimation.php');?>
         
-        <!-- End Animated Top Menu -->
-        
+        <!-- End Animated Top Menu --><!-- /.row --> 
         <div class="row">
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h3 class="box-title">Driver Locations<span class="progress-text"></span></h3>
+                <h3 class="box-title">Truck Trailer Driver  Export<span class="progress-text"></span> Data</h3>
                 <div class="box-tools pull-right">
                   <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                   <div class="btn-group">
@@ -300,96 +299,65 @@ if (isset($_GET['exportDisplay']))
                 </div>
               </div>
               <!-- /.box-header -->
+              <form class="form" method="get" action="">
               <div class="box-body">
-
-<form method="POST" action=processor.php>
-  <div id="options">
-  Map Defaults:
-  <input type="radio" id="rd_map" name="mapType" value="map" checked>Map
-  <input type="radio" id="rd_satellite" name="mapType" value="satellite" >Satellite
-  <input type="checkbox" id="ck_refresh" name="ck_refresh" NULL>
-  (Auto Refresh: Remember Last Map & Zoom Position)
-  <input type="hidden" id="hdn_zoom" name="hdn_zoom" value="">
-  <select name="sel_refreshTime" id="sel_refreshTime">Auto Refresh Time
-              <option selected="selected" value="1">1 min.</option>
-          <option value="5">5 min.</option>
-          <option value="10">10 min.</option>
-          <option value="20">20 min.</option>
-          </select>
-  <br>
-  <input type="submit" id="btn_submit" value="Save Defaults"/>
-  <hr>
-  </div>
-</form>
-<form method="GET">
-  <div id="selections">
-  Live Status (Show map points for users
-  that have had a GPS update in the last 30 minutes)
-  <input type="checkbox" id="ck_status" name="ck_status" checked>
-  <br>
-  Items to show:
-  <input type="checkbox" id="ck_username" name="ck_username" checked>Username
-  <input type="checkbox" id="ck_truck" name="ck_truck" checked>Truck
-  <input type="checkbox" id="ck_trailer" name="ck_trailer" checked>Trailer
-  <br>
-  Select Driver:
-  <label for="driver"></label>
-  <select name="driver" id="Select Driver">
-    <option selected="selected" value="active">Active (Updated location within specified time)</option>
-     <option value="inactive">Inactive (Have not updated location within specified time)</option>
-<?php
-  $sql = "SELECT drivername from users order by 1";
-  $result = mysql_query($sql);
-  while ($row = mysql_fetch_array($result, MYSQL_BOTH))
-  {
-    ?>
-      <option><?php echo $row["drivername"]; ?></option>
-  <?php
-  }
-  ?>
-  </select>
-  <p> Select Time Period (hours):
-  <label for="timeperiod"></label>
-  <input type="text" id="timeperiod" name="timeperiod" value=1>
-  <input type="submit">
-</div>
-</form>
-<div id="map-canvas" style="height:500px; width:1000px"></div>
-
+               <div class="input-daterange input-group" id="datepicker" style="width: 25%;">
+                <input type="text" class="input-sm form-control datepicker" name="start" data-date-format="mm/dd/yyyy"/ required>
+                <span class="input-group-addon">to</span>
+                <input type="text" class="input-sm form-control datepicker" name="end" data-date-format="mm/dd/yyyy"/ required>
+               </div>
+                <div class="input-group" style="margin-top: 5px">
+                 <label class="radio-inline">
+                  <input name="inlineRadioOptions" type="radio" id="inlineRadio1" value="exportDisplay" checked> Display
+                 </label>
+                 <label class="radio-inline">
+                  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="exportCsv"> CSV
+                 </label>
+                </div>
+                <div class="input-group" style="margin-top: 5px">
+                 <input type="submit" class="btn btn-primary" name="exportDisplay" id="exportDisplay" value="Display / Export"/>
+                </div>
+                <div class="input-group" style="margin-top: 5px" style="display: none;">
+                 <?php if ($_GET['inlineRadioOptions'] == "exportDisplay")
+                 {
+                   ?>
+                   <table class="table" style="display: block;">
+                   <th>drivername</th>
+                   <th>id</th>
+                   <th>truck number</th>
+                   <th>trailer number</th>
+                   <th>rental</th>
+                   <th>login time</th>
+                   <th>odometer</th>
+   
+                   <?php
+                   $sql = mysql_query($loginSql);
+                   while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
+                   {
+                   ?>
+                     <tr>
+                      <td><?php echo $row['drivername'];?></td>
+                      <td><?php echo $row['driver_driverid'];?></td>
+                      <td><?php echo $row['truck_number'];?></td>
+                      <td><?php echo $row['trailer_number'];?></td>
+                      <td><?php echo $row['rental'];?></td>
+                      <td><?php echo $row['login_time'];?></td>
+                      <td><?php echo $row['truck_odometer'];?></td>
+                     </tr>
+                   <?php
+                   }
+                   ?>
+                   </table> 
+                  <?php
+                  }
+                  ?>
+                </div>
               </div>
+              </form>
               <!-- ./box-body -->
               <div class="box-footer"> </div>
               <!-- /.box-footer --> 
             </div>
-            <!-- /.box --> 
-          </div>
-          <!-- /.col --> 
-        </div>
-        <!-- /.row --> 
-        <div class="row">
-          <div class="col-md-12">
-            <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">Another Field</h3>
-                <div class="box-tools pull-right">
-                  <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                  <div class="btn-group">
-                    <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Action</a></li>
-                      <li><a href="#">Another action</a></li>
-                      <li><a href="#">Something else here</a></li>
-                      <li class="divider"></li>
-                      <li><a href="#">Separated link</a></li>
-                    </ul>
-                  </div>
-                  <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                </div>
-              </div>
-              <!-- /.box-header --><!-- ./box-body -->
-            <div class="box-footer"> </div>
-              <!-- /.box-footer --> 
-          </div>
             <!-- /.box --> 
           </div>
           <!-- /.col --> 
