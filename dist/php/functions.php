@@ -74,5 +74,18 @@ function pageErrors($error)
     return ($array["$error"]);
 }
 
+function rtrim_limit($str, $delim, $count = 0)
+{
+    if ($count == 0) return rtrim($str, $delim);
+
+    $l = strlen($delim);
+    $k = 0;
+
+    while (substr($str, -$l) == $delim && ($count == 0 || ($count > 0 && $k++ < $count))) {
+        $str = substr($str, 0, strlen($str) - $l);
+    }
+
+    return $str;
+}
 ?>
 

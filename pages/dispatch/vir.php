@@ -130,7 +130,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 $record = mysql_query($statement);
                 $record = mysql_fetch_array($record);
                 ?>
-                <td colspan="2"><a href="vir_previous.php"> Previous VIR </a><?php echo explode(',',$record[0])[0];?>
+                <td colspan="2"><a href="vir_previous.php?truck_number=<?php echo $truckid;?>&trailer_number=<?php echo $trailerid;?>"> Previous VIR </a>
+                <?php echo explode(',',$record[0])[0];?>
               </tr>
               <tr>
                 <td>Trailer
@@ -142,7 +143,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 $record = mysql_query($statement);
                 $record = mysql_fetch_array($record);
                 ?>
-                <td colspan="2"><a href="vir_previous.php">Previous VIR </a><?php echo explode(',',$record[0])[0];?>
+                <td colspan="2"><a href="vir_previous.php?truck_number=<?php echo $truckid;?>&trailer_number=<?php echo $trailerid;?>">Previous VIR </a>
+                <?php echo explode(',',$record[0])[0];?>
               </tr>
               <tr>
                 <td colspan="4"><div align="center">Pre Trip:
@@ -998,13 +1000,13 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                      <table width="200" border="1">
   <tr>
     <td width="52" height="4" bgcolor="#33FF00"><div align="center">Green 
-                  <input type="radio" name="vir_trailer_tire[]" id="vir_sprinter_tire_green" value="Green,(No Issues)">
+                  <input type="radio" name="vir_truck_tire[]" id="vir_sprinter_tire_green" value="Green,(No Issues)">
                   <label for="vir_trailer_tire"></label></td>
     <td width="54" height="4" bgcolor="#FFFF00"><div align="center">Yellow
-                  <input type="radio" name="vir_trailer_tire[]" id="vir_sprinter_tire_yellow" value="Yellow,(Reporting Problems)">
+                  <input type="radio" name="vir_truck_tire[]" id="vir_sprinter_tire_yellow" value="Yellow,(Reporting Problems)">
                   <label for="vir_trailer_tire"></label></td>
     <td width="45" height="4" bgcolor="#FF0000"><div align="center">Red
-                  <input name="vir_trailer_tire[]" type="radio" id="vir_sprinter_tire_red" value="Red,(Do Not Operate)" >
+                  <input name="vir_truck_tire[]" type="radio" id="vir_sprinter_tire_red" value="Red,(Do Not Operate)" >
                   <label for="vir_trailer_tire"></label></td>
   </tr>
 </table>
