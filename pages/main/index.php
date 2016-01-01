@@ -340,34 +340,80 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
               <div class="box">
                 <div class="box-header with-border">
                   <h3 class="box-title">Company Updates: Welcome, <?php echo "$_SESSION[fname]"; ?></h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <div class="btn-group">
-                      <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
-                      <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                      </ul>
-                    </div>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div>
                 </div><!-- /.box-header --><!-- ./box-body -->
 
-                <div class="box-footer">
-                </div>
 
-
-
-
-          <!-- Main row -->
           <div class="row">
             <!-- Left col -->
-            <div class="col-md-8">
+            <div class="col-md-8"  style="width: 100%;">
               <!-- MAP & BOX PANE -->
               <div class="box box-success">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Monthly Recap Report</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <div class="row">
+                    <div class="col-md-8">
+                      <p class="text-center">
+                        <strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
+                      </p>
+                      <div class="chart">
+                        <!-- Sales Chart Canvas -->
+                        <canvas id="dispatchChart" style="height: 280px; width: 760px;" width="1520" height="360"></canvas>
+                      </div><!-- /.chart-responsive -->
+                    </div><!-- /.col -->
+                    <div class="col-md-4">
+                      <p class="text-center">
+                        <strong>User Statistics</strong>
+                      </p>
+                      <div class="progress-group">
+                        <span class="progress-text"> HWB dispatched vs updated</span>
+                        <span class="progress-number"><b>160</b>/200</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
+                        </div>
+                         <div class="progress-group">
+                        <span class="progress-text"> PU dispatched  vs HWB Updated</span>
+                        <span class="progress-number"><b>160</b>/200</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-blue" style="width: 20%"></div>
+                        </div>
+                      </div><!-- /.progress-group -->
+                      <div class="progress-group">
+                        <span class="progress-text">DEL dispatched vs HWB Updated</span>                        <span class="progress-number"><b>310</b>/400</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+                        </div>
+                      </div><!-- /.progress-group -->
+                      <div class="progress-group">
+                        <span class="progress-text">Accessorials added vs HWB #,s</span><span class="progress-number"><b>480</b>/800</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                        </div>
+                      </div><!-- /.progress-group -->
+                      <div class="progress-group">
+                        <span class="progress-text">IFTA Reports submitted vs trips run OTR</span><span class="progress-number"><b>250</b>/500</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+                        </div>
+                        <div class="progress-group">
+                        <span class="progress-text">CSA Points</span><span class="progress-number"><b>5</b>/25</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-red" style="width: 10%"></div>
+                        </div>
+                      </div><!-- /.progress-group -->
+                    </div><!-- /.col -->
+                  </div><!-- /.row -->
+                </div><!-- ./box-body -->
+               </div>
+                </div>
+                <!-- /.box-body -->
+              </div><!-- /.box -->
+<div class="box box-success">
                 <div class="box-header with-border">
                   <h3 class="box-title">Send Message</h3>
                   <div class="box-tools pull-right">
@@ -377,15 +423,15 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 </div><!-- /.box-header -->
                 <div class="box-body">
                   <div class="row">
-                   <form class="form" method="post" action="<?php echo HTTP . $_SERVER['PHP_SELF']; ?>">
+                   <form class="form" method="post" action="http://tice.zapto.org:80/pages/main/index.php">
                    <div class="form-group">
                     <div class="col-lg-12">
                      <div class="well">
 <div class="input-group">
 <span class="input-group-addon" style="border: 0px; background: transparent">
- <img width="50px" src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; }?>" class="img-circle" alt="User Image" />
+ <img width="50px" src="http://tice.zapto.org:80/dist/img/userimages/jrussell_avatar" class="img-circle" alt="User Image">
 </span>
-<input type="text" class="form-control" name="message" id="message" placeholder="Share an update..." value="" required >
+<input type="text" class="form-control" name="message" id="message" placeholder="Share an update..." value="" required="">
 <div class="input-group-inline">
 <select class="form-control" style="width: 33%; margin-top:5px" name="audience">
 <option>All</option>
@@ -395,7 +441,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 </div>
                     <div class="col-lg-4">
 <div class="checkbox">
-  <label><input type="checkbox" name="sendEmail" value="on" checked>Email</label>
+  <label><input type="checkbox" name="sendEmail" value="on" checked="">Email</label>
   <label style="margin-left:10px;"><input type="checkbox" name="sendText" value="on">Text</label>
 </div>
                     </div>
@@ -411,7 +457,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                   <!-- /.row -->
                 </div>
                 <!-- /.box-body -->
-              </div><!-- /.box -->
+              </div>
               <div class="row">
                 <div class="col-md-6">
                </div><!-- /.col -->
@@ -448,8 +494,125 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 <script src='<?php echo HTTP;?>/plugins/fastclick/fastclick.min.js'></script>
 <!-- AdminLTE App -->
 <script src="<?php echo HTTP;?>/dist/js/app.min.js" type="text/javascript"></script>
+<!-- ChartJS -->
+<script src="<?php echo HTTP;?>/dist/js/Chart.min.js"></script>
+<script>
+// Get context with jQuery - using jQuery's .get() method.
+var ctx = $("#dispatchChart").get(0).getContext("2d");
+// This will get the first returned node in the jQuery collection.
+<?php
+$sql = "SELECT
+monthname(str_to_date(dueDate,'%c/%e/%Y')) AS del_month,
+sum(CASE monthname(str_to_date(dueDate,'%c/%e/%Y'))
+WHEN 'January' THEN 1
+WHEN 'February' THEN 1
+WHEN 'March' THEN 1
+WHEN 'April' THEN 1
+WHEN 'May' THEN 1
+WHEN 'June' THEN 1
+WHEN 'July' THEN 1
+WHEN 'August' THEN 1
+WHEN 'September' THEN 1
+WHEN 'Octover' THEN 1
+WHEN 'November' THEN 1
+WHEN 'December' THEN 1
+ELSE 0
+END) AS deliveries
+FROM
+    dispatch
+WHERE
+
+    delAgentDriverPhone = (SELECT 
+            driverid
+        FROM
+            users
+        WHERE
+            username = \"$username\")           
+AND 
+str_to_date(dueDate,'%c/%e/%Y') > DATE(now()) - INTERVAL 12 MONTH
+group by del_month
+order by str_to_date(dueDate,'%c/%e/%Y')";
+$months = array();
+$pickups = array();
+$deliveries = array();
+$result = mysql_query($sql);
+while ($row = mysql_fetch_array($result,MYSQL_BOTH))
+{
+  array_push($months,'"'.$row[0].'"');
+  array_push($deliveries,$row[1]);
+}
+mysql_free_result($result);
+
+$sql = "SELECT
+monthname(str_to_date(hawbDate,'%c/%e/%Y')) AS pu_month,
+sum(CASE monthname(str_to_date(hawbDate,'%c/%e/%Y'))
+WHEN 'January' THEN 1
+WHEN 'February' THEN 1
+WHEN 'March' THEN 1
+WHEN 'April' THEN 1
+WHEN 'May' THEN 1
+WHEN 'June' THEN 1
+WHEN 'July' THEN 1
+WHEN 'August' THEN 1
+WHEN 'September' THEN 1
+WHEN 'Octover' THEN 1
+WHEN 'November' THEN 1
+WHEN 'December' THEN 1
+ELSE 0
+END) AS pickups
+FROM
+    dispatch
+WHERE
+
+    puAgentDriverPhone = (SELECT 
+            driverid
+        FROM
+            users
+        WHERE
+            username = \"$username\")           
+AND 
+str_to_date(hawbDate,'%c/%e/%Y') > DATE(now()) - INTERVAL 12 MONTH
+group by pu_month
+order by str_to_date(hawbDate,'%c/%e/%Y')";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_array($result,MYSQL_BOTH))
+{
+  array_push($pickups,$row[1]);
+}
+mysql_free_result($result);
+
+$pickups =  rtrim(implode(',',$pickups),',');
+$deliveries =  rtrim(implode(',',$deliveries),',');
+$months =  rtrim(implode(',',$months),',');
+?>
+var data = {
+    labels: [<?php echo $months;?>],
+    datasets: [
+        {
+            label: "Pickups",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [<?php echo $pickups;?>]
+        },
+        {
+            label: "Deliveries",
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            data: [<?php echo $deliveries;?>]
+        }
+    ]
+};
+var myLineChart = new Chart(ctx).Line(data);
+</script>
 
 <!-- Demo -->
-<script src="<?php echo HTTP;?>/dist/js/demo.js" type="text/javascript"></script>
 </body>
 </html>
