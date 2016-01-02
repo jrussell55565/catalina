@@ -281,8 +281,8 @@ if ($pallets == '')
   $pallets = 'NULL';
 }
 
-$statement = "INSERT INTO driverexport (hawbNumber,driver,status,hawbDate,dueDate,date,trace_notes,accessorials,pieces,pallets)
-VALUES (\"$hawb\",\"$drivername\",\"$status\",(select str_to_date(hawbDate,'%c/%e/%Y') as hawbDate from dispatch WHERE hawbNumber=\"$hawb\"),(select str_to_date(dueDate,'%c/%e/%Y') as dueDate from dispatch WHERE hawbNumber=\"$hawb\"),now(),$trace_notes,$accessorial_override,$pieces,$pallets)";
+$statement = "INSERT INTO driverexport (hawbNumber,driver,status,hawbDate,dueDate,date,trace_notes,accessorials,pieces,pallets,sts_points)
+VALUES (\"$hawb\",\"$drivername\",\"$status\",(select str_to_date(hawbDate,'%c/%e/%Y') as hawbDate from dispatch WHERE hawbNumber=\"$hawb\"),(select str_to_date(dueDate,'%c/%e/%Y') as dueDate from dispatch WHERE hawbNumber=\"$hawb\"),now(),$trace_notes,$accessorial_override,$pieces,$pallets,1)";
 mysql_query($statement);
 
 // If the status update was Arrived To Consignee then update the DB with the time
