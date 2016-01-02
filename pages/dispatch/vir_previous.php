@@ -268,7 +268,13 @@ if ($row['updated_status'] == '')
 ?>
                                 <option <?php if($row['updated_status'] == 'Open') { echo 'selected=selected';}?>>Open</option>
                                 <option <?php if($row['updated_status'] == 'Work Order Created') { echo 'selected=selected';}?>>Work Order Created</option>
-                                <option <?php if($row['updated_status'] == 'Close') { echo 'selected=selected';}?>>Close</option>
+                                <option <?php
+                                if(($row['updated_status'] == 'Close') || ((preg_match('/^Green/',$row[$tot.'_vir_condition']) && (preg_match('/^Green/',$row[$tot.'_tires_overall'])))))
+                                { 
+                                   echo 'selected=selected';
+                                }
+                                ?>
+                                >Close</option>
                               </select>
                             </div>
                           </form></td>
@@ -282,7 +288,7 @@ if (preg_match('/^Open/',$row['updated_status']))
 echo '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
 }elseif (preg_match('/^Work/',$row['updated_status'])){
 echo '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
-}elseif (preg_match('/^Close/',$row['updated_status'])){
+}elseif ((preg_match('/^Close/',$row['updated_status'])) || ((preg_match('/^Green/',$row[$tot.'_vir_condition']) && (preg_match('/^Green/',$row[$tot.'_tires_overall']))))){
 echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
 }
 ?>
