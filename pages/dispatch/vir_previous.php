@@ -69,6 +69,18 @@ if(isset($_GET['submit']))
       readfile($fileDir . $fileName);
       unlink($fileDir . $fileName);
 }
+
+# Get the list of mechanics from the users table.
+$sql = 'SELECT CONCAT(fname," ",lname) as mechanic ,employee_id from users where title = "Mechanic"';
+$results = mysql_query($sql);
+$mechanics = array();
+$mechanic_id = array();
+while ($row = mysql_fetch_array($results,MYSQL_BOTH))
+{
+array_push($mechanics,$row[0]);
+array_push($mechanic_id,$row[1]);
+}
+mysql_free_result($results);
 ?>
 <!DOCTYPE html>
 <html>
@@ -245,7 +257,7 @@ if ($_SESSION['login'] == 1)
                         <td><form role="form" method="post" action="vir_previous.php">
                             <input type="hidden" name="hdn_vir_itemnum" id="hdn_vir_itemnum" value="<?php echo $row['vir_itemnum'];?>"/>
                             <div class="form-group">
-                              <select name="vir_status" id="vir_status_<?php echo $row['vir_itemnum'];?>" class="form-control" onchange="submitSelect(this,<?php echo $row['vir_itemnum'];?>);">
+                              <select name="vir_status" id="vir_status_<?php echo $row['vir_itemnum'];?>" class="form-control" onchange="submitSelect(this,<?php echo $row['vir_itemnum'];?>,'modal_close_<?php echo $tot;?>_<?php echo $row['vir_itemnum'];?>');">
                                 <?php
 if ($row['updated_status'] == '')
 {
@@ -276,8 +288,64 @@ echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style
 ?>
                           </div></td>
                       </tr>
-                      
-                      <!-- MODAL -->
+                     
+                      <!-- CLOSE ISSUE MODAL -->
+                    <div class="modal fade" id="modal_close_<?php echo $tot;?>_<?php echo $row['vir_itemnum'];?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Close <?php echo $row['vir_itemnum'];?></h4>
+                          </div>
+                          <div class="modal-body">
+                            <div class="row" style="padding-bottom: 5px;">
+                              <div class="col-md-4">
+                               <b>Repair Notes</b>
+                              </div>
+                              <div class="col-md-4 col-md-offset-4">
+                               <input type="text" id="repair_notes_<?php echo $row['vir_itemnum'];?>" class="form-control" placeholder="Enter repair notes..."/>
+                              </div>
+                            </div>
+                            <div class="row" style="padding-bottom: 5px;">
+                              <div class="col-md-4">
+                               <b>Cost of Repair</b>
+                              </div>
+                              <div class="col-md-4 col-md-offset-4">
+                               <div class="input-group">
+                                 <span class="input-group-addon">$</span>
+                                 <input type="text" id="cost_<?php echo $row['vir_itemnum'];?>"class="form-control" aria-label="Amount (to the nearest dollar)">
+                                 <span class="input-group-addon">.00</span>
+                               </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-4">
+                               <b>Repaired By:</b>
+                              </div>
+                              <div class="col-md-4 col-md-offset-4">
+                              <select name="mechanic" id="mechanic_<?php echo $row['vir_itemnum'];?>" class="form-control">
+                              <?php
+                              for($i = 0; $i < count($mechanics); $i++)
+                              {
+                              ?>
+                               <option id="<?php echo $mechanic_id[$i];?>"><?php echo $mechanics[$i];?></option>
+                              <?php
+                              }
+                              ?>
+                              </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="closeVir(<?php echo $row['vir_itemnum'];?>,$('#repair_notes_<?php echo $row['vir_itemnum'];?>').val(),$('#cost_<?php echo $row['vir_itemnum'];?>').val(),$('#mechanic_<?php echo $row['vir_itemnum'];?> option:selected').text())">Save</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /MODAL -->
+ 
+                      <!-- GENERAL MODAL -->
                     <div class="modal fade" id="modal_<?php echo $tot;?>_<?php echo $row['vir_itemnum'];?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -444,25 +512,40 @@ immediately after the control sidebar -->
 <script src="<?php echo HTTP;?>/dist/js/demo.js" type="text/javascript">
 </script>
 <script>
-function submitSelect(sel,item)
+function closeVir(item,notes,cost,repaired_by)
 {
-$.post( "viractions.php", { vir_item: item, vir_status: sel.value })
-.success(function() {
-if (sel.value == "Open")
-{
-x = '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
+  item_status = 'Close';
+  $.post( "viractions.php", { vir_item: item, vir_status: item_status, repair_notes: notes, repair_cost: cost, repair_by: repaired_by })
+  .success(function(data) {
+  x = '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
+  $("#updated_status_"+item).html(x);
+  })
+  .error(function(data) { console.log(data); });
 }
-if (sel.value == "Work Order Created")
+function submitSelect(sel,item,modal)
 {
-x = '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
-}
 if (sel.value == "Close")
 {
-x = '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
-}
-$("#updated_status_"+item).html(x);
-})
-.error(function(data) { console.log(data); });
+  $('#'+modal).modal('show');
+}else{
+  $.post( "viractions.php", { vir_item: item, vir_status: sel.value })
+  .success(function() {
+  if (sel.value == "Open")
+  {
+  x = '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
+  }
+  if (sel.value == "Work Order Created")
+  {
+  x = '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
+  }
+  if (sel.value == "Close")
+  {
+  x = '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
+  }
+  $("#updated_status_"+item).html(x);
+  })
+  .error(function(data) { console.log(data); });
+  }
 }
 </script>
 <!-- Date Picker -->

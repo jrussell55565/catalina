@@ -12,7 +12,15 @@ mysql_select_db($db_name) or DIE('Database name is not available!');
 if (isset($_POST['vir_item']) && isset($_POST['vir_status']))
 {
 # AJAX call to update vir status
-$sql = "UPDATE virs SET updated_status = \"".$_POST['vir_status']."\" WHERE vir_itemnum = ".$_POST['vir_item'];
+## Let's see if we are trying to close the ticket
+if (! isset($_POST['repair_notes'])) { $repair_notes = "NULL"; }else{ $repair_notes = '"'.$_POST['repair_notes'].'"'; }
+if (! isset($_POST['repair_cost'])) { $repair_cost = "NULL"; }else{ $repair_cost = $_POST['repair_cost']; }
+if (! isset($_POST['repair_by'])) { $repair_by = "NULL"; }else{ $repair_by = '"'.$_POST['repair_by'].'"'; }
+$sql = "UPDATE virs SET updated_status = \"".$_POST['vir_status']."\",
+        repair_notes = $repair_notes,
+        repair_cost = $repair_cost,
+        repair_by = $repair_by
+        WHERE vir_itemnum = ".$_POST['vir_item'];
 if (! mysql_query($sql))
 {
     echo('Unable to update `updated_status`' . mysql_error());
