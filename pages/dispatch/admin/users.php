@@ -150,6 +150,7 @@ if (! empty($_FILES["fileToUpload"]["name"]))
   }
 
   $sql = "UPDATE users SET
+   employee_id = UUID(),
    fname = $fname,
    mname = $mname,
    lname = $lname,
