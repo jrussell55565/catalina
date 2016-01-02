@@ -460,21 +460,21 @@ AND extract(YEAR_MONTH FROM driverexport.date) BETWEEN Extract(YEAR_MONTH FROM C
 $result = mysql_query($sql);
 $row = mysql_fetch_array($result,MYSQL_BOTH);
 ?>
-                        <span class="progress-text"> Total dispatched vs total updated</span>
+                        <span class="progress-text"> Total: Updated vs Dispatched</span>
                         <span class="progress-number"><b><?php echo $row['updated_orders'];?></b>/<?php echo $row['dispatch_orders'];?></span>
                         <div class="progress sm">
                           <div class="progress-bar progress-bar-aqua" style="width: <?php echo (($row['updated_orders'] / $row['dispatch_orders'] ) * 100);?>%"></div>
                         </div>
                          <div class="progress-group">
-                        <span class="progress-text"> PU dispatched  vs PU Updated</span>
-                        <span class="progress-number"><b><?php echo $row['pu_dispatch'];?></b>/<?php echo $row['pu_updated'];?></span>
+                        <span class="progress-text"> PU: Updated  vs Dispatched</span>
+                        <span class="progress-number"><b><?php echo $row['pu_updated'];?></b>/<?php echo $row['pu_dispatch'];?></span>
                         <div class="progress sm">
                           <div class="progress-bar progress-bar-blue" style="width: <?php echo (($row['pu_dispatch'] / $row['pu_updated'] ) * 100);?>%"></div>
                         </div>
                       </div><!-- /.progress-group -->
                       <div class="progress-group">
-                        <span class="progress-text">DEL dispatched vs DEL Updated</span>                        
-                        <span class="progress-number"><b><?php echo $row['del_dispatch'];?></b>/<?php echo $row['del_updated'];?></span>
+                        <span class="progress-text">DEL: Updated vs Dispatched</span>                        
+                        <span class="progress-number"><b><?php echo $row['del_updated'];?></b>/<?php echo $row['del_dispatch'];?></span>
                         <div class="progress sm">
                           <div class="progress-bar progress-bar-red" style="width: <?php echo (($row['del_dispatch'] / $row['del_updated'] ) * 100);?>%"></div>
                         </div>
