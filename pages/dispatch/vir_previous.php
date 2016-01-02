@@ -49,6 +49,7 @@ if(isset($_GET['submit']))
       for ($i = 0; $i <= mysql_num_fields($result); $i++)
       {
         $a = str_replace(array("\r","\n"), ' ', $row[$i]);
+        $a = str_replace(",","|",$a);
         $fullRow .= $a . ",";
       }
       $fullRow = rtrim_limit($fullRow,',',1) . "\n";
