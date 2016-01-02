@@ -22,6 +22,7 @@ $sql = "select
 $statement = 'SELECT drivername,employee_id from users where username = "'.$_SESSION['userid'].'"';
 $output = mysql_fetch_array(mysql_query($statement),MYSQL_BOTH);
 $drivername = $output['drivername'];
+$drivername_export = $drivername;
 $employee_id = $output['employee_id'];
 
 $row = mysql_fetch_array(mysql_query($sql),MYSQL_BOTH);
@@ -282,7 +283,7 @@ if ($pallets == '')
 }
 
 $statement = "INSERT INTO driverexport (employee_id,hawbNumber,driver,status,hawbDate,dueDate,date,trace_notes,accessorials,pieces,pallets,sts_points)
-VALUES (\"$employee_id\",\"$hawb\",\"$drivername\",\"$status\",(select str_to_date(hawbDate,'%c/%e/%Y') as hawbDate from dispatch WHERE hawbNumber=\"$hawb\"),(select str_to_date(dueDate,'%c/%e/%Y') as dueDate from dispatch WHERE hawbNumber=\"$hawb\"),now(),$trace_notes,$accessorial_override,$pieces,$pallets,1)";
+VALUES (\"$employee_id\",\"$hawb\",\"$drivername_export\",\"$status\",(select str_to_date(hawbDate,'%c/%e/%Y') as hawbDate from dispatch WHERE hawbNumber=\"$hawb\"),(select str_to_date(dueDate,'%c/%e/%Y') as dueDate from dispatch WHERE hawbNumber=\"$hawb\"),now(),$trace_notes,$accessorial_override,$pieces,$pallets,1)";
 if (! mysql_query($statement))
 {
   echo "Unable to update DRIVEREXPORT table: ".mysql_error();
