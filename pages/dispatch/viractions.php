@@ -20,6 +20,11 @@ if (! mysql_query($sql))
 exit;
 }
 
+# USER info
+$statement = 'SELECT employee_id from users where username = "'.$_SESSION['userid'].'"';
+$drivername = mysql_fetch_array(mysql_query($statement),MYSQL_BOTH);
+$employee_id = $drivername[0];
+
 # VIR POST variables
 $trucktype = $_POST['trucktype'];
 $insp_start_time = $_POST['insp_start_time'];
@@ -130,6 +135,7 @@ $trailer_vir_items = rtrim($trailer_vir_items,",");
 
 # Insert TRUCK vir:
 $sql = "INSERT INTO virs (
+employee_id, /* employee_id = $employee_id */
 insp_date, /* str_to_date('\$insp_date','%m/%d/%y') = str_to_date('$insp_date','%m/%d/%y') */
 insp_start_time, /* \$insp_start_time = $insp_start_time */
 insp_end_time, /* CURTIME() */
@@ -167,6 +173,7 @@ truck_vir_itemnum
 )
 VALUES
 (
+'$employee_id',
 str_to_date('$insp_date','%m/%d/%y'),
 '$insp_start_time',
 CURTIME(),
@@ -217,6 +224,7 @@ if (($trucktype == 'combo') && ($trailer_number != ''))
 
     # Insert into virs to populate the trailer info now.
     $sql = "INSERT INTO virs (
+    employee_id, /* employee_id = $employee_id */
     insp_date, /* str_to_date('\$insp_date','%m/%d/%y') = str_to_date('$insp_date','%m/%d/%y') */
     insp_start_time, /* \$insp_start_time = $insp_start_time */
     insp_end_time, /* CURTIME() */
@@ -254,6 +262,7 @@ if (($trucktype == 'combo') && ($trailer_number != ''))
     )
     VALUES
     (
+    '$employee_id',
     str_to_date('$insp_date','%m/%d/%y'),
     '$insp_start_time',
     CURTIME(),
