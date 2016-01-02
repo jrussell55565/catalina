@@ -30,7 +30,6 @@ $puDriver   = $row['PUAgentDriverName'];
 $delDriver  = $row['delAgentDriverName'];
 $exportdest = $row['puAgentCode'];
 $dueDate    = $row['dueDate'];
-
 $username	= $_SESSION['userid'];
 
 # Common POST
@@ -284,7 +283,10 @@ if ($pallets == '')
 
 $statement = "INSERT INTO driverexport (employee_id,hawbNumber,driver,status,hawbDate,dueDate,date,trace_notes,accessorials,pieces,pallets,sts_points)
 VALUES (\"$employee_id\",\"$hawb\",\"$drivername\",\"$status\",(select str_to_date(hawbDate,'%c/%e/%Y') as hawbDate from dispatch WHERE hawbNumber=\"$hawb\"),(select str_to_date(dueDate,'%c/%e/%Y') as dueDate from dispatch WHERE hawbNumber=\"$hawb\"),now(),$trace_notes,$accessorial_override,$pieces,$pallets,1)";
-mysql_query($statement);
+if (! mysql_query($statement))
+{
+  echo "Unable to update DRIVEREXPORT table: ".mysql_error();
+}
 
 // If the status update was Arrived To Consignee then update the DB with the time
 if ($status == "Arrived To Consignee")
