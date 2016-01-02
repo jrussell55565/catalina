@@ -359,7 +359,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                   <div class="row">
                     <div class="col-md-8">
                       <p class="text-center">
-                        <strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
+                        <strong>Pickups vs. Deliveries - 12 months.</strong>
                       </p>
                       <div class="chart">
                         <!-- Sales Chart Canvas -->
@@ -368,31 +368,122 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                     </div><!-- /.col -->
                     <div class="col-md-4">
                       <p class="text-center">
-                        <strong>User Statistics</strong>
+                        <strong>User Statistics - current month.</strong>
                       </p>
                       <div class="progress-group">
-                        <span class="progress-text"> HWB dispatched vs updated</span>
-                        <span class="progress-number"><b>160</b>/200</span>
+<?php
+$sql = "SELECT * 
+FROM   (SELECT Count(*) AS dispatch_orders 
+        FROM   dispatch 
+        WHERE  ( puagentdriverphone = (SELECT driverid 
+                                       FROM   users 
+                                       WHERE  username = \"$username\") 
+                 AND Extract(YEAR_MONTH FROM Str_to_date(hawbdate, '%c/%e/%Y')) BETWEEN 
+                     Extract(YEAR_MONTH FROM CURRENT_DATE) AND Extract( 
+                     YEAR_MONTH FROM 
+                         CURRENT_DATE + INTERVAL 1 month) ) 
+                OR ( delagentdriverphone = (SELECT driverid 
+                                            FROM   users 
+                                            WHERE  username = \"$username\") 
+                     AND Extract(YEAR_MONTH FROM Str_to_date(duedate, '%c/%e/%Y')) BETWEEN 
+                         Extract(YEAR_MONTH FROM CURRENT_DATE) AND Extract( 
+                         YEAR_MONTH FROM 
+                             CURRENT_DATE + INTERVAL 1 month) )) dispatch, 
+       (SELECT Count(*) AS updated_orders 
+        FROM   driverexport 
+        WHERE  employee_id = (SELECT employee_id 
+                              FROM   users 
+                              WHERE  username = \"$username\") 
+               AND ( status = 'Picked Up' 
+                      OR status = 'Delivered' ) 
+               AND extract(YEAR_MONTH FROM driverexport.date) BETWEEN Extract(YEAR_MONTH FROM CURRENT_DATE) AND 
+                                Extract( 
+                                YEAR_MONTH FROM 
+                                    CURRENT_DATE + INTERVAL 1 month)) 
+       driverexport, 
+       (SELECT Count(*) AS pu_dispatch 
+        FROM   dispatch 
+        WHERE  ( puagentdriverphone = (SELECT driverid 
+                                       FROM   users 
+                                       WHERE  username = \"$username\") 
+                 AND Extract(YEAR_MONTH FROM Str_to_date(hawbdate, '%c/%e/%Y')) BETWEEN 
+                     Extract(YEAR_MONTH FROM CURRENT_DATE) AND Extract( 
+                     YEAR_MONTH FROM 
+                         CURRENT_DATE + INTERVAL 1 month) )) pu_dispatch, 
+       (SELECT Count(*) AS pu_updated 
+        FROM   driverexport 
+        WHERE  employee_id = (SELECT employee_id 
+                              FROM   users 
+                              WHERE  username = \"$username\") 
+               AND status = 'Picked Up' 
+               AND extract(YEAR_MONTH FROM driverexport.date) BETWEEN Extract(YEAR_MONTH FROM CURRENT_DATE) AND 
+                                Extract( 
+                                YEAR_MONTH FROM 
+                                    CURRENT_DATE + INTERVAL 1 month)) 
+       pickup_updated, 
+       (SELECT Count(*) AS del_dispatch 
+        FROM   dispatch 
+        WHERE  ( delagentdriverphone = (SELECT driverid 
+                                        FROM   users 
+                                        WHERE  username = \"$username\") 
+                 AND Extract(YEAR_MONTH FROM Str_to_date(duedate, '%c/%e/%Y')) BETWEEN 
+                     Extract(YEAR_MONTH FROM CURRENT_DATE) AND Extract( 
+                     YEAR_MONTH FROM 
+                         CURRENT_DATE + INTERVAL 1 month) )) del_dispatch, 
+       (SELECT Count(*) AS del_updated 
+        FROM   driverexport 
+        WHERE  employee_id = (SELECT employee_id 
+                              FROM   users 
+                              WHERE  username = \"$username\") 
+               AND status = 'Delivered' 
+               AND extract(YEAR_MONTH FROM driverexport.date) BETWEEN Extract(YEAR_MONTH FROM CURRENT_DATE) AND 
+                                Extract( 
+                                YEAR_MONTH FROM 
+                                    CURRENT_DATE + INTERVAL 1 month)) 
+       del_updated,
+       (SELECT count(*) accessorials_count
+  FROM (select accessorials from driverexport where employee_id = (SELECT employee_id 
+                              FROM   users 
+                              WHERE  username = \"$username\")
+AND extract(YEAR_MONTH FROM driverexport.date) BETWEEN Extract(YEAR_MONTH FROM CURRENT_DATE) AND 
+                                Extract( 
+                                YEAR_MONTH FROM 
+                                    CURRENT_DATE + INTERVAL 1 month)) t CROSS JOIN 
+(
+   SELECT a.N + b.N * 10 + 1 n
+     FROM 
+    (SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) a
+   ,(SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) b
+    ORDER BY n
+) n
+ WHERE n.n <= 1 + (LENGTH(t.accessorials) - LENGTH(REPLACE(t.accessorials, ',', '')))) accessorials";
+$result = mysql_query($sql);
+$row = mysql_fetch_array($result,MYSQL_BOTH);
+?>
+                        <span class="progress-text"> Total dispatched vs total updated</span>
+                        <span class="progress-number"><b><?php echo $row['updated_orders'];?></b>/<?php echo $row['dispatch_orders'];?></span>
                         <div class="progress sm">
-                          <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
+                          <div class="progress-bar progress-bar-aqua" style="width: <?php echo (($row['updated_orders'] / $row['dispatch_orders'] ) * 100);?>%"></div>
                         </div>
                          <div class="progress-group">
-                        <span class="progress-text"> PU dispatched  vs HWB Updated</span>
-                        <span class="progress-number"><b>160</b>/200</span>
+                        <span class="progress-text"> PU dispatched  vs PU Updated</span>
+                        <span class="progress-number"><b><?php echo $row['pu_dispatch'];?></b>/<?php echo $row['pu_updated'];?></span>
                         <div class="progress sm">
-                          <div class="progress-bar progress-bar-blue" style="width: 20%"></div>
+                          <div class="progress-bar progress-bar-blue" style="width: <?php echo (($row['pu_dispatch'] / $row['pu_updated'] ) * 100);?>%"></div>
                         </div>
                       </div><!-- /.progress-group -->
                       <div class="progress-group">
-                        <span class="progress-text">DEL dispatched vs HWB Updated</span>                        <span class="progress-number"><b>310</b>/400</span>
+                        <span class="progress-text">DEL dispatched vs DEL Updated</span>                        
+                        <span class="progress-number"><b><?php echo $row['del_dispatch'];?></b>/<?php echo $row['del_updated'];?></span>
                         <div class="progress sm">
-                          <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+                          <div class="progress-bar progress-bar-red" style="width: <?php echo (($row['del_dispatch'] / $row['del_updated'] ) * 100);?>%"></div>
                         </div>
                       </div><!-- /.progress-group -->
                       <div class="progress-group">
-                        <span class="progress-text">Accessorials added vs HWB #,s</span><span class="progress-number"><b>480</b>/800</span>
+                        <span class="progress-text">Accessorials added vs HWB Updated</span>
+                        <span class="progress-number"><b><?php echo $row['accessorials_count'];?></b>/<?php echo $row['updated_orders'];?></span>
                         <div class="progress sm">
-                          <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                          <div class="progress-bar progress-bar-green" style="width: <?php echo (($row['accessorials_count'] / $row['updated_orders'] ) * 100);?>%"></div>
                         </div>
                       </div><!-- /.progress-group -->
                       <div class="progress-group">
