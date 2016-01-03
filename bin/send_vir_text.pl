@@ -34,6 +34,7 @@ sub get_vtext
             FROM
                 users
             WHERE
+                status = 'Active'
                 vtext != ''
                 AND ".$_."_message != ''
                 AND ".$_."_time != ''
