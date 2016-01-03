@@ -13,15 +13,53 @@ mysql_select_db($db_name) or DIE('Database name is not available!');
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
 
-if ($_GET['action'] == 'loginas')
+# Get Violation Cats.
+$violations = array();
+$statement = "select distinct basic from csadata where basic != ''";
+$result = mysql_query($statement);
+while($row = mysql_fetch_array($result))
 {
-  $_SESSION['userid'] = $_GET['username'];
-  $_SESSION['username'] = $_GET['username'];
-  $_SESSION['drivername'] = $_GET['drivername'];
-  $_SESSION['login'] = 2;
-  header("Location: /pages/main/index.php");
+  array_push($violations,$row[0]);
 }
+mysql_free_result($result);
 
+$drivers = array();
+$statement = "select drivername from users where status = 'Active' ORDER BY 1";
+$result = mysql_query($statement);
+while($row = mysql_fetch_array($result))
+{
+  array_push($drivers,$row[0]);
+}
+mysql_free_result($result);
+
+if ($_POST['update_csa'])
+{
+  $sql = "INSERT INTO csadata_int (
+          employee_id,
+          creation_date,
+          violation_cat,
+          violation_group,
+          violation_code,
+          violation_weight,
+          violation_time_weight,
+          violation_description,
+          co_driver,
+          score) 
+          VALUES (
+          '".$_POST['hdn_employee_id']."',
+          str_to_date('".$_POST['violation_date']."','%m/%d/%Y'),
+          '".$_POST['violation_cat']."',
+          '".$_POST['violation_group']."',
+          '".$_POST['violation_code']."',
+          ".$_POST['violation_weight'].",
+          ".$_POST['time_weight'].",
+          '".$_POST['description']."',
+          '".$_POST['co_driver']."',
+          ".$_POST['score']."
+          )";
+  $result = mysql_query($sql) or die ("unable to insert into csadata_int: ".mysql_error()); 
+  unset($_POST);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -88,57 +126,12 @@ if ($_GET['action'] == 'loginas')
 <table class="table table-striped">
  <thead>
   <tr>
-    <?php
-      # Defaults
-      $orderName = 'desc';
-      $glyphName = "top";
-      $orderStatus = 'desc';
-      $glyphStatus = "top";
-      $orderSql = "ORDER BY drivername ASC";
-
-      if ($_GET['sort'] == 'name')
-      {
-        if ($_GET['order'] == 'desc')
-        {
-          $orderName = 'asc';
-          $glyphName = "bottom";
-          $orderSql = "ORDER BY drivername DESC";
-        }
-        if ($_GET['order'] == 'asc')
-        {
-          $orderName = 'desc';
-          $glyphName = "top";
-          $orderSql = "ORDER BY drivername ASC";
-        }
-      }
-      if ($_GET['sort'] == 'status')
-      {
-        if ($_GET['order'] == 'desc')
-        {
-          $orderStatus = 'asc';
-          $glyphStatus = "bottom";
-          $orderSql = "ORDER BY status DESC";
-        }
-        if ($_GET['order'] == 'asc')
-        {
-          $orderStatus = 'desc';
-          $glyphStatus = "top";
-          $orderSql = "ORDER BY status ASC";
-        }
-      }
-    ?>
     <th>Name</th>
     <th>Score</th>
   </tr>
  </thead>
  <tbody>
 <?php
-# If non-admin logs in then only show their info
-if ($_SESSION['login'] == 2)
-{
-  $predicate = "AND (last_name in (SELECT upper(lname) from users where username = '$_SESSION[username]')
-                 AND first_name in (SELECT upper(fname) from users where username = '$_SESSION[username]'))";
-}
 $sql = "select distinct first_name,last_name from csadata 
         WHERE 1=1 $predicate ORDER BY 1";
 
@@ -159,62 +152,171 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 <tr class="collapse" id="<?php echo $row['last_name'];?>_details">
 <td colspan="9">
   <div class="well">
-<form enctype="multipart/form-data" role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <table>
+<form enctype="multipart/form-data" role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <tr>
- <?php $sqlDetails = "SELECT * from csadata WHERE first_name = '" . $row['first_name'] . "' AND last_name = '" . $row['last_name'] . "'";
+ <?php 
+       $first_name = $row['first_name'];
+       $last_name = $row['last_name'];
+       $sqlDetails = "SELECT date,
+basic,
+violation_group,
+code,
+violation_weight,
+time_weight,description,
+co_driver_first_name,
+co_driver_last_name
+from csadata where first_name = '$first_name' and last_name= '$last_name'
+UNION ALL
+select creation_date,
+violation_cat,
+violation_group,
+violation_code,
+violation_weight,
+violation_time_weight,
+violation_description,
+(SELECT fname from users WHERE drivername = co_driver) co_driver_first_name,
+(SELECT lname from users WHERE drivername = co_driver) co_driver_last_name
+from csadata_int where employee_id = (select employee_id from users
+where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name'))";
        $sqlDetails = mysql_query($sqlDetails);
        while ($rowDetails = mysql_fetch_array($sqlDetails, MYSQL_BOTH))
        { 
  ?>
  <td style="padding: 5px">
   <label for="status">Violation Date</label>
-  <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="<?php echo $rowDetails['date'];?>" readonly>
+  <input type="text" class="form-control"  value="<?php echo $rowDetails['date'];?>" readonly>
  </td>
  <td style="padding: 5px">
-  <label for="status">Violation Category</label>
-  <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="<?php echo $rowDetails['basic'];?>" readonly>
+  <label for="status">Violation Cat.</label>
+  <input type="text" class="form-control"  value="<?php echo $rowDetails['basic'];?>" readonly>
  </td>
  <td style="padding: 5px">
   <label for="addr1">Violation Group</label>
-  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $rowDetails['violation_group'];?>" readonly>
+  <input type="text" class="form-control"  value="<?php echo $rowDetails['violation_group'];?>" readonly>
  </td>
  <td style="padding: 5px">
   <label for="addr1">Violation Code</label>
-  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $rowDetails['code'];?>" readonly>
+  <input type="text" class="form-control"  value="<?php echo $rowDetails['code'];?>" readonly>
  </td>
  <td style="padding: 5px">
   <label for="addr1">Violation Weight</label>
-  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $rowDetails['violation_weight'];?>" readonly>
+  <input type="text" class="form-control"  value="<?php echo $rowDetails['violation_weight'];?>" readonly>
  </td>
  <td style="padding: 5px">
   <label for="addr1">Time Weight</label>
-  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $rowDetails['time_weight'];?>" readonly>
+  <input type="text" class="form-control"  value="<?php echo $rowDetails['time_weight'];?>" readonly>
  </td>
  <td style="padding: 5px" colspan="2">
   <label for="addr1">Description</label>
-  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $rowDetails['description'];?>" readonly>
+  <input type="text" class="form-control"  value="<?php echo $rowDetails['description'];?>" readonly>
  </td>
  <td style="padding: 5px" colspan="2">
   <label for="addr1">Co-Driver</label>
-  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $rowDetails['co_driver_first_name'] . ' ' . $rowDetails['co_driver_last_name'];?>" readonly>
+  <input type="text" class="form-control"  value="<?php echo $rowDetails['co_driver_first_name'] . ' ' . $rowDetails['co_driver_last_name'];?>" readonly>
  </td>
  <td style="padding: 5px" colspan="2">
   <label for="addr1">Score</label>
-  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="1" readonly>
+  <input type="text" class="form-control"  value="1" readonly>
  </td>
 </tr>
  <?php
  }
  mysql_free_result($sqlDetails);
  ?>
+  <tr>
+ <td style="padding: 5px">
+  <label for="status">Violation Date</label>
+                  <div class="input-daterange input-group" id="datepicker_update">
+                   <input type="text" class="input-sm form-control datepicker" name="violation_date" data-date-format="mm/dd/yyyy"/ required>
+</div>
+ </td>
+ <td style="padding: 5px">
+  <label for="status">Violation Cat.</label>
+  <select class="form-control" name="violation_cat">
+  <?php
+  foreach($violations as $a)
+  {
+  ?>
+  <option value="<?php echo $a;?>"><?php echo $a;?></option>
+  <?php
+  }
+  ?>
+  </select>
+ </td>
+ <td style="padding: 5px">
+  <label for="addr1">Violation Group</label>
+  <input type="text" class="form-control"  value="" name="violation_group" required>
+ </td>
+ <td style="padding: 5px">
+  <label for="addr1">Violation Code</label>
+  <input type="text" class="form-control"  value="" name="violation_code" required>
+ </td>
+ <td style="padding: 5px">
+  <label for="addr1">Violation Weight</label>
+  <select class="form-control"  value="" name="violation_weight">
+  <?php
+  foreach(range(1,10) as $i)
+  {
+  ?>
+  <option value="<?php echo $i;?>"><?php echo $i;?></option>
+  <?php
+  }
+  ?>
+  </select>
+ </td>
+ <td style="padding: 5px">
+  <label for="addr1">Time Weight</label>
+  <select class="form-control"  value="" name="time_weight">
+  <?php
+  foreach(range(1,3) as $i)
+  {
+  ?>
+  <option value="<?php echo $i;?>"><?php echo $i;?></option>
+  <?php
+  }
+  ?>
+  </select>
+ </td>
+ <td style="padding: 5px" colspan="2">
+  <label for="addr1">Description</label>
+  <input type="text" class="form-control"  value="" name="description" required>
+ </td>
+ <td style="padding: 5px" colspan="2">
+  <label for="addr1">Co-Driver</label>
+  <select class="form-control"  value="" name="co_driver">
+  <?php
+  foreach($drivers as $i)
+  {
+  ?>
+  <option value="<?php echo $i;?>"><?php echo $i;?></option>
+  <?php
+  }
+  ?>
+  </select>
+ </td>
+ <td style="padding: 5px" colspan="2">
+  <label for="addr1">Score</label>
+  <input type="text" class="form-control"  value="1" name="score" required>
+ </td>
+  </tr>
    <tr>
      <td style="padding: 5px">
-       <input type="submit" name="submit" class="btn btn-primary" value="Submit">
+       <input type="submit" name="update_csa" class="btn btn-primary" value="Submit">
+       <input type="hidden" name="hdn_fname" value="<?php echo $row['first_name'];?>">
+       <input type="hidden" name="hdn_lname" value="<?php echo $row['last_name'];?>">
+       <?php
+        $sql_emp = "SELECT employee_id from users where lower(\"".$row['first_name']."\") = lower(fname)
+                AND lower(\"".$row['last_name']."\") = lower(lname)";
+        $result_emp = mysql_query($sql_emp);
+        $row_emp = mysql_fetch_array($result_emp);
+        mysql_free_result($result_emp);
+       ?>
+       <input type="hidden" name="hdn_employee_id" value="<?php echo $row_emp[0];?>">
      </td>
     </tr>
-   </table>
    </form>
+   </table>
   </div>
 </td>
 </tr>
@@ -290,6 +392,15 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 <script src="<?php echo HTTP;?>/dist/js/bootstrap-datepicker.js"></script>
 <script>
     $('.datepicker').datepicker({
+    startDate: "2015-01-01",
+    todayBtn: "linked",
+    autoclose: true,
+    datesDisabled: '0',
+    todayHighlight: true,
+    });
+</script>
+<script>
+    $('.datepicker_update').datepicker({
     startDate: "2015-01-01",
     todayBtn: "linked",
     autoclose: true,
