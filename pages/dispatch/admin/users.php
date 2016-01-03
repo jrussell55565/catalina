@@ -133,9 +133,9 @@ if (! empty($_FILES["fileToUpload"]["name"]))
   {
     # Insert the record first
     $sql = "INSERT INTO users
-           (username)
+           (username,employee_id)
            VALUES
-           ($formUsername)";
+           ($formUsername,UUID())";
            #print "$sql<br>\n\n";
            mysql_query($sql);
 
@@ -501,6 +501,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
          <option value="Dispatch"<?php if ($row['title'] == 'Dispatch') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Dispatch</option>
          <option value="Accounting" <?php if ($row['title'] == 'Accounting') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Accounting</option>
          <option value="Driver"<?php if ($row['title'] == 'Driver') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Driver</option>
+         <option value="Mechanic"<?php if ($row['title'] == 'Mechanic') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Mechanic</option>
        </select> 
      </td>
     </tr>
@@ -905,6 +906,7 @@ if ($_SESSION['login'] == 1)
          <option value="Dispatch">Dispatch</option>
          <option value="Accounting">Accounting</option>
          <option value="Driver">Driver</option>
+         <option value="Driver">Mechanic</option>
        </select>
      </td>
     </tr>

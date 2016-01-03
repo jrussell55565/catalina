@@ -9,6 +9,30 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
 mysql_select_db($db_name) or DIE('Database name is not available!');
 
+if (isset($_POST['vir_item']) && isset($_POST['vir_status']))
+{
+# AJAX call to update vir status
+## Let's see if we are trying to close the ticket
+if (! isset($_POST['repair_notes'])) { $repair_notes = "NULL"; }else{ $repair_notes = '"'.$_POST['repair_notes'].'"'; }
+if (! isset($_POST['repair_cost'])) { $repair_cost = "NULL"; }else{ $repair_cost = $_POST['repair_cost']; }
+if (! isset($_POST['repair_by'])) { $repair_by = "NULL"; }else{ $repair_by = '"'.$_POST['repair_by'].'"'; }
+$sql = "UPDATE virs SET updated_status = \"".$_POST['vir_status']."\",
+        repair_notes = $repair_notes,
+        repair_cost = $repair_cost,
+        repair_by = $repair_by
+        WHERE vir_itemnum = ".$_POST['vir_item'];
+if (! mysql_query($sql))
+{
+    echo('Unable to update `updated_status`' . mysql_error());
+}
+exit;
+}
+
+# USER info
+$statement = 'SELECT employee_id from users where username = "'.$_SESSION['userid'].'"';
+$drivername = mysql_fetch_array(mysql_query($statement),MYSQL_BOTH);
+$employee_id = $drivername[0];
+
 # VIR POST variables
 $trucktype = $_POST['trucktype'];
 $insp_start_time = $_POST['insp_start_time'];
@@ -24,12 +48,12 @@ $truck_vir_condition = $_POST['vir_truck'][0];
 $truck_vir_condition_tire = $_POST['vir_truck_tire'][0];
 $trailer_vir_condition = $_POST['vir_trailer'][0];
 $trailer_vir_condition_tire = $_POST['vir_trailer_tire'][0];
-$vir_notes_quick_report = $_POST['vir_notes_quick_report'];
-$vir_notes_finish = $_POST['vir_notes_finish'];
-$vir_notes_detailed_truck = $_POST['vir_notes_detailed_truck'];
-$vir_notes_detailed_trailer = $_POST['vir_notes_detailed_trailer'];
-$truck_tires_notes = $_POST['truck_tires_notes_'.$trucktype];
-$trailer_tires_notes = $_POST['trailer_tires_notes_trailer'];
+$vir_notes_quick_report = mysql_escape_string($_POST['vir_notes_quick_report']);
+$vir_notes_finish = mysql_escape_string($_POST['vir_notes_finish']);
+$vir_notes_detailed_truck = mysql_escape_string($_POST['vir_notes_detailed_truck']);
+$vir_notes_detailed_trailer = mysql_escape_string($_POST['vir_notes_detailed_trailer']);
+$truck_tires_notes = mysql_escape_string($_POST['truck_tires_notes_'.$trucktype]);
+$trailer_tires_notes = mysql_escape_string($_POST['trailer_tires_notes_trailer']);
 $username = $_POST['username'];
 $vir_detailed_truck = $_POST['vir_detailed_truck'];
 
@@ -100,7 +124,7 @@ if ($trucktype == 'boxtruck' || $trucktype == 'sprinter')
   $truck_tires_passenger_ax2rear = '';
 }
 
-$vir_finish_notes = $_POST['vir_finish_notes_'.$trucktype];
+$vir_finish_notes = mysql_escape_string($_POST['vir_finish_notes_'.$trucktype]);
 $bx_localtime2 = $_POST['bx_localtime2'];
 $bx_localdate2 = $_POST['bx_localdate2'];
 $submitvir = $_POST['submitvir'];
@@ -117,7 +141,9 @@ foreach ($_POST['trailer_ck_accessorials'] as $key => $val)
 }
 $trailer_vir_items = rtrim($trailer_vir_items,",");
 
+# Insert TRUCK vir:
 $sql = "INSERT INTO virs (
+employee_id, /* employee_id = $employee_id */
 insp_date, /* str_to_date('\$insp_date','%m/%d/%y') = str_to_date('$insp_date','%m/%d/%y') */
 insp_start_time, /* \$insp_start_time = $insp_start_time */
 insp_end_time, /* CURTIME() */
@@ -127,7 +153,7 @@ driver_name, /* \$username = $username */
 vir_points, /* 1 */
 truck_number, /* \$truck_number = $truck_number */
 truck_odometer, /* \$truckodometer = $truckodometer */
-truck_vir_condition, /* \$truck_vir_condition = $truck_vir_condition */ 
+truck_vir_condition, /* \$truck_vir_condition = $truck_vir_condition */
 truck_vir_items, /* \$truck_vir_items = $truck_vir_items */
 truck_vir_notes, /* \$vir_notes_detailed_truck = $vir_notes_detailed_truck */
 vir_notes_quick_report, /* \$vir_notes_quick_report = $vir_notes_quick_report */
@@ -147,10 +173,15 @@ trailer_tires_passenger_ax1front, /* \$trailer_tires_passenger_ax1front = $trail
 trailer_tires_driverside_ax2rear, /* \$trailer_tires_driverside_ax2rear = $trailer_tires_driverside_ax2rear */
 trailer_tires_passenger_ax2rear, /* \$trailer_tires_passenger_ax2rear = $trailer_tires_passenger_ax2rear */
 trailer_tires_notes, /* \$trailer_tires_notes = $trailer_tires_notes */
-vir_finish_notes /* \$vir_notes_finish = $vir_notes_finish */,
-trucktype) /* \$trucktype = $trucktype */
+vir_finish_notes, /* \$vir_notes_finish = $vir_notes_finish */
+trucktype, /* \$trucktype = $trucktype */
+truck_tires_overall, /* \$truck_vir_condition_tire = $truck_vir_condition_tire */
+trailer_tires_overall, /* \$trailer_vir_condition_tire = $trailer_vir_condition_tire */
+truck_vir_itemnum
+)
 VALUES
 (
+'$employee_id',
 str_to_date('$insp_date','%m/%d/%y'),
 '$insp_start_time',
 CURTIME(),
@@ -171,22 +202,116 @@ $truckodometer,
 '$truck_tires_driverside_ax2rear',
 '$truck_tires_passenger_ax2rear',
 '$truck_tires_notes',
-$trailer_number,
-'$trailer_vir_condition',
-'$trailer_vir_items',
-'$vir_notes_detailed_trailer',
-'$trailer_tires_driverside_ax1front',
-'$trailer_tires_passenger_ax1front',
-'$trailer_tires_driverside_ax2rear',
-'$trailer_tires_passenger_ax2rear',
-'$trailer_tires_notes',
+NULL,
+NULL,
+NULL,
+NULL,
+NULL,
+NULL,
+NULL,
+NULL,
+NULL,
 '$vir_notes_finish',
-'$trucktype'
+'$trucktype',
+'$truck_vir_condition_tire',
+NULL,
+NULL
 )";
 
-#print $sql."\n\n";
-#print_r($_POST); exit;
-mysql_query($sql);
+if (! mysql_query($sql))
+{
+    die('Unable to INSERT truck VIR into table: ' . mysql_error());
+}
+
+if (($trucktype == 'combo') && ($trailer_number != ''))
+{
+    # Now get the last vir_itemnum so we can use it to populate the child record (trailer)
+    $sql = "SELECT vir_itemnum FROM virs WHERE truck_number = $truck_number ORDER BY vir_itemnum DESC LIMIT 1";
+    $result = mysql_query($sql);
+    $row = mysql_fetch_array($result,MYSQL_BOTH);
+
+    # Insert into virs to populate the trailer info now.
+    $sql = "INSERT INTO virs (
+    employee_id, /* employee_id = $employee_id */
+    insp_date, /* str_to_date('\$insp_date','%m/%d/%y') = str_to_date('$insp_date','%m/%d/%y') */
+    insp_start_time, /* \$insp_start_time = $insp_start_time */
+    insp_end_time, /* CURTIME() */
+    insp_duration, /* subtime(curtime(),'\$insp_start_time') = subtime(curtime(),'$insp_start_time') */
+    insp_type, /* \$preorposttrip = $preorposttrip */
+    driver_name, /* \$username = $username */
+    vir_points, /* 1 */
+    truck_number, /* \$truck_number = $truck_number */
+    truck_odometer, /* \$truckodometer = $truckodometer */
+    truck_vir_condition, /* \$truck_vir_condition = $truck_vir_condition */
+    truck_vir_items, /* \$truck_vir_items = $truck_vir_items */
+    truck_vir_notes, /* \$vir_notes_detailed_truck = $vir_notes_detailed_truck */
+    vir_notes_quick_report, /* \$vir_notes_quick_report = $vir_notes_quick_report */
+    truck_tires_driverside_steer, /* \$truck_tires_driverside_steer = $truck_tires_driverside_steer */
+    truck_tires_passenger_steer, /* \$truck_tires_passenger_steer = $truck_tires_passenger_steer */
+    truck_tires_driverside_ax1front, /* \$truck_tires_driverside_ax1front = $truck_tires_driverside_ax1front */
+    truck_tires_passenger_ax1front, /* \$truck_tires_passenger_ax1front = $truck_tires_passenger_ax1front */
+    truck_tires_driverside_ax2rear, /* \$truck_tires_driverside_ax2rear = $truck_tires_driverside_ax2rear */
+    truck_tires_passenger_ax2rear, /* \$truck_tires_passenger_ax2rear = $truck_tires_passenger_ax2rear */
+    truck_tires_notes, /* \$truck_tires_notes = $truck_tires_notes */
+    trailer_number, /* \$trailer_number = $trailer_number */
+    trailer_vir_condition,  /* \$trailer_vir_condition = $trailer_vir_condition */
+    trailer_vir_items, /* \$trailer_vir_items = $trailer_vir_items */
+    trailer_vir_notes, /* \$vir_notes_detailed_trailer = $vir_notes_detailed_trailer */
+    trailer_tires_driverside_ax1front, /* \$trailer_tires_driverside_ax1front = $trailer_tires_driverside_ax1front */
+    trailer_tires_passenger_ax1front, /* \$trailer_tires_passenger_ax1front = $trailer_tires_passenger_ax1front */
+    trailer_tires_driverside_ax2rear, /* \$trailer_tires_driverside_ax2rear = $trailer_tires_driverside_ax2rear */
+    trailer_tires_passenger_ax2rear, /* \$trailer_tires_passenger_ax2rear = $trailer_tires_passenger_ax2rear */
+    trailer_tires_notes, /* \$trailer_tires_notes = $trailer_tires_notes */
+    vir_finish_notes, /* \$vir_notes_finish = $vir_notes_finish */
+    trucktype, /* \$trucktype = $trucktype */
+    truck_tires_overall, /* \$truck_vir_condition_tire = $truck_vir_condition_tire */
+    trailer_tires_overall, /* \$trailer_vir_condition_tire = $trailer_vir_condition_tire */
+    truck_vir_itemnum
+    )
+    VALUES
+    (
+    '$employee_id',
+    str_to_date('$insp_date','%m/%d/%y'),
+    '$insp_start_time',
+    CURTIME(),
+    subtime(curtime(),'$insp_start_time'),
+    '$preorposttrip',
+    '$username',
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    $trailer_number,
+    '$trailer_vir_condition',
+    '$trailer_vir_items',
+    '$vir_notes_detailed_trailer',
+    '$trailer_tires_driverside_ax1front',
+    '$trailer_tires_passenger_ax1front',
+    '$trailer_tires_driverside_ax2rear',
+    '$trailer_tires_passenger_ax2rear',
+    '$trailer_tires_notes',
+    NULL,
+    NULL,
+    NULL,
+    '$trailer_vir_condition_tire',
+    ".$row[0]."
+    )";
+
+    if (! mysql_query($sql))
+    {
+        die('Unable to INSERT trailer VIR into table: ' . mysql_error());
+    }
+}
 
 # Send the email out
 # Reset the trucktype if it's 'combo'

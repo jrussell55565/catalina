@@ -285,7 +285,7 @@ if ($row['status'] == "Delivered")
               <table id="tracenotesDetails" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="tracenotesDetails_info">
                 <tbody>
                   <tr role="row" class="odd">
-                    <td><label>Name</label></td>
+                    <td><label>Updated By</label></td>
                     <td><label>Date</label></td>
                     <td><label>State Change</label></td>
                     <td><label>Trace Notes</label></td>
@@ -298,7 +298,7 @@ if ($row['status'] == "Delivered")
               {
               ?>
                   <tr role="row" class="even">
-                    <td><?php echo "$export_row[driver]";?></td>
+                    <td><?php echo "$export_row[updated_by]";?></td>
                     <td><?php echo "$export_row[date]";?></td>
                     <td><?php echo "$export_row[status]";?></td>
                     <td><?php echo "$export_row[trace_notes]";?></td>

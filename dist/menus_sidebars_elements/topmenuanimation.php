@@ -52,9 +52,15 @@ a.button2 {
                 <span class="info-box-icon bg-green"><i class="fa fa-tachometer"></i></span>
                 </a>
                 <div class="info-box-content">
+<<<<<<< HEAD
                 <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/userstats.php">User Stats</a></span>
                 <span class="info-box-number">Todays Stats: X
                 <br>Last 30 days Stats: X</span></div>
+=======
+                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/costats.php">User Points</a></span>
+                <span class="info-box-number">Today: 
+                <br>Last 30 days: </span></div>
+>>>>>>> origin/master
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->

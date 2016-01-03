@@ -19,9 +19,11 @@ $sql = "select
         date_format(str_to_date(dueDate, '%c/%e/%Y'),'%c/%e/%Y') dueDate
         from dispatch where recordId = $recordid";
 
-$statement = 'SELECT drivername from users where username = "'.$_SESSION['userid'].'"';
-$drivername = mysql_fetch_array(mysql_query($statement),MYSQL_BOTH);
-$drivername = $drivername[0];
+$statement = 'SELECT drivername,employee_id from users where username = "'.$_SESSION['userid'].'"';
+$output = mysql_fetch_array(mysql_query($statement),MYSQL_BOTH);
+$drivername = $output['drivername'];
+$drivername_export = $drivername;
+$employee_id = $output['employee_id'];
 
 $row = mysql_fetch_array(mysql_query($sql),MYSQL_BOTH);
 $hawb       = $row['hawbNumber'];
@@ -29,7 +31,6 @@ $puDriver   = $row['PUAgentDriverName'];
 $delDriver  = $row['delAgentDriverName'];
 $exportdest = $row['puAgentCode'];
 $dueDate    = $row['dueDate'];
-
 $username	= $_SESSION['userid'];
 
 # Common POST
@@ -281,9 +282,12 @@ if ($pallets == '')
   $pallets = 'NULL';
 }
 
-$statement = "INSERT INTO driverexport (hawbNumber,driver,status,hawbDate,dueDate,date,trace_notes,accessorials,pieces,pallets)
-VALUES (\"$hawb\",\"$drivername\",\"$status\",(select str_to_date(hawbDate,'%c/%e/%Y') as hawbDate from dispatch WHERE hawbNumber=\"$hawb\"),(select str_to_date(dueDate,'%c/%e/%Y') as dueDate from dispatch WHERE hawbNumber=\"$hawb\"),now(),$trace_notes,$accessorial_override,$pieces,$pallets)";
-mysql_query($statement);
+$statement = "INSERT INTO driverexport (employee_id,hawbNumber,updated_by,status,hawbDate,dueDate,date,trace_notes,accessorials,pieces,pallets,sts_points)
+VALUES (\"$employee_id\",\"$hawb\",\"$drivername_export\",\"$status\",(select str_to_date(hawbDate,'%c/%e/%Y') as hawbDate from dispatch WHERE hawbNumber=\"$hawb\"),(select str_to_date(dueDate,'%c/%e/%Y') as dueDate from dispatch WHERE hawbNumber=\"$hawb\"),now(),$trace_notes,$accessorial_override,$pieces,$pallets,1)";
+if (! mysql_query($statement))
+{
+  echo "Unable to update DRIVEREXPORT table: ".mysql_error();
+}
 
 // If the status update was Arrived To Consignee then update the DB with the time
 if ($status == "Arrived To Consignee")
