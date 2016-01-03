@@ -35,7 +35,7 @@ sub get_vtext
                 users
             WHERE
                 status = 'Active'
-                vtext != ''
+                AND vtext != ''
                 AND ".$_."_message != ''
                 AND ".$_."_time != ''
                 AND HOUR(STR_TO_DATE(".$_."_time, '%H:%i')) = HOUR(NOW())";
