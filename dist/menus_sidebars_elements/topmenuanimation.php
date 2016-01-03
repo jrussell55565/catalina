@@ -52,9 +52,15 @@ a.button2 {
                 <span class="info-box-icon bg-green"><i class="fa fa-tachometer"></i></span>
                 </a>
                 <div class="info-box-content">
+<<<<<<< HEAD
+                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/userstats.php">User Stats</a></span>
+                <span class="info-box-number">Todays Stats: X
+                <br>Last 30 days Stats: X</span></div>
+=======
                 <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/costats.php">User Points</a></span>
                 <span class="info-box-number">Today: 
                 <br>Last 30 days: </span></div>
+>>>>>>> origin/master
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
@@ -114,7 +120,7 @@ Last 8 days IFTA: X</span></div><!-- /.info-box-content -->
                <span class="info-box-icon bg-purple"><i class="fa fa-map-marker"></i></span>
                </a>
                 <div class="info-box-content">
-                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/accessorials.php"> Accessorials </a></span><span class="info-box-number">View</span></div>
+                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/accessorials.php"> Edit HWB Accessorials </a></span><span class="info-box-number">View</span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
@@ -133,7 +139,7 @@ Last 8 days IFTA: X</span></div><!-- /.info-box-content -->
                <span class="info-box-icon bg-#607D8B"><i class="fa fa-check-square-o"></i></span>
                </a>
                 <div class="info-box-content">
-                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/adminvir.php">    VIR Accessorials</a></span><span class="info-box-number">                   View</span></div>
+                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/adminvir.php">    EDIT VIR Accessorials</a></span><span class="info-box-number">                   View</span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->            
