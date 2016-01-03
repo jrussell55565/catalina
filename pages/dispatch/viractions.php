@@ -222,14 +222,10 @@ if (! mysql_query($sql))
 {
     die('Unable to INSERT truck VIR into table: ' . mysql_error());
 }
+$truck_po = mysql_insert_id();
 
 if (($trucktype == 'combo') && ($trailer_number != ''))
 {
-    # Now get the last vir_itemnum so we can use it to populate the child record (trailer)
-    $sql = "SELECT vir_itemnum FROM virs WHERE truck_number = $truck_number ORDER BY vir_itemnum DESC LIMIT 1";
-    $result = mysql_query($sql);
-    $row = mysql_fetch_array($result,MYSQL_BOTH);
-
     # Insert into virs to populate the trailer info now.
     $sql = "INSERT INTO virs (
     employee_id, /* employee_id = $employee_id */
@@ -304,13 +300,14 @@ if (($trucktype == 'combo') && ($trailer_number != ''))
     NULL,
     NULL,
     '$trailer_vir_condition_tire',
-    ".$row[0]."
+    $truck_po
     )";
 
     if (! mysql_query($sql))
     {
         die('Unable to INSERT trailer VIR into table: ' . mysql_error());
     }
+    $trailer_po = mysql_insert_id();
 }
 
 # Send the email out
