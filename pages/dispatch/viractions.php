@@ -314,7 +314,7 @@ if (($trucktype == 'combo') && ($trailer_number != ''))
 # Reset the trucktype if it's 'combo'
 ($trucktype == 'combo' ? $trucktype = 'semi' : $trucktype = $trucktype);
 $to = "trucks@catalinacartage.com";
-$subject = "VIR $truck_number / $trailer_number / $preorposttrip";
+$subject = "VIR $truck_number / $trailer_number / $preorposttrip $truck_po, $trailer_po";
 $body = <<<EOT
 Driver: $username
 Truck Type: $trucktype
@@ -323,6 +323,9 @@ Trailer: $trailer_number, $trailer_vir_condition
 Date: $insp_date
 Start Time: $insp_start_time
 End Time  : $insp_end_time
+Truck Maintenance PO: $truck_po
+Trailer Maintenance PO: $trailer_po
+Truck Odometer: $truckodometer
 
 General Notes: $vir_notes_finish
 
