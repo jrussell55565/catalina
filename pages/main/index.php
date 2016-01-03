@@ -529,13 +529,13 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
                 </div><!-- /.box-header -->
                 <div class="box-body">
                   <div class="row">
-                   <form class="form" method="post" action="http://tice.zapto.org:80/pages/main/index.php">
+                   <form class="form" method="post" action="<?php echo HTTP;?>/pages/main/index.php">
                    <div class="form-group">
                     <div class="col-lg-12">
                      <div class="well">
 <div class="input-group">
 <span class="input-group-addon" style="border: 0px; background: transparent">
- <img width="50px" src="http://tice.zapto.org:80/dist/img/userimages/jrussell_avatar" class="img-circle" alt="User Image">
+ <img width="50px" src="<?php echo HTTP;?>dist/img/userimages/jrussell_avatar" class="img-circle" alt="User Image">
 </span>
 <input type="text" class="form-control" name="message" id="message" placeholder="Share an update..." value="" required="">
 <div class="input-group-inline">
