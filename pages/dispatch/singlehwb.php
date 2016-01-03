@@ -298,7 +298,7 @@ if ($row['status'] == "Delivered")
               {
               ?>
                   <tr role="row" class="even">
-                    <td><?php echo "$export_row[driver]";?></td>
+                    <td><?php echo "$export_row[updated_by]";?></td>
                     <td><?php echo "$export_row[date]";?></td>
                     <td><?php echo "$export_row[status]";?></td>
                     <td><?php echo "$export_row[trace_notes]";?></td>

@@ -282,7 +282,7 @@ if ($pallets == '')
   $pallets = 'NULL';
 }
 
-$statement = "INSERT INTO driverexport (employee_id,hawbNumber,driver,status,hawbDate,dueDate,date,trace_notes,accessorials,pieces,pallets,sts_points)
+$statement = "INSERT INTO driverexport (employee_id,hawbNumber,updated_by,status,hawbDate,dueDate,date,trace_notes,accessorials,pieces,pallets,sts_points)
 VALUES (\"$employee_id\",\"$hawb\",\"$drivername_export\",\"$status\",(select str_to_date(hawbDate,'%c/%e/%Y') as hawbDate from dispatch WHERE hawbNumber=\"$hawb\"),(select str_to_date(dueDate,'%c/%e/%Y') as dueDate from dispatch WHERE hawbNumber=\"$hawb\"),now(),$trace_notes,$accessorial_override,$pieces,$pallets,1)";
 if (! mysql_query($statement))
 {
