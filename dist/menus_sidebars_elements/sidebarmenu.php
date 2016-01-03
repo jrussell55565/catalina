@@ -12,9 +12,7 @@
                 <li class="active"><a href="/pages/dispatch/ifta.php"><i class="fa fa-circle-o"></i> Ifta Reporting</a></li>
                 <li class="active"><a href="/pages/dispatch/admin/csa.php"><i class="fa fa-circle-o"></i> DOT Saftey</a></li>
                 <li class="active"><a href="/pages/dispatch/location.php"><i class="fa fa-circle-o"></i> Locate Users</a></li>
-                <li class="active"><a href="/pages/dispatch/logintrace.php"><i class="fa fa-circle-o"></i> Login Trace</a></li>
-            </ul>
-  </li>
+                <li class="active"><a href="/pages/dispatch/logintrace.php"><i class="fa fa-circle-o"></i> Login Trace</a></li></ul></li>
 
 <!-- Remove Below
             <li class="treeview">
