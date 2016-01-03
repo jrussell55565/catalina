@@ -129,9 +129,10 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 $statement = "SELECT truck_vir_condition from virs WHERE truck_number = $truckid ORDER BY vir_itemnum DESC LIMIT 1";
                 $record = mysql_query($statement);
                 $record = mysql_fetch_array($record);
+                $a = explode(',',$record[0]);
                 ?>
                 <td colspan="2"><a href="vir_previous.php?truck_number=<?php echo $truckid;?>&trailer_number=<?php echo $trailerid;?>"> Previous VIR </a>
-                <?php echo explode(',',$record[0])[0];?>
+                <?php echo $a[0];?>
               </tr>
               <tr>
                 <td>Trailer
@@ -142,9 +143,10 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 $statement = "SELECT trailer_vir_condition from virs WHERE trailer_number = $trailerid ORDER BY vir_itemnum DESC LIMIT 1";
                 $record = mysql_query($statement);
                 $record = mysql_fetch_array($record);
+                $a = explode(',',$record[0]);
                 ?>
                 <td colspan="2"><a href="vir_previous.php?truck_number=<?php echo $truckid;?>&trailer_number=<?php echo $trailerid;?>">Previous VIR </a>
-                <?php echo explode(',',$record[0])[0];?>
+                <?php echo $a[0];?>
               </tr>
               <tr>
                 <td colspan="4"><div align="center">Pre Trip:
