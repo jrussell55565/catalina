@@ -30,12 +30,11 @@ sub get_vtext
   foreach("vir_pretrip","vir_posttrip")
   {
      my $sql = "SELECT
-                vtext, ".$_."_message
+                vtext, ".$_."_message, email, vir_vtext_enabled, vir_email_enabled
             FROM
                 users
             WHERE
-                vir_vtext_enabled = '1'
-                AND vtext != ''
+                vtext != ''
                 AND ".$_."_message != ''
                 AND ".$_."_time != ''
                 AND HOUR(STR_TO_DATE(".$_."_time, '%H:%i')) = HOUR(NOW())";
@@ -48,7 +47,14 @@ sub get_vtext
     while(my @data = $sth->fetchrow_array)
     {
       # Sending email to $data[0] with subject $data[1]
-      vtext_notify($data[0],$data[1]);
+      if ($data[3] == "1")
+      {
+        vtext_notify($data[0],$data[1]);
+      }
+      if ($data[4] == "1")
+      {
+        vtext_notify($data[2],$data[1]);
+      }
     }
     $dbh->disconnect();
 
