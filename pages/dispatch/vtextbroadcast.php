@@ -2,7 +2,7 @@
 session_start();
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 $body = $_POST['vtext_broadcast'];
-$subject = "Broadcast Message";
+$subject = "msg";
 $email = "dispatch@catalinacartage.com";
 $headers = "From: $email" . "\r\n" .
 "CC: jaime.russell@catalinacartage.com" . "\r\n" .
