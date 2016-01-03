@@ -308,6 +308,14 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 <link rel="stylesheet" href="/dist/css/animate.css">
+<style>
+.chart-legend li span{
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+}
+</style>
 </head>
 <body class="skin-blue sidebar-mini">
 <div class="wrapper">
@@ -359,12 +367,13 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                   <div class="row">
                     <div class="col-md-8">
                       <p class="text-center">
-                        <strong>Pickups vs. Deliveries - 12 months.</strong>
+                        <strong>Dispatch vs. Update - 12 months.</strong>
                       </p>
                       <div class="chart">
                         <!-- Sales Chart Canvas -->
-                        <canvas id="dispatchChart" style="height: 280px; width: 760px;" width="1520" height="360"></canvas>
+                        <canvas id="dispatchChart" style="height: 380px; width: 760px;" width="1520" height="360"></canvas>
                       </div><!-- /.chart-responsive -->
+                        <div id="js-legend" class="chart-legend"></div>
                     </div><!-- /.col -->
                     <div class="col-md-4">
                       <p class="text-center">
@@ -497,6 +506,12 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
                           <div class="progress-bar progress-bar-red" style="width: 10%"></div>
                         </div>
                       </div><!-- /.progress-group -->
+                        <div class="progress-group">
+                        <span class="progress-text">VIR Updates</span><span class="progress-number"><b>5</b>/40</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-red" style="width: 10%"></div>
+                        </div>
+                      </div><!-- /.progress-group -->
                     </div><!-- /.col -->
                   </div><!-- /.row -->
                 </div><!-- ./box-body -->
@@ -592,50 +607,11 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
 var ctx = $("#dispatchChart").get(0).getContext("2d");
 // This will get the first returned node in the jQuery collection.
 <?php
-$sql = "SELECT
-monthname(str_to_date(dueDate,'%c/%e/%Y')) AS del_month,
-sum(CASE monthname(str_to_date(dueDate,'%c/%e/%Y'))
-WHEN 'January' THEN 1
-WHEN 'February' THEN 1
-WHEN 'March' THEN 1
-WHEN 'April' THEN 1
-WHEN 'May' THEN 1
-WHEN 'June' THEN 1
-WHEN 'July' THEN 1
-WHEN 'August' THEN 1
-WHEN 'September' THEN 1
-WHEN 'Octover' THEN 1
-WHEN 'November' THEN 1
-WHEN 'December' THEN 1
-ELSE 0
-END) AS deliveries
-FROM
-    dispatch
-WHERE
-
-    delAgentDriverPhone = (SELECT 
-            driverid
-        FROM
-            users
-        WHERE
-            username = \"$username\")           
-AND 
-str_to_date(dueDate,'%c/%e/%Y') > DATE(now()) - INTERVAL 12 MONTH
-group by del_month
-order by str_to_date(dueDate,'%c/%e/%Y')";
-$months = array();
-$pickups = array();
-$deliveries = array();
-$result = mysql_query($sql);
-while ($row = mysql_fetch_array($result,MYSQL_BOTH))
-{
-  array_push($months,'"'.$row[0].'"');
-  array_push($deliveries,$row[1]);
-}
-mysql_free_result($result);
-
-$sql = "SELECT
-monthname(str_to_date(hawbDate,'%c/%e/%Y')) AS pu_month,
+# Create array with months.
+$sql = "select monthname(str_to_date(pu_month,'%m-%y')),sum(pickups) from
+(
+SELECT
+date_format(str_to_date(hawbDate,'%c/%e/%Y'),'%m-%y') pu_month,
 sum(CASE monthname(str_to_date(hawbDate,'%c/%e/%Y'))
 WHEN 'January' THEN 1
 WHEN 'February' THEN 1
@@ -664,44 +640,125 @@ WHERE
 AND 
 str_to_date(hawbDate,'%c/%e/%Y') > DATE(now()) - INTERVAL 12 MONTH
 group by pu_month
-order by str_to_date(hawbDate,'%c/%e/%Y')";
+UNION ALL
+SELECT
+date_format(str_to_date(dueDate,'%c/%e/%Y'),'%m-%y') pu_month,
+sum(CASE monthname(str_to_date(dueDate,'%c/%e/%Y'))
+WHEN 'January' THEN 1
+WHEN 'February' THEN 1
+WHEN 'March' THEN 1
+WHEN 'April' THEN 1
+WHEN 'May' THEN 1
+WHEN 'June' THEN 1
+WHEN 'July' THEN 1
+WHEN 'August' THEN 1
+WHEN 'September' THEN 1
+WHEN 'October' THEN 1
+WHEN 'November' THEN 1
+WHEN 'December' THEN 1
+ELSE 0
+END) AS pickups
+FROM
+    dispatch
+WHERE
+
+    delAgentDriverPhone = (SELECT 
+            driverid
+        FROM
+            users
+        WHERE
+            username = \"$username\")           
+AND 
+str_to_date(dueDate,'%c/%e/%Y') > DATE(now()) - INTERVAL 12 MONTH
+group by pu_month
+) foo
+group by pu_month
+order by pu_month DESC";
+
+$months = array();
+$dispatch_number = array();
 $result = mysql_query($sql);
 while ($row = mysql_fetch_array($result,MYSQL_BOTH))
 {
-  array_push($pickups,$row[1]);
+  array_push($months,"'$row[0]'");
+  array_push($dispatch_number,$row[1]);
 }
 mysql_free_result($result);
 
-$pickups =  rtrim(implode(',',$pickups),',');
-$deliveries =  rtrim(implode(',',$deliveries),',');
 $months =  rtrim(implode(',',$months),',');
+$dispatch_number =  rtrim(implode(',',$dispatch_number),',');
 ?>
 var data = {
     labels: [<?php echo $months;?>],
     datasets: [
         {
-            label: "Pickups",
+            label: "Dispatched",
             fillColor: "rgba(220,220,220,0.2)",
             strokeColor: "rgba(220,220,220,1)",
             pointColor: "rgba(220,220,220,1)",
             pointStrokeColor: "#fff",
             pointHighlightFill: "#fff",
             pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [<?php echo $pickups;?>]
+            data: [<?php echo $dispatch_number;?>]
         },
-        {
-            label: "Deliveries",
+<?php
+$sql = "SELECT
+monthname(date) pu_month,
+SUM(CASE monthname(date)
+WHEN 'January' THEN 1
+WHEN 'February' THEN 1
+WHEN 'March' THEN 1
+WHEN 'April' THEN 1
+WHEN 'May' THEN 1
+WHEN 'June' THEN 1
+WHEN 'July' THEN 1
+WHEN 'August' THEN 1
+WHEN 'September' THEN 1
+WHEN 'October' THEN 1
+WHEN 'November' THEN 1
+WHEN 'December' THEN 1
+ELSE 0
+END) AS pickups
+FROM
+    driverexport
+WHERE employee_id =
+(select employee_id from users where username = \"$username\")
+AND
+date > DATE(now()) - INTERVAL 12 MONTH
+AND
+(status = 'Picked Up' OR status = 'Delivered')
+group by pu_month
+order by date DESC";
+
+$months = array();
+$dispatch_number = array();
+$result = mysql_query($sql);
+while ($row = mysql_fetch_array($result,MYSQL_BOTH))
+{
+  array_push($months,"'$row[0]'");
+  array_push($dispatch_number,$row[1]);
+}
+mysql_free_result($result);
+
+$months =  rtrim(implode(',',$months),',');
+$dispatch_number =  rtrim(implode(',',$dispatch_number),',');
+?>
+       {
+            label: "Updated",
             fillColor: "rgba(151,187,205,0.2)",
             strokeColor: "rgba(151,187,205,1)",
             pointColor: "rgba(151,187,205,1)",
             pointStrokeColor: "#fff",
             pointHighlightFill: "#fff",
             pointHighlightStroke: "rgba(151,187,205,1)",
-            data: [<?php echo $deliveries;?>]
-        }
+            data: [<?php echo $dispatch_number;?>]
+        },
     ]
 };
-var myLineChart = new Chart(ctx).Line(data);
+var myLineChart = new Chart(ctx).Line(data, {
+});
+x = myLineChart.generateLegend();
+$("#js-legend").html(x);
 </script>
 
 <!-- Demo -->
