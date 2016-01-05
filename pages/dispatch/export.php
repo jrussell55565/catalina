@@ -72,7 +72,7 @@ switch ($statustype)
 {
     case "Arrived to Shipper":
 	    $status = "Arrived to Shipper";
-	    $accessorials = processAccessorials($hawb,"PU",$username,0);
+	    $accessorials = processAccessorials($hawb,"PU",$username);
         $drivername = $puDriver;
 	    if ($remarks != '')
 	    {
@@ -82,7 +82,7 @@ switch ($statustype)
 
     case "Accepted PU":
 	    $status = "Accepted PU";
-	    $accessorials = processAccessorials($hawb,"PU",$username,0);
+	    $accessorials = processAccessorials($hawb,"PU",$username);
         $drivername = $puDriver;
 	    if ($remarks != '')
 		{
@@ -92,7 +92,7 @@ switch ($statustype)
 
     case "Arrived to Consignee":
         $status = "Arrived To Consignee";
-	    $accessorials = processAccessorials($hawb,"DEL",$username,0);
+	    $accessorials = processAccessorials($hawb,"DEL",$username);
         $drivername = $delDriver;
 	    if ($remarks != '')
 		{
@@ -102,7 +102,7 @@ switch ($statustype)
 
     case "Accepted DEL":
 	    $status = "Accepted DEL";
-	    $accessorials = processAccessorials($hawb,"PU",$username,0);
+	    $accessorials = processAccessorials($hawb,"PU",$username);
         $drivername = $delDriver;
 	    if ($remarks != '')
 		    {
@@ -112,7 +112,7 @@ switch ($statustype)
 
     case "Reject PU DEL":
 	    $status = "Reject PU DEL";
-	    $accessorials = processAccessorials($hawb,"PU",$username,0);
+	    $accessorials = processAccessorials($hawb,"PU",$username);
 	    if ($remarks != '')
 		    {
 		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
@@ -121,7 +121,7 @@ switch ($statustype)
 
     case "Trace Note PU":
 	    $status = "Trace Note PU";
-	    $accessorials = processAccessorials($hawb,"PU",$username,0);
+	    $accessorials = processAccessorials($hawb,"PU",$username);
         $drivername = $puDriver;
 	    if ($remarks != '')
 		{
@@ -133,9 +133,9 @@ switch ($statustype)
         $status = "Freight At Dock";
 	    if ($_POST['formname'] == "FreightAtDock.php")
 	    {
-		    $accessorials = processAccessorials($hawb,"PU",$username,0);
+		    $accessorials = processAccessorials($hawb,"PU",$username);
 	    }else{
-		    $accessorials = processAccessorials($hawb,"DEL",$username,0);
+		    $accessorials = processAccessorials($hawb,"DEL",$username);
 	    }
 	    if ($remarks != '')
 		{
@@ -147,9 +147,9 @@ switch ($statustype)
         $status = "Trailer Dropped";
 	    if ($_POST['formname'] == "TrailerDroppedPU.php")
 	    {
-		    $accessorials = processAccessorials($hawb,"PU",$username,0);
+		    $accessorials = processAccessorials($hawb,"PU",$username);
 	    }else{
-		    $accessorials = processAccessorials($hawb,"DEL",$username,0);
+		    $accessorials = processAccessorials($hawb,"DEL",$username);
 	    }
 	    if ($remarks != '')
 		{
@@ -161,7 +161,7 @@ switch ($statustype)
         $status = "Picked Up";
 	    $puconf = "X";
 	    $putime = $localtime;
-	    $accessorials = processAccessorials($hawb,"PU",$username,0);
+	    $accessorials = processAccessorials($hawb,"PU",$username);
         $drivername = $puDriver;
 
 	    if ($remarks != '')
@@ -172,7 +172,7 @@ switch ($statustype)
 
     case "Attempted Pick Up":
         $status = "Attempted Pick Up";
-	    $accessorials = processAccessorials($hawb,"PU",$username,0);
+	    $accessorials = processAccessorials($hawb,"PU",$username);
         $drivername = $puDriver;
 	    if ($remarks != '')
 		{
@@ -182,7 +182,7 @@ switch ($statustype)
 
     case "Attempted Delivery":
         $status = "Attempted Delivery";
-	    $accessorials = processAccessorials($hawb,"DEL",$username,0);
+	    $accessorials = processAccessorials($hawb,"DEL",$username);
         $drivername = $delDriver;
 	    if ($remarks != '')
 		{
@@ -192,7 +192,7 @@ switch ($statustype)
 
     case "Refused":
         $status = "Refused";
-	    $accessorials = processAccessorials($hawb,"DEL",$username,0);
+	    $accessorials = processAccessorials($hawb,"DEL",$username);
 	    if ($remarks != '')
 		{
 		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
@@ -201,7 +201,7 @@ switch ($statustype)
 
     case "Trace Note DEL":
 	    $status = "Trace Note DEL";
-	    $accessorials = processAccessorials($hawb,"DEL",$username,0);
+	    $accessorials = processAccessorials($hawb,"DEL",$username);
         $drivername = $delDriver;
 	    if ($remarks != '')
 		{
@@ -215,7 +215,7 @@ switch ($statustype)
         if ($podname == '') { returnWithError($recordid,'/pages/dispatch/delconfirmed.php','podName'); }
         if ($pieces < 1) { returnWithError($recordid,'/pages/dispatch/delconfirmed.php','pieces'); }
 
-	    $accessorials = processAccessorials($hawb,"DEL",$username,0);
+	    $accessorials = processAccessorials($hawb,"DEL",$username);
         $drivername = $delDriver;
 	    if ($remarks != '')
 	    {
@@ -236,10 +236,13 @@ if (isset($simplestatus))
 if (! isset($doNotSendAccessorial))
 {
     # Accessorials.csv
-    $tmpfnameAccessorial = "accessorial+"."$exportdest+".microtime(true);
-    $fpAccessorial = fopen($_SERVER['DOCUMENT_ROOT']."/exports/$tmpfnameAccessorial.csv", 'w');
-    fwrite($fpAccessorial, "HWB,Type,RevenueChargeName,RevenueChargeAmount\r\n$accessorials");
-    fclose($fpAccessorial);
+    if ($accessorials != '')
+    {
+      $tmpfnameAccessorial = "accessorial+"."$exportdest+".microtime(true);
+      $fpAccessorial = fopen($_SERVER['DOCUMENT_ROOT']."/exports/$tmpfnameAccessorial.csv", 'w');
+      fwrite($fpAccessorial, "HWB,Type,RevenueChargeName,RevenueChargeAmount\r\n$accessorials");
+      fclose($fpAccessorial);
+    }
 }
 
 # Sleep slightly to ensure different file names.
@@ -263,7 +266,7 @@ if ($remarks != '')
   $trace_notes = 'NULL';
 }
 
-$accessorial_override = processAccessorials($hawb,'OVER',$username,1);
+$accessorial_override = processAccessorials($hawb,'OVER',$username);
 
 if ($accessorial_override != '')
 {
@@ -312,31 +315,25 @@ if ($status == "Delivered")
 
 header("Location: /pages/dispatch/orders.php");
 
-function processAccessorials($hawb,$action,$username,$raw)
+function processAccessorials($hawb,$action,$username)
 {
+  $sqlSearchIn = array();
         foreach ($_POST['ck_accessorials'] as $key => $val)
         {
-                $sqlSearchIn .= '"'.$val.'",';
+                array_push($sqlSearchIn,"\"$val\"");
         }
-        foreach ($_POST['bx_accessorials'] as $key => $val)
-        {
-                if ($val == '')
-                {
-                        $sqlSearchIn .= '"'.$key.'",';
-                }else{
-                        $accessorials .= "$hawb,$action,$key,$val\n";
-                }
-        }
-        $sqlArray = rtrim($sqlSearchIn,",");
 
-        if ($raw == 1)
+        $sqlArray = rtrim(implode(',',$sqlSearchIn),",");
+
+        if ($action == "OVER")
         {
             return str_replace('"','',$sqlArray);
         }
-
-        if (! empty($sqlArray))
+        if (count($sqlSearchIn) > 0)
         {
-                $sql = mysql_query("SELECT acc_type,revenue_charge,revenue_amount,input_type FROM accessorials WHERE (acc_type = \"$action\" OR acc_type = \"REVENUE\") AND revenue_charge IN ($sqlArray)");
+                $statement = "SELECT acc_type,revenue_charge,revenue_amount,input_type FROM accessorials WHERE (acc_type = \"$action\" OR acc_type = \"REVENUE\") AND revenue_charge IN ($sqlArray)";
+                $sql = mysql_query($statement);
+
                 while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
                 {
                         $accessorials .= "$hawb,$row[acc_type],$row[revenue_charge],$row[revenue_amount]\r\n";
@@ -351,8 +348,8 @@ function processAccessorials($hawb,$action,$username,$raw)
 			$accessorialsEmail = "Accessorials submitted by $username\r\n\r\n$accessorialsEmail";
 			sendEmail('accessorials@catalinacartage.com',"Accessorials $hawb","$accessorialsEmail");
 		}
+	        return $accessorials;
         }
-	return $accessorials;
 
 }
 
