@@ -53,7 +53,8 @@ if ($_POST['update_csa'])
           violation_time_weight,
           violation_description,
           co_driver,
-          score) 
+          score,
+          author) 
           VALUES (
           '".$row['employee_id']."',
           str_to_date('".$_POST['violation_date']."','%m/%d/%Y'),
@@ -64,7 +65,8 @@ if ($_POST['update_csa'])
           ".$_POST['time_weight'].",
           '".$_POST['description']."',
           '".$_POST['co_driver']."',
-          ".$_POST['score']."
+          ".$_POST['score'].",
+          '".$_SESSION['employee_id']."'
           )";
 
   $result = mysql_query($sql) or die ("unable to insert into csadata_int: ".mysql_error()); 
@@ -310,11 +312,15 @@ where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name')
  </td>
  <td style="padding: 5px">
   <label for="addr1">Group</label>
-  <input type="text" class="form-control"  value="" name="violation_group" required>
+  <select class="form-control" name="violation_group" required>
+   <option value="1">1</option>
+  </select>
  </td>
  <td style="padding: 5px">
   <label for="addr1">Code</label>
-  <input type="text" class="form-control"  value="" name="violation_code" required>
+  <select class="form-control" name="violation_code" required>
+   <option value="1">1</option>
+  </select>
  </td>
  <td style="padding: 5px; width: 90px;">
   <label for="addr1">V. Weight</label>
