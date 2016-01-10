@@ -28,12 +28,21 @@ $statement = "select drivername from users where status = 'Active' ORDER BY 1";
 $result = mysql_query($statement);
 while($row = mysql_fetch_array($result))
 {
+  # Used to populate the driver dropdown box
   array_push($drivers,$row[0]);
 }
 mysql_free_result($result);
 
 if ($_POST['update_csa'])
 {
+  # Get the employee_id for the user specified
+  $statement = "SELECT employee_id FROM users WHERE
+                drivername = '".$_POST['driver']."'";
+
+  $result = mysql_query($statement);
+  $row = mysql_fetch_array($result,MYSQL_BOTH);
+  mysql_free_result($result);
+                
   $sql = "INSERT INTO csadata_int (
           employee_id,
           creation_date,
@@ -46,7 +55,7 @@ if ($_POST['update_csa'])
           co_driver,
           score) 
           VALUES (
-          '".$_POST['hdn_employee_id']."',
+          '".$row['employee_id']."',
           str_to_date('".$_POST['violation_date']."','%m/%d/%Y'),
           '".$_POST['violation_cat']."',
           '".$_POST['violation_group']."',
@@ -57,8 +66,10 @@ if ($_POST['update_csa'])
           '".$_POST['co_driver']."',
           ".$_POST['score']."
           )";
+
   $result = mysql_query($sql) or die ("unable to insert into csadata_int: ".mysql_error()); 
   unset($_POST);
+  header("Location: csa.php");
 }
 ?>
 <!DOCTYPE html>
@@ -132,7 +143,19 @@ if ($_POST['update_csa'])
  </thead>
  <tbody>
 <?php
-$sql = "select distinct first_name,last_name from csadata 
+if ($_SESSION['login'] == 2)
+{
+  $predicate = " AND lower(first_name) = lower('".$_SESSION['fname']."')
+                 and lower(last_name) = lower('".$_SESSION['lname']."')";
+}
+$sql = "select distinct first_name,last_name from
+(
+select distinct first_name,last_name from csadata
+UNION
+select upper(fname), upper(lname) from users
+WHERE employee_id in 
+(select employee_id from csadata_int)
+) a
         WHERE 1=1 $predicate ORDER BY 1";
 
 $sql = mysql_query($sql);
@@ -153,7 +176,6 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 <td colspan="9">
   <div class="well">
 <table>
-<form enctype="multipart/form-data" role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <tr>
  <?php 
        $first_name = $row['first_name'];
@@ -179,6 +201,7 @@ violation_description,
 (SELECT lname from users WHERE drivername = co_driver) co_driver_last_name
 from csadata_int where employee_id = (select employee_id from users
 where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name'))";
+
        $sqlDetails = mysql_query($sqlDetails);
        while ($rowDetails = mysql_fetch_array($sqlDetails, MYSQL_BOTH))
        { 
@@ -224,15 +247,56 @@ where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name')
  }
  mysql_free_result($sqlDetails);
  ?>
+   </table>
+  </div>
+</td>
+</tr>
+<?php
+                      }
+                      mysql_free_result($sql);
+?>
+</tbody>
+</table>
+                </div><!-- ./box-body -->
+               </div><!-- /.col -->
+          </div><!-- /.row -->
+
+<?php if ($_SESSION['login'] == 1)
+      {
+      ?>
+            <div class="col-md-12">
+              <div class="box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Add Violations</h3>
+                </div><!-- /.box-header -->
+                 <div class="box-body">
+
+                  <form enctype="multipart/form-data" role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<table>
   <tr>
  <td style="padding: 5px">
-  <label for="status">Violation Date</label>
+  <label for="status">Date</label>
                   <div class="input-daterange input-group" id="datepicker_update">
                    <input type="text" class="input-sm form-control datepicker" name="violation_date" data-date-format="mm/dd/yyyy"/ required>
 </div>
  </td>
+ <td style="padding: 5px" colspan="2">
+  <label for="addr1">Driver</label>
+  <select class="form-control"  value="" name="driver" required>
+  <option value="">Select Driver</option>
+  <?php
+  foreach($drivers as $i)
+  {
+  ?>
+  <option value="<?php echo $i;?>"><?php echo $i;?></option>
+  <?php
+  }
+  ?>
+  </select>
+ </td>
+
  <td style="padding: 5px">
-  <label for="status">Violation Cat.</label>
+  <label for="status">Category</label>
   <select class="form-control" name="violation_cat">
   <?php
   foreach($violations as $a)
@@ -245,15 +309,15 @@ where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name')
   </select>
  </td>
  <td style="padding: 5px">
-  <label for="addr1">Violation Group</label>
+  <label for="addr1">Group</label>
   <input type="text" class="form-control"  value="" name="violation_group" required>
  </td>
  <td style="padding: 5px">
-  <label for="addr1">Violation Code</label>
+  <label for="addr1">Code</label>
   <input type="text" class="form-control"  value="" name="violation_code" required>
  </td>
- <td style="padding: 5px">
-  <label for="addr1">Violation Weight</label>
+ <td style="padding: 5px; width: 90px;">
+  <label for="addr1">V. Weight</label>
   <select class="form-control"  value="" name="violation_weight">
   <?php
   foreach(range(1,10) as $i)
@@ -265,11 +329,11 @@ where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name')
   ?>
   </select>
  </td>
- <td style="padding: 5px">
-  <label for="addr1">Time Weight</label>
+ <td style="padding: 5px; width: 90px;">
+  <label for="addr1">T. Weight</label>
   <select class="form-control"  value="" name="time_weight">
   <?php
-  foreach(range(1,3) as $i)
+    foreach(range(1,3) as $i)
   {
   ?>
   <option value="<?php echo $i;?>"><?php echo $i;?></option>
@@ -285,6 +349,7 @@ where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name')
  <td style="padding: 5px" colspan="2">
   <label for="addr1">Co-Driver</label>
   <select class="form-control"  value="" name="co_driver">
+  <option value="NULL">Select Driver</option>
   <?php
   foreach($drivers as $i)
   {
@@ -303,8 +368,6 @@ where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name')
    <tr>
      <td style="padding: 5px">
        <input type="submit" name="update_csa" class="btn btn-primary" value="Submit">
-       <input type="hidden" name="hdn_fname" value="<?php echo $row['first_name'];?>">
-       <input type="hidden" name="hdn_lname" value="<?php echo $row['last_name'];?>">
        <?php
         $sql_emp = "SELECT employee_id from users where lower(\"".$row['first_name']."\") = lower(fname)
                 AND lower(\"".$row['last_name']."\") = lower(lname)";
@@ -314,25 +377,14 @@ where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name')
        ?>
        <input type="hidden" name="hdn_employee_id" value="<?php echo $row_emp[0];?>">
      </td>
-    </tr>
-   </form>
-   </table>
-  </div>
-</td>
-</tr>
-<?php
-                      }
-                      mysql_free_result($sql);
-?>
-</tbody>
+         </tr>
 </table>
-                </div><!-- ./box-body -->
-               </div><!-- /.col -->
-          </div><!-- /.row -->
+   </form>
+ 
+                 </div>
+                </div>
+              </div>
 
-<?php if ($_SESSION['login'] == 1)
-      {
-      ?>
             <div class="col-md-12">
               <div class="box">
                 <div class="box-header with-border">
