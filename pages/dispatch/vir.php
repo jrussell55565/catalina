@@ -131,7 +131,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 $record = mysql_fetch_array($record);
                 $a = explode(',',$record[0]);
                 ?>
-                <td colspan="2"><a href="vir_previous.php?truck_number=<?php echo $truckid;?>&trailer_number=<?php echo $trailerid;?>"> Previous VIR </a>
+                <td colspan="2"><a href="vir_previous.php"> Previous VIR </a>
                 <?php echo $a[0];?>
               </tr>
               <tr>
@@ -145,7 +145,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 $record = mysql_fetch_array($record);
                 $a = explode(',',$record[0]);
                 ?>
-                <td colspan="2"><a href="vir_previous.php?truck_number=<?php echo $truckid;?>&trailer_number=<?php echo $trailerid;?>">Previous VIR </a>
+                <td colspan="2"><a href="vir_previous.php">Previous VIR </a>
                 <?php echo $a[0];?>
               </tr>
               <tr>

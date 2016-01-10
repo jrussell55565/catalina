@@ -10,18 +10,6 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
 mysql_select_db($db_name) or DIE('Database name is not available!');
 
-$username = $_SESSION['userid'];
-$drivername = $_SESSION['drivername'];
-
-if ($_GET['action'] == 'loginas')
-{
-$_SESSION['userid'] = $_GET['username'];
-$_SESSION['username'] = $_GET['username'];
-$_SESSION['drivername'] = $_GET['drivername'];
-$_SESSION['login'] = 2;
-header("Location: /pages/main/index.php");
-}
-
 if(isset($_GET['submit']))
 {
   # Override the time predicate here.
@@ -120,7 +108,7 @@ folder instead of downloading all of them to reduce the load. -->
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
 <section class="content-header">
-  <h1> Admin Previous VIR</h1>
+  <h1>Previous VIR</h1>
   <ol class="breadcrumb">
     <li>
       <a href="#">
@@ -151,7 +139,7 @@ folder instead of downloading all of them to reduce the load. -->
 # If non-admin logs in then only show their info
 if ($_SESSION['login'] == 2)
 {
-$restricted_predicate = "AND (truck_number = ".$_GET['truck_number']." OR trailer_number = ".$_GET['trailer_number'].")";
+$restricted_predicate = "AND employee_id = '".$_SESSION['employee_id']."'";
 }else{
 $restricted_predicate = '';
 }
@@ -162,6 +150,7 @@ foreach (range(0, 10) as $number)
 $sql = "SELECT * FROM virs WHERE 1=1 $restricted_predicate
 AND insp_date = date(now()) - INTERVAL $number DAY
 ORDER BY insp_date DESC, vir_itemnum ASC";
+
 $sql = mysql_query($sql);
 ?>
             <tr>
