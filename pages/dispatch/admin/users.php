@@ -15,9 +15,19 @@ $drivername = $_SESSION['drivername'];
 
 if ($_GET['action'] == 'loginas')
 {
-  $_SESSION['userid'] = $_GET['username'];
-  $_SESSION['username'] = $_GET['username'];
-  $_SESSION['drivername'] = $_GET['drivername'];
+  $statement = "SELECT username,
+                       drivername,
+                       fname,
+                       lname
+                FROM users WHERE employee_id = '" . mysql_real_escape_string($_GET['employee_id']) . "'";
+
+  $results = mysql_query($statement);
+  $row = mysql_fetch_array($results, MYSQL_BOTH);
+  $_SESSION['userid'] = $row['username'];
+  $_SESSION['username'] = $row['username'];
+  $_SESSION['drivername'] = $row['drivername'];
+  $_SESSION['fname'] = $row['fname'];
+  $_SESSION['lname'] = $row['lname'];
   $_SESSION['login'] = 2;
   header("Location: /pages/main/index.php");
 }
@@ -358,6 +368,7 @@ if ($_SESSION['login'] == 2)
 }
 $sql = "SELECT 
      id,
+     employee_id,
      username,
      drivername,
      fname,
@@ -419,7 +430,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
   href="#<?php echo $row['username'];?>_details"aria-expanded="false" aria-controls="<?php echo $row['username'];?>_details">
   </a></div>
 </td>
-<td><a href="<?php echo $_SERVER['PHP_SELF'];?>?action=loginas&username=<?php echo $row['username'];?>&drivername=<?php echo $row['drivername'];?>">
+<td><a href="<?php echo $_SERVER['PHP_SELF'];?>?action=loginas&employee_id=<?php echo $row['employee_id'];?>">
     <i class="glyphicon glyphicon-lock"></i></a></td>
 <td><?php echo $row['status'];?></td>
 <td><?php echo $row['title'];?></td>
