@@ -252,6 +252,26 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
   {
     $predicate = "AND office='TUS'";
   }
+    if ($audience == 'PHL')
+  {
+    $predicate = "AND office='PHL'";
+  }
+    if ($audience == 'DEN')
+  {
+    $predicate = "AND office='DEN'";
+  }
+    if ($audience == 'LAX')
+  {
+    $predicate = "AND office='LAX'";
+  }
+    if ($audience == 'MIA')
+  {
+    $predicate = "AND office='MIA'";
+  }
+    if ($audience == 'ORD')
+  {
+    $predicate = "AND office='ORD'";
+  }
   $message = $_POST['message'];
   $sql = "SELECT 1";
   if (isset($_POST['sendEmail']))
@@ -543,6 +563,11 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
 <option>All</option>
 <option>PHX</option>
 <option>TUS</option>
+<option>PHL</option>
+<option>DEN</option>
+<option>LAX</option>
+<option>MIA</option>
+<option>ORD</option>
 </select>
 </div>
                     <div class="col-lg-4">

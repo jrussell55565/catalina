@@ -481,6 +481,11 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
    <select class="form-control" name="office" id="office">
      <option value="PHX" <?php if ($row['office'] == 'PHX') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>PHX</option>
      <option value="TUS"<?php if ($row['office'] == 'TUS') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>TUS</option>
+     <option value="PHL" <?php if ($row['office'] == 'PHL') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>PHL</option>
+     <option value="DEN" <?php if ($row['office'] == 'DEN') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>DEN</option>
+     <option value="LAX" <?php if ($row['office'] == 'LAX') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>LAX</option>
+     <option value="MIA" <?php if ($row['office'] == 'MIA') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>MIA</option>
+     <option value="ORD" <?php if ($row['office'] == 'ORD') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>ORD</option>
    </select> 
  </td>
 </tr>
