@@ -291,7 +291,7 @@ if (! empty($_FILES["fuelUpload"]["name"]))
 
 <!-- Animated Top Menu Insert PHP Reference to /wwwlive/dist/menus_sidebars_elements  -->
 
-<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/topmenuadminanimation.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/topmenuanimation.php');?>
 
 <!-- End Animated Top Menu -->
           

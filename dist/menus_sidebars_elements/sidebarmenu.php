@@ -43,7 +43,7 @@
                 <li><a href="/pages/info/inspectiontypes.php"><i class="fa fa-circle-o"></i>DOT Inspection Info</a></li>
                 <li><a href="/pages/layout/boxed.html"><i class="fa fa-circle-o"></i>IFTA Trip Info</a></li>
                 <li><a href="/pages/layout/fixed.html"><i class="fa fa-circle-o"></i>Chain Laws Info</a></li>
-                <li><a href="/pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i></a></li>
+                <li><a href="/pages/info/otrpodimage.php"><i class="fa fa-circle-o"></i>OTR Documents Policy</a></li>
               </ul>
   </li>
 
