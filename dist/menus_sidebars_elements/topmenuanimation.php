@@ -30,7 +30,8 @@
 </a>               
                 <div class="info-box-content">
                   <p><span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/vir.php">VIRs</a></span>
-                    <span class="info-box-number">Today: <?php echo $virs_daily_count;?> of 2<br>Last 8 days: <?php echo $virs_weekly_count;?> of 16</span></p>
+                    <span class="info-box-number">Today: <?php echo $virs_daily_count;?> of 2  <br>
+                  Last 8 days: <?php echo $virs_weekly_count;?> of 16</span></p>
 				</div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
@@ -52,15 +53,9 @@ a.button2 {
                 <span class="info-box-icon bg-green"><i class="fa fa-tachometer"></i></span>
                 </a>
                 <div class="info-box-content">
-<<<<<<< HEAD
-                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/userstats.php">User Stats</a></span>
+                <span class="info-box-text"><a href="/pages/dispatch/userstats.php">User Stats</a></span>
                 <span class="info-box-number">Todays Stats: X
                 <br>Last 30 days Stats: X</span></div>
-=======
-                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/costats.php">User Points</a></span>
-                <span class="info-box-number">Today: 
-                <br>Last 30 days: </span></div>
->>>>>>> origin/master
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
@@ -77,7 +72,7 @@ a.button2 {
                <span class="info-box-icon bg-yellow"><i class="fa fa-newspaper-o"></i></span>
 </a>
                 <div class="info-box-content">
-                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/ifta.php"> IFTA Reports</a></span><span class="info-box-number">Todays  IFTA: X<br>
+                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/ifta.php"> IFTA/Fuel Reports</a></span><span class="info-box-number">Todays  IFTA: X<br>
 Last 8 days IFTA: X</span></div><!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
@@ -101,7 +96,7 @@ Last 8 days IFTA: X</span></div><!-- /.info-box-content -->
 
                 <div class="info-box-content">
                   <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/csa.php">  DOT Safety Report</a></span>
-                <span class="info-box-number">                  View Your Report</span></div>
+                <span class="info-box-number">                  Includes Company info also</span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->            
@@ -120,7 +115,7 @@ Last 8 days IFTA: X</span></div><!-- /.info-box-content -->
                <span class="info-box-icon bg-purple"><i class="fa fa-map-marker"></i></span>
                </a>
                 <div class="info-box-content">
-                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/accessorials.php"> Edit HWB Accessorials </a></span><span class="info-box-number">View</span></div>
+                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/location.php">VIR Accessorials</a></span><span class="info-box-number"> Admin Only</span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
@@ -139,7 +134,7 @@ Last 8 days IFTA: X</span></div><!-- /.info-box-content -->
                <span class="info-box-icon bg-#607D8B"><i class="fa fa-check-square-o"></i></span>
                </a>
                 <div class="info-box-content">
-                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/adminvir.php">    EDIT VIR Accessorials</a></span><span class="info-box-number">                   View</span></div>
+                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/userstats.php">   Accessorials</a></span><span class="info-box-number">                   Admin Only</span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->            
@@ -164,7 +159,7 @@ Last 8 days IFTA: X</span></div><!-- /.info-box-content -->
                </a>
                 <div class="info-box-content">
                   <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/users.php"> User Profile</a></span>
-                  <span class="info-box-number">Contact Other Users</span><span class="info-box-number"><br>
+                  <span class="info-box-number">Edit User</span><span class="info-box-number"><br>
                 </span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->

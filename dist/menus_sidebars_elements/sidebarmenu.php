@@ -7,7 +7,7 @@
                 <li class="active"><a href="/pages/main/index.php"><i class="fa fa-circle-o"></i> Dashboard</a></li>
                 <li class="active"><a href="/pages/dispatch/orders.php"><i class="fa fa-circle-o"></i> Load Board</a></li>
                 <li class="active"><a href="/pages/dispatch/vir.php"><i class="fa fa-circle-o"></i> VIR Reporting</a></li>
-                <li class="active"><a href="/pages/dispatch/vir_review.php"><i class="fa fa-circle-o"></i> VIR Review</a></li>
+                <li class="active"><a href="/pages/dispatch/vir_previous.php"><i class="fa fa-circle-o"></i> VIR Review</a></li>
                 <li class="active"><a href="/pages/dispatch/userstats.php"><i class="fa fa-circle-o"></i> User Stats</a></li>
                 <li class="active"><a href="/pages/dispatch/ifta.php"><i class="fa fa-circle-o"></i> Ifta Reporting</a></li>
                 <li class="active"><a href="/pages/dispatch/admin/csa.php"><i class="fa fa-circle-o"></i> DOT Saftey</a></li>
