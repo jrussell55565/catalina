@@ -281,11 +281,11 @@ if (! empty($_FILES["fuelUpload"]["name"]))
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Users Profile</h1>
+            Admin Dashboard</h1>
             
           <ol class="breadcrumb">
-            <li><a href="/pages/main/index.php"><i class="fa fa-home"></i> Home</a></li>
-            <li class="active">User Profile</li>
+            <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+            <li class="active">Dashboard</li>
           </ol>
         </section>
 
@@ -301,18 +301,8 @@ if (! empty($_FILES["fuelUpload"]["name"]))
             <div class="col-md-12">
               <div class="box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">
-                    <input name="radio" type="radio" id="activeusers" value="activeusers" checked>
-                    <label for="activeusers"></label>
-                    <label for="userstatus"></label>
-                  Active Users / 
-                  <input type="radio" name="radio" id="inactiveusers" value="inactiveusers">
-                  <label for="inactiveusers"></label>
-                  Inactive Users / 
-                  <input type="radio" name="radio" id="allusers" value="allusers">
-                  <label for="allusers"></label>
-                  All Users</h3>
-</div><!-- /.box-header -->
+                  <h3 class="box-title">Users</h3>
+                </div><!-- /.box-header -->
                 <div class="box-body">
 <table class="table table-striped">
  <thead>
@@ -339,83 +329,6 @@ if (! empty($_FILES["fuelUpload"]["name"]))
           $glyphName = "top";
           $orderSql = "ORDER BY drivername ASC";
         }
-// Jaime Added these items below
-      }
-      if ($_GET['sort'] == 'title')
-      {
-        if ($_GET['order'] == 'desc')
-        {
-          $orderStatus = 'asc';
-          $glyphStatus = "bottom";
-          $orderSql = "ORDER BY title DESC";
-        }
-        if ($_GET['order'] == 'asc')
-        {
-          $orderStatus = 'desc';
-          $glyphStatus = "top";
-          $orderSql = "ORDER BY title ASC";
-        }
-		}
-      if ($_GET['sort'] == 'office')
-      {
-        if ($_GET['order'] == 'desc')
-        {
-          $orderStatus = 'asc';
-          $glyphStatus = "bottom";
-          $orderSql = "ORDER BY office DESC";
-        }
-        if ($_GET['order'] == 'asc')
-        {
-          $orderStatus = 'desc';
-          $glyphStatus = "top";
-          $orderSql = "ORDER BY office ASC";
-        }
-      }
-      if ($_GET['sort'] == 'phonenumber')
-      {
-        if ($_GET['order'] == 'desc')
-        {
-          $orderStatus = 'asc';
-          $glyphStatus = "bottom";
-          $orderSql = "ORDER BY phonenumber DESC";
-        }
-        if ($_GET['order'] == 'asc')
-        {
-          $orderStatus = 'desc';
-          $glyphStatus = "top";
-          $orderSql = "ORDER BY phonenumber ASC";
-        }
-      }
-      if ($_GET['sort'] == 'login')
-      {
-        if ($_GET['order'] == 'desc')
-        {
-          $orderStatus = 'asc';
-          $glyphStatus = "bottom";
-          $orderSql = "ORDER BY login DESC";
-        }
-        if ($_GET['order'] == 'asc')
-        {
-          $orderStatus = 'desc';
-          $glyphStatus = "top";
-          $orderSql = "ORDER BY login ASC";
-        }
-      }
-      if ($_GET['sort'] == 'title')
-      {
-        if ($_GET['order'] == 'desc')
-        {
-          $orderStatus = 'asc';
-          $glyphStatus = "bottom";
-          $orderSql = "ORDER BY password DESC";
-        }
-        if ($_GET['order'] == 'asc')
-        {
-          $orderStatus = 'desc';
-          $glyphStatus = "top";
-          $orderSql = "ORDER BY password ASC";
-        }
-// Matt original code begins again
       }
       if ($_GET['sort'] == 'status')
       {
@@ -430,7 +343,7 @@ if (! empty($_FILES["fuelUpload"]["name"]))
           $orderStatus = 'desc';
           $glyphStatus = "top";
           $orderSql = "ORDER BY status ASC";
-        }		
+        }
       }
     ?>
     <th> </th>
@@ -439,15 +352,11 @@ if (! empty($_FILES["fuelUpload"]["name"]))
     <th>Login As</th>
     <th>Status <a href="?sort=status&order=<?php echo $orderStatus;?>">
                <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>
-    <th>Title <a href="?sort=status&order=<?php echo $orderTitle;?>">
-               <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>
-    <th>Office <a href="?sort=status&order=<?php echo $orderOffice;?>">
-               <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>
-    <th>Phone Number <a href="?sort=status&order=<?php echo $orderPhoneNumber;?>">
-        <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>
-    <th>Login <a href="?sort=status&order=<?php echo $orderLogin;?>">
-        <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>    <th>Password <a href="?sort=status&order=<?php echo $orderPassword;?>">
-               <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>
+    <th>Title</th>
+    <th>Office</th>
+    <th>Phone Number</th>
+    <th>Login</th>
+    <th>Password</th>
   </tr>
  </thead>
  <tbody>
@@ -948,7 +857,7 @@ if ($_SESSION['login'] == 1)
     <tr>
      <td rowspan="3">
        <div><img style="display: block; margin: 0 auto;"
-             src="<?php echo HTTP."/dist/img/usernophoto.jpg";?>"/></div>
+             src="<?php echo HTTP."/dist/img/avatar.png";?>"/></div>
        <div><input id="fileToUpload" name="fileToUpload" type="file" multiple=true class="file-loading"></div>
      </td>
      <td style="padding: 5px">
