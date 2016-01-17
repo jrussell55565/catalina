@@ -7,7 +7,7 @@
                 <li class="active"><a href="/pages/main/index.php"><i class="fa fa-circle-o"></i> Dashboard</a></li>
                 <li class="active"><a href="/pages/dispatch/orders.php"><i class="fa fa-circle-o"></i> Load Board</a></li>
                 <li class="active"><a href="/pages/dispatch/vir.php"><i class="fa fa-circle-o"></i> VIR Reporting</a></li>
-                <li class="active"><a href="/pages/dispatch/vir_review.php"><i class="fa fa-circle-o"></i> VIR Review</a></li>
+                <li class="active"><a href="/pages/dispatch/vir_previous.php"><i class="fa fa-circle-o"></i> VIR Review</a></li>
                 <li class="active"><a href="/pages/dispatch/userstats.php"><i class="fa fa-circle-o"></i> User Stats</a></li>
                 <li class="active"><a href="/pages/dispatch/ifta.php"><i class="fa fa-circle-o"></i> Ifta Reporting</a></li>
                 <li class="active"><a href="/pages/dispatch/admin/csa.php"><i class="fa fa-circle-o"></i> DOT Saftey</a></li>
@@ -43,7 +43,7 @@
                 <li><a href="/pages/info/inspectiontypes.php"><i class="fa fa-circle-o"></i>DOT Inspection Info</a></li>
                 <li><a href="/pages/layout/boxed.html"><i class="fa fa-circle-o"></i>IFTA Trip Info</a></li>
                 <li><a href="/pages/layout/fixed.html"><i class="fa fa-circle-o"></i>Chain Laws Info</a></li>
-                <li><a href="/pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i></a></li>
+                <li><a href="/pages/info/otrpodimage.php"><i class="fa fa-circle-o"></i>OTR Documents Policy</a></li>
               </ul>
   </li>
 
