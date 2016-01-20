@@ -513,7 +513,7 @@ $sql = mysql_query($sql);
 while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 {
 ?>
-<tr>
+<tr name="<?php echo $row['status'];?>">
 <td><a href="#"><i class="glyphicon glyphicon-user"></i></a></td>
 <td>
 <div style="float:left;width:80%;"><?php echo $row['fname'] . " " . $row['lname'];?></div>
@@ -1344,6 +1344,24 @@ if ($_SESSION['login'] == 1)
 //}).on('hidden.bs.collapse', function(){
 //$(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
 //});
+$(document).ready(function() {
+  // Default visibility for users
+  $('[name="Active"]').show();
+  $('[name="Inactive"]').hide();
+
+  $("#activeusers").click(function() {
+    $('[name="Active"]').show();
+    $('[name="Inactive"]').hide();
+  });
+  $("#inactiveusers").click(function() {
+    $('[name="Active"]').hide();
+    $('[name="Inactive"]').show();
+  });
+  $("#allusers").click(function() {
+    $('[name="Active"]').show();
+    $('[name="Inactive"]').show();
+  });
+});
 </script>
 
 </body>
