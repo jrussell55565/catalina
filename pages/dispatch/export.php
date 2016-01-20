@@ -58,8 +58,8 @@ $remdate = "";
 $remtime = "";
 $deldriv = "";
 
-# Remove CRLF from Remarks
-$remarks = str_replace (array("\r\n", "\n", "\r"), ' ', $remarks);
+# Remove CRLF and comma from Remarks
+$remarks = str_replace (array("\r\n", "\n", "\r", ","), ' ', $remarks);
 
 # If the statustype is NOT delivered then we'll just reset podDate and podTime to empty
 if ($statustype != 'Delivered')
