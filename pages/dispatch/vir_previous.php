@@ -130,6 +130,17 @@ folder instead of downloading all of them to reduce the load. -->
     <div class="box">
       <div class="box-header with-border">
         <h3 class="box-title">VIR</h3>
+        <p>
+         <label for="allvir"></label>
+         <input name="radio" type="radio" id="allvir" value="allvir" checked>
+         All
+         <label for="openvir"></label>
+         <input name="radio" type="radio" id="openvir" value="openvir" >
+         Open
+         <label for="notclosedvir"></label>
+         <input type="radio" name="radio" id="notclosedvir" value="notclosedvir">
+         Not Closed
+        </p>
       </div>
       <!-- /.box-header -->
       <div class="box-body">
@@ -192,8 +203,16 @@ $tot = 'truck';
 }elseif($row['trailer_number'] != '') {
 $tot = 'trailer';
 }
+
+# Set the name of the <tr> so we can show all, open, or 'not closed'
+if ((preg_match('/^Close/',$row['updated_status'])) || ((preg_match('/^Green/',$row[$tot.'_vir_condition']) && (preg_match('/^Green/',$row[$tot.'_tires_overall'])))))
+{
+    $status = 'closed_vir';
+}else{
+    $status = 'notclosed_vir';
+}
 ?>
-                      <tr>
+                      <tr name="<?php echo $status;?>">
                         <td><!-- Button trigger modal -->
                           
                           <button type="button" class="btn btn-primary btn-small" data-toggle="modal" data-target="#modal_<?php echo $tot;?>_<?php echo $row['vir_itemnum'];?>">
@@ -575,6 +594,25 @@ if (sel.value == "Close")
   ?>
     $('#startDate').val(<?php echo $startDate;?>)
     $('#endDate').val(<?php echo $endDate;?>)
+
+$(document).ready(function() {
+  // Default visibility for users
+  $('[name="closed_vir"]').show();
+  $('[name="notclosed_vir"]').show();
+
+  $("#allvir").click(function() {
+    $('[name="closed_vir"]').show();
+    $('[name="notclosed_vir"]').show();
+  });
+  $("#openvir").click(function() {
+    $('[name="closed_vir"]').hide();
+    $('[name="not_closed"]').show();
+  });
+  $("#notclosedvir").click(function() {
+    $('[name="closed_vir"]').hide();
+    $('[name="not_closed"]').show();
+  });
+});
 </script>
 </body>
 </html>
