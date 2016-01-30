@@ -55,7 +55,7 @@ function accessorials($accessorialType,$srcPage,$username)
 
 function sendEmail($to, $subject, $body, $cc)
 {
-  $headers = "From: noreply@catalinacartage.com" . "\r\n" .
+  $headers = "From: drivers@catalinacartage.com" . "\r\n" .
              'X-Mailer: PHP/' . phpversion() . "\r\n";
   if (isset($cc))
   {
