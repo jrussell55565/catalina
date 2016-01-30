@@ -59,13 +59,16 @@ if (isset($_GET['exportDisplay']))
   b.trailer_number,
   b.rental,
   b.login_time,
+  DATE(b.login_time) AS date_w,
   b.truck_odometer 
   from users a, 
    login_capture b 
   where 
    a.driverid = b.driver_driverid
    and login_time between str_to_date('$startDate','%m/%d/%Y')
-     and str_to_date('$endDate','%m/%d/%Y')";
+     and str_to_date('$endDate','%m/%d/%Y')
+  GROUP BY drivername , driver_driverid , driver_driverid , truck_number , trailer_number , rental , truck_odometer , date_w
+  order by b.login_time";
 
   if ($_GET['inlineRadioOptions'] == "exportCsv")
   {
