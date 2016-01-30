@@ -203,7 +203,7 @@ if (! empty($_FILES["fileToUpload"]["name"]))
    vir_pretrip_message = $vir_pre_message,
    vir_posttrip_message = $vir_post_message
   WHERE id = $id";
-print $sql; exit;
+
   mysql_query($sql);
 
 # PDF Uploads
