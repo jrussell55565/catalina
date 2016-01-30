@@ -203,7 +203,7 @@ if (! empty($_FILES["fileToUpload"]["name"]))
    vir_pretrip_message = $vir_pre_message,
    vir_posttrip_message = $vir_post_message
   WHERE id = $id";
-
+print $sql; exit;
   mysql_query($sql);
 
 # PDF Uploads
@@ -371,7 +371,7 @@ if (! empty($_FILES["fuelUpload"]["name"]))
           $orderSql = "ORDER BY office ASC";
         }
       }
-      if ($_GET['sort'] == 'phonenumber')
+      if ($_GET['sort'] == 'number')
       {
         if ($_GET['order'] == 'desc')
         {
@@ -405,18 +405,18 @@ if (! empty($_FILES["fuelUpload"]["name"]))
       {
         if ($_GET['order'] == 'desc')
         {
-          $orderStatus = 'asc';
+          $orderTitle = 'asc';
           $glyphStatus = "bottom";
-          $orderSql = "ORDER BY password DESC";
+          $orderSql = "ORDER BY title DESC";
         }
         if ($_GET['order'] == 'asc')
         {
-          $orderStatus = 'desc';
+          $orderTitle = 'desc';
           $glyphStatus = "top";
-          $orderSql = "ORDER BY password ASC";
+          $orderSql = "ORDER BY title ASC";
         }
-// Matt original code begins again
       }
+// Matt original code begins again
       if ($_GET['sort'] == 'status')
       {
         if ($_GET['order'] == 'desc')
@@ -439,14 +439,15 @@ if (! empty($_FILES["fuelUpload"]["name"]))
     <th>Login As</th>
     <th>Status <a href="?sort=status&order=<?php echo $orderStatus;?>">
                <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>
-    <th>Title <a href="?sort=status&order=<?php echo $orderTitle;?>">
+    <th>Title <a href="?sort=title&order=<?php echo $orderTitle;?>">
                <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>
-    <th>Office <a href="?sort=status&order=<?php echo $orderOffice;?>">
+    <th>Office <a href="?sort=office&order=<?php echo $orderOffice;?>">
                <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>
-    <th>Phone Number <a href="?sort=status&order=<?php echo $orderPhoneNumber;?>">
+    <th>Phone Number <a href="?sort=number&order=<?php echo $orderPhoneNumber;?>">
         <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>
-    <th>Login <a href="?sort=status&order=<?php echo $orderLogin;?>">
-        <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>    <th>Password <a href="?sort=status&order=<?php echo $orderPassword;?>">
+    <th>Login <a href="?sort=login&order=<?php echo $orderLogin;?>">
+        <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>    
+    <th>Password <a href="?sort=password&order=<?php echo $orderPassword;?>">
                <i class="glyphicon glyphicon-triangle-<?php echo $glyphStatus;?>"></i></a></th>
   </tr>
  </thead>
@@ -1151,7 +1152,7 @@ if ($_SESSION['login'] == 1)
      </td>
      <td style="padding: 5px">
       <label for="username">Username</label>
-      <input type="text" class="form-control" name="username" id="username" placeholder="" value="foo" required>
+      <input type="text" class="form-control" name="username" id="username" placeholder="" value="" required>
      </td>
      <td style="padding: 5px">
       <label for="password">Password</label>
@@ -1182,6 +1183,16 @@ if ($_SESSION['login'] == 1)
      <td style="padding: 5px" colspan="3">
       <label for="miscDetails">Notes</label>
       <textarea class="form-control" name="miscDetails" id="miscDetails" placeholder="" value="" style="padding-top: 0px; padding-bottom: 0px; height: 34px;"></textarea>
+     </td>
+    </tr>
+    <tr>
+     <td style="padding: 5px">
+      <label for="tsPhone">TS Phone</label>
+      <input type="text" class="form-control" name="tsPhone" id="tsPhone" placeholder="" value="">
+     </td>
+     <td style="padding: 5px">
+      <label for="tsName">TS Name</label>
+      <input type="text" class="form-control" name="tsName" id="tsName" placeholder="" value="">
      </td>
     </tr>
 <tr>
