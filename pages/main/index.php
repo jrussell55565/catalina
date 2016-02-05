@@ -559,6 +559,7 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
 </span>
 <input type="text" class="form-control" name="message" id="message" placeholder="Share an update..." value="" required="">
 <div class="input-group-inline">
+ <!-- Note added the below stations -->
 <select class="form-control" style="width: 33%; margin-top:5px" name="audience">
 <option>All</option>
 <option>PHX</option>
