@@ -87,6 +87,9 @@ if (empty($_POST['fuelcard'])) { $fuelcard = 'NULL'; }else{ $fuelcard = "\"$_POS
 if (empty($_POST['notes'])) { $notes = 'NULL'; }else{ $notes = "\"$_POST[notes]\"";}
 if (empty($_POST['tsName'])) { $tsName = 'NULL'; }else{ $tsName = "\"$_POST[tsName]\"";}
 if (empty($_POST['tsPhone'])) { $tsPhone = 'NULL'; }else{ $tsPhone = $_POST['tsPhone'];}
+# Strip non-digits from the phone
+$tsPhone = preg_replace('/\D/','',$tsPhone);
+
 if (empty($_POST['vir_pretrip_time'])) { $vir_pretrip_time = 'NULL'; }else{ $vir_pretrip_time = "\"$_POST[vir_pretrip_time]\"";}
 if (empty($_POST['vir_posttrip_time'])) { $vir_posttrip_time = 'NULL'; }else{ $vir_posttrip_time = "\"$_POST[vir_posttrip_time]\"";}
 if (isset($_POST['vir_vtextEnabled']) && $_POST['vir_vtextEnabled'] == 'on') { $vir_vtextEnabled = '"1"'; }else{ $vir_vtextEnabled = '"0"';}
