@@ -19,11 +19,12 @@ $sql = "select
         date_format(str_to_date(dueDate, '%c/%e/%Y'),'%c/%e/%Y') dueDate
         from dispatch where recordId = $recordid";
 
-$statement = 'SELECT drivername,employee_id from users where username = "'.$_SESSION['userid'].'"';
+$statement = 'SELECT drivername,employee_id,fname,lname from users where username = "'.$_SESSION['userid'].'"';
 $output = mysql_fetch_array(mysql_query($statement),MYSQL_BOTH);
 $drivername = $output['drivername'];
 $drivername_export = $drivername;
 $employee_id = $output['employee_id'];
+$driver_full_name = $output['fname'] . " " . $output['lname'];
 
 $row = mysql_fetch_array(mysql_query($sql),MYSQL_BOTH);
 $hawb       = $row['hawbNumber'];
@@ -315,7 +316,7 @@ if ($status == "Delivered")
 
 header("Location: /pages/dispatch/orders.php");
 
-function processAccessorials($hawb,$action,$username)
+function processAccessorials($hawb,$action,$driver_full_name)
 {
   $sqlSearchIn = array();
         foreach ($_POST['ck_accessorials'] as $key => $val)
@@ -345,7 +346,7 @@ function processAccessorials($hawb,$action,$username)
                 }
 		if (count($accessorialsEmail) > 0 )
 		{
-			$accessorialsEmail = "Accessorials submitted by $username\r\n\r\n$accessorialsEmail";
+			$accessorialsEmail = "Accessorials submitted by $driver_full_name\r\n\r\n$accessorialsEmail";
 			sendEmail('accessorials@catalinacartage.com',"Accessorials $hawb","$accessorialsEmail");
 		}
 	        return $accessorials;
