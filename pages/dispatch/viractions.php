@@ -29,9 +29,10 @@ exit;
 }
 
 # USER info
-$statement = 'SELECT employee_id from users where username = "'.$_SESSION['userid'].'"';
+$statement = 'SELECT employee_id,fname,lname from users where username = "'.$_SESSION['userid'].'"';
 $drivername = mysql_fetch_array(mysql_query($statement),MYSQL_BOTH);
 $employee_id = $drivername[0];
+$driver_name = $drivername[1]. " ". $drivername[2];
 
 # VIR POST variables
 $trucktype = $_POST['trucktype'];
@@ -316,7 +317,7 @@ if (($trucktype == 'combo') && ($trailer_number != ''))
 $to = "trucks@catalinacartage.com";
 $subject = "VIR $truck_number / $trailer_number / $preorposttrip $truck_po, $trailer_po";
 $body = <<<EOT
-Driver: $username
+Driver: $driver_name
 Truck Type: $trucktype
 Truck: $truck_number, $truck_vir_condition
 Trailer: $trailer_number, $trailer_vir_condition
