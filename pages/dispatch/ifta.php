@@ -23,7 +23,7 @@ $us_state_abbrevs = array('AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Dashboard</title>
+<title>IFTA Trip Reports</title>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -54,10 +54,10 @@ $us_state_abbrevs = array('AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 
     <div class="content-wrapper"> 
       <!-- Content Header (Page header) -->
       <section class="content-header">
-        <h1>IFTA</h1>
+        <h1>IFTA Trip Reports</h1>
         <ol class="breadcrumb">
           <li><a href="orders.php"><i class="fa fa-home"></i> Home</a></li>
-          <li class="active">Vehicle Inspection Report</li>
+          <li class="active">IFTA TRIP Reports</li>
         </ol>
       </section>
       
@@ -87,380 +87,345 @@ $us_state_abbrevs = array('AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 
             <!-- PAGE CONTENT HERE -->
 
           <!-- Default box -->
-          <div class="box">
+          <div class="box box-primary collapsed-box">
             <div class="box-header with-border">
-              <h3 class="box-title">IFTA Trip Report</h3>
+              <h3 class="box-title"> Search IFTA Trips </h3>
               <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Open"><i class="fa fa-plus"></i></button>
                 <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
               </div>
             </div>
             <div class="box-body">
-              <form name="frm_ifta_previous" method="get" action="processifta.php">
-                    <input type="submit" name="load_ifta" id="load_ifta" value="Load Previous Trip" />
-              </form>
               <form name="frm_ifta" method="post" action="processifta.php">
-                <table width="690" border="1">
+                <table width="377" border="1">
                   <tr>
-                    <td colspan="4">Please fill out trip report below to match the hand written Fuel Report</td>
+                    <td colspan="2"> IFTA Trip Sheets Search &amp; Load</td>
                   </tr>
                   <tr>
-                    <td >Tractor
-                      <input name="truck_number" type="text" id="truck_number" value="<?php echo $_SESSION['truckid']; ?>" size="10" readonly="readonly" />
-                    </td>
-<td>
-Trailer
-<input name="trailer_number" type="text" id="trailer_number" value="<?php echo $_SESSION['trailerid']; ?>" readonly /></td>
-<input name="truck_rental" type="hidden" id="trailer_rental" value="<?php echo $_SESSION['truckrental']; ?>" readonly /></td>
-</td>
-                    <td width="388">Trip# 
-                    <input name="trip_num" type="text" id="trip_num" value="<?php echo $_GET['tripno'];?>" size="12" required></td>
-                    <td width="388">Trip Start Odometer
-                    <?php
-                     $sql = "select start_odometer from ifta where trip_num = '$_GET[tripno]' LIMIT 1";
-                     $startOdometer = mysql_result(mysql_query($sql),0);
-                    ?>
-                    <input name="start_odometer" type="text" id="start_odometer" value="<?php echo $startOdometer;?>" size="12" 
-                     <?php if ($startOdometer != '') { echo 'readonly'; }else{ echo  'required'; }?>></td>
+                    <td width="145">Trip Number </td>
+                    <td width="216"><input name="trip_search_tripnum" type="text" id="search_tripnum" value="12345" size="15"></td>
                   </tr>
                   <tr>
-                    <td colspan="4">                    Enter Trip Details Below </td>
+                    <td>Trip Starting </td>
+                    <td><input name="trip_search_startdate" type="text" id="trip_startdate2" value="date" size="15"></td>
+                  </tr>
+                  <tr>
+                    <td>Trip Ending</td>
+                    <td><input name="trip_search_enddate" type="text" id="trip_enddate2" value="date" size="15"></td>
+                  </tr>
+                  <tr>
+                    <td>State Enter / State Exit</td>
+                    <td><select name="trip_search_st_exit" id="trip_search_st_exit" value="<?php echo $row['st_exit'];?>">
+                      <?php
+                     foreach ($us_state_abbrevs as $state) { ?>
+                      <option selected <?php if ($row['st_exit'] == "$state") { echo "selected"; }?>><?php echo $state;?></option>
+                      <?php } ?>
+                    </select></td>
+                  </tr>
+                  <tr>
+                    <td>Permit Required</td>
+                    <td><input type="checkbox" name="trip_search_permit_req2" id="trip_search_permit_req2"></td>
+                  </tr>
+                  <tr>
+                    <td>Truck #</td>
+                    <td><input name="trip_search_trucknumber" type="text" id="trip_search_trucknumber" value="Truck Number" size="15"></td>
+                  </tr>
+                  <tr>
+                    <td>Driver</td>
+                    <td><input name="trip_search_driver" type="text" id="trip_search_driver" value="Driver" size="15"></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2"><input type="submit" name="btn_submit_all3" id="btn_submit_all3" value="Search / Export" />
+                      <input name="ifta_display_trips2" type="checkbox" id="ifta_display_trips2">
+Export
+<input name="ifta_display_trips" type="checkbox" id="ifta_display_trips" checked>
+Display</td>
                   </tr>
                 </table>
-  <table width="1012" height="136" border="1">
+                <p>***(Java Script) Hide Below until Search is preformed***  On Search (populate data from DB to show below results or export &quot;All&quot; from DB for date range / Reload page.***</p>
+                <table width="1142" border="1">
                   <tr>
-                    <td width="62" height="25">
-                    <td width="91">
-                    <td width="107">
-                    <td width="167">
-                    <td colspan="2">
-                    Starting OD
-                    <td width="48">
-                    <td width="85">
-        <td>
-        </tr>
-                  <tr>
-                    <td height="42" >Date </td>
-                    <td >Driver</td>
-                    <td >HWB</td>
-                    <td >Routes Hwys</td>
-                    <td width="48" >State Exit
-                    </td>
-                    <td width="64" >State Enter
-                    </td>
-                    <td >Enter OD Reading at state line</td>
-                    <td ><p>Total Miles</p></td>
-                    <td >Status:</td>
-                  </tr>
-                  <?php
-                  if (isset($_GET['tripno']))
-                  {
-                    $sql = "SELECT id,trip_num,truck_number,trailer_number,truck_rental,drivername,
-                            COALESCE(start_odometer,0) as start_odometer,
-                            date_trip,hwb,route,st_exit,st_enter,state_line_odometer,trip_sts,end_odometer
-                            FROM ifta WHERE trip_num = '$_GET[tripno]' order by id ASC";
-                    $sql = mysql_query($sql); 
-                  }
-                  $index = 0;
-                  while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-                  {
-                  ?> 
-                  <tr>
-                    <td height="28" >
-                     <input name="date_trip[]" type="text" id="date_trip[]" value="<?php echo (isset($row['date_trip'])? date("m/d/Y", strtotime($row['date_trip'])) : $localdateYear) ;?>" size="8"/>
-                     <input name="id_trip[]" type="hidden" id="id_trip[]" value="<?php echo $row['id'];?>">
-                    </td>
-                    <td ><?php echo "$drivername"; ?></td>
-                    <td ><label for="iftahwb"></label>
-                    <input name="hwb[]" type="text" id="hwb[]" size="15" value="<?php echo $row['hwb'];?>" required></td>
-                    <td ><input name="route[]" type="text" id="route[]" size="30" value="<?php echo $row['route'];?>" required></td>
-                    <td >
-                    <select name="st_exit[]" id="st_exit[]" value="<?php echo $row['st_exit'];?>">
-                    <?php
-                     foreach ($us_state_abbrevs as $state) { ?>
-                       <option <?php if ($row['st_exit'] == "$state") { echo "selected"; }?>><?php echo $state;?></option>
-                     <?php } ?>
-                    </select>
-                    </td>
-                    <td >
-                    <select name="st_enter[]" id="st_enter[]" value="<?php echo $row['st_enter'];?>">
-                    <?php
-                     foreach ($us_state_abbrevs as $state) { ?>
-                       <option <?php if ($row['st_enter'] == "$state") { echo "selected"; }?>><?php echo $state;?></option>
-                     <?php } ?>
-                    </select>
-                    </td>
-                    <td >
-                     <input name="state_line_odometer[]" type="number" id="state_line_odometer[]" size="15" value="<?php echo $row['state_line_odometer'];?>" required>
-                    </td>
-                    <?php
-                     # If this is the first record then find the difference
-                     # between state_line_odometer - start_odometer
-                     if ($index == 0)
-                     {
-                       $totalMiles = $row['state_line_odometer'] - $row['start_odometer'];
-                     }
-                       $index++;
-                    ?>
-                    <td ><input name="total_miles[]" type="hidden" id="total_miles[]" size="10" value="<?php echo $totalMiles;?>" readonly></td>
-                    <td ><input name="trip_sts[]" type="text" id="trip_sts[]" size="12" value="<?php echo $row['trip_sts'];?>" readonly></td>
-                  </tr>
-                <?php
-                }
-                ?>
-                 <tr>
-                    <td height="28" >
-                     <input name="date_trip[]" type="text" id="date_trip[]" value="<?php echo $localdateYear ;?>" size="8"/>
-                     <input name="id_trip[]" type="hidden" id="id_trip[]" value="">
-                    </td>
-                    <td ><?php echo "$drivername"; ?></td>
-                    <td ><label for="iftahwb"></label>
-                    <input name="hwb[]" type="text" id="hwb[]" size="15" value="" required></td>
-                    <td ><input name="route[]" type="text" id="route[]" size="30" value="" required></td>
-                    <td >
-                    <select name="st_exit[]" id="st_exit[]" value="">
-                    <?php
-                     foreach ($us_state_abbrevs as $state) { ?>
-                       <option><?php echo $state;?></option>
-                     <?php } ?>
-                    </select>
-                    </td>
-                    <td >
-                    <select name="st_enter[]" id="st_enter[]">
-                    <?php
-                     foreach ($us_state_abbrevs as $state) { ?>
-                       <option><?php echo $state;?></option>
-                     <?php } ?>
-                    </select>
-                    </td>
-                    <td ><input name="state_line_odometer[]" type="number" id="state_line_odometer[]" size="15" value="" required></td>
-                    <td ><input name="total_miles[]" type="number" id="total_miles[]" size="10" value="" readonly></td>
-                    <td ><input name="trip_sts[]" type="text" id="trip_sts[]" size="12" value="" readonly></td>
+                    <td height="23" colspan="11">Display Results</td>
                   </tr>
                   <tr>
-                    <td height="28" >&nbsp;</td>
-                    <td >&nbsp;</td>
-                    <td >&nbsp;</td>
-                    <td >&nbsp;</td>
-                    <td >&nbsp;</td>
-                    <td >&nbsp;</td>
-                    <td >Ending Odometer
-                    <input name="end_odometer[]" type="number" id="end_odometer[]" size="15" value="<?php echo $row['end_odometer'];?>"></td>
-                    <td >TMFT
-                    <input name="total_trip_miles[]" type="number" id="total_trip_miles[]" size="10" value="<?php echo $row['total_trip_miles'];?>"></td>
-                    <td >&nbsp;</td>
+                    <td width="112" height="23">Trip Number</td>
+                    <td width="53">Status</td>
+                    <td width="49">Truck</td>
+                    <td width="82">Trip Start</td>
+                    <td width="85">Trip End</td>
+                    <td width="100">Driver Name 1</td>
+                    <td width="91">Driver Name 2</td>
+                    <td width="72">State Exit</td>
+                    <td width="72"><p>State Enter</p></td>
+                    <td width="116">Total Trip Miles</td>
+                    <td width="240">Want to use Click Load or Button??</td>
                   </tr>
-
-              </table>
-              <table width="799" border="1">
-                <tr>
-                  <td colspan="4">Fuel  Reporting</td>
-                  <td colspan="3"><img src="images/fuelclipart.gif" width="60" height="48"></td>
-                </tr>
-                <tr>
-                  <td colspan="7">Enter Fuel Details Below
-                    <a href="loadtrip.php">View Past Fuel</a></td>
-                </tr>
-                <tr>
-                  <td width="72"><p>Date</p></td>
-                  <td width="101">Ticket Inv #</td>
-                  <td>Fuel Type</td>
-                  <td>Gallons</td>
-                  <td>State</td>
-                  <td>Current Truck Miles</td>
-                  <td width="202">Total $ Reciept</td>
-                </tr>
-                  <?php
-                  if (isset($_GET['tripno']))
-                  {
-                    $sql = "SELECT id,date_fuel,fuel_invoice_no,fuel_type,fuel_gallons,fuel_st,
-                            fuel_odometer,fuel_receipt_total
-                            FROM ifta WHERE trip_num = '$_GET[tripno]' order by id ASC";
-                    $sql = mysql_query($sql);
-                  while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-                  {
-                  ?> 
-                <tr>
-                  <td>
-                   <input name="date_fuel[]" type="text" id="date_fuel[]" value="<?php echo (isset($row['date_fuel'])? date("m/d/Y", strtotime($row['date_fuel'])) : $localdateYear) ;?>" size="8"/>
-                   <input name="id_fuel[]" type="hidden" id="id_fuel[]" value="<?php echo $row['id'];?>">
-                  </td>
-                  <td><label for="fuel_invoice"></label>
-                  <input type="text" name="fuel_invoice_no[]" id="fuel_invoice_no[]" value="<?php echo $row['fuel_invoice_no'];?>"></td>
-                  <td><select name="fuel_type[]" id="fuel_type[]">
-                    <option>FuelType</option>
-                    <option <?php if ($row['fuel_type'] == "diesel") { echo "selected"; }?>>diesel</option>
-                    <option <?php if ($row['fuel_type'] == "unlead") { echo "selected"; }?>>unlead</option>
-                    <option <?php if ($row['fuel_type'] == "biodiesel") { echo "selected"; }?>>biodiesel</option>
-                    <option <?php if ($row['fuel_type'] == "refer") { echo "selected"; }?>>refer</option>
-                  </select></td>
-                  <td><input name="fuel_gallons[]" type="number" id="fuel_gallons[]" size="8" value="<?php echo $row['fuel_gallons'];?>"></td>
-                  <td><select name="fuel_st[]" id="fuel_st[]" value="<?php echo $row['fuel_st'];?>">
-                    <option>State</option>
-                     <?php foreach ($us_state_abbrevs as $state) {?>
-                       <option <?php if ($row['fuel_st'] == "$state") { echo "selected"; }?>><?php echo $state;?></option>
-                     <?php } ?>
-                  </select></td>
-                  <td><input name="fuel_odometer[]" type="text" id="fuel_odometer[]" size="15" value="<?php echo $row['fuel_odometer'];?>"></td>
-                  <td><input name="fuel_receipt_total[]" type="text" id="fuel_receipt_total[]" size="15" value="<?php echo $row['fuel_receipt_total'];?>"></td>
-                </tr>
-                <tr>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                </tr>
-                <?php
-                }
-               }
-                ?>
-               <tr>
-                  <td>
-                   <input name="date_fuel[]" type="text" id="date_fuel[]" value="<?php echo $localdateYear ;?>" size="8"/>
-                   <input name="id_fuel[]" type="hidden" id="id_fuel[]" value="">
-                  </td>
-                  <td><label for="fuel_invoice"></label>
-                  <input type="text" name="fuel_invoice_no[]" id="fuel_invoice_no[]" value=""></td>
-                  <td><select name="fuel_type[]" id="fuel_type[]">
-                    <option>FuelType</option>
-                    <option>diesel</option>
-                    <option>unlead</option>
-                    <option>biodiesel</option>
-                    <option>refer</option>
-                  </select></td>
-                  <td><input name="fuel_gallons[]" type="number" id="fuel_gallons[]" size="8" value=""></td>
-                  <td><select name="fuel_st[]" id="fuel_st[]" value="">
-                    <option>State</option>
-                     <?php foreach ($us_state_abbrevs as $state) {?>
-                       <option><?php echo $state;?></option>
-                     <?php } ?>
-                  </select></td>
-                  <td><input name="fuel_odometer[]" type="text" id="fuel_odometer[]" size="15" value=""></td>
-                  <td><input name="fuel_receipt_total[]" type="text" id="fuel_receipt_total[]" size="15" value=""></td>
-                </tr>
-                <tr>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                </tr>
-
-              </table>
-              <table width="647" border="1">
-                <tr>
-                  <td colspan="3">Permit  &amp; Tolls Reporting</td>
-                  <td width="120"><img src="images/permit.gif" width="105" height="48"></td>
-                  <td><img src="images/toll.gif" width="149" height="53"></td>
-                </tr>
-                <tr>
-                  <td width="89">Date</td>
-                  <td width="142">Permit Type</td>
-                  <td width="78">State</td>
-                  <td>Permit #</td>
-                  <td>Total Receipt</td>
-                </tr>
-                  <?php
-                  if (isset($_GET['tripno']))
-                  {
-                    $sql = "SELECT id,date_permit,permit_type,permit_st,permit_no,permit_receipt
-                            FROM ifta WHERE trip_num = '$_GET[tripno]' order by id ASC";
-                    $sql = mysql_query($sql);
-                  while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-                  {
-                  ?> 
-                <tr>
-                  <td>
-                   <input name="date_permit[]" type="text" id="date_permit[]" value="<?php echo (isset($row['date_permit'])? date("m/d/Y", strtotime($row['date_permit'])) : $localdateYear) ;?>" size="8"/>
-                   <input name="id_permit[]" type="hidden" id="id_permit[]" value="<?php echo $row['id'];?>">
-                  </td>
-                  <td><select name="permit_type[]" id="permit_type[]">
-                    <option <?php if ($row['permit_type'] == "no permit") { echo "selected"; }?>>no permit</option>
-                    <option <?php if ($row['permit_type'] == "annual") { echo "selected"; }?>>annual</option>
-                    <option <?php if ($row['permit_type'] == "1 time") { echo "selected"; }?>>1 time</option>
-                    <option <?php if ($row['permit_type'] == "oversized") { echo "selected"; }?>>oversized</option>
-                    <option <?php if ($row['permit_type'] == "overweight") { echo "selected"; }?>>overweight</option>
-                  </select></td>
-                  <td>
-                   <select name="permit_st[]" id="permit_st[]">
-                    <option>State</option>
-                    <?php
-                     foreach ($us_state_abbrevs as $state) { ?>
-                       <option <?php if ($row['permit_st'] == "$state") { echo "selected"; }?>><?php echo $state;?></option>
-                     <?php } ?>
-                  </select></td>
-                  <td><input name="permit_no[]" type="text" id="permit_no[]" size="15" value="<?php echo $row['permit_no'];?>"></td>
-                  <td><input name="permit_receipt[]" type="text" id="permit_receipt[]" size="15" value="<?php echo $row['permit_receipt'];?>"></td>
-                </tr>
-                <tr>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                </tr>
-               </tr>
-                <?php
-                }
-               }
-                ?>
-                <tr>
-                  <td>
-                   <input name="date_permit[]" type="text" id="date_permit[]" value="<?php echo $localdateYear ;?>" size="8"/>
-                   <input name="id_permit[]" type="hidden" id="id_permit[]" value="">
-                  </td>
-                  <td><select name="permit_type[]" id="permit_type[]">
-                    <option>no permit</option>
-                    <option>annual</option>
-                    <option>1 time</option>
-                    <option>oversized</option>
-                    <option>overweight</option>
-                  </select></td>
-                  <td>
-                   <select name="permit_st[]" id="permit_st[]">
-                    <option>State</option>
-                    <?php
-                     foreach ($us_state_abbrevs as $state) { ?>
-                       <option><?php echo $state;?></option>
-                     <?php } ?>
-                  </select></td>
-                  <td><input name="permit_no[]" type="text" id="permit_no[]" size="15" value=""></td>
-                  <td><input name="permit_receipt[]" type="text" id="permit_receipt[]" size="15" value=""></td>
-                </tr>
-                <tr>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                </tr>
-               </tr>
-
-              </table>
-              <p>&nbsp;</p>
-              <table width="794" border="1">
                   <tr>
-                    <td>
-                    <input type="submit" name="btn_submit_all" id="btn_submit_all" value="Update All" />
-                    Finalize:
-                    <input type="checkbox" name="finalize" id="finalize">
-                    </td>
-                </tr>
-      </table>
-      </form>
-                <p>&nbsp;</p>
-            </div><!-- /.box-body -->
+                    <td><a href="#">12345(clickload)</a></td>
+                    <td>Open</td>
+                    <td>1111</td>
+                    <td>1/20/2015</td>
+                    <td>1/28/2015</td>
+                    <td>Jason Shumsky</td>
+                    <td>Jaime Russell</td>
+                    <td>AZ</td>
+                    <td>NV</td>
+                    <td>2345</td>
+                    <td><input type="submit" name="Add6" id="Add2" value="Load Trip"></td>
+                  </tr>
+                  <tr>
+                    <td height="28"><a href="#">12346</a></td>
+                    <td>Finalized</td>
+                    <td>1112</td>
+                    <td>1/21/2015</td>
+                    <td>1/29/2015</td>
+                    <td>Jason Shumsky</td>
+                    <td>none</td>
+                    <td>NV</td>
+                    <td>AZ</td>
+                    <td>3255</td>
+                    <td><input type="submit" name="Add7" id="Add3" value="Load Trip"></td>
+                  </tr>
+                </table>
+              </form>
+            </div>
+            <!-- /.box-body -->
             <div class="box-footer"></div>
             <!-- /.box-footer-->
           </div><!-- /.box -->
 
 
 
+
+
+
+
+
+
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+
+
+            <!-- PAGE CONTENT HERE -->
+
+          <!-- Default box -->
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Edit IFTA Trip (insert Trip PHP)
+                </h3><div class="box-tools pull-right">
+                  <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <div class="box-body">
+              <form name="frm_ifta" method="post" action="processifta.php">
+                <table width="1096" border="1">
+                  <tr>
+                    <td colspan="10">Enter Trip Info Below </td>
+                  </tr>
+                  <tr>
+                    <td width="77" height="25">Trip #
+                    <td width="77"> Start
+                      Date
+                    <td width="77">End
+                      Date                   
+                    <td width="97">Driver                    
+                      1
+                    <td width="97">Driver 2
+                    <td width="65">Truck #
+                    <td width="97">Starting OD
+                    <td width="97">Ending OD
+                    <td width="104">Total Trip Miles                    
+                  <td width="244">Options /                    Finalize:
+                    <input type="checkbox" name="finalize" id="finalize">
+Open
+<input name="unfinalize" type="checkbox" id="unfinalize" checked>                  
+                  </tr>
+                  <tr>
+                    <td><input name="tripnum" type="text" id="tripnum" value="man enter or echo" size="12"></td>
+                    <td><input name="trip_startdate3" type="text" id="trip_startdate3" value="man enter or echo" size="12"></td>
+                    <td><input name="trip_enddate3" type="text" id="trip_enddate3" value="man enter or echo" size="12"></td>
+                    <td><input name="trip_driver1" type="text" id="trip_driver5" value="man enter or echo" size="15"></td>
+                    <td><input name="trip_driver2" type="text" id="trip_driver6" value="man enter or echo" size="15"></td>
+                    <td><input name="trip_trucknumber" type="text" id="trip_trucknumber" value="man enter or echo" size="10"></td>
+                    <td><input name="trip_startod" type="text" id="trip_startod" value="man enter or echo" size="15"></td>
+                    <td><input name="trip_endod" type="text" id="trip_endod" value="man enter or echo" size="15"></td>
+                    <td><input name="trip_totalmiles" type="text" id="trip_totalmiles" value="DB calc Sub Start OD from End OD" size="15"></td>
+                    <td><input type="submit" name="Add4" id="Add10" value="Delete">
+                      <input type="submit" name="Add3" id="Add9" value="Save">
+                    <input type="submit" name="Add8" id="Add6" value="New Trip"></td>
+                  </tr>
+                </table>
+                <table width="1258" height="120" border="1">
+                  <tr>
+                    <td colspan="11">Enter Trip info Below</td>
+                  </tr>
+                  <tr>
+                    <td width="60" height="46">Trip #</td>
+                    <td width="60">Date </td>
+                    <td width="90">Driver </td>
+                    <td width="90">HWB </td>
+                    <td width="120">Routes Hwys</td>
+                    <td width="41">Exit</td>
+                    <td width="41"> Ent</td>
+                    <td width="90"> OD  State Line</td>
+                    <td width="72">State Miles</td>
+                    <td width="100">Permit Req</td>
+                    <td width="762">Options</td>
+                  </tr>
+                  <tr>
+                    <td height="28"><label for="tripnum3"></label>
+                    <input name="tripnum" type="text" id="tripnum" value="echo trip" size="10"></td>
+                    <td><input name="trip_startdate" type="text" id="trip_startdate" value="Date" size="10"></td>
+                    <td><input name="trip_driver2" type="text" id="trip_driver" value="Choose from Current Trip # drop down only available drivers" size="15"></td>
+                    <td><label for="trip_hwb"></label>
+                    <input name="trip_hwb" type="text" id="trip_hwb" size="15"></td>
+                    <td><label for="trip_routes"></label>
+                    <input name="trip_routes" type="text" id="trip_routes" size="20"></td>
+                    <td><select name="trip_st_exit[]" id="trip_st_exit[]" value="<?php echo $row['st_exit'];?>">
+                      <?php
+                     foreach ($us_state_abbrevs as $state) { ?>
+                      <option <?php if ($row['st_exit'] == "$state") { echo "selected"; }?>><?php echo $state;?></option>
+                      <?php } ?>
+                    </select></td>
+                    <td><select name="trip_st_enter[]" id="trip_st_enter[]" value="<?php echo $row['st_enter'];?>">
+                      <?php
+                     foreach ($us_state_abbrevs as $state) { ?>
+                      <option <?php if ($row['st_enter'] == "$state") { echo "selected"; }?>><?php echo $state;?></option>
+                      <?php } ?>
+                    </select></td>
+                    <td><label for="trip_enter_state_od"></label>
+                    <input name="trip_enter_state_od" type="text" id="trip_enter_state_od" size="15"></td>
+                    <td><label for="trip_state_miles"></label>
+                    
+                    <!-- Calculate State Miles From DB Entries
+                    No miles will be calculated unless 1 entry is input, null if no entry.
+                    1st Entry of "Current Trip" Look at Odometer at State Line,
+                    Lets say OD State Line entered is 1000.  Starting State AZ.
+                    Lets say Starting OD entered on this trip is 500.
+                    So At the State Line, User entered 1000.  Starting od is 500.
+                    So 1000 minus 500 = 500.  That is to populate in the state miles.
+                    
+                    Now for line 2 that gets entered.  
+                    
+                    
+                    
+                     -->
+                    
+                    <input name="trip_state_miles" type="text" id="trip_state_miles" value="DB calc See notes:" size="12"></td>
+                    
+                    
+                    
+                    
+                    <td><input type="checkbox" name="trip_permit_req" id="trip_permit_req">
+                    <label for="trip_permit_req"></label></td>
+                    <td><label for="ifta_image_type">
+                      <input type="submit" name="Add5" id="Add7" value="Update Row">
+                      <input type="submit" name="Add" id="Add4" value="Add Row">
+                      <input type="submit" name="Add10" id="Add" value="Delete Row">
+                    </label></td>
+                  </tr>
+                </table>
+                <table width="1257" border="1">
+                  <tr>
+                    <td colspan="10">Enter Fuel Info for Trip</td>
+                  </tr>
+                  <tr>
+                    <td width="92">Trip #</td>
+                    <td width="61">Fuel Date</td>
+                    <td width="101">Truck Gallons</td>
+                    <td width="76">Reefer Fuel</td>
+                    <td width="90">Other Fuel</td>
+                    <td width="49">Vendor</td>
+                    <td width="63">City</td>
+                    <td width="55">State</td>
+                    <td width="142">Odometer</td>
+                    <td width="559">Options</td>
+                  </tr>
+                  <tr>
+                    <td><input name="tripnum4" type="text" id="tripnum4" value="echo trip" size="12"></td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td><select name="st_enter[]3" id="st_enter[]3" value="<?php echo $row['st_enter'];?>">
+                      <?php
+                     foreach ($us_state_abbrevs as $state) { ?>
+                      <option <?php if ($row['st_enter'] == "$state") { echo "selected"; }?>><?php echo $state;?></option>
+                      <?php } ?>
+                    </select></td>
+                    <td>&nbsp;</td>
+                    <td><input type="submit" name="Add2" id="Add5" value="Update Row">
+                      <input type="submit" name="Add2" id="Add8" value="Add Row"></td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                </table>
+                <table width="676" border="1">
+                  <tr>
+                    <td colspan="3">Upload Trip Images Trip #1111</td>
+                  </tr>
+                  <tr>
+                    <td width="236">Image IFTA Trip Report</td>
+                    <td width="211"><input name="ifta_image_trip" type="file" class="file-loading" id="ifta_image_trip" size="10" multiple=true></td>
+                    <td width="211"><input type="submit" name="Add9" id="Add12" value="Update Image">
+                    <input type="submit" name="Add11" id="Add11" value="Delete Image"></td>
+                  </tr>
+                  <tr>
+                    <td>Image IFTA Fuel Reciepts</td>
+                    <td><input name="ifta_image_fuel" type="file" class="file-loading" id="ifta_image_fuel" size="10" multiple=true></td>
+                    <td><input type="submit" name="Add13" id="Add13" value="Update Image">
+                    <input type="submit" name="Add12" id="Add14" value="Delete Image"></td>
+                  </tr>
+                  <tr>
+                    <td>Image IFTA GPS Data</td>
+                    <td><input name="ifta_image_gps" type="file" class="file-loading" id="ifta_image_gps" size="10" multiple=true></td>
+                    <td><input type="submit" name="Add14" id="Add15" value="Update Image">
+                    <input type="submit" name="Add14" id="Add16" value="Delete Image"></td>
+                  </tr>
+                  <tr>
+                    <td>Image Individual Trip Permits</td>
+                    <td><input name="ifta_image_permits" type="file" class="file-loading" id="ifta_image_permits" size="10" multiple=true></td>
+                    <td><input type="submit" name="Add15" id="Add17" value="Update Image">
+                    <input type="submit" name="Add15" id="Add18" value="Delete Image"></td>
+                  </tr>
+                  <tr>
+                    <td>Image Driver Logs (for current trip)</td>
+                    <td><input name="ifta_image_drivers_logs" type="file" class="file-loading" id="ifta_image_drivers_logs" size="10" multiple=true></td>
+                    <td><input type="submit" name="Add16" id="Add19" value="Update Image">
+                    <input type="submit" name="Add16" id="Add20" value="Delete Image"></td>
+                  </tr>
+                  <tr>
+                    <td>Image BOL (for current trip)</td>
+                    <td><input name="ifta_image_bol" type="file" class="file-loading" id="ifta_image_bol" size="10" multiple=true></td>
+                    <td><input type="submit" name="Add17" id="Add21" value="Update Image">
+                    <input type="submit" name="Add17" id="Add22" value="Delete Image"></td>
+                  </tr>
+                  <tr>
+                    <td>Image MISC (for current trip)</td>
+                    <td><input name="ifta_image_misc" type="file" class="file-loading" id="ifta_image_misc" size="10" multiple=true></td>
+                    <td><input type="submit" name="Add18" id="Add23" value="Update Image">
+                    <input type="submit" name="Add18" id="Add24" value="Delete Image"></td>
+                  </tr>
+                </table>
+              </form>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer"></div>
+            <!-- /.box-footer-->
+          </div><!-- /.box -->
 
 
 
