@@ -986,6 +986,11 @@ if ($_SESSION['login'] == 1)
        <select class="form-control" name="office" id="office">
          <option value="PHX">PHX</option>
          <option value="TUS">TUS</option>
+         <option>PHL</option>
+		 <option>DEN</option>
+  		 <option>LAX</option>
+		 <option>MIA</option>
+		 <option>ORD</option>
        </select>
      </td>
     </tr>
