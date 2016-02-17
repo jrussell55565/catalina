@@ -3,6 +3,7 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/f_phxtime.php");
 include("$_SERVER[DOCUMENT_ROOT]/config/config.php");
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/functions.php");
 define('HTTP', "http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']);
+define('IFTA_UPLOAD',$_SERVER['DOCUMENT_ROOT']."/ifta_uploads");
 
 $localdate = phx_time("date");
 $localtime = phx_time("time");
