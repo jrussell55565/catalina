@@ -9,7 +9,7 @@ if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 include($_SERVER['DOCUMENT_ROOT']."/dist/php/global.php");
 $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
 
-print_r($_POST);
+####
 
 # Start TX
 $mysqli->autocommit(FALSE);
@@ -136,52 +136,52 @@ try {
     $id = $_POST['hdn_upload'];
     for ($i=0; $i<sizeof($id); $i++)
     {
-    $file_name = $_POST['hdn_upload'][$i];
-    $continue = 0;
-    switch ($_FILES["$file_name"]['error']) {
-        case UPLOAD_ERR_OK:
-            break;
-        case UPLOAD_ERR_NO_FILE:
-            $continue = 1;
-            break;
-        case UPLOAD_ERR_INI_SIZE:
-        case UPLOAD_ERR_FORM_SIZE:
-            throw new Exception('Exceeded filesize limit.');
-        default:
-            throw new Exception('Unknown error uploading '.$_FILES["$file_name"]['name']);
-    }
-    if ($continue == 1)
-    {
-        # if no file was uploaded then skip to the next file
-        continue;
-    }
-   
-      print $_FILES["$file_name"]['tmp_name']."<br>";
-      $file = md5($_POST['txt_tripnum'].".".$_FILES["$file_name"]['name'].$_POST['hdn_upload'][$i]);
-      $sql_uploads = "INSERT INTO ifta_uploads
-      (
-      trip_no,
-      type,
-      file_name
-      )
-      VALUES
-      (
-      ".$_POST['txt_tripnum'].",
-      '".$_POST['hdn_upload'][$i]."',
-      '$file'
-      )";
-    
-    if ($mysqli->query($sql_uploads) === false)
-    {
-        throw new Exception("Error uploading file to IFTA_UPLOADS: ". $mysqli->error);
-    }
+        $file_name = $_POST['hdn_upload'][$i];
+        $file_ary = reArrayFiles($_FILES["$file_name"]);
+        foreach ($file_ary as $file)
+        {
+            if ($file["name"])
+            {
+                switch ($file['error'])
+                {
+                    case UPLOAD_ERR_OK:
+                        break;
+                    case UPLOAD_ERR_NO_FILE:
+                        throw new Exception('No file found.');
+                    case UPLOAD_ERR_INI_SIZE:
+                    case UPLOAD_ERR_FORM_SIZE:
+                        throw new Exception('Exceeded filesize limit.');
+                    default:
+                        throw new Exception('Unknown error uploading '.$file['name']);
+                }
+                $dst = md5($_POST['txt_tripnum'].".".$file['tmp_name']);
+                $sql_uploads = "INSERT INTO ifta_uploads
+                               (
+                               trip_no,
+                               type,
+                               file_name
+                               )
+                               VALUES
+                               (
+                               ".$_POST['txt_tripnum'].",
+                               '".$_POST['hdn_upload'][$i]."',
+                               '".$dst."'
+                               )";
 
-    $src = $_FILES["$file_name"]['tmp_name'];
-    $dst = IFTA_UPLOAD."/".$file;
-    if (!move_uploaded_file($src, $dst))
-    {
-        throw new Exception("Unable to move $src into $dst");
-    }
+                if ($mysqli->query($sql_uploads) === false)
+                {
+                    throw new Exception("Error INSERTING file into IFTA_UPLOADS: ". $mysqli->error);
+                }
+
+                $src = $file['tmp_name'];
+                $dst = IFTA_UPLOAD."/".$dst;
+                if (!move_uploaded_file($src, $dst))
+                {
+                    throw new Exception("Unable to move $src into $dst");
+                }
+
+            }
+        }
     }
 
     $mysqli->commit();
@@ -200,7 +200,21 @@ try {
 
 $mysqli->autocommit(TRUE);
 $mysqli->close();
-exit;
 header("location: /pages/dispatch/ifta.php");
 exit;
+
+function reArrayFiles(&$file_post) {
+
+    $file_ary = array();
+    $file_count = count($file_post['name']);
+    $file_keys = array_keys($file_post);
+
+    for ($i=0; $i<$file_count; $i++) {
+        foreach ($file_keys as $key) {
+            $file_ary[$i][$key] = $file_post[$key][$i];
+        }
+    }
+
+    return $file_ary;
+}
 ?>
