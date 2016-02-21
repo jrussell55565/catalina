@@ -191,10 +191,9 @@ try {
     // We must rollback the transaction
     $url_error = urlencode($e->getMessage());
     $mysqli->rollback();
-    #header("location: /pages/dispatch/ifta.php?error=$url_error");
+    header("location: /pages/dispatch/ifta.php?error=$url_error");
     $mysqli->autocommit(TRUE);
     $mysqli->close();
-    echo $url_error."<BR>";
     exit;
 }
 
