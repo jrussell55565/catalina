@@ -420,16 +420,27 @@
          function addOdoRow() {
          var random = Math.ceil(Math.random() * 10000);
          var tripnum = $("#txt_tripnum").val();
+
+         var driver_list = [];
+         driver_list[0] = {
+                                 "id" : $("#sel_add_driver_1").val(),
+                                 "name": $("#sel_add_driver_1 option:selected").text()
+                               };
+         driver_list[1] = {
+                                 "id" : $("#sel_add_driver_2").val(),
+                                 "name": $("#sel_add_driver_2 option:selected").text()
+                               };
+
          var new_row = `<tr id="tr_add_driver_details_`+random+`">
                                  <td style="width: 5em;"><input class="input-sm form-control" name="txt_tripnum_details[]" type="text" id="txt_tripnum_details_`+random+`" value="`+tripnum+`" readonly>
                                     <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_`+random+`" value="1"></td>
                                     <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_`+random+`" value="" size=""></td>
                                  <td>
-                                  <select class="input-sm form-control" name="txt_driver_details[]" type="text" id="txt_driver_details_`+random+`" onFocus="create_driver_sel(this);" value="">
+                                  <select class="input-sm form-control" name="txt_driver_details[]" type="text" id="txt_driver_details_`+random+`" value="">
                                    <option value="null">Choose...</option>
                                   </select>
                                  </td>
-                                 <td style="width: 5em;"><input class="input-sm form-control" name="txt_hwb_details[]" type="text" id="txt_hwb_details_`+random+`"></td>
+                                 <td style="width: 5em;"><input class="input-sm form-control hwb" name="txt_hwb_details[]" type="text" id="txt_hwb_details_`+random+`"></td>
                                  <td><input class="input-sm form-control" name="txt_routes_details[]" type="text" id="txt_routes_details_`+random+`"></td>
                                  <td>
                                     <select class="input-sm form-control" name="txt_state_exit_details[]" id="txt_state_exit_details_`+random+`" value="">
@@ -456,8 +467,40 @@
                                     <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_details[]" id="txt_delete_row_details_`+random+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                  </td>
                               </tr>`;
-                  
+         
+         // Append a new tr to the table based on the 'new_row' variables         
          $("#add_ifta_table > tbody:last-child").append(new_row);
+
+         var prev_hwb = $("#tr_add_driver_details_"+random).prev().children('td').eq(3).children(':text').val();
+         var prev_st_enter = $("#tr_add_driver_details_"+random).prev().children('td').eq(6).find('option:selected').text();
+         $("#txt_hwb_details_"+random).val(prev_hwb);
+
+         // Set the Exit state to the value of the "enter" state of the previous line
+         if (prev_st_enter) {
+             $("#txt_state_exit_details_"+random+" option:contains(" + prev_st_enter + ")").attr('selected', 'selected');
+         }
+
+         // Append Driver 1 to the select box
+         $("#txt_driver_details_"+random)
+         .find('option')
+         .remove()
+         .end()
+         .append('<option value="'+driver_list[0].id+'">'+driver_list[0].name+'</option>')
+         .val(driver_list[0].name)
+
+         // Make the first driver the selected driver
+         $("#txt_driver_details_"+random+" option[value="+driver_list[0].id+"]").prop('selected', true);
+
+         // If we chose a driver 2 then we'll append that
+         if (driver_list[1].id != 'null') {
+           $("#txt_driver_details_"+random)
+           .find('option')
+           .remove()
+           .end()
+           .append('<option value="'+driver_list[1].id+'">'+driver_list[1].name+'</option>')
+           .val(driver_list[1].name);
+         }
+
          }
          
          function addFuelRow(id) {
@@ -515,27 +558,6 @@ $(document).ready(function(){
     $("#txt_fuel_tripnum_1").val($("#txt_tripnum").val());
   });
 });
-
-function create_driver_sel(v_id) {
-  var driver_list = [];
-    driver_list[0] = {
-                                 "id" : $("#sel_add_driver_1").val(),
-                                 "name": $("#sel_add_driver_1 option:selected").text()
-                               };
-    driver_list[1] = {
-                                 "id" : $("#sel_add_driver_2").val(),
-                                 "name": $("#sel_add_driver_2 option:selected").text()
-                               };
-
-    $("#"+v_id.id)
-      .find('option')
-      .remove()
-      .end()
-      .append('<option value="'+driver_list[0].id+'">'+driver_list[0].name+'</option>')
-      .val(driver_list[0].name)
-      .append('<option value="'+driver_list[1].id+'">'+driver_list[1].name+'</option>')
-      .val(driver_list[1].name);
-}
 
 function deleteRow(z) {
   v_id = $("#"+z.id).parent().parent().get( 0 ).id;
