@@ -26,20 +26,6 @@
        $driver_array[$row['employee_id']] = $row['fname']." ".$row['lname'];
    }
    mysql_free_result($results);
-   
-   if (isset($_GET['btn_display_results']))
-   {
-       # Create our SQL based on the inputs
-       $statement = "SELECT * from ifta WHERE 1=1 ";
-       switch ($_GET['btn_display_results'])
-       {
-           case "display":
-               break;
-           case "export":
-               break;
-       }
-   }
-   
    ?>
 <!DOCTYPE html>
 <html>
@@ -141,20 +127,27 @@
                                  </tr>
                                  <tr>
                                     <td>Permit Required</td>
-                                    <td><input class="input-sm form-control" type="checkbox" name="trip_search_permit_req" id="trip_search_permit_req"></td>
+                                    <td><input class="input-sm" type="checkbox" name="trip_search_permit_req" id="trip_search_permit_req"></td>
                                  </tr>
                                  <tr>
                                     <td>Truck #</td>
-                                    <td><input class="input-sm form-control" name="trip_search_trucknumber" type="text" id="trip_search_trucknumber" value="Truck Number"></td>
+                                    <td><input class="input-sm form-control" name="trip_search_trucknumber" type="text" id="trip_search_trucknumber"></td>
                                  </tr>
                                  <tr>
                                     <td>Driver</td>
-                                    <td><input class="input-sm form-control" name="trip_search_driver" type="text" id="trip_search_driver" value="Driver"></td>
+                                   <td>
+                                       <select class="input-sm form-control" name="trip_search_driver" id="trip_search_driver" value="">
+                                          <option value="null">Choose Driver...</option>
+                                          <?php
+                                             foreach ($driver_array as $employee_id => $driver) { ?>
+                                          <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
+                                          <?php } ?>
+                                       </select>
+                                    </td>
                                  </tr>
                                  <tr>
                                     <td>
-                                       <button type="submit" id="btn_display_results" name="btn_display_results" value="display" class="btn btn-default dropdown-toggle">Display Results</button>
-                                       <button type="submit" id="btn_export_results" name="btn_display_results" value="export" class="btn btn-default dropdown-toggle">Export Results</button>
+                                       <button type="button" id="btn_display_results" name="btn_display_results" value="display" class="btn btn-default dropdown-toggle">Display Results</button>
                                     </td>
                                  </tr>
                               </table>
@@ -532,8 +525,25 @@
          $("#add_ifta_fuel > tbody:last-child").append(new_row);
          }
       </script>
+
 <script>
 $(document).ready(function(){
+  // Ajax calls for search
+  $("#btn_display_results").click(function() {
+    $.get( "searchifta.php", { trip_no: $("#search_tripnum").val(),
+                             trip_start: $("#trip_search_startdate").val(),
+                             trip_end: $("#trip_search_enddate").val(),
+                             trip_state: $("#trip_search_state").val(),
+                             trip_permit: $("#trip_search_permit_req").is(":checked"),
+                             trip_truck_no: $("#trip_search_trucknumber").val(),
+                             trip_driver: $("#trip_search_driver").val()
+                              } )
+      .done(function( data ) {
+        alert( "Data Loaded: " + data );
+      });
+  });
+
+
   // Are You Sure form validator
   $('form').areYouSure();
 
