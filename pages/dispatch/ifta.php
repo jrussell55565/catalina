@@ -539,7 +539,7 @@ $(document).ready(function(){
                              trip_driver: $("#trip_search_driver").val()
                               } )
       .done(function( data ) {
-        alert( "Data Loaded: " + data );
+        console.log( data );
       });
   });
 
