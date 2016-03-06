@@ -26,6 +26,10 @@
        $driver_array[$row['employee_id']] = $row['fname']." ".$row['lname'];
    }
    mysql_free_result($results);
+
+   // Get the info from the DB if this is a GET req.
+   if (isset($_GET['trip_no'])) {
+       
    ?>
 <!DOCTYPE html>
 <html>
@@ -87,93 +91,13 @@
                   </div>
                </div>
                <!-- /.box-header -->
-               <div class="box-body no-padding">
-                  <!-- PAGE CONTENT HERE -->
-                  <!-- Default box -->
-                  <div class="box box-primary collapsed-box">
-                     <div class="box-header" style="text-align: center;">
-                        <h3 class="box-title"> Search IFTA Trips </h3>
-                        <div class="box-tools pull-right">
-                           <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Open"><i class="fa fa-plus"></i></button>
-                        </div>
-                     </div>
-                     <div class="box-body">
-                        <form name="frm_ifta_search" method="GET" action="ifta.php" role="form">
-                           <div class="table-responsive">
-                              <table class="table table-condensed table-striped">
-                                 <tr>
-                                    <td>Trip Number </td>
-                                    <td><input class="input-sm form-control" name="trip_search_tripnum" type="text" id="search_tripnum" value=""></td>
-                                 </tr>
-                                 <tr>
-                                    <td>Trip Starting </td>
-                                    <td><input type="text" class="input-sm form-control datepicker" name="trip_search_startdate" id="trip_search_startdate" data-date-format="mm/dd/yyyy"></td>
-                                 </tr>
-                                 <tr>
-                                    <td>Trip Ending</td>
-                                    <td><input type="text" class="input-sm form-control datepicker" name="trip_search_enddate" id="trip_search_enddate" data-date-format="mm/dd/yyyy"></td>
-                                 </tr>
-                                 <tr>
-                                    <td>State Enter / State Exit</td>
-                                    <td>
-                                       <select class="input-sm form-control" name="trip_search_state" id="trip_search_state" value="">
-                                          <option>Choose State...</option>
-                                          <?php
-                                             foreach ($us_state_abbrevs as $state) { ?>
-                                          <option><?php echo $state;?></option>
-                                          <?php } ?>
-                                       </select>
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td>Permit Required</td>
-                                    <td><input class="input-sm" type="checkbox" name="trip_search_permit_req" id="trip_search_permit_req"></td>
-                                 </tr>
-                                 <tr>
-                                    <td>Truck #</td>
-                                    <td><input class="input-sm form-control" name="trip_search_trucknumber" type="text" id="trip_search_trucknumber"></td>
-                                 </tr>
-                                 <tr>
-                                    <td>Driver</td>
-                                   <td>
-                                       <select class="input-sm form-control" name="trip_search_driver" id="trip_search_driver" value="">
-                                          <option value="null">Choose Driver...</option>
-                                          <?php
-                                             foreach ($driver_array as $employee_id => $driver) { ?>
-                                          <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
-                                          <?php } ?>
-                                       </select>
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td>
-                                       <button type="button" id="btn_display_results" name="btn_display_results" value="display" class="btn btn-primary dropdown-toggle">Display Results</button>
-                                    </td>
-                                 </tr>
-                              </table>
-                           </div>
-                        </form>
-                        <div id="search_results">
-                        </div>
-                     </div>
-                     <!-- /.box-body -->
-                     <div class="box-footer"></div>
-                     <!-- /.box-footer-->
-                  </div>
-                  <!-- /.box -->
-                  <!-- /.box-header -->
                   <div class="box-body no-padding">
                      <!-- PAGE CONTENT HERE -->
                      <!-- Default box -->
                      <div class="box">
                         <div class="box-header" style="text-align: center;">
-                           <h3 class="box-title">Add IFTA Trip
+                           <h3 class="box-title">IFTA Trip
                            </h3>
-                           <?php
-                            if (isset($_GET['error'])) {
-                              echo "<br>";
-                              echo '<div style="width: 50%; text-align: center; margin:auto" class="alert alert-danger" role="alert">Error adding record: ',urldecode($_GET['error']),'</div>';
-                            }?>
                            <div class="box-tools pull-right">
                               <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                            </div>
