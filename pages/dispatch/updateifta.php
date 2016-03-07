@@ -23,8 +23,23 @@
        printf("Connect failed: %s\n", $mysqli->connect_error);
        exit();
      }
+
+     # Get the driver names and employee_id
+     $driver_array = array();
+     $statement = 'SELECT fname, lname, employee_id from users WHERE title = "Driver" ORDER BY fname';
+     if ($result = $mysqli->query($statement)) {
+       while($row = $result->fetch_array(MYSQL_BOTH))
+       {
+         $driver_array[$row['employee_id']] = $row['fname']." ".$row['lname'];
+       }
+       $result->close();
+     }
+
+     // IFTA
      $ifta_results = array();
-     $query = "SELECT * FROM ifta WHERE trip_no = '".$_GET['trip_no']."'";
+     $query = "SELECT trip_no,date_format(date_started,'%m/%d/%Y') as date_started,date_format(date_ended,'%m/%d/%Y') as date_ended
+               ,driver1,driver2,truck_no,odo_start,odo_end
+               FROM ifta WHERE trip_no = '".$_GET['trip_no']."'";
      if ($result = $mysqli->query($query)) {
          while($obj = $result->fetch_object()){ 
            $ifta_results['trip_no'] = $obj->trip_no; 
@@ -33,9 +48,58 @@
            $ifta_results['driver1'] = $obj->driver1; 
            $ifta_results['driver2'] = $obj->driver2; 
            $ifta_results['truck_no'] = $obj->truck_no; 
+           $ifta_results['odo_start'] = $obj->odo_start; 
+           $ifta_results['odo_end'] = $obj->odo_end; 
          } 
+       $result->close();
+     }
+     // IFTA_DETAILS
+     $ifta_details = array();
+     $counter = 0;
+     $query = "SELECT ifta_details.trip_no,date_format(ifta_details.trip_date,'%m/%d/%Y') as trip_date,
+               driver,ifta_details.hwb,ifta_details.route,ifta_details.st_exit,
+               ifta_details.st_enter,ifta_details.state_line_odometer,ifta_details.state_miles,ifta_details.permit_required
+               FROM ifta_details
+               WHERE ifta_details.trip_no = '".$_GET['trip_no']."'
+               ORDER BY date_created DESC";
+     if ($result = $mysqli->query($query)) {
+         while($obj = $result->fetch_object()){ 
+           $ifta_details[$counter]['trip_no'] = $obj->trip_no;
+           $ifta_details[$counter]['trip_date'] = $obj->trip_date;
+           $ifta_details[$counter]['driver'] = $obj->driver;
+           $ifta_details[$counter]['hwb'] = $obj->hwb;
+           $ifta_details[$counter]['route'] = $obj->route;
+           $ifta_details[$counter]['st_exit'] = $obj->st_exit;
+           $ifta_details[$counter]['st_enter'] = $obj->st_enter;
+           $ifta_details[$counter]['state_line_odometer'] = $obj->state_line_odometer;
+           $ifta_details[$counter]['state_miles'] = $obj->state_miles;
+           $ifta_details[$counter]['permit_required'] = $obj->permit_required;
+           $counter++;
+         } 
+       $result->close();
+     }
 
-       /* free result set */
+     // IFTA_FUEL
+     $ifta_fuel = array();
+     $counter = 0;
+     $query = "select trip_no, date_format(trip_date,'%m/%d/%Y') as trip_date,
+               fuel_gallons, fuel_reefer, fuel_other, vendor, city, state, odometer
+               from ifta_fuel
+               WHERE trip_no = '".$_GET['trip_no']."'
+               ORDER BY date_created DESC";
+     if ($result = $mysqli->query($query)) {
+         while($obj = $result->fetch_object()){ 
+           $ifta_fuel[$counter]['trip_no'] = $obj->trip_no;
+           $ifta_fuel[$counter]['trip_date'] = $obj->trip_date;
+           $ifta_fuel[$counter]['fuel_gallons'] = $obj->fuel_gallons;
+           $ifta_fuel[$counter]['fuel_reefer'] = $obj->fuel_reefer;
+           $ifta_fuel[$counter]['fuel_other'] = $obj->fuel_other;
+           $ifta_fuel[$counter]['vendor'] = $obj->vendor;
+           $ifta_fuel[$counter]['city'] = $obj->city;
+           $ifta_fuel[$counter]['state'] = $obj->state;
+           $ifta_fuel[$counter]['odometer'] = $obj->odometer;
+           $counter++;
+         } 
        $result->close();
      }
      $mysqli->close();
@@ -189,6 +253,54 @@
                                  <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_1" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                               </tr>
                               <tr id="tr_add_driver_details_1">
+                              <?php
+                                for($i=0; $i<count($ifta_details); $i++) {
+                                  $random = mt_rand(0,0xffffff);
+                              ?>
+                                <tr id="tr_add_driver_details_<?php echo $random;?>">
+                                 <td style="width: 5em;"><input class="input-sm form-control" name="txt_tripnum_details[]" type="text" id="txt_tripnum_details_<?php echo $random;?>" value="<?php echo $ifta_details[$i]['trip_no'];?>" readonly>
+                                    <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_<?php echo $random;?>" value="1"></td>
+                                    <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_<?php echo $random;?>" value="<?php echo $ifta_details[$i]['trip_date'];?>" size=""></td>
+                                 <td>
+                                  <select class="input-sm form-control" name="txt_driver_details[]" type="text" id="txt_driver_details_<?php echo $random;?>" value="">
+                                   <option value="null">Choose...</option>
+                                   <?php
+                                    foreach ($driver_array as $employee_id => $driver) { ?>
+                                    <option value=<?php echo "$employee_id ";?> <?php if($employee_id == $ifta_details[$i]['driver']) { echo "selected"; }?>><?php echo $driver;?></option>
+                                   <?php } ?>
+                                  </select>
+                                 </td>
+                                 <td style="width: 5em;"><input class="input-sm form-control hwb" name="txt_hwb_details[]" type="text" id="txt_hwb_details_<?php echo $random;?>" value="<?php echo $ifta_details[$i]['hwb'];?>"></td>
+                                 <td><input class="input-sm form-control" name="txt_routes_details[]" type="text" id="txt_routes_details_<?php echo $random;?>" value="<?php echo $ifta_details[$i]['route'];?>"></td>
+                                 <td>
+                                    <select class="input-sm form-control" name="txt_state_exit_details[]" id="txt_state_exit_details_<?php echo $random;?>" value="">
+                                       <?php
+                                          foreach ($us_state_abbrevs as $state) { ?>
+                                       <option <?php if($state == $ifta_details[$i]['st_exit']){echo " selected ";}?>><?php echo $state;?></option>
+                                       <?php } ?>
+                                    </select>
+                                 </td>
+                                 <td>
+                                    <select class="input-sm form-control" name="txt_state_enter_details[]" id="txt_state_exit_details_<?php echo $random;?>" value="">
+                                       <?php
+                                          foreach ($us_state_abbrevs as $state) { ?>
+                                       <option <?php if($state == $ifta_details[$i]['st_enter']){echo " selected ";}?>><?php echo $state;?></option>
+                                       <?php } ?>
+                                    </select>
+                                 </td>
+                                 <td><input class="input-sm form-control" name="txt_state_odo_details[]" type="text" id="txt_state_odo_details_<?php echo $random;?>" value="<?php echo $ifta_details[$i]['state_line_odometer'];?>"></td>
+                                 <td>
+                                    <input class="input-sm form-control" name="txt_state_miles_details[]" type="text" id="txt_state_miles_details_<?php echo $random;?>" value="<?php echo $ifta_details[$i]['state_miles'];?>">
+                                 </td>
+                                 <td><input class="input-sm" type="checkbox" name="txt_permit_req_details[]" id="txt_permit_req_details_<?php echo $random;?>" <?php if($ifta_details[$i]['permit_required'] == 'Y') { echo " checked ";} ?>></td>
+                                 <td style="text-align: right;">
+                                    <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_details[]" id="txt_delete_row_details_<?php echo $random;?>" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
+                                 </td>
+                              </tr>
+                              <?php
+                              }
+                              ?>
+
                               </tr>
                               </tbody>
                            </table>
@@ -211,6 +323,35 @@
                                     <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_1" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  </tr>
                                  <tr id="tr_add_fuel_details_1">
+                                 <?php
+                                for($i=0; $i<count($ifta_fuel); $i++) {
+                                  $random = mt_rand(0,0xffffff);
+                              ?>
+<tr id="tr_add_fuel_details_<?php echo $random;?>">
+                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_tripnum[]" type="text" id="txt_fuel_tripnum_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['trip_no'];?>" readonly>
+                                    <input type="hidden" name="hdn_fuel_id[]" id="hdn_fuel_id_<?php echo $random;?>" value="1"></td>
+                                    <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_fuel_date[]" type="text" id="txt_fuel_date_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['trip_date'];?>" size=""></td>
+                                    <td><input class="input-sm form-control" name="txt_fuel_gallons[]" type="text" id="txt_fuel_gallons_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['fuel_gallons'];?>"></td>
+                                    <td><input class="input-sm form-control" name="txt_fuel_reefer[]" type="text" id="txt_fuel_reefer_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['fuel_reefer'];?>"></td>
+                                    <td style="width: 10em;"><input class="input-sm form-control" name="txt_fuel_other[]" type="text" id="txt_fuel_other_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['fuel_other'];?>"></td>
+                                    <td><input class="input-sm form-control" name="txt_fuel_vendor[]" type="text" id="txt_fuel_vendor_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['vendor'];?>"></td>
+                                    <td><input class="input-sm form-control" name="txt_fuel_city[]" type="text" id="txt_fuel_city_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['city'];?>"></td>
+                                    <td>
+                                       <select class="input-sm form-control" name="txt_fuel_state[]" id="txt_fuel_state_<?php echo $random;?>" value="">
+                                          <?php
+                                             foreach ($us_state_abbrevs as $state) { ?>
+                                          <option <?php if($state == $ifta_fuel[$i]['state']){echo " selected ";}?>><?php echo $state;?></option>
+                                          <?php } ?>
+                                       </select>
+                                    </td>
+                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_odo[]" type="text" id="txt_fuel_odo_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['odometer'];?>"></td>
+                                    <td style="text-align: right;">
+                                       <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_fuel[]" id="txt_delete_row_fuel_<?php echo $random;?>" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
+                                    </td>
+                                 </tr>
+                                 <?php 
+                                 }
+                                 ?>
                                  </tr>
                               </tbody>
                            </table>
@@ -419,81 +560,6 @@
 
 <script>
 $(document).ready(function(){
-  // Ajax calls for search
-  $("#btn_display_results").click(function() {
-    function searchResults(callBack) {
-      $.ajax({
-       method: "GET",
-       url: "searchifta.php",
-       data: {
-              trip_no: $("#search_tripnum").val(),
-              trip_start: $("#trip_search_startdate").val(),
-              trip_end: $("#trip_search_enddate").val(),
-              trip_state: $("#trip_search_state").val(),
-              trip_permit: $("#trip_search_permit_req").is(":checked"),
-              trip_truck_no: $("#trip_search_trucknumber").val(),
-              trip_driver: $("#trip_search_driver").val()
-            },
-       success: function(data, textStatus, xhr) {
-            //$('.rtnMsg').html(data);
-            myRtnA = "Success"
-            return callBack( myRtnA, data );  // return callBack() with myRtna
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            //$('.rtnMsg').html("opps: " + textStatus + " : " + errorThrown);
-            myRtnA = "Error"
-            return callBack ( myRtnA, errorThrown ); // return callBack() with myRtna
-        }
-      });
-    }
-
-    searchResults(function(myRtn, data) {
-          if (myRtn == "Success") {
-            //resetForm($('#myForm'));
-            //resetForm($('form[name=addChlGrp]'));
-            //console.log(data);
-            var output = `<table id="tbl_search_results" class="table">
-                            <tr>
-                              <td>Trip Number</td>
-                              <td>Status</td>
-                              <td>Truck</td>
-                              <td>Trip Start</td>
-                              <td>Trip End</td>
-                              <td>Driver Name 1</td>
-                              <td>Driver Name 2</td>
-                              <td>State Exit</td>
-                              <td>State Enter</td>
-                              <td>Total Trip Miles</td>
-                           </tr>`;
-
-
-            var json = jQuery.parseJSON( data );
-            for(var i = 0; i < json.length; i++) {
-              var obj = json[i];
-               output = output + `<tr>
-                              <td><a href="updateifta.php?trip_no=`+obj.trip_no+`" target="_blank">`+obj.trip_no+`</a></td>
-                              <td>Open</td>
-                              <td>`+obj.truck_no+`</td>
-                              <td>`+obj.date_started+`</td>
-                              <td>`+obj.date_ended+`</td>
-                              <td>`+obj.driver1+`</td>
-                              <td>`+obj.driver2+`</td>
-                              <td>`+obj.st_exit+`</td>
-                              <td>`+obj.st_enter+`</td>
-                              <td>2345</td>
-                           </tr>`;
-            }
-            output = output + '</table>';
-            $("#search_results").html(output);
-            //console.log(data);
-          } else {
-            console.log(data);
-            //$('.rtnMsg').html("Opps! Ajax Error");
-          }
-        });
-  });
-
-
   // Are You Sure form validator
   $('form').areYouSure();
 
