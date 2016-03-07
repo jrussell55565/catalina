@@ -7,8 +7,6 @@
    }
    
    include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
-   mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
-   mysql_select_db($db_name) or DIE('Database name is not available!');
    
    $username = $_SESSION['userid'];
    $drivername = $_SESSION['drivername'];
@@ -17,18 +15,31 @@
    
    $us_state_abbrevs = array('AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM', 'FL', 'GA', 'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MH', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VI', 'VA', 'WA', 'WV', 'WI', 'WY');
    
-   # Get the driver names and employee_id
-   $driver_array = array();
-   $statement = 'SELECT fname, lname, employee_id from users WHERE title = "Driver" ORDER BY fname';
-   $results = mysql_query($statement);
-   while($row = mysql_fetch_array($results, MYSQL_BOTH))
-   {
-       $driver_array[$row['employee_id']] = $row['fname']." ".$row['lname'];
-   }
-   mysql_free_result($results);
-
    // Get the info from the DB if this is a GET req.
    if (isset($_GET['trip_no'])) {
+     $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
+     /* check connection */
+     if ($mysqli->connect_errno) {
+       printf("Connect failed: %s\n", $mysqli->connect_error);
+       exit();
+     }
+     $ifta_results = array();
+     $query = "SELECT * FROM ifta WHERE trip_no = '".$_GET['trip_no']."'";
+     if ($result = $mysqli->query($query)) {
+         while($obj = $result->fetch_object()){ 
+           $ifta_results['trip_no'] = $obj->trip_no; 
+           $ifta_results['date_started'] = $obj->date_started; 
+           $ifta_results['date_ended'] = $obj->date_ended; 
+           $ifta_results['driver1'] = $obj->driver1; 
+           $ifta_results['driver2'] = $obj->driver2; 
+           $ifta_results['truck_no'] = $obj->truck_no; 
+         } 
+
+       /* free result set */
+       $result->close();
+     }
+     $mysqli->close();
+   }
        
    ?>
 <!DOCTYPE html>
@@ -108,15 +119,15 @@
                               <tbody>
                                  <tr>
                                     <td>Trip #
-                                    <td><input class="input-sm form-control" name="txt_tripnum" type="text" id="txt_tripnum" value="" required></td>
+                                    <td><input class="input-sm form-control" name="txt_tripnum" type="text" id="txt_tripnum" value="<?php echo $ifta_results['trip_no'];?>" required></td>
                                  </tr>
                                  <tr>
                                     <td>Start Date
-                                    <td><input class="input-sm form-control datepicker" name="txt_date_start" type="text" id="txt_date_start" value="" required></td>
+                                    <td><input class="input-sm form-control datepicker" name="txt_date_start" type="text" id="txt_date_start" value="<?php echo $ifta_results['date_started'];?>" required></td>
                                  </tr>
                                  <tr>
                                     <td>End Date
-                                    <td><input class="input-sm form-control datepicker" name="txt_date_end" type="text" id="txt_date_end" value="" required></td>
+                                    <td><input class="input-sm form-control datepicker" name="txt_date_end" type="text" id="txt_date_end" value="<?php echo $ifta_results['date_ended'];?>" required></td>
                                  </tr>
                                  <tr>
                                     <td>Driver 1
@@ -125,7 +136,7 @@
                                           <option value="null">Choose Driver...</option>
                                           <?php
                                              foreach ($driver_array as $employee_id => $driver) { ?>
-                                          <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
+                                          <option value=<?php echo "$employee_id ";?> <?php if($employee_id == $ifta_results['driver1']) { echo "selected"; }?>><?php echo $driver;?></option>
                                           <?php } ?>
                                        </select>
                                     </td>
@@ -137,26 +148,26 @@
                                           <option value="null">Choose Driver...</option>
                                           <?php
                                              foreach ($driver_array as $employee_id => $driver) { ?>
-                                          <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
+                                          <option value=<?php echo "$employee_id ";?><?php if($employee_id == $ifta_results['driver2']) { echo "selected"; }?>><?php echo $driver;?></option>
                                           <?php } ?>
                                        </select>
                                     </td>
                                  </tr>
                                  <tr>
                                     <td>Truck #
-                                    <td><input class="input-sm form-control" name="txt_truckno" type="text" id="txt_truckno" value="" required></td>
+                                    <td><input class="input-sm form-control" name="txt_truckno" type="text" id="txt_truckno" value="<?php echo $ifta_results['truck_no'];?>" required></td>
                                  </tr>
                                  <tr>
                                     <td>Starting OD
-                                    <td><input class="input-sm form-control" name="txt_od_start" type="text" id="txt_od_start" value="" required></td>
+                                    <td><input class="input-sm form-control" name="txt_od_start" type="text" id="txt_od_start" value="<?php echo $ifta_results['odo_start'];?>" required></td>
                                  </tr>
                                  <tr>
                                     <td>Ending OD
-                                    <td><input class="input-sm form-control" name="txt_od_end" type="text" id="txt_od_end" value="" required></td>
+                                    <td><input class="input-sm form-control" name="txt_od_end" type="text" id="txt_od_end" value="<?php echo $ifta_results['odo_end'];?>" required></td>
                                  </tr>
                                  <tr>
                                     <td>Total Trip Miles
-                                    <td><input class="input-sm form-control" name="txt_od_total" type="text" id="txt_od_total" value=""></td>
+                                    <td><input class="input-sm form-control" name="txt_od_total" type="text" id="txt_od_total" value="<?php echo $ifta_results['odo_end'] - $ifta_results['odo_start']; ?>"></td>
                                  </tr>
                            </table>
                            <p></p>

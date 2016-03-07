@@ -24,16 +24,20 @@ try {
     date_ended,
     driver1,
     driver2,
-    truck_no
+    truck_no,
+    odo_start,
+    odo_end
     )
     VALUES
     (
-    ".$_POST['txt_tripnum'].",
+    '".$_POST['txt_tripnum']."',
     str_to_date('".$_POST['txt_date_start']."','%m/%d/%Y'),
     str_to_date('".$_POST['txt_date_end']."','%m/%d/%Y'),
     '".$_POST['sel_add_driver_1']."',
     '".$_POST['sel_add_driver_2']."',
-    ".$_POST['txt_truckno']."
+    ".$_POST['txt_truckno'].",
+    ".$_POST['txt_od_start'].",
+    ".$_POST['txt_od_end']."
     )";
 
     if ($mysqli->query($sql_ifta) === false)
@@ -71,7 +75,7 @@ try {
         )
         VALUES
         (
-        ".$_POST['txt_tripnum_details'][$i].",
+        '".$_POST['txt_tripnum_details'][$i]."',
         str_to_date('".$_POST['txt_date_details'][$i]."','%m/%d/%Y'),
         '".$_POST['txt_driver_details'][$i]."',
         '".$_POST['txt_hwb_details'][$i]."',
@@ -116,7 +120,7 @@ try {
         )
         VALUES
         (
-        ".$_POST['txt_fuel_tripnum'][$i].",
+        '".$_POST['txt_fuel_tripnum'][$i]."',
         str_to_date('".$_POST['txt_fuel_date'][$i]."','%m/%d/%Y'),
         ".$_POST['txt_fuel_gallons'][$i].",
         ".$_POST['txt_fuel_reefer'][$i].",
@@ -163,7 +167,7 @@ try {
                                )
                                VALUES
                                (
-                               ".$_POST['txt_tripnum'].",
+                               '".$_POST['txt_tripnum']."',
                                '".$_POST['hdn_upload'][$i]."',
                                '".$dst."'
                                )";
