@@ -318,7 +318,7 @@
                             </tbody>
                            </table>
                         <p></p>
-                        <button type="submit" class="btn btn-danger">Submit</button>
+                        <button type="submit" class="btn btn-danger" name="add_ifta">Submit</button>
                         </form>
                         </div>
                         <!-- /.box-body -->

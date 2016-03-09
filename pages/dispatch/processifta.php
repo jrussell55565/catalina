@@ -14,7 +14,10 @@ $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
 # Start TX
 $mysqli->autocommit(FALSE);
 $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
-try {
+
+// Run this part if we're ADDING an IFTA
+if (isset($_POST['add_ifta'])) {
+  try {
 
     # IFTA table
     $sql_ifta = "INSERT INTO ifta
@@ -190,7 +193,7 @@ try {
 
     $mysqli->commit();
 
-} catch (Exception $e) {
+  } catch (Exception $e) {
     // An exception has been thrown
     // We must rollback the transaction
     $url_error = urlencode($e->getMessage());
@@ -199,6 +202,39 @@ try {
     $mysqli->autocommit(TRUE);
     $mysqli->close();
     exit;
+  }
+}
+
+// Run this part if we're UPDATING an IFTA
+if (isset($_POST['update_ifta'])) {
+
+  try {
+    # IFTA table
+    $sql_ifta = "UPDATE ifta SET
+    date_started = str_to_date('".$_POST['txt_date_start']."','%m/%d/%Y'),
+    date_ended = str_to_date('".$_POST['txt_date_end']."','%m/%d/%Y'),
+    driver1 = '".$_POST['sel_add_driver_1']."',
+    driver2 = '".$_POST['sel_add_driver_2']."',
+    truck_no = ".$_POST['txt_truckno'].",
+    odo_start = ".$_POST['txt_od_start'].",
+    odo_end = ".$_POST['txt_od_end']."
+    WHERE trip_no = '".$_POST['txt_tripnum']."'";
+    
+    if ($mysqli->query($sql_ifta) === false)
+    {
+        throw new Exception("Error UPDATING IFTA: ".$mysqli->error);
+    }
+
+  } catch (Exception $e) {
+    // An exception has been thrown
+    // We must rollback the transaction
+    $url_error = urlencode($e->getMessage());
+    $mysqli->rollback();
+    header("location: /pages/dispatch/updateifta.php?trip_no=".$_POST['txt_tripnum']."&error=$url_error");
+    $mysqli->autocommit(TRUE);
+    $mysqli->close();
+    exit;
+  }
 }
 
 $mysqli->autocommit(TRUE);

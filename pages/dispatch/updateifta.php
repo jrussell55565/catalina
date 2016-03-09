@@ -183,7 +183,7 @@
                               <tbody>
                                  <tr>
                                     <td>Trip #
-                                    <td><input class="input-sm form-control" name="txt_tripnum" type="text" id="txt_tripnum" value="<?php echo $ifta_results['trip_no'];?>" required></td>
+                                    <td><input class="input-sm form-control" name="txt_tripnum" type="text" id="txt_tripnum" value="<?php echo $ifta_results['trip_no'];?>" readonly></td>
                                  </tr>
                                  <tr>
                                     <td>Start Date
@@ -394,7 +394,7 @@
                             </tbody>
                            </table>
                         <p></p>
-                        <button type="submit" class="btn btn-danger">Submit</button>
+                        <button type="submit" class="btn btn-danger" name="update_ifta">Submit</button>
                         </form>
                         </div>
                         <!-- /.box-body -->
