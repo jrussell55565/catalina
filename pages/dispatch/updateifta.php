@@ -56,14 +56,15 @@
      // IFTA_DETAILS
      $ifta_details = array();
      $counter = 0;
-     $query = "SELECT ifta_details.trip_no,date_format(ifta_details.trip_date,'%m/%d/%Y') as trip_date,
+     $query = "SELECT ifta_details.id,ifta_details.trip_no,date_format(ifta_details.trip_date,'%m/%d/%Y') as trip_date,
                driver,ifta_details.hwb,ifta_details.route,ifta_details.st_exit,
                ifta_details.st_enter,ifta_details.state_line_odometer,ifta_details.state_miles,ifta_details.permit_required
                FROM ifta_details
                WHERE ifta_details.trip_no = '".$_GET['trip_no']."'
-               ORDER BY date_created DESC";
+               ORDER BY date_created ASC";
      if ($result = $mysqli->query($query)) {
          while($obj = $result->fetch_object()){ 
+           $ifta_details[$counter]['id'] = $obj->id;
            $ifta_details[$counter]['trip_no'] = $obj->trip_no;
            $ifta_details[$counter]['trip_date'] = $obj->trip_date;
            $ifta_details[$counter]['driver'] = $obj->driver;
@@ -82,13 +83,14 @@
      // IFTA_FUEL
      $ifta_fuel = array();
      $counter = 0;
-     $query = "select trip_no, date_format(trip_date,'%m/%d/%Y') as trip_date,
+     $query = "select id,trip_no, date_format(trip_date,'%m/%d/%Y') as trip_date,
                fuel_gallons, fuel_reefer, fuel_other, vendor, city, state, odometer
                from ifta_fuel
                WHERE trip_no = '".$_GET['trip_no']."'
-               ORDER BY date_created DESC";
+               ORDER BY date_created ASC";
      if ($result = $mysqli->query($query)) {
          while($obj = $result->fetch_object()){ 
+           $ifta_fuel[$counter]['id'] = $obj->id;
            $ifta_fuel[$counter]['trip_no'] = $obj->trip_no;
            $ifta_fuel[$counter]['trip_date'] = $obj->trip_date;
            $ifta_fuel[$counter]['fuel_gallons'] = $obj->fuel_gallons;
@@ -259,7 +261,7 @@
                               ?>
                                 <tr id="tr_add_driver_details_<?php echo $random;?>">
                                  <td style="width: 5em;"><input class="input-sm form-control" name="txt_tripnum_details[]" type="text" id="txt_tripnum_details_<?php echo $random;?>" value="<?php echo $ifta_details[$i]['trip_no'];?>" readonly>
-                                    <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_<?php echo $random;?>" value="1"></td>
+                                    <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_<?php echo $random;?>" value="<?php echo $ifta_details[$i]['id'];?>"></td>
                                     <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_<?php echo $random;?>" value="<?php echo $ifta_details[$i]['trip_date'];?>" size=""></td>
                                  <td>
                                   <select class="input-sm form-control" name="txt_driver_details[]" type="text" id="txt_driver_details_<?php echo $random;?>" value="">
@@ -329,7 +331,7 @@
                               ?>
 <tr id="tr_add_fuel_details_<?php echo $random;?>">
                                     <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_tripnum[]" type="text" id="txt_fuel_tripnum_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['trip_no'];?>" readonly>
-                                    <input type="hidden" name="hdn_fuel_id[]" id="hdn_fuel_id_<?php echo $random;?>" value="1"></td>
+                                    <input type="hidden" name="hdn_fuel_id[]" id="hdn_fuel_id_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['id'];?>"></td>
                                     <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_fuel_date[]" type="text" id="txt_fuel_date_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['trip_date'];?>" size=""></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_gallons[]" type="text" id="txt_fuel_gallons_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['fuel_gallons'];?>"></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_reefer[]" type="text" id="txt_fuel_reefer_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['fuel_reefer'];?>"></td>
@@ -456,19 +458,19 @@
                                  "name": $("#sel_add_driver_2 option:selected").text()
                                };
 
-         var new_row = `<tr id="tr_add_driver_details_`+random+`">
-                                 <td style="width: 5em;"><input class="input-sm form-control" name="txt_tripnum_details[]" type="text" id="txt_tripnum_details_`+random+`" value="`+tripnum+`" readonly>
-                                    <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_`+random+`" value="1"></td>
-                                    <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_`+random+`" value="" size=""></td>
+         var new_row = `<tr id="tr_add_driver_details_add_`+random+`">
+                                 <td style="width: 5em;"><input class="input-sm form-control" name="txt_tripnum_details_add[]" type="text" id="txt_tripnum_details_add_`+random+`" value="`+tripnum+`" readonly>
+                                    <input type="hidden" name="hdn_details_id_add[]" id="hdn_details_id_add_`+random+`" value="0"></td>
+                                    <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_date_details_add[]" type="text" id="txt_date_details_add_`+random+`" value="" size=""></td>
                                  <td>
-                                  <select class="input-sm form-control" name="txt_driver_details[]" type="text" id="txt_driver_details_`+random+`" value="">
+                                  <select class="input-sm form-control" name="txt_driver_details_add[]" type="text" id="txt_driver_details_add_`+random+`" value="">
                                    <option value="null">Choose...</option>
                                   </select>
                                  </td>
-                                 <td style="width: 5em;"><input class="input-sm form-control hwb" name="txt_hwb_details[]" type="text" id="txt_hwb_details_`+random+`"></td>
-                                 <td><input class="input-sm form-control" name="txt_routes_details[]" type="text" id="txt_routes_details_`+random+`"></td>
+                                 <td style="width: 5em;"><input class="input-sm form-control hwb" name="txt_hwb_details_add[]" type="text" id="txt_hwb_details_add_`+random+`"></td>
+                                 <td><input class="input-sm form-control" name="txt_routes_details_add[]" type="text" id="txt_routes_details_add_`+random+`"></td>
                                  <td>
-                                    <select class="input-sm form-control" name="txt_state_exit_details[]" id="txt_state_exit_details_`+random+`" value="">
+                                    <select class="input-sm form-control" name="txt_state_exit_details_add[]" id="txt_state_exit_details_add_`+random+`" value="">
                                        <?php
                                           foreach ($us_state_abbrevs as $state) { ?>
                                        <option><?php echo $state;?></option>
@@ -476,81 +478,78 @@
                                     </select>
                                  </td>
                                  <td>
-                                    <select class="input-sm form-control" name="txt_state_enter_details[]" id="txt_state_exit_details_`+random+`" value="">
+                                    <select class="input-sm form-control" name="txt_state_enter_details_add[]" id="txt_state_exit_details_add_`+random+`" value="">
                                        <?php
                                           foreach ($us_state_abbrevs as $state) { ?>
                                        <option><?php echo $state;?></option>
                                        <?php } ?>
                                     </select>
                                  </td>
-                                 <td><input class="input-sm form-control" name="txt_state_odo_details[]" type="text" id="txt_state_odo_details_`+random+`"></td>
+                                 <td><input class="input-sm form-control" name="txt_state_odo_details_add[]" type="text" id="txt_state_odo_details_add_`+random+`"></td>
                                  <td>
-                                    <input class="input-sm form-control" name="txt_state_miles_details[]" type="text" id="txt_state_miles_details_`+random+`" value="">
+                                    <input class="input-sm form-control" name="txt_state_miles_details_add[]" type="text" id="txt_state_miles_details_add_`+random+`" value="">
                                  </td>
-                                 <td><input class="input-sm" type="checkbox" name="txt_permit_req_details[]" id="txt_permit_req_details_`+random+`"></td>
+                                 <td><input class="input-sm" type="checkbox" name="txt_permit_req_details_add[]" id="txt_permit_req_details_add_`+random+`"></td>
                                  <td style="text-align: right;">
-                                    <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_details[]" id="txt_delete_row_details_`+random+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
+                                    <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_details_add[]" id="txt_delete_row_details_add_`+random+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                  </td>
                               </tr>`;
          
          // Append a new tr to the table based on the 'new_row' variables         
          $("#add_ifta_table > tbody:last-child").append(new_row);
 
-         var prev_hwb = $("#tr_add_driver_details_"+random).prev().children('td').eq(3).children(':text').val();
-         var prev_st_enter = $("#tr_add_driver_details_"+random).prev().children('td').eq(6).find('option:selected').text();
-         $("#txt_hwb_details_"+random).val(prev_hwb);
+         var prev_hwb = $("#tr_add_driver_details_add_"+random).prev().children('td').eq(3).children(':text').val();
+         var prev_st_enter = $("#tr_add_driver_details_add_"+random).prev().children('td').eq(6).find('option:selected').text();
+         $("#txt_hwb_details_add_"+random).val(prev_hwb);
 
          // Set the Exit state to the value of the "enter" state of the previous line
          if (prev_st_enter) {
-             $("#txt_state_exit_details_"+random+" option:contains(" + prev_st_enter + ")").attr('selected', 'selected');
+             $("#txt_state_exit_details_add_"+random+" option:contains(" + prev_st_enter + ")").attr('selected', 'selected');
          }
 
          // Append Driver 1 to the select box
-         $("#txt_driver_details_"+random)
+         $("#txt_driver_details_add_"+random)
          .find('option')
          .remove()
          .end()
          .append('<option value="'+driver_list[0].id+'">'+driver_list[0].name+'</option>')
          .val(driver_list[0].name)
 
-         // Make the first driver the selected driver
-         $("#txt_driver_details_"+random+" option[value="+driver_list[0].id+"]").prop('selected', true);
-
          // If we chose a driver 2 then we'll append that
          if (driver_list[1].id != 'null') {
-           $("#txt_driver_details_"+random)
-           .find('option')
-           .remove()
-           .end()
+           $("#txt_driver_details_add_"+random)
            .append('<option value="'+driver_list[1].id+'">'+driver_list[1].name+'</option>')
            .val(driver_list[1].name);
          }
+
+         // Make the first driver the selected driver
+         $("#txt_driver_details_add_"+random+" option[value="+driver_list[0].id+"]").prop('selected', true);
 
          }
          
          function addFuelRow(id) {
          var random = Math.ceil(Math.random() * 1000);
          var tripnum = $("#txt_tripnum").val();
-         var new_row = `<tr id="tr_add_fuel_details_`+random+`">
-                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_tripnum[]" type="text" id="txt_fuel_tripnum_`+random+`" value="`+tripnum+`" readonly>
-                                    <input type="hidden" name="hdn_fuel_id[]" id="hdn_fuel_id_`+random+`" value="1"></td>
-                                    <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_fuel_date[]" type="text" id="txt_fuel_date_`+random+`" value="" size=""></td>
-                                    <td><input class="input-sm form-control" name="txt_fuel_gallons[]" type="text" id="txt_fuel_gallons_`+random+`" value=""></td>
-                                    <td><input class="input-sm form-control" name="txt_fuel_reefer[]" type="text" id="txt_fuel_reefer_`+random+`" value=""></td>
-                                    <td style="width: 10em;"><input class="input-sm form-control" name="txt_fuel_other[]" type="text" id="txt_fuel_other_`+random+`" value=""></td>
-                                    <td><input class="input-sm form-control" name="txt_fuel_vendor[]" type="text" id="txt_fuel_vendor_`+random+`" value=""></td>
-                                    <td><input class="input-sm form-control" name="txt_fuel_city[]" type="text" id="txt_fuel_city_`+random+`" value=""></td>
+         var new_row = `<tr id="tr_add_fuel_details_add_`+random+`">
+                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_tripnum_add[]" type="text" id="txt_fuel_tripnum_add_`+random+`" value="`+tripnum+`" readonly>
+                                    <input type="hidden" name="hdn_fuel_id_add[]" id="hdn_fuel_id_add_`+random+`" value="0"></td>
+                                    <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_fuel_date_add[]" type="text" id="txt_fuel_date_add_`+random+`" value="" size=""></td>
+                                    <td><input class="input-sm form-control" name="txt_fuel_gallons_add[]" type="text" id="txt_fuel_gallons_add_`+random+`" value=""></td>
+                                    <td><input class="input-sm form-control" name="txt_fuel_reefer_add[]" type="text" id="txt_fuel_reefer_add_`+random+`" value=""></td>
+                                    <td style="width: 10em;"><input class="input-sm form-control" name="txt_fuel_other_add[]" type="text" id="txt_fuel_other_add_`+random+`" value=""></td>
+                                    <td><input class="input-sm form-control" name="txt_fuel_vendor_add[]" type="text" id="txt_fuel_vendor_add_`+random+`" value=""></td>
+                                    <td><input class="input-sm form-control" name="txt_fuel_city_add[]" type="text" id="txt_fuel_city_add_`+random+`" value=""></td>
                                     <td>
-                                       <select class="input-sm form-control" name="txt_fuel_state[]" id="txt_fuel_state_`+random+`" value="<?php echo $row['st_enter'];?>">
+                                       <select class="input-sm form-control" name="txt_fuel_state_add[]" id="txt_fuel_state_add_`+random+`" value="<?php echo $row['st_enter'];?>">
                                           <?php
                                              foreach ($us_state_abbrevs as $state) { ?>
                                           <option><?php echo $state;?></option>
                                           <?php } ?>
                                        </select>
                                     </td>
-                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_odo[]" type="text" id="txt_fuel_odo_`+random+`" value=""></td>
+                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_odo_add[]" type="text" id="txt_fuel_odo_add_`+random+`" value=""></td>
                                     <td style="text-align: right;">
-                                       <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_fuel[]" id="txt_delete_row_fuel_`+random+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
+                                       <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_fuel_add[]" id="txt_delete_row_fuel_add_`+random+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                     </td>
                                  </tr>`;
 

@@ -54,7 +54,10 @@ if (isset($_GET['trip_driver']) && $_GET['trip_driver'] != '' && $_GET['trip_dri
 
 $query = "SELECT concat(a.fname,' ',a.lname) AS driver1,
           concat(b.fname,' ',b.lname) AS driver2,
-          ifta.trip_no,truck_no,date_started,date_ended,st_exit,st_enter 
+          ifta.trip_no,truck_no,
+          date_format(date_started,'%m/%d/%Y') as date_started,
+          date_format(date_ended,'%m/%d/%Y') as date_ended,
+          st_exit,st_enter 
           FROM ifta, ifta_details, users a, users b
           WHERE ifta.trip_no = ifta_details.trip_no
           AND ifta.driver1 = a.employee_id

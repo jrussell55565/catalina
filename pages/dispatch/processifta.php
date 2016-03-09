@@ -225,6 +225,164 @@ if (isset($_POST['update_ifta'])) {
         throw new Exception("Error UPDATING IFTA: ".$mysqli->error);
     }
 
+    $id = $_POST['hdn_details_id'];
+    for ($i=0; $i<sizeof($id); $i++)
+    {
+        if ($_POST['txt_tripnum_details'][$i] == '') { $_POST['txt_tripnum_details'][$i] = 'NULL'; }
+        if ($_POST['txt_date_details'][$i] == '') { $_POST['txt_date_details'][$i] = 'NULL'; }
+        if ($_POST['txt_driver_details'][$i] == '') { $_POST['txt_driver_details'][$i] = 'NULL'; }
+        if ($_POST['txt_hwb_details'][$i] == '') { $_POST['txt_hwb_details'][$i] = 'NULL'; }
+        if ($_POST['txt_routes_details'][$i] == '') { $_POST['txt_routes_details'][$i] = 'NULL'; }
+        if ($_POST['txt_state_exit_details'][$i] == '') { $_POST['txt_state_exit_details'][$i] = 'NULL'; }
+        if ($_POST['txt_state_enter_details'][$i] == '') { $_POST['txt_state_enter_details'][$i] = 'NULL'; }
+        if ($_POST['txt_state_odo_details'][$i] == '') { $_POST['txt_state_odo_details'][$i] = 'NULL'; }
+        if ($_POST['txt_state_miles_details'][$i] == '') { $_POST['txt_state_miles_details'][$i] = 'NULL'; }
+        if (isset($_POST['txt_permit_req_details'][$i])) { $permit = 'Y'; }else{ $permit = 'N'; }
+      
+        $sql_details = "UPDATE ifta_details SET
+        trip_date = str_to_date('".$_POST['txt_date_details'][$i]."','%m/%d/%Y'),
+        driver = '".$_POST['txt_driver_details'][$i]."',
+        hwb = '".$_POST['txt_hwb_details'][$i]."',
+        route = '".$_POST['txt_routes_details'][$i]."',
+        st_exit = '".$_POST['txt_state_exit_details'][$i]."',
+        st_enter = '".$_POST['txt_state_enter_details'][$i]."',
+        state_line_odometer = ".$_POST['txt_state_odo_details'][$i].",
+        state_miles = ".$_POST['txt_state_miles_details'][$i].",
+        permit_required = '$permit'
+        WHERE id = ".$_POST['hdn_details_id'][$i];
+
+        if ($mysqli->query($sql_details) === false)
+        {
+            throw new Exception("Error UPDATING IFTA_DETAILS: ".$mysqli->error);
+        }
+    }
+
+    $id = $_POST['hdn_details_id_add'];
+    for ($i=0; $i<sizeof($id); $i++)
+    {
+        if ($_POST['txt_tripnum_details_add'][$i] == '') { $_POST['txt_tripnum_details_add'][$i] = 'NULL'; }
+        if ($_POST['txt_date_details_add'][$i] == '') { $_POST['txt_date_details_add'][$i] = 'NULL'; }
+        if ($_POST['txt_driver_details_add'][$i] == '') { $_POST['txt_driver_details_add'][$i] = 'NULL'; }
+        if ($_POST['txt_hwb_details_add'][$i] == '') { $_POST['txt_hwb_details_add'][$i] = 'NULL'; }
+        if ($_POST['txt_routes_details_add'][$i] == '') { $_POST['txt_routes_details_add'][$i] = 'NULL'; }
+        if ($_POST['txt_state_exit_details_add'][$i] == '') { $_POST['txt_state_exit_details_add'][$i] = 'NULL'; }
+        if ($_POST['txt_state_enter_details_add'][$i] == '') { $_POST['txt_state_enter_details_add'][$i] = 'NULL'; }
+        if ($_POST['txt_state_odo_details_add'][$i] == '') { $_POST['txt_state_odo_details_add'][$i] = 'NULL'; }
+        if ($_POST['txt_state_miles_details_add'][$i] == '') { $_POST['txt_state_miles_details_add'][$i] = 'NULL'; }
+        if (isset($_POST['txt_permit_req_details_add'][$i])) { $permit = 'Y'; }else{ $permit = 'N'; }
+      
+        $sql_details_add = 
+        "INSERT INTO ifta_details
+        (
+        trip_no,
+        trip_date,
+        driver,
+        hwb,
+        route,
+        st_exit,
+        st_enter,
+        state_line_odometer,
+        state_miles,
+        permit_required
+        )
+        VALUES
+        (
+        '".$_POST['txt_tripnum_details_add'][$i]."',
+        str_to_date('".$_POST['txt_date_details_add'][$i]."','%m/%d/%Y'),
+        '".$_POST['txt_driver_details_add'][$i]."',
+        '".$_POST['txt_hwb_details_add'][$i]."',
+        '".$_POST['txt_routes_details_add'][$i]."',
+        '".$_POST['txt_state_exit_details_add'][$i]."',
+        '".$_POST['txt_state_enter_details_add'][$i]."',
+        ".$_POST['txt_state_odo_details_add'][$i].",
+        ".$_POST['txt_state_miles_details_add'][$i].",
+        '$permit'
+        )";
+
+        if ($mysqli->query($sql_details_add) === false)
+        {
+            throw new Exception("Error INSERTING into table IFTA_DETAILS: ".$mysqli->error);
+        }
+    }
+
+  #IFTA_FUEL
+    $id = $_POST['hdn_fuel_id'];
+    for ($i=0; $i<sizeof($id); $i++)
+    {
+        if ($_POST['txt_fuel_tripnum'][$i] == '') { $_POST['txt_fuel_tripnum'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_date'][$i] == '') { $_POST['txt_fuel_date'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_gallons'][$i] == '') { $_POST['txt_fuel_gallons'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_reefer'][$i] == '') { $_POST['txt_fuel_reefer'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_other'][$i] == '') { $_POST['txt_fuel_other'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_vendor'][$i] == '') { $_POST['txt_fuel_vendor'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_city'][$i] == '') { $_POST['txt_fuel_city'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_state'][$i] == '') { $_POST['txt_fuel_state'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_odo'][$i] == '') { $_POST['txt_fuel_odo'][$i] = 'NULL'; }
+        
+        $sql_fuel = "UPDATE ifta_fuel SET
+        trip_date = str_to_date('".$_POST['txt_fuel_date'][$i]."','%m/%d/%Y'),
+        fuel_gallons = ".$_POST['txt_fuel_gallons'][$i].",
+        fuel_reefer = ".$_POST['txt_fuel_reefer'][$i].",
+        fuel_other = ".$_POST['txt_fuel_other'][$i].",
+        vendor = '".$_POST['txt_fuel_vendor'][$i]."',
+        city = '".$_POST['txt_fuel_city'][$i]."',
+        state = '".$_POST['txt_fuel_state'][$i]."',
+        odometer = ".$_POST['txt_fuel_odo'][$i]."
+        WHERE id = ".$_POST['hdn_fuel_id'][$i];
+
+        if ($mysqli->query($sql_fuel) === false)
+        {
+            throw new Exception("Error UPDATING table IFTA_FUEL: ".$mysqli->error);
+        }
+    }
+
+    $id = $_POST['hdn_fuel_id_add'];
+    for ($i=0; $i<sizeof($id); $i++)
+    {
+        if ($_POST['txt_fuel_tripnum_add'][$i] == '') { $_POST['txt_fuel_tripnum_add'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_date_add'][$i] == '') { $_POST['txt_fuel_date_add'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_gallons_add'][$i] == '') { $_POST['txt_fuel_gallons_add'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_reefer_add'][$i] == '') { $_POST['txt_fuel_reefer_add'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_other_add'][$i] == '') { $_POST['txt_fuel_other_add'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_vendor_add'][$i] == '') { $_POST['txt_fuel_vendor_add'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_city_add'][$i] == '') { $_POST['txt_fuel_city_add'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_state_add'][$i] == '') { $_POST['txt_fuel_state_add'][$i] = 'NULL'; }
+        if ($_POST['txt_fuel_odo_add'][$i] == '') { $_POST['txt_fuel_odo_add'][$i] = 'NULL'; }
+        
+        $sql_fuel = "INSERT INTO ifta_fuel
+        (
+        trip_no,
+        trip_date,
+        fuel_gallons,
+        fuel_reefer,
+        fuel_other,
+        vendor,
+        city,
+        state,
+        odometer
+        )
+        VALUES
+        (
+        '".$_POST['txt_fuel_tripnum_add'][$i]."',
+        str_to_date('".$_POST['txt_fuel_date_add'][$i]."','%m/%d/%Y'),
+        ".$_POST['txt_fuel_gallons_add'][$i].",
+        ".$_POST['txt_fuel_reefer_add'][$i].",
+        ".$_POST['txt_fuel_other_add'][$i].",
+        '".$_POST['txt_fuel_vendor_add'][$i]."',
+        '".$_POST['txt_fuel_city_add'][$i]."',
+        '".$_POST['txt_fuel_state_add'][$i]."',
+        ".$_POST['txt_fuel_odo_add'][$i]."
+        )";
+
+        if ($mysqli->query($sql_fuel) === false)
+        {
+            throw new Exception("Error INSERTING into table IFTA_FUEL: ".$mysqli->error);
+        }
+    }
+
+
+
+
   } catch (Exception $e) {
     // An exception has been thrown
     // We must rollback the transaction
@@ -239,7 +397,12 @@ if (isset($_POST['update_ifta'])) {
 
 $mysqli->autocommit(TRUE);
 $mysqli->close();
-header("location: /pages/dispatch/ifta.php");
+if (isset($_POST['add_ifta'])) {
+    header("location: /pages/dispatch/ifta.php");
+}
+if (isset($_POST['update_ifta'])) {
+    header("location: /pages/dispatch/updateifta.php?trip_no=".$_POST['txt_tripnum']);
+}
 exit;
 
 function reArrayFiles(&$file_post) {

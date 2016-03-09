@@ -437,18 +437,15 @@
          .append('<option value="'+driver_list[0].id+'">'+driver_list[0].name+'</option>')
          .val(driver_list[0].name)
 
-         // Make the first driver the selected driver
-         $("#txt_driver_details_"+random+" option[value="+driver_list[0].id+"]").prop('selected', true);
-
          // If we chose a driver 2 then we'll append that
          if (driver_list[1].id != 'null') {
            $("#txt_driver_details_"+random)
-           .find('option')
-           .remove()
-           .end()
            .append('<option value="'+driver_list[1].id+'">'+driver_list[1].name+'</option>')
            .val(driver_list[1].name);
          }
+
+         // Make the first driver the selected driver
+         $("#txt_driver_details_"+random+" option[value="+driver_list[0].id+"]").prop('selected', true);
 
          }
          
