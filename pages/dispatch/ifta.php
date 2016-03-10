@@ -96,6 +96,7 @@
                         <div class="box-tools pull-right">
                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Open"><i class="fa fa-plus"></i></button>
                         </div>
+                        <div style="width: 50%; text-align: center; margin:auto; display: none;" id="search_alert" class="alert alert-danger" role="alert">Include a beginning AND end date.</div>
                      </div>
                      <div class="box-body">
                         <form name="frm_ifta_search" method="GET" action="ifta.php" role="form">
@@ -112,22 +113,6 @@
                                  <tr>
                                     <td>Trip Ending</td>
                                     <td><input type="text" class="input-sm form-control datepicker" name="trip_search_enddate" id="trip_search_enddate" data-date-format="mm/dd/yyyy"></td>
-                                 </tr>
-                                 <tr>
-                                    <td>State Enter / State Exit</td>
-                                    <td>
-                                       <select class="input-sm form-control" name="trip_search_state" id="trip_search_state" value="">
-                                          <option>Choose State...</option>
-                                          <?php
-                                             foreach ($us_state_abbrevs as $state) { ?>
-                                          <option><?php echo $state;?></option>
-                                          <?php } ?>
-                                       </select>
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td>Permit Required</td>
-                                    <td><input class="input-sm" type="checkbox" name="trip_search_permit_req" id="trip_search_permit_req"></td>
                                  </tr>
                                  <tr>
                                     <td>Truck #</td>
@@ -483,6 +468,11 @@
 $(document).ready(function(){
   // Ajax calls for search
   $("#btn_display_results").click(function() {
+    if (($("#trip_search_startdate").val().length < 1)
+        || ($("#trip_search_enddate").val().length < 1)) {
+       $("#search_alert").show();
+       return false;
+    }
     function searchResults(callBack) {
       $.ajax({
        method: "GET",
@@ -492,7 +482,6 @@ $(document).ready(function(){
               trip_start: $("#trip_search_startdate").val(),
               trip_end: $("#trip_search_enddate").val(),
               trip_state: $("#trip_search_state").val(),
-              trip_permit: $("#trip_search_permit_req").is(":checked"),
               trip_truck_no: $("#trip_search_trucknumber").val(),
               trip_driver: $("#trip_search_driver").val()
             },
@@ -513,7 +502,7 @@ $(document).ready(function(){
           if (myRtn == "Success") {
             //resetForm($('#myForm'));
             //resetForm($('form[name=addChlGrp]'));
-            //console.log(data);
+            console.log(data);
             var output = `<table id="tbl_search_results" class="table">
                             <tr>
                               <td>Trip Number</td>
@@ -523,8 +512,6 @@ $(document).ready(function(){
                               <td>Trip End</td>
                               <td>Driver Name 1</td>
                               <td>Driver Name 2</td>
-                              <td>State Exit</td>
-                              <td>State Enter</td>
                               <td>Total Trip Miles</td>
                            </tr>`;
 
@@ -540,14 +527,11 @@ $(document).ready(function(){
                               <td>`+obj.date_ended+`</td>
                               <td>`+obj.driver1+`</td>
                               <td>`+obj.driver2+`</td>
-                              <td>`+obj.st_exit+`</td>
-                              <td>`+obj.st_enter+`</td>
-                              <td>2345</td>
+                              <td>`+obj.trip_miles+`</td>
                            </tr>`;
             }
             output = output + '</table>';
             $("#search_results").html(output);
-            //console.log(data);
           } else {
             console.log(data);
             //$('.rtnMsg').html("Opps! Ajax Error");
