@@ -299,7 +299,7 @@ $drivername = $_SESSION['drivername'];
                     $sql .= "AND archived=\"F\" AND deleted=\"F\"";
                 }
 
-                $sql .= " ORDER BY str_to_date(hawbDate,'%c/%e/%Y'), readyTime DESC";
+                $sql .= " ORDER BY str_to_date(hawbDate,'%c/%e/%Y'), readyTime ASC";
                 $sql = mysql_query($sql);
 
                 # Status: Red needs update(EF5350), Turquise (26A69A) Update not complete,
