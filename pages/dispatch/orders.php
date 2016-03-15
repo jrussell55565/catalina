@@ -278,6 +278,8 @@ $drivername = $_SESSION['drivername'];
                         ,pieces
                         ,weight 
                         ,readyTime
+						,closeTime
+						,dueTime
                         from dispatch
                         where (";
                 if ($_GET['gather'] == "del")
@@ -357,35 +359,53 @@ $drivername = $_SESSION['drivername'];
                     <td style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                      <span>
                       <input type="hidden" id="<?php echo "order[$counter][hawb]"; ?>" name="<?php echo "order[$counter][hawb]"; ?>" value="<?php echo "$row[hawbNumber]";?>" />
-                      <a href="singlehwb.php?hwb=<?php echo "$row[hawbNumber]"; ?>&amp;recordid=<?php echo "$row[recordID]"; ?>"><?php echo "$row[hawbNumber]"; ?></a><br>
-                      PU:<?php echo "$row[puAgentDriverName]";?>
+                     <a href="singlehwb.php?hwb=<?php echo "$row[hawbNumber]"; ?>&amp;recordid=<?php echo "$row[recordID]"; ?>"><?php echo "$row[hawbNumber]"; ?></a><br>
+                      PU:<?php echo "$row[puAgentDriverName]";?><br>
+                      <?php echo "$row[readyTime]";?>
                      </span>
-
                      <br>
-                      DEL:<?php echo "$row[delAgentDriverName]";?>
+                      DEL:<?php echo "$row[delAgentDriverName]";?><br>
+                      <?php echo "$row[dueTime]";?>
                      </span>
                     </td>
                     <td><td style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                     <span><?php echo "$row[status]";?></span><br>
-                    <span>PU: <?php echo "$row[shipperName]";?></span><br>
-                    <span>DEL: <?php echo "$row[consigneeName]";?></span><br></td>
-<!-- Bootstrap 3.3.4 
+                    <span><?php echo "$row[shipperName]";?></span><br>
+                    <span><?php echo "$row[closeTime]";?></span><br>
+                    <span><?php echo "$row[consigneeName]";?></span><br>
+                    <?php echo "$row[dueTime]";?></td>
+<!-- Bootstrap 3.3.4
                     <td><span>PU<?php echo "$row[puAgentDriverName]";?></span><br>
-                      <span>DEL: <?php echo "$row[delAgentDriverName]";?></span><br></td> -->
+                    <span>DEL: <?php echo "$row[delAgentDriverName]";?></span><br></td> -->
                     <td>
                      <span>
                      <?php echo "$row[pieces]"; ?> / <?php echo "$row[weight]"; ?>
                      <br>
                       <?php if ($_GET['gather'] == "pu")
 							{ 
-                              echo $row['hawbDate'];
+							echo $row['hawbDate'];
+                            } 
+							elseif ($_GET['gather'] == "pu") 
+                            { 
+                            echo $row['hawbDate'];
+                            }
+							elseif ($_GET['gather'] == "")
+							{
+                            echo $row['hawbDate'] . " <br> " . $row['hawbDate'];
+                            }
+							?>
+                            
+                            <?php if ($_GET['gather'] == "del")
+							{ 
+                              echo $row['dueDate'];
                             } elseif ($_GET['gather'] == "del") 
                             { 
                               echo $row['dueDate'];
                             }elseif ($_GET['gather'] == ""){
-                              echo $row['hawbDate'] . " <br> " . $row['dueDate'];
+                              echo $row['dueDate'] . " <br> " . $row['dueDate'];
                             }?>
-                     </span><br>
+                     </span>
+                     <br>
                     </td>
                   </tr>
                 </div>
