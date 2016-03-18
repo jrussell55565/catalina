@@ -52,7 +52,7 @@ $drivername = $_SESSION['drivername'];
         <h1> King Pin Settings</h1>
         <ol class="breadcrumb">
           <li><a href="orders.php"><i class="fa fa-home"></i> Home</a></li>
-          <li class="active">Kinf Pin Settings</li>
+          <li class="active">King Pin Settings</li>
         </ol>
       </section>
       

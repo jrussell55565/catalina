@@ -40,6 +40,7 @@
                 <li><a href="/pages/info/loadboardinfo.php"><i class="fa fa-circle-o"></i>Load Board Info</a></li>
                 <li><a href="/pages/info/virinfo.php"><i class="fa fa-circle-o"></i>VIR Info</a></li>
                 <li><a href="/pages/info/kingpin.php"><i class="fa fa-circle-o"></i> King Pin Settings Info</a></li>
+                <li><a href="/pages/info/tirepressure.php"><i class="fa fa-circle-o"></i> Tire Pressure Info</a></li>
                 <li><a href="/pages/info/inspectiontypes.php"><i class="fa fa-circle-o"></i>DOT Inspection Info</a></li>
                 <li><a href="/pages/layout/boxed.html"><i class="fa fa-circle-o"></i>IFTA Trip Info</a></li>
                 <li><a href="/pages/layout/fixed.html"><i class="fa fa-circle-o"></i>Chain Laws Info</a></li>
