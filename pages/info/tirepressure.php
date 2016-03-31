@@ -49,10 +49,10 @@ $drivername = $_SESSION['drivername'];
     <div class="content-wrapper"> 
       <!-- Content Header (Page header) -->
       <section class="content-header">
-        <h1> King Pin Settings</h1>
+        <h1> Tire Inflation Info</h1>
         <ol class="breadcrumb">
           <li><a href="orders.php"><i class="fa fa-home"></i> Home</a></li>
-          <li class="active">Kinf Pin Settings</li>
+          <li class="active">Tire Inflation Info</li>
         </ol>
       </section>
       

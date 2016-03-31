@@ -8,40 +8,41 @@
                  <span class="info-box-icon bg-aqua"><i class="fa fa-cog fa-spin"></i></span>
                 </a>               
             <div class="info-box-content">
-			     <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php">Load Board</a></span><span class="info-box-number">Todays PU:<?php echo "$pu_today_count";?><br>
-                 Todays DEL:   <?php echo "$del_today_count";?></span></div>
+			     <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php">Load Board</a></span><span class="info-box-number">PU Today:<?php echo "$pu_today_count";?><br>
+                 DEL Today:   <?php echo "$del_today_count";?></span></div>
                  <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
 
 
 
+            <!-- fix for small devices only  Trying to Add Font Animations here-->
+            <div class="clearfix visible-sm-block"></div>
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
-              <a href="<?php echo HTTP;?>/pages/dispatch/vir.php" class="button animated rubberBand">
+			  <a href="<?php echo HTTP;?>/pages/dispatch/vir.php" class="button2 animated zoomIn">
 <style>
- a.button {
-	 -webkit-animation-duration: 5s;
+a.button2 {
+	 -webkit-animation-duration: 6s;
 	 -webkit-animation-delay: 1s;
 	 -webkit-animation-iteration-count: infinite;
 }
-</style>
-                <span class="info-box-icon bg-red"><i class="fa fa-wrench faa-wrench animated"></i></span>
-</a>               
+</style>              
+                <span class="info-box-icon bg-red"><i class="fa fa-wrench"></i></span>
+                </a>
                 <div class="info-box-content">
-                  <p><span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/vir.php">VIRs</a></span>
-                    <span class="info-box-number">Today: <?php echo $virs_daily_count;?> of 2<br>Last 8 days: <?php echo $virs_weekly_count;?> of 16</span></p>
-				</div>
+                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/vir.php">Vehicle Inspections</a></span>
+                <span class="info-box-number">VIR Today: <?php echo $virs_daily_count;?><br>
+                VIR Previous: <?php echo $virs_weekly_count;?></span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
 
             <!-- fix for small devices only -->
             <div class="clearfix visible-sm-block"></div>
-
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
-			  <a href="<?php echo HTTP;?>/pages/tables/fuel.php" class="button2 animated zoomIn">
+			  <a href="<?php echo HTTP;?>/pages/tables/userstats.php" class="button2 animated zoomIn">
 <style>
 a.button2 {
 	 -webkit-animation-duration: 6s;
@@ -52,34 +53,18 @@ a.button2 {
                 <span class="info-box-icon bg-green"><i class="fa fa-tachometer"></i></span>
                 </a>
                 <div class="info-box-content">
-                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/costats.php">User Points</a></span>
+                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/userstats.php">Driver Productivity</a></span>
                 <span class="info-box-number">Today: 
-                <br>Last 30 days: </span></div>
+                <br>
+                Last 30 days: </span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
 
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box"><a href="<?php echo HTTP;?>/pages/tables/ifta.php" class="button3 animated jello">
-<style>
- a.button3 {
-	 -webkit-animation-duration: 3s;
-	 -webkit-animation-delay: 1s;
-	 -webkit-animation-iteration-count: infinite;
- }
-</style>
-               <span class="info-box-icon bg-yellow"><i class="fa fa-newspaper-o"></i></span>
-</a>
-                <div class="info-box-content">
-                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/ifta.php"> IFTA Reports</a></span><span class="info-box-number">Todays  IFTA: X<br>
-Last 8 days IFTA: X</span></div><!-- /.info-box-content -->
-              </div><!-- /.info-box -->
-            </div><!-- /.col -->
-            
 
 
 
-            
+
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
 <a href="<?php echo HTTP;?>/pages/dispatch/admin/csa.php" class="button3 animated pulse">
@@ -94,12 +79,38 @@ Last 8 days IFTA: X</span></div><!-- /.info-box-content -->
 </a>
 
                 <div class="info-box-content">
-                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/csa.php">  DOT Safety Report</a></span>
+                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/csa.php">  Driver Compliance</a></span>
                 <span class="info-box-number">                  View Your Report</span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
-            </div><!-- /.col -->            
-            
+            </div><!-- /.col -->  
+
+
+           
+
+
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box"><a href="<?php echo HTTP;?>/pages/tables/ifta.php" class="button3 animated jello">
+<style>
+ a.button3 {
+	 -webkit-animation-duration: 3s;
+	 -webkit-animation-delay: 1s;
+	 -webkit-animation-iteration-count: infinite;
+ }
+</style>
+               <span class="info-box-icon bg-yellow"><i class="fa fa-newspaper-o"></i></span>
+</a>
+                <div class="info-box-content">
+                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/ifta.php"> IFTA Trip Reports</a></span><span class="info-box-number">Update IFTA <br>
+                </span></div>
+                <!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+
+
+
+
+
 
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
