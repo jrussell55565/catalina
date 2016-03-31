@@ -468,10 +468,13 @@
 $(document).ready(function(){
   // Ajax calls for search
   $("#btn_display_results").click(function() {
-    if (($("#trip_search_startdate").val().length < 1)
+    // If no trip number was specified then make sure we enter a date range
+    if ($("#search_tripnum").val().length < 1) {
+      if (($("#trip_search_startdate").val().length < 1)
         || ($("#trip_search_enddate").val().length < 1)) {
        $("#search_alert").show();
        return false;
+      }
     }
     function searchResults(callBack) {
       $.ajax({
