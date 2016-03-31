@@ -347,8 +347,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Catalina Dashboard
-            <small>1.0.</small></h1>
+            Welcome <span class="box-title"><?php echo "$_SESSION[fname]"; ?></span></h1>
 
           <ol class="breadcrumb">
             <li><a href="/pages/main/index.php"><i class="fa fa-home"></i> Home</a></li>
@@ -365,10 +364,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 
           <div class="row">
             <div class="col-md-12">
-              <div class="box">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Company Updates: Welcome, <?php echo "$_SESSION[fname]"; ?></h3>
-                </div><!-- /.box-header --><!-- ./box-body -->
+              <div class="box"><!-- /.box-header --><!-- ./box-body -->
 
 
           <div class="row">
@@ -377,7 +373,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
               <!-- MAP & BOX PANE -->
               <div class="box box-success">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Monthly Recap Report</h3>
+                  <h3 class="box-title">Shipment Updates Stats</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>

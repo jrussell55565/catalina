@@ -10,6 +10,8 @@
                 <li class="active"><a href="/pages/dispatch/vir_previous.php"><i class="fa fa-circle-o"></i> VIR Review</a></li>
                 <li class="active"><a href="/pages/dispatch/userstats.php"><i class="fa fa-circle-o"></i> User Stats</a></li>
                 <li class="active"><a href="/pages/dispatch/ifta.php"><i class="fa fa-circle-o"></i> Ifta Reporting</a></li>
+                <li class="active"><a href="/pages/dispatch/admin/accessorials.php"><i class="fa fa-circle-o"></i> Accessorials</a></li>
+                <li class="active"><a href="/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i> VIR Accessorials</a></li>
                 <li class="active"><a href="/pages/dispatch/admin/csa.php"><i class="fa fa-circle-o"></i> DOT Saftey</a></li>
                 <li class="active"><a href="/pages/dispatch/location.php"><i class="fa fa-circle-o"></i> Locate Users</a></li>
                 <li class="active"><a href="/pages/dispatch/logintrace.php"><i class="fa fa-circle-o"></i> Login Trace</a></li></ul></li>
@@ -30,10 +32,30 @@
             </li>
 -->
 
+
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-files-o"></i>
               <span>  Info Links For Drivers</span>
+              <span class="label label-primary pull-right"><!-- Remove Below 5 --></span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="/pages/info/loadboardinfo.php"><i class="fa fa-circle-o"></i>Load Board Info</a></li>
+                <li><a href="/pages/info/virinfo.php"><i class="fa fa-circle-o"></i>VIR Info</a></li>
+                <li><a href="/pages/info/kingpin.php"><i class="fa fa-circle-o"></i> King Pin Settings Info</a></li>
+                <li><a href="/pages/info/tirepressure.php"><i class="fa fa-circle-o"></i> Tire Pressure Info</a></li>
+                <li><a href="/pages/info/inspectiontypes.php"><i class="fa fa-circle-o"></i>DOT Inspection Info</a></li>
+                <li><a href="/pages/layout/boxed.html"><i class="fa fa-circle-o"></i>IFTA Trip Info</a></li>
+                <li><a href="/pages/layout/fixed.html"><i class="fa fa-circle-o"></i>Chain Laws Info</a></li>
+                <li><a href="/pages/info/otrpodimage.php"><i class="fa fa-circle-o"></i>OTR Documents Policy</a></li>
+              </ul>
+  </li>
+
+
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-files-o"></i>
+              <span>  Admin Links</span>
               <span class="label label-primary pull-right"><!-- Remove Below 5 --></span>
               </a>
               <ul class="treeview-menu">
