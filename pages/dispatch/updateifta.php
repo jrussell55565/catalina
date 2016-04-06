@@ -61,7 +61,7 @@
                ifta_details.st_enter,ifta_details.state_line_odometer,ifta_details.state_miles,ifta_details.permit_required
                FROM ifta_details
                WHERE ifta_details.trip_no = '".$_GET['trip_no']."'
-               ORDER BY date_created ASC";
+               ORDER BY date_format(ifta_details.trip_date,'%m/%d/%Y') ASC";
      if ($result = $mysqli->query($query)) {
          while($obj = $result->fetch_object()){ 
            $ifta_details[$counter]['id'] = $obj->id;
@@ -87,7 +87,7 @@
                fuel_gallons, fuel_reefer, fuel_other, vendor, city, state, odometer
                from ifta_fuel
                WHERE trip_no = '".$_GET['trip_no']."'
-               ORDER BY date_created ASC";
+               ORDER BY date_format(trip_date,'%m/%d/%Y') ASC";
      if ($result = $mysqli->query($query)) {
          while($obj = $result->fetch_object()){ 
            $ifta_fuel[$counter]['id'] = $obj->id;
