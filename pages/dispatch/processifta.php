@@ -249,7 +249,6 @@ if (isset($_POST['update_ifta'])) {
         }else{
             $permit = 'N';
         }
-        #if ($_POST['txt_permit_req_details'][$i] == 'on') { $permit = 'Y'; }else{ $permit = 'N'; }
       
         $sql_details = "UPDATE ifta_details SET
         trip_date = str_to_date('".$_POST['txt_date_details'][$i]."','%m/%d/%Y'),
