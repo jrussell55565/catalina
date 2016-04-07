@@ -237,7 +237,19 @@ if (isset($_POST['update_ifta'])) {
         if ($_POST['txt_state_enter_details'][$i] == '') { $_POST['txt_state_enter_details'][$i] = 'NULL'; }
         if ($_POST['txt_state_odo_details'][$i] == '') { $_POST['txt_state_odo_details'][$i] = 'NULL'; }
         if ($_POST['txt_state_miles_details'][$i] == '') { $_POST['txt_state_miles_details'][$i] = 'NULL'; }
-        if (isset($_POST['txt_permit_req_details'][$i])) { $permit = 'Y'; }else{ $permit = 'N'; }
+        
+        $count = 0;
+        foreach($_POST['txt_permit_req_details'] as $permit_value) {
+          if ($permit_value == $_POST['hdn_details_id'][$i]) {
+              $count = 1;
+          }
+        }
+        if ($count == 1) {
+            $permit = 'Y';
+        }else{
+            $permit = 'N';
+        }
+        #if ($_POST['txt_permit_req_details'][$i] == 'on') { $permit = 'Y'; }else{ $permit = 'N'; }
       
         $sql_details = "UPDATE ifta_details SET
         trip_date = str_to_date('".$_POST['txt_date_details'][$i]."','%m/%d/%Y'),
