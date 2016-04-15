@@ -107,6 +107,10 @@
                                     <td><input class="input-sm form-control" name="trip_search_tripnum" type="text" id="search_tripnum" value=""></td>
                                  </tr>
                                  <tr>
+                                    <td>HWB Number </td>
+                                    <td><input class="input-sm form-control" name="trip_search_hwbnum" type="text" id="search_hwbnum" value=""></td>
+                                 </tr>
+                                 <tr>
                                     <td>Trip Starting </td>
                                     <td><input type="text" class="input-sm form-control datepicker" name="trip_search_startdate" id="trip_search_startdate" data-date-format="mm/dd/yyyy"></td>
                                  </tr>
@@ -482,6 +486,7 @@ $(document).ready(function(){
        url: "searchifta.php",
        data: {
               trip_no: $("#search_tripnum").val(),
+              hwb_no: $("#search_hwbnum").val(),
               trip_start: $("#trip_search_startdate").val(),
               trip_end: $("#trip_search_enddate").val(),
               trip_state: $("#trip_search_state").val(),
@@ -509,6 +514,7 @@ $(document).ready(function(){
             var output = `<table id="tbl_search_results" class="table">
                             <tr>
                               <td>Trip Number</td>
+                              <td>HWB Number</td>
                               <td>Status</td>
                               <td>Truck</td>
                               <td>Trip Start</td>
@@ -523,7 +529,8 @@ $(document).ready(function(){
             for(var i = 0; i < json.length; i++) {
               var obj = json[i];
                output = output + `<tr>
-                              <td><a href="updateifta.php?trip_no=`+obj.trip_no+`" target="_blank">`+obj.trip_no+`</a></td>
+                              <td><a href="<?php echo HTTP;?>/pages/dispatch/updateifta.php?trip_no=`+obj.trip_no+`" target="_blank">`+obj.trip_no+`</a></td>
+                              <td>`+obj.hwb_no+`</td>
                               <td>Open</td>
                               <td>`+obj.truck_no+`</td>
                               <td>`+obj.date_started+`</td>
