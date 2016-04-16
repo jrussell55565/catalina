@@ -16,6 +16,12 @@ if (isset($_GET['trip_no']) && ($_GET['trip_no'] != '')) {
     $_GET['trip_no'] = ' ifta.trip_no like "%"';
 }
 
+if (isset($_GET['hwb_no']) && ($_GET['hwb_no'] != '')) { 
+    $_GET['hwb_no'] = ' ifta.hwb_no = "' . $_GET['hwb_no'] . '"'; 
+} else { 
+    $_GET['hwb_no'] = ' ifta.hwb_no like "%"';
+}
+
 // Don't set a trip_date value if we left off a beginning date
 if (! empty($_GET['trip_start']) && $_GET['trip_start'] != '') {
     $trip_date = ' 
@@ -42,13 +48,15 @@ if (isset($_GET['trip_driver']) && $_GET['trip_driver'] != '' && $_GET['trip_dri
 $query = "SELECT 
           (SELECT concat(fname,' ',lname) from users where employee_id=driver1) as driver1,
           (SELECT concat(fname,' ',lname) from users where employee_id=driver2) as driver2,
+          odo_start,
+          odo_end,
           odo_end - odo_start as trip_miles,
           ifta.trip_no,
           truck_no,
           date_format(date_started,'%m/%d/%Y') as date_started,
           date_format(date_ended,'%m/%d/%Y') as date_ended
           FROM ifta
-          WHERE 1=1 
+          WHERE 1=1
           AND ". $_GET['trip_no'] ."
           AND
           (

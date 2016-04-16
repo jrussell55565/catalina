@@ -515,6 +515,8 @@ $(document).ready(function(){
                             <tr>
                               <td>Trip Number</td>
                               <td>HWB Number</td>
+                              <td>Odometer, start</td>
+                              <td>Odometer, end</td>
                               <td>Status</td>
                               <td>Truck</td>
                               <td>Trip Start</td>
@@ -531,6 +533,8 @@ $(document).ready(function(){
                output = output + `<tr>
                               <td><a href="<?php echo HTTP;?>/pages/dispatch/updateifta.php?trip_no=`+obj.trip_no+`" target="_blank">`+obj.trip_no+`</a></td>
                               <td>`+obj.hwb_no+`</td>
+                              <td>`+obj.odo_start+`</td>
+                              <td>`+obj.odo_end+`</td>
                               <td>Open</td>
                               <td>`+obj.truck_no+`</td>
                               <td>`+obj.date_started+`</td>
