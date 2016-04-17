@@ -35,6 +35,28 @@
        $result->close();
      }
 
+   # Create associative array for the border states
+   $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
+   $state_border_array = array();
+   $statement = "select state_extent,bs_01,bs_02,bs_03,bs_04,bs_05,bs_06,bs_07,bs_08 from ifta_stateboarders";
+   if ($result = $mysqli->query($statement)) {
+     while($obj = $result->fetch_object()){
+            $states = $obj->state_extent . "," .
+                      $obj->bs_01 . "," .
+                      $obj->bs_02 . "," .
+                      $obj->bs_03 . "," .
+                      $obj->bs_04 . "," .
+                      $obj->bs_05 . "," .
+                      $obj->bs_06 . "," .
+                      $obj->bs_07 . "," .
+                      $obj->bs_08
+                      ;
+             array_push($state_border_array, $states) ;
+     }
+   }
+   /* free result set */
+   $result->close();
+
      // IFTA
      $ifta_results = array();
      $query = "SELECT trip_no,date_format(date_started,'%m/%d/%Y') as date_started,date_format(date_ended,'%m/%d/%Y') as date_ended
@@ -75,6 +97,7 @@
            $ifta_details[$counter]['state_line_odometer'] = $obj->state_line_odometer;
            $ifta_details[$counter]['state_miles'] = $obj->state_miles;
            $ifta_details[$counter]['permit_required'] = $obj->permit_required;
+           $ifta_details[$counter]['iteration'] = $counter;
            $counter++;
          } 
        $result->close();
@@ -133,6 +156,10 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
       <![endif]-->
+      <script>
+        var odo_counter = 0;
+        var fuel_counter = 0;
+      </script>
    </head>
    <body class="skin-blue sidebar-mini">
       <div class="wrapper">
@@ -256,10 +283,10 @@
                               </tr>
                               <tr id="tr_add_driver_details_1">
                               <?php
+                                $counter = 0;
                                 for($i=0; $i<count($ifta_details); $i++) {
-                                  $random = mt_rand(0,0xffffff);
                               ?>
-                                <tr id="tr_add_driver_details_<?php echo $random;?>">
+                                <tr id="tr_add_driver_details_<?php echo $ifta_details[$i]['iteration'];?>">
                                  <td style="width: 5em;"><input class="input-sm form-control" name="txt_tripnum_details[]" type="text" id="txt_tripnum_details_<?php echo $random;?>" value="<?php echo $ifta_details[$i]['trip_no'];?>" readonly>
                                     <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_<?php echo $random;?>" value="<?php echo $ifta_details[$i]['id'];?>"></td>
                                     <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_<?php echo $random;?>" value="<?php echo $ifta_details[$i]['trip_date'];?>" size=""></td>
@@ -283,7 +310,7 @@
                                     </select>
                                  </td>
                                  <td>
-                                    <select class="input-sm form-control" name="txt_state_enter_details[]" id="txt_state_exit_details_<?php echo $random;?>" value="">
+                                    <select class="input-sm form-control" name="txt_state_enter_details[]" id="txt_state_enter_details_<?php echo $random;?>" value="">
                                        <?php
                                           foreach ($us_state_abbrevs as $state) { ?>
                                        <option <?php if($state == $ifta_details[$i]['st_enter']){echo " selected ";}?>><?php echo $state;?></option>
@@ -445,7 +472,8 @@
       <script src="<?php echo HTTP;?>/dist/js/jquery.are-you-sure.js"></script>
       <script>
          function addOdoRow() {
-         var random = Math.ceil(Math.random() * 10000);
+         odo_counter = <?php echo count($ifta_details);?>;
+         var random = odo_counter;
          var tripnum = $("#txt_tripnum").val();
 
          var driver_list = [];
@@ -478,11 +506,8 @@
                                     </select>
                                  </td>
                                  <td>
-                                    <select class="input-sm form-control" name="txt_state_enter_details_add[]" id="txt_state_exit_details_add_`+random+`" value="">
-                                       <?php
-                                          foreach ($us_state_abbrevs as $state) { ?>
-                                       <option><?php echo $state;?></option>
-                                       <?php } ?>
+                                    <select class="input-sm form-control" name="txt_state_enter_details_add[]" id="txt_state_enter_details_add_`+random+`" value="">
+                                       <option></option>
                                     </select>
                                  </td>
                                  <td><input class="input-sm form-control" name="txt_state_odo_details_add[]" type="text" id="txt_state_odo_details_add_`+random+`"></td>
@@ -499,12 +524,54 @@
          $("#add_ifta_table > tbody:last-child").append(new_row);
 
          var prev_hwb = $("#tr_add_driver_details_add_"+random).prev().children('td').eq(3).children(':text').val();
+
+         // Set the value of txt_state_enter_details select box to states that surround the txt_state_exit_details select box
+         <?php
+           echo "var states = {\n";
+           foreach ($state_border_array as $state) {
+             $state_array = array();
+             $state_array = explode(",", $state);
+             echo "        '$state_array[0]' : [";
+             for($i = 1; $i <= 8; $i++) {
+               if ($state_array[$i] != '') {
+                 echo "'" . $state_array[$i] . "'";
+               }
+               if ( $state_array[$i + 1] == '' ) { continue; }
+               echo ",";
+             }
+             echo "],\n";
+           }
+           echo "        };\n";
+         ?>
+
          var prev_st_enter = $("#tr_add_driver_details_add_"+random).prev().children('td').eq(6).find('option:selected').text();
          $("#txt_hwb_details_add_"+random).val(prev_hwb);
 
          // Set the Exit state to the value of the "enter" state of the previous line
          if (prev_st_enter) {
              $("#txt_state_exit_details_add_"+random+" option:contains(" + prev_st_enter + ")").attr('selected', 'selected');
+         }
+
+         $("#txt_state_enter_details_"+random)
+         .find('option')
+         .remove()
+         .end()
+
+         // Only set the state_enter values if we're NOT the first row
+         if (random == 1) {
+           $("#txt_state_enter_details_add_"+random)
+           <?php
+           foreach ($us_state_abbrevs as $state) {
+             ?>
+             .append('<option value=""><?php echo $state;?></option>')
+             <?php
+           }?>
+         }else{
+           var primary_state = $("#txt_state_exit_details_add_"+random).children("option").filter(":selected").text();
+           for (var i = 1; i <= states[primary_state].length - 1; i++) {
+               $("#txt_state_enter_details_add_"+random)
+               .append('<option value="">'+states[primary_state][i]+'</option>')
+           }
          }
 
          // Append Driver 1 to the select box

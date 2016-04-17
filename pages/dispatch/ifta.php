@@ -26,6 +26,29 @@
        $driver_array[$row['employee_id']] = $row['fname']." ".$row['lname'];
    }
    mysql_free_result($results);
+
+   # Create associative array for the border states
+   $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
+   $state_border_array = array();
+   $statement = "select state_extent,bs_01,bs_02,bs_03,bs_04,bs_05,bs_06,bs_07,bs_08 from ifta_stateboarders";
+   if ($result = $mysqli->query($statement)) {
+     while($obj = $result->fetch_object()){ 
+            $states = $obj->state_extent . "," .
+                      $obj->bs_01 . "," .
+                      $obj->bs_02 . "," .
+                      $obj->bs_03 . "," .
+                      $obj->bs_04 . "," .
+                      $obj->bs_05 . "," .
+                      $obj->bs_06 . "," .
+                      $obj->bs_07 . "," .
+                      $obj->bs_08
+                      ;
+             array_push($state_border_array, $states) ;
+     }
+   }
+   /* free result set */
+   $result->close();
+
    ?>
 <!DOCTYPE html>
 <html>
@@ -52,7 +75,12 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
       <![endif]-->
+      <script>
+        var odo_counter = 0;
+        var fuel_counter = 0;
+      </script>
    </head>
+  
    <body class="skin-blue sidebar-mini">
       <div class="wrapper">
          <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/header.php');?>
@@ -356,7 +384,8 @@
       <script src="<?php echo HTTP;?>/dist/js/jquery.are-you-sure.js"></script>
       <script>
          function addOdoRow() {
-         var random = Math.ceil(Math.random() * 10000);
+         odo_counter = odo_counter + 1;
+         var random = odo_counter;
          var tripnum = $("#txt_tripnum").val();
 
          var driver_list = [];
@@ -389,11 +418,8 @@
                                     </select>
                                  </td>
                                  <td>
-                                    <select class="input-sm form-control" name="txt_state_enter_details[]" id="txt_state_exit_details_`+random+`" value="">
-                                       <?php
-                                          foreach ($us_state_abbrevs as $state) { ?>
-                                       <option><?php echo $state;?></option>
-                                       <?php } ?>
+                                    <select class="input-sm form-control" name="txt_state_enter_details[]" id="txt_state_enter_details_`+random+`" value="">
+                                       <option></option>
                                     </select>
                                  </td>
                                  <td><input class="input-sm form-control" name="txt_state_odo_details[]" type="text" id="txt_state_odo_details_`+random+`"></td>
@@ -410,12 +436,54 @@
          $("#add_ifta_table > tbody:last-child").append(new_row);
 
          var prev_hwb = $("#tr_add_driver_details_"+random).prev().children('td').eq(3).children(':text').val();
-         var prev_st_enter = $("#tr_add_driver_details_"+random).prev().children('td').eq(6).find('option:selected').text();
          $("#txt_hwb_details_"+random).val(prev_hwb);
+
+         // Set the value of txt_state_enter_details select box to states that surround the txt_state_exit_details select box
+         <?php
+           echo "var states = {\n";
+           foreach ($state_border_array as $state) {
+             $state_array = array();
+             $state_array = explode(",", $state);
+             echo "        '$state_array[0]' : [";
+             for($i = 1; $i <= 8; $i++) {
+               if ($state_array[$i] != '') {
+                 echo "'" . $state_array[$i] . "'";
+               }
+               if ( $state_array[$i + 1] == '' ) { continue; }
+               echo ",";
+             }
+             echo "],\n";
+           }
+           echo "        };\n";
+         ?>
+
+         var prev_st_enter = $("#tr_add_driver_details_"+random).prev().children('td').eq(6).find('option:selected').text();
 
          // Set the Exit state to the value of the "enter" state of the previous line
          if (prev_st_enter) {
              $("#txt_state_exit_details_"+random+" option:contains(" + prev_st_enter + ")").attr('selected', 'selected');
+         }
+
+         $("#txt_state_enter_details_"+random)
+         .find('option')
+         .remove()
+         .end()
+
+         // Only set the state_enter values if we're NOT the first row
+         if (random == 1) {
+           $("#txt_state_enter_details_"+random)
+           <?php
+           foreach ($us_state_abbrevs as $state) {
+             ?>
+             .append('<option value=""><?php echo $state;?></option>')
+             <?php
+           }?>
+         }else{
+           var primary_state = $("#txt_state_exit_details_"+random).children("option").filter(":selected").text();
+           for (var i = 1; i <= states[primary_state].length - 1; i++) {
+               $("#txt_state_enter_details_"+random)
+               .append('<option value="">'+states[primary_state][i]+'</option>')
+           }
          }
 
          // Append Driver 1 to the select box
@@ -439,7 +507,9 @@
          }
          
          function addFuelRow(id) {
-         var random = Math.ceil(Math.random() * 1000);
+         fuel_counter = fuel_counter + 1;
+         var random = fuel_counter;
+         //var random = Math.ceil(Math.random() * 1000);
          var tripnum = $("#txt_tripnum").val();
          var new_row = `<tr id="tr_add_fuel_details_`+random+`">
                                     <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_tripnum[]" type="text" id="txt_fuel_tripnum_`+random+`" value="`+tripnum+`" readonly>
