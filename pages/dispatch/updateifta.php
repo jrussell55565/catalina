@@ -568,7 +568,7 @@
            }?>
          }else{
            var primary_state = $("#txt_state_exit_details_add_"+random).children("option").filter(":selected").text();
-           for (var i = 1; i <= states[primary_state].length - 1; i++) {
+           for (var i = 0; i <= states[primary_state].length - 1; i++) {
                $("#txt_state_enter_details_add_"+random)
                .append('<option value="">'+states[primary_state][i]+'</option>')
            }

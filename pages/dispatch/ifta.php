@@ -480,7 +480,8 @@
            }?>
          }else{
            var primary_state = $("#txt_state_exit_details_"+random).children("option").filter(":selected").text();
-           for (var i = 1; i <= states[primary_state].length - 1; i++) {
+           for (var i = 0; i <= states[primary_state].length - 1; i++) {
+               console.log(states[primary_state][i]);
                $("#txt_state_enter_details_"+random)
                .append('<option value="">'+states[primary_state][i]+'</option>')
            }
@@ -509,7 +510,6 @@
          function addFuelRow(id) {
          fuel_counter = fuel_counter + 1;
          var random = fuel_counter;
-         //var random = Math.ceil(Math.random() * 1000);
          var tripnum = $("#txt_tripnum").val();
          var new_row = `<tr id="tr_add_fuel_details_`+random+`">
                                     <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_tripnum[]" type="text" id="txt_fuel_tripnum_`+random+`" value="`+tripnum+`" readonly>
