@@ -481,7 +481,7 @@
          }else{
            var primary_state = $("#txt_state_exit_details_"+random).children("option").filter(":selected").text();
            for (var i = 0; i <= states[primary_state].length - 1; i++) {
-               console.log(states[primary_state][i]);
+               //console.log(states[primary_state][i]);
                $("#txt_state_enter_details_"+random)
                .append('<option value="">'+states[primary_state][i]+'</option>')
            }
@@ -607,8 +607,8 @@ $(document).ready(function(){
                               <td>`+obj.odo_end+`</td>
                               <td>Open</td>
                               <td>`+obj.truck_no+`</td>
-                              <td>`+obj.date_started+`</td>
-                              <td>`+obj.date_ended+`</td>
+                              <td>`+obj.trip_start+`</td>
+                              <td>`+obj.trip_end+`</td>
                               <td>`+obj.driver1+`</td>
                               <td>`+obj.driver2+`</td>
                               <td>`+obj.trip_miles+`</td>

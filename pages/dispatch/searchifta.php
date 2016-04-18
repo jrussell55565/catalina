@@ -53,8 +53,8 @@ $query = "SELECT
           odo_end - odo_start as trip_miles,
           ifta.trip_no,
           truck_no,
-          date_format(date_started,'%m/%d/%Y') as date_started,
-          date_format(date_ended,'%m/%d/%Y') as date_ended
+          date_format(date_started,'%m/%d/%Y') as trip_start,
+          date_format(date_ended,'%m/%d/%Y') as trip_end
           FROM ifta
           WHERE 1=1
           AND ". $_GET['trip_no'] ."
@@ -64,7 +64,7 @@ $query = "SELECT
           )
           AND ". $_GET['trip_truck_no']. "
           AND ". $_GET['trip_driver']. "
-          ORDER BY date_format(date_started,'%m/%d/%Y') ASC";
+          ORDER BY date_started ASC";
 
 /* check connection */
 if ($mysqli->connect_errno) {
