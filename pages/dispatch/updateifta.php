@@ -127,6 +127,17 @@
          } 
        $result->close();
      }
+
+     // IFTA_UPLOADS
+     $ifta_uploads = array();
+     $query = "select type,file_name_uploaded from ifta_uploads
+               WHERE trip_no = '".$_GET['trip_no']."'";
+     if ($result = $mysqli->query($query)) {
+         while($obj = $result->fetch_object()){ 
+           $ifta_uploads[$obj->type] = $obj->file_name_uploaded;
+         }
+     }
+
      $mysqli->close();
    }
        
@@ -157,8 +168,8 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
       <![endif]-->
       <script>
-        var odo_counter = 0;
-        var fuel_counter = 0;
+        var odo_counter = 100;
+        var fuel_counter = 100;
       </script>
    </head>
    <body class="skin-blue sidebar-mini">
@@ -202,6 +213,11 @@
                         <div class="box-header" style="text-align: center;">
                            <h3 class="box-title">IFTA Trip
                            </h3>
+                           <?php
+                            if (isset($_GET['error'])) {
+                              echo "<br>";
+                              echo '<div style="width: 50%; text-align: center; margin:auto" class="alert alert-danger" role="alert">Error adding record: ',urldecode($_GET['error']),'</div>';
+                            }?>
                            <div class="box-tools pull-right">
                               <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                            </div>
@@ -285,6 +301,8 @@
                               <?php
                                 $counter = 0;
                                 for($i=0; $i<count($ifta_details); $i++) {
+                                  $random = $counter + 1;
+                                  $counter++;
                               ?>
                                 <tr id="tr_add_driver_details_<?php echo $ifta_details[$i]['iteration'];?>">
                                  <td style="width: 5em;"><input class="input-sm form-control" name="txt_tripnum_details[]" type="text" id="txt_tripnum_details_<?php echo $random;?>" value="<?php echo $ifta_details[$i]['trip_no'];?>" readonly>
@@ -388,37 +406,75 @@
                            <table class="table table-condensed table-striped">
                             <tbody>
                               <tr>
-                                 <td colspan="2" style="text-align: center; font-weight: bold;">Upload Trip Images</td>
+                                 <td colspan="3" style="text-align: center; font-weight: bold;">Upload Trip Images</td>
                               </tr>
                               <tr>
                                  <td>Image IFTA Trip Report</td>
-                                 <td><input name="ifta_image_trip[]" type="file" class="file-loading input-sm form-control" id="ifta_image_trip" multiple=true>
-                                    <input type="hidden" name="hdn_upload[]" id="hdn_upload_1" value="ifta_image_trip"></td>
+                                 <td>
+                                    <?php if (isset($ifta_uploads['ifta_image_trip'])) {?>
+                                       <input name="ifta_image_trip[]" type="text" class="input-sm form-control" id="ifta_image_trip" value="<?php echo $ifta_uploads['ifta_image_trip']; ?>">
+                                     <?php }else{ ?>
+                                    <input name="ifta_image_trip[]" type="file" class="file-loading input-sm form-control" id="ifta_image_trip" multiple=false>
+                                     <?php } ?>
+                                    <input type="hidden" name="hdn_upload[]" id="hdn_upload_1" value="ifta_image_trip">
+                                 </td>
                               </tr>
                               <tr>
                                  <td>Image IFTA Fuel Reciepts</td>
-                                 <td><input name="ifta_image_fuel[]" type="file" class="file-loading input-sm form-control" id="ifta_image_fuel" multiple=true>
-                                    <input type="hidden" name="hdn_upload[]" id="hdn_upload_2" value="ifta_image_fuel"></td>
+                                 <td>
+                                    <?php if (isset($ifta_uploads['ifta_image_fuel'])) {?>
+                                       <input name="ifta_image_fuel[]" type="text" class="input-sm form-control" id="ifta_image_fuel" value="<?php echo $ifta_uploads['ifta_image_fuel']; ?>">
+                                     <?php }else{ ?>
+                                      <input name="ifta_image_fuel[]" type="file" class="file-loading input-sm form-control" id="ifta_image_fuel" multiple=false>
+                                     <?php } ?>
+                                    <input type="hidden" name="hdn_upload[]" id="hdn_upload_2" value="ifta_image_fuel">
+                                 </td>
                               </tr>
                               <tr>
                                  <td>Image IFTA GPS Data</td>
-                                 <td><input name="ifta_image_gps[]" type="file" class="file-loading input-sm form-control" id="ifta_image_gps" multiple=true>
-                                    <input type="hidden" name="hdn_upload[]" id="hdn_upload_3" value="ifta_image_gps"></td>
+                                 <td>
+                                    <?php if (isset($ifta_uploads['ifta_image_gps'])) {?>
+                                       <input name="ifta_image_gps[]" type="text" class="input-sm form-control" id="ifta_image_gps" value="<?php echo $ifta_uploads['ifta_image_gps']; ?>">
+                                     <?php }else{ ?>
+                                    <input name="ifta_image_gps[]" type="file" class="file-loading input-sm form-control" id="ifta_image_gps" multiple=false>
+                                     <?php } ?>
+                                    <input type="hidden" name="hdn_upload[]" id="hdn_upload_3" value="ifta_image_gps">
+                                 </td>
                               </tr>
                               <tr>
                                  <td>Image Individual Trip Permits</td>
-                                 <td><input name="ifta_image_permits[]" type="file" class="file-loading input-sm form-control" id="ifta_image_permits" multiple=true>
-                                    <input type="hidden" name="hdn_upload[]" id="hdn_upload_4" value="ifta_image_permits"></td>
+                                 <td>
+                                    <?php if (isset($ifta_uploads['ifta_image_permits'])) {?>
+                                       <input name="ifta_image_permits[]" type="text" class="input-sm form-control" id="ifta_image_permits" value="<?php echo $ifta_uploads['ifta_image_permits']; ?>">
+                                     <?php }else{ ?>
+                                    <input name="ifta_image_permits[]" type="file" class="file-loading input-sm form-control" id="ifta_image_permits" multiple=false>
+                                     <?php } ?>
+                                    <input type="hidden" name="hdn_upload[]" id="hdn_upload_4" value="ifta_image_permits">
+                                 </td>
                               </tr>
                               <tr>
                                  <td>Image Driver Logs (for current trip)</td>
-                                 <td><input name="ifta_image_drivers_logs" type="file" class="file-loading input-sm form-control" id="ifta_image_drivers_logs" multiple=true>
-                                    <input type="hidden" name="hdn_upload[]" id="hdn_upload_5" value="ifta_image_drivers_logs"></td>
+                                 <td>
+                                    <?php
+                                     if (isset($ifta_uploads['ifta_image_drivers_logs'])) {?>
+                                       <input name="ifta_image_permits[]" type="text" class="input-sm form-control" id="ifta_image_permits" value="<?php echo $ifta_uploads['ifta_image_drivers_logs']; ?>">
+                                     <?php }else{ ?>
+                                    <input name="ifta_image_drivers_logs" type="file" class="file-loading input-sm form-control" id="ifta_image_drivers_logs" multiple=false>
+                                     <?php } ?>
+                                    <input type="hidden" name="hdn_upload[]" id="hdn_upload_5" value="ifta_image_drivers_logs">
+                                 </td>
                               </tr>
                               <tr>
                                  <td>Image BOL (for current trip)</td>
-                                 <td><input name="ifta_image_bol" type="file" class="file-loading input-sm form-control" id="ifta_image_bol" multiple=true>
-                                    <input type="hidden" name="hdn_upload[]" id="hdn_upload_6" value="ifta_image_bol"></td>
+                                 <td>
+                                    <?php
+                                     if (isset($ifta_uploads['ifta_image_bol'])) {?>
+                                       <input name="ifta_image_bol[]" type="text" class="input-sm form-control" id="ifta_image_bol" value="<?php echo $ifta_uploads['ifta_image_bol']; ?>">
+                                     <?php }else{ ?>
+                                    <input name="ifta_image_bol" type="file" class="file-loading input-sm form-control" id="ifta_image_bol" multiple=true>
+                                     <?php } ?>
+                                    <input type="hidden" name="hdn_upload[]" id="hdn_upload_6" value="ifta_image_bol">
+                                 </td>
                               </tr>
                             </tbody>
                            </table>
@@ -472,7 +528,7 @@
       <script src="<?php echo HTTP;?>/dist/js/jquery.are-you-sure.js"></script>
       <script>
          function addOdoRow() {
-         odo_counter = <?php echo count($ifta_details);?>;
+         odo_counter = odo_counter + 1;
          var random = odo_counter;
          var tripnum = $("#txt_tripnum").val();
 

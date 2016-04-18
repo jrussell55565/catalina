@@ -166,13 +166,15 @@ if (isset($_POST['add_ifta'])) {
                                (
                                trip_no,
                                type,
-                               file_name
+                               file_name,
+                               file_name_uploaded
                                )
                                VALUES
                                (
                                '".$_POST['txt_tripnum']."',
                                '".$_POST['hdn_upload'][$i]."',
-                               '".$dst."'
+                               '".$dst."',
+                               '".$file["name"]."'
                                )";
 
                 if ($mysqli->query($sql_uploads) === false)
@@ -261,7 +263,8 @@ if (isset($_POST['update_ifta'])) {
         state_miles = ".$_POST['txt_state_miles_details'][$i].",
         permit_required = '$permit'
         WHERE id = ".$_POST['hdn_details_id'][$i];
-
+        #print $sql_details . "\n";
+        #continue;
         if ($mysqli->query($sql_details) === false)
         {
             throw new Exception("Error UPDATING IFTA_DETAILS: ".$mysqli->error);
@@ -391,6 +394,58 @@ if (isset($_POST['update_ifta'])) {
         }
     }
 
+    $id = $_POST['hdn_upload'];
+    for ($i=0; $i<sizeof($id); $i++)
+    {
+        $file_name = $_POST['hdn_upload'][$i];
+        $file_ary = reArrayFiles($_FILES["$file_name"]);
+        foreach ($file_ary as $file)
+        {
+            if ($file["name"])
+            {
+                switch ($file['error'])
+                {
+                    case UPLOAD_ERR_OK:
+                        break;
+                    case UPLOAD_ERR_NO_FILE:
+                        throw new Exception('No file found.');
+                    case UPLOAD_ERR_INI_SIZE:
+                    case UPLOAD_ERR_FORM_SIZE:
+                        throw new Exception('Exceeded filesize limit.');
+                    default:
+                        throw new Exception('Unknown error uploading '.$file['name']);
+                }
+                $dst = md5($_POST['txt_tripnum'].".".$file['tmp_name']);
+                $sql_uploads = "INSERT INTO ifta_uploads
+                               (
+                               trip_no,
+                               type,
+                               file_name,
+                               file_name_uploaded
+                               )
+                               VALUES
+                               (
+                               '".$_POST['txt_tripnum']."',
+                               '".$_POST['hdn_upload'][$i]."',
+                               '".$dst."',
+                               '".$file["name"]."'
+                               )";
+
+                if ($mysqli->query($sql_uploads) === false)
+                {
+                    throw new Exception("Error INSERTING file into IFTA_UPLOADS: ". $mysqli->error);
+                }
+
+                $src = $file['tmp_name'];
+                $dst = IFTA_UPLOAD."/".$dst;
+                if (!move_uploaded_file($src, $dst))
+                {
+                    throw new Exception("Unable to move $src into $dst");
+                }
+
+            }
+        }
+    }
 
 
 
