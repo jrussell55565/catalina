@@ -9,6 +9,12 @@ if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 include($_SERVER['DOCUMENT_ROOT']."/dist/php/global.php");
 $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
 
+// If we just want to download the file then run this
+
+if (isset($_GET['download_file'])) {
+  downloadFile(IFTA_UPLOAD . "/" . $_GET['filename']);
+}
+
 ####
 
 # Start TX
@@ -461,6 +467,48 @@ if (isset($_POST['update_ifta'])) {
   }
 }
 
+if (isset($_POST['delete_upload'])) {
+  try {
+    // Get the current filename
+    $statement = "SELECT file_name FROM ifta_uploads
+                  WHERE id = " . $_POST['upload_id'];
+
+    if ($result = $mysqli->query($statement)) {
+      while($obj = $result->fetch_object()){
+        $file_name = $obj->file_name;
+      }
+    }
+
+    # IFTA_UPLOADS
+    $sql_ifta = "DELETE FROM ifta_uploads
+                 WHERE id = ".$_POST['upload_id'];
+
+    if ($mysqli->query($sql_ifta) === false)
+    {
+        throw new Exception("Error deleting image from IFTA_UPLOADS: ".$mysqli->error);
+    }
+
+    // Delete the file
+    if (!unlink(IFTA_UPLOAD."/".$file_name))
+    {
+        throw new Exception("Unable to delete file from disk.");
+    }
+
+  } catch (Exception $e) {
+    // An exception has been thrown
+    // We must rollback the transaction
+    $mysqli->rollback();
+    $mysqli->autocommit(TRUE);
+    $mysqli->close();
+    $data = array('type' => 'error', 'message' => $e->getMessage);
+    header('HTTP/1.1 400 Bad Request');
+    header('Content-Type: application/json; charset=UTF-8');
+    echo json_encode($data);
+    exit;
+  }
+}
+
+
 $mysqli->autocommit(TRUE);
 $mysqli->close();
 if (isset($_POST['add_ifta'])) {
@@ -484,5 +532,22 @@ function reArrayFiles(&$file_post) {
     }
 
     return $file_ary;
+}
+
+function downloadFile($file) { 
+   if(file_exists($file)) {
+       header('Content-Description: File Transfer');
+       header('Content-Type: application/octet-stream');
+       header('Content-Disposition: attachment; filename='.basename($file));
+       header('Content-Transfer-Encoding: binary');
+       header('Expires: 0');
+       header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+       header('Pragma: public');
+       header('Content-Length: ' . filesize($file));
+       ob_clean();
+       flush();
+       readfile($file);
+       exit;
+  }
 }
 ?>
