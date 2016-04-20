@@ -519,6 +519,31 @@ if (isset($_POST['delete_upload'])) {
   }
 }
 
+if (isset($_POST['delete_ifta'])) {
+  try {
+    $ifta_type = $_POST['ifta_type'];
+    $sql_ifta = "DELETE FROM ".$ifta_type."
+                 WHERE id = ".$_POST['ifta_id'];
+
+    if ($mysqli->query($sql_ifta) === false)
+    {
+        throw new Exception("Error deleting record from $ifta_type: ".$mysqli->error);
+    }
+
+  } catch (Exception $e) {
+    // An exception has been thrown
+    // We must rollback the transaction
+    $mysqli->rollback();
+    $mysqli->autocommit(TRUE);
+    $mysqli->close();
+    $data = array('type' => 'error', 'message' => $e->getMessage);
+    header('HTTP/1.1 400 Bad Request');
+    header('Content-Type: application/json; charset=UTF-8');
+    echo json_encode($data);
+    exit;
+  }
+}
+
 
 $mysqli->autocommit(TRUE);
 $mysqli->close();
@@ -549,6 +574,7 @@ function downloadFile($file_name, $file_name_uploaded) {
    if(file_exists(IFTA_UPLOAD . "/" . $file_name)) {
        $temp = tempnam(sys_get_temp_dir(), 'TMP_');
        file_put_contents($temp, file_get_contents(IFTA_UPLOAD . "/" . $file_name));
+       $file_name_uploaded = str_replace(',',' ',$file_name_uploaded);
 
        header('Content-Description: File Transfer');
        header('Content-Type: application/octet-stream');
