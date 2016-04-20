@@ -12,7 +12,18 @@ $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
 // If we just want to download the file then run this
 
 if (isset($_GET['download_file'])) {
-  downloadFile(IFTA_UPLOAD . "/" . $_GET['filename']);
+   $statement = "SELECT file_name,file_name_uploaded FROM ifta_uploads
+                 WHERE id = ".$_GET['id'];
+
+   if ($result = $mysqli->query($statement)) {
+     while($obj = $result->fetch_object()){
+            $file_name = $obj->file_name;
+            $file_name_uploaded = $obj->file_name_uploaded;
+     }
+   }
+   /* free result set */
+   $result->close();
+   downloadFile($file_name, $file_name_uploaded);
 }
 
 ####
@@ -534,19 +545,23 @@ function reArrayFiles(&$file_post) {
     return $file_ary;
 }
 
-function downloadFile($file) { 
-   if(file_exists($file)) {
+function downloadFile($file_name, $file_name_uploaded) { 
+   if(file_exists(IFTA_UPLOAD . "/" . $file_name)) {
+       $temp = tempnam(sys_get_temp_dir(), 'TMP_');
+       file_put_contents($temp, file_get_contents(IFTA_UPLOAD . "/" . $file_name));
+
        header('Content-Description: File Transfer');
        header('Content-Type: application/octet-stream');
-       header('Content-Disposition: attachment; filename='.basename($file));
+       header('Content-Disposition: attachment; filename='.basename($file_name_uploaded));
        header('Content-Transfer-Encoding: binary');
        header('Expires: 0');
        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
        header('Pragma: public');
-       header('Content-Length: ' . filesize($file));
+       header('Content-Length: ' . filesize(IFTA_UPLOAD . "/" . $file_name));
        ob_clean();
        flush();
-       readfile($file);
+       readfile($temp);
+       unlink($temp);
        exit;
   }
 }

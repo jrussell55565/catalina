@@ -421,7 +421,7 @@
                                        <input name="ifta_image_trip[]" type="text" class="input-sm" style="border: 1px solid #CCC; width: 80%;" id="ifta_image_trip" value="<?php echo $ifta_uploads['ifta_image_trip']['name']; ?>">
                                        <div style="float: right;">
                                          <button class="btn btn-sm btn-danger" type="button" name="btn_delete_file_ifta_image_trip" id="btn_delete_file_ifta_image_trip" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_trip']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
-                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_trip" id="btn_view_file_ifta_image_trip" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&filename=<?php echo $ifta_uploads['ifta_image_trip']['filename']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
+                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_trip" id="btn_view_file_ifta_image_trip" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_trip']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
                                        </div>
                                      <?php }else{ ?>
                                     <input name="ifta_image_trip[]" type="file" class="file-loading input-sm form-control" id="ifta_image_trip" multiple=false>
@@ -436,7 +436,7 @@
                                        <input name="ifta_image_fuel[]" type="text" class="input-sm" style="border: 1px solid #CCC; width: 80%;" id="ifta_image_fuel" value="<?php echo $ifta_uploads['ifta_image_fuel']['name']; ?>">
                                        <div style="float: right;">
                                          <button class="btn btn-sm btn-danger" type="button" name="btn_delete_file_ifta_image_fuel" id="btn_delete_file_ifta_image_fuel" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_fuel']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
-                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_fuel" id="btn_view_file_ifta_image_fuel" data-toggle="tooltip" data-placement="top" title="View" onClick="deleteRow(this);"><span class="glyphicon glyphicon-search"></span></button>
+                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_fuel" id="btn_view_file_ifta_image_fuel" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_fuel']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
                                        </div>
                                      <?php }else{ ?>
                                       <input name="ifta_image_fuel[]" type="file" class="file-loading input-sm form-control" id="ifta_image_fuel" multiple=false>
@@ -451,7 +451,7 @@
                                        <input name="ifta_image_gps[]" type="text" class="input-sm" style="border: 1px solid #CCC; width: 80%;" id="ifta_image_gps" value="<?php echo $ifta_uploads['ifta_image_gps']['name']; ?>">
                                        <div style="float: right;">
                                          <button class="btn btn-sm btn-danger" type="button" name="btn_delete_file_ifta_image_gps" id="btn_delete_file_ifta_image_gps" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_gps']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
-                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_gps" id="btn_view_file_ifta_image_gps" data-toggle="tooltip" data-placement="top" title="View" onClick="deleteRow(this);"><span class="glyphicon glyphicon-search"></span></button>
+                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_gps" id="btn_view_file_ifta_image_gps" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_gps']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
                                        </div>
                                      <?php }else{ ?>
                                     <input name="ifta_image_gps[]" type="file" class="file-loading input-sm form-control" id="ifta_image_gps" multiple=false>
@@ -466,7 +466,7 @@
                                        <input name="ifta_image_permits[]" type="text" class="input-sm" style="border: 1px solid #CCC; width: 80%;" id="ifta_image_permits" value="<?php echo $ifta_uploads['ifta_image_permits']['name']; ?>">
                                        <div style="float: right;">
                                          <button class="btn btn-sm btn-danger" type="button" name="btn_delete_file_ifta_image_permits" id="btn_delete_file_ifta_image_permits" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_permits']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
-                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_permits" id="btn_view_file_ifta_image_permits" data-toggle="tooltip" data-placement="top" title="View" onClick="deleteRow(this);"><span class="glyphicon glyphicon-search"></span></button>
+                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_permits" id="btn_view_file_ifta_image_permits" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_permits']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
                                        </div>
                                      <?php }else{ ?>
                                     <input name="ifta_image_permits[]" type="file" class="file-loading input-sm form-control" id="ifta_image_permits" multiple=false>
@@ -482,7 +482,7 @@
                                        <input name="ifta_image_permits[]" type="text" class="input-sm" style="border: 1px solid #CCC; width: 80%;" id="ifta_image_permits" value="<?php echo $ifta_uploads['ifta_image_drivers_logs']['name']; ?>">
                                        <div style="float: right;">
                                          <button class="btn btn-sm btn-danger" type="button" name="btn_delete_file_ifta_image_drivers_logs" id="btn_delete_file_ifta_image_drivers_logs" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_drivers_logs']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
-                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_drivers_logs" id="btn_view_file_ifta_image_drivers_logs" data-toggle="tooltip" data-placement="top" title="View" onClick="deleteRow(this);"><span class="glyphicon glyphicon-search"></span></button>
+                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_drivers_logs" id="btn_view_file_ifta_image_drivers_logs" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_drivers_logs']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
                                        </div>
                                      <?php }else{ ?>
                                     <input name="ifta_image_drivers_logs" type="file" class="file-loading input-sm form-control" id="ifta_image_drivers_logs" multiple=false>
@@ -498,7 +498,7 @@
                                        <input name="ifta_image_bol[]" type="text" class="input-sm" style="border: 1px solid #CCC; width: 80%;" id="ifta_image_bol" value="<?php echo $ifta_uploads['ifta_image_bol']['name']; ?>">
                                        <div style="float: right;">
                                          <button class="btn btn-sm btn-danger" type="button" name="btn_delete_file_ifta_image_bol" id="btn_delete_file_ifta_image_bol" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_bol']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
-                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_bol" id="btn_view_file_ifta_image_bol" data-toggle="tooltip" data-placement="top" title="View" onClick="deleteRow(this);"><span class="glyphicon glyphicon-search"></span></button>
+                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_bol" id="btn_view_file_ifta_image_bol" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_bol']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
                                        </div>
                                      <?php }else{ ?>
                                     <input name="ifta_image_bol" type="file" class="file-loading input-sm form-control" id="ifta_image_bol" multiple=true>
