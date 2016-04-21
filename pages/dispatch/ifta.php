@@ -198,7 +198,7 @@
                         <div class="box-body">
                         <form name="frm_ifta_add" method="POST" action="processifta.php" role="form" enctype="multipart/form-data">
                            <table id="tbl_ifta_add" class="table table-condensed table-striped">
-                              <tbody>
+                              <tbody id="tbody_ifta_details">
                                  <tr>
                                     <td>Trip #
                                     <td><input class="input-sm form-control" name="txt_tripnum" type="text" id="txt_tripnum" value="" required></td>
@@ -268,9 +268,10 @@
                                  <td>OD State Line</td>
                                  <td>State Miles</td>
                                  <td>Permit Req</td>
-                                 <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_1" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                 <td>&nbsp;</td>
+                                 <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                               </tr>
-                              <tr id="tr_add_driver_details_1">
+                              <tr id="tr_add_driver_details_0">
                               </tr>
                               </tbody>
                            </table>
@@ -290,9 +291,10 @@
                                     <td>City</td>
                                     <td>State</td>
                                     <td>Odometer</td>
-                                    <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_1" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                    <td>&nbsp;</td>
+                                    <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  </tr>
-                                 <tr id="tr_add_fuel_details_1">
+                                 <tr id="tr_add_fuel_details_0">
                                  </tr>
                               </tbody>
                            </table>
@@ -427,6 +429,7 @@
                                     <input class="input-sm form-control" name="txt_state_miles_details[]" type="text" id="txt_state_miles_details_`+random+`" value="">
                                  </td>
                                  <td><input class="input-sm" type="checkbox" name="txt_permit_req_details[]" id="txt_permit_req_details_`+random+`"></td>
+                                 <td style="text-align: right;"><button class="btn btn-sm btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  <td style="text-align: right;">
                                     <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_details[]" id="txt_delete_row_details_`+random+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                  </td>
@@ -435,8 +438,10 @@
          // Append a new tr to the table based on the 'new_row' variables         
          $("#add_ifta_table > tbody:last-child").append(new_row);
 
+         // Set the hwb to the value of the hwb on the previous row
          var prev_hwb = $("#tr_add_driver_details_"+random).prev().children('td').eq(3).children(':text').val();
          $("#txt_hwb_details_"+random).val(prev_hwb);
+
 
          // Set the value of txt_state_enter_details select box to states that surround the txt_state_exit_details select box
          <?php
@@ -529,6 +534,7 @@
                                        </select>
                                     </td>
                                     <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_odo[]" type="text" id="txt_fuel_odo_`+random+`" value=""></td>
+                                    <td style="text-align: right;"><button class="btn btn-sm btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                     <td style="text-align: right;">
                                        <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_fuel[]" id="txt_delete_row_fuel_`+random+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                     </td>
@@ -644,8 +650,8 @@ $(document).ready(function(){
     $("#txt_od_total").val(total_odometer);
   });
   $("#txt_tripnum").change(function() {
-    $("#txt_tripnum_details_1").val($("#txt_tripnum").val());
-    $("#txt_fuel_tripnum_1").val($("#txt_tripnum").val());
+    $("#txt_tripnum_details_0").val($("#txt_tripnum").val());
+    $("#txt_fuel_tripnum_0").val($("#txt_tripnum").val());
   });
 });
 

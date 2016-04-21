@@ -296,6 +296,7 @@
                                  <td>OD State Line</td>
                                  <td>State Miles</td>
                                  <td>Permit Req</td>
+                                 <td>&nbsp;</td>
                                  <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                               </tr>
                               <tr id="tr_add_driver_details_0">
@@ -341,6 +342,7 @@
                                     <input class="input-sm form-control" name="txt_state_miles_details[]" type="text" id="txt_state_miles_details_<?php echo $random;?>" value="<?php echo $ifta_details[$i]['state_miles'];?>">
                                  </td>
                                  <td><input class="input-sm" type="checkbox" name="txt_permit_req_details[]" id="txt_permit_req_details_<?php echo $random;?>" <?php if($ifta_details[$i]['permit_required'] == 'Y') { echo " checked ";} ?> value="<?php echo $ifta_details[$i]['id'];?>"></td>
+                                 <td style="text-align: right;"><button class="btn btn-sm btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  <td style="text-align: right;" id="ifta_details|<?php echo $ifta_details[$i]['id'];?>">
                                     <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_details[]" id="txt_delete_row_details_<?php echo $random;?>" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                  </td>
@@ -368,6 +370,7 @@
                                     <td>City</td>
                                     <td>State</td>
                                     <td>Odometer</td>
+                                    <td>&nbsp;</td>
                                     <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  </tr>
                                  <tr id="tr_add_fuel_details_0">
@@ -395,6 +398,7 @@
                                        </select>
                                     </td>
                                     <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_odo[]" type="text" id="txt_fuel_odo_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['odometer'];?>"></td>
+                                    <td style="text-align: right;"><button class="btn btn-sm btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                     <td style="text-align: right;" id="ifta_fuel|<?php echo $ifta_fuel[$i]['id'];?>">
                                        <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_fuel[]" id="txt_delete_row_fuel_<?php echo $random;?>" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                     </td>
@@ -602,6 +606,8 @@
                                     <input class="input-sm form-control" name="txt_state_miles_details_add[]" type="text" id="txt_state_miles_details_add_`+random+`" value="">
                                  </td>
                                  <td><input class="input-sm" type="checkbox" name="txt_permit_req_details_add[]" id="txt_permit_req_details_add_`+random+`"></td>
+                                 <td style="text-align: right;">
+                                    <button class="btn btn-sm btn-primary" type="button" name="txt_new_row_details[]" id="txt_delete_row_details_add_`+random+`" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  <td style="text-align: right;" id="ifta_details|<?php echo $ifta_details[$i]['id'];?>">
                                     <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_details_add[]" id="txt_delete_row_details_add_`+random+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                  </td>
@@ -703,6 +709,8 @@
                                        </select>
                                     </td>
                                     <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_odo_add[]" type="text" id="txt_fuel_odo_add_`+random+`" value=""></td>
+                                    <td style="text-align: right;">
+                                       <button class="btn btn-sm btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_delete_row_fuel_add_`+random+`" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                     <td style="text-align: right;" id="ifta_fuel|<?php echo $ifta_fuel[$i]['id'];?>">
                                        <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_fuel_add[]" id="txt_delete_row_fuel_add_`+random+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                     </td>
