@@ -306,32 +306,32 @@
                               </tr>
                               <tr>
                                  <td>Image IFTA Trip Report</td>
-                                 <td><input name="ifta_image_trip[]" type="file" class="file-loading input-sm form-control" id="ifta_image_trip" multiple=true>
+                                 <td><input name="ifta_image_trip[]" type="file" class="file-loading input-sm form-control" id="ifta_image_trip" multiple=false>
                                     <input type="hidden" name="hdn_upload[]" id="hdn_upload_1" value="ifta_image_trip"></td>
                               </tr>
                               <tr>
                                  <td>Image IFTA Fuel Reciepts</td>
-                                 <td><input name="ifta_image_fuel[]" type="file" class="file-loading input-sm form-control" id="ifta_image_fuel" multiple=true>
+                                 <td><input name="ifta_image_fuel[]" type="file" class="file-loading input-sm form-control" id="ifta_image_fuel" multiple=false>
                                     <input type="hidden" name="hdn_upload[]" id="hdn_upload_2" value="ifta_image_fuel"></td>
                               </tr>
                               <tr>
                                  <td>Image IFTA GPS Data</td>
-                                 <td><input name="ifta_image_gps[]" type="file" class="file-loading input-sm form-control" id="ifta_image_gps" multiple=true>
+                                 <td><input name="ifta_image_gps[]" type="file" class="file-loading input-sm form-control" id="ifta_image_gps" multiple=false>
                                     <input type="hidden" name="hdn_upload[]" id="hdn_upload_3" value="ifta_image_gps"></td>
                               </tr>
                               <tr>
                                  <td>Image Individual Trip Permits</td>
-                                 <td><input name="ifta_image_permits[]" type="file" class="file-loading input-sm form-control" id="ifta_image_permits" multiple=true>
+                                 <td><input name="ifta_image_permits[]" type="file" class="file-loading input-sm form-control" id="ifta_image_permits" multiple=false>
                                     <input type="hidden" name="hdn_upload[]" id="hdn_upload_4" value="ifta_image_permits"></td>
                               </tr>
                               <tr>
                                  <td>Image Driver Logs (for current trip)</td>
-                                 <td><input name="ifta_image_drivers_logs" type="file" class="file-loading input-sm form-control" id="ifta_image_drivers_logs" multiple=true>
+                                 <td><input name="ifta_image_drivers_logs[]" type="file" class="file-loading input-sm form-control" id="ifta_image_drivers_logs" multiple=false>
                                     <input type="hidden" name="hdn_upload[]" id="hdn_upload_5" value="ifta_image_drivers_logs"></td>
                               </tr>
                               <tr>
                                  <td>Image BOL (for current trip)</td>
-                                 <td><input name="ifta_image_bol" type="file" class="file-loading input-sm form-control" id="ifta_image_bol" multiple=true>
+                                 <td><input name="ifta_image_bol[]" type="file" class="file-loading input-sm form-control" id="ifta_image_bol" multiple=false>
                                     <input type="hidden" name="hdn_upload[]" id="hdn_upload_6" value="ifta_image_bol"></td>
                               </tr>
                             </tbody>
@@ -454,7 +454,7 @@
                if ($state_array[$i] != '') {
                  echo "'" . $state_array[$i] . "'";
                }
-               if ( $state_array[$i + 1] == '' ) { continue; }
+               if (empty($state_array[$i])) { continue; }
                echo ",";
              }
              echo "],\n";
