@@ -38,7 +38,7 @@
    # Create associative array for the border states
    $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
    $state_border_array = array();
-   $statement = "select state_extent,bs_01,bs_02,bs_03,bs_04,bs_05,bs_06,bs_07,bs_08 from ifta_stateboarders";
+   $statement = "select state_extent,bs_01,bs_02,bs_03,bs_04,bs_05,bs_06,bs_07,bs_08,bs_09 from ifta_stateboarders";
    if ($result = $mysqli->query($statement)) {
      while($obj = $result->fetch_object()){
             $states = $obj->state_extent . "," .
@@ -49,7 +49,8 @@
                       $obj->bs_05 . "," .
                       $obj->bs_06 . "," .
                       $obj->bs_07 . "," .
-                      $obj->bs_08
+                      $obj->bs_08 . "," .
+                      $obj->bs_09
                       ;
              array_push($state_border_array, $states) ;
      }
