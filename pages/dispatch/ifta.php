@@ -481,7 +481,7 @@
            <?php
            foreach ($us_state_abbrevs as $state) {
              ?>
-             .append('<option value=""><?php echo $state;?></option>')
+             .append('<option><?php echo $state;?></option>')
              <?php
            }?>
          }else{
@@ -489,7 +489,7 @@
            for (var i = 0; i <= states[primary_state].length - 1; i++) {
                //console.log(states[primary_state][i]);
                $("#txt_state_enter_details_"+random)
-               .append('<option value="">'+states[primary_state][i]+'</option>')
+               .append('<option>'+states[primary_state][i]+'</option>')
            }
          }
 
