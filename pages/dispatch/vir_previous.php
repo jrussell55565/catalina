@@ -7,12 +7,13 @@ header('Location: /pages/login/driverlogin.php');
 }
 
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
-mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
-mysql_select_db($db_name) or DIE('Database name is not available!');
 
 if(isset($_GET['submit']))
 {
-  # Override the time predicate here.
+    mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
+    mysql_select_db($db_name) or DIE('Database name is not available!');
+
+    # Override the time predicate here.
     $fileName = time() . '.csv';
     $fileDir = '/tmp/';
     $file = fopen($fileDir . $fileName, "w") or die("Unable to open file!");
@@ -59,6 +60,8 @@ if(isset($_GET['submit']))
       unlink($fileDir . $fileName);
 }
 
+mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
+mysql_select_db($db_name) or DIE('Database name is not available!');
 # Get the list of mechanics from the users table.
 $sql = 'SELECT CONCAT(fname," ",lname) as mechanic ,employee_id from users where title = "Mechanic"';
 $results = mysql_query($sql);
@@ -148,27 +151,69 @@ folder instead of downloading all of them to reduce the load. -->
 if ($_SESSION['login'] == 2)
 {
 $restricted_predicate = "AND employee_id = '".$_SESSION['employee_id']."'";
+$max_results = 8;
 }else{
 $restricted_predicate = '';
+$max_results = 30;
 }
 
-foreach (range(0, 10) as $number)
-{
+// Get the previous VIRS
+$mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
 
-$sql = "SELECT * FROM virs WHERE 1=1 $restricted_predicate
-AND insp_date = date(now()) - INTERVAL $number DAY
-ORDER BY insp_date DESC, vir_itemnum ASC";
+new mysqli($db_hostname, $db_username, $db_password, $db_name);
 
-$sql = mysql_query($sql);
+$statement = "SELECT vir_itemnum, insp_date, insp_type,
+                     trucktype, driver_name, truck_number,
+                     truck_vir_condition, truck_vir_items,
+                     truck_vir_notes, truck_tires_notes,
+                     trailer_number, trailer_vir_condition,
+                     trailer_vir_items, trailer_vir_notes,
+                     trailer_tires_notes, vir_finish_notes,
+                     truck_tires_overall, trailer_tires_overall,
+                     updated_status
+               FROM virs WHERE 1=1 $restricted_predicate
+               AND insp_date = date(now()) - INTERVAL $max_results DAY
+               ORDER BY insp_date DESC, vir_itemnum ASC";
+
+$counter = 0;
+$virs = array();
+if ($result = $mysqli->query($statement)) {
+  while($obj = $result->fetch_object()){
+    $virs[$counter]['vir_itemnum'] = $obj->vir_itemnum;
+    $virs[$counter]['insp_date'] = $obj->insp_date;
+    $virs[$counter]['insp_type'] = $obj->insp_type;
+    $virs[$counter]['trucktype'] = $obj->trucktype;
+    $virs[$counter]['driver_name'] = $obj->driver_name;
+    $virs[$counter]['truck_number'] = $obj->truck_number;
+    $virs[$counter]['truck_vir_condition'] = $obj->truck_vir_condition;
+    $virs[$counter]['truck_vir_items'] = $obj->truck_vir_items;
+    $virs[$counter]['truck_vir_notes'] = $obj->truck_vir_notes;
+    $virs[$counter]['truck_tires_notes'] = $obj->truck_tires_notes;
+    $virs[$counter]['trailer_number'] = $obj->trailer_number;
+    $virs[$counter]['trailer_vir_condition'] = $obj->trailer_vir_condition;
+    $virs[$counter]['trailer_vir_items'] = $obj->trailer_vir_items;
+    $virs[$counter]['trailer_vir_notes'] = $obj->trailer_vir_notes;
+    $virs[$counter]['trailer_tires_notes'] = $obj->trailer_tires_notes;
+    $virs[$counter]['vir_finish_notes'] = $obj->vir_finish_notes;
+    $virs[$counter]['truck_tires_overall'] = $obj->truck_tires_overall;
+    $virs[$counter]['trailer_tires_overall'] = $obj->trailer_tires_overall;
+    $virs[$counter]['updated_status'] = $obj->updated_status;
+    $counter++;
+  }
+}
+
+/* free result set */
+$result->close();
+
 ?>
             <tr>
               <td style="width: 20px;"><i class="glyphicon glyphicon-wrench"></i></td>
-              <td><?php echo "$number day ago";?>
+              <td><?php echo "$max_results days ago";?>
                 <a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse"
-href="#<?php echo $number;?>_details" aria-expanded="false" aria-controls="<?php echo $number;?>_details" style="padding-left: 15px;">
+href="#vir_details" aria-expanded="false" aria-controls="vir_details" style="padding-left: 15px;">
                 </a></td>
             </tr>
-            <tr class="collapse" id="<?php echo $number;?>_details">
+            <tr class="collapse" id="vir_details">
               <td colspan="9"><div class="well table-responsive">
                   <table class="table">
                     <thead>
@@ -185,25 +230,26 @@ if ($_SESSION['login'] == 1)
 {
 ?>
                         <th>Actions</th>
-                        <?php
+<?php
 }
 ?>
                         <th>Updated Status</th>
                         <th>Inspection Date</th>
                       </tr>
                       <?php
-while($row = mysql_fetch_array($sql, MYSQL_BOTH))
+for ($x=0; $x < count($virs); $x++)
 {
-if ($row['truck_number'] != '')
+echo '<!-- '.$x.'-->';
+if ($virs[$x]['truck_number'] != '')
 {
 # $tot is Truck or Trailer
 $tot = 'truck';
-}elseif($row['trailer_number'] != '') {
+}elseif($virs[$x]['trailer_number'] != '') {
 $tot = 'trailer';
 }
 
 # Set the name of the <tr> so we can show all, open, or 'not closed'
-if ((preg_match('/^Close/',$row['updated_status'])) || ((preg_match('/^Green/',$row[$tot.'_vir_condition']) && (preg_match('/^Green/',$row[$tot.'_tires_overall'])))))
+if ((preg_match('/^Close/',$virs[$x]['updated_status'])) || ((preg_match('/^Green/',$virs[$x][$tot.'_vir_condition']) && (preg_match('/^Green/',$virs[$x][$tot.'_tires_overall'])))))
 {
     $status = 'closed_vir';
 }else{
@@ -213,21 +259,21 @@ if ((preg_match('/^Close/',$row['updated_status'])) || ((preg_match('/^Green/',$
                       <tr name="<?php echo $status;?>">
                         <td><!-- Button trigger modal -->
                           
-                          <button type="button" class="btn btn-primary btn-small" data-toggle="modal" data-target="#modal_<?php echo $tot;?>_<?php echo $row['vir_itemnum'];?>">
-                          <?php echo $row['vir_itemnum'];?>
+                          <button type="button" class="btn btn-primary btn-small" data-toggle="modal" data-target="#modal_<?php echo $tot;?>_<?php echo $virs[$x]['vir_itemnum'];?>">
+                          <?php echo $virs[$x]['vir_itemnum'];?>
                           </button></td>
-                        <td><?php echo $row[$tot.'_number'];?></td>
+                        <td><?php echo $virs[$x][$tot.'_number'];?></td>
                         <td><img src="../images/<?php if($tot == 'truck')
 {
-if ($row['trucktype'] == "combo")
+if ($virs[$x]['trucktype'] == "combo")
 {
 echo 'semismall.gif';
 }
-if($row['trucktype'] == "boxtruck")
+if($virs[$x]['trucktype'] == "boxtruck")
 {
 echo 'boxtrucksmall.gif';
 }
-if($row['trucktype'] == 'sprinter')
+if($virs[$x]['trucktype'] == 'sprinter')
 {
 echo 'sprintersmall.gif';
 }
@@ -236,47 +282,47 @@ echo 'trailersmall.gif';
 }
 ?>"></img></td>
                         <td><?php
-if (preg_match('/^Green/',$row[$tot.'_vir_condition']))
+if (preg_match('/^Green/',$virs[$x][$tot.'_vir_condition']))
 {
 echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
-}elseif (preg_match('/^Yellow/',$row[$tot.'_vir_condition'])){
+}elseif (preg_match('/^Yellow/',$virs[$x][$tot.'_vir_condition'])){
 echo '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
-}elseif (preg_match('/^Red/',$row[$tot.'_vir_condition'])){
+}elseif (preg_match('/^Red/',$virs[$x][$tot.'_vir_condition'])){
 echo '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
 }
 ?></td>
                         <td><?php
-if (preg_match('/^Green/',$row[$tot.'_tires_overall']))
+if (preg_match('/^Green/',$virs[$x][$tot.'_tires_overall']))
 {
 echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
-}elseif (preg_match('/^Yellow/',$row[$tot.'_tires_overall'])){
+}elseif (preg_match('/^Yellow/',$virs[$x][$tot.'_tires_overall'])){
 echo '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
-}elseif (preg_match('/^Red/',$row[$tot.'_tires_overall'])){
+}elseif (preg_match('/^Red/',$virs[$x][$tot.'_tires_overall'])){
 echo '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
 }
 ?></td>
-                        <td><?php echo str_replace('vir_','',$row['insp_type']);?></td>
-                        <td><?php echo $row['driver_name'];?></td>
+                        <td><?php echo str_replace('vir_','',$virs[$x]['insp_type']);?></td>
+                        <td><?php echo $virs[$x]['driver_name'];?></td>
                         <?php
 if ($_SESSION['login'] == 1)
 {
 ?>
                         <td><form role="form" method="post" action="vir_previous.php">
-                            <input type="hidden" name="hdn_vir_itemnum" id="hdn_vir_itemnum" value="<?php echo $row['vir_itemnum'];?>"/>
+                            <input type="hidden" name="hdn_vir_itemnum" id="hdn_vir_itemnum" value="<?php echo $virs[$x]['vir_itemnum'];?>"/>
                             <div class="form-group">
-                              <select name="vir_status" id="vir_status_<?php echo $row['vir_itemnum'];?>" class="form-control" onchange="submitSelect(this,<?php echo $row['vir_itemnum'];?>,'modal_close_<?php echo $tot;?>_<?php echo $row['vir_itemnum'];?>');">
+                              <select name="vir_status" id="vir_status_<?php echo $virs[$x]['vir_itemnum'];?>" class="form-control" onchange="submitSelect(this,<?php echo $virs[$x]['vir_itemnum'];?>,'modal_close_<?php echo $tot;?>_<?php echo $virs[$x]['vir_itemnum'];?>');">
                                 <?php
-if ($row['updated_status'] == '')
+if ($virs[$x]['updated_status'] == '')
 {
 ?>
                                 <option>Choose Option</option>
                                 <?php
 }
 ?>
-                                <option <?php if($row['updated_status'] == 'Open') { echo 'selected=selected';}?>>Open</option>
-                                <option <?php if($row['updated_status'] == 'Work Order Created') { echo 'selected=selected';}?>>Work Order Created</option>
+                                <option <?php if($virs[$x]['updated_status'] == 'Open') { echo 'selected=selected';}?>>Open</option>
+                                <option <?php if($virs[$x]['updated_status'] == 'Work Order Created') { echo 'selected=selected';}?>>Work Order Created</option>
                                 <option <?php
-                                if(($row['updated_status'] == 'Close') || ((preg_match('/^Green/',$row[$tot.'_vir_condition']) && (preg_match('/^Green/',$row[$tot.'_tires_overall'])))))
+                                if(($virs[$x]['updated_status'] == 'Close') || ((preg_match('/^Green/',$virs[$x][$tot.'_vir_condition']) && (preg_match('/^Green/',$virs[$x][$tot.'_tires_overall'])))))
                                 { 
                                    echo 'selected=selected';
                                 }
@@ -288,30 +334,30 @@ if ($row['updated_status'] == '')
                         <?php
 }
 ?>
-                        <td><div id="updated_status_<?php echo $row['vir_itemnum'];?>">
+                        <td><div id="updated_status_<?php echo $virs[$x]['vir_itemnum'];?>">
                             <?php
-if (preg_match('/^Open/',$row['updated_status']))
+if (preg_match('/^Open/',$virs[$x]['updated_status']))
 {
 echo '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
-}elseif (preg_match('/^Work/',$row['updated_status'])){
+}elseif (preg_match('/^Work/',$virs[$x]['updated_status'])){
 echo '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
-}elseif ((preg_match('/^Close/',$row['updated_status'])) || ((preg_match('/^Green/',$row[$tot.'_vir_condition']) && (preg_match('/^Green/',$row[$tot.'_tires_overall']))))){
+}elseif ((preg_match('/^Close/',$virs[$x]['updated_status'])) || ((preg_match('/^Green/',$virs[$x][$tot.'_vir_condition']) && (preg_match('/^Green/',$virs[$x][$tot.'_tires_overall']))))){
 echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
 }
 ?>
                           </div></td>
                        <td>
-                       <?php echo $row['insp_date'];?>
+                       <?php echo $virs[$x]['insp_date'];?>
                        </td>
                       </tr>
                      
                       <!-- CLOSE ISSUE MODAL -->
-                    <div class="modal fade" id="modal_close_<?php echo $tot;?>_<?php echo $row['vir_itemnum'];?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal fade" id="modal_close_<?php echo $tot;?>_<?php echo $virs[$x]['vir_itemnum'];?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Close <?php echo $row['vir_itemnum'];?></h4>
+                            <h4 class="modal-title" id="myModalLabel">Close <?php echo $virs[$x]['vir_itemnum'];?></h4>
                           </div>
                           <div class="modal-body">
                             <div class="row" style="padding-bottom: 5px;">
@@ -319,7 +365,7 @@ echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style
                                <b>Repair Notes</b>
                               </div>
                               <div class="col-md-4 col-md-offset-4">
-                               <input type="text" id="repair_notes_<?php echo $row['vir_itemnum'];?>" class="form-control" placeholder="Enter repair notes..."/>
+                               <input type="text" id="repair_notes_<?php echo $virs[$x]['vir_itemnum'];?>" class="form-control" placeholder="Enter repair notes..."/>
                               </div>
                             </div>
                             <div class="row" style="padding-bottom: 5px;">
@@ -329,7 +375,7 @@ echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style
                               <div class="col-md-4 col-md-offset-4">
                                <div class="input-group">
                                  <span class="input-group-addon">$</span>
-                                 <input type="text" id="cost_<?php echo $row['vir_itemnum'];?>"class="form-control" aria-label="Amount (to the nearest dollar)">
+                                 <input type="text" id="cost_<?php echo $virs[$x]['vir_itemnum'];?>"class="form-control" aria-label="Amount (to the nearest dollar)">
                                  <span class="input-group-addon">.00</span>
                                </div>
                               </div>
@@ -339,7 +385,7 @@ echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style
                                <b>Repaired By:</b>
                               </div>
                               <div class="col-md-4 col-md-offset-4">
-                              <select name="mechanic" id="mechanic_<?php echo $row['vir_itemnum'];?>" class="form-control">
+                              <select name="mechanic" id="mechanic_<?php echo $virs[$x]['vir_itemnum'];?>" class="form-control">
                               <?php
                               for($i = 0; $i < count($mechanics); $i++)
                               {
@@ -354,7 +400,7 @@ echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="closeVir(<?php echo $row['vir_itemnum'];?>,$('#repair_notes_<?php echo $row['vir_itemnum'];?>').val(),$('#cost_<?php echo $row['vir_itemnum'];?>').val(),$('#mechanic_<?php echo $row['vir_itemnum'];?> option:selected').text())">Save</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="closeVir(<?php echo $virs[$x]['vir_itemnum'];?>,$('#repair_notes_<?php echo $virs[$x]['vir_itemnum'];?>').val(),$('#cost_<?php echo $virs[$x]['vir_itemnum'];?>').val(),$('#mechanic_<?php echo $virs[$x]['vir_itemnum'];?> option:selected').text())">Save</button>
                           </div>
                         </div>
                       </div>
@@ -362,12 +408,12 @@ echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style
                     <!-- /MODAL -->
  
                       <!-- GENERAL MODAL -->
-                    <div class="modal fade" id="modal_<?php echo $tot;?>_<?php echo $row['vir_itemnum'];?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal fade" id="modal_<?php echo $tot;?>_<?php echo $virs[$x]['vir_itemnum'];?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Details for <?php echo $row['vir_itemnum'];?></h4>
+                            <h4 class="modal-title" id="myModalLabel">Details for <?php echo $virs[$x]['vir_itemnum'];?></h4>
                           </div>
                           <div class="modal-body">
                             <div class="row">
@@ -375,7 +421,7 @@ echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style
                                 General Notes
                               </div>
                               <div class="col-md-4 col-md-offset-4">
-                                <?php if ($row['vir_finish_notes'] == '')
+                                <?php if ($virs[$x]['vir_finish_notes'] == '')
 {
 if ($tot == 'trailer')
 {
@@ -384,7 +430,7 @@ echo '<span class="label label-info">See Truck Notes</span>';
 echo '<span class="label label-danger">No Notes</span>';
 }
 }else{
-echo $row['vir_finish_notes'];
+echo $virs[$x]['vir_finish_notes'];
 }
 ?>
                               </div>
@@ -394,11 +440,11 @@ echo $row['vir_finish_notes'];
                                 Items
                               </div>
                               <div class="col-md-4 col-md-offset-4">
-                                <?php if ($row[$tot.'_vir_items'] == '')
+                                <?php if ($virs[$x][$tot.'_vir_items'] == '')
 {
 echo '<span class="label label-danger">No Items</span>';
 }else{
-echo $row[$tot.'_vir_items'];
+echo $virs[$x][$tot.'_vir_items'];
 }
 ?>
                               </div>
@@ -408,11 +454,11 @@ echo $row[$tot.'_vir_items'];
                                 Truck / Trailer Notes
                               </div>
                               <div class="col-md-4 col-md-offset-4">
-                                <?php if ($row[$tot.'_vir_notes'] == '')
+                                <?php if ($virs[$x][$tot.'_vir_notes'] == '')
 {
 echo '<span class="label label-danger">No Notes</span>';
 }else{
-echo $row[$tot.'_vir_notes'];
+echo $virs[$x][$tot.'_vir_notes'];
 }
 ?>
                               </div>
@@ -422,11 +468,11 @@ echo $row[$tot.'_vir_notes'];
                                 Tire Notes
                               </div>
                               <div class="col-md-4 col-md-offset-4">
-                                <?php if ($row[$tot.'_tires_notes'] == '')
+                                <?php if ($virs[$x][$tot.'_tires_notes'] == '')
 {
 echo '<span class="label label-danger">No Notes</span>';
 }else{
-echo $row[$tot.'_tires_notes'];
+echo $virs[$x][$tot.'_tires_notes'];
 }
 ?>
                               </div>
@@ -442,16 +488,12 @@ echo $row[$tot.'_tires_notes'];
                     
                       </form>
                     
-                    <?php
+<?php
 }
 ?>
                   </table>
                 </div></td>
             </tr>
-            <?php
-}
-mysql_free_result($sql);
-?>
             <tr>
               <td colspan="2">
           <?php
