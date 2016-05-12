@@ -172,7 +172,7 @@ $statement = "SELECT vir_itemnum, insp_date, insp_type,
                      truck_tires_overall, trailer_tires_overall,
                      updated_status
                FROM virs WHERE 1=1 $restricted_predicate
-               AND insp_date = date(now()) - INTERVAL $max_results DAY
+               AND insp_date >= date(now()) - INTERVAL $max_results DAY
                ORDER BY insp_date DESC, vir_itemnum ASC";
 
 $counter = 0;
