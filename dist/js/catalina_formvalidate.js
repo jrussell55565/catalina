@@ -19,6 +19,12 @@ function validateLogin()
       document.getElementById("odo_error1").style.display = 'block';
       return false;
     }
+    if (truck != null && odo == "")
+    {
+      document.getElementById("odo_error1").innerHTML = "You must Enter a Odometer";
+      document.getElementById("odo_error1").style.display = 'block';
+      return false;
+    }
     if (odo == trailer)
     {
       document.getElementById("odo_error2").innerHTML = "Trailer and odometers values must be different";
@@ -34,8 +40,8 @@ function validateLogin()
       }
       if (truck>=4000 && truck<7999)
       {
-          document.getElementById("truck_error").innerHTML = "A trailer number is required";
-          document.getElementById("truck_error").style.display = 'block';
+          document.getElementById("trailer_error").innerHTML = "A trailer number is required";
+          document.getElementById("trailer_error").style.display = 'block';
           return false;
       }
     }
