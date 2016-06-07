@@ -97,6 +97,15 @@ if (isset($_POST['vir_emailEnabled']) && $_POST['vir_emailEnabled'] == 'on') { $
 if (empty($_POST['vir_pre_message'])) { $vir_pre_message = 'NULL'; }else{ $vir_pre_message = "\"$_POST[vir_pre_message]\"";}
 if (empty($_POST['vir_post_message'])) { $vir_post_message = 'NULL'; }else{ $vir_post_message = "\"$_POST[vir_post_message]\"";}
 
+if (empty($_POST['bom_time'])) { $bom_time = 'NULL'; }else{ $bom_time = "\"$_POST[bom_time]\"";}
+if (empty($_POST['eom_time'])) { $eom_time = 'NULL'; }else{ $eom_time = "\"$_POST[eom_time]\"";}
+if (isset($_POST['bom_vtextEnabled']) && $_POST['bom_vtextEnabled'] == 'on') { $bom_vtextEnabled = '"1"'; }else{ $bom_vtextEnabled = '"0"';}
+if (isset($_POST['eom_vtextEnabled']) && $_POST['eom_vtextEnabled'] == 'on') { $eom_vtextEnabled = '"1"'; }else{ $eom_vtextEnabled = '"0"';}
+if (isset($_POST['bom_emailEnabled']) && $_POST['bom_emailEnabled'] == 'on') { $bom_emailEnabled = '"1"'; }else{ $bom_emailEnabled = '"0"';}
+if (isset($_POST['eom_emailEnabled']) && $_POST['eom_emailEnabled'] == 'on') { $eom_emailEnabled = '"1"'; }else{ $eom_emailEnabled = '"0"';}
+if (empty($_POST['bom_message'])) { $bom_message = 'NULL'; }else{ $bom_message = "\"$_POST[bom_message]\"";}
+if (empty($_POST['eom_message'])) { $eom_message = 'NULL'; }else{ $eom_message = "\"$_POST[eom_message]\"";}
+
 # Image Uploads
 if (! empty($_FILES["fileToUpload"]["name"]))
 {
@@ -204,7 +213,15 @@ if (! empty($_FILES["fileToUpload"]["name"]))
    vir_vtext_enabled = $vir_vtextEnabled,
    vir_email_enabled = $vir_emailEnabled,
    vir_pretrip_message = $vir_pre_message,
-   vir_posttrip_message = $vir_post_message
+   vir_posttrip_message = $vir_post_message,
+   bom_time = $bom_time,
+   eom_time = $eom_time,
+   bom_vtext_enabled = $bom_vtextEnabled,
+   eom_vtext_enabled = $eom_vtextEnabled,
+   bom_email_enabled = $bom_emailEnabled,
+   eom_email_enabled = $eom_emailEnabled,
+   bom_message = $bom_message,
+   eom_message = $eom_message
   WHERE id = $id";
 
   mysql_query($sql);
@@ -509,7 +526,15 @@ $sql = "SELECT
      vir_vtext_enabled,
      vir_email_enabled,
      vir_pretrip_message,
-     vir_posttrip_message
+     vir_posttrip_message,
+     bom_time,
+     eom_time,
+     bom_vtext_enabled,
+     eom_vtext_enabled,
+     bom_email_enabled,
+     eom_email_enabled,
+     bom_message,
+     eom_message
       FROM users 
     $predicate
 $orderSql";
@@ -881,6 +906,120 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
      <td style="padding: 5px">
       <label for="vir_post_message">VIR Post Message</label>
       <input type="text" class="form-control" name="vir_post_message" id="vir_post_message" placeholder="" value="<?php echo $row['vir_posttrip_message'];?>">
+     </td>
+</tr>
+<tr>
+     <td style="padding: 5px">
+      <label for="bom_time">BOM Time</label>
+       <select class="form-control" name="bom_time" id="bom_time">
+         <option value="00:00" <?php if ($row['bom_time'] == '00:00') { echo " selected "; }?>>00:00</option>
+         <option value="01:00" <?php if ($row['bom_time'] == '01:00') { echo " selected "; }?>>01:00</option>
+         <option value="02:00" <?php if ($row['bom_time'] == '02:00') { echo " selected "; }?>>02:00</option>
+         <option value="03:00" <?php if ($row['bom_time'] == '03:00') { echo " selected "; }?>>03:00</option>
+         <option value="04:00" <?php if ($row['bom_time'] == '04:00') { echo " selected "; }?>>04:00</option>
+         <option value="05:00" <?php if ($row['bom_time'] == '05:00') { echo " selected "; }?>>05:00</option>
+         <option value="06:00" <?php if ($row['bom_time'] == '06:00') { echo " selected "; }?>>06:00</option>
+         <option value="07:00" <?php if ($row['bom_time'] == '07:00') { echo " selected "; }?>>07:00</option>
+         <option value="08:00" <?php if ($row['bom_time'] == '08:00') { echo " selected "; }?>>08:00</option>
+         <option value="09:00" <?php if ($row['bom_time'] == '09:00') { echo " selected "; }?>>09:00</option>
+         <option value="10:00" <?php if ($row['bom_time'] == '10:00') { echo " selected "; }?>>10:00</option>
+         <option value="11:00" <?php if ($row['bom_time'] == '11:00') { echo " selected "; }?>>11:00</option>
+         <option value="12:00" <?php if ($row['bom_time'] == '12:00') { echo " selected "; }?>>12:00</option>
+         <option value="13:00" <?php if ($row['bom_time'] == '13:00') { echo " selected "; }?>>13:00</option>
+         <option value="14:00" <?php if ($row['bom_time'] == '14:00') { echo " selected "; }?>>14:00</option>
+         <option value="15:00" <?php if ($row['bom_time'] == '15:00') { echo " selected "; }?>>15:00</option>
+         <option value="16:00" <?php if ($row['bom_time'] == '16:00') { echo " selected "; }?>>16:00</option>
+         <option value="17:00" <?php if ($row['bom_time'] == '17:00') { echo " selected "; }?>>17:00</option>
+         <option value="18:00" <?php if ($row['bom_time'] == '18:00') { echo " selected "; }?>>18:00</option>
+         <option value="19:00" <?php if ($row['bom_time'] == '19:00') { echo " selected "; }?>>19:00</option>
+         <option value="20:00" <?php if ($row['bom_time'] == '20:00') { echo " selected "; }?>>20:00</option>
+         <option value="21:00" <?php if ($row['bom_time'] == '21:00') { echo " selected "; }?>>21:00</option>
+         <option value="22:00" <?php if ($row['bom_time'] == '22:00') { echo " selected "; }?>>22:00</option>
+         <option value="23:00" <?php if ($row['bom_time'] == '23:00') { echo " selected "; }?>>23:00</option>
+      </select>
+     </td>
+     <td style="padding: 5px">
+      <label for="eom_time">EOM Time</label>
+       <select class="form-control" name="eom_time" id="eom_time">
+         <option value="00:00" <?php if ($row['eom_time'] == '00:00') { echo " selected "; }?>>00:00</option>
+         <option value="01:00" <?php if ($row['eom_time'] == '01:00') { echo " selected "; }?>>01:00</option>
+         <option value="02:00" <?php if ($row['eom_time'] == '02:00') { echo " selected "; }?>>02:00</option>
+         <option value="03:00" <?php if ($row['eom_time'] == '03:00') { echo " selected "; }?>>03:00</option>
+         <option value="04:00" <?php if ($row['eom_time'] == '04:00') { echo " selected "; }?>>04:00</option>
+         <option value="05:00" <?php if ($row['eom_time'] == '05:00') { echo " selected "; }?>>05:00</option>
+         <option value="06:00" <?php if ($row['eom_time'] == '06:00') { echo " selected "; }?>>06:00</option>
+         <option value="07:00" <?php if ($row['eom_time'] == '07:00') { echo " selected "; }?>>07:00</option>
+         <option value="08:00" <?php if ($row['eom_time'] == '08:00') { echo " selected "; }?>>08:00</option>
+         <option value="09:00" <?php if ($row['eom_time'] == '09:00') { echo " selected "; }?>>09:00</option>
+         <option value="10:00" <?php if ($row['eom_time'] == '10:00') { echo " selected "; }?>>10:00</option>
+         <option value="11:00" <?php if ($row['eom_time'] == '11:00') { echo " selected "; }?>>11:00</option>
+         <option value="12:00" <?php if ($row['eom_time'] == '12:00') { echo " selected "; }?>>12:00</option>
+         <option value="13:00" <?php if ($row['eom_time'] == '13:00') { echo " selected "; }?>>13:00</option>
+         <option value="14:00" <?php if ($row['eom_time'] == '14:00') { echo " selected "; }?>>14:00</option>
+         <option value="15:00" <?php if ($row['eom_time'] == '15:00') { echo " selected "; }?>>15:00</option>
+         <option value="16:00" <?php if ($row['eom_time'] == '16:00') { echo " selected "; }?>>16:00</option>
+         <option value="17:00" <?php if ($row['eom_time'] == '17:00') { echo " selected "; }?>>17:00</option>
+         <option value="18:00" <?php if ($row['eom_time'] == '18:00') { echo " selected "; }?>>18:00</option>
+         <option value="19:00" <?php if ($row['eom_time'] == '19:00') { echo " selected "; }?>>19:00</option>
+         <option value="20:00" <?php if ($row['eom_time'] == '20:00') { echo " selected "; }?>>20:00</option>
+         <option value="21:00" <?php if ($row['eom_time'] == '21:00') { echo " selected "; }?>>21:00</option>
+         <option value="22:00" <?php if ($row['eom_time'] == '22:00') { echo " selected "; }?>>22:00</option>
+         <option value="23:00" <?php if ($row['eom_time'] == '23:00') { echo " selected "; }?>>23:00</option>
+      </select>
+     </td>
+<td style="padding: 5px"><label for="bom_text_updates" style="margin-top: 8px; margin-bottom: 0px;">BOM Text</label>
+  <table>
+    <tr>
+      <td><div class="checkbox">
+          <label>
+            <input name="bom_vtextEnabled" id="bom_vtextEnabled" type="checkbox" value="on" <?php if ($row['bom_vtext_enabled'] == "1") { echo "checked"; }?>>
+          </label>
+        </div>
+        </div></td>
+    </tr>
+  </table></td>
+<td style="padding: 5px"><label for="eom_text_updates" style="margin-top: 8px; margin-bottom: 0px;">EOM Text</label>
+  <table>
+    <tr>
+      <td><div class="checkbox">
+          <label>
+            <input name="eom_vtextEnabled" id="eom_vtextEnabled" type="checkbox" value="on" <?php if ($row['eom_vtext_enabled'] == "1") { echo "checked"; }?>>
+          </label>
+        </div>
+        </div></td>
+    </tr>
+  </table></td>
+<td style="padding: 5px"><label for="bom_email_updates" style="margin-top: 8px; margin-bottom: 0px;">BOM Email</label>
+  <table>
+    <tr>
+      <td><div class="checkbox">
+          <label>
+            <input name="bom_emailEnabled" id="bom_emailEnabled" type="checkbox" value="on" <?php if ($row['bom_email_enabled'] == "1") { echo "checked"; }?>>
+          </label>
+        </div>
+        </div></td>
+    </tr>
+  </table></td>
+<td style="padding: 5px"><label for="eom_email_updates" style="margin-top: 8px; margin-bottom: 0px;">EOM Email</label>
+  <table>
+    <tr>
+      <td><div class="checkbox">
+          <label>
+            <input name="eom_emailEnabled" id="eom_emailEnabled" type="checkbox" value="on" <?php if ($row['eom_email_enabled'] == "1") { echo "checked"; }?>>
+          </label>
+        </div>
+        </div></td>
+    </tr>
+  </table></td>
+</tr>
+<tr>
+     <td style="padding: 5px">
+      <label for="bom_message">BOM Message</label>
+      <input type="text" class="form-control" name="bom_message" id="bom_message" placeholder="" value="<?php echo $row['bom_message'];?>">
+     </td>
+     <td style="padding: 5px">
+      <label for="eom_message">EOM Message</label>
+      <input type="text" class="form-control" name="eom_message" id="eom_message" placeholder="" value="<?php echo $row['eom_message'];?>">
      </td>
 </tr>
     <tr>
@@ -1291,6 +1430,120 @@ if ($_SESSION['login'] == 1)
      <td style="padding: 5px">
       <label for="vir_post_message">VIR Post Message</label>
       <input type="text" class="form-control" name="vir_post_message" id="vir_post_message" placeholder="" value="">
+     </td>
+</tr>
+<tr>
+     <td style="padding: 5px">
+      <label for="bom_time">BOM Time</label>
+       <select class="form-control" name="bom_time" id="bom_time">
+         <option value="00:00">00:00</option>
+         <option value="01:00">01:00</option>
+         <option value="02:00">02:00</option>
+         <option value="03:00">03:00</option>
+         <option value="04:00">04:00</option>
+         <option value="05:00">05:00</option>
+         <option value="06:00">06:00</option>
+         <option value="07:00">07:00</option>
+         <option value="08:00">08:00</option>
+         <option value="09:00">09:00</option>
+         <option value="10:00">10:00</option>
+         <option value="11:00">11:00</option>
+         <option value="12:00">12:00</option>
+         <option value="13:00">13:00</option>
+         <option value="14:00">14:00</option>
+         <option value="15:00">15:00</option>
+         <option value="16:00">16:00</option>
+         <option value="17:00">17:00</option>
+         <option value="18:00">18:00</option>
+         <option value="19:00">19:00</option>
+         <option value="20:00">20:00</option>
+         <option value="21:00">21:00</option>
+         <option value="22:00">22:00</option>
+         <option value="23:00">23:00</option>
+      </select>
+     </td>
+     <td style="padding: 5px">
+      <label for="eom_time">EOM Time</label>
+       <select class="form-control" name="eom_time" id="eom_time">
+         <option value="00:00">00:00</option>
+         <option value="01:00">01:00</option>
+         <option value="02:00">02:00</option>
+         <option value="03:00">03:00</option>
+         <option value="04:00">04:00</option>
+         <option value="05:00">05:00</option>
+         <option value="06:00">06:00</option>
+         <option value="07:00">07:00</option>
+         <option value="08:00">08:00</option>
+         <option value="09:00">09:00</option>
+         <option value="10:00">10:00</option>
+         <option value="11:00">11:00</option>
+         <option value="12:00">12:00</option>
+         <option value="13:00">13:00</option>
+         <option value="14:00">14:00</option>
+         <option value="15:00">15:00</option>
+         <option value="16:00">16:00</option>
+         <option value="17:00">17:00</option>
+         <option value="18:00">18:00</option>
+         <option value="19:00">19:00</option>
+         <option value="20:00">20:00</option>
+         <option value="21:00">21:00</option>
+         <option value="22:00">22:00</option>
+         <option value="23:00">23:00</option>
+      </select>
+     </td>
+<td style="padding: 5px"><label for="bom_text_updates" style="margin-top: 8px; margin-bottom: 0px;">BOM Text</label>
+  <table>
+    <tr>
+      <td><div class="checkbox">
+          <label>
+            <input name="bom_vtextEnabled" id="bom_vtextEnabled" type="checkbox" value="">
+          </label>
+        </div>
+        </div></td>
+    </tr>
+  </table></td>
+<td style="padding: 5px"><label for="eom_text_updates" style="margin-top: 8px; margin-bottom: 0px;">EOM Text</label>
+  <table>
+    <tr>
+      <td><div class="checkbox">
+          <label>
+            <input name="eom_vtextEnabled" id="eom_vtextEnabled" type="checkbox" value="">
+          </label>
+        </div>
+        </div></td>
+    </tr>
+  </table></td>
+<td style="padding: 5px"><label for="bom_email_updates" style="margin-top: 8px; margin-bottom: 0px;">BOM Email</label>
+  <table>
+    <tr>
+      <td><div class="checkbox">
+          <label>
+            <input name="bom_emailEnabled" id="bom_emailEnabled" type="checkbox" value="">
+          </label>
+        </div>
+        </div></td>
+    </tr>
+  </table></td>
+<td style="padding: 5px"><label for="eom_email_updates" style="margin-top: 8px; margin-bottom: 0px;">EOM Email</label>
+  <table>
+    <tr>
+      <td><div class="checkbox">
+          <label>
+            <input name="eom_emailEnabled" id="eom_emailEnabled" type="checkbox" value="">
+          </label>
+        </div>
+        </div></td>
+    </tr>
+  </table></td>
+</tr>
+<tr>
+     <td style="padding: 5px">
+      <label for="bom_message">BOM Message</label>
+      <input type="text" class="form-control" name="bom_message" id="bom_message" placeholder="" value="">
+     </td>
+     <td style="padding: 5px">
+      <label for="eom_message">EOM Message</label>
+      <input type="text" class="form-control" name="eom_message" id="eom_message" placeholder="" value="">
      </td>
 </tr>
     <tr>
