@@ -197,13 +197,10 @@ $drivername = $_SESSION['drivername'];
                             <option selected="selected"><?php echo $row['src_page'];?></option>
                             <option>puconfirmed.php</option>
                             <option>delconfirmed.php</option>
-                            <option>TrailerDroppedPU.php</option>
-                            <option>TrailerDroppedDEL.php</option>
-                            <option>ArrivedtoConsignee.php</option>
-                            <option>AttemptDEL.php</option>
-                            <option>Refused.php</option>
-                            <option>AttemptPU.php</option>
-                            <option>ArrivedtoShipper.php</option>
+                            <option>arrivecon.php</option>
+                            <option>attemptdel.php</option>
+                            <option>attemptpu.php</option>
+                            <option>arriveship.php</option>
                           </select></td>
                           <td><input name="btn_submit" value="Delete" type="submit" id="btn_submit" class="btn btn-danger"/>
                           <input type="hidden" name="hdn_accessorials"/>
