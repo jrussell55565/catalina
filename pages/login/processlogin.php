@@ -29,6 +29,7 @@ $_SESSION['login_rentaltruck'] = $rentalTruck;
 $_SESSION['login_truckodometer'] = $truckOdometer;
 $_SESSION['truckid'] = $truckId;
 $_SESSION['trailerid'] = $trailerId;
+$_SESSION['odometer'] = $truckOdometer;
 
 # setup the database connection
 mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
@@ -140,10 +141,18 @@ if (mysql_num_rows($login) == 1)
         $output = mysql_query($sql);
 
         # Insert into the login_capture table
-        $sql = "INSERT INTO login_capture (driver_driverid, drivername, truck_number, trailer_number, rental, truck_odometer)
+        if ($isadmin == 1)
+        {
+            $sql = "INSERT INTO login_capture (driver_driverid, drivername, truck_number, trailer_number, rental, truck_odometer)
+                VALUES
+                ((SELECT driverid from users WHERE username = '$userName'), '$userName',
+                'admintruck', 'admintrailer', 'adminrental','adminodometer')";
+        }else{
+            $sql = "INSERT INTO login_capture (driver_driverid, drivername, truck_number, trailer_number, rental, truck_odometer)
                 VALUES
                 ((SELECT driverid from users WHERE username = '$userName'), '$userName',
                 $truckId, $trailerId, '$rentalTruck',$truckOdometer)";
+        }
 
         $output = mysql_query($sql);
 
