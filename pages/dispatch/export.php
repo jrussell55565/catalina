@@ -252,7 +252,7 @@ usleep(100);
 # Status.csv
 $tmpfnameStatus = "status+"."$exportdest+".microtime(true);
 $fpStatus = fopen($_SERVER['DOCUMENT_ROOT']."/exports/$tmpfnameStatus.csv", 'w');
-fwrite($fpStatus, "HWB,Status,PODName,PODDate,PodTime,Pcs,ReWeigh,Load Position,PickupConfirmed,PickupTime,Remarks,Driver,Remark Type,Remark Date,Remark Time,Delivery Driver,pallets,Truck Miles\n\"$hawb\",\"$status\",\"$podname\",\"$poddate\",\"$podtime\",\"$pieces\",\"$reweigh\",\"".$_SESSION['truckid']."|".$_SESSION['odometer']."\",\"$puconf\",\"$putime\",\"$remarks\",\"$drivername\",\"$remtype\",\"$remdate\",\"$remtime\",\"$deldriv\",\"$pallets\",\"\"");
+fwrite($fpStatus, "HWB,Status,PODName,PODDate,PodTime,Pcs,ReWeigh,Load Position,PickupConfirmed,PickupTime,Remarks,Driver,Remark Type,Remark Date,Remark Time,Delivery Driver,pallets,Truck Miles\n\"$hawb\",\"$status\",\"$podname\",\"$poddate\",\"$podtime\",\"$pieces\",\"$reweigh\",\"".$_SESSION['truckid']."|".$_SESSION['trailerid']."\",\"$puconf\",\"$putime\",\"$remarks\",\"$drivername\",\"$remtype\",\"$remdate\",\"$remtime\",\"$deldriv\",\"$pallets\",\"".$_SESSION['truckid']."|".$_SESSION['odometer']."\"");
 fclose($fpStatus);
 
 mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
