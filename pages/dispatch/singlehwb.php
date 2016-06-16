@@ -140,6 +140,7 @@ if ($row['status'] == "Delivered")
           </td>
         </tr>
         <tr>
+        <!-- Removing Accept PU and Accept DEL
           <td><form method="GET" action="acceptpu.php">
             <input type="hidden" id="hwb" name="hwb"
                            value="<?php echo $row['hawbNumber'];?>">
@@ -160,6 +161,7 @@ if ($row['status'] == "Delivered")
             </input>
             </form>
           </td>
+          -->
         </tr>
         <tr>
           <td><form method="GET" action="arriveship.php">
@@ -285,12 +287,12 @@ if ($row['status'] == "Delivered")
               <table id="tracenotesDetails" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="tracenotesDetails_info">
                 <tbody>
                   <tr role="row" class="odd">
-                    <td><label>Updated By</label></td>
-                    <td><label>Date</label></td>
-                    <td><label>State Change</label></td>
-                    <td><label>Trace Notes</label></td>
-                    <td><label>Accessorials</label></td>
-                    <td><label>Pieces / Pallets</label></td>
+                    <td width="70"><label>User</label></td>
+                    <td width="33"><label>Date</label></td>
+                    <td width="56"><label> Change</label></td>
+                    <td width="101"><label> Notes</label></td>
+                    <td width="76"><label>Acc</label></td>
+                    <td width="90"><label>Pcs/Plt</label></td>
                   </tr>
               <?php
               $result = mysql_query($sql);
@@ -370,7 +372,7 @@ if ($row['status'] == "Delivered")
                   <td><?php echo "$row[shipperPhone]"; ?></td>
                 </tr>
                 <tr role="row" class="odd">
-                  <td><label>Pickup Instructions</label></td>
+                  <td><label>PU Inst</label></td>
                   <td><?php echo "$row[puRemarks]"; ?></td>
                 </tr>
                 <tr role="row" class="even">
@@ -386,27 +388,27 @@ if ($row['status'] == "Delivered")
                   <td><?php echo "$row[weight]"; ?></td>
                 </tr>
                 <tr role="row" class="odd">
-                  <td><label>Appointment Notes</label></td>
+                  <td><label>Appt Notes</label></td>
                   <td><?php echo "$row[appNotes]"; ?></td>
                 </tr>
                 <tr role="row" class="odd">
-                  <td><label>Shipper Assembly</label></td>
+                  <td><label>PU Assb</label></td>
                   <td><?php echo "$row[shipperAssembly]"; ?></td>
                 </tr>
                 <tr role="row" class="even">
-                  <td><label>Agent Code</label></td>
+                  <td><label>AgentCode</label></td>
                   <td><?php echo "$row[puAgentCode]"; ?></td>
                 </tr>
                 <tr role="row" class="odd">
-                  <td><label>Agent Name</label></td>
+                  <td><label>AgentName</label></td>
                   <td><?php echo "$row[puAgentName]"; ?></td>
                 </tr>
                 <tr role="row" class="even">
-                  <td><label>Driver Number</label></td>
+                  <td><label>Driver #</label></td>
                   <td><?php echo "$row[puAgentDriverPhone]"; ?></td>
                 </tr>
                 <tr role="row" class="odd">
-                  <td><label>Driver Name</label></td>
+                  <td><label> Name</label></td>
                   <td><?php echo "$row[puAgentDriverName]"; ?></td>
                 </tr>
                 <tr role="row" class="even">
@@ -414,8 +416,12 @@ if ($row['status'] == "Delivered")
                   <td><?php echo "$row[puZone]"; ?></td>
                 </tr>
                 <tr role="row" class="odd">
-                  <td><label>MessageDate</label></td>
+                  <td><label>MsgDate</label></td>
                   <td><?php echo "$row[messageDate]"; ?></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td><label>MsgTime</label></td>
+                  <td><?php echo "$row[messageTime]"; ?></td>
                 </tr>
               </tbody>
             </table>
@@ -480,11 +486,11 @@ if ($row['status'] == "Delivered")
                     <td><?php echo "$row[consigneePhone]"; ?></td>
                   </tr>
                   <tr role="row" class="odd">
-                    <td><label>Delivery Instructions</label></td>
+                    <td><label>DEL Inst</label></td>
                     <td><?php echo "$row[delRemarks]"; ?></td>
                   </tr>
                   <tr role="row" class="even">
-                    <td><label>Delivery Appt Required</label></td>
+                    <td><label>DEL Appt</label></td>
                     <td><?php echo "$row[appDate]"; ?></td>
                   </tr>
                   <tr role="row" class="even">
@@ -504,27 +510,27 @@ if ($row['status'] == "Delivered")
                     <td><?php echo "$row[appTime]"; ?></td>
                   </tr>
                   <tr role="row" class="even">
-                    <td><label>Appointment Notes</label></td>
+                    <td><label>Appt Notes</label></td>
                     <td><?php echo "$row[appNotes]"; ?></td>
                   </tr>
                   <tr role="row" class="odd">
-                    <td><label>Cons Assmb</label></td>
+                    <td><label>Cons Assb</label></td>
                     <td><?php echo "$row[consigneeAssembly]"; ?></td>
                   </tr>
                   <tr role="row" class="even">
-                    <td><label>Agent Code</label></td>
+                    <td><label>AgentCode</label></td>
                     <td><?php echo "$row[delAgentCode]"; ?></td>
                   </tr>
                   <tr role="row" class="odd">
-                    <td><label>Agent Name</label></td>
+                    <td><label>AgentName</label></td>
                     <td><?php echo "$row[delAgentName]"; ?></td>
                   </tr>
                   <tr role="row" class="even">
-                    <td><label>Driver Number</label></td>
+                    <td><label>Driver #</label></td>
                     <td><?php echo "$row[delAgentDriverPhone]"; ?></td>
                   </tr>
                   <tr role="row" class="odd">
-                    <td><label>Driver Name</label></td>
+                    <td><label> Name</label></td>
                     <td><?php echo "$row[delAgentDriverName]"; ?></td>
                   </tr>
                   <tr role="row" class="even">
@@ -532,7 +538,11 @@ if ($row['status'] == "Delivered")
                     <td><?php echo "$row[delZone]"; ?></td>
                   </tr>
                   <tr role="row" class="odd">
-                    <td><label>Message Time</label></td>
+                    <td><label>MsgDate</label></td>
+                    <td><?php echo "$row[messageDate]"; ?></td>
+                  </tr>
+                  <tr role="row" class="odd">
+                    <td><label>MsgTime</label></td>
                     <td><?php echo "$row[messageTime]"; ?></td>
                   </tr>
                 </tbody>

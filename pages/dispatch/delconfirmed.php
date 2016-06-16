@@ -118,27 +118,27 @@ $drivername = $_SESSION['drivername'];
                       }
                     ?>
               <tr>
-                <td>Pieces</td>
+                <td><label>Pieces</label></td>
                 <td><input type="number" id="txt_pieces" name="txt_pieces"
                     value="<?php echo $pallets; #Yup, use pallets;?>" class="form-control"></td>
               </tr>
               <tr>
-                <td>Pallets</td>
+                <td><label>Pallets</label></td>
                 <td><input type="number" id="txt_pallets" name="txt_pallets"
                     value="<?php echo $pallets; ?>" class="form-control"></td>
               </tr>
               <tr>
-                <td>POD Name</td>
+                <td><label>POD Name</label></td>
                 <td><input type="text" id="podName" name="podName"
                     value="" class="form-control"></td>
               </tr>
               <tr>
-                <td>POD Date</td>
+                <td><label>POD Date</label></td>
                 <td><input type="text" id="podDate" name="podDate"
                     value="<?php echo $currentDate;?>" class="form-control"></td>
               </tr>              
               <tr>
-                <td>POD Time</td>
+                <td><label>POD Time</label></td>
                 <td><div class="bootstrap-timepicker">
                     <div class="bootstrap-timepicker-widget dropdown-menu">
                       <table>
@@ -177,7 +177,7 @@ $drivername = $_SESSION['drivername'];
                     <!-- /.form group -->
                   </div></td>
               <tr>
-                <td>Trace Notes</td>
+                <td><label>TraceNotes</label></td>
                 <td><textarea id="remarks" name="remarks" class="form-control" placeholder="Don't forget accessorials. Check Piece and Pallet counts"></textarea></td>
               </tr>
             </table>

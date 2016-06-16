@@ -106,17 +106,17 @@ $drivername = $_SESSION['drivername'];
                       }
                     ?>
               <tr>
-                <td>Pieces</td>
+                <td><label>Pieces</label></td>
                 <td><input type="number" id="txt_pieces" name="txt_pieces"
                     value="<?php echo $pallets; #Yup, use pallets;?>" class="form-control"></td>
               </tr>
               <tr>
-                <td>Pallets</td>
+                <td><label>Pallets</label></td>
                 <td><input type="number" id="txt_pallets" name="txt_pallets"
                     value="<?php echo $pallets; ?>" class="form-control"></td>
               </tr>
               <tr>
-                <td>Trace Note Time</td>
+                <td><label>ArrTime</label></td>
                 <td><div class="bootstrap-timepicker">
                     <div class="bootstrap-timepicker-widget dropdown-menu">
                       <table>
@@ -155,7 +155,7 @@ $drivername = $_SESSION['drivername'];
                     <!-- /.form group --> 
                   </div></td>
               <tr>
-                <td>Trace Notes</td>
+                <td><label>TraceNotes</label></td>
                 <td><textarea id="remarks" name="remarks" class="form-control" placeholder="Note Arrival time on Original BOL. At cons.longer than 1 hour. Trace Note!!"></textarea></td>
               </tr>
             </table>
