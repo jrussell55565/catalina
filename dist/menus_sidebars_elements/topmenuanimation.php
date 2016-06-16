@@ -8,7 +8,7 @@
                  <span class="info-box-icon bg-aqua"><i class="fa fa-cog fa-spin"></i></span>
                 </a>               
             <div class="info-box-content">
-			     <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php">Load Board</a></span><span class="info-box-number">PU Today:<?php echo "$pu_today_count";?><br>
+			     <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php">Shipment Boards</a></span><span class="info-box-number">PU Today:<?php echo "$pu_today_count";?><br>
                  DEL Today:   <?php echo "$del_today_count";?></span></div>
                  <!-- /.info-box-content -->
               </div><!-- /.info-box -->
