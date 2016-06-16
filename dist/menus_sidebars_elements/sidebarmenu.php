@@ -6,15 +6,11 @@
               <ul class="treeview-menu">
                 <li class="active"><a href="<?php echo HTTP;?>/pages/main/index.php"><i class="fa fa-circle-o"></i> Dashboard</a></li>
                 <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php"><i class="fa fa-circle-o"></i> Load Board</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/vir.php"><i class="fa fa-circle-o"></i> VIR Reporting</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/vir_previous.php"><i class="fa fa-circle-o"></i> VIR Review</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/userstats.php"><i class="fa fa-circle-o"></i> User Stats</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/ifta.php"><i class="fa fa-circle-o"></i> Ifta Reporting</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/accessorials.php"><i class="fa fa-circle-o"></i> Accessorials</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i> VIR Accessorials</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/csa.php"><i class="fa fa-circle-o"></i> DOT Saftey</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/location.php"><i class="fa fa-circle-o"></i> Locate Users</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/logintrace.php"><i class="fa fa-circle-o"></i> Login Trace</a></li></ul></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/vir.php"><i class="fa fa-circle-o"></i> Vehicle Inspctions</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/productivity.php"><i class="fa fa-circle-o"></i> Productivity</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/csa.php"><i class="fa fa-circle-o"></i> CSA Compliance</a></li>
+                                
+                </ul></li>
 
 <!-- Remove Below
             <li class="treeview">
@@ -44,10 +40,10 @@
                 <li><a href="<?php echo HTTP;?>/pages/info/virinfo.php"><i class="fa fa-circle-o"></i>VIR Info</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/info/kingpin.php"><i class="fa fa-circle-o"></i> King Pin Settings Info</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/info/tirepressure.php"><i class="fa fa-circle-o"></i> Tire Pressure Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/info/inspectiontypes.php"><i class="fa fa-circle-o"></i>DOT Inspection Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/layout/boxed.html"><i class="fa fa-circle-o"></i>IFTA Trip Info</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/info/inspectiontypes.php"><i class="fa fa-circle-o"></i>CSA Info</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/layout/fixed.html"><i class="fa fa-circle-o"></i>Chain Laws Info</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/info/otrpodimage.php"><i class="fa fa-circle-o"></i>OTR Documents Policy</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/location.php"><i class="fa fa-circle-o"></i> Locate Users</a></li>
               </ul>
   </li>
 
@@ -59,14 +55,15 @@
               <span class="label label-primary pull-right"><!-- Remove Below 5 --></span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="<?php echo HTTP;?>/pages/info/loadboardinfo.php"><i class="fa fa-circle-o"></i>Load Board Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/info/virinfo.php"><i class="fa fa-circle-o"></i>VIR Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/info/kingpin.php"><i class="fa fa-circle-o"></i> King Pin Settings Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/info/tirepressure.php"><i class="fa fa-circle-o"></i> Tire Pressure Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/info/inspectiontypes.php"><i class="fa fa-circle-o"></i>DOT Inspection Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/layout/boxed.html"><i class="fa fa-circle-o"></i>IFTA Trip Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/layout/fixed.html"><i class="fa fa-circle-o"></i>Chain Laws Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/info/otrpodimage.php"><i class="fa fa-circle-o"></i>OTR Documents Policy</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/dispatch/orders.php"><i class="fa fa-circle-o"></i>Load Board Admin</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/dispatch/vir_previous.php"><i class="fa fa-circle-o"></i>VIR Admin</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/info/inspectiontypes.php"><i class="fa fa-circle-o"></i>CSA Admin</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/accessorials.php"><i class="fa fa-circle-o"></i> Accessorials Admin</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i> VIR Accessorials</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/dispatch/ifta.php"><i class="fa fa-circle-o"></i>IFTA Admin</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/logintrace.php"><i class="fa fa-circle-o"></i> Login Trace</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/location.php"><i class="fa fa-circle-o"></i> Locate Users</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/info/otrpodimage.php"><i class="fa fa-circle-o"></i>Productivity Admin</a></li>
               </ul>
   </li>
 
