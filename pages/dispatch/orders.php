@@ -61,7 +61,7 @@ $drivername = $_SESSION['drivername'];
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1> Shipment Boards</h1>
-        <a href="/pages/examples/colors.php">What do the colors mean Click here? </a>
+        <a href="/pages/info/colors.php">What do the colors mean Click here? </a>
         <ol class="breadcrumb">
           <li><a href="/pages/main/index.php"><i class="fa fa-home"></i>Home</a></li>
           <!--        <li><a href="#">Tables</a></li> -->
@@ -301,7 +301,7 @@ $drivername = $_SESSION['drivername'];
                     $sql .= "AND archived=\"F\" AND deleted=\"F\"";
                 }
 
-                $sql .= " ORDER BY str_to_date(hawbDate,'%c/%e/%Y'), readyTime ASC";
+                $sql .= " ORDER BY str_to_date(hawbDate,'%c/%e/%Y') DESC";
                 $sql = mysql_query($sql);
 
                 # Status: Red needs update(EF5350), Turquise (26A69A) Update not complete,
@@ -365,7 +365,7 @@ $drivername = $_SESSION['drivername'];
                      </span>
                      <br>
                       DEL:<?php echo "$row[delAgentDriverName]";?><br>
-                      <?php echo "$row[dueTime]";?>
+                      <?php echo "$row[appTime]";?>
                      </span>
                     </td>
                     <td><td style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
