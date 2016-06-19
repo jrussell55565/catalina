@@ -36,7 +36,7 @@
               <span class="label label-primary pull-right"><!-- Remove Below 5 --></span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="<?php echo HTTP;?>/pages/info/loadboardinfo.php"><i class="fa fa-circle-o"></i>Load Board Info</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/info/loadboardinfo.php"><i class="fa fa-circle-o"></i>Shipment Board Info</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/info/virinfo.php"><i class="fa fa-circle-o"></i>VIR Info</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/info/kingpin.php"><i class="fa fa-circle-o"></i> King Pin Settings Info</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/info/tirepressure.php"><i class="fa fa-circle-o"></i> Tire Pressure Info</a></li>

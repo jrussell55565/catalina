@@ -1,6 +1,5 @@
       <footer class="main-footer">
         <div class="pull-right hidden-xs">
-          <b>Version</b> 1.0
+          <b>Version</b> A.!07#
         </div>
-        <strong>Copyright &copy; Forever <a href="http://www.catalinacartage.com/">Catalina Cartage</a>.</strong> All rights reserved.
-      </footer>
+        <strong>Copyright &copy; <!-- Content Wrapper. Contains page content <a href="http://www.catalinacartage.com/">Catalina Cartage</a>-->Catalina Cartage LLC</strong></footer>

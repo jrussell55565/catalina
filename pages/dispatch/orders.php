@@ -60,12 +60,14 @@ $drivername = $_SESSION['drivername'];
     <div class="content-wrapper"> 
       <!-- Content Header (Page header) -->
       <section class="content-header">
-        <h1> Shipment Boards</h1>
-        <a href="/pages/info/colors.php">What do the colors mean Click here? </a>
+        <h1>PU&amp;DEL(s) <span class="box-title"><?php echo "$_SESSION[drivername]"; ?></span> <a href="#">
+        <?php if ($_SESSION['login'] == 1) { echo "(Admin)"; }?>
+        </a></h1>
+        <a href="/pages/info/colors.php"> Click here for info about colors of the Boards! </a>
         <ol class="breadcrumb">
           <li><a href="/pages/main/index.php"><i class="fa fa-home"></i>Home</a></li>
           <!--        <li><a href="#">Tables</a></li> -->
-          <li class="active">Shipments</li>
+          <li class="active">Shipment Boards</li>
         </ol>
       </section>
       

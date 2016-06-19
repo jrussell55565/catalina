@@ -42,7 +42,7 @@ a.button2 {
             <div class="clearfix visible-sm-block"></div>
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
-			  <a href="<?php echo HTTP;?>/pages/tables/userstats.php" class="button2 animated zoomIn">
+			  <a href="<?php echo HTTP;?>/pages/dispatch/productivity.php" class="button2 animated zoomIn">
 <style>
 a.button2 {
 	 -webkit-animation-duration: 6s;
@@ -53,7 +53,7 @@ a.button2 {
                 <span class="info-box-icon bg-green"><i class="fa fa-tachometer"></i></span>
                 </a>
                 <div class="info-box-content">
-                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/userstats.php">Driver Productivity</a></span>
+                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/productivity.php"> Productivity</a></span>
                 <span class="info-box-number">View Your Report </span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
@@ -77,7 +77,7 @@ a.button2 {
 </a>
 
                 <div class="info-box-content">
-                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/csa.php">  CSA Compliance</a></span>
+                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/csa.php">   Compliance</a></span>
                 <span class="info-box-number">                  View Your Report</span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->

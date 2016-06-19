@@ -347,9 +347,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Welcome <span class="box-title"><?php echo "$_SESSION[drivername]"; ?></span> <a href="#">
-            <?php if ($_SESSION['login'] == 1) { echo "(Admin)"; }?>
-            </a></h1>
+            Welcome <span class="box-title"><?php echo "$_SESSION[fname]"; ?></span></h1>
 
           <ol class="breadcrumb">
             <li><a href="/pages/main/index.php"><i class="fa fa-home"></i> Home</a></li>
@@ -364,71 +362,180 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 <!-- End Animated Top Menu -->  
 
 
-          <!--  Google Pie Chart start -->
           <div class="row">
-            <div class="col-xs-12">
-              <div class="box">
-                <div class="box-header">
-                  
-                  <h3 class="box-title"> Company Stats / <a href="../../pages/dispatch/productivity.php">View Your Stats</a></h3>
+            <div class="col-md-12">
+              <div class="box"><!-- /.box-header --><!-- ./box-body -->
 
-                  <!-- Remove Search Tool
-                  <div class="box-tools">
-                    <div class="input-group" style="width: 150px;">
-                      <input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
-                      <div class="input-group-btn">
-                        <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
-                      </div>
-                    </div>
-                  </div>
-                  -->
-                  <!-- Insert Plus Minus tool -->
+
+          <div class="row">
+            <!-- Left col -->
+            <div class="col-md-8"  style="width: 100%;">
+              <!-- MAP & BOX PANE -->
+              <div class="box box-success">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Shipment Updates Stats</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                   </div>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <div class="row">
+                    <div class="col-md-8">
+                      <p class="text-center">
+                        <strong>Dispatch vs. Update - 12 months.</strong>
+                      </p>
+                      <div class="chart">
+                        <!-- Sales Chart Canvas -->
+                        <canvas id="dispatchChart" style="height: 380px; width: 760px;" width="1520" height="360"></canvas>
+                      </div><!-- /.chart-responsive -->
+                        <div id="js-legend" class="chart-legend"></div>
+                    </div><!-- /.col -->
+                    <div class="col-md-4">
+                      <p class="text-center">
+                        <strong>User Statistics - current month.</strong>
+                      </p>
+                      <div class="progress-group">
+<?php
+$sql = "SELECT * 
+FROM   (SELECT Count(*) AS dispatch_orders 
+        FROM   dispatch 
+        WHERE  ( puagentdriverphone = (SELECT driverid 
+                                       FROM   users 
+                                       WHERE  username = \"$username\") 
+                 AND Extract(YEAR_MONTH FROM Str_to_date(hawbdate, '%c/%e/%Y')) BETWEEN 
+                     Extract(YEAR_MONTH FROM CURRENT_DATE) AND Extract( 
+                     YEAR_MONTH FROM 
+                         CURRENT_DATE + INTERVAL 1 month) ) 
+                OR ( delagentdriverphone = (SELECT driverid 
+                                            FROM   users 
+                                            WHERE  username = \"$username\") 
+                     AND Extract(YEAR_MONTH FROM Str_to_date(duedate, '%c/%e/%Y')) BETWEEN 
+                         Extract(YEAR_MONTH FROM CURRENT_DATE) AND Extract( 
+                         YEAR_MONTH FROM 
+                             CURRENT_DATE + INTERVAL 1 month) )) dispatch, 
+       (SELECT Count(*) AS updated_orders 
+        FROM   driverexport 
+        WHERE  employee_id = (SELECT employee_id 
+                              FROM   users 
+                              WHERE  username = \"$username\") 
+               AND ( status = 'Picked Up' 
+                      OR status = 'Delivered' ) 
+               AND extract(YEAR_MONTH FROM driverexport.date) BETWEEN Extract(YEAR_MONTH FROM CURRENT_DATE) AND 
+                                Extract( 
+                                YEAR_MONTH FROM 
+                                    CURRENT_DATE + INTERVAL 1 month)) 
+       driverexport, 
+       (SELECT Count(*) AS pu_dispatch 
+        FROM   dispatch 
+        WHERE  ( puagentdriverphone = (SELECT driverid 
+                                       FROM   users 
+                                       WHERE  username = \"$username\") 
+                 AND Extract(YEAR_MONTH FROM Str_to_date(hawbdate, '%c/%e/%Y')) BETWEEN 
+                     Extract(YEAR_MONTH FROM CURRENT_DATE) AND Extract( 
+                     YEAR_MONTH FROM 
+                         CURRENT_DATE + INTERVAL 1 month) )) pu_dispatch, 
+       (SELECT Count(*) AS pu_updated 
+        FROM   driverexport 
+        WHERE  employee_id = (SELECT employee_id 
+                              FROM   users 
+                              WHERE  username = \"$username\") 
+               AND status = 'Picked Up' 
+               AND extract(YEAR_MONTH FROM driverexport.date) BETWEEN Extract(YEAR_MONTH FROM CURRENT_DATE) AND 
+                                Extract( 
+                                YEAR_MONTH FROM 
+                                    CURRENT_DATE + INTERVAL 1 month)) 
+       pickup_updated, 
+       (SELECT Count(*) AS del_dispatch 
+        FROM   dispatch 
+        WHERE  ( delagentdriverphone = (SELECT driverid 
+                                        FROM   users 
+                                        WHERE  username = \"$username\") 
+                 AND Extract(YEAR_MONTH FROM Str_to_date(duedate, '%c/%e/%Y')) BETWEEN 
+                     Extract(YEAR_MONTH FROM CURRENT_DATE) AND Extract( 
+                     YEAR_MONTH FROM 
+                         CURRENT_DATE + INTERVAL 1 month) )) del_dispatch, 
+       (SELECT Count(*) AS del_updated 
+        FROM   driverexport 
+        WHERE  employee_id = (SELECT employee_id 
+                              FROM   users 
+                              WHERE  username = \"$username\") 
+               AND status = 'Delivered' 
+               AND extract(YEAR_MONTH FROM driverexport.date) BETWEEN Extract(YEAR_MONTH FROM CURRENT_DATE) AND 
+                                Extract( 
+                                YEAR_MONTH FROM 
+                                    CURRENT_DATE + INTERVAL 1 month)) 
+       del_updated,
+       (SELECT count(*) accessorials_count
+  FROM (select accessorials from driverexport where employee_id = (SELECT employee_id 
+                              FROM   users 
+                              WHERE  username = \"$username\")
+AND extract(YEAR_MONTH FROM driverexport.date) BETWEEN Extract(YEAR_MONTH FROM CURRENT_DATE) AND 
+                                Extract( 
+                                YEAR_MONTH FROM 
+                                    CURRENT_DATE + INTERVAL 1 month)) t CROSS JOIN 
+(
+   SELECT a.N + b.N * 10 + 1 n
+     FROM 
+    (SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) a
+   ,(SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) b
+    ORDER BY n
+) n
+ WHERE n.n <= 1 + (LENGTH(t.accessorials) - LENGTH(REPLACE(t.accessorials, ',', '')))) accessorials";
+$result = mysql_query($sql);
+$row = mysql_fetch_array($result,MYSQL_BOTH);
+?>
+                        <span class="progress-text"> Total: Updated vs Dispatched</span>
+                        <span class="progress-number"><b><?php echo $row['updated_orders'];?></b>/<?php echo $row['dispatch_orders'];?></span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-aqua" style="width: <?php echo (($row['updated_orders'] / $row['dispatch_orders'] ) * 100);?>%"></div>
+                        </div>
+                         <div class="progress-group">
+                        <span class="progress-text"> PU: Updated  vs Dispatched</span>
+                        <span class="progress-number"><b><?php echo $row['pu_updated'];?></b>/<?php echo $row['pu_dispatch'];?></span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-blue" style="width: <?php echo (($row['pu_dispatch'] / $row['pu_updated'] ) * 100);?>%"></div>
+                        </div>
+                      </div><!-- /.progress-group -->
+                      <div class="progress-group">
+                        <span class="progress-text">DEL: Updated vs Dispatched</span>                        
+                        <span class="progress-number"><b><?php echo $row['del_updated'];?></b>/<?php echo $row['del_dispatch'];?></span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-red" style="width: <?php echo (($row['del_dispatch'] / $row['del_updated'] ) * 100);?>%"></div>
+                        </div>
+                      </div><!-- /.progress-group -->
+                      <div class="progress-group">
+                        <span class="progress-text">Accessorials added vs HWB Updated</span>
+                        <span class="progress-number"><b><?php echo $row['accessorials_count'];?></b>/<?php echo $row['updated_orders'];?></span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-green" style="width: <?php echo (($row['accessorials_count'] / $row['updated_orders'] ) * 100);?>%"></div>
+                        </div>
+                      </div><!-- /.progress-group -->
+                      <div class="progress-group">
+                        <span class="progress-text">IFTA Reports submitted vs trips run OTR</span><span class="progress-number"><b>250</b>/500</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+                        </div>
+                        <div class="progress-group">
+                        <span class="progress-text">CSA Points</span><span class="progress-number"><b>5</b>/25</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-red" style="width: 10%"></div>
+                        </div>
+                      </div><!-- /.progress-group -->
+                        <div class="progress-group">
+                        <span class="progress-text">VIR Updates</span><span class="progress-number"><b>5</b>/40</span>
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-red" style="width: 10%"></div>
+                        </div>
+                      </div><!-- /.progress-group -->
+                    </div><!-- /.col -->
+                  </div><!-- /.row -->
+                </div><!-- ./box-body -->
+               </div>
                 </div>
-                
-                <!-- /.box-header -->
-                <div class="box-body table-responsive no-padding">
-
-    			<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    			<script type="text/javascript">
-      			google.charts.load('current', {'packages':['corechart']});
-     			google.charts.setOnLoadCallback(drawChart);
-      			function drawChart() {
-
-		        var data = google.visualization.arrayToDataTable([
-        		['Task', 'Hours per Day'],
-          		['HWB Updates',     11],
-          		['VIR Updates',      2],
-          		['Paperwork',  2],
-          		['CSA Compliance', 2],
-          		['Accessorials',    7]				
-        		]);
-
-        		var options = {
-          		title: 'Click her to View Your Stats' 
-       			};
-
-        		var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-        		chart.draw(data, options);
-      			}
-    			</script>
-     	        <div id="piechart" style="width: 400px; height: 300px;"></div>
-                </div>
-              </div> 
-            </div>
-        </div>
- 
- 
-                </table>
-
-
-
-
-                <div class="box box-success">
+                <!-- /.box-body -->
+              </div><!-- /.box -->
+<div class="box box-success">
                 <div class="box-header with-border">
                   <h3 class="box-title">Send Message</h3>
                   <div class="box-tools pull-right">
@@ -483,8 +590,8 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 <div class="col-md-6">
                </div><!-- /.col -->
               </div><!-- /.row -->
-  </div><!-- /.col -->
-</div><!-- /.row -->
+            </div><!-- /.col -->
+           </div><!-- /.row -->
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
 

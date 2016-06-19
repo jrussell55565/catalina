@@ -63,9 +63,8 @@ $drivername = $_SESSION['drivername'];
           <div class="box">
             <div class="box-header with-border">
               <h4 class="box-title">Below are the meanings of  Colors on the Load Board.</h4>
-              <p>&nbsp;</p>
               <p>Red (warning) Driver update or Please call in Dispatch</p>
-              <p>Blue (neutral) Shipment not Finished Updates Needed from Dispatch or Driver needed</p>
+<p>Blue (neutral) Shipment not Finished Updates Needed from Dispatch or Driver needed</p>
               <p>Orange (warning) Driver needs to update shipment.</p>
               <p>Grey (Dispatch) Dispatch contacting Client for next action.</p>
               <p>Green (Finished) All is done with shipment. Ok to Archive or Delete</p>
