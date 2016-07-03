@@ -4,14 +4,14 @@ session_start();
 // Include database connection settings
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 
-$userName 	= $_POST["DriverUserName"];
-$password 	= $_POST["DriverPassword"];
-$truckId 	= $_POST["TruckID"];
-$trailerId	= $_POST["LoadPosition"];
-$email		= $_POST["DriverEmail"];
+$userName 	= trim($_POST["DriverUserName"]);
+$password 	= trim($_POST["DriverPassword"]);
+$truckId 	= trim($_POST["TruckID"]);
+$trailerId	= trim($_POST["LoadPosition"]);
+$email		= trim($_POST["DriverEmail"]);
 $admin		= $_POST["AdminLogin"];
 $rentalTruck    = $_POST["rentaltrucks"];
-$truckOdometer = $_POST["truck_odometer"];
+$truckOdometer = trim($_POST["truck_odometer"]);
 $coordinates    = explode('|',$_POST["hdn_coordinates"]);
 $latitude = $coordinates[0];
 $longitude = $coordinates[1];
@@ -32,130 +32,125 @@ $_SESSION['trailerid'] = $trailerId;
 $_SESSION['odometer'] = $truckOdometer;
 
 # setup the database connection
-mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
-mysql_select_db($db_name) or DIE('Database name is not available!');
+$mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
+/* check connection */
+if (mysqli_connect_errno()) {
+    printf("Connect failed: %s\n", mysqli_connect_error());
+    exit();
+}
 
 # First, if we've gotten here via the forgotPassword page then we'll just 
 # validate and skip the rest
-
-if ($_POST['forgotPassword'] == 'true')
+if (isset($_POST['forgotPassword']) && ($_POST['forgotPassword'] == 'true'))
 {
-    $forgottenUser = $_POST['DriverUserName'];
-    $sql = "SELECT username,email,password FROM users WHERE 
-            lower(username) = lower('" . mysql_real_escape_string($forgottenUser) . "')
-            or
-            lower(email) = lower('" . mysql_real_escape_string($forgottenUser) . "')";
+    $forgottenUser = $mysqli->real_escape_string($_POST['DriverUserName']);
+    $statement = "SELECT username,email,password FROM users WHERE 
+                  lower(username) = lower('" . $forgottenUser . "')
+                  or
+                  lower(email) = lower('" . $forgottenUser . "')";
 
-    $login = mysql_query($sql);
-    if (!$login) {
-        die('Invalid query: ' . mysql_error());
+     if ($result = $mysqli->query($statement)) 
+     {
+         $rows = mysqli_stmt_store_result($statement);
+         if ($rows == 1)
+         {
+             while ($row = mysqli_fetch_assoc($result))
+             {
+                 $forgottenUser = $row['username'];
+                 $forgottenEmail = $row['email'];
+                 $password = $row['password'];
+                 sendEmail('dispatch@catalinacartage.com',"Password Request","$forgottenUser has forgotten their current username or password.\r\n
+                 Username: $forgottenUser\r\n
+                 Email: $forgottenEmail\r\n
+                 Password: $password\r\n");
+             }
+         }
     }
-    if (mysql_num_rows($login) == 1)
-    {
-        $row = mysql_fetch_array($login, MYSQL_BOTH);
-        $forgottenUser = $row['username'];
-        $forgottenEmail = $row['email'];
-        $password = $row['password'];
-        sendEmail('dispatch@catalinacartage.com',"Password Request","$forgottenUser has forgotten their current username or password.\r\n
-        Username: $forgottenUser\r\n
-        Email: $forgottenEmail\r\n
-        Password: $password\r\n");
-    }
+    $result->close();
     header("Location: /pages/login/forgot.php?return=true");
+    exit;
 }
 
-// Check username and password match
-if (mysql_num_rows($login) == 1)
-{
-        while ($row = mysql_fetch_array($login, MYSQL_BOTH))
-        {
-}
-
-$login = mysql_query($sql);
-}
-
-if ($admin)
-{
-	$admin = "1";
-}else{
-	$admin = "0";
-}
-
-if ($admin == 0)
-{
-    # First, make sure the inputs were valid (only if we are not an admin)
-    if (checkOdometer($userName, $truckId) == 0)
-    {
-        if ($truckOdometer == null)
-        {
-            $errors['odometer'] = "Please enter an odometer reading for truck $truckId";
-            processErrors($errors);
-            exit;
-        }
-    }
-    if (checkRental($truckId) == 0)
-    {
-        if ($rentalTruck == 'No Rental')
-        {
-            $errors['rental'] = "This truck ($truckId) looks like a rental.  Please choose a rental company";
-            processErrors($errors);
-        }
-    }
-}
-
+# Now, let's see if we entered a valid username/password combination.
 // Retrieve username and password from database according to user's input
-$sql = "SELECT * FROM users WHERE (username = '" . mysql_real_escape_string($userName) . "') 
-        and (password = '" . mysql_real_escape_string($password) . "')
+$userName = $mysqli->real_escape_string($userName);
+$password = $mysqli->real_escape_string($password);
+$statement = "SELECT * FROM users WHERE (username = '" . $userName . "') 
+        and (password = '" . $password . "')
         and status = 'Active'";
 
-$login = mysql_query($sql);
-if (!$login) {
-    die('Invalid query: ' . mysql_error());
-}
-
-// Check username and password match
-if (mysql_num_rows($login) == 1)
+if ($result = $mysqli->query($statement)) 
 {
-        while ($row = mysql_fetch_array($login, MYSQL_BOTH))
+    $row_cnt = $result->num_rows;
+    if ($row_cnt == 1)
+    {
+        # Okay, we entered a valid username/password combination
+        while ($row = mysqli_fetch_assoc($result))
         {
-                $_SESSION['userid'] = $row['username'];
-                $isadmin = $row['admin'];
-                $_SESSION['drivername'] = $row['drivername'];
-                $_SESSION['email']      = $row['email'];
-                $_SESSION['username']      = $row['username'];
-                $_SESSION['fname']      = $row['fname'];
-                $_SESSION['lname']      = $row['lname'];
-                $_SESSION['employee_id'] = $row['employee_id'];
+             $_SESSION['userid'] = $row['username'];
+             $isadmin = $row['admin'];
+             $_SESSION['drivername'] = $row['drivername'];
+             $_SESSION['email']      = $row['email'];
+             $_SESSION['username']      = $row['username'];
+             $_SESSION['fname']      = $row['fname'];
+             $_SESSION['lname']      = $row['lname'];
+             $_SESSION['employee_id'] = $row['employee_id'];
         }
-  
+        # If I logged in as an admin and I'm really an admin...
+        if (isset($admin) && $isadmin == 1)
+        {
+            $registered_admin = 1;
+        }else{
+            $registered_admin = 0;
+        }
         # Check that the odometer is increasing (not for admins)
-        if ($isadmin != 1)
+        if ($registered_admin == 0)
         {
             checkOdometerIncrements($userName, $truckId, $truckOdometer);
+            # First, make sure the inputs were valid (only if we are not an admin)
+            if (checkOdometer($userName, $truckId) == 0)
+            {
+                if ($truckOdometer === null)
+                {
+                    $errors['odometer'] = "Please enter an odometer reading for truck $truckId";
+                    processErrors($errors);
+                    exit;
+                }
+            }
+            if (checkRental($truckId) == 0)
+            {
+                if ($rentalTruck == 'No Rental')
+                {
+                    $errors['rental'] = "This truck ($truckId) looks like a rental.  Please choose a rental company";
+                    processErrors($errors);
+                }
+            }
+            # Now insert the coordinates
+            $sql = "insert into coordinates (driver_id, latitude, longitude)
+               values ((select driverid from users where username = '$_SESSION[userid]'),
+                       $latitude, $longitude)";
+            if ($mysqli->query($sql) === false)
+            {
+                throw new Exception("Unable to insert coordinates: ".$mysqli->error);
+            }
         }
-
-        $sql = "insert into coordinates (driver_id, latitude, longitude)
-                values ((select driverid from users where username = '$_SESSION[userid]'),
-                        $latitude, $longitude)";
-
-        $output = mysql_query($sql);
-
-        # Insert into the login_capture table
-        if ($isadmin == 1)
+        # Now capture the login
+        if ($registered_admin == 1)
         {
             $sql = "INSERT INTO login_capture (driver_driverid, drivername, truck_number, trailer_number, rental, truck_odometer)
-                VALUES
-                ((SELECT driverid from users WHERE username = '$userName'), '$userName',
-                'admintruck', 'admintrailer', 'adminrental','adminodometer')";
+               VALUES
+               ((SELECT driverid from users WHERE username = '$userName'), '$userName',
+               'admintruck', 'admintrailer', 'adminrental','adminodometer')";
         }else{
             $sql = "INSERT INTO login_capture (driver_driverid, drivername, truck_number, trailer_number, rental, truck_odometer)
-                VALUES
-                ((SELECT driverid from users WHERE username = '$userName'), '$userName',
-                $truckId, $trailerId, '$rentalTruck',$truckOdometer)";
+               VALUES
+               ((SELECT driverid from users WHERE username = '$userName'), '$userName',
+               $truckId, $trailerId, '$rentalTruck',$truckOdometer)";
         }
-
-        $output = mysql_query($sql);
-
+        if ($mysqli->query($sql) === false)
+        {
+            throw new Exception("Unable to insert login audit: ".$mysqli->error);
+        }
         setCookies($_SESSION['login_username'],$_SESSION['login_password'],$_SESSION['login_truckid'],$_SESSION['login_trailerid'],$_SESSION['login_rentaltruck'],$_SESSION['login_truckodometer']);
         unset($_SESSION['login_username']);
         unset($_SESSION['login_password']);
@@ -163,32 +158,23 @@ if (mysql_num_rows($login) == 1)
         unset($_SESSION['login_trailerid']);
         unset($_SESSION['login_rentaltruck']);
         unset($_SESSION['login_truckodometer']);
-        if ($isadmin == 1)
+        if ($registered_admin == 1)
         {
-                if ($admin == 1)
-                {
-                        $_SESSION['login'] = 1;
-                        header('Location: /pages/main/index.php');
-                }else{
-                        $_SESSION['login'] = 2;
-                        header('Location: /pages/main/index.php');
-                }
+            $_SESSION['login'] = 1;
         }else{
-                $_SESSION['login'] = 2;
-                header('Location: /pages/main/index.php');
+            $_SESSION['login'] = 2;
         }
-} else {
+        header('Location: /pages/main/index.php');
+        exit;
+    }else{
         // Login failed
         $_SESSION['login'] = 0;
         $errors['credentials'] = "Invalid username or password";
         unset($_SESSION['login_username']);
         unset($_SESSION['login_password']);
         processErrors($errors);
+    }
 }
-
-# Now if the errors array is larger than zero we create the GET
-# request and send it back to the login page.
-
 
 function processErrors($errors)
 {
@@ -209,39 +195,36 @@ function processErrors($errors)
 function checkOdometer($driver, $truck)
 {
     # Validate they've entered an odometer reading TODAY
-    $sql = "select truck_odometer from login_capture where driver_driverid = 
+    $statement = "select truck_odometer from login_capture where driver_driverid = 
             (SELECT driverid from users WHERE username = '$driver')
              and truck_number = $truck
              and date_format(login_time, '%Y-%m-%d') = CURRENT_DATE()";
     
-    $result = mysql_query($sql);
-    if (! $result)
+    if ($r = $mysqli->query($statement) === false)
     {
-        echo "There was an error trying to query for mileage";
+        throw new Exception("Unable to validate odometer: ".$mysqli->error);
         exit;
-    } 
-    $num_rows = mysql_num_rows($result);
-    return $num_rows;
+    }
+    $r->store_result();
+    return $r->num_rows;
 }
 
 function checkOdometerIncrements($driver, $truck, $truckOdometer)
 {
     # Validate that the odometer reading they entered today has incremented since yesterday
-    $sql = "select $truckOdometer - truck_odometer AS difference
+    $statement = "select $truckOdometer - truck_odometer AS difference
             from login_capture 
             where truck_number = $truck 
             and driver_driverid=(SELECT driverid from users WHERE username = '$driver')
             and date_format(login_time, '%Y-%m-%d') < CURRENT_DATE()
             order by login_time desc limit 1";
-
-    $result = mysql_query($sql);
-    if (! $result)
+    if ($r = $mysqli->query($statement) === false)
     {
-        echo "There was an error trying to query for mileage";
+        throw new Exception("Unable to validate odometer increment: ".$mysqli->error);
         exit;
-    } 
-    $row = mysql_fetch_array($result, MYSQL_BOTH);
-    if ($row['difference'] < 1)
+    }
+    $row = $r->fetch_assoc();
+    if ($row < 1)
     {
         # Looks like the odometer reading has not increased
         #$errors['odometer_inc'] = "The odometer reading has not increased.";
@@ -251,15 +234,14 @@ function checkOdometerIncrements($driver, $truck, $truckOdometer)
 
 function checkRental($truck)
 {
-    $sql = "select cattrucks from equipment where cattrucks = $truck";
-    $result = mysql_query($sql);
-    if (! $result)
+    $statement = "select cattrucks from equipment where cattrucks = $truck";
+    if ($r = $mysqli->query($statement) === false)
     {
-        echo "There was an error trying to query for rentals";
+        throw new Exception("Unable to check if this is a rental truck: ".$mysqli->error);
         exit;
-    } 
-    $num_rows = mysql_num_rows($result);
-    return $num_rows;
+    }
+    $r->store_result();
+    return $r->num_rows;
 }
 
 function setCookies($login_username,$login_password,$login_truckid,$login_trailerid,$login_rentaltruck,$login_truckodometer)
