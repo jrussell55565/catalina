@@ -88,4 +88,3 @@ function rtrim_limit($str, $delim, $count = 0)
     return $str;
 }
 ?>
-
