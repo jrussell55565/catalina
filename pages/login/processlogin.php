@@ -106,9 +106,9 @@ if ($result = $mysqli->query($statement))
         # Check that the odometer is increasing (not for admins)
         if ($registered_admin == 0)
         {
-            checkOdometerIncrements($userName, $truckId, $truckOdometer);
+            checkOdometerIncrements($mysqli, $userName, $truckId, $truckOdometer);
             # First, make sure the inputs were valid (only if we are not an admin)
-            if (checkOdometer($userName, $truckId) == 0)
+            if (checkOdometer($mysqli, $userName, $truckId) == 0)
             {
                 if ($truckOdometer === null)
                 {
@@ -117,7 +117,7 @@ if ($result = $mysqli->query($statement))
                     exit;
                 }
             }
-            if (checkRental($truckId) == 0)
+            if (checkRental($mysqli, $truckId) == 0)
             {
                 if ($rentalTruck == 'No Rental')
                 {
@@ -192,7 +192,7 @@ function processErrors($errors)
     }
 }
 
-function checkOdometer($driver, $truck)
+function checkOdometer($mysqli, $driver, $truck)
 {
     # Validate they've entered an odometer reading TODAY
     $statement = "select truck_odometer from login_capture where driver_driverid = 
@@ -200,16 +200,17 @@ function checkOdometer($driver, $truck)
              and truck_number = $truck
              and date_format(login_time, '%Y-%m-%d') = CURRENT_DATE()";
     
-    if ($r = $mysqli->query($statement) === false)
+    if ($result = $mysqli->query($statement))
     {
-        throw new Exception("Unable to validate odometer: ".$mysqli->error);
+        $row_cnt = $result->num_rows;
+        return $row_cnt;
+    }else{
+        throw new Exception("Unable to validate the odometer reading: ".$mysqli->error);
         exit;
     }
-    $r->store_result();
-    return $r->num_rows;
 }
 
-function checkOdometerIncrements($driver, $truck, $truckOdometer)
+function checkOdometerIncrements($mysqli, $driver, $truck, $truckOdometer)
 {
     # Validate that the odometer reading they entered today has incremented since yesterday
     $statement = "select $truckOdometer - truck_odometer AS difference
@@ -218,30 +219,41 @@ function checkOdometerIncrements($driver, $truck, $truckOdometer)
             and driver_driverid=(SELECT driverid from users WHERE username = '$driver')
             and date_format(login_time, '%Y-%m-%d') < CURRENT_DATE()
             order by login_time desc limit 1";
-    if ($r = $mysqli->query($statement) === false)
+
+    if ($result = $mysqli->query($statement))
     {
-        throw new Exception("Unable to validate odometer increment: ".$mysqli->error);
+        $row_cnt = $result->num_rows;
+        while ($obj = $result->fetch_object())
+        {
+            $difference = $obj->difference;
+        }
+        if ($row_cnt == 0)
+        {
+            $difference = 0;
+        }
+    }else{
+        throw new Exception("Unable to validate if the odometer is incrementing: ".$mysqli->error);
         exit;
     }
-    $row = $r->fetch_assoc();
+
     if ($row < 1)
     {
         # Looks like the odometer reading has not increased
-        #$errors['odometer_inc'] = "The odometer reading has not increased.";
         processErrors($errors);
     }
 }
 
-function checkRental($truck)
+function checkRental($mysqli, $truck)
 {
     $statement = "select cattrucks from equipment where cattrucks = $truck";
-    if ($r = $mysqli->query($statement) === false)
+    if ($result = $mysqli->query($statement))
     {
+        $row_cnt = $result->num_rows;
+        return $row_cnt;
+    }else{
         throw new Exception("Unable to check if this is a rental truck: ".$mysqli->error);
         exit;
     }
-    $r->store_result();
-    return $r->num_rows;
 }
 
 function setCookies($login_username,$login_password,$login_truckid,$login_trailerid,$login_rentaltruck,$login_truckodometer)
