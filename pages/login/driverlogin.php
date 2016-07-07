@@ -57,6 +57,9 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
                                     <?php if (strpos($_GET['error'], 'credentials') !== false) { ?>
                                       <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center">Invalid username or password.</div>
                                     <?php } ?> 
+                                    <?php if (strpos($_GET['error'], 'admin') !== false) { ?>
+                                      <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center">Administrative access is restricted.</div>
+                                    <?php } ?> 
                                     <input class="form-control" placeholder="Username" name="DriverUserName" type="text" autofocus
                                     value='<?php if(isset($_SESSION['login_username'])){ echo $_SESSION['login_username']; }elseif (isset($_COOKIE['login_username'])){ echo $_COOKIE['login_username']; } ?>'>
                                 </div>

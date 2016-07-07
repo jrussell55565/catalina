@@ -100,6 +100,9 @@ if ($result = $mysqli->query($statement))
         if (isset($admin) && $isadmin == 1)
         {
             $registered_admin = 1;
+        }elseif (isset($admin) && $isadmin == 0) {
+            $errors['admin'] = "Administrative access is restricted.";
+            processErrors($errors);
         }else{
             $registered_admin = 0;
         }
