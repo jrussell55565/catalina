@@ -6,12 +6,12 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 
 $userName 	= trim($_POST["DriverUserName"]);
 $password 	= trim($_POST["DriverPassword"]);
-$truckId 	= trim($_POST["TruckID"]);
-$trailerId	= trim($_POST["LoadPosition"]);
+$truck_id 	= trim($_POST["TruckID"]);
+$trailer_id	= trim($_POST["LoadPosition"]);
 $email		= trim($_POST["DriverEmail"]);
 $admin		= $_POST["AdminLogin"];
-$rentalTruck    = $_POST["rentaltrucks"];
-$truckOdometer = trim($_POST["truck_odometer"]);
+$rental_truck    = $_POST["rentaltrucks"];
+$truck_odometer = trim($_POST["truck_odometer"]);
 $coordinates    = explode('|',$_POST["hdn_coordinates"]);
 $latitude = $coordinates[0];
 $longitude = $coordinates[1];
@@ -22,14 +22,14 @@ $getErrors = "error=";
 # driver login if we need to.
 $_SESSION['login_username'] = $userName;
 $_SESSION['login_password'] = $password;
-$_SESSION['login_truckid'] = $truckId;
-$_SESSION['login_trailerid'] = $trailerId;
+$_SESSION['login_truckid'] = $truck_id;
+$_SESSION['login_trailerid'] = $trailer_id;
 # Setup duplicate-esque sessions variables for truck and trailer
-$_SESSION['login_rentaltruck'] = $rentalTruck;
-$_SESSION['login_truckodometer'] = $truckOdometer;
-$_SESSION['truckid'] = $truckId;
-$_SESSION['trailerid'] = $trailerId;
-$_SESSION['odometer'] = $truckOdometer;
+$_SESSION['login_rentaltruck'] = $rental_truck;
+$_SESSION['login_truckodometer'] = $truck_odometer;
+$_SESSION['truckid'] = $truck_id;
+$_SESSION['trailerid'] = $trailer_id;
+$_SESSION['odometer'] = $truck_odometer;
 
 # setup the database connection
 $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
@@ -109,22 +109,22 @@ if ($result = $mysqli->query($statement))
         # Check that the odometer is increasing (not for admins)
         if ($registered_admin == 0)
         {
-            checkOdometerIncrements($mysqli, $userName, $truckId, $truckOdometer);
+            checkOdometerIncrements($mysqli, $userName, $truck_id, $truck_odometer);
             # First, make sure the inputs were valid (only if we are not an admin)
-            if (checkOdometer($mysqli, $userName, $truckId) == 0)
+            if (checkOdometer($mysqli, $userName, $truck_id) == 0)
             {
-                if ($truckOdometer === null)
+                if ($truck_odometer === null)
                 {
-                    $errors['odometer'] = "Please enter an odometer reading for truck $truckId";
+                    $errors['odometer'] = "Please enter an odometer reading for truck $truck_id";
                     processErrors($errors);
                     exit;
                 }
             }
-            if (checkRental($mysqli, $truckId) == 0)
+            if (checkRental($mysqli, $truck_id) == 0)
             {
-                if ($rentalTruck == 'No Rental')
+                if ($rental_truck == 'No Rental')
                 {
-                    $errors['rental'] = "This truck ($truckId) looks like a rental.  Please choose a rental company";
+                    $errors['rental'] = "This truck ($truck_id) looks like a rental.  Please choose a rental company";
                     processErrors($errors);
                 }
             }
@@ -132,9 +132,17 @@ if ($result = $mysqli->query($statement))
             $sql = "insert into coordinates (driver_id, latitude, longitude)
                values ((select driverid from users where username = '$_SESSION[userid]'),
                        $latitude, $longitude)";
-            if ($mysqli->query($sql) === false)
+            try {
+                if ($mysqli->query($sql) === false)
+                {
+                    throw new Exception("Unable to insert coordinates: ".$mysqli->error);
+                }
+            }
+            catch (Exception $e)
             {
-                throw new Exception("Unable to insert coordinates: ".$mysqli->error);
+                error_log($e); 
+                header('Location: /pages/errors/500.html');
+                exit;
             }
         }
         # Now capture the login
@@ -145,15 +153,29 @@ if ($result = $mysqli->query($statement))
                ((SELECT driverid from users WHERE username = '$userName'), '$userName',
                'admintruck', 'admintrailer', 'adminrental','adminodometer')";
         }else{
+            # If we're a box truck and don't have a trailer then set it to NULL
+            if ($trailer_id == '')
+            {
+                $trailer_id = 'NULL';
+            }
             $sql = "INSERT INTO login_capture (driver_driverid, drivername, truck_number, trailer_number, rental, truck_odometer)
                VALUES
                ((SELECT driverid from users WHERE username = '$userName'), '$userName',
-               $truckId, $trailerId, '$rentalTruck',$truckOdometer)";
+               $truck_id, $trailer_id, '$rental_truck',$truck_odometer)";
         }
-        if ($mysqli->query($sql) === false)
+        try {
+            if ($mysqli->query($sql) === false)
+            {
+                throw new Exception("Unable to insert record into login_capture: ".$mysqli->error);
+            }
+        }
+        catch (Exception $e)
         {
-            throw new Exception("Unable to insert login audit: ".$mysqli->error);
-        }
+            error_log($e); 
+            header('Location: /pages/errors/500.html');
+            exit;
+        } 
+            
         setCookies($_SESSION['login_username'],$_SESSION['login_password'],$_SESSION['login_truckid'],$_SESSION['login_trailerid'],$_SESSION['login_rentaltruck'],$_SESSION['login_truckodometer']);
         unset($_SESSION['login_username']);
         unset($_SESSION['login_password']);
@@ -213,10 +235,10 @@ function checkOdometer($mysqli, $driver, $truck)
     }
 }
 
-function checkOdometerIncrements($mysqli, $driver, $truck, $truckOdometer)
+function checkOdometerIncrements($mysqli, $driver, $truck, $truck_odometer)
 {
     # Validate that the odometer reading they entered today has incremented since yesterday
-    $statement = "select $truckOdometer - truck_odometer AS difference
+    $statement = "select $truck_odometer - truck_odometer AS difference
             from login_capture 
             where truck_number = $truck 
             and driver_driverid=(SELECT driverid from users WHERE username = '$driver')
