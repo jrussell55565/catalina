@@ -12,6 +12,13 @@ $email		= trim($_POST["DriverEmail"]);
 $admin		= $_POST["AdminLogin"];
 $rental_truck    = $_POST["rentaltrucks"];
 $truck_odometer = trim($_POST["truck_odometer"]);
+
+if ($_POST["hdn_coordinates"] == '' )
+{
+    # Set some default coordinate (in Canada).
+    $_POST["hdn_coordinates"] = '52.939916|-106.450864';
+}
+
 $coordinates    = explode('|',$_POST["hdn_coordinates"]);
 $latitude = $coordinates[0];
 $longitude = $coordinates[1];
