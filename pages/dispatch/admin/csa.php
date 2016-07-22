@@ -123,7 +123,7 @@ if ($_POST['update_csa'])
 
 <!-- Animated Top Menu Insert PHP Reference to /wwwlive/dist/menus_sidebars_elements  -->
 
-<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/topmenuadminanimation.php');?>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/topmenuanimation.php');?>
 
 <!-- End Animated Top Menu -->
           
@@ -131,9 +131,13 @@ if ($_POST['update_csa'])
           
           <div class="row">
             <div class="col-md-12">
-              <div class="box">
+              <div class="box box-default collapsed-box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">CSA Data</h3>
+                  <h3 class="box-title">CSA Compliance</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools -->
                 </div><!-- /.box-header -->
                 <div class="box-body">
 <table class="table table-striped">
@@ -266,10 +270,47 @@ where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name')
 <?php if ($_SESSION['login'] == 1)
       {
       ?>
-            <div class="col-md-12">
-              <div class="box">
+      
+<div class="col-md-12">
+              <div class="box box-defualt collapsed-box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Add Violations</h3>
+                  <h3 class="box-title">Internal  Compliance</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools --> 
+                </div><!-- /.box-header -->
+                 <div class="box-body">
+
+                  <div class="input-daterange input-group" id="datepicker" style="width: 25%">
+                   <input type="text" class="input-sm form-control datepicker" name="start" data-date-format="mm/dd/yyyy"/ required>
+                   <span class="input-group-addon">to</span>
+                   <input type="text" class="input-sm form-control datepicker" name="end" data-date-format="mm/dd/yyyy"/ required>
+                  </div>
+                 </div>
+                </div>
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+      
+            <div class="col-md-12">
+              <div class="box box-defualt collapsed-box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Add Company Violations</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools -->                  
                 </div><!-- /.box-header -->
                  <div class="box-body">
 
@@ -392,9 +433,13 @@ where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name')
               </div>
 
             <div class="col-md-12">
-              <div class="box">
+              <div class="box box-defualt collapsed-box">
                 <div class="box-header with-border">
                   <h3 class="box-title">CSA Reports</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools --> 
                 </div><!-- /.box-header -->
                  <div class="box-body">
 
