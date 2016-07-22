@@ -58,11 +58,12 @@
                 <li><a href="<?php echo HTTP;?>/pages/dispatch/orders.php"><i class="fa fa-circle-o"></i>Load Board Admin</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/dispatch/vir_previous.php"><i class="fa fa-circle-o"></i>VIR Admin</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/info/inspectiontypes.php"><i class="fa fa-circle-o"></i>CSA Admin</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/accessorials.php"><i class="fa fa-circle-o"></i> Accessorials Admin</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i> VIR Accessorials</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/accessorials.php"><i class="fa fa-circle-o"></i>Accessorials Admin</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i>VIR Accessorials</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/dispatch/ifta.php"><i class="fa fa-circle-o"></i>IFTA Admin</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/logintrace.php"><i class="fa fa-circle-o"></i> Login Trace</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/location.php"><i class="fa fa-circle-o"></i> Locate Users</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/logintrace.php"><i class="fa fa-circle-o"></i>Login Trace</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/location.php"><i class="fa fa-circle-o"></i>Map Users</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/users.php"><i class="fa fa-circle-o"></i>All Users</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/info/otrpodimage.php"><i class="fa fa-circle-o"></i>Productivity Admin</a></li>
               </ul>
   </li>
@@ -136,8 +137,8 @@
 
             <li>
               <a href="/pages/mailbox/mailbox.html">
-                <i class="fa fa-envelope"></i> <span>Mailbox</span>
-                <small class="label pull-right bg-yellow">5</small>
+                <i class="fa fa-envelope"></i> <span>Recent Posts</span>
+                <small class="label pull-right bg-yellow">69</small>
               </a>
             </li>
                         
@@ -158,18 +159,21 @@
 
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-folder"></i> <span>Admin Links</span>
+                <i class="fa fa-folder"></i> <span>Testing Links</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="/pages/dispatch/orders.php"><i class="fa fa-circle-o"></i> Load Boards All</a></li>
-                <li><a href="/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i> Admin VIRs All </a></li>
-                <li><a href="/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i> Company Stats All</a></li>
-                <li><a href="/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i> Admin IFTA All</a></li>
+                <li><a href="/pages/main/indextesting.php"><i class="fa fa-circle-o"></i> Index Testing</a></li>
+                <li><a href="/pages/examples/index_starter_page.php"><i class="fa fa-circle-o"></i>Default Template</a></li>
+                <li><a href="/AdminLTE230/index.html"><i class="fa fa-circle-o"></i> AdminLTE Index</a></li>
+                <li><a href="/pages/dispatch/securitytesting.php"><i class="fa fa-circle-o"></i> Security Testing</a></li>
+                <li><a href="/pages/dispatch/imports.php"><i class="fa fa-circle-o"></i> Imports</a></li>
+<!--                <li><a href="/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i> Admin IFTA All</a></li>
                 <li><a href="/pages/dispatch/admin/csa.php"><i class="fa fa-circle-o"></i> Admin DOT Safety All</a></li>
                 <li><a href="/pages/examples/500.html"><i class="fa fa-circle-o"></i> Admin Edit Accessorials</a></li>
                 <li><a href="/pages/examples/blank.html"><i class="fa fa-circle-o"></i> Admin Edit VIR Accs</a></li>
                 <li><a href="/pages/dispatch/admin/users.php"><i class="fa fa-circle-o"></i> Edit All Users</a></li>
+-->                 
               </ul>
             </li>
             
