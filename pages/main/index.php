@@ -426,17 +426,21 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 </table>
 
 
-
+<!-- =======================Share Start==================================== -->
 
                 <div class="box box-success">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Send Message</h3>
+                  <h3 class="box-title">Broadcast Message</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                   </div>
                 </div><!-- /.box-header -->
-                <div class="box-body">
+                
+                
+                
+                
+                 <div class="box-body">
                   <div class="row">
                    <form class="form" method="post" action="<?php echo HTTP;?>/pages/main/index.php">
                    <div class="form-group">
@@ -479,6 +483,9 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 </div>
                 <!-- /.box-body -->
               </div>
+
+<!-- ========================Share over=================================== --> 
+
               <div class="row">
                 <div class="col-md-6">
                </div><!-- /.col -->
@@ -489,7 +496,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
       </div><!-- /.content-wrapper -->
 
 
-
+<!-- ========================Share over=================================== -->
 
 
 
