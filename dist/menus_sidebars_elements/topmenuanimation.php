@@ -5,7 +5,7 @@
           <div class="row">
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php">
-                 <span class="info-box-icon bg-aqua"><i class="fa fa-cog fa-spin"></i></span>
+                 <span class="info-box-icon bg-blue"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
                 </a>               
             <div class="info-box-content">
 			     <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php">Shipment Boards</a></span><span class="info-box-number">PU Today:<?php echo "$pu_today_count";?><br>
@@ -13,14 +13,13 @@
                  <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
-
+            
 
 
             <!-- fix for small devices only  Trying to Add Font Animations here-->
             <div class="clearfix visible-sm-block"></div>
             <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box">
-			  <a href="<?php echo HTTP;?>/pages/dispatch/vir.php" class="button2 animated zoomIn">
+              <div class="info-box"><a href="<?php echo HTTP;?>/pages/dispatch/vir.php" class="button2 animated zoomIn">
 <style>
 a.button2 {
 	 -webkit-animation-duration: 6s;
@@ -50,7 +49,7 @@ a.button2 {
 	 -webkit-animation-iteration-count: infinite;
 }
 </style>              
-                <span class="info-box-icon bg-green"><i class="fa fa-tachometer"></i></span>
+                <span class="info-box-icon bg-purple"><i class="fa fa-line-chart"></i></span>
                 </a>
                 <div class="info-box-content">
                 <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/productivity.php"> Productivity</a></span>
@@ -73,7 +72,7 @@ a.button2 {
 	 -webkit-animation-iteration-count: infinite;
  }
 </style>
-               <span class="info-box-icon bg-blue"><i class="fa fa-bank"></i></span>
+               <span class="info-box-icon bg-orange"><i class="fa fa-bank"></i></span>
 </a>
 
                 <div class="info-box-content">
