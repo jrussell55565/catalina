@@ -317,50 +317,37 @@ if (($trucktype == 'combo') && ($trailer_number != ''))
 $to = "trucks@catalinacartage.com";
 $subject = "VIR $truck_number / $trailer_number / $preorposttrip $truck_po, $trailer_po";
 $body = <<<EOT
-Driver: $driver_name
-Truck Type: $trucktype
-Truck: $truck_number, $truck_vir_condition
-Trailer: $trailer_number, $trailer_vir_condition
-Date: $insp_date
-Start Time: $insp_start_time
-End Time  : $insp_end_time
-Truck Maintenance PO: $truck_po
-Trailer Maintenance PO: $trailer_po
-Truck Odometer: $truckodometer
+Driver:				$driver_name
+Truck Type:			$trucktype
+Truck:				$truck_number, $truck_vir_condition
+Trailer:				$trailer_number, $trailer_vir_condition
+Date:				$insp_date
+Start Time:			$insp_start_time
+End Time:			$insp_end_time
+Truck WO:			$truck_po
+Trailer WO:			$trailer_po
+Truck Odometer:		$truckodometer
 
-General Notes: $vir_notes_finish
+General VIR Notes:		$vir_notes_finish;
 
-$truck_number: $truck_vir_condition
-Items Marked:
-$truck_vir_items
+Truck VIR:			$truck_vir_condition;
+Comments:			$vir_notes_detailed_truck $vir_notes_quick_report;
+Item(s):				$truck_vir_items;
 
-Additional Driver Notes For $truck_number:
-$vir_notes_detailed_truck $vir_notes_quick_report
+Truck Tires VIR:	$truck_tires_notes_combo
+Steer (Driver):			$truck_tires_driverside_steer			Steer (Passenger): $truck_tires_passenger_steer
+Axel 1(Driver):			$truck_tires_driverside_ax1front		Axel 1(Passenger): $truck_tires_passenger_ax1front
+Axel 2(Driver):			$truck_tires_driverside_ax2rear		Axel 2(Passenger): $truck_tires_passenger_ax2rear
 
-$truck_number: Tire Conditions (Drivers Side):
-Steer,$truck_tires_driverside_steer
-Axel 1: $truck_tires_driverside_ax1front
-Axel 2: $truck_tires_driverside_ax2rear
+Trailer VIR:			$trailer_vir_condition:
+Comments:			$vir_notes_detailed_trailer;
+Item(s):				$trailer_vir_items;
 
-$truck_number: Tire Conditions (Passenger Side):
-Steer: $truck_tires_driverside_steer
-Axel 1: $truck_tires_passenger_ax1front
-Axel 2: $truck_tires_passenger_ax2rear
+Trailer Tires VIR:		$trailer_tires_notes_trailer;
+Axel 1 (Driver): 			$trailer_tires_driverside_ax1front		Axel 1 (Passenger): $trailer_tires_passenger_ax1front
+Axel 2 (Driver): 			$trailer_tires_driverside_ax2rear		Axel 2 (Passenger): $trailer_tires_passenger_ax2rear
 
-$trailer_number: $trailer_vir_condition:
-Items Marked:
-$trailer_vir_items
-
-Additional Driver Notes For Trailer:
-$vir_notes_detailed_trailer
-
-$trailer_number: Tire Conditions (Drivers Side):
-Axel 1: $trailer_tires_driverside_ax1front
-AXEL 2: $trailer_tires_driverside_ax2rear
-
-$trailer_number: Tire Conditions (Passenger Side):
-Axel 1: $trailer_tires_passenger_ax1front
-AXEL 2: $trailer_tires_passenger_ax2rear
+::::::::::::::::::::::::End of Message::::::::::::::::::::::::
 
 EOT;
 

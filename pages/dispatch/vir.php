@@ -106,7 +106,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
       <!-- Default box -->
       <div class="box">
         <div class="box-header with-border">
-          <h3 class="box-title">Vechicle Inspection Quick Report</h3>
+          <h3 class="box-title">Vechicle Inspection Report</h3>
           <div class="box-tools pull-right">
             <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
             <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
@@ -114,6 +114,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
         </div>
         <div class="box-body">
           <form class="form" name="virForm" id="virForm" method="post" action="viractions.php" onsubmit="return validateSubmit(this);">
+            
             <table width="313" border="1">
               <tr>
                 <td colspan="4">Start Time:
@@ -123,40 +124,47 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                   <span class="active"><?php echo "$truck_number"; ?></span>
               </tr>
               <tr>
-                <td width="95">Truck
-                <td width="72"><input name="truck_number" type="text" id="truck_number" value="<?php echo $truckid; ?>" size="8" readonly />
-                <?php
+                <td width="94">Truck
+                <td width="79"><div align="center">
+                  <input name="truck_number" type="text" id="truck_number" value="<?php echo $truckid; ?>" size="8" readonly />
+                  <?php
                 $statement = "SELECT truck_vir_condition from virs WHERE truck_number = $truckid ORDER BY vir_itemnum DESC LIMIT 1";
                 $record = mysql_query($statement);
                 $record = mysql_fetch_array($record);
                 $a = explode(',',$record[0]);
                 ?>
-                <td colspan="2"><a href="vir_previous.php"> Previous VIR </a>
-                <?php echo $a[0];?>
-              </tr>
+                </div>
+                <td colspan="2" ><div align="center"><?php echo $a[0];?> on 7/1/2016</div>                </tr>
               <tr>
                 <td>Trailer
-                <td><input name="trailer_number" type="text" id="trailer_number" value="<?php echo $trailerid; ?>" size="8" readonly>
-                <input name="truck_odometer" type="hidden" id="truck_odometer" value="<?php echo $truckOdometer; ?>" size="8" readonly>
-                </td>
+                <td><div align="center">
+                  <input name="trailer_number" type="text" id="trailer_number" value="<?php echo $trailerid; ?>" size="8" readonly>
+                  <input name="truck_odometer" type="hidden" id="truck_odometer" value="<?php echo $truckOdometer; ?>" size="8" readonly>
+                </div></td>
                 <?php
                 $statement = "SELECT trailer_vir_condition from virs WHERE trailer_number = $trailerid ORDER BY vir_itemnum DESC LIMIT 1";
                 $record = mysql_query($statement);
                 $record = mysql_fetch_array($record);
                 $a = explode(',',$record[0]);
                 ?>
-                <td colspan="2"><a href="vir_previous.php">Previous VIR </a>
-                <?php echo $a[0];?>
-              </tr>
+                <td colspan="2"><div align="center"><?php echo $a[0];?> on 7/1/2016</div>                </tr>
               <tr>
-                <td colspan="4"><div align="center">Pre Trip:
+                <td colspan="4">
+                <div align="center">
+                    Pre Trip:
                     <input name="preorposttrip" type="radio" id="pretrip" value="vir_pretrip">
-                  <label for="vir_pretrip"></label>
+                    <label for="vir_pretrip"></label>
                     Post Trip:
                     <input type="radio" name="preorposttrip" id="posttrip" value="vir_posttrip">
                     <label for="vir_posttrip"></label>
-                  </div>
-                  <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none" id="preorpostdiv">Choose pre-trip or post-trip</div>
+                </div>
+                  <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none" id="preorpostdiv">Choose pre/post trip or Breakdown</div>
+              </tr>
+              <tr>
+                <td colspan="4"><div align="center">Breakdown:
+                    <input name="preorposttrip" type="radio" id="breakdown" value="vir_breakdown">
+                    <label for="vir_breakdown"></label>
+                </div>                
               </tr>
               <tr>
                 <td colspan="4"><div align="center">Truck Type</div>
@@ -165,7 +173,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
               <tr>
                 <td><div align="center"><span class="box-title"><img src="../images/semismall.gif" alt="tire"></span></div>
                 <td colspan="2"><div align="center"><span class="box-title"><img src="../images/boxtrucksmall.gif" alt="tire"></span></div>
-                <td width="100"><div align="center"><span class="box-title"><img src="../images/sprintersmall.gif" alt="tire"></span></div>
+                <td width="96"><div align="center"><span class="box-title"><img src="../images/sprintersmall.gif" alt="tire"></span></div>
               </tr>
               <tr>
                 <td><div align="center">
@@ -182,17 +190,28 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                     <label for="type_sprinter"></label>
                   </div>
               </tr>
+              <tr>
+              <td colspan="4"><div align="center"> If you are reporting vir items that have not been fixed on the truck or trailer but were previously reported in the last week, Select Option Below.</div>              
+              </tr>
+              <tr>
+                <td colspan="3"><div align="center">Previously Reported
+                  <input type="radio" name="previously_reported" id="previously_reported" value="previously_reported">
+                  <label for="type_sprinter2"></label>
+                </div>
+                             
+                <td><a href="vir_previous.php">Previous VIRS</a></tr>
+              <tr>
+                <td colspan="3"><div align="center"></div>
+                <td><div align="center"></div>                </tr>
             </table>
-            </div>
+
         <!-- /.box-body -->
         <div class="box-footer">
          <div class="vir">
          Not All Green? Add Items Below!
-         </div>
-         <div class="virconfirmation">
-         Choose a truck type to continue.
-         </div>
-        </div>
+
+         <div class="virconfirmation" role="alert" style="padding: 1px; text-align: center; display: none" id="preorpostdiv">Choose a truck type to continue</div>
+
         <!-- /.box-footer-->
       </div>
       <!-- /.box -->
@@ -202,21 +221,18 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
       <!--Remove the div Class "box" above and add below primary collapsed -->
       <div name="div_truck_vir" id="div_truck_vir" class="box box-primary collapsed-box vir truckvir">
         <div class="box-header with-border">
-          <h3 class="box-title"><img src="../images/semismall.gif" alt="tire">Truck Inspection <img src="../images/boxtrucksmall.gif" alt="tire">
+          <h3 class="box-title"><img src="../images/semismall.gif" alt="tire">Truck Inspection <img src="../images/boxtrucksmall.gif" alt="tire"></h3>
           <table width="200" border="1">
               <tr>
                 <td width="52" height="4"  bgcolor="#33FF00"><div align="center">Green
                   <input type="radio" name="vir_truck[]" id="vir_truck_green" value="Green,(No Issues)">
                   <label for="vir_truck_green"></label>
-                </div>
                 <td width="54" height="4"  bgcolor="#FFFF00"><div align="center">Yellow
                   <input type="radio" name="vir_truck[]" id="vir_truck_yellow" value="Yellow,(Reporting Problems)">
                   <label for="vir_truck_yellow"></label>
-                </div>
                 <td width="45" height="4" bgcolor="#FF0000"><div align="center">Red
                   <input name="vir_truck[]" type="radio" id="vir_truck_red" value="Red,(Do Not Operate)" >
                   <label for="vir_truck_red"></label>
-                </div>
               </tr>
 </table>
 
@@ -1181,24 +1197,24 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
           </div>
         </div>
         <div class="box-body">
-            <table width="318" border="1">
+            <table width="258" height="307" border="1">
               <tr>
-                <td width="306" colspan="3"><div align="center"> Submit VIR &amp; Tire Report</div>
+                <td width="272" colspan="3"><div align="center"> Submit VIR &amp; Tire Report</div>
                   <div align="center"></div>
                   <div align="center">
                   <div align="center"></div>
               </tr>
               <tr>
-                <td colspan="2"><img src="../images/finish.jpg" alt="Submit" width="310" height="152"></td>
+                <td colspan="2"><img src="../images/finish.jpg" alt="Submit" width="252" height="119"></td>
               <tr>
-                <td height="85" colspan="2"><table width="310" border="1">
+                <td height="85" colspan="2"><table width="250" border="1">
                <td colspan="4">
                   <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none" id="generalStatus"></div>
                </td>
                   </table>
-                  <div align="center">Additional Notes: <?php echo "$drivername"; ?> </div>
+                  <div align="center">General VIR Notes: <?php echo "$drivername"; ?> </div>
                   <div align="center">
-                    <textarea name="vir_notes_finish" id="vir_notes_finish" cols="43" rows="3" placeholder="Enter final notes here"></textarea>
+                    <textarea name="vir_notes_finish" id="vir_notes_finish" cols="35" rows="3" placeholder="Enter final notes here"></textarea>
                   </div></td>
               </tr>
               <tr>
@@ -1214,7 +1230,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td ><div align="center">You will be sent and email of this inspection! </div></td>
               </tr>
             </table>
-          </form>
+  </form>
         </div>
         <!-- /.box-body -->
         <div class="box-footer">
@@ -1330,7 +1346,7 @@ $(document).ready(function(){
 
         if($(this).attr("value")=="combo")
         {
-          if ((document.getElementById('pretrip').checked) || (document.getElementById('posttrip').checked))
+          if ((document.getElementById('pretrip').checked) || (document.getElementById('posttrip').checked) || (document.getElementById('breakdown').checked))
           {
             $(".vir").not(".combo").hide();
             $(".combo").show();
@@ -1343,7 +1359,7 @@ $(document).ready(function(){
           }
         }
         if($(this).attr("value")=="boxtruck"){
-          if ((document.getElementById('pretrip').checked) || (document.getElementById('posttrip').checked))
+          if ((document.getElementById('pretrip').checked) || (document.getElementById('posttrip').checked) || (document.getElementById('breakdown').checked))
           {
             $(".vir").not(".boxtruck").hide();
             $(".boxtruck").show();
@@ -1356,7 +1372,7 @@ $(document).ready(function(){
           }
         }
         if($(this).attr("value")=="sprinter"){
-          if ((document.getElementById('pretrip').checked) || (document.getElementById('posttrip').checked))
+          if ((document.getElementById('pretrip').checked) || (document.getElementById('posttrip').checked) || (document.getElementById('breakdown').checked))
           {
             $(".vir").not(".sprinter").hide();
             $(".sprinter").show();
