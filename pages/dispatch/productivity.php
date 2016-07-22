@@ -349,7 +349,15 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
           <h1>
             Productivity / <span class="box-title"><?php echo "$_SESSION[drivername]"; ?></span> <a href="#">
             <?php if ($_SESSION['login'] == 1) { echo "(Admin)"; }?>
-            </a></h1>
+            </a>
+            <label for="productivity_time"></label>
+            <select name="productivity_time" id="productivity_time">
+              <option selected>Current Year</option>
+              <option>Current Quarter</option>
+              <option>Current Month</option>
+              <option>All</option>
+            </select>
+          </h1>
 
           <ol class="breadcrumb">
             <li><a href="/pages/main/index.php"><i class="fa fa-home"></i> Home</a></li>
@@ -359,9 +367,321 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 
 <!-- Animated Top Menu Insert PHP Reference to /wwwlive/dist/menus_sidebars_elements  -->
 
-
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/topmenuanimation.php');?>
 
 <!-- End Animated Top Menu -->  
+<!-- =============Productivity Menu================================ -->
+
+          <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box bg-blue">
+                <!--<span class="info-box-icon"><i class="fa fa-exchange fa-spin"></i></span> -->
+                <span class="info-box-icon"><i class="fa fa-exchange"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text"> Shipments Updated</span>                 
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> of <?php echo "$pu_today_count";?></span>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 10%"></div>
+                  </div>
+                  <span class="progress-description">
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> % of Total Score</span></span></div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box bg-red">
+                <span class="info-box-icon"><i class="fa fa-truck"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Pre/Post Trip Inspections</span>
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> of <?php echo "$pu_today_count";?></span>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description">
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> % of Total Score</span></span></div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box bg-purple">
+                <span class="info-box-icon"><i class="fa fa-tasks"></i></span>
+                <div class="info-box-content">Tasks
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> of <?php echo "$pu_today_count";?></span>
+<div class="progress">
+          <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description">
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> % of Total Score</span>
+                  </span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box bg-orange">
+                <span class="info-box-icon"><i class="fa fa-gavel"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">CSA Compliance </span><span class="info-box-number"><?php echo "$pu_today_count";?> of <?php echo "$pu_today_count";?></span>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description">
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> % of Total Score</span>
+                  </span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+
+<!-- =============Productivity Menu================================ -->
+
+          <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box bg-blue">
+                <span class="info-box-icon"><i class="fa fa-user-plus"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text"> Accessorials Added</span>                 
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> of <?php echo "$pu_today_count";?></span>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 10%"></div>
+                  </div>
+                  <span class="progress-description">
+                    <span class="info-box-number"><?php echo "$pu_today_count";?> % of Total Score</span> 
+                  </span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box bg-red color-palette">
+                <span class="info-box-icon"><i class="fa fa-sign-out"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Breakdowns Reported</span>
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> of <?php echo "$pu_today_count";?></span>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description">
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> % of Total Score</span>
+                  </span> 
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box bg-purple">
+                <span class="info-box-icon"><i class="fa fa-cogs"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Projects</span><span class="info-box-number"><?php echo "$pu_today_count";?> of <?php echo "$pu_today_count";?></span>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description">
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> % of Total Score</span>
+                  </span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box bg-orange">
+                <span class="info-box-icon"><i class="fa fa-exclamation-circle"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Company Compliance</span>
+                  <span class="info-box-number">135</span>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description">
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> % of Total Score</span>
+                  </span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+
+<!-- =================Productivy Menu========================================== -->
+<!-- =============Productivity Menu================================ -->
+
+          <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box bg-blue">
+                <span class="info-box-icon"><i class="fa fa-file-o"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text"> BOL Submissions</span>                 
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> of <?php echo "$pu_today_count";?></span>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 10%"></div>
+                  </div>
+                  <span class="progress-description">
+                    <span class="info-box-number"><?php echo "$pu_today_count";?> % of Total Score</span> 
+                  </span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box bg-red color-palette">
+                <span class="info-box-icon"><i class="fa fa-file-o"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Trip Reports </span>
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> of <?php echo "$pu_today_count";?></span>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description">
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> % of Total Score</span>
+                  </span> 
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box bg-purple">
+                <span class="info-box-icon"><i class="fa fa-cogs"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Paperwork</span><span class="info-box-number"><?php echo "$pu_today_count";?> of <?php echo "$pu_today_count";?></span>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description">
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> % of Total Score</span>
+                  </span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box bg-orange">
+                <span class="info-box-icon"><i class="fa fa-newspaper-o"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Attendance</span>
+                  <span class="info-box-number">135</span>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description">
+                  <span class="info-box-number"><?php echo "$pu_today_count";?> % of Total Score</span>
+                  </span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+
+<!-- =================Productivy Menu========================================== -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- =================Productivy Menu========================================== -->
+
+<!-- ======================New Section Colored Boxes============ -->
+          <!-- Boxes with Icon on Right side (Status box) -->
+          <div class="row">
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-blue">
+                <div class="inner">
+                  <!-- =========================================================== -->
+                  <h3>Score <?php echo "$pu_today_count";?> 85%</h3>
+                  <p>As of PHP Select Year, Quarter, Month</p>
+                </div>
+                <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
+                <a href="#" class="small-box-footer"> More info (go to below item current page)<i class="fa fa-arrow-circle-right"></i> </a> </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-red">
+                <div class="inner">
+                  <h3>Score <?php echo "$pu_today_count";?> 85%</h3>
+                  <p>As of PHP Select Year, Quarter, Month</p>
+                </div>
+                <div class="icon"> <i class="ion ion-stats-bars"></i> </div>
+                <a href="#" class="small-box-footer"> More info (go to below item current page)<i class="fa fa-arrow-circle-right"></i> <i class="fa fa-arrow-circle-right"></i> </a> </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-purple">
+                <div class="inner">
+                  <h3>Score <?php echo "$pu_today_count";?> 85%</h3>
+                  <p>As of PHP Select Year, Quarter, Month</p>
+                </div>
+                <div class="icon"> <i class="ion ion-person-add"></i> </div>
+                <a href="#" class="small-box-footer">More info (go to below item current page)<i class="fa fa-arrow-circle-right"></i> <i class="fa fa-arrow-circle-right"></i> </a> </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-orange">
+                <div class="inner">
+                  <h3>Score <?php echo "$pu_today_count";?> 85%</h3>
+                  <p>As of PHP Select Year, Quarter, Month</p>
+                </div>
+                <div class="icon"> <i class="ion ion-pie-graph"></i> </div>
+                <a href="#" class="small-box-footer">More info (go to below item current page)<i class="fa fa-arrow-circle-right"></i> <i class="fa fa-arrow-circle-right"></i> </a> </div>
+            </div>
+            <!-- ./col -->
+          </div>
+          <!-- /.row -->
+
+<!-- =========================================================== -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- =================Productivy Menu========================================== -->
+
+<!-- ======================New Section Colored Boxes============ -->
+          <!-- Boxes with Icon on Right side (Status box) -->
+        <div class="row">
+          <div class="col-lg-12 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-green">
+                <div class="inner">
+                  <!-- =========================================================== -->
+                  <center>
+                    <h3>Combined Score <?php echo "$pu_today_count";?> 75% </h3></center>
+                  <center><p>Total Points All Categories 150 of 200 as of Current Selection Year, Quarter, Month</p></center>
+                </div>
+                <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
+                <!--<a href="#" class="small-box-footer"> More info <i class="fa fa-arrow-circle-right"></i> </a> </div>-->
+          </div>
+          <!-- ./col --><!-- ./col --><!-- ./col --><!-- ./col -->
+          </div>
+          <!-- /.row -->
+
+<!-- =========================================================== -->
+
+
+
+
+
+
 
 
           <div class="row">
@@ -532,11 +852,11 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
                         </div>
                        </div>
                       </div>
-                     </div><!-- /.progress-group -->
-                    </div><!-- /.col -->
-                  </div><!-- /.row -->
-                </div><!-- ./box-body -->
-               </div>
+                    </div><!-- /.progress-group -->
+                  </div><!-- /.col -->
+                </div><!-- /.row -->
+              </div><!-- ./box-body -->
+            </div>
                 </div>
                 <!-- /.box-body -->
               </div>
@@ -545,10 +865,10 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
                </div><!-- /.col -->
               </div><!-- /.row -->
             </div><!-- /.col -->
-           </div><!-- /.row -->
+        </div><!-- /.row -->
            
  
- 
+<!-- =========================================================== -->
  
            <!--  Google Pie Chart start -->
           <div class="row">
@@ -603,17 +923,7 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
       			}
     			</script>
      	        <div id="piechart" style="width: 400px; height: 300px;"></div>
- 
-
-
-
-
-
-
- 
- 
- 
-                  </table>
+                </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
             </div>
@@ -621,25 +931,14 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
           <!--  Google Pie Chart End -->          
            
            
-      
-        
-        
-        
-        
+<!-- =========================================================== -->      
+ 
 
 
 
 
 
-
-
-
-
-
-
-
-
-          <!-- Top Box Full sized window -->
+      <!-- Top Box Full sized window -->
           <div class="row">
             <div class="col-xs-12">
               <div class="box">
@@ -666,17 +965,17 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
                 
                 <!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
-                  <table width="2506%" class="table table-hover">
+                  <table width="118%" class="table table-hover">
                     <tr>
-                      <th width="2%">#</th>
-                      <th width="17%">Name</th>
-                      <th width="22%">Graph Score</th>
-                      <th width="6%">Score</th>
+                      <th width="3%">#</th>
+                      <th width="15%">Name</th>
+                      <th width="26%">Graph Score</th>
+                      <th width="9%">Score</th>
                       <th width="11%">Positive Points</th>
-                      <th width="12%"> Negative Points</th>
-                      <th width="8%">Total Points</th>
-                      <th width="11%">Best Category</th>
-                      <th width="11%">Worst Category</th>
+                      <th width="9%"> Negative Points</th>
+                      <th width="7%">Total Points</th>
+                      <th width="10%">Best Category</th>
+                      <th width="10%">Worst Category</th>
                     </tr>
                     <tr>
                       <td>1</td>
@@ -982,7 +1281,7 @@ jQuery(document).ready( function(){
         }
     },
 -->
-
+<!-- End this box left side -->
 
 
 
@@ -1913,7 +2212,7 @@ jQuery(document).ready( function(){
            
            
         </section><!-- /.content -->
-      </div><!-- /.content-wrapper -->
+  </div><!-- /.content-wrapper -->
 
 
 
