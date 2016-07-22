@@ -123,48 +123,85 @@
                      <div class="box-header" style="text-align: center;">
                         <h3 class="box-title"> Search IFTA Trips </h3>
                         <div class="box-tools pull-right">
-                           <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Open"><i class="fa fa-plus"></i></button>
+                           <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Open"><i class="fa fa-minus"></i></button>
                         </div>
                         <div style="width: 50%; text-align: center; margin:auto; display: none;" id="search_alert" class="alert alert-danger" role="alert">Include a beginning AND end date.</div>
                      </div>
                      <div class="box-body">
                         <form name="frm_ifta_search" method="GET" action="ifta.php" role="form">
                            <div class="table-responsive">
-                              <table class="table table-condensed table-striped">
+                              <table width="646" class="table table-condensed table-striped">
                                  <tr>
-                                    <td>Trip Number </td>
-                                    <td><input class="input-sm form-control" name="trip_search_tripnum" type="text" id="search_tripnum" value=""></td>
+                                    <td width="106">Trip Number </td>
+                                    <td width="131"><input name="trip_search_tripnum" type="text" class="input-sm form-control" id="search_tripnum" value="" size="10"></td>
+                                    <td width="58">&nbsp;</td>
+                                    <td width="78">&nbsp;</td>
+                                    <td width="82">&nbsp;</td>
+                                    <td width="57">&nbsp;</td>
+                                    <td width="102">&nbsp;</td>
                                  </tr>
                                  <tr>
                                     <td>HWB Number </td>
-                                    <td><input class="input-sm form-control" name="trip_search_hwbnum" type="text" id="search_hwbnum" value=""></td>
+                                    <td><input name="trip_search_hwbnum" type="text" class="input-sm form-control" id="search_hwbnum" value="" size="10"></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
                                  </tr>
                                  <tr>
                                     <td>Trip Starting </td>
-                                    <td><input type="text" class="input-sm form-control datepicker" name="trip_search_startdate" id="trip_search_startdate" data-date-format="mm/dd/yyyy"></td>
+                                    <td><input name="trip_search_startdate" type="text" class="input-sm form-control datepicker" id="trip_search_startdate" size="10" data-date-format="mm/dd/yyyy"></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
                                  </tr>
                                  <tr>
                                     <td>Trip Ending</td>
-                                    <td><input type="text" class="input-sm form-control datepicker" name="trip_search_enddate" id="trip_search_enddate" data-date-format="mm/dd/yyyy"></td>
+                                    <td><input name="trip_search_enddate" type="text" class="input-sm form-control datepicker" id="trip_search_enddate" size="10" data-date-format="mm/dd/yyyy"></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
                                  </tr>
                                  <tr>
                                     <td>Truck #</td>
-                                    <td><input class="input-sm form-control" name="trip_search_trucknumber" type="text" id="trip_search_trucknumber"></td>
+                                    <td><input name="trip_search_trucknumber" type="text" class="input-sm form-control" id="trip_search_trucknumber" size="10"></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                 </tr>
+                                 <tr>
+                                    <td>States</td>
+                                   <td>Add St Enter / Exit</td>
+                                   <td>OK</td>
+                                   <td>To </td>
+                                   <td>Leave</td>
+                                   <td>Blank</td>
+                                   <td>&nbsp;</td>
                                  </tr>
                                  <tr>
                                     <td>Driver</td>
-                                   <td>
-                                       <select class="input-sm form-control" name="trip_search_driver" id="trip_search_driver" value="">
-                                          <option value="null">Choose Driver...</option>
-                                          <?php
+                                   <td><select class="input-sm form-control" name="trip_search_driver" id="trip_search_driver" value="">
+                                     <option value="null">Choose Driver...</option>
+                                     <?php
                                              foreach ($driver_array as $employee_id => $driver) { ?>
-                                          <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
-                                          <?php } ?>
-                                       </select>
-                                    </td>
-                                 </tr>
+                                     <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
+                                     <?php } ?>
+                                   </select></td>
+                                   <td>&nbsp;</td>
+                                   <td>&nbsp;</td>
+                                   <td>&nbsp;</td>
+                                   <td>&nbsp;</td>
+                                   <td>&nbsp;</td>
+                                 </tr>                                 
                                  <tr>
-                                    <td>
+                                    <td colspan="2">
                                        <button type="button" id="btn_display_results" name="btn_display_results" value="display" class="btn btn-primary dropdown-toggle">Display Results</button>
                                     </td>
                                  </tr>
@@ -198,85 +235,130 @@
                         </div>
                         <div class="box-body">
                         <form name="frm_ifta_add" method="POST" action="processifta.php" role="form" enctype="multipart/form-data">
-                           <table id="tbl_ifta_add" class="table table-condensed table-striped">
+                           <table width="628" class="table table-condensed table-striped" id="tbl_ifta_add">
                               <tbody id="tbody_ifta_details">
                                  <tr>
-                                    <td>Trip #
-                                    <td><input class="input-sm form-control" name="txt_tripnum" type="text" id="txt_tripnum" value="" required></td>
+                                    <td width="101">Trip #
+                                    <td width="237"><input class="input-sm form-control" name="txt_tripnum" type="text" id="txt_tripnum" value="" required>                                    
+                                    <td width="158">IFTA Compliance</td>
+                                    <td width="112">Option</td>
                                  </tr>
                                  <tr>
                                     <td>Start Date
-                                    <td><input class="input-sm form-control datepicker" name="txt_date_start" type="text" id="txt_date_start" value="" required></td>
+                                    <td><input class="input-sm form-control datepicker" name="txt_date_start" type="text" id="txt_date_start" value="" required>                                    
+                                    <td>Trip filled out Correctly</td>
+                                    <td><label for="compliance_option_Trip"></label>
+                                      <select name="compliance_option_Trip" id="compliance_option_Trip">
+                                        <option selected>choose...</option>
+                                        <option>Not in Packet</option>
+                                        <option>Incomplete</option>
+                                        <option>Complete</option>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>End Date
-                                    <td><input class="input-sm form-control datepicker" name="txt_date_end" type="text" id="txt_date_end" value="" required></td>
+                                    <td><input class="input-sm form-control datepicker" name="txt_date_end" type="text" id="txt_date_end" value="" required>                                    
+                                    <td>Logs / DVIR included</td>
+                                    <td><select name="compliance_LOGS" id="compliance_logs_dvir">
+                                      <option selected>choose...</option>
+                                      <option>Not in Packet</option>
+                                      <option>Incomplete</option>
+                                      <option>Complete</option>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>Driver 1
-                                    <td>
-                                       <select class="input-sm form-control" name="sel_add_driver_1" id="sel_add_driver_1" value="">
-                                          <option value="null">Choose Driver...</option>
-                                          <?php
+                                    <td><select class="input-sm form-control" name="sel_add_driver_1" id="sel_add_driver_1" value="">
+                                      <option value="null">Choose Driver...</option>
+                                      <?php
                                              foreach ($driver_array as $employee_id => $driver) { ?>
-                                          <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
-                                          <?php } ?>
-                                       </select>
-                                    </td>
+                                      <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
+                                      <?php } ?>
+                                    </select>                                    
+                                    <td>Fuel Reciepts included</td>
+                                    <td><select name="compliance_fuel_reciepts" id="compliance_fuel_reciepts">
+                                      <option selected>choose...</option>
+                                      <option>Not in Packet</option>
+                                      <option>Incomplete</option>
+                                      <option>Complete</option>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>Driver 2
-                                    <td>
-                                       <select class="input-sm form-control" name="sel_add_driver_2" id="sel_add_driver_2" value="">
-                                          <option value="null">Choose Driver...</option>
-                                          <?php
+                                    <td><select class="input-sm form-control" name="sel_add_driver_2" id="sel_add_driver_2" value="">
+                                      <option value="null">Choose Driver...</option>
+                                      <?php
                                              foreach ($driver_array as $employee_id => $driver) { ?>
-                                          <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
-                                          <?php } ?>
-                                       </select>
-                                    </td>
+                                      <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
+                                      <?php } ?>
+                                    </select>                                    
+                                    <td>Original BOl included</td>
+                                    <td><select name="compliance_option_BOL" id="compliance_option_BOL">
+                                      <option selected>choose...</option>
+                                      <option>Not in Packet</option>
+                                      <option>Incomplete</option>
+                                      <option>Complete</option>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>Truck #
-                                    <td><input class="input-sm form-control" name="txt_truckno" type="text" id="txt_truckno" value="" required></td>
+                                    <td><input class="input-sm form-control" name="txt_truckno" type="text" id="txt_truckno" value="" required>                                    
+                                    <td>Permits</td>
+                                    <td><select name="compliance_option_permits" id="compliance_option_permits">
+                                      <option selected>choose...</option>
+                                      <option>Not in Packet</option>
+                                      <option>Incomplete</option>
+                                      <option>Complete</option>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>Starting OD
-                                    <td><input class="input-sm form-control" name="txt_od_start" type="text" id="txt_od_start" value="" required></td>
+                                    <td><input class="input-sm form-control" name="txt_od_start" type="text" id="txt_od_start" value="" required>                                    
+                                    <td>GPS Reports</td>
+                                    <td><select name="compliance_options6" id="compliance_options6">
+                                      <option selected>choose...</option>
+                                      <option>Not in Packet</option>
+                                      <option>Incomplete</option>
+                                      <option>Complete</option>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>Ending OD
-                                    <td><input class="input-sm form-control" name="txt_od_end" type="text" id="txt_od_end" value="" required></td>
+                                    <td><input class="input-sm form-control" name="txt_od_end" type="text" id="txt_od_end" value="" required>                                    
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
                                  </tr>
                                  <tr>
                                     <td>Total Trip Miles
-                                    <td><input class="input-sm form-control" name="txt_od_total" type="text" id="txt_od_total" value=""></td>
+                                    <td><input class="input-sm form-control" name="txt_od_total" type="text" id="txt_od_total" value="">                                    
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
                                  </tr>
                            </table>
-                           <p></p>
-                           <table id="add_ifta_table" class="table table-condensed table-striped">
+<p></p>
+                           <table width="632" class="table table-condensed table-striped" id="add_ifta_table">
                               <tr>
                                  <td colspan="11" style="text-align: center; font-weight: bold;">Enter Trip info Below</td>
                               </tr>
                               <tr>
-                                 <td>Trip #</td>
-                                 <td>Date</td>
-                                 <td>Driver</td>
-                                 <td>HWB</td>
-                                 <td>Routes Hwys</td>
-                                 <td>Exit</td>
-                                 <td>Ent</td>
-                                 <td>OD State Line</td>
-                                 <td>State Miles</td>
-                                 <td>Permit Req</td>
-                                 <td>&nbsp;</td>
-                                 <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                 <td width="43">Trip #</td>
+                                 <td width="34">Date</td>
+                                 <td width="44">Driver</td>
+                                 <td width="62">HWB</td>
+                                 <td width="88">Routes Hwys</td>
+                                 <td width="31">Exit</td>
+                                 <td width="37">Ent</td>
+                                 <td width="95">OD State Line</td>
+                                 <td width="54">St Miles</td>
+                                 <td width="52">Permits</td>
+                                 <td width="15">&nbsp;</td>
+                                 <td width="25" style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                               </tr>
                               <tr id="tr_add_driver_details_0">
                               </tr>
                               </tbody>
                            </table>
-                           <p></p>
+                         <p></p>
                            <table id="add_ifta_fuel" class="table table-condensed table-striped">
                               <tbody>
                                  <tr style="text-align: center; font-weight: bold;">
