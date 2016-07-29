@@ -79,6 +79,7 @@ mysql_free_result($results);
 <head>
 <meta charset="UTF-8">
 <title>Previous VIR</title>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -124,7 +125,7 @@ folder instead of downloading all of them to reduce the load. -->
 
 <!-- Animated Top Menu Insert PHP Reference to /wwwlive/dist/menus_sidebars_elements  -->
 
-
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/topmenuanimation.php');?>
 
 <!-- End Animated Top Menu -->
 
@@ -135,10 +136,10 @@ folder instead of downloading all of them to reduce the load. -->
         <h3 class="box-title">VIR</h3>
         <p>
          <label for="allvir"></label>
-         <input name="radio" type="radio" id="allvir" value="allvir">
+         <input name="radio" type="radio" id="allvir" value="allvir" checked>
          All
          <label for="openvir"></label>
-         <input name="radio" type="radio" id="openvir" value="openvir" checked >
+         <input name="radio" type="radio" id="openvir" value="openvir" >
          Open
         </p>
       </div>
@@ -208,7 +209,7 @@ $result->close();
 ?>
             <tr>
               <td style="width: 20px;"><i class="glyphicon glyphicon-wrench"></i></td>
-              <td><?php echo "$max_results Days Previous VIRs";?>
+              <td><?php echo "$max_results days ago";?>
                 <a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse"
 href="#vir_details" aria-expanded="false" aria-controls="vir_details" style="padding-left: 15px;">
                 </a></td>
@@ -542,6 +543,7 @@ echo $virs[$x][$tot.'_tires_notes'];
   
   <!-- Control Sidebar -->
   <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/r_sidebar.php');?>
+  <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
 immediately after the control sidebar -->
   <div class='control-sidebar-bg'>

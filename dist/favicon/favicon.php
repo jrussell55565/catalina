@@ -1,0 +1,1 @@
+<link rel="shortcut icon" href="/dist/favicon/gears.ico" type="image/x-icon" />

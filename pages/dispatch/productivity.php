@@ -308,6 +308,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 <BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
 <title>Productivity</title>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -595,7 +596,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 <div class="inner">
                   <!-- =========================================================== -->
                   <h3>Score <?php echo "$pu_today_count";?> 85%</h3>
-                  <p>As of PHP Select Year, Quarter, Month</p>
+                  <p>As of PHP Select Year, Quarter, Month </p>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
                 <a href="#" class="small-box-footer"> More info (go to below item current page)<i class="fa fa-arrow-circle-right"></i> </a> </div>

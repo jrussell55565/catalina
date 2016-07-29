@@ -56,6 +56,7 @@
    <head>
       <meta charset="UTF-8">
       <title>IFTA Trip Reports</title>
+      <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>
       <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
       <!-- Bootstrap 3.3.4 -->
       <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -246,24 +247,26 @@
                                  <tr>
                                     <td>Start Date
                                     <td><input class="input-sm form-control datepicker" name="txt_date_start" type="text" id="txt_date_start" value="" required>                                    
-                                    <td>Trip filled out Correctly</td>
-                                    <td><label for="compliance_option_Trip"></label>
-                                      <select name="compliance_option_Trip" id="compliance_option_Trip">
-                                        <option selected>choose...</option>
+                                    <td>Trip Filed Correctly</td>
+                                    <td><label for="compliance_trip"></label>
+                                      <select name="compliance_trip" id="compliance_trip">
+                                        <option selected>Select One</option>
                                         <option>Not in Packet</option>
                                         <option>Incomplete</option>
                                         <option>Complete</option>
+                                        <option>NA</option>
                                     </select></td>
                                  </tr>
                                  <tr>
                                     <td>End Date
                                     <td><input class="input-sm form-control datepicker" name="txt_date_end" type="text" id="txt_date_end" value="" required>                                    
-                                    <td>Logs / DVIR included</td>
-                                    <td><select name="compliance_LOGS" id="compliance_logs_dvir">
-                                      <option selected>choose...</option>
+                                    <td>Logs /  Included</td>
+                                    <td><select name="compliance_logs" id="compliance_logs">
+                                      <option selected>Select One</option>
                                       <option>Not in Packet</option>
                                       <option>Incomplete</option>
                                       <option>Complete</option>
+                                      <option>NA</option>
                                     </select></td>
                                  </tr>
                                  <tr>
@@ -275,12 +278,13 @@
                                       <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
                                       <?php } ?>
                                     </select>                                    
-                                    <td>Fuel Reciepts included</td>
-                                    <td><select name="compliance_fuel_reciepts" id="compliance_fuel_reciepts">
-                                      <option selected>choose...</option>
+                                    <td>VIR / Included</td>
+                                    <td><select name="compliance_vir" id="compliance_vir">
+                                      <option selected>Select One</option>
                                       <option>Not in Packet</option>
                                       <option>Incomplete</option>
                                       <option>Complete</option>
+                                      <option>NA</option>
                                     </select></td>
                                  </tr>
                                  <tr>
@@ -292,47 +296,62 @@
                                       <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
                                       <?php } ?>
                                     </select>                                    
-                                    <td>Original BOl included</td>
-                                    <td><select name="compliance_option_BOL" id="compliance_option_BOL">
-                                      <option selected>choose...</option>
+                                    <td>Fuel Reciepts included</td>
+                                    <td><select name="compliance_fuel" id="compliance_fuel">
+                                      <option selected>Select One</option>
                                       <option>Not in Packet</option>
                                       <option>Incomplete</option>
                                       <option>Complete</option>
+                                      <option>NA</option>
                                     </select></td>
                                  </tr>
                                  <tr>
                                     <td>Truck #
                                     <td><input class="input-sm form-control" name="txt_truckno" type="text" id="txt_truckno" value="" required>                                    
-                                    <td>Permits</td>
-                                    <td><select name="compliance_option_permits" id="compliance_option_permits">
-                                      <option selected>choose...</option>
+                                    <td>Original BOL included</td>
+                                    <td><select name="compliance_bol" id="compliance_bol">
+                                      <option selected>Select One</option>
                                       <option>Not in Packet</option>
                                       <option>Incomplete</option>
                                       <option>Complete</option>
+                                      <option>NA</option>
                                     </select></td>
                                  </tr>
                                  <tr>
                                     <td>Starting OD
                                     <td><input class="input-sm form-control" name="txt_od_start" type="text" id="txt_od_start" value="" required>                                    
-                                    <td>GPS Reports</td>
-                                    <td><select name="compliance_options6" id="compliance_options6">
-                                      <option selected>choose...</option>
+                                    <td>Permits</td>
+                                    <td><select name="compliance_permits" id="compliance_permits">
+                                      <option selected>Select One</option>
                                       <option>Not in Packet</option>
                                       <option>Incomplete</option>
                                       <option>Complete</option>
+                                      <option>NA</option>
                                     </select></td>
                                  </tr>
                                  <tr>
                                     <td>Ending OD
                                     <td><input class="input-sm form-control" name="txt_od_end" type="text" id="txt_od_end" value="" required>                                    
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
+                                    <td>GPS Reports</td>
+                                    <td><select name="compliance_gps" id="compliance_gps">
+                                      <option selected>Select One</option>
+                                      <option>Not in Packet</option>
+                                      <option>Incomplete</option>
+                                      <option>Complete</option>
+                                      <option>NA</option>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>Total Trip Miles
                                     <td><input class="input-sm form-control" name="txt_od_total" type="text" id="txt_od_total" value="">                                    
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
+                                    <td>DOT Violations</td>
+                                    <td><select name="compliance_options" id="compliance_options">
+                                      <option selected>Select One</option>
+                                      <option>Not in Packet</option>
+                                      <option>Incomplete</option>
+                                      <option>Complete</option>
+                                      <option>NA</option>
+                                    </select></td>
                                  </tr>
                            </table>
 <p></p>

@@ -308,6 +308,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 <BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
 <title>Index Testing</title>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -839,6 +840,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                   <button class='btn btn-default btn-xs'><i class='fa fa-share'></i> Share</button>
                   <button class='btn btn-default btn-xs'><i class='fa fa-thumbs-o-up'></i> Like</button>
                   <!-- Note: Only User that Posted will have the Remove Post feature / And Admin will have remove for everything -->
+                  <button class='btn btn-default btn-xs'><i class='fa fa-check-circle'></i> UpDate</button>
                   <button class='btn btn-default btn-xs'><i class='fa fa-trash'></i> Remove</button>
                  <!-- <span class='pull-right'>1 likes - 1 comments</span> -->
                       <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">
@@ -863,9 +865,8 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 <div class="widget-user-header bg-blue">
                   <div class="widget-user-image">
                     <img src="../dist/img/h2tyd 3.jpg" alt="User Avatar" width="50" height="50" class="img-circle">
-                    <span class='username'><a href="#" class="fa-2x">Hector Axe</a></span>
-                    <span class='description pull-right'> Goals & Projects</span>
-                  </div>
+                    <span class='username'><a href="../pages/dispatch/projects2.php" class="fa-2x">Hector Axe</a></span>
+                  <a href="indextesting.php"><span class='description pull-right'> Goals & Projects</span></a> </div>
                   <!-- /.widget-user-image -->
                   <!-- Removing Name Below Added Above 
                   <h3 class="widget-user-username">Nadia Carmichael</h3>
@@ -874,8 +875,8 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">Projects <span class="pull-right badge bg-blue">3</span></a></li>
-                    <li><a href="#">Tasks <span class="pull-right badge bg-red">2</span></a></li>
+                    <li><a href="#">Assigned Projects <span class="pull-right badge bg-blue">3</span></a></li>
+                    <li><a href="#">Tasks (From Expirations)<span class="pull-right badge bg-red">2</span></a></li>
                     <li><a href="#">Completed <span class="pull-right badge bg-green">12</span></a></li>
                   </ul>
                 </div>
@@ -955,6 +956,7 @@ LOVE this Adele cover!! These kids are crazy talented!
                   <button class='btn btn-default btn-xs'><i class='fa fa-share'></i> Share</button>
                   <button class='btn btn-default btn-xs'><i class='fa fa-thumbs-o-up'></i> Like</button>
                   <!-- Note: Only User that Posted will have the Remove Post feature / And Admin will have remove for everything -->
+                  <button class='btn btn-default btn-xs'><i class='fa fa-check-circle'></i> UpDate</button>
                   <button class='btn btn-default btn-xs'><i class='fa fa-trash'></i> Remove</button>
                   <span class='pull-right text-muted'>13 likes - 2 comments</span>
                       <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">

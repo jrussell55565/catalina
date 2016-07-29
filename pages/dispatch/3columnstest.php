@@ -369,7 +369,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
             <div class="col-xs-12">
               <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Top Box Centered</h3>
+                  <h3 class="box-title">Row 1 Box 1 (Only 1 Box)</h3>
                   
                   <!-- 
                   Remove Search Tool
@@ -410,7 +410,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
             <!-- Div Class-md-6 will give the seperation of columns...-->  <div class="col-md-6">
               <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title"> Left Box 1</h3>
+                    <h3 class="box-title"> Row 2 Box 1</h3>
                        <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -438,7 +438,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
             <!-- Div Class-md-6 will give the seperation of columns...-->  <div class="col-md-6">
               <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title"> Left Box 1</h3>
+                    <h3 class="box-title"> Row 3 Box 1</h3>
                        <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -494,7 +494,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
               </div>
               -->
               
-                 <h3 class="box-title">Center Box 1</h3>
+                 <h3 class="box-title">Row 3 Box 2</h3>
 <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>

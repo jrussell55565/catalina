@@ -422,28 +422,70 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
           </div>         
          <!-- Top Box Full sized window Close Out-->        
 
+
+
+
+          <!-- Top Box Centered Full sized window -->
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">Idle Time</h3>
+                  
+                  <!-- 
+                  Remove Search Tool
+                  <div class="box-tools">
+                    <div class="input-group" style="width: 150px;">
+                      <input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
+                      <div class="input-group-btn">
+                        <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                  -->
+                  
+                  <!-- Insert Plus Minus tool -->
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div>
+                </div>
+                
+                <!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                  <table width="98%" class="table table-hover">
+                    <tr>
+                      <th><a href="http://login.intouchgps.com/users/sign_in">Download Idle Time</a> Download CSV File &amp; Upload...</th>
+                    </tr>
+                    <tr>
+                      <th>Example File: <a href="../pages/examples/intouchGPS/Idle-Totals-w-Multiple-multiple.csv">Example Idle Totals</a></th>
+                    </tr>
+                  </table>
+                  <p>
+                    <input id="CSA_Upload" name="CSA_Upload" type="file" multiple=true class="file-loading">
+                  </p>
+<input type="submit" name="submit" class="btn btn-primary" value="Import">
+                Only CSV File Imports will Work</div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div>
+          </div>         
+         <!-- Top Box Full sized window Close Out-->
+
+
+
+
+
+
+
+
+
+
+
         
         
          <!-- Left Side Box 1 Start-->         
           <div class="row">
-            <!-- Div Class-md-6 will give the seperation of columns...-->  <div class="col-md-6">
-              <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title"> Left Box 1</h3>
-                       <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                       </div>
-
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <table width="39%" class="table table-hover">
-                    <tr>
-                      <th>Enter Table Here</th>
-                    </tr>
-                  </table>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
+            <!-- Div Class-md-6 will give the seperation of columns...-->  <div class="col-md-12"><!-- /.box -->
 
 <!-- Left Side Box 1 End--> 
 

@@ -1,16 +1,40 @@
           <ul class="sidebar-menu">
-            <li class="active treeview">
-              <a href="#">
-                <i class="fa fa-dashboard"></i> <span>Main Menu</span> <i class="fa fa-angle-left pull-right"></i>
+            <!--<li class="active treeview">-->
+<li class="treeview">
+              <a href="<?php echo HTTP;?>/pages/main/index.php">
+                <i class="fa fa-crosshairs"></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li class="active"><a href="<?php echo HTTP;?>/pages/main/index.php"><i class="fa fa-circle-o"></i> Dashboard</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php"><i class="fa fa-circle-o"></i> Load Board</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/vir.php"><i class="fa fa-circle-o"></i> Vehicle Inspctions</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/productivity.php"><i class="fa fa-circle-o"></i> Productivity</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/csa.php"><i class="fa fa-circle-o"></i> CSA Compliance</a></li>
-                                
-                </ul></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/main/index.php"><i class="fa fa-home"></i> Dashboard</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php"><i class="fa fa-spinner"></i> Load Board</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/vir.php"><i class="fa fa-wrench"></i> Vehicle Inspctions</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/productivity.php"><i class="fa fa-line-chart"></i> Productivity</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/csa.php"><i class="fa fa-bank"></i> Compliance</a></li>
+              </ul>
+</li>
+
+
+
+
+
+<li class="treeview">
+              <a href="#">
+                <i class="fa fa-truck"></i> <span>Drivers Links</span> <i class="fa fa-angle-left pull-right"></i>
+              <span class="label label-primary pull-right"><!-- Remove Below 5 --></span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="<?php echo HTTP;?>/pages/info/loadboardinfo.php"><i class="fa fa-spinner"></i>Load Board Info</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/info/inspectiontypes.php"><i class="fa fa-bank"></i>CSA Inspection Types</a></li>                
+                <li><a href="<?php echo HTTP;?>/pages/info/virinfo.php"><i class="fa fa-truck"></i>VIR Info</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/info/kingpin.php"><i class="fa fa-truck"></i> King Pin Settings Info</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/info/tirepressure.php"><i class="fa truck"></i> Tire Pressure Info</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/layout/fixed.html"><i class="fa fa-chain"></i>Chain Laws Info</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/info/otrpodimage.php"><i class="fa fa-newspaper-o"></i>OTR Documents Policy</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/location.php"><i class="fa fa-globe"></i> Map Users</a></li>
+              </ul>
+</li>
+
+
 
 <!-- Remove Below
             <li class="treeview">
@@ -27,46 +51,138 @@
               </ul>
             </li>
 -->
+<li class="treeview">
+              <a href="#"><i class="fa fa-book"></i>  Handbooks<i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">
+                <li><a href="#"><i class="fa fa-book"></i> Accounting Handbook <i class="fa fa-angle-left pull-right"></i></a>
+                  <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-file-pdf-o"></i>Entire Handbook</a></li>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i></a><a href="#"><i class="fa fa-file-pdf-o"></i>Application</a></li>
+                      </ul>
+                  </ul> 
+               
+                
+                <li><a href="#"><i class="fa fa-book"></i> Driver Handbook <i class="fa fa-angle-left pull-right"></i></a>
+                  <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-file-pdf-o"></i>Entire Handbook</a></li>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Application<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Application Section</a><a href="#"></a></li></ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Driver Training<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Driver Training Section</a><a href="#"></a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Employment Review<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Employment Section</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>FingerCheck<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Finger Check Section</a></li>
+                      </ul>                     
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Check in With Dispatch<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Check in Section</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Log Into Your Truck<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Truck Login Section</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Vehicle Inspections<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>VIR Section</a><a href="#"></a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>VIR Guide<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Vir Guide</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Driver Dashboard<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Dashboard Section</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Shipment Boards<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Shipment Board Section</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Info links for drivers<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>See menu</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Hours of Service<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>HOS Section</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Level 2<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Level 3</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Level 2<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Level 3</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Level 2<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Level 3</a></li>
+                      </ul>                     
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Level 2<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Level 3</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Level 2<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Level 3</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Level 2<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Level 3</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Level 2<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Level 3</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Level 2<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Level 3</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Level 2<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Level 3</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Level 2<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Level 3</a></li>
+                      </ul>
+                    <li> <a href="#"><i class="fa fa-file-pdf-o"></i>Level 2<i class="fa fa-angle-left pull-right"></i></a>
+                      <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-file-pdf-o"></i>Level 3</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
 
 
-            <li class="treeview">
+
+
+
+<li class="treeview">
               <a href="#">
-                <i class="fa fa-files-o"></i>
-              <span>  Info Links For Drivers</span>
+                <i class="fa fa-stack-overflow"></i> <span>Admin Links</span> <i class="fa fa-angle-left pull-right"></i>
               <span class="label label-primary pull-right"><!-- Remove Below 5 --></span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="<?php echo HTTP;?>/pages/info/loadboardinfo.php"><i class="fa fa-circle-o"></i>Shipment Board Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/info/virinfo.php"><i class="fa fa-circle-o"></i>VIR Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/info/kingpin.php"><i class="fa fa-circle-o"></i> King Pin Settings Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/info/tirepressure.php"><i class="fa fa-circle-o"></i> Tire Pressure Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/info/inspectiontypes.php"><i class="fa fa-circle-o"></i>CSA Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/layout/fixed.html"><i class="fa fa-circle-o"></i>Chain Laws Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/info/otrpodimage.php"><i class="fa fa-circle-o"></i>OTR Documents Policy</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/location.php"><i class="fa fa-circle-o"></i> Locate Users</a></li>
-              </ul>
-  </li>
-
-
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-files-o"></i>
-              <span>  Admin Links</span>
-              <span class="label label-primary pull-right"><!-- Remove Below 5 --></span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="<?php echo HTTP;?>/pages/dispatch/orders.php"><i class="fa fa-circle-o"></i>Load Board Admin</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/dispatch/vir_previous.php"><i class="fa fa-circle-o"></i>VIR Admin</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/info/inspectiontypes.php"><i class="fa fa-circle-o"></i>CSA Admin</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/accessorials.php"><i class="fa fa-circle-o"></i>Accessorials Admin</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i>VIR Accessorials</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/dispatch/ifta.php"><i class="fa fa-circle-o"></i>IFTA Admin</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/logintrace.php"><i class="fa fa-circle-o"></i>Login Trace</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/location.php"><i class="fa fa-circle-o"></i>Map Users</a></li>
-                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/users.php"><i class="fa fa-circle-o"></i>All Users</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/info/otrpodimage.php"><i class="fa fa-circle-o"></i>Productivity Admin</a></li>
-              </ul>
-  </li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/accessorials.php"><i class="fa fa-exchange"></i>Accessorials</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/dispatch/ifta.php"><i class="fa fa-newspaper-o"></i>IFTA</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/dispatch/orders.php"><i class="fa fa-spinner"></i>Load Board</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/logintrace.php"><i class="fa fa-group"></i>Login Trace</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/location.php"><i class="fa fa-globe"></i>Map Users</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/info/otrpodimage.php"><i class="fa fa-line-chart"></i>Productivity</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/users.php"><i class="fa fa-child"></i> Users</a></li>
+                <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/adminvir.php"><i class="fa fa-wrench"></i>VIR Accessorials</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/dispatch/vir_previous.php"><i class="fa fa-wrench"></i>VIR Previous</a></li>
+  </ul>
+</li>
 
 
 
@@ -135,39 +251,22 @@
             </li>
 --> 
 
-            <li>
-              <a href="/pages/mailbox/mailbox.html">
-                <i class="fa fa-envelope"></i> <span>Recent Posts</span>
-                <small class="label pull-right bg-yellow">69</small>
-              </a>
-            </li>
-                        
-            <li>
-              <a href="/pages/mailbox/notifications.html">
-                <i class="fa fa-bell"></i> <span>Notifications</span>
-                <small class="label pull-right bg-blue">19</small>
-              </a>
-            </li>
-
-            <li>
-              <a href="/pages/mailbox/alerts.html">
-                <i class="fa fa-flag"></i> <span>Alerts</span>
-                <small class="label pull-right bg-red">6</small>
-              </a>
-            </li>
-
-
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-folder"></i> <span>Testing Links</span>
+                <i class="fa fa-gears"></i> <span>Big Project II</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
-              <ul class="treeview-menu">
-                <li><a href="/pages/main/indextesting.php"><i class="fa fa-circle-o"></i> Index Testing</a></li>
-                <li><a href="/pages/examples/index_starter_page.php"><i class="fa fa-circle-o"></i>Default Template</a></li>
-                <li><a href="/AdminLTE230/index.html"><i class="fa fa-circle-o"></i> AdminLTE Index</a></li>
-                <li><a href="/pages/dispatch/securitytesting.php"><i class="fa fa-circle-o"></i> Security Testing</a></li>
-                <li><a href="/pages/dispatch/imports.php"><i class="fa fa-circle-o"></i> Imports</a></li>
+              <ul class="active treeview-menu">
+                <li><a href="/pages/main/indextesting.php"><i class="fa fa-server"></i> Index Testing</a></li>
+                <li><a href="/pages/dispatch/projects.php"><i class="fa fa-area-chart"></i> Tasks &amp; Projects</a></li>
+                <li><a href="/pages/dispatch/admin/controlpanel.php"><i class="fa fa-area-chart"></i> Control Panel</a></li>
+                <li><a href="/pages/dispatch/imports.php"><i class="fa fa-random"></i> Imports</a></li>
+                <li><a href="/pages/dispatch/3columnstest.php"><i class="fa fa-area-chart"></i> 3 Column Test</a></li>
+                <li><a href="/pages/main/user_request.php"><i class="fa fa-question-circle"></i> Request User</a></li>
+                <li><a href="/pages/examples/index_starter_page.php"><i class="fa fa-cube"></i>Default Template</a></li>
+                <li><a href="/AdminLTE230/index.html"><i class="fa fa-flask"></i> AdminLTE Index</a></li>
+                <li><a href="/pages/dispatch/securitytesting.php"><i class="fa fa-lock"></i> Site Admin Testing</a></li>
+                
 <!--                <li><a href="/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i> Admin IFTA All</a></li>
                 <li><a href="/pages/dispatch/admin/csa.php"><i class="fa fa-circle-o"></i> Admin DOT Safety All</a></li>
                 <li><a href="/pages/examples/500.html"><i class="fa fa-circle-o"></i> Admin Edit Accessorials</a></li>
@@ -175,7 +274,43 @@
                 <li><a href="/pages/dispatch/admin/users.php"><i class="fa fa-circle-o"></i> Edit All Users</a></li>
 -->                 
               </ul>
+</li>
+
+            <li>
+              <a href="/pages/dispatch/productivity.php">
+                <i class="fa fa-dashboard"></i> <span> Current Score </span>
+                <small class="label pull-right bg-green">69%</small>
+              </a>
+</li>
+                        
+            <li>
+              <a href="/pages/main/indextesting.php">
+                <i class="fa fa-bell"></i> <span> Notifications</span>
+                <small class="label pull-right bg-blue">19</small>
+              </a>
             </li>
+            
+            <li>
+              <a href="/pages/main/indextesting.php">
+                <i class="fa fa-clock-o"></i> <span>Expirations</span>
+              <small class="label pull-right bg-red">2</small>
+              </a>
+            </li>
+
+            <li><a href="/pages/main/indextesting.php">
+                <!-- Would like to put one of these here: fa-hourglass-2 (alias) fa-hourglass-3 (alias) fa-hourglass-end fa-hourglass-half -->
+                <i class="fa fa-clock-o"></i> <span> Projects</span> 
+                <small class="label pull-right bg-yellow">1</small>
+              </a>
+              <ul class="active treeview-menu">
+                <!--                <li><a href="/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i> Admin IFTA All</a></li>
+                <li><a href="/pages/dispatch/admin/csa.php"><i class="fa fa-circle-o"></i> Admin DOT Safety All</a></li>
+                <li><a href="/pages/examples/500.html"><i class="fa fa-circle-o"></i> Admin Edit Accessorials</a></li>
+                <li><a href="/pages/examples/blank.html"><i class="fa fa-circle-o"></i> Admin Edit VIR Accs</a></li>
+                <li><a href="/pages/dispatch/admin/users.php"><i class="fa fa-circle-o"></i> Edit All Users</a></li>
+-->                 
+              </ul>
+</li>
             
 <!-- Remove Below  Before I got rid of the links for old stuff.            
             <li class="treeview">
@@ -194,42 +329,17 @@
               </ul>
             </li>
 -->            
+          
             
-            
-<!-- Remove Below         
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-share"></i> <span>Multilevel</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
-                <li>
-                  <a href="#"><i class="fa fa-circle-o"></i> Level One <i class="fa fa-angle-left pull-right"></i></a>
-                  <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Level Two</a></li>
-                    <li>
-                      <a href="#"><i class="fa fa-circle-o"></i> Level Two <i class="fa fa-angle-left pull-right"></i></a>
-                      <ul class="treeview-menu">
-                        <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
-                        <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
-              </ul>
-            </li>
-            
-           
-            
-            
+        
+<!-- Remove Below  Before I got rid of the links for old stuff. 
             <li><a href="documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
             <li class="header">LABELS</li>
             <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
             <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
             <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
           </ul>
+-->          
         </section>
 
--->
+

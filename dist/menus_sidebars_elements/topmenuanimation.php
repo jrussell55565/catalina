@@ -31,8 +31,8 @@ a.button2 {
                 </a>
                 <div class="info-box-content">
                 <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/vir.php">Vehicle Inspections</a></span>
-                <span class="info-box-number">VIR Today: <?php echo $virs_daily_count;?><br>
-                VIR Previous: <?php echo $virs_weekly_count;?></span></div>
+                <span class="info-box-number">VIR's Today: <?php echo $virs_daily_count;?><br>
+                Last 8 Days VIR's: <?php echo $virs_weekly_count;?></span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
@@ -51,9 +51,8 @@ a.button2 {
 </style>              
                 <span class="info-box-icon bg-purple"><i class="fa fa-line-chart"></i></span>
                 </a>
-                <div class="info-box-content">
-                <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/productivity.php"> Productivity</a></span>
-                <span class="info-box-number">View Your Report </span></div>
+                <div class="info-box-content"><span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/productivity.php">PRODUCTIVITY</a></span> <span class="info-box-number">Your Tasks: <?php echo $virs_daily_count;?><br />
+  Your Projects: <?php echo $virs_weekly_count;?></span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
@@ -75,9 +74,8 @@ a.button2 {
                <span class="info-box-icon bg-orange"><i class="fa fa-bank"></i></span>
 </a>
 
-                <div class="info-box-content">
-                  <span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/csa.php">   Compliance</a></span>
-                <span class="info-box-number">                  View Your Report</span></div>
+                <div class="info-box-content"><span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/csa.php">COMPLIANCE</a></span> <span class="info-box-number">Your CSA Score: <?php echo $virs_daily_count;?><br />
+Int. Compliance Score: <?php echo $virs_weekly_count;?></span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->  

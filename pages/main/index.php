@@ -308,6 +308,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 <BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
 <title>Dashboard</title>
+<link rel="shortcut icon" href="/dist/favicon/gears.ico" type="image/x-icon" />
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />

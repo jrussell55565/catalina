@@ -458,6 +458,98 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 <!-- =========================================================== -->
 
 
+
+<h2 class="page-header">Security Testing (Removing Boxes)</h2>
+
+<!-- =========================================================== -->
+          <div class="row">
+ <!-- ====================box 1 in section 2========================== -->            
+          
+            <div class="col-md-3">
+              <div class="box box-default">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Grey All Users</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                Security Setting Grey (non Admin)</div>
+                <!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->          
+          
+
+
+<!-- ====================box 2 in section 2========================== -->  
+
+            <div class="col-md-3">
+              <div class="box box-success">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Green All Users</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">Security Setting Grey (non Admin)</div>
+                <!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+            
+            
+<!-- ====================box 3 in section 2========================== -->              
+            
+            
+            <div class="col-md-3">
+              <div class="box box-warning">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Yellow Supervisor</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">Security Setting Yellow (Limited Admin)</div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+            
+            
+            
+<!-- ====================box 4 in section 2========================== -->            
+            
+            
+            
+            <div class="col-md-3">
+              <div class="box box-danger">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Red Admin</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">Security Setting Yellow (Full Admin Rights)</div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+
+
+<!-- ====================End Colapse Section 2 in section========================== -->  
+
+
+          </div><!-- /.row -->
+
+
+
+
+
+
+
 <h2 class="page-header">Security Testing (Content In Boxes)</h2>
 
 <!-- =========================================================== -->
@@ -553,8 +645,6 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 
 <!-- ======================End Section 4===================================== -->
 
-
- 
           <div class="row">
             <div class="col-xs-12">
               <div class="nav-tabs-custom">

@@ -14,6 +14,7 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
     <meta name="author" content="">
 
     <title>Driver Login</title>
+    <link rel="shortcut icon" href="/dist/favicon/gears.ico" type="image/x-icon" />
 
     <!-- Bootstrap Core CSS -->
     <link href="<?php echo HTTP;?>/dist/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -108,11 +109,13 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
                                     </select>
                                 </div>
                                 <div class="checkbox">
-                                    <label>
+                                  <label>
                                         <input name="AdminLogin" id="AdminLogin" type="checkbox" value="admin">Administrative Login
                                     </label>
-                              / <a href="/pages/login/forgot.php">Forgot Password</a></div>
-                                <input type="submit" class="btn btn-lg btn-success btn-block" value="Login">
+                              /                              </div>
+                              <div class="form-group">
+                                <a href="/pages/login/forgot.php">Forgot Password</a> / <a href="../main/user_request.php">New User Form</a></div>
+                              <input type="submit" class="btn btn-lg btn-success btn-block" value="Login">
                             </fieldset>
                         </form>
                     </div>
