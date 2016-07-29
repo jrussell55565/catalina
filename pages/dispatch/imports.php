@@ -430,7 +430,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
             <div class="col-xs-12">
               <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Idle Time</h3>
+                  <h3 class="box-title">Daily Trips / Miles / Idle</h3>
                   
                   <!-- 
                   Remove Search Tool
@@ -455,7 +455,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 <div class="box-body table-responsive no-padding">
                   <table width="98%" class="table table-hover">
                     <tr>
-                      <th><a href="http://login.intouchgps.com/users/sign_in">Download Idle Time</a> Download CSV File &amp; Upload...</th>
+                      <th><a href="http://login.intouchgps.com/users/sign_in">Download Trip Example</a> Download CSV File &amp; Upload...</th>
                     </tr>
                     <tr>
                       <th>Example File: <a href="../pages/examples/intouchGPS/Idle-Totals-w-Multiple-multiple.csv">Example Idle Totals</a></th>
