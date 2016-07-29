@@ -222,6 +222,7 @@ switch ($statustype)
 	    {
 		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"));
 	    }
+        $remarks = "POD Name: $podname @ $podtime $poddate " . $remarks;
     break;
 }
 
