@@ -755,6 +755,36 @@ $(document).ready(function(){
     $("#txt_tripnum_details_0").val($("#txt_tripnum").val());
     $("#txt_fuel_tripnum_0").val($("#txt_tripnum").val());
   });
+
+  // Ajax call for the truck #.  We'll use this to get the last ODO entered for the truck
+  var final_odometer = 0;
+  var delay = (function(){
+    var timer = 0;
+    return function(callback, ms){
+      clearTimeout (timer);
+      timer = setTimeout(callback, ms);
+    };
+  })(); 
+  $("#txt_truckno").keyup(function() {
+    delay(function(){
+      $.ajax({
+       method: "GET",
+       url: "searchifta.php",
+       data: {
+              search_type: "truck_odo",
+              truck_no: $("#txt_truckno").val(),
+            },
+       success: function(data, textStatus, xhr) {
+            var json = jQuery.parseJSON( data );
+            $("#txt_od_start").val(json[0]["odo_end"]);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.log("error getting the odo reading for the truck")
+        }
+      });
+    }, 1000 );
+  });
+
 });
 
 function deleteRow(z) {
