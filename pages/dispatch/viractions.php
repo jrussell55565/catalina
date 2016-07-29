@@ -33,6 +33,8 @@ $statement = 'SELECT employee_id,fname,lname from users where username = "'.$_SE
 $drivername = mysql_fetch_array(mysql_query($statement),MYSQL_BOTH);
 $employee_id = $drivername[0];
 $driver_name = $drivername[1]. " ". $drivername[2];
+$latitude = $_SESSION['latitude'];
+$longitude = $_SESSION['longitude'];
 
 # VIR POST variables
 $trucktype = $_POST['trucktype'];
@@ -324,6 +326,7 @@ Trailer:				$trailer_number, $trailer_vir_condition
 Date:				$insp_date
 Start Time:			$insp_start_time
 End Time:			$insp_end_time
+Coordinates:        $latitude, $longitude
 Truck WO:			$truck_po
 Trailer WO:			$trailer_po
 Truck Odometer:		$truckodometer

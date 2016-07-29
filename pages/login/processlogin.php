@@ -102,6 +102,8 @@ if ($result = $mysqli->query($statement))
              $_SESSION['fname']      = $row['fname'];
              $_SESSION['lname']      = $row['lname'];
              $_SESSION['employee_id'] = $row['employee_id'];
+             $_SESSION['latitude'] = $latitude;
+             $_SESSION['longitude'] = $longitude;
         }
         # If I logged in as an admin and I'm really an admin...
         if (isset($admin) && $isadmin == 1)
