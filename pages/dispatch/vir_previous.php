@@ -163,7 +163,7 @@ $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
 
 new mysqli($db_hostname, $db_username, $db_password, $db_name);
 
-$statement = "SELECT vir_itemnum, insp_date, insp_type,
+$statement = "SELECT vir_itemnum, date_format(insp_date,'%m/%d/%Y') insp_date, insp_type,
                      trucktype, driver_name, truck_number,
                      truck_vir_condition, truck_vir_items,
                      truck_vir_notes, truck_tires_notes,
