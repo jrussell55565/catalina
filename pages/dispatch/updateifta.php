@@ -83,7 +83,7 @@
                ifta_details.st_enter,ifta_details.state_line_odometer,ifta_details.state_miles,ifta_details.permit_required
                FROM ifta_details
                WHERE ifta_details.trip_no = '".$_GET['trip_no']."'
-               ORDER BY ifta_details.state_line_odometer ASC";
+               ORDER BY ifta_details.state_line_odometer, ifta_details.trip_date ASC";
      if ($result = $mysqli->query($query)) {
          $counter = 0;
          while($obj = $result->fetch_object()){ 
