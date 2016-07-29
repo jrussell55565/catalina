@@ -338,6 +338,7 @@ Comments:			$vir_notes_detailed_truck $vir_notes_quick_report;
 Item(s):				$truck_vir_items;
 
 Truck Tires VIR:	$truck_tires_notes_combo
+Tire Condition:     $truck_tires_notes
 Steer (Driver):			$truck_tires_driverside_steer			Steer (Passenger): $truck_tires_passenger_steer
 Axel 1(Driver):			$truck_tires_driverside_ax1front		Axel 1(Passenger): $truck_tires_passenger_ax1front
 Axel 2(Driver):			$truck_tires_driverside_ax2rear		Axel 2(Passenger): $truck_tires_passenger_ax2rear
@@ -347,6 +348,7 @@ Comments:			$vir_notes_detailed_trailer;
 Item(s):				$trailer_vir_items;
 
 Trailer Tires VIR:		$trailer_tires_notes_trailer;
+Tire Condition:     $trailer_tires_notes
 Axel 1 (Driver): 			$trailer_tires_driverside_ax1front		Axel 1 (Passenger): $trailer_tires_passenger_ax1front
 Axel 2 (Driver): 			$trailer_tires_driverside_ax2rear		Axel 2 (Passenger): $trailer_tires_passenger_ax2rear
 
