@@ -384,29 +384,20 @@ $drivername = $_SESSION['drivername'];
                      <span>
                      <?php echo "$row[pieces]"; ?> / <?php echo "$row[weight]"; ?>
                      <br>
-                      <?php if ($_GET['gather'] == "pu")
-							{ 
-							echo $row['hawbDate'];
-                            } 
-							elseif ($_GET['gather'] == "pu") 
-                            { 
-                            echo $row['hawbDate'];
+                      <?php
+                            switch($_GET['gather'])
+                            {
+                              case "pu":
+							    echo $row['hawbDate'];
+                                break;
+                              case "del":
+                                echo $row['dueDate'];
+                                break;
+                              default:
+                                echo $row['hawbDate'] . " <br> " . $row['dueDate'];
+                                break;
                             }
-							elseif ($_GET['gather'] == "")
-							{
-                            echo $row['hawbDate'] . " <br> " . $row['hawbDate'];
-                            }
-							?>
-                            
-                            <?php if ($_GET['gather'] == "del")
-							{ 
-                              echo $row['dueDate'];
-                            } elseif ($_GET['gather'] == "del") 
-                            { 
-                              echo $row['dueDate'];
-                            }elseif ($_GET['gather'] == ""){
-                              echo $row['dueDate'] . " <br> " . $row['dueDate'];
-                            }?>
+                       ?>
                      </span>
                      <br>
                     </td>
