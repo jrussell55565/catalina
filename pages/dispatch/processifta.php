@@ -238,6 +238,53 @@ if (isset($_POST['add_ifta'])) {
     $mysqli->close();
     exit;
   }
+
+  // This part will email the driver1 (and driver2 if applicable)
+  // to inform them of any missing compliance info
+  $compliance = array ('compliance_trip' => 'Did not fill out Trip Pack correctly',
+                       'compliance_logs' => 'Logs were missing',
+                       'compliance_vir' => 'VIR not included',
+                       'compliance_fuel' => 'Fuel receipts not included',
+                       'compliance_bol' => 'Bill of Lading is missing',
+                       'compliance_permits' => 'Permits are missing',
+                       //'compliance_gps',
+                       'compliance_dot' => 'DOT violations are missing');
+  $counter = 0;
+  $subject = "IFTA Trip Incomplete";
+  $body = "Notice: IFTA trip pack ".$_POST['txt_tripnum']." has been entered.\n";
+  $body .= "Please note that the following is missing:\n";
+  foreach ($compliance as $key => $value)
+  {
+    if ( ($_POST[$key] == 'Incomplete' ) || ($_POST[$key] == 'Not in Packet') )
+    {
+      $body .= $value . "\n";
+      $counter++;
+    }
+  }
+  // Pull the drivers email from the DB
+  try {
+    $statement = "SELECT email from users where employee_id IN ('".$_POST['sel_add_driver_1']."','".$_POST['sel_add_driver_2']."')";
+    if ($result = $mysqli->query($statement))
+    {
+        while($obj = $result->fetch_object()){
+          $f = $obj->email;
+          sendEmail($f,$subject,$body);
+        }
+        $result->close();
+    }else{
+        throw new Exception("Unable to retrieve drivers email for notification: ". $mysqli->error);
+    }
+  } catch (Exception $e) {
+    // An exception has been thrown
+    // We must rollback the transaction
+    $url_error = urlencode($e->getMessage());
+    $mysqli->rollback();
+    header("location: /pages/dispatch/ifta.php?error=$url_error");
+    $mysqli->autocommit(TRUE);
+    $mysqli->close();
+    exit;
+  }
+exit;
 }
 
 // Run this part if we're UPDATING an IFTA
