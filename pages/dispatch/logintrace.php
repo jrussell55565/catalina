@@ -13,37 +13,15 @@ mysql_select_db($db_name) or DIE('Database name is not available!');
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
 
-$ck_refresh = $_COOKIE["ck_refresh"];
-if (empty($_COOKIE["sel_refreshTime"]))
+# Get the driver names and employee_id
+$driver_array = array();
+$statement = 'SELECT fname, lname, employee_id from users WHERE title = "Driver" ORDER BY fname';
+$results = mysql_query($statement);
+while($row = mysql_fetch_array($results, MYSQL_BOTH))
 {
-  $refreshRate = 60;
-}else{
-  $refreshRate = $_COOKIE["sel_refreshTime"] * 60;
+    $driver_array[$row['employee_id']] = $row['fname']." ".$row['lname'];
 }
-
-if (empty($_COOKIE["mapType"]))
-{
-  $mapType = "map";
-}else{
-  $mapType = $_COOKIE["mapType"];
-}
-
-if (empty($_COOKIE["mapZoomLevel"]))
-{
-  $hdn_zoom = 5;
-}else{
-  $hdn_zoom = $_COOKIE["mapZoomLevel"];
-}
-
-if (empty($_COOKIE["mapCenterCoords"]))
-{
-  $latitude = 33.4500;
-  $longitude = -112.0667;
-}else{
-  $coordinates = explode(',',$_COOKIE["mapCenterCoords"]);
-  $latitude = str_replace('(','',$coordinates[0]);
-  $longitude = str_replace(')','',$coordinates[1]);
-}
+mysql_free_result($results);
 
 # Process GET requests.  Made by the driver export calls
 if (isset($_GET['exportDisplay']))
@@ -51,23 +29,49 @@ if (isset($_GET['exportDisplay']))
   $startDate = $_GET['start'];
   $endDate = $_GET['end'];
   $exportType = $_GET['inlineRadioOptions'];
+  $driver_predicate = '';
+  $truck_predicate = '';
 
-  $loginSql = "select 
-  a.drivername,
-  b.driver_driverid,
-  b.truck_number,
-  b.trailer_number,
-  b.rental,
-  b.login_time,
-  DATE(b.login_time) AS date_w,
-  b.truck_odometer 
+  if ($_GET['trip_search_driver'] != 'null')
+  {
+    $driver_predicate = 'AND b.drivername = (SELECT username from users where employee_id="'.$_GET['trip_search_driver'].'")';
+  }
+  if (! empty($_GET['truck_no']))
+  {
+    $truck_predicate = 'AND b.truck_number = '.$_GET['truck_no'];
+  }
+  if ($_GET['remove_dup'] == 'true')
+  {
+    $select_statement = "SELECT distinct
+    a.drivername,
+    b.driver_driverid,
+    b.truck_number,
+    b.trailer_number,
+    b.rental,
+    DATE(b.login_time) AS login_time,
+    b.truck_odometer";
+  }else{
+    $select_statement = "SELECT
+    a.drivername,
+    b.driver_driverid,
+    b.truck_number,
+    b.trailer_number,
+    b.rental,
+    b.login_time,
+    b.truck_odometer";
+  }
+
+  $loginSql = "$select_statement
   from users a, 
    login_capture b 
   where 
    a.driverid = b.driver_driverid
-   and login_time between str_to_date('$startDate','%m/%d/%Y')
-     and str_to_date('$endDate','%m/%d/%Y')
-  GROUP BY drivername , driver_driverid , driver_driverid , truck_number , trailer_number , rental , truck_odometer , date_w
+   and login_time between str_to_date('$startDate 00:00:00','%m/%d/%Y %H:%i:%s')
+     and str_to_date('$endDate 23:59:59','%m/%d/%Y %H:%i:%s')
+  $driver_predicate
+  $truck_predicate
+  AND truck_number != 0
+  GROUP BY drivername , driver_driverid , driver_driverid , truck_number , trailer_number , rental , truck_odometer , login_time
   order by b.login_time";
 
   if ($_GET['inlineRadioOptions'] == "exportCsv")
@@ -105,16 +109,7 @@ if (isset($_GET['exportDisplay']))
 <!DOCTYPE html>
 <html>
     <head>
-    <meta charset="UTF-8" http-equiv="refresh" content="<?php echo $refreshRate; ?>">
-
-<style type="text/css">
-        html, body, #map-canvas {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-    }
-    </style>
+    <meta charset="UTF-8">
 
     <title>Trace Login</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
@@ -140,125 +135,6 @@ if (isset($_GET['exportDisplay']))
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <link rel="stylesheet" href="<?php echo HTTP . "/dist/css/animate.css";?>">
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js">
-    </script>
-    <script type="text/javascript">
-      function initialize() {
-      <?php
-        if ($mapType == "map")
-        {
-          $googleMapType = "ROADMAP";
-        } elseif ($mapType == "satellite") {
-          $googleMapType = "SATELLITE";
-        }
-      ?>
-        var mapOptions = {
-          center: { lat: <?php echo $latitude; ?>, lng: <?php echo $longitude; ?>},
-          zoom: <?php echo $hdn_zoom; ?>,
-          mapTypeId: google.maps.MapTypeId.<?php echo $googleMapType;?>
-        };
-        var map = new google.maps.Map(document.getElementById('map-canvas'),
-            mapOptions);
-            <?php
-                if (empty($_GET["timeperiod"]))
-                {
-                  $timeperiod = 1;
-                }else{
-                  $timeperiod = $_GET["timeperiod"];
-                }
-
-                if (empty($_GET["driver"]))
-                {
-                  $driver = "NULL";
-                }else{
-                  $driver = $_GET["driver"];
-                }
-
-                switch ($driver)
-                {
-                  case "active":
-                    $sql = "select users.drivername, coordinates.latitude, coordinates.longitude,
-                           date_format(coordinates.created_date,'%b %d %Y %h:%i %p') as created_date
-                        from users, coordinates
-                        WHERE coordinates.driver_id = users.driverid
-                        AND coordinates.created_date > NOW() - interval $timeperiod hour";
-                    break;
-                  case "inactive";
-                    $sql = "SELECT users.drivername,
-                             coordinates.latitude,
-                             coordinates.longitude,
-                             date_format(coordinates.created_date,'%b %d %Y %h:%i %p') as created_date
-                           FROM users,
-                             coordinates
-                           WHERE coordinates.driver_id = users.driverid
-                           AND coordinates.driver_id  IN
-                             ( SELECT DISTINCT driver_id
-                             FROM coordinates
-                             WHERE coordinates.created_date < NOW() - interval 1 hour
-                             AND driver_id NOT                     IN
-                               (SELECT driver_id
-                               FROM coordinates
-                               WHERE coordinates.created_date > NOW() - interval 1 hour
-                               )
-                             )
-                           AND coordinates.created_date =
-                           (SELECT MAX(t2.created_date)
-                           FROM coordinates t2
-                           WHERE t2.driver_id = coordinates.driver_id
-                           )
-                         ORDER BY coordinates.created_date DESC";
-                    break;
-                  default:
-                         $sql = "select users.drivername,
-                         coordinates.latitude, coordinates.longitude,
-                         date_format(coordinates.created_date,'%b %d %Y %h:%i %p') as created_date
-                         from users, coordinates
-                         WHERE coordinates.driver_id = users.driverid
-                         AND coordinates.created_date > NOW() - interval $timeperiod hour
-                         AND users.drivername = '$driver'";
-                }
-                                $result = mysql_query($sql);
-                $counter = 0;
-                                while ($row = mysql_fetch_array($result, MYSQL_BOTH))
-                                {
-             ?>
-                var contentString_<?php echo $counter;?> = '<div id="mapContent">'+
-                '<div id="siteNotice">'+
-                '</div>'+
-                '<h1 id="firstHeading" class="firstHeading"><?php echo $row["drivername"];?></h1>'+
-                '<?php echo $row["created_date"];?>'+
-                '</div>';
-                 var myLatlng_<?php echo $counter;?> = new google.maps.LatLng(<?php echo $row["latitude"];?>,<?php echo $row["longitude"];?>);
-                 var marker_<?php echo $counter;?> = new google.maps.Marker({
-                     position: myLatlng_<?php echo $counter; ?>,
-                     map: map,
-                     title: '<?php echo $row["drivername"];?>'
-                 });
-                 var infowindow_<?php echo $counter;?> = new google.maps.InfoWindow({
-                   content: contentString_<?php echo $counter;?>
-                 });
-
-                 google.maps.event.addListener(marker_<?php echo $counter;?>, 'click', function() {
-                   infowindow_<?php echo $counter;?>.open(map,marker_<?php echo $counter;?>);
-                 });
-
-                                <?php
-                $counter++;
-                }
-                                ?>
-             google.maps.event.addListener(map, 'zoom_changed', function() {
-               str = map.getZoom() + '';
-               setCookie('mapZoomLevel', str, 1)
-             });
-
-             google.maps.event.addListener(map, 'center_changed', function() {
-               str = map.getCenter() + '';
-               setCookie('mapCenterCoords', str, 1)
-             });
-      }
-      google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
     </head>
     <body class="skin-blue sidebar-mini">
     <div class="wrapper">
@@ -309,7 +185,22 @@ if (isset($_GET['exportDisplay']))
                 <span class="input-group-addon">to</span>
                 <input type="text" class="input-sm form-control datepicker" name="end" data-date-format="mm/dd/yyyy"/ required>
                </div>
+               <div class="input-group" id="driver" style="width: 25%;">
+                 <select class="input-sm form-control" name="trip_search_driver" id="trip_search_driver" value="" style="margin-top: 5px;">
+                  <option value="null">Choose Driver...</option>
+                  <?php
+                  foreach ($driver_array as $employee_id => $driver) { ?>
+                    <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
+                  <?php } ?>
+                </select>
+               </div>
+               <div class="input-group">
+                  <input type="text" class="input-sm form-control" name="truck_no" placeholder="Truck Number" style="margin-top: 5px;">
+               </div>
                 <div class="input-group" style="margin-top: 5px">
+                 <p>
+                 <input type="checkbox" name="remove_dup" id="remove_dup" value="true"> Remove Day Duplicates
+                 </p> 
                  <label class="radio-inline">
                   <input name="inlineRadioOptions" type="radio" id="inlineRadio1" value="exportDisplay" checked> Display
                  </label>
