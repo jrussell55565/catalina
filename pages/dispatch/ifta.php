@@ -236,13 +236,13 @@
                         </div>
                         <div class="box-body">
                         <form name="frm_ifta_add" method="POST" action="processifta.php" role="form" enctype="multipart/form-data">
-                           <table width="628" class="table table-condensed table-striped" id="tbl_ifta_add">
+                           <table width="644" class="table table-condensed table-striped" id="tbl_ifta_add">
                               <tbody id="tbody_ifta_details">
                                  <tr>
-                                    <td width="101">Trip #
-                                    <td width="237"><input class="input-sm form-control" name="txt_tripnum" type="text" id="txt_tripnum" value="" required>                                    
-                                    <td width="158">IFTA Compliance</td>
-                                    <td width="112">Option</td>
+                                    <td width="93">Trip #
+                                    <td width="232"><input class="input-sm form-control" name="txt_tripnum" type="text" id="txt_tripnum" value="" required>                                    
+                                    <td width="138">IFTA Compliance</td>
+                                    <td width="145">Option</td>
                                  </tr>
                                  <tr>
                                     <td>Start Date
@@ -344,6 +344,13 @@
                                       <option>Complete</option>
                                       <option selected>NA</option>
                                     </select></td>
+                                 </tr>
+                                 <tr>
+                                   <td>Trip Gen Notes
+                                   <td><input class="input-sm form-control" name="notes_gen_trip" type="text" id="notes_gen_trip" value="">                                 
+                                   <td>Notes: Trip Driver</td>
+                                   <td><label for="notes_trip_driver"></label>
+                                   <input class="input-sm form-control" name="notes_trip_driver" type="text" id="notes_trip_driver" value=""></td>
                                  </tr>
                            </table>
 <p></p>
