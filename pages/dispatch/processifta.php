@@ -46,7 +46,15 @@ if (isset($_POST['add_ifta'])) {
     driver2,
     truck_no,
     odo_start,
-    odo_end
+    odo_end,
+    compliance_trip_filed_correctly,
+    compliance_logs_included,
+    compliance_vir_included,
+    compliance_fuel_included,
+    compliance_bol_included,
+    compliance_permits,
+    compliance_gps_reports,
+    compliance_dot_violations
     )
     VALUES
     (
@@ -57,7 +65,15 @@ if (isset($_POST['add_ifta'])) {
     '".$_POST['sel_add_driver_2']."',
     ".$_POST['txt_truckno'].",
     ".$_POST['txt_od_start'].",
-    ".$_POST['txt_od_end']."
+    ".$_POST['txt_od_end'].",
+    '".$_POST['compliance_trip']."',
+    '".$_POST['compliance_logs']."',
+    '".$_POST['compliance_vir']."',
+    '".$_POST['compliance_fuel']."',
+    '".$_POST['compliance_bol']."',
+    '".$_POST['compliance_permits']."',
+    '".$_POST['compliance_gps']."',
+    '".$_POST['compliance_dot']."'
     )";
 
     if ($mysqli->query($sql_ifta) === false)
@@ -236,7 +252,15 @@ if (isset($_POST['update_ifta'])) {
     driver2 = '".$_POST['sel_add_driver_2']."',
     truck_no = ".$_POST['txt_truckno'].",
     odo_start = ".$_POST['txt_od_start'].",
-    odo_end = ".$_POST['txt_od_end']."
+    odo_end = ".$_POST['txt_od_end'].",
+    compliance_trip_filed_correctly = '".$_POST['compliance_trip']."',
+    compliance_logs_included = '".$_POST['compliance_logs']."',
+    compliance_vir_included = '".$_POST['compliance_vir']."',
+    compliance_fuel_included = '".$_POST['compliance_fuel']."',
+    compliance_bol_included = '".$_POST['compliance_bol']."',
+    compliance_permits = '".$_POST['compliance_permits']."',
+    compliance_gps_reports = '".$_POST['compliance_gps']."',
+    compliance_dot_violations = '".$_POST['compliance_dot']."'
     WHERE trip_no = '".$_POST['txt_tripnum']."'";
     
     if ($mysqli->query($sql_ifta) === false)
