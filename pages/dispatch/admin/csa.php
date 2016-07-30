@@ -155,15 +155,8 @@ if ($_SESSION['login'] == 2)
   $predicate = " AND lower(first_name) = lower('".$_SESSION['fname']."')
                  and lower(last_name) = lower('".$_SESSION['lname']."')";
 }
-$sql = "select distinct first_name,last_name from
-(
-select distinct first_name,last_name from csadata
-UNION
-select upper(fname), upper(lname) from users
-WHERE employee_id in 
-(select employee_id from csadata_int)
-) a
-        WHERE 1=1 $predicate ORDER BY 1";
+$sql = "select distinct upper(fname) first_name, upper(lname) last_name from users
+        WHERE title='Driver' $predicate ORDER BY 1";
 
 $sql = mysql_query($sql);
 while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
@@ -173,7 +166,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 <td>
 <div style="float:left;width:20%;"><?php echo $row['first_name'] . " " . $row['last_name'];?></div>
 <div style="float:right;width:80%;"><a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse" 
-  href="#<?php echo $row['last_name'];?>_details"aria-expanded="false" aria-controls="<?php echo $row['last_name'];?>_details">
+  href="#<?php echo $row['last_name'];?>_details" aria-expanded="false" aria-controls="<?php echo $row['last_name'];?>_details">
   </a></div>
 </td>
 <td><?php echo $row['date'];?></td>
