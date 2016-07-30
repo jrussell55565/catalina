@@ -131,7 +131,7 @@ $drivername = $_SESSION['drivername'];
                           </td>
                       </form>
                       <?php
-                $result = mysql_query("SELECT * FROM accessorials ORDER BY acc_type,revenue_charge");
+                $result = mysql_query("SELECT * FROM accessorials where src_page != 'VIR' ORDER BY acc_type,revenue_charge");
                 $counter = 0;
                 while ($row = mysql_fetch_array($result, MYSQL_BOTH))
                 {
