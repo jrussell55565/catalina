@@ -14,7 +14,9 @@
    $trailerid = $_SESSION['trailerid'];
    
    $us_state_abbrevs = array('AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM', 'FL', 'GA', 'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MH', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VI', 'VA', 'WA', 'WV', 'WI', 'WY');
-   
+  
+   $compliance_options = array('Not in Packet', 'Incomplete', 'Complete', 'NA');
+ 
    // Get the info from the DB if this is a GET req.
    if (isset($_GET['trip_no'])) {
      $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
@@ -61,7 +63,9 @@
      // IFTA
      $ifta_results = array();
      $query = "SELECT trip_no,date_format(date_started,'%m/%d/%Y') as date_started,date_format(date_ended,'%m/%d/%Y') as date_ended
-               ,driver1,driver2,truck_no,odo_start,odo_end
+               ,driver1,driver2,truck_no,odo_start,odo_end,compliance_trip_filed_correctly,compliance_logs_included
+               ,compliance_vir_included,compliance_fuel_included,compliance_bol_included,compliance_permits
+               ,compliance_gps_reports,compliance_dot_violations
                FROM ifta WHERE trip_no = '".$_GET['trip_no']."'";
      if ($result = $mysqli->query($query)) {
          while($obj = $result->fetch_object()){ 
@@ -73,6 +77,14 @@
            $ifta_results['truck_no'] = $obj->truck_no; 
            $ifta_results['odo_start'] = $obj->odo_start; 
            $ifta_results['odo_end'] = $obj->odo_end; 
+           $ifta_results['compliance_trip_filed_correctly'] = $obj->compliance_trip_filed_correctly;
+           $ifta_results['compliance_logs_included'] = $obj->compliance_logs_included;
+           $ifta_results['compliance_vir_included'] = $obj->compliance_vir_included;
+           $ifta_results['compliance_fuel_included'] = $obj->compliance_fuel_included;
+           $ifta_results['compliance_bol_included'] = $obj->compliance_bol_included;
+           $ifta_results['compliance_permits'] = $obj->compliance_permits;
+           $ifta_results['compliance_gps_reports'] = $obj->compliance_gps_reports;
+           $ifta_results['compliance_dot_violations'] = $obj->compliance_dot_violations;
          } 
        $result->close();
      }
@@ -231,14 +243,31 @@
                                  <tr>
                                     <td>Trip #
                                     <td><input class="input-sm form-control" name="txt_tripnum" type="text" id="txt_tripnum" value="<?php echo $ifta_results['trip_no'];?>" readonly></td>
+                                    <td width="158">IFTA Compliance</td>
+                                    <td width="112">Option</td>
                                  </tr>
                                  <tr>
                                     <td>Start Date
                                     <td><input class="input-sm form-control datepicker" name="txt_date_start" type="text" id="txt_date_start" value="<?php echo $ifta_results['date_started'];?>" required></td>
+                                    <td>Trip Filed Correctly</td>
+                                    <td><label for="compliance_trip"></label>
+                                      <select class="input-sm form-control" name="compliance_trip" id="compliance_trip">
+                                   <?php
+                                    foreach ($compliance_options as $i) { ?>
+                                    <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_trip_filed_correctly']) { echo "selected"; }?>><?php echo $i;?></option>
+                                   <?php } ?>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>End Date
                                     <td><input class="input-sm form-control datepicker" name="txt_date_end" type="text" id="txt_date_end" value="<?php echo $ifta_results['date_ended'];?>" required></td>
+                                    <td>Logs Included</td>
+                                    <td><select class="input-sm form-control" name="compliance_logs" id="compliance_logs">
+                                   <?php
+                                    foreach ($compliance_options as $i) { ?>
+                                    <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_logs_included']) { echo "selected"; }?>><?php echo $i;?></option>
+                                   <?php } ?>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>Driver 1
@@ -251,6 +280,13 @@
                                           <?php } ?>
                                        </select>
                                     </td>
+                                    <td>VIR Included</td>
+                                    <td><select class="input-sm form-control" name="compliance_vir" id="compliance_vir">
+                                   <?php
+                                    foreach ($compliance_options as $i) { ?>
+                                    <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_vir_included']) { echo "selected"; }?>><?php echo $i;?></option>
+                                   <?php } ?>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>Driver 2
@@ -263,22 +299,57 @@
                                           <?php } ?>
                                        </select>
                                     </td>
+                                    <td>Fuel Reciepts included</td>
+                                    <td><select class="input-sm form-control" name="compliance_fuel" id="compliance_fuel">
+                                   <?php
+                                    foreach ($compliance_options as $i) { ?>
+                                    <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_fuel_included']) { echo "selected"; }?>><?php echo $i;?></option>
+                                   <?php } ?>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>Truck #
                                     <td><input class="input-sm form-control" name="txt_truckno" type="text" id="txt_truckno" value="<?php echo $ifta_results['truck_no'];?>" required></td>
+                                    <td>Original BOL included</td>
+                                    <td><select class="input-sm form-control" name="compliance_bol" id="compliance_bol">
+                                   <?php
+                                    foreach ($compliance_options as $i) { ?>
+                                    <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_bol_included']) { echo "selected"; }?>><?php echo $i;?></option>
+                                   <?php } ?>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>Starting OD
                                     <td><input class="input-sm form-control" name="txt_od_start" type="text" id="txt_od_start" value="<?php echo $ifta_results['odo_start'];?>" required></td>
+                                    <td>Permits</td>
+                                    <td><select class="input-sm form-control" name="compliance_permits" id="compliance_permits">
+                                   <?php
+                                    foreach ($compliance_options as $i) { ?>
+                                    <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_permits']) { echo "selected"; }?>><?php echo $i;?></option>
+                                   <?php } ?>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>Ending OD
                                     <td><input class="input-sm form-control" name="txt_od_end" type="text" id="txt_od_end" value="<?php echo $ifta_results['odo_end'];?>" required></td>
+                                   <td>GPS Reports</td>
+                                    <td><select class="input-sm form-control" name="compliance_gps" id="compliance_gps">
+                                   <?php
+                                    foreach ($compliance_options as $i) { ?>
+                                    <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_gps_reports']) { echo "selected"; }?>><?php echo $i;?></option>
+                                   <?php } ?>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>Total Trip Miles
                                     <td><input class="input-sm form-control" name="txt_od_total" type="text" id="txt_od_total" value="<?php echo $ifta_results['odo_end'] - $ifta_results['odo_start']; ?>"></td>
+                                   <td>DOT Violations</td>
+                                    <td><select class="input-sm form-control" name="compliance_dot" id="compliance_dot">
+                                   <?php
+                                    foreach ($compliance_options as $i) { ?>
+                                    <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_dot_violations']) { echo "selected"; }?>><?php echo $i;?></option>
+                                   <?php } ?>
+                                    </select></td>
                                  </tr>
                            </table>
                            <p></p>
@@ -515,7 +586,7 @@
                             </tbody>
                            </table>
                         <p></p>
-                        <button type="submit" class="btn btn-danger" name="update_ifta">Submit</button>
+                        <button type="submit" class="btn btn-danger" name="update_ifta">Update</button>
                         </form>
                         </div>
                         <!-- /.box-body -->
