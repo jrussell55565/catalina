@@ -41,7 +41,13 @@ $localdate 	= $_POST['bx_localdate'];
 $loadposition	= $_POST['LoadPosition'];
 $remarks	= $_POST['remarks'];
 $statustype	= $_POST['btn_sourceform'];
-$simplestatus	= $_POST['sel_quickStatus'];
+
+// If we're doing a simple status just set statusType to that value
+if (! empty($_POST['sel_quickStatus']))
+{
+    $statustype = $_POST['sel_quickStatus'];
+}
+
 $pieces		= $_POST['txt_pieces'];
 $pallets	= $_POST['txt_pallets'];
 $podname        = $_POST['podName'];
@@ -112,15 +118,6 @@ switch ($statustype)
 	    }
     break;
 
-    case "Reject PU DEL":
-	    $status = "Reject PU DEL";
-	    $accessorials = processAccessorials($hawb,"PU",$username);
-	    if ($remarks != '')
-		    {
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
-	    }
-    break;
-
     case "Trace Note PU":
 	    $status = "Trace Note PU";
 	    $accessorials = processAccessorials($hawb,"PU",$username);
@@ -131,13 +128,53 @@ switch ($statustype)
 	    }
 	break;
 
-    case "Freight At Dock":
-        $status = "Freight At Dock";
-	    if ($_POST['formname'] == "FreightAtDock.php")
+    case "In Transit":
+        $status = "In Transit";
+        // If I'm the PU driver then give me a PU accessorial credit for this status
+	    if ($puDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"PU",$username);
-	    }else{
-		    $accessorials = processAccessorials($hawb,"DEL",$username);
+		    $accessorials = processAccessorials($hawb,"PU",$username,$status);
+	    }
+        // If I'm the DEL driver then give me a DEL accessorial credit for this status
+	    if ($delDriver == $drivername)
+	    {
+		    $accessorials = processAccessorials($hawb,"DEL",$username,$status);
+	    }
+	    if ($remarks != '')
+		{
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+	    }
+	break;
+
+    case "On Dock PHX":
+        $status = "On Dock PHX";
+        // If I'm the PU driver then give me a PU accessorial credit for this status
+	    if ($puDriver == $drivername)
+	    {
+		    $accessorials = processAccessorials($hawb,"PU",$username,$status);
+	    }
+        // If I'm the DEL driver then give me a DEL accessorial credit for this status
+	    if ($delDriver == $drivername)
+	    {
+		    $accessorials = processAccessorials($hawb,"DEL",$username,$status);
+	    }
+	    if ($remarks != '')
+		{
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+	    }
+	break;
+
+    case "On Dock TUS":
+        $status = "On Dock TUS";
+        // If I'm the PU driver then give me a PU accessorial credit for this status
+	    if ($puDriver == $drivername)
+	    {
+		    $accessorials = processAccessorials($hawb,"PU",$username,$status);
+	    }
+        // If I'm the DEL driver then give me a DEL accessorial credit for this status
+	    if ($delDriver == $drivername)
+	    {
+		    $accessorials = processAccessorials($hawb,"DEL",$username,$status);
 	    }
 	    if ($remarks != '')
 		{
@@ -147,17 +184,75 @@ switch ($statustype)
 
     case "Trailer Dropped":
         $status = "Trailer Dropped";
-	    if ($_POST['formname'] == "TrailerDroppedPU.php")
+        // If I'm the PU driver then give me a PU accessorial credit for this status
+	    if ($puDriver == $drivername)
 	    {
 		    $accessorials = processAccessorials($hawb,"PU",$username);
-	    }else{
+	    }
+        // If I'm the DEL driver then give me a DEL accessorial credit for this status
+	    if ($delDriver == $drivername)
+	    {
 		    $accessorials = processAccessorials($hawb,"DEL",$username);
 	    }
 	    if ($remarks != '')
 		{
 		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
-    break;
+	break;
+
+    case "Reject PU DEL":
+        $status = "Reject PU DEL";
+        // If I'm the PU driver then give me a PU accessorial credit for this status
+	    if ($puDriver == $drivername)
+	    {
+		    $accessorials = processAccessorials($hawb,"PU",$username);
+	    }
+        // If I'm the DEL driver then give me a DEL accessorial credit for this status
+	    if ($delDriver == $drivername)
+	    {
+		    $accessorials = processAccessorials($hawb,"DEL",$username);
+	    }
+	    if ($remarks != '')
+		{
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+	    }
+	break;
+
+    case "Refused":
+        $status = "Refused";
+        // If I'm the PU driver then give me a PU accessorial credit for this status
+	    if ($puDriver == $drivername)
+	    {
+		    $accessorials = processAccessorials($hawb,"PU",$username);
+	    }
+        // If I'm the DEL driver then give me a DEL accessorial credit for this status
+	    if ($delDriver == $drivername)
+	    {
+		    $accessorials = processAccessorials($hawb,"DEL",$username);
+	    }
+	    if ($remarks != '')
+		{
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+	    }
+	break;
+
+    case "Freight At Dock":
+        $status = "Freight At Dock";
+        // If I'm the PU driver then give me a PU accessorial credit for this status
+	    if ($puDriver == $drivername)
+	    {
+		    $accessorials = processAccessorials($hawb,"PU",$username,$status);
+	    }
+        // If I'm the DEL driver then give me a DEL accessorial credit for this status
+	    if ($delDriver == $drivername)
+	    {
+		    $accessorials = processAccessorials($hawb,"DEL",$username,$status);
+	    }
+	    if ($remarks != '')
+		{
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+	    }
+	break;
 
     case "Picked Up":
         $status = "Picked Up";
@@ -192,15 +287,6 @@ switch ($statustype)
 	    }
     break;
 
-    case "Refused":
-        $status = "Refused";
-	    $accessorials = processAccessorials($hawb,"DEL",$username);
-	    if ($remarks != '')
-		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
-	    }
-	break;
-
     case "Trace Note DEL":
 	    $status = "Trace Note DEL";
 	    $accessorials = processAccessorials($hawb,"DEL",$username);
@@ -227,25 +313,9 @@ switch ($statustype)
     break;
 }
 
-# For the simple status change
-if (isset($simplestatus))
+if ($accessorials != '')
 {
-	$status = $simplestatus;
-	$statustype = $simplestatus;
-    $doNotSendAccessorial = 0;
-}
-
-# Skip the accessorials if we're just doing a simple status change
-if (! isset($doNotSendAccessorial))
-{
-    # Accessorials.csv
-    if ($accessorials != '')
-    {
-      $tmpfnameAccessorial = "accessorial+"."$exportdest+".microtime(true);
-      $fpAccessorial = fopen($_SERVER['DOCUMENT_ROOT']."/exports/$tmpfnameAccessorial.csv", 'w');
-      fwrite($fpAccessorial, "HWB,Type,RevenueChargeName,RevenueChargeAmount\r\n$accessorials");
-      fclose($fpAccessorial);
-    }
+    createAccessorial($exportdest,$accessorials);
 }
 
 # Sleep slightly to ensure different file names.
@@ -318,48 +388,66 @@ if ($status == "Delivered")
 
 header("Location: /pages/dispatch/orders.php");
 
-function processAccessorials($hawb,$action,$driver_full_name)
+function processAccessorials($hawb,$action,$driver_full_name,$status)
 {
-  $sqlSearchIn = array();
-        foreach ($_POST['ck_accessorials'] as $key => $val)
+
+    $sqlSearchIn = array();
+    // Create an array for the simplestatus
+    $simple_status = array('In Transit','On Dock PHX','On Dock TUS',
+                           'Trailer Dropped','Reject PU DEL','Refused','Freight At Dock');
+    foreach ($simple_status as $i)
+    {
+        if ($status == $i)
         {
-                array_push($sqlSearchIn,"\"$val\"");
+            array_push($sqlSearchIn,"\"$i\"");
         }
+    }
 
-        $sqlArray = rtrim(implode(',',$sqlSearchIn),",");
+    foreach ($_POST['ck_accessorials'] as $key => $val)
+    {
+        array_push($sqlSearchIn,"\"$val\"");
+    } 
 
-        if ($action == "OVER")
+    $sqlArray = rtrim(implode(',',$sqlSearchIn),",");
+    if ($action == "OVER")
+    {
+        return str_replace('"','',$sqlArray);
+    }
+    if (count($sqlSearchIn) > 0)
+    {
+        $statement = "SELECT acc_type,revenue_charge,revenue_amount,input_type FROM accessorials WHERE (acc_type = \"$action\" OR acc_type = \"REVENUE\") AND revenue_charge IN ($sqlArray)";
+        $sql = mysql_query($statement);
+
+        while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
         {
-            return str_replace('"','',$sqlArray);
-        }
-        if (count($sqlSearchIn) > 0)
-        {
-                $statement = "SELECT acc_type,revenue_charge,revenue_amount,input_type FROM accessorials WHERE (acc_type = \"$action\" OR acc_type = \"REVENUE\") AND revenue_charge IN ($sqlArray)";
-                $sql = mysql_query($statement);
-
-                while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-                {
-                        $accessorials .= "$hawb,$row[acc_type],$row[revenue_charge],$row[revenue_amount]\r\n";
+            $accessorials .= "$hawb,$row[acc_type],$row[revenue_charge],$row[revenue_amount]\r\n";
 			preg_match("/^hdn_.+/", "$row[input_type]",$matches);
 			if (! $matches)
 			{
 				$accessorialsEmail .= "$hawb,$row[acc_type],$row[revenue_charge],$row[revenue_amount]\r\n";
 			}
-                }
+        }
 		if (count($accessorialsEmail) > 0 )
 		{
 			$accessorialsEmail = "Accessorials submitted by $driver_full_name\r\n\r\n$accessorialsEmail";
 			sendEmail('accessorials@catalinacartage.com',"Accessorials $hawb","$accessorialsEmail");
 		}
 	        return $accessorials;
-        }
-
+    }
 }
 
 function returnWithError($recordid,$page,$error)
 {
     header("Location: $page?recordid=$recordid&expError=$error");
     exit;
+}
+
+function createAccessorial($exportdest,$accessorials)
+{
+      $tmpfnameAccessorial = "accessorial+"."$exportdest+".microtime(true);
+      $fpAccessorial = fopen($_SERVER['DOCUMENT_ROOT']."/exports/$tmpfnameAccessorial.csv", 'w');
+      fwrite($fpAccessorial, "HWB,Type,RevenueChargeName,RevenueChargeAmount\r\n$accessorials");
+      fclose($fpAccessorial);
 }
 
 ?>
