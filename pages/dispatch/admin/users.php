@@ -682,7 +682,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
      </td>
      <td style="padding: 5px">
       <label for="quietTimeVal1">Quiet (start)</label>
-       <select class="form-control" name="quietTimeVal1" id="quietTimeVal1">
+       <select class="form-control" name="quietTimeVal1" id="quietTimeVal1" data-toggle="tooltip" data-placement="top" title="Quiet time will turn off your email and text messages at this time">
          <option value="00:00" <?php if ($row['quiet_time_begin'] == '00:00') { echo " selected "; }?>>00:00</option>
          <option value="01:00" <?php if ($row['quiet_time_begin'] == '01:00') { echo " selected "; }?>>01:00</option>
          <option value="02:00" <?php if ($row['quiet_time_begin'] == '02:00') { echo " selected "; }?>>02:00</option>
@@ -1070,6 +1070,7 @@ if ($_SESSION['login'] == 1)
 <td>
 <div style="float:left;width:80%;">Add User</div>
 <div style="float:right;width:20%;"><a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse"
+onClick="$(this).toggleClass('glyphicon-chevron-down glyphicon-chevron-right');"
   href="#addUser_details"aria-expanded="false" aria-controls="addUser_details">
   </a></div>
 </td>
