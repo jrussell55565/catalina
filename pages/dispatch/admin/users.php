@@ -547,6 +547,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 <td>
 <div style="float:left;width:80%;"><?php echo $row['fname'] . " " . $row['lname'];?></div>
 <div style="float:right;width:20%;"><a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse" 
+  onClick="$(this).toggleClass('glyphicon-chevron-down glyphicon-chevron-right');"
   href="#<?php echo $row['username'];?>_details"aria-expanded="false" aria-controls="<?php echo $row['username'];?>_details">
   </a></div>
 </td>

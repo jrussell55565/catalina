@@ -165,7 +165,8 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 <tr>
 <td>
 <div style="float:left;width:20%;"><?php echo $row['first_name'] . " " . $row['last_name'];?></div>
-<div style="float:right;width:80%;"><a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse" 
+<div style="float:right;width:80%;"><a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse"
+  onClick="$(this).toggleClass('glyphicon-chevron-down glyphicon-chevron-right');"
   href="#<?php echo $row['last_name'];?>_details" aria-expanded="false" aria-controls="<?php echo $row['last_name'];?>_details">
   </a></div>
 </td>
