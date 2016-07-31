@@ -679,6 +679,126 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 </td>
 </tr></table>
 
+      <label for="VtextHelp"></label>
+            <select name="VtextHelp" id="VtextHelp">
+<option value="@txt.att.net">AT&T Txt (@txt.att.net)USA</option>
+<option value="@txt.att.net">AT&T Txt (@txt.att.net)USA</option>
+<option value="@mms.att.net">AT&T MMS (@mms.att.net)USA</option>
+<option value="@cingularme.com">Cingular (@cingularme.com)USA</option>
+<option value="@myboostmobile.com">Boost Mobile (@myboostmobile.com)USA</option>
+<option value="@messaging.nextel.com">Nextel (@messaging.nextel.com)USA</option>
+<option value="@messaging.sprintpcs.com">Sprint PCS (@messaging.sprintpcs.com)USA</option>
+<option value="@pm.sprint.com">Sprint Smart (@pm.sprint.com)USA</option>
+<option value="@tmomail.net">T-Moblile (@tmomail.net)USA</option>
+<option value="@email.uscc.net">Us Cellular (@email.uscc.net)USA</option>
+<option value="@vtext.com">Verizon (@vtext.com)USA</option>
+<option value="@vzwpix.com">Verizon MMS (@vzwpix.com)USA</option>
+<option value="@vmobl.com">Virgin Mobile  (@vmobl.com)USA</option>
+<option value="@mmst5.tracfone.com">Tracefone (@mmst5.tracfone.com)USA</option>
+<option value="@vtext.com">Verizon (@vtext.com)USA</option>
+<option value="@page.att.net">AT&T Page (@page.att.net)USA</option>
+<option value="@cingularme.com">Cingular  (@cingularme.com)USA</option>
+<option value="@mymetropcs.com">Metro PCS (@mymetropcs.com)USA</option>
+<option value="@qwestmp.com">Quest (@qwestmp.com)USA</option>
+<option value="@cingularme.com">Cingluar (@cingularme.com)USA</option>
+<option value="@cingularme.com">Cingular (@cingularme.com)USA</option>
+<option value="@messaging.nextel.com">Nextel (@messaging.nextel.com)USA</option>
+<option value="@sms.airtelmontana.com">Airtel Montana (@sms.airtelmontana.com)USA</option>
+<option value="@msg.acsalaska.com">Alaska Comm (@msg.acsalaska.com)USA</option>
+<option value="@cellcom.quiktxt.com">Cellcom (@cellcom.quiktxt.com)USA</option>
+<option value="@mobile.celloneusa.com">Cellular One (@mobile.celloneusa.com)USA</option>
+<option value="@text.cellonenation.net">Cellular One (@text.cellonenation.net)USA</option>
+<option value="@cwemail.com">Centennial Wireless (@cwemail.com)USA</option>
+<option value="@sms.mycricket.com">Cricket (@sms.mycricket.com)USA</option>
+<option value="@cspire1.com">C-Spire (@cspire1.com)USA</option>
+<option value="@msg.gci.net">General Comm Inc (@msg.gci.net)USA</option>
+<option value="@msg.gci.net">Globalstar (@msg.gci.net)USA</option>
+<option value="@msg.globalstarusa.com">Helio (@msg.globalstarusa.com)USA</option>
+<option value="@ivctext.com">Illinois Valley Cell (@ivctext.com)USA</option>
+<option value="@msg.iridium.com">Iridium (@msg.iridium.com)USA</option>
+<option value="@orange.pl">Orange Polska (@orange.pl)USA</option>
+<option value="@tms.suncom.com">Seuncom (@tms.suncom.com)USA</option>
+<option value="@sms.thumbcellular.com">Thumb Cellular (@sms.thumbcellular.com)USA</option>
+<option value="@sms.alltelwireless.com">AllTel (@sms.alltelwireless.com)USA</option>
+<option value="@sms.bluecell.com">Bluegrass Cellular (@sms.bluecell.com)USA</option>
+<option value="@messaging.centurytel.net">Century Tel (@messaging.centurytel.net)USA</option>
+<option value="@mobile.att.net">Cincinnati Bell (@mobile.att.net)USA</option>
+<option value="@corrwireless.net">Corr Wireless Comm (@corrwireless.net)USA</option>
+<option value="@mobile.dobson.net">Dobson Cellular Systems (@mobile.dobson.net)USA</option>
+<option value="@mobile.cellularone.com">Dobson Cellular One (@mobile.cellularone.com)USA</option>
+<option value="@inlandlink.com">Inland Cellular (@inlandlink.com)USA</option>
+<option value="@metropcs.sms.us">Metro PCS (@metropcs.sms.us)USA</option>
+<option value="@clearlydigital.com">Midwest Wireless (@clearlydigital.com)USA</option>
+<option value="@pcsone.net">PCS ONE (@pcsone.net)USA</option>
+<option value="@msg.pioneerenidcellular.com">Pioneer Enid Cell (@msg.pioneerenidcellular.com)USA</option>
+<option value="@voicestream.net">Powertel (@voicestream.net)USA</option>
+<option value="@sms.pscel.com">Public Service Cell (@sms.pscel.com)USA</option>
+<option value="@typetalk.ruralcellular.com">Rural Cell (@typetalk.ruralcellular.com)USA</option>
+<option value="@csouth1.com">Telepak Cell South (@csouth1.com)USA</option>
+<option value="@voicestream.net">Voicestream (@voicestream.net)USA</option>
+<option value="@sms.wcc.net">West Central Wireless (@sms.wcc.net)USA</option>
+<option value="@cellularonewest.com">Western Wireless (@cellularonewest.com)USA</option>
+<option value="@viaerosms.com">Viaero (@viaerosms.com)USA</option>
+<option value="@msg.fi.google.com">Google FI (@msg.fi.google.com)USA</option>
+<option value="@mms.mycricket.com">Cricket (@mms.mycricket.com)USA</option>
+<option value="@sms.ctimovil.com.ar">CTI (@sms.ctimovil.com.ar)ARGENTINA</option>
+<option value="@sms.movistar.net.ar">Movicom (@sms.movistar.net.ar)ARGENTINA</option>
+<option value="@nextel.net.ar">Nextel (@nextel.net.ar)ARGENTINA</option>
+<option value="@pcs.ntelos.com">Ntelos (@pcs.ntelos.com)ARGENTINA</option>
+<option value="@alertas.personal.com.ar">Personal (@alertas.personal.com.ar)ARGENTINA</option>
+<option value="@mas.aw">Setar Mobile (@mas.aw)ARUBA</option>
+<option value="@sms.t-mobile.at">T-Mobile (@sms.t-mobile.at)AUSTRIA</option>
+<option value="@slinteractive.com.au">SL Interactive (@slinteractive.com.au)AUSTRRALIA</option>
+<option value="@clarotorpedo.com.br">Claro (@clarotorpedo.com.br)BRAZIL</option>
+<option value="@txt.bell.ca">Bell Mobility (@txt.bell.ca)Canada</option>
+<option value="@fido.ca">Fido (@fido.ca)Canada</option>
+<option value="@msg.koodomobile.com">Koodo Mobile (@msg.koodomobile.com)Canada</option>
+<option value="@text.mtsmobility.com">MTS (@text.mtsmobility.com)Canada</option>
+<option value="@txt.bell.ca">Bell Choice (@txt.bell.ca)Canada</option>
+<option value="@pcs.rogers.com">Rogers (@pcs.rogers.com)Canada</option>
+<option value="@sms.sasktel.com">Sasktel (@sms.sasktel.com)Canada</option>
+<option value="@msg.telus.com">Telus Mobility (@msg.telus.com)Canada</option>
+<option value="@airtelkk.com">Airtel (@airtelkk.com)Canada</option>
+<option value="@vmobile.ca">Virgin Mobile  (@vmobile.ca)CANADA</option>
+<option value="@txt.bellmobility.ca">Bell Mobility (@txt.bellmobility.ca)CANADA</option>
+<option value="@comcel.com.co">Comcel (@comcel.com.co)COLUMBIA</option>
+<option value="@movistar.com.co">Movistar (@movistar.com.co)COLUMBIA</option>
+<option value="@mobilecell1se.com">Price Communications (@mobilecell1se.com)DUTCH</option>
+<option value="@sms.tigo.com.co">Tigo (@sms.tigo.com.co)EL SALVADOR</option>
+<option value="@emtelworld.net">Emtel (@emtelworld.net)GERMANY</option>
+<option value="@mobipcs.net">MobiPCS (@mobipcs.net)HAWAII</option>
+<option value="@bplmobile.com">BLP Mobile (@bplmobile.com)INDIA</option>
+<option value="@sms.mymeteor.ie">Meteor (@sms.mymeteor.ie)IRELAND</option>
+<option value="@sms.vodafone.it">Vodafone (@sms.vodafone.it)ITALY</option>
+<option value="@sms.lmt.lv">LMT (@sms.lmt.lv)LATVIA</option>
+<option value="@rek2.com.mx">Iusacell (@rek2.com.mx)MEXICO</option>
+<option value="@sms.spicenepal.com">Mero (@sms.spicenepal.com)NEPAL</option>
+<option value="@ideasclaro-ca.com">Claro (@ideasclaro-ca.com)NICARAGUA</option>
+<option value="@text.plusgsm.p">Plus GSM (@text.plusgsm.p)POLAND</option>
+<option value="@sms.co.za">MTN (@sms.co.za)SOUTH AFRICA</option>
+<option value="@voda.co.za">Vodacom (@voda.co.za)SOUTH AFRICA</option>
+<option value="@sms.mobitel.lk">Mobitel  (@sms.mobitel.lk)SRI LANKA</option>
+<option value="@text.aql.com">Aql (@text.aql.com)UK</option>
+<option value="@tachyonsms.co.uk">Big Red Giant (@tachyonsms.co.uk)UK</option>
+<option value="@t-mobile.uk.net">T-Mobile (@t-mobile.uk.net)UK</option>
+<option value="@utext.com">Unicel (@utext.com)XXX</option>
+<option value="@sms.ycc.ru">YCC (@sms.ycc.ru)XXX</option>
+
+
+
+
+
+
+
+
+
+</select>
+
+
+
+
+
+
      </td>
      <td style="padding: 5px">
       <label for="quietTimeVal1">Quiet (start)</label>

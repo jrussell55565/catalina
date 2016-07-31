@@ -379,7 +379,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
             <div class="col-md-3">
               <div class="box box-primary">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Shipment Boards Calcs</h3>
+                  <h3 class="box-title">Shipment Calculations</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -387,54 +387,141 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                   </div><!-- /.box-tools -->
                 </div><!-- /.box-header -->
                 <div class="box-body">
-                  <table width="308" border="0">
+                  <table width="371" border="0">
                     <tr>
-                      <td colspan="2"><div align="center">Points</div></td>
+                      <td>Info</td>
+                      <td>A Point Multi</td>
+                      <td width="127">C Point Weight</td>
                     </tr>
                     <tr>
-                      <td width="233"> Arrived to Shipper</td>
-                      <td width="65">1</td>
+                      <td width="116">Arrived Shipper</td>
+                      <td><input name="arrived_shipper_apoint" type="arrived_shipper_apoint" id="arrived_shipper_apoint" value="1" size="1"></td>
+                      <td><input name="arrived_shipper_cpoint" type="arrived_shipper_cpoint" id="arrived_shipper_cpoint" value="20" size="1"></td>
                     </tr>
                     <tr>
                       <td>Picked Up</td>
-                      <td>1</td>
+                      <td width="114"><input name="picked_up_apoint" type="picked_up_apoint" id="picked_up_apoint" value="1" size="1"></td>
+                      <td><input name="picked_up_cpoint" type="picked_up_cpoint" id="picked_up_cpoint" value="20" size="1"></td>
                     </tr>
                     <tr>
-                      <td>Arrived to Consignee</td>
-                      <td>1</td>
+                      <td width="116">Arrived Consignee</td>
+                      <td><input name="arrived_consignee_apoint" type="arrived_consignee_apoint" id="arrived_consignee_apoint" value="1" size="1"></td>
+                      <td><input name="arrived_consignee_cpoint" type="arrived_consignee_cpoint" id="arrived_consignee_cpoint" value="20" size="1"></td>
                     </tr>
                     <tr>
                       <td>Delivered</td>
-                      <td>1</td>
+                      <td><input name="delivered_apoint" type="delivered_apoint" id="delivered_apoint" value="1" size="1"></td>
+                      <td><input name="delivered_cpoint" type="delivered_cpoint" id="delivered_cpoint" value="20" size="1"></td>
                     </tr>
                     <tr>
-                      <td>Accessorial Points</td>
-                      <td>1</td>
+                      <td height="22">Non-Core Update</td>
+                      <td><input name="noncore_apoint" type="noncore_apoint" id="noncore_apoint" value="1" size="1"></td>
+                      <td><input name="noncore_cpoint" type="noncore_cpoint" id="noncore_cpoint" value="10" size="1"></td>
                     </tr>
                     <tr>
-                      <td colspan="2"><div align="center">% Points Below</div></td>
+                      <td>Accessorials</td>
+                      <td><input name="accessorials_apoint" type="accessorials_apoint" id="accessorials_apoint" value="1" size="1"></td>
+                      <td><input name="accessorials_cpoint" type="accessorials_cpoint" id="accessorials_cpoint" value="10" size="1"></td>
                     </tr>
                     <tr>
-                      <td>PU/DEL Category Score</td>
-                      <td>34</td>
+                      <td>Message</td>
+                      <td colspan="2"><label for="textfield2"></label>
+                        <label for="textarea2"></label>
+                        <textarea name="shipments_message" id="shipments_message" placeholder="Message to Drivers About Scores" cols="35" rows="5">Please see your "PHP daily,weekly,monthly," Stats</textarea></td>
                     </tr>
                     <tr>
-                      <td>Accessorials Category Score</td>
-                      <td>33</td>
+                      <td>Notify</td>
+                      <td colspan="2">
+                        <input name="radio_shipment_score_notify" type="radio" id="radio_shipment_score_notify_yes" value="1" checked>Yes
+						<input type="radio" name="radio_shipment_score_notify" id="radio_shipment_score_notify_no" value="0">No
+                      </td>
                     </tr>
                     <tr>
-                      <td>Bol Submission Score</td>
-                      <td>33</td>
+                      <td>Export Type</td>
+                      <td colspan="2"><label for="shipments_score_export_type"></label>
+                        <select name="shipments_score_export_type" id="shipments_score_export_type">
+                          <option>CSV</option>
+                          <option>PDF</option>
+                      </select></td>
                     </tr>
                     <tr>
-                      <td colspan="2"><div align="center">Category Score</div></td>
+                      <td>Notify Via</td>
+                     <td colspan="2"><label for="frequency_date">
+                       <input name="shipments_notify_via_txt" type="checkbox" id="shipments_notify_via_txt" checked>
+                       TXT
+                       <input name="shipments_notify_via_email" type="checkbox" id="shipments_notify_via_email" checked>
+                       Email
+                       <input name="shipments_notify_via_task" type="checkbox" id="shipments_notify_via_task" checked>
+                       Task
+                       <input name="shipments_notify_via_project" type="checkbox" id="shipments_notify_via_project" checked>
+                      Project</label></td>
                     </tr>
                     <tr>
-                      <td>Category Score</td>
-                      <td>25</td>
+                      <td>Freequency</td>
+                      <td colspan="2"><input type="checkbox" name="sc_points_freequency_daily" id="sc_points_freequency_daily">
+                      <label for="sc_points_freequency_daily">Daily
+                        <input type="checkbox" name="sc_points_freequency_weekly" id="sc_points_freequency_weekly">
+                      Weekly</label>
+                      <input type="checkbox" name="sc_points_freequency_monthly" id="sc_points_freequency_monthly">
+                      <label for="sc_points_freequency_monthly">Monthly</label></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td colspan="2"><label for="shipments_points_freequency_select_days">Time to Send: <span style="padding: 5px">
+                      <select name="shipment_points_time" id="shipment_points_time">
+                        <option value="00:00" <?php if ($row['sc_points_freequency_time'] == '00:00') { echo " selected "; }?>>00:00</option>
+                        <option value="01:00" <?php if ($row['sc_points_freequency_time'] == '01:00') { echo " selected "; }?>>01:00</option>
+                        <option value="02:00" <?php if ($row['sc_points_freequency_time'] == '02:00') { echo " selected "; }?>>02:00</option>
+                        <option value="03:00" <?php if ($row['sc_points_freequency_time'] == '03:00') { echo " selected "; }?>>03:00</option>
+                        <option value="04:00" <?php if ($row['sc_points_freequency_time'] == '04:00') { echo " selected "; }?>>04:00</option>
+                        <option value="05:00" <?php if ($row['sc_points_freequency_time'] == '05:00') { echo " selected "; }?>>05:00</option>
+                        <option value="06:00" <?php if ($row['sc_points_freequency_time'] == '06:00') { echo " selected "; }?>>06:00</option>
+                        <option value="07:00" <?php if ($row['sc_points_freequency_time'] == '07:00') { echo " selected "; }?>>07:00</option>
+                        <option value="08:00" selected <?php if ($row['sc_points_freequency_time'] == '08:00') { echo " selected "; }?>>08:00</option>
+                        <option value="09:00" <?php if ($row['sc_points_freequency_time'] == '09:00') { echo " selected "; }?>>09:00</option>
+                        <option value="10:00" <?php if ($row['sc_points_freequency_time'] == '10:00') { echo " selected "; }?>>10:00</option>
+                        <option value="11:00" <?php if ($row['sc_points_freequency_time'] == '11:00') { echo " selected "; }?>>11:00</option>
+                        <option value="12:00" <?php if ($row['sc_points_freequency_time'] == '12:00') { echo " selected "; }?>>12:00</option>
+                        <option value="13:00" <?php if ($row['sc_points_freequency_time'] == '13:00') { echo " selected "; }?>>13:00</option>
+                        <option value="14:00" <?php if ($row['sc_points_freequency_time'] == '14:00') { echo " selected "; }?>>14:00</option>
+                        <option value="15:00" <?php if ($row['sc_points_freequency_time'] == '15:00') { echo " selected "; }?>>15:00</option>
+                        <option value="16:00" <?php if ($row['sc_points_freequency_time'] == '16:00') { echo " selected "; }?>>16:00</option>
+                        <option value="17:00" <?php if ($row['sc_points_freequency_time'] == '17:00') { echo " selected "; }?>>17:00</option>
+                        <option value="18:00" <?php if ($row['sc_points_freequency_time'] == '18:00') { echo " selected "; }?>>18:00</option>
+                        <option value="19:00" <?php if ($row['sc_points_freequency_time'] == '19:00') { echo " selected "; }?>>19:00</option>
+                        <option value="20:00" <?php if ($row['sc_points_freequency_time'] == '20:00') { echo " selected "; }?>>20:00</option>
+                        <option value="21:00" <?php if ($row['sc_points_freequency_time'] == '21:00') { echo " selected "; }?>>21:00</option>
+                        <option value="22:00" <?php if ($row['sc_points_freequency_time'] == '22:00') { echo " selected "; }?>>22:00</option>
+                        <option value="23:00" <?php if ($row['sc_points_freequency_time'] == '23:00') { echo " selected "; }?>>23:00</option>
+                      </select>
+                      </span></label></td>
+                    </tr>
+                    <tr>
+                      <td height="47">Select Days</td>
+                      <td colspan="2"><input type="checkbox" name="sc_points_freequency_day_sunday" id="sc_points_freequency_day_sunday">
+                      <label for="sc_points_freequency_day_sunday">Sunday
+                        <input type="checkbox" name="sc_points_freequency_day_monday" id="sc_points_freequency_day_monday">
+                      Monday
+                      <input type="checkbox" name="sc_points_freequency_day_tuesday" id="sc_points_freequency_day_tuesday">
+                      Tuesday
+                      <input type="checkbox" name="sc_points_freequency_day_wednesday" id="sc_points_freequency_day_wednesday">
+                      Wednesday
+                      <input type="checkbox" name="sc_points_freequency_day_thursday" id="sc_points_freequency_day_thursday">
+                      Thursday</label>
+                      <input type="checkbox" name="sc_points_freequency_day_friday" id="sc_points_freequency_day_friday">
+                      <label for="sc_points_freequency_day_friday">Friday</label>
+                      <input type="checkbox" name="sc_points_freequency_day_saturday" id="sc_points_freequency_day_saturday">
+                      <label for="sc_points_freequency_day_saturday">Saturday</label></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td colspan="2">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td><input type="submit" name="Submit5" id="Submit5" value="Update DB"></td>
+                      <td colspan="2">&nbsp;</td>
                     </tr>
                   </table>
-                  <input type="submit" name="Submit" id="Submit" value="Update DB">
                 </div>
                 <!-- /.box-body -->
               </div><!-- /.box -->
@@ -447,7 +534,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
             <div class="col-md-3">
               <div class="box box-danger">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Driver Scores Calculations VIR</h3>
+                  <h3 class="box-title">VIR Calculations</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -458,71 +545,130 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                   <table width="371" border="0">
                     <tr>
                       <td>Info</td>
-                      <td>A Point</td>
-                      <td width="65">C Point</td>
-                      <td width="100">Notify</td>
+                      <td>A Point Multi</td>
+                      <td width="127">C Point Weight</td>
                     </tr>
                     <tr>
-                      <td width="116">Pre-Post Trips</td>
-                      <td><input name="txt_prepost_points" type="txt_prepost_points" id="txt_prepost_points" value="1" size="1"></td>
-                      <td><input name="txt_prepost_points4" type="txt_prepost_points" id="txt_prepost_points4" value="33" size="1"></td>
-                      <td><input type="radio" name="radio_prepost" id="radio_prepost2" value="radio_prepost_yes">
-                        <label for="radio"></label>
-Yes
-<input type="radio" name="radio_prepost" id="radio_prepost2" value="radio_prepost_no">
-No</td>
+                      <td width="116">Arrived Shipper</td>
+                      <td><input name="arrived_shipper_apoint2" type="arrived_shipper_apoint" id="arrived_shipper_apoint2" value="1" size="1"></td>
+                      <td><input name="arrived_shipper_cpoint2" type="arrived_shipper_cpoint" id="arrived_shipper_cpoint2" value="20" size="1"></td>
                     </tr>
                     <tr>
-                      <td>Breakdowns</td>
-                      <td width="72"><input name="txt_prepost_points2" type="txt_prepost_points" id="txt_prepost_points2" value="1" size="1"></td>
-                      <td><input name="txt_prepost_points5" type="txt_prepost_points" id="txt_prepost_points5" value="33" size="1"></td>
-                      <td><input type="radio" name="radio_prepost" id="radio_prepost4" value="radio_prepost_yes">
-                        <label for="radio"></label>
-Yes
-<input type="radio" name="radio_prepost" id="radio_prepost4" value="radio_prepost_no">
-No</td>
+                      <td>Picked Up</td>
+                      <td width="114"><input name="picked_up_apoint2" type="picked_up_apoint" id="picked_up_apoint2" value="1" size="1"></td>
+                      <td><input name="picked_up_cpoint2" type="picked_up_cpoint" id="picked_up_cpoint2" value="20" size="1"></td>
                     </tr>
                     <tr>
-                      <td width="116">Trip Reports</td>
-                      <td><input name="txt_prepost_points3" type="txt_prepost_points" id="txt_prepost_points3" value="1" size="1"></td>
-                      <td><input name="txt_prepost_points6" type="txt_prepost_points" id="txt_prepost_points6" value="34" size="1"></td>
-                      <td><input type="radio" name="radio_prepost" id="radio_prepost5" value="radio_prepost_yes">
-                        <label for="radio"></label>
-Yes
-<input type="radio" name="radio_prepost" id="radio_prepost5" value="radio_prepost_no">
-No</td>
+                      <td width="116">Arrived Consignee</td>
+                      <td><input name="arrived_consignee_apoint2" type="arrived_consignee_apoint" id="arrived_consignee_apoint2" value="1" size="1"></td>
+                      <td><input name="arrived_consignee_cpoint2" type="arrived_consignee_cpoint" id="arrived_consignee_cpoint2" value="20" size="1"></td>
                     </tr>
                     <tr>
-                      <td>Idle Time</td>
-                      <td><input name="txt_prepost_points7" type="txt_prepost_points" id="txt_prepost_points7" value="1" size="1"></td>
-                      <td><input name="txt_prepost_points8" type="txt_prepost_points" id="txt_prepost_points8" value="34" size="1"></td>
-                      <td><input type="radio" name="radio_prepost" id="radio_prepost6" value="radio_prepost_yes">
-                        <label for="radio"></label>
-Yes
-<input type="radio" name="radio_prepost" id="radio_prepost6" value="radio_prepost_no">
-No</td>
+                      <td>Delivered</td>
+                      <td><input name="delivered_apoint2" type="delivered_apoint" id="delivered_apoint2" value="1" size="1"></td>
+                      <td><input name="delivered_cpoint2" type="delivered_cpoint" id="delivered_cpoint2" value="20" size="1"></td>
+                    </tr>
+                    <tr>
+                      <td height="22">Non-Core Update</td>
+                      <td><input name="noncore_update_apoint2" type="noncore_update_apoint" id="noncore_update_apoint2" value="1" size="1"></td>
+                      <td><input name="noncore_cpoint2" type="noncore_cpoint" id="noncore_cpoint2" value="10" size="1"></td>
+                    </tr>
+                    <tr>
+                      <td>Accessorials</td>
+                      <td><input name="accessorials_apoint2" type="accessorials_apoint" id="accessorials_apoint2" value="1" size="1"></td>
+                      <td><input name="accessorials_cpoint2" type="accessorials_cpoint" id="accessorials_cpoint2" value="10" size="1"></td>
                     </tr>
                     <tr>
                       <td>Message</td>
-                      <td colspan="3"><label for="textfield"></label>
-                        <label for="textarea"></label>
-                      <textarea name="textarea" id="textarea" cols="35" rows="5"></textarea></td>
+                      <td colspan="2"><label for="textfield3"></label>
+                        <label for="textarea3"></label>
+                        <textarea name="shipments_message2" id="shipments_message2" placeholder="Message to Drivers About Scores" cols="35" rows="5">Please see your "PHP daily,weekly,monthly," Stats</textarea></td>
+                    </tr>
+                    <tr>
+                      <td>Notify</td>
+                      <td colspan="2"><input name="vir" type="radio" id="radio_shipment_score_notify_yes2" value="radio_shipment_score_notify_yes" checked>
+                        Yes
+                        <input type="radio" name="vir" id="radio_shipment_score_notify_no2" value="radio_shipment_score_notify_no">
+                        No </td>
+                    </tr>
+                    <tr>
+                      <td>Export Type</td>
+                      <td colspan="2"><label for="shipments_score_export_type"></label>
+                        <select name="shipments_score_export_type2" id="shipments_score_export_type">
+                          <option>CSV</option>
+                          <option>PDF</option>
+                        </select></td>
                     </tr>
                     <tr>
                       <td>Notify Via</td>
-                      <td colspan="3"><input type="radio" name="radio_prepost" id="radio_prepost" value="radio_prepost_yes">
-                        <label for="radio"></label>
-                        Txt
-                        <input type="radio" name="radio_prepost" id="radio_prepost" value="radio_prepost_no"> 
+                      <td colspan="2"><label for="frequency_date">
+                        <input name="shipments_notify_via_txt2" type="checkbox" id="shipments_notify_via_txt2" checked>
+                        TXT
+                        <input name="shipments_notify_via_email2" type="checkbox" id="shipments_notify_via_email2" checked>
                         Email
-                        <input type="radio" name="radio_prepost" id="radio_prepost3" value="radio_prepost_yes"><label for="radio"></label>
-Task
-<input type="radio" name="radio_prepost" id="radio_prepost3" value="radio_prepost_no">
-Projects</td>
+                        <input name="shipments_notify_via_task2" type="checkbox" id="shipments_notify_via_task2" checked>
+                        Task
+                        <input name="shipments_notify_via_project2" type="checkbox" id="shipments_notify_via_project2" checked>
+                        Project</label></td>
                     </tr>
                     <tr>
-                      <td><input type="submit" name="Submit2" id="Submit2" value="Update DB"></td>
-                      <td colspan="3">&nbsp;</td>
+                      <td>Freequency</td>
+                      <td colspan="2"><select name="frequency_date2" id="frequency_date">
+                        <option value="daily">daily</option>
+                        <option value="weekly">weekly</option>
+                        <option value="monthly" selected>monthly</option>
+                        <option value="quarterly">quarterly</option>
+                      </select>
+                        Time:
+                        <label for="sc_points_freequency_time"></label>
+                        <span style="padding: 5px">
+                          <select name="shipment_points_time2" id="shipment_points_time2">
+                            <option value="00:00" <?php if ($row['sc_points_freequency_time'] == '00:00') { echo " selected "; }?>>00:00</option>
+                            <option value="01:00" <?php if ($row['sc_points_freequency_time'] == '01:00') { echo " selected "; }?>>01:00</option>
+                            <option value="02:00" <?php if ($row['sc_points_freequency_time'] == '02:00') { echo " selected "; }?>>02:00</option>
+                            <option value="03:00" <?php if ($row['sc_points_freequency_time'] == '03:00') { echo " selected "; }?>>03:00</option>
+                            <option value="04:00" <?php if ($row['sc_points_freequency_time'] == '04:00') { echo " selected "; }?>>04:00</option>
+                            <option value="05:00" <?php if ($row['sc_points_freequency_time'] == '05:00') { echo " selected "; }?>>05:00</option>
+                            <option value="06:00" <?php if ($row['sc_points_freequency_time'] == '06:00') { echo " selected "; }?>>06:00</option>
+                            <option value="07:00" <?php if ($row['sc_points_freequency_time'] == '07:00') { echo " selected "; }?>>07:00</option>
+                            <option value="08:00" selected <?php if ($row['sc_points_freequency_time'] == '08:00') { echo " selected "; }?>>08:00</option>
+                            <option value="09:00" <?php if ($row['sc_points_freequency_time'] == '09:00') { echo " selected "; }?>>09:00</option>
+                            <option value="10:00" <?php if ($row['sc_points_freequency_time'] == '10:00') { echo " selected "; }?>>10:00</option>
+                            <option value="11:00" <?php if ($row['sc_points_freequency_time'] == '11:00') { echo " selected "; }?>>11:00</option>
+                            <option value="12:00" <?php if ($row['sc_points_freequency_time'] == '12:00') { echo " selected "; }?>>12:00</option>
+                            <option value="13:00" <?php if ($row['sc_points_freequency_time'] == '13:00') { echo " selected "; }?>>13:00</option>
+                            <option value="14:00" <?php if ($row['sc_points_freequency_time'] == '14:00') { echo " selected "; }?>>14:00</option>
+                            <option value="15:00" <?php if ($row['sc_points_freequency_time'] == '15:00') { echo " selected "; }?>>15:00</option>
+                            <option value="16:00" <?php if ($row['sc_points_freequency_time'] == '16:00') { echo " selected "; }?>>16:00</option>
+                            <option value="17:00" <?php if ($row['sc_points_freequency_time'] == '17:00') { echo " selected "; }?>>17:00</option>
+                            <option value="18:00" <?php if ($row['sc_points_freequency_time'] == '18:00') { echo " selected "; }?>>18:00</option>
+                            <option value="19:00" <?php if ($row['sc_points_freequency_time'] == '19:00') { echo " selected "; }?>>19:00</option>
+                            <option value="20:00" <?php if ($row['sc_points_freequency_time'] == '20:00') { echo " selected "; }?>>20:00</option>
+                            <option value="21:00" <?php if ($row['sc_points_freequency_time'] == '21:00') { echo " selected "; }?>>21:00</option>
+                            <option value="22:00" <?php if ($row['sc_points_freequency_time'] == '22:00') { echo " selected "; }?>>22:00</option>
+                            <option value="23:00" <?php if ($row['sc_points_freequency_time'] == '23:00') { echo " selected "; }?>>23:00</option>
+                          </select>
+                        </span></td>
+                    </tr>
+                    <tr>
+                      <td>Select Days</td>
+                      <td colspan="2"><label for="shipments_points_freequency_select_days"></label></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td colspan="2"><select name="shipments_points_freequency_select_days2" id="shipments_points_freequency_select_days" multiple>
+                        <option value="Sunday" selected>Sunday</option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                      </select></td>
+                    </tr>
+                    <tr>
+                      <td><input type="submit" name="Submit" id="Submit" value="Update DB"></td>
+                      <td colspan="2">&nbsp;</td>
                     </tr>
                   </table>
                 </div>
@@ -537,7 +683,7 @@ Projects</td>
             <div class="col-md-3">
               <div class="box box-navy">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Driver Scores Calculations Productivity</h3>
+                  <h3 class="box-title">Productivity Calculations</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -577,7 +723,7 @@ Projects</td>
             <div class="col-md-3">
               <div class="box box-warning">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Driver Scores Calculations CSA</h3>
+                  <h3 class="box-title">CSA Calculations</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
