@@ -87,6 +87,11 @@ $drivername = $_SESSION['drivername'];
 <!-- End Animated Top Menu -->  
 <!-- =============Productivity Menu================================ -->
 
+<?php
+// Only show this portion to non-admins since it's user-specific
+if ($_SESSION['login'] == 2)
+{
+?>
 
           <div class="row">
 
@@ -118,8 +123,149 @@ $drivername = $_SESSION['drivername'];
                 </div>
               </div><!-- /.widget-user -->
             </div>
+           <div class="col-md-3">
+              <!-- Widget: user widget style 1 -->
+              <div class="box box-widget widget-user-2">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-red">
+                  <div class="widget-user-image">
+                    <img class="img-circle" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
+                  </div><!-- /.widget-user-image -->
+                  <span class="info-box-text"> Shipments Updated</span>
+                </div>
+                <div class="box-footer no-padding">
+                  <ul class="nav nav-stacked">
+                    <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
+                    <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
+                    <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
+                    <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
+                    <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
+                    <li><a href="#">Arrived Consignee Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
+                    <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered"></span></a></li>
+                    <li><a href="#">Delivered Points<span class="pull-right badge bg-blue" id="shp_delivered_points"></span></a></li>
+                    <li><a href="#">Accessorials Added <span class="pull-right badge bg-blue" id="shp_accessorials"></span></a></li>
+                    <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue" id="shp_accessorials_points"></span></a></li>
+                    <li><a href="#">Other Status Change <span class="pull-right badge bg-blue" id="shp_other_status"></span></a></li>
+                    <li><a href="#">Other Status Change Points<span class="pull-right badge bg-blue" id="shp_other_status_points"></span></a></li>
+                  </ul>
+                </div>
+              </div><!-- /.widget-user -->
+            </div>
+           <div class="col-md-3">
+              <!-- Widget: user widget style 1 -->
+              <div class="box box-widget widget-user-2">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-purple">
+                  <div class="widget-user-image">
+                    <img class="img-circle" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
+                  </div><!-- /.widget-user-image -->
+                  <span class="info-box-text"> Shipments Updated</span>
+                </div>
+                <div class="box-footer no-padding">
+                  <ul class="nav nav-stacked">
+                    <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
+                    <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
+                    <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
+                    <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
+                    <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
+                    <li><a href="#">Arrived Consignee Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
+                    <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered"></span></a></li>
+                    <li><a href="#">Delivered Points<span class="pull-right badge bg-blue" id="shp_delivered_points"></span></a></li>
+                    <li><a href="#">Accessorials Added <span class="pull-right badge bg-blue" id="shp_accessorials"></span></a></li>
+                    <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue" id="shp_accessorials_points"></span></a></li>
+                    <li><a href="#">Other Status Change <span class="pull-right badge bg-blue" id="shp_other_status"></span></a></li>
+                    <li><a href="#">Other Status Change Points<span class="pull-right badge bg-blue" id="shp_other_status_points"></span></a></li>
+                  </ul>
+                </div>
+              </div><!-- /.widget-user -->
+            </div>
+           <div class="col-md-3">
+              <!-- Widget: user widget style 1 -->
+              <div class="box box-widget widget-user-2">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-orange">
+                  <div class="widget-user-image">
+                    <img class="img-circle" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
+                  </div><!-- /.widget-user-image -->
+                  <span class="info-box-text"> Shipments Updated</span>
+                </div>
+                <div class="box-footer no-padding">
+                  <ul class="nav nav-stacked">
+                    <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
+                    <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
+                    <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
+                    <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
+                    <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
+                    <li><a href="#">Arrived Consignee Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
+                    <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered"></span></a></li>
+                    <li><a href="#">Delivered Points<span class="pull-right badge bg-blue" id="shp_delivered_points"></span></a></li>
+                    <li><a href="#">Accessorials Added <span class="pull-right badge bg-blue" id="shp_accessorials"></span></a></li>
+                    <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue" id="shp_accessorials_points"></span></a></li>
+                    <li><a href="#">Other Status Change <span class="pull-right badge bg-blue" id="shp_other_status"></span></a></li>
+                    <li><a href="#">Other Status Change Points<span class="pull-right badge bg-blue" id="shp_other_status_points"></span></a></li>
+                  </ul>
+                </div>
+              </div><!-- /.widget-user -->
+            </div>
+
           </div>
 
+<?php
+// END Only show this portion to non-admins since it's user-specific
+}
+?>
+<!-- ======================New Section Colored Boxes============ -->
+          <!-- Boxes with Icon on Right side (Status box) -->
+          <div class="row">
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-blue">
+                <div class="inner">
+                  <!-- =========================================================== -->
+                  <h4 id="shp_points"></h4>
+                  <h4 id="shp_percent"></h4>
+                </div>
+                <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-red">
+                <div class="inner">
+                  <h3>Score <?php echo "$pu_today_count";?> 85%</h3>
+                  <p>As of PHP Select Year, Quarter, Month</p>
+                </div>
+                <div class="icon"> <i class="ion ion-stats-bars"></i> </div>
+                <a href="#" class="small-box-footer"> More info (go to below item current page)<i class="fa fa-arrow-circle-right"></i> <i class="fa fa-arrow-circle-right"></i> </a> </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-purple">
+                <div class="inner">
+                  <h3>Score <?php echo "$pu_today_count";?> 85%</h3>
+                  <p>As of PHP Select Year, Quarter, Month</p>
+                </div>
+                <div class="icon"> <i class="ion ion-person-add"></i> </div>
+                <a href="#" class="small-box-footer">More info (go to below item current page)<i class="fa fa-arrow-circle-right"></i> <i class="fa fa-arrow-circle-right"></i> </a> </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-orange">
+                <div class="inner">
+                  <h3>Score <?php echo "$pu_today_count";?> 85%</h3>
+                  <p>As of PHP Select Year, Quarter, Month</p>
+                </div>
+                <div class="icon"> <i class="ion ion-pie-graph"></i> </div>
+                <a href="#" class="small-box-footer">More info (go to below item current page)<i class="fa fa-arrow-circle-right"></i> <i class="fa fa-arrow-circle-right"></i> </a> </div>
+            </div>
+            <!-- ./col -->
+          </div>
+          <!-- /.row -->
+
+<!-- =========================================================== -->
           <div class="row">
 
             <div class="col-md-3 col-sm-6 col-xs-12">
@@ -881,18 +1027,7 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
             <div class="col-md-6">
               <div class="box">
                 <div class="box-header">
-             <!-- Removing box heeader with border  
-                <div class="box-header with-border">
-                  <blockquote> 
-             -->
-              <!-- Adding the Spinner Box Icon here   
-              <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php">
-                 <span class="info-box-icon bg-progress"><i class="fa fa-spinner fa-spin"></i></span>
-                </a>                    
-              </div>
-              </div>
-              -->      
+
                     <h3 class="box-title"> Shipment Updates</h3>
                        <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -900,102 +1035,8 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
                        </div>
                   </blockquote>
                 </div><!-- /.box-header -->
-                <div class="box-body">
-                  <table class="table table-bordered">
-                    <tr>
-                      <th style="width: 10px">#</th>
-                      <th>Name</th>
-                      <th>Graph Score</th>
-                      <th style="width: 40px">Score</th>
-                    </tr>
-                    <tr>
-                      <td>1.</td>
-                      <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"> Dash</td>
-                     
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-success" style="width: 99%"></div>
-                      </div></td>
-
-                      <td><span class="badge bg-green">99%</span></td>
-                    </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td><img src="../../dist/img/violet.jpg" alt="" width="24" height="24" class="img-circle"> Violote</td>
-                      <td>
-                        <div class="progress progress-xs progress-striped active">
-                          <div class="progress-bar progress-bar-success" style="width: 85%"></div>
-                        </div>
-                      </td>
-                      <td><span class="badge bg-green">80%</span></td>
-                    </tr>
-                    <tr>
-                      <td>3.</td>
-                      <td><img src="../../dist/img/jack.jpg" alt="" width="24" height="24" class="img-circle">Jack Jack</td>
-                      <td>
-                        <div class="progress progress-xs progress-striped active">
-                          <div class="progress-bar progress-bar-primary" style="width: 79%"></div>
-                        </div>
-                      </td>
-                      <td><span class="badge bg-light-blue">79%</span></td>
-                    </tr>
-                    <tr>
-                      <td>4.</td>
-                      <td><img src="../../dist/img/edna.jpg" alt="" width="24" height="24" class="img-circle">Edna Mode</td>
-                      <td>
-                        <div class="progress progress-xs progress-striped active">
-                          <div class="progress-bar progress-bar-primary" style="width: 66%"></div>
-                        </div>
-                      </td>
-                      <td><span class="badge bg-light-blue">60%</span></td>
-                    </tr>
-                    <tr>
-                      <td>5.</td>
-                      <td><img src="../../dist/img/Gilbert Huph.jpg" alt="" width="24" height="24" class="img-circle">Gilbert Huph</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-yellow" style="width: 58%"></div>
-                      </div></td>
-                      <td><span class="badge bg-yellow">59%</span></td>
-                    </tr>
-                    <tr>
-                      <td>6.</td>
-                      <td><img src="../../dist/img/syndrome.jpg" alt="" width="24" height="24" class="img-circle">Syndrome</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-yellow" style="width: 40%"></div>
-                      </div></td>
-                      <td><span class="badge bg-yellow">40%</span></td>
-                    </tr>
-                    <tr>
-                      <td>7.</td>
-                      <td><img src="../../dist/img/bernie kropp.jpg" alt="" width="24" height="24" class="img-circle"> Burnie Kropp</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 39%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">39%</span></td>
-                    </tr>
-                    <tr>
-                      <td>8.</td>
-                      <td><img src="../../dist/img/frank.jpg" alt="" width="24" height="24" class="img-circle"> Frank</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 20%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">20%</span></td>
-                    </tr>
-                    <tr>
-                      <td>9.</td>
-                      <td><img src="../../dist/img/h2tyd 3.jpg" alt="" width="24" height="24" class="img-circle"> Hector Axe</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 19%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">19%</span></td>
-                    </tr>
-                    <tr>
-                      <td>10.</td>
-                      <td><img src="../../dist/img/tony rydinger.jpg" alt="" width="24" height="24" class="img-circle"> Troy Hydinger</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 01%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">01%</span></td>
-                    </tr>
+                <div class="box-body" style="overflow: auto; height: 500px;">
+                  <table class="table table-bordered" id="shp_admin_stats">
                   </table>
                 </div><!-- /.box-body -->
                 <div class="box-footer clearfix">
@@ -2135,156 +2176,171 @@ $("#js-legend").html(x);
 <script>
 $(document).ready(function(){
   // Set some default values after load
-  $.ajax({
-   method: "GET",
-   url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
-   data: {
-          username: "<?php echo $username;?>",
-          frequency: "day"
-        },
-   success: function(data, textStatus, xhr) {
-        var json = jQuery.parseJSON( data );
-        update_shipment_info(json);
-    },
-    error: function(xhr, textStatus, errorThrown) {
-        console.log("error getting the odo reading for the truck")
-    }
-  });
+  <?php // If we're an admin then change the username to 'all' ?>
+  <?php if ($_SESSION['login'] == 1) { $username = "all"; } ?>
+
+  get_productivity_report("<?php echo $username;?>","day");
 
    $("#productivity_time").change(function() {
     $("#productivity_time option:selected").each(function() {
       var productivity = $( this ).val();
       // Now, set the HTML based on 'productivity'
       if (productivity == 'day') {
-        $.ajax({
-         method: "GET",
-         url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
-         data: {
-                username: "<?php echo $username;?>",
-                frequency: "day"
-              },
-         success: function(data, textStatus, xhr) {
-              var json = jQuery.parseJSON( data );
-              update_shipment_info(json);
-          },
-          error: function(xhr, textStatus, errorThrown) {
-              console.log("error getting the odo reading for the truck")
-          }
-        });
+        get_productivity_report("<?php echo $username;?>","day");
       }
       if (productivity == 'week') {
-        $.ajax({
-         method: "GET",
-         url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
-         data: {
-                username: "<?php echo $username;?>",
-                frequency: "week"
-              },
-         success: function(data, textStatus, xhr) {
-              //console.log(data);
-              var json = jQuery.parseJSON( data );
-              update_shipment_info(json);
-          },
-          error: function(xhr, textStatus, errorThrown) {
-              console.log("error getting the odo reading for the truck")
-          }
-        });
+        get_productivity_report("<?php echo $username;?>","week");
       }
       if (productivity == 'month') {
-        $.ajax({
-         method: "GET",
-         url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
-         data: {
-                username: "<?php echo $username;?>",
-                frequency: "month"
-              },
-         success: function(data, textStatus, xhr) {
-              var json = jQuery.parseJSON( data );
-              update_shipment_info(json);
-          },
-          error: function(xhr, textStatus, errorThrown) {
-              console.log("error getting the odo reading for the truck")
-          }
-        });
+        get_productivity_report("<?php echo $username;?>","month");
       }
       if (productivity == 'quarter') {
-        $.ajax({
-         method: "GET",
-         url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
-         data: {
-                username: "<?php echo $username;?>",
-                frequency: "quarter"
-              },
-         success: function(data, textStatus, xhr) {
-              var json = jQuery.parseJSON( data );
-              update_shipment_info(json);
-          },
-          error: function(xhr, textStatus, errorThrown) {
-              console.log("error getting the odo reading for the truck")
-          }
-        });
+        get_productivity_report("<?php echo $username;?>","quarter");
       }
       if (productivity == 'year') {
-        $.ajax({
-         method: "GET",
-         url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
-         data: {
-                username: "<?php echo $username;?>",
-                frequency: "year"
-              },
-         success: function(data, textStatus, xhr) {
-              var json = jQuery.parseJSON( data );
-              update_shipment_info(json);
-          },
-          error: function(xhr, textStatus, errorThrown) {
-              console.log("error getting the odo reading for the truck")
-          }
-        });
+        get_productivity_report("<?php echo $username;?>","year");
       }
       if (productivity == 'all') {
-        $.ajax({
-         method: "GET",
-         url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
-         data: {
-                username: "<?php echo $username;?>",
-                frequency: "all"
-              },
-         success: function(data, textStatus, xhr) {
-              var json = jQuery.parseJSON( data );
-              update_shipment_info(json);
-          },
-          error: function(xhr, textStatus, errorThrown) {
-              console.log("error getting the odo reading for the truck")
-          }
-        });
+        get_productivity_report("<?php echo $username;?>","all");
       }
     });
   });
 });
+</script>
 
+<?php if ($_SESSION['login'] == 2) { ?>
+
+<script>
 function update_shipment_info(json)
 {
-        // Order count
-        $("#shp_arrived_shipper").html(json[0]["arrived_to_shipper"] + " of " + (parseInt(json[0]["as_puagent"],10) + parseInt(json[0]["as_pu_and_delagent"],10)) );
-        $("#shp_picked_up").html(json[0]["picked_up"] + " of " + (parseInt(json[0]["as_puagent"],10) + parseInt(json[0]["as_pu_and_delagent"],10)) );
-        $("#shp_arrived_consignee").html(json[0]["arrived_to_consignee"] + " of " + (parseInt(json[0]["as_delagent"],10) + parseInt(json[0]["as_pu_and_delagent"],10)) );
-        $("#shp_delivered").html(json[0]["delivered"] + " of " + (parseInt(json[0]["as_delagent"],10) + parseInt(json[0]["as_pu_and_delagent"],10)) );
-        $("#shp_accessorials").html(json[0]["accessorial_count"] + " of " 
-             + (parseInt(json[0]["as_puagent"],10) + parseInt(json[0]["as_delagent"],10) + parseInt(json[0]["as_pu_and_delagent"],10)) );
-        $("#shp_other_status").html(json[0]["misc_updates_sum"] + " of "
-             + (parseInt(json[0]["as_puagent"],10) + parseInt(json[0]["as_delagent"],10) + parseInt(json[0]["as_pu_and_delagent"],10)) );
-        // Order points
-        $("#shp_arrived_shipper_points").html(json[0]["arrived_to_shipper_points"] + " of " + json[0]["max_arrived_to_shipper_points"] );
-        $("#shp_picked_up_points").html(json[0]["picked_up_points"] + " of " + json[0]["max_picked_up_points"] );
-        $("#shp_arrived_consignee_points").html(json[0]["arrived_to_consignee_points"] + " of " + json[0]["max_arrived_to_consignee_points"] );
-        $("#shp_delivered_points").html(json[0]["delivered_points"] + " of " + json[0]["max_delivered_points"] );
-        $("#shp_accessorials_points").html(json[0]["accessorial_points"] + " of " + json[0]["max_accessorial_points"] );
-        $("#shp_other_status_points").html(json[0]["misc_updates_sum"] + " of "
-             + (parseInt(json[0]["as_puagent"],10) + parseInt(json[0]["as_delagent"],10) + parseInt(json[0]["as_pu_and_delagent"],10)) );
+        var arrived_to_shipper = parseInt(json[0]["arrived_to_shipper"],10);
+        var arrived_to_consignee = parseInt(json[0]["arrived_to_consignee"],10);
+        var as_puagent = parseInt(json[0]["as_puagent"],10);
+        var as_pu_and_delagent = parseInt(json[0]["as_pu_and_delagent"],10);
+        var picked_up = parseInt(json[0]["picked_up"],10);
+        var as_delagent = parseInt(json[0]["as_delagent"],10);
+        var delivered = parseInt(json[0]["delivered"],10);
+        var accessorial_count = parseInt(json[0]["accessorial_count"],10);
+        var misc_updates_sum = parseInt(json[0]["misc_updates_sum"],10);
+        var arrived_to_shipper_points = parseInt(json[0]["arrived_to_shipper_points"],10);
+        var max_arrived_to_shipper_points = parseInt(json[0]["max_arrived_to_shipper_points"],10);
+        var picked_up_points = parseInt(json[0]["picked_up_points"],10);
+        var max_picked_up_points = parseInt(json[0]["max_picked_up_points"],10);
+        var arrived_to_consignee_points = parseInt(json[0]["arrived_to_consignee_points"],10);
+        var max_arrived_to_consignee_points = parseInt(json[0]["max_arrived_to_consignee_points"],10);
+        var delivered_points = parseInt(json[0]["delivered_points"],10);
+        var max_delivered_points = parseInt(json[0]["max_delivered_points"],10);
+        var accessorial_points = parseInt(json[0]["accessorial_points"],10);
+        var earned_points = parseInt(json[0]["earned_points"],10);
+        var max_points = parseInt(json[0]["max_points"],10);
+        var percentage_earned = parseInt(json[0]["percentage_earned"],10);
 
-        $("#shp_points").html("Points: " + json[0]["earned_points"] + " of " + json[0]["max_points"]);
+        // Order count
+        $("#shp_arrived_shipper").html(arrived_to_shipper + " of " + (as_puagent + as_pu_and_delagent) );
+        $("#shp_picked_up").html(picked_up + " of " + (as_puagent + as_pu_and_delagent) );
+        $("#shp_arrived_consignee").html(arrived_to_consignee + " of " + (as_delagent + as_pu_and_delagent) );
+        $("#shp_delivered").html(delivered + " of " + (as_delagent + as_pu_and_delagent) );
+        $("#shp_accessorials").html(accessorial_count + " of " + (as_puagent + as_delagent + as_pu_and_delagent) );
+        $("#shp_other_status").html(misc_updates_sum + " of " + (as_puagent + as_delagent + as_pu_and_delagent) );
+        // Order points
+        $("#shp_arrived_shipper_points").html(arrived_to_shipper_points + " of " + max_arrived_to_shipper_points );
+        $("#shp_picked_up_points").html(picked_up_points + " of " + max_picked_up_points );
+        $("#shp_arrived_consignee_points").html(arrived_to_consignee_points + " of " + max_arrived_to_consignee_points );
+        $("#shp_delivered_points").html(delivered_points + " of " + max_delivered_points );
+        $("#shp_accessorials_points").html(accessorial_points);
+        $("#shp_other_status_points").html(misc_updates_sum);
+
+        // Totals
+        $("#shp_points").html("Points: " + earned_points + " of " + max_points);
+        $("#shp_percent").html(percentage_earned + "%");
 }
 
+</script>
+<?php } ?>
+
+<?php if ($_SESSION['login'] == 1) { ?>
+<script>
+function update_admin_shipment_info(json)
+{
+      var counter = 1;
+      $("#shp_admin_stats tr").remove();
+      var j = `                   <tr>
+                      <th style="width: 10px">#</th>
+                      <th>Name</th>
+                      <th>Graph Score</th>
+                      <th style="width: 40px">Score</th>
+                    </tr>`;
+      $("#shp_admin_stats").append(j);
+
+      $.each(json, function() {
+        var color = '';
+        var percentage_earned = parseInt(this.percentage_earned,10);
+        if (percentage_earned > 90) {
+            color = 'green';
+        }
+        if (percentage_earned > 50 && percentage_earned <= 90) {
+            color = 'yellow';
+        }
+        if (percentage_earned > 0 && percentage_earned <= 50) {
+            color = 'red';
+        }
+        var i = `<tr>
+                 <td>`+counter+`.</td>
+                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"> `+this.username+`</td>
+
+                 <td><div class="progress progress-xs progress-striped active">
+                 <div class="progress-bar progress-bar-`+color+`" style="width: `+this.percentage_earned+`%"></div>
+
+                 <td><span class="badge bg-`+color+`">`+this.percentage_earned+`%</span></td>
+                 </tr>`;
+        $("#shp_admin_stats").append(i);
+        counter = counter + 1;
+      });
+/*    <tr>
+      <td>1.</td>
+      <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"> Dash</td>
+     
+      <td><div class="progress progress-xs progress-striped active">
+        <div class="progress-bar progress-bar-success" style="width: 99%"></div>
+  
+      <td><span class="badge bg-green">99%</span></td>
+    </tr>
+*/
+}
+</script>
+<?php } ?>
+
+<script>
+function get_productivity_report(username,frequency)
+{
+    $.ajax({
+     method: "GET",
+     url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
+     data: {
+            username: username,
+            frequency: frequency
+          },
+     success: function(data, textStatus, xhr) {
+          var json = jQuery.parseJSON( data );
+          <?php
+          if ($_SESSION['login'] == 2)
+          {
+              // Update the shipment board if non-admin
+          ?>
+              update_shipment_info(json);
+          <?php
+          }elseif($_SESSION['login'] == 1){
+          ?>
+              update_admin_shipment_info(json);
+          <?php
+          }
+          ?>
+      },
+      error: function(xhr, textStatus, errorThrown) {
+          console.log("error getting productivity report for "+username)
+      }
+    });
+}
 </script>
 
 </body>
