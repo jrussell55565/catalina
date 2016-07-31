@@ -7,298 +7,10 @@ if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 }
 
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
-mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
-mysql_select_db($db_name) or DIE('Database name is not available!');
 
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
-$role = $_SESSION['role'];
 
-?>
-
-<?php
-                     $sql = "SELECT
-                      total_today.counts   AS total_today_count,
-                      pu_today.counts      AS pu_today_count,
-                      del_today.counts     AS del_today_count,
-                      total_alltime.counts AS total_alltime_count,
-                      pu_alltime.counts    AS pu_alltime_count,
-                      del_alltime.counts   AS del_alltime_count,
-                      archived.counts      AS archived_count,
-                      virs_daily.count     AS virs_daily_count,
-                      virs_weekly.count    AS virs_weekly_count
-                    FROM
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          AND str_to_date(hawbDate,'%c/%e/%Y') = CURDATE()
-                          AND deleted                          =\"F\"
-                          AND archived                         =\"F\"
-                          )
-                        OR
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username =\"$username\"
-                            )
-                          AND str_to_date(dueDate,'%c/%e/%Y') = CURDATE()
-                          AND deleted                         =\"F\"
-                          AND archived                        =\"F\"
-                          )
-                      )
-                      total_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          puAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND str_to_date(hawbDate,'%c/%e/%Y') = DATE(now())
-                        AND deleted                          =\"F\"
-                        AND archived                         =\"F\"
-                        AND deleted                          =\"F\"
-                        AND archived                         =\"F\"
-                      )
-                      pu_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          delAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND str_to_date(dueDate,'%c/%e/%Y') = DATE(now())
-                        AND deleted                         =\"F\"
-                        AND archived                        =\"F\"
-                        AND deleted                         =\"F\"
-                        AND archived                        =\"F\"
-                      )
-                      del_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          OR puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      total_alltime,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          puAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      pu_alltime,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          delAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      del_alltime,
-                      (
-                      SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          OR puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"T\"
-                      )
-                      archived,
-                     (
-                      SELECT
-                          COUNT(*) AS count
-                        FROM
-                          virs
-                        WHERE
-                        driver_name=\"$username\"
-                        AND insp_date = date(now())
-                      ) virs_daily,
-                      (
-                      SELECT
-                          COUNT(*) AS count
-                        FROM
-                          virs
-                        WHERE
-                        driver_name=\"$username\"
-                        AND insp_date BETWEEN date(now()) AND date(now()) - INTERVAL 8 DAY
-                      ) virs_weekly";
-
-                      $sql = mysql_query($sql);
-                      while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-                      {
-                        $total_today_count   = $row['total_today_count'];
-                        $pu_today_count      = $row['pu_today_count'];
-                        $del_today_count     = $row['del_today_count'];
-                        $total_alltime_count = $row['total_alltime_count'];
-                        $pu_alltime_count    = $row['pu_alltime_count'];
-                        $del_alltime_count   = $row['del_alltime_count'];
-                        $archived_count      = $row['archived_count'];
-                        $virs_daily_count    = $row['virs_daily_count'];
-                        $virs_weekly_count   = $row['virs_weekly_count'];
-                      }
-                      mysql_free_result($sql);
-
-if (isset($_POST['submit']) && $_POST['submit'] == 'share')
-{
-  $audience = $_POST['audience'];
-  if ($audience == 'PHX')
-  {
-    $predicate = "AND office='PHX'";
-  }
-  if ($audience == 'TUS')
-  {
-    $predicate = "AND office='TUS'";
-  }
-    if ($audience == 'PHL')
-  {
-    $predicate = "AND office='PHL'";
-  }
-    if ($audience == 'DEN')
-  {
-    $predicate = "AND office='DEN'";
-  }
-    if ($audience == 'LAX')
-  {
-    $predicate = "AND office='LAX'";
-  }
-    if ($audience == 'MIA')
-  {
-    $predicate = "AND office='MIA'";
-  }
-    if ($audience == 'ORD')
-  {
-    $predicate = "AND office='ORD'";
-  }
-  $message = $_POST['message'];
-  $sql = "SELECT 1";
-  if (isset($_POST['sendEmail']))
-  {
-    $sql .= ",email";
-  } 
-  if (isset($_POST['sendText']))
-  {
-    $sql .= ",vtext";
-  } 
-  $sql .= " FROM users WHERE 1=1 $predicate AND status='Active'";
-
-  $sql = mysql_query($sql);
-  while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-  {
-    if (isset($_POST['sendEmail']))
-    {
-      sendEmail($row['email'],'Broadcast Message',$message); 
-    } 
-    if (isset($_POST['sendText']))
-    {
-      sendEmail($row['vtext'],'Broadcast Message',$message); 
-    }
-  }
-  mysql_free_result($sql);
-
-}
 ?>
 
 
@@ -353,10 +65,12 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
             </a>
             <label for="productivity_time"></label>
             <select name="productivity_time" id="productivity_time">
-              <option selected>Current Year</option>
-              <option>Current Quarter</option>
-              <option>Current Month</option>
-              <option>All</option>
+              <option value="day" selected>Current Day</option>
+              <option value="week">Current Week</option>
+              <option value="month">Current Month</option>
+              <option value="quarter">Current Quarter</option>
+              <option value="year">Current Year</option>
+              <option value="all">All</option>
             </select>
           </h1>
 
@@ -373,14 +87,48 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 <!-- End Animated Top Menu -->  
 <!-- =============Productivity Menu================================ -->
 
+
           <div class="row">
+
+           <div class="col-md-3">
+              <!-- Widget: user widget style 1 -->
+              <div class="box box-widget widget-user-2">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-blue">
+                  <div class="widget-user-image">
+                    <img class="img-circle" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
+                  </div><!-- /.widget-user-image -->
+                  <span class="info-box-text"> Shipments Updated</span>
+                </div>
+                <div class="box-footer no-padding">
+                  <ul class="nav nav-stacked">
+                    <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
+                    <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
+                    <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
+                    <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
+                    <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
+                    <li><a href="#">Arrived Consignee Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
+                    <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered"></span></a></li>
+                    <li><a href="#">Delivered Points<span class="pull-right badge bg-blue" id="shp_delivered_points"></span></a></li>
+                    <li><a href="#">Accessorials Added <span class="pull-right badge bg-blue" id="shp_accessorials"></span></a></li>
+                    <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue" id="shp_accessorials_points"></span></a></li>
+                    <li><a href="#">Other Status Change <span class="pull-right badge bg-blue" id="shp_other_status"></span></a></li>
+                    <li><a href="#">Other Status Change Points<span class="pull-right badge bg-blue" id="shp_other_status_points"></span></a></li>
+                  </ul>
+                </div>
+              </div><!-- /.widget-user -->
+            </div>
+          </div>
+
+          <div class="row">
+
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box bg-blue">
                 <!--<span class="info-box-icon"><i class="fa fa-exchange fa-spin"></i></span> -->
                 <span class="info-box-icon"><i class="fa fa-exchange"></i></span>
                 <div class="info-box-content">
                   <span class="info-box-text"> Shipments Updated</span>                 
-                  <span class="info-box-number"><?php echo "$pu_today_count";?> of <?php echo "$pu_today_count";?></span>
+                  <span class="info-box-number" id="shp_core_updates"></span>
                   <div class="progress">
                     <div class="progress-bar" style="width: 10%"></div>
                   </div>
@@ -439,7 +187,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 <span class="info-box-icon"><i class="fa fa-user-plus"></i></span>
                 <div class="info-box-content">
                   <span class="info-box-text"> Accessorials Added</span>                 
-                  <span class="info-box-number"><?php echo "$pu_today_count";?> of <?php echo "$pu_today_count";?></span>
+                  <span class="info-box-number" id="shp_accessorials_added"></span>
                   <div class="progress">
                     <div class="progress-bar" style="width: 10%"></div>
                   </div>
@@ -503,8 +251,8 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
               <div class="info-box bg-blue">
                 <span class="info-box-icon"><i class="fa fa-file-o"></i></span>
                 <div class="info-box-content">
-                  <span class="info-box-text"> BOL Submissions</span>                 
-                  <span class="info-box-number"><?php echo "$pu_today_count";?> of <?php echo "$pu_today_count";?></span>
+                  <span class="info-box-text"> Other Updates</span>                 
+                  <span class="info-box-number" id="shp_misc_updates"></span>
                   <div class="progress">
                     <div class="progress-bar" style="width: 10%"></div>
                   </div>
@@ -595,11 +343,11 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
               <div class="small-box bg-blue">
                 <div class="inner">
                   <!-- =========================================================== -->
-                  <h3>Score <?php echo "$pu_today_count";?> 85%</h3>
-                  <p>As of PHP Select Year, Quarter, Month </p>
+                  <h4 id="shp_points"></h4>
+                  <h4 id="shp_percent"></h4>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
-                <a href="#" class="small-box-footer"> More info (go to below item current page)<i class="fa fa-arrow-circle-right"></i> </a> </div>
+                </div>
             </div>
             <!-- ./col -->
             <div class="col-lg-3 col-xs-6">
@@ -1263,25 +1011,6 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
 -->Would like to have a scoll bars for all these categories show only the 1st 10 in the box and then the scroll activates to see users below in that category.</div>
               </div><!-- /.box -->
 
-<!-- Found this code on JSfiddle.  Not sure if it will help with the programming of the progress bars...-->
-<!-- 
-jQuery(document).ready( function(){
-    window.percent = 0;
-    window.progressInterval = window.setInterval( function(){
-        if(window.percent < 100) {
-            window.percent++;
-            jQuery('.progress').addClass('progress-striped').addClass('active');
-            jQuery('.progress .bar:first').removeClass().addClass('bar')
-            .addClass ( (percent < 40) ? 'bar-danger' : ( (percent < 80) ? 'bar-warning' : 'bar-success' ) ) ;
-            jQuery('.progress .bar:first').width(window.percent+'%');
-            jQuery('.progress .bar:first').text(window.percent+'%');
-        } else {
-            window.clearInterval(window.progressInterval);
-            jQuery('.progress').removeClass('progress-striped').removeClass('active');
-            jQuery('.progress .bar:first').text('Done!');
-        }
-    },
--->
 <!-- End this box left side -->
 
 
@@ -2403,6 +2132,160 @@ x = myLineChart.generateLegend();
 $("#js-legend").html(x);
 </script>
 
-<!-- Demo -->
+<script>
+$(document).ready(function(){
+  // Set some default values after load
+  $.ajax({
+   method: "GET",
+   url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
+   data: {
+          username: "<?php echo $username;?>",
+          frequency: "day"
+        },
+   success: function(data, textStatus, xhr) {
+        var json = jQuery.parseJSON( data );
+        update_shipment_info(json);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+        console.log("error getting the odo reading for the truck")
+    }
+  });
+
+   $("#productivity_time").change(function() {
+    $("#productivity_time option:selected").each(function() {
+      var productivity = $( this ).val();
+      // Now, set the HTML based on 'productivity'
+      if (productivity == 'day') {
+        $.ajax({
+         method: "GET",
+         url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
+         data: {
+                username: "<?php echo $username;?>",
+                frequency: "day"
+              },
+         success: function(data, textStatus, xhr) {
+              var json = jQuery.parseJSON( data );
+              update_shipment_info(json);
+          },
+          error: function(xhr, textStatus, errorThrown) {
+              console.log("error getting the odo reading for the truck")
+          }
+        });
+      }
+      if (productivity == 'week') {
+        $.ajax({
+         method: "GET",
+         url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
+         data: {
+                username: "<?php echo $username;?>",
+                frequency: "week"
+              },
+         success: function(data, textStatus, xhr) {
+              //console.log(data);
+              var json = jQuery.parseJSON( data );
+              update_shipment_info(json);
+          },
+          error: function(xhr, textStatus, errorThrown) {
+              console.log("error getting the odo reading for the truck")
+          }
+        });
+      }
+      if (productivity == 'month') {
+        $.ajax({
+         method: "GET",
+         url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
+         data: {
+                username: "<?php echo $username;?>",
+                frequency: "month"
+              },
+         success: function(data, textStatus, xhr) {
+              var json = jQuery.parseJSON( data );
+              update_shipment_info(json);
+          },
+          error: function(xhr, textStatus, errorThrown) {
+              console.log("error getting the odo reading for the truck")
+          }
+        });
+      }
+      if (productivity == 'quarter') {
+        $.ajax({
+         method: "GET",
+         url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
+         data: {
+                username: "<?php echo $username;?>",
+                frequency: "quarter"
+              },
+         success: function(data, textStatus, xhr) {
+              var json = jQuery.parseJSON( data );
+              update_shipment_info(json);
+          },
+          error: function(xhr, textStatus, errorThrown) {
+              console.log("error getting the odo reading for the truck")
+          }
+        });
+      }
+      if (productivity == 'year') {
+        $.ajax({
+         method: "GET",
+         url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
+         data: {
+                username: "<?php echo $username;?>",
+                frequency: "year"
+              },
+         success: function(data, textStatus, xhr) {
+              var json = jQuery.parseJSON( data );
+              update_shipment_info(json);
+          },
+          error: function(xhr, textStatus, errorThrown) {
+              console.log("error getting the odo reading for the truck")
+          }
+        });
+      }
+      if (productivity == 'all') {
+        $.ajax({
+         method: "GET",
+         url: "<?php echo HTTP;?>/pages/dispatch/productivity_calculator.php",
+         data: {
+                username: "<?php echo $username;?>",
+                frequency: "all"
+              },
+         success: function(data, textStatus, xhr) {
+              var json = jQuery.parseJSON( data );
+              update_shipment_info(json);
+          },
+          error: function(xhr, textStatus, errorThrown) {
+              console.log("error getting the odo reading for the truck")
+          }
+        });
+      }
+    });
+  });
+});
+
+function update_shipment_info(json)
+{
+        // Order count
+        $("#shp_arrived_shipper").html(json[0]["arrived_to_shipper"] + " of " + (parseInt(json[0]["as_puagent"],10) + parseInt(json[0]["as_pu_and_delagent"],10)) );
+        $("#shp_picked_up").html(json[0]["picked_up"] + " of " + (parseInt(json[0]["as_puagent"],10) + parseInt(json[0]["as_pu_and_delagent"],10)) );
+        $("#shp_arrived_consignee").html(json[0]["arrived_to_consignee"] + " of " + (parseInt(json[0]["as_delagent"],10) + parseInt(json[0]["as_pu_and_delagent"],10)) );
+        $("#shp_delivered").html(json[0]["delivered"] + " of " + (parseInt(json[0]["as_delagent"],10) + parseInt(json[0]["as_pu_and_delagent"],10)) );
+        $("#shp_accessorials").html(json[0]["accessorial_count"] + " of " 
+             + (parseInt(json[0]["as_puagent"],10) + parseInt(json[0]["as_delagent"],10) + parseInt(json[0]["as_pu_and_delagent"],10)) );
+        $("#shp_other_status").html(json[0]["misc_updates_sum"] + " of "
+             + (parseInt(json[0]["as_puagent"],10) + parseInt(json[0]["as_delagent"],10) + parseInt(json[0]["as_pu_and_delagent"],10)) );
+        // Order points
+        $("#shp_arrived_shipper_points").html(json[0]["arrived_to_shipper_points"] + " of " + json[0]["max_arrived_to_shipper_points"] );
+        $("#shp_picked_up_points").html(json[0]["picked_up_points"] + " of " + json[0]["max_picked_up_points"] );
+        $("#shp_arrived_consignee_points").html(json[0]["arrived_to_consignee_points"] + " of " + json[0]["max_arrived_to_consignee_points"] );
+        $("#shp_delivered_points").html(json[0]["delivered_points"] + " of " + json[0]["max_delivered_points"] );
+        $("#shp_accessorials_points").html(json[0]["accessorial_points"] + " of " + json[0]["max_accessorial_points"] );
+        $("#shp_other_status_points").html(json[0]["misc_updates_sum"] + " of "
+             + (parseInt(json[0]["as_puagent"],10) + parseInt(json[0]["as_delagent"],10) + parseInt(json[0]["as_pu_and_delagent"],10)) );
+
+        $("#shp_points").html("Points: " + json[0]["earned_points"] + " of " + json[0]["max_points"]);
+}
+
+</script>
+
 </body>
 </html>

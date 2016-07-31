@@ -20,19 +20,19 @@ switch($frequency)
       $date_driver_export = "date = CURDATE()";
       break;
     case "week":
-      $date_dispatch_hwb = "WEEK(STR_TO_DATE(hawbDate, '%c/%e/%Y')) = WEEK(CURDATE())";
-      $date_dispatch_due = "WEEK(STR_TO_DATE(dueDate, '%c/%e/%Y')) = WEEK(CURDATE())";
-      $date_driver_export = "WEEK(date) = WEEK(CURDATE())";
+      $date_dispatch_hwb = "YEARWEEK(STR_TO_DATE(hawbDate, '%c/%e/%Y')) = YEARWEEK(CURDATE())";
+      $date_dispatch_due = "YEARWEEK(STR_TO_DATE(dueDate, '%c/%e/%Y')) = YEARWEEK(CURDATE())";
+      $date_driver_export = "YEARWEEK(date) = YEARWEEK(CURDATE())";
       break;
     case "month":
-      $date_dispatch_hwb = "MONTH(STR_TO_DATE(hawbDate, '%c/%e/%Y')) = MONTH(CURDATE())";
-      $date_dispatch_due = "MONTH(STR_TO_DATE(dueDate, '%c/%e/%Y')) = MONTH(CURDATE())";
-      $date_driver_export = "MONTH(date) = MONTH(CURDATE())";
+      $date_dispatch_hwb = "YEAR(STR_TO_DATE(hawbDate, '%c/%e/%Y')) = YEAR(CURDATE()) AND MONTH(STR_TO_DATE(hawbDate, '%c/%e/%Y')) = MONTH(CURDATE())";
+      $date_dispatch_due = "YEAR(STR_TO_DATE(hawbDate, '%c/%e/%Y')) = YEAR(CURDATE()) AND MONTH(STR_TO_DATE(dueDate, '%c/%e/%Y')) = MONTH(CURDATE())";
+      $date_driver_export = "YEAR(date) = YEAR(CURDATE()) AND MONTH(date) = MONTH(CURDATE())";
       break;
     case "quarter":
-      $date_dispatch_hwb = "QUARTER(STR_TO_DATE(hawbDate, '%c/%e/%Y')) = QUARTER(CURDATE())";
-      $date_dispatch_due = "QUARTER(STR_TO_DATE(dueDate, '%c/%e/%Y')) = QUARTER(CURDATE())";
-      $date_driver_export = "QUARTER(date) = QUARTER(CURDATE())";
+      $date_dispatch_hwb = "YEAR(STR_TO_DATE(hawbDate, '%c/%e/%Y')) = YEAR(CURDATE()) AND QUARTER(STR_TO_DATE(hawbDate, '%c/%e/%Y')) = QUARTER(CURDATE())";
+      $date_dispatch_due = "YEAR(STR_TO_DATE(hawbDate, '%c/%e/%Y')) = YEAR(CURDATE()) AND QUARTER(STR_TO_DATE(dueDate, '%c/%e/%Y')) = QUARTER(CURDATE())";
+      $date_driver_export = "YEAR(date) = YEAR(CURDATE()) AND QUARTER(date) = QUARTER(CURDATE())";
       break;
     case "year":
       $date_dispatch_hwb = "YEAR(STR_TO_DATE(hawbDate, '%c/%e/%Y')) = YEAR(CURDATE())";
@@ -46,21 +46,36 @@ switch($frequency)
       break;
 }
 
-$sql = "select 
-        _a.count as 'as_puagent',
-        _b.count as 'as_delagent',
-        _c.count as 'as_pu_and_delagent',
-        _a.count + _b.count +  _c.count as 'sum_count',
-        _a.count * 2 as 'puagent_required_updates',
-        _b.count * 2 as 'delagent_required_updates',
-        _c.count * 4 as 'puagent_and_delagent_required_updates',
-        _d.count as 'core_updates_sum',
-        _e.count as 'misc_updates_sum',
-        _f.count as 'picked_up',
-        _g.count as 'arrived_to_shipper',
-        _h.count as 'delivered',
-        _i.count as 'arrived_to_consignee',
-        _j.count as 'accessorial_count'
+$sql = "SELECT 
+    a.*,
+    round(a.arrived_to_shipper_points + a.picked_up_points + a.arrived_to_consignee_points + a.delivered_points + a.accessorial_points,1) as 'earned_points',
+    round(a.max_arrived_to_shipper_points + a.max_picked_up_points + a.max_arrived_to_consignee_points + a.max_delivered_points + a.max_accessorial_points,1) as 'max_points'
+FROM
+    (SELECT 
+        _a.count AS 'as_puagent',
+            _b.count AS 'as_delagent',
+            _c.count AS 'as_pu_and_delagent',
+            _a.count + _b.count + _c.count AS 'sum_count',
+            _a.count * 2 AS 'puagent_required_updates',
+            _b.count * 2 AS 'delagent_required_updates',
+            _c.count * 4 AS 'puagent_and_delagent_required_updates',
+            _d.count AS 'core_updates_sum',
+            _e.count AS 'misc_updates_sum',
+            _f.count AS 'picked_up',
+            _g.count AS 'arrived_to_shipper',
+            _h.count AS 'delivered',
+            _i.count AS 'arrived_to_consignee',
+            _j.count AS 'accessorial_count',
+            (_cp_shipments.arrived_shipper_apoint * _g.count) * _cp_shipments.arrived_shipper_cpoint AS 'arrived_to_shipper_points',
+            (_cp_shipments.arrived_shipper_apoint * (_a.count + _c.count)) * _cp_shipments.arrived_shipper_cpoint AS 'max_arrived_to_shipper_points',
+            (_cp_shipments.picked_up_apoint * _f.count) * _cp_shipments.picked_up_cpoint AS 'picked_up_points',
+            (_cp_shipments.picked_up_apoint *(_a.count + _c.count)) * _cp_shipments.picked_up_cpoint AS 'max_picked_up_points',
+            (_cp_shipments.arrived_consignee_apoint * _i.count) * _cp_shipments.arrived_consignee_cpoint AS 'arrived_to_consignee_points',
+            (_cp_shipments.arrived_consignee_apoint * (_b.count + _c.count)) * _cp_shipments.arrived_consignee_cpoint AS 'max_arrived_to_consignee_points',
+            (_cp_shipments.delivered_apoint * _h.count) * _cp_shipments.delivered_cpoint AS 'delivered_points',
+            (_cp_shipments.delivered_apoint * (_b.count + _c.count)) * _cp_shipments.delivered_cpoint AS 'max_delivered_points',
+            (_cp_shipments.accessorials_apoint * _j.count) * _cp_shipments.accessorials_cpoint AS 'accessorial_points',
+             _a.count + _b.count + _c.count AS 'max_accessorial_points'
 FROM 
 (
 SELECT 
@@ -198,8 +213,12 @@ select count(*) as count
             WHERE
                 username = \"$username\")
                 AND accessorials <> status
-                AND date = CURDATE()
-) _j
+                AND $date_driver_export
+) _j,
+(
+select * from cp_shipments
+) _cp_shipments
+) a
 ";
 
 try {
@@ -208,7 +227,6 @@ try {
         while ($row = $result->fetch_assoc()) {
             $emparray[] = $row;
         }
-    }
         $result->close();
     }else{
         throw new Exception("Unable to retrieve drivers email for notification: ". $mysqli->error);
@@ -222,6 +240,6 @@ try {
     echo json_encode($data);
     exit;
   }
-
+//echo $sql; exit;
 print json_encode($emparray);
 ?>
