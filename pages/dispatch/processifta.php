@@ -607,7 +607,7 @@ if (isset($_POST['delete_ifta'])) {
     $mysqli->rollback();
     $mysqli->autocommit(TRUE);
     $mysqli->close();
-    $data = array('type' => 'error', 'message' => $e->getMessage);
+    $data = array('type' => 'error', 'message' => $e->getMessage());
     header('HTTP/1.1 400 Bad Request');
     header('Content-Type: application/json; charset=UTF-8');
     echo json_encode($data);
