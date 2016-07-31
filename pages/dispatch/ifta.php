@@ -241,26 +241,32 @@
                                  <tr>
                                     <td width="93">Trip #
                                     <td width="232"><input class="input-sm form-control" name="txt_tripnum" type="text" id="txt_tripnum" value="" required>                                    
-                                    <td width="138">IFTA Compliance</td>
-                                    <td width="145">Option</td>
+                                    <td width="138">Trip Filed Correctly</td>
+                                    <td width="145"><select class="input-sm form-control" name="compliance_trip" id="compliance_trip">
+                                      <option>Not in Packet</option>
+                                      <option>Incomplete</option>
+                                      <option selected>Complete</option>
+                                      <option>NA</option>
+                                    </select></td>
                                  </tr>
                                  <tr>
                                     <td>Start Date
                                     <td><input class="input-sm form-control datepicker" name="txt_date_start" type="text" id="txt_date_start" value="" required>                                    
-                                    <td>Trip Filed Correctly</td>
-                                    <td><label for="compliance_trip"></label>
-                                      <select class="input-sm form-control" name="compliance_trip" id="compliance_trip">
+                                    <td>Logs Included</td>
+                                    <td><label for="compliance_trip">
+                                      <select class="input-sm form-control" name="compliance_logs" id="compliance_logs">
                                         <option>Not in Packet</option>
                                         <option>Incomplete</option>
                                         <option selected>Complete</option>
                                         <option>NA</option>
-                                    </select></td>
+                                      </select>
+                                    </label></td>
                                  </tr>
                                  <tr>
                                     <td>End Date
                                     <td><input class="input-sm form-control datepicker" name="txt_date_end" type="text" id="txt_date_end" value="" required>                                    
-                                    <td>Logs Included</td>
-                                    <td><select class="input-sm form-control" name="compliance_logs" id="compliance_logs">
+                                    <td>VIR Included</td>
+                                    <td><select class="input-sm form-control" name="compliance_vir" id="compliance_vir">
                                       <option>Not in Packet</option>
                                       <option>Incomplete</option>
                                       <option selected>Complete</option>
@@ -276,8 +282,8 @@
                                       <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
                                       <?php } ?>
                                     </select>                                    
-                                    <td>VIR Included</td>
-                                    <td><select class="input-sm form-control" name="compliance_vir" id="compliance_vir">
+                                    <td>Fuel Reciepts included</td>
+                                    <td><select class="input-sm form-control" name="compliance_fuel" id="compliance_fuel">
                                       <option>Not in Packet</option>
                                       <option>Incomplete</option>
                                       <option selected>Complete</option>
@@ -293,17 +299,6 @@
                                       <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
                                       <?php } ?>
                                     </select>                                    
-                                    <td>Fuel Reciepts included</td>
-                                    <td><select class="input-sm form-control" name="compliance_fuel" id="compliance_fuel">
-                                      <option>Not in Packet</option>
-                                      <option>Incomplete</option>
-                                      <option selected>Complete</option>
-                                      <option>NA</option>
-                                    </select></td>
-                                 </tr>
-                                 <tr>
-                                    <td>Truck #
-                                    <td><input class="input-sm form-control" name="txt_truckno" type="text" id="txt_truckno" value="" required>                                    
                                     <td>Original BOL included</td>
                                     <td><select class="input-sm form-control" name="compliance_bol" id="compliance_bol">
                                       <option>Not in Packet</option>
@@ -313,8 +308,8 @@
                                     </select></td>
                                  </tr>
                                  <tr>
-                                    <td>Starting OD
-                                    <td><input class="input-sm form-control" name="txt_od_start" type="text" id="txt_od_start" value="" required>                                    
+                                    <td>Truck #
+                                    <td><input class="input-sm form-control" name="txt_truckno" type="text" id="txt_truckno" value="" required>                                    
                                     <td>Permits</td>
                                     <td><select class="input-sm form-control" name="compliance_permits" id="compliance_permits">
                                       <option>Not in Packet</option>
@@ -324,8 +319,8 @@
                                     </select></td>
                                  </tr>
                                  <tr>
-                                    <td>Ending OD
-                                    <td><input class="input-sm form-control" name="txt_od_end" type="text" id="txt_od_end" value="" required>                                    
+                                    <td>Starting OD
+                                    <td><input class="input-sm form-control" name="txt_od_start" type="text" id="txt_od_start" value="" required>                                    
                                     <td>GPS Reports</td>
                                     <td><select class="input-sm form-control" name="compliance_gps" id="compliance_gps">
                                       <option>Not in Packet</option>
@@ -335,8 +330,8 @@
                                     </select></td>
                                  </tr>
                                  <tr>
-                                    <td>Total Trip Miles
-                                    <td><input class="input-sm form-control" name="txt_od_total" type="text" id="txt_od_total" value="">                                    
+                                    <td>Ending OD
+                                    <td><input class="input-sm form-control" name="txt_od_end" type="text" id="txt_od_end" value="" required>                                    
                                     <td>DOT Violations</td>
                                     <td><select class="input-sm form-control" name="compliance_dot" id="compliance_dot">
                                       <option>Not in Packet</option>
@@ -346,11 +341,16 @@
                                     </select></td>
                                  </tr>
                                  <tr>
+                                    <td>Total Trip Miles
+                                    <td><input class="input-sm form-control" name="txt_od_total" type="text" id="txt_od_total" value="">                                    
+                                    <td>Notes: Trip Driver</td>
+                                    <td><input class="input-sm form-control" name="notes_trip_driver" type="text" id="notes_trip_driver" value=""></td>
+                                 </tr>
+                                 <tr>
                                    <td>Trip Gen Notes
                                    <td><input class="input-sm form-control" name="notes_gen_trip" type="text" id="notes_gen_trip" value="">                                 
-                                   <td>Notes: Trip Driver</td>
-                                   <td><label for="notes_trip_driver"></label>
-                                   <input class="input-sm form-control" name="notes_trip_driver" type="text" id="notes_trip_driver" value=""></td>
+                                   <td>&nbsp;</td>
+                                   <td>&nbsp;</td>
                                  </tr>
                            </table>
 <p></p>
