@@ -1,304 +1,96 @@
 <?php
 session_start();
 
-if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
+if ($_SESSION['login'] != 1)
 {
         header('Location: /pages/login/driverlogin.php');
 }
 
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
-mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
-mysql_select_db($db_name) or DIE('Database name is not available!');
+$mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
 
-$username = $_SESSION['userid'];
-$drivername = $_SESSION['drivername'];
-$role = $_SESSION['role'];
-
-?>
-
-<?php
-                     $sql = "SELECT
-                      total_today.counts   AS total_today_count,
-                      pu_today.counts      AS pu_today_count,
-                      del_today.counts     AS del_today_count,
-                      total_alltime.counts AS total_alltime_count,
-                      pu_alltime.counts    AS pu_alltime_count,
-                      del_alltime.counts   AS del_alltime_count,
-                      archived.counts      AS archived_count,
-                      virs_daily.count     AS virs_daily_count,
-                      virs_weekly.count    AS virs_weekly_count
-                    FROM
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          AND str_to_date(hawbDate,'%c/%e/%Y') = CURDATE()
-                          AND deleted                          =\"F\"
-                          AND archived                         =\"F\"
-                          )
-                        OR
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username =\"$username\"
-                            )
-                          AND str_to_date(dueDate,'%c/%e/%Y') = CURDATE()
-                          AND deleted                         =\"F\"
-                          AND archived                        =\"F\"
-                          )
-                      )
-                      total_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          puAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND str_to_date(hawbDate,'%c/%e/%Y') = DATE(now())
-                        AND deleted                          =\"F\"
-                        AND archived                         =\"F\"
-                        AND deleted                          =\"F\"
-                        AND archived                         =\"F\"
-                      )
-                      pu_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          delAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND str_to_date(dueDate,'%c/%e/%Y') = DATE(now())
-                        AND deleted                         =\"F\"
-                        AND archived                        =\"F\"
-                        AND deleted                         =\"F\"
-                        AND archived                        =\"F\"
-                      )
-                      del_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          OR puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      total_alltime,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          puAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      pu_alltime,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          delAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      del_alltime,
-                      (
-                      SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          OR puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"T\"
-                      )
-                      archived,
-                     (
-                      SELECT
-                          COUNT(*) AS count
-                        FROM
-                          virs
-                        WHERE
-                        driver_name=\"$username\"
-                        AND insp_date = date(now())
-                      ) virs_daily,
-                      (
-                      SELECT
-                          COUNT(*) AS count
-                        FROM
-                          virs
-                        WHERE
-                        driver_name=\"$username\"
-                        AND insp_date BETWEEN date(now()) AND date(now()) - INTERVAL 8 DAY
-                      ) virs_weekly";
-
-                      $sql = mysql_query($sql);
-                      while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-                      {
-                        $total_today_count   = $row['total_today_count'];
-                        $pu_today_count      = $row['pu_today_count'];
-                        $del_today_count     = $row['del_today_count'];
-                        $total_alltime_count = $row['total_alltime_count'];
-                        $pu_alltime_count    = $row['pu_alltime_count'];
-                        $del_alltime_count   = $row['del_alltime_count'];
-                        $archived_count      = $row['archived_count'];
-                        $virs_daily_count    = $row['virs_daily_count'];
-                        $virs_weekly_count   = $row['virs_weekly_count'];
-                      }
-                      mysql_free_result($sql);
-
-if (isset($_POST['submit']) && $_POST['submit'] == 'share')
+if ($_POST['btn_csa'])
 {
-  $audience = $_POST['audience'];
-  if ($audience == 'PHX')
+  try
   {
-    $predicate = "AND office='PHX'";
-  }
-  if ($audience == 'TUS')
-  {
-    $predicate = "AND office='TUS'";
-  }
-    if ($audience == 'PHL')
-  {
-    $predicate = "AND office='PHL'";
-  }
-    if ($audience == 'DEN')
-  {
-    $predicate = "AND office='DEN'";
-  }
-    if ($audience == 'LAX')
-  {
-    $predicate = "AND office='LAX'";
-  }
-    if ($audience == 'MIA')
-  {
-    $predicate = "AND office='MIA'";
-  }
-    if ($audience == 'ORD')
-  {
-    $predicate = "AND office='ORD'";
-  }
-  $message = $_POST['message'];
-  $sql = "SELECT 1";
-  if (isset($_POST['sendEmail']))
-  {
-    $sql .= ",email";
-  } 
-  if (isset($_POST['sendText']))
-  {
-    $sql .= ",vtext";
-  } 
-  $sql .= " FROM users WHERE 1=1 $predicate AND status='Active'";
-
-  $sql = mysql_query($sql);
-  while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-  {
-    if (isset($_POST['sendEmail']))
+    switch ($_FILES['file_csa']['error'])
     {
-      sendEmail($row['email'],'Broadcast Message',$message); 
-    } 
-    if (isset($_POST['sendText']))
-    {
-      sendEmail($row['vtext'],'Broadcast Message',$message); 
+        case UPLOAD_ERR_OK:
+            break;
+        case UPLOAD_ERR_NO_FILE:
+            throw new Exception('No file found.');
+        case UPLOAD_ERR_INI_SIZE:
+        case UPLOAD_ERR_FORM_SIZE:
+            throw new Exception('Exceeded filesize limit.');
+        default:
+            throw new Exception('Unknown error uploading '.$_FILES['file_csa']['name']);
     }
-  }
-  mysql_free_result($sql);
+    $statement = "load data local infile \"".$_FILES['file_csa']["tmp_name"]."\"
+               REPLACE INTO TABLE csadata FIELDS TERMINATED BY ','
+               ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 LINES
+               (@v_date,state,number,level,placard_inspection,hm_inspection,basic,violation_group,code,description,out_of_service,convicted_diff_charge,violation_weight,time_weight,total_points,basic_violation_inspection,last_name,first_name,co_driver_last_name,co_driver_first_name)
+               SET date = str_to_date(@v_date, '%m/%d/%Y')";
 
+    if ($mysqli->query($statement) === false)
+    {
+        throw new Exception("Unable to load file into csadata: ". $mysqli->error);
+    }
+
+    } catch (Exception $e) {
+        // An exception has been thrown
+        // We must rollback the transaction
+        $url_error = urlencode($e->getMessage());
+        $mysqli->rollback();
+        header("location: " . HTTP . "/pages/dispatch/imports.php?error=$url_error");
+        $mysqli->autocommit(TRUE);
+        $mysqli->close();
+        exit;
+    }
+    header("location: " . HTTP . "/pages/dispatch/imports.php?status=success");
+    exit;
 }
+
+if ($_POST['btn_trips'])
+{
+  try
+  {
+    switch ($_FILES['file_trips']['error'])
+    {
+        case UPLOAD_ERR_OK:
+            break;
+        case UPLOAD_ERR_NO_FILE:
+            throw new Exception('No file found.');
+        case UPLOAD_ERR_INI_SIZE:
+        case UPLOAD_ERR_FORM_SIZE:
+            throw new Exception('Exceeded filesize limit.');
+        default:
+            throw new Exception('Unknown error uploading '.$_FILES['file_trips']['name']);
+    }
+    $statement = "load data local infile \"".$_FILES['file_trips']["tmp_name"]."\"
+               REPLACE INTO TABLE import_gps_trips FIELDS TERMINATED BY ','
+               ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 LINES
+               (`Category`,`Device`,`Driver`,`Start Address`,@v_began,`Stop Address`,@v_ended,`Miles`,`Max Speed`,`Avg Speed`,`Travel Time`,`Idle Time`)
+               SET `began` = str_to_date(@v_began, '%m/%d/%Y %H:%i'), `ended` = str_to_date(@v_ended,'%m/%d/%Y %H:%i')";
+
+    if ($mysqli->query($statement) === false)
+    {
+        throw new Exception("Unable to load file into import_gps_trips: ". $mysqli->error);
+    }
+
+    } catch (Exception $e) {
+        // An exception has been thrown
+        // We must rollback the transaction
+        $url_error = urlencode($e->getMessage());
+        $mysqli->rollback();
+        header("location: " . HTTP . "/pages/dispatch/imports.php?error=$url_error");
+        $mysqli->autocommit(TRUE);
+        $mysqli->close();
+        exit;
+    }
+    header("location: " . HTTP . "/pages/dispatch/imports.php?status=success");
+    exit;
+}
+
 ?>
 
 
@@ -365,6 +157,15 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 
 
           <!-- Top Box Centered Full sized window -->
+          <?php
+          if (isset($_GET['error'])) {
+            echo "<br>";
+            echo '<div style="width: 50%; text-align: center; margin:auto" class="alert alert-danger" role="alert">Error adding record: ',urldecode($_GET['error']),'</div>';
+          }
+          if (isset($_GET['status'])) {
+            echo "<br>";
+            echo '<div style="width: 50%; text-align: center; margin:auto" class="alert alert-success" role="alert">File added successfully.</div>';
+          }?>
           <div class="row">
             <div class="col-xs-12">
               <div class="box">
@@ -391,6 +192,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 </div>
                 
                 <!-- /.box-header -->
+               <form enctype="multipart/form-data" role="form" method="post" action="<?php echo HTTP . $_SERVER['PHP_SELF']; ?>">
                 <div class="box-body table-responsive no-padding">
                   <table width="98%" class="table table-hover">
                     <tr>
@@ -413,36 +215,26 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                     </tr>
                   </table>
                   <p>
-                    <input id="CSA_Upload" name="CSA_Upload" type="file" multiple=true class="file-loading">
+                    <input id="file_csa" name="file_csa" type="file" multiple=false class="file-loading">
                   </p>
-<input type="submit" name="submit" class="btn btn-primary" value="Import">
+                  <input type="submit" class="btn btn-primary" value="Import" name="btn_csa" id="btn_csa">
                 Only CSV File Imports will Work</div><!-- /.box-body -->
               </div><!-- /.box -->
             </div>
           </div>         
+         </form>
          <!-- Top Box Full sized window Close Out-->        
 
 
 
 
           <!-- Top Box Centered Full sized window -->
+         <form enctype="multipart/form-data" role="form" method="post" action="<?php echo HTTP . $_SERVER['PHP_SELF']; ?>">
           <div class="row">
             <div class="col-xs-12">
               <div class="box">
                 <div class="box-header">
                   <h3 class="box-title">Daily Trips / Miles / Idle</h3>
-                  
-                  <!-- 
-                  Remove Search Tool
-                  <div class="box-tools">
-                    <div class="input-group" style="width: 150px;">
-                      <input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
-                      <div class="input-group-btn">
-                        <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
-                      </div>
-                    </div>
-                  </div>
-                  -->
                   
                   <!-- Insert Plus Minus tool -->
                   <div class="box-tools pull-right">
@@ -462,13 +254,14 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                     </tr>
                   </table>
                   <p>
-                    <input id="CSA_Upload" name="CSA_Upload" type="file" multiple=true class="file-loading">
+                    <input class="file-loading" type="file" multiple=true class="file-loading" name="file_trips" id="file_trips"/>
                   </p>
-<input type="submit" name="submit" class="btn btn-primary" value="Import">
+                    <input type="submit" class="btn btn-primary" value="Import" name="btn_trips" id="btn_trips">
                 Only CSV File Imports will Work</div><!-- /.box-body -->
               </div><!-- /.box -->
             </div>
           </div>         
+         </form>
          <!-- Top Box Full sized window Close Out-->
 
 
@@ -915,166 +708,6 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 <script src='<?php echo HTTP;?>/plugins/fastclick/fastclick.min.js'></script>
 <!-- AdminLTE App -->
 <script src="<?php echo HTTP;?>/dist/js/app.min.js" type="text/javascript"></script>
-<!-- ChartJS -->
-<script src="<?php echo HTTP;?>/dist/js/Chart.min.js"></script>
-<script>
-// Get context with jQuery - using jQuery's .get() method.
-var ctx = $("#dispatchChart").get(0).getContext("2d");
-// This will get the first returned node in the jQuery collection.
-<?php
-# Create array with months.
-$sql = "select monthname(str_to_date(pu_month,'%m-%y')),sum(pickups) from
-(
-SELECT
-date_format(str_to_date(hawbDate,'%c/%e/%Y'),'%m-%y') pu_month,
-sum(CASE monthname(str_to_date(hawbDate,'%c/%e/%Y'))
-WHEN 'January' THEN 1
-WHEN 'February' THEN 1
-WHEN 'March' THEN 1
-WHEN 'April' THEN 1
-WHEN 'May' THEN 1
-WHEN 'June' THEN 1
-WHEN 'July' THEN 1
-WHEN 'August' THEN 1
-WHEN 'September' THEN 1
-WHEN 'Octover' THEN 1
-WHEN 'November' THEN 1
-WHEN 'December' THEN 1
-ELSE 0
-END) AS pickups
-FROM
-    dispatch
-WHERE
-
-    puAgentDriverPhone = (SELECT 
-            driverid
-        FROM
-            users
-        WHERE
-            username = \"$username\")           
-AND 
-str_to_date(hawbDate,'%c/%e/%Y') > DATE(now()) - INTERVAL 12 MONTH
-group by pu_month
-UNION ALL
-SELECT
-date_format(str_to_date(dueDate,'%c/%e/%Y'),'%m-%y') pu_month,
-sum(CASE monthname(str_to_date(dueDate,'%c/%e/%Y'))
-WHEN 'January' THEN 1
-WHEN 'February' THEN 1
-WHEN 'March' THEN 1
-WHEN 'April' THEN 1
-WHEN 'May' THEN 1
-WHEN 'June' THEN 1
-WHEN 'July' THEN 1
-WHEN 'August' THEN 1
-WHEN 'September' THEN 1
-WHEN 'October' THEN 1
-WHEN 'November' THEN 1
-WHEN 'December' THEN 1
-ELSE 0
-END) AS pickups
-FROM
-    dispatch
-WHERE
-
-    delAgentDriverPhone = (SELECT 
-            driverid
-        FROM
-            users
-        WHERE
-            username = \"$username\")           
-AND 
-str_to_date(dueDate,'%c/%e/%Y') > DATE(now()) - INTERVAL 12 MONTH
-group by pu_month
-) foo
-group by pu_month
-order by pu_month DESC";
-
-$months = array();
-$dispatch_number = array();
-$result = mysql_query($sql);
-while ($row = mysql_fetch_array($result,MYSQL_BOTH))
-{
-  array_push($months,"'$row[0]'");
-  array_push($dispatch_number,$row[1]);
-}
-mysql_free_result($result);
-
-$months =  rtrim(implode(',',$months),',');
-$dispatch_number =  rtrim(implode(',',$dispatch_number),',');
-?>
-var data = {
-    labels: [<?php echo $months;?>],
-    datasets: [
-        {
-            label: "Dispatched",
-            fillColor: "rgba(220,220,220,0.2)",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(220,220,220,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [<?php echo $dispatch_number;?>]
-        },
-<?php
-$sql = "SELECT
-monthname(date) pu_month,
-SUM(CASE monthname(date)
-WHEN 'January' THEN 1
-WHEN 'February' THEN 1
-WHEN 'March' THEN 1
-WHEN 'April' THEN 1
-WHEN 'May' THEN 1
-WHEN 'June' THEN 1
-WHEN 'July' THEN 1
-WHEN 'August' THEN 1
-WHEN 'September' THEN 1
-WHEN 'October' THEN 1
-WHEN 'November' THEN 1
-WHEN 'December' THEN 1
-ELSE 0
-END) AS pickups
-FROM
-    driverexport
-WHERE employee_id =
-(select employee_id from users where username = \"$username\")
-AND
-date > DATE(now()) - INTERVAL 12 MONTH
-AND
-(status = 'Picked Up' OR status = 'Delivered')
-group by pu_month
-order by date DESC";
-
-$months = array();
-$dispatch_number = array();
-$result = mysql_query($sql);
-while ($row = mysql_fetch_array($result,MYSQL_BOTH))
-{
-  array_push($months,"'$row[0]'");
-  array_push($dispatch_number,$row[1]);
-}
-mysql_free_result($result);
-
-$months =  rtrim(implode(',',$months),',');
-$dispatch_number =  rtrim(implode(',',$dispatch_number),',');
-?>
-       {
-            label: "Updated",
-            fillColor: "rgba(151,187,205,0.2)",
-            strokeColor: "rgba(151,187,205,1)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: [<?php echo $dispatch_number;?>]
-        },
-    ]
-};
-var myLineChart = new Chart(ctx).Line(data, {
-});
-x = myLineChart.generateLegend();
-$("#js-legend").html(x);
-</script>
 
 <!-- Demo -->
 </body>
