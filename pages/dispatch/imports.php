@@ -7,7 +7,9 @@ if ($_SESSION['login'] != 1)
 }
 
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
-$mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
+$mysqli = mysqli_init();
+$mysqli->options(MYSQLI_OPT_LOCAL_INFILE, true);
+$mysqli->real_connect($db_hostname, $db_username, $db_password, $db_name);
 
 if ($_POST['btn_csa'])
 {
