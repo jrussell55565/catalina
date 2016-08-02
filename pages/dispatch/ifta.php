@@ -178,13 +178,14 @@
                                     <td>&nbsp;</td>
                                  </tr>
                                  <tr>
-                                    <td>States</td>
-                                   <td>Add St Enter / Exit</td>
-                                   <td>OK</td>
-                                   <td>To </td>
-                                   <td>Leave</td>
-                                   <td>Blank</td>
-                                   <td>&nbsp;</td>
+                                    <td>State Exit/Enter</td>
+                                   <td><select class="input-sm form-control" name="txt_state_enter_details[]" id="txt_state_enter_details_<?php echo $random;?>" value="">
+                                     <?php
+                                          foreach ($us_state_abbrevs as $state) { ?>
+                                     <option <?php if($state == $ifta_details[$i]['st_enter']){echo " selected ";}?>><?php echo $state;?></option>
+                                     <?php } ?>
+                                   </select></td>
+                                   <td colspan="5">Leave State Blank. Or will only search that state</td>
                                  </tr>
                                  <tr>
                                     <td>Driver</td>
@@ -668,6 +669,8 @@ $(document).ready(function(){
               trip_end: $("#trip_search_enddate").val(),
               trip_state: $("#trip_search_state").val(),
               trip_truck_no: $("#trip_search_trucknumber").val(),
+			  trip_state_exit: $("#trip_search_state_exit").val(),
+			  trip_state_enter: $("#trip_search_state_enter").val(),
               trip_driver: $("#trip_search_driver").val()
             },
        success: function(data, textStatus, xhr) {
@@ -701,6 +704,8 @@ $(document).ready(function(){
                               <td>Driver Name 1</td>
                               <td>Driver Name 2</td>
                               <td>Total Trip Miles</td>
+							  <td>State Exit</td>
+							  <td>State Enter</td>
                            </tr>`;
 
 
@@ -719,6 +724,8 @@ $(document).ready(function(){
                               <td>`+obj.driver1+`</td>
                               <td>`+obj.driver2+`</td>
                               <td>`+obj.trip_miles+`</td>
+							  <td>`+obj.trip_state_exit+`</td>
+							  <td>`+obj.trip_state_enter+`</td>
                            </tr>`;
             }
             output = output + '</table>';
