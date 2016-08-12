@@ -18,7 +18,8 @@ $drivername = $_SESSION['drivername'];
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Dashboard</title>
+<title>Inspection Types</title>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -62,60 +63,33 @@ $drivername = $_SESSION['drivername'];
         <div class="col-md-8">
           <div class="box">
             <div class="box-header with-border">
-              <h1>LEVEL I<br>
+              <h3>
+              <p>LEVEL I<br>
                 North American Standard Inspection – An inspection that includes examination of driver’s license; medical examiner’s certificate and Skill Performance Evaluation (SPE) Certificate (if applicable); alcohol and drugs; driver’s record of duty status as required; hours of service; seat belt; vehicle inspection report(s) (if applicable); brake systems; coupling devices; exhaust systems; frames; fuel systems; lighting devices (headlamps, tail lamps, stop lamps, turn signals and lamps/flags on projecting loads); securement of cargo; steering mechanisms; suspensions; tires; van and open-top trailer bodies; wheels, rims and hubs; windshield wipers; emergency exits and/or electrical cables and systems in engine and battery compartments (buses), and HM/DG requirements as applicable. HM/DG required inspection items will be inspected by certified HM/DG inspectors.<br>
-                <br>
-                <br>
-                Back to top<br>
-                <br>
-                <br>
-                <br>
                 <br>
                 LEVEL II<br>
                 Walk-Around Driver/Vehicle Inspection – An examination that includes each of the items specified under the North American Standard Level II Walk-Around Driver/Vehicle Inspection Procedure. As a minimum, Level II inspections must include examination of: driver’s license; medical examiner’s certificate and Skill Performance Evaluation (SPE) Certificate (if applicable); alcohol and drugs; driver’s record of duty status as required; hours of service; seat belt; vehicle inspection report(s) (if applicable); brake systems; coupling devices; exhaust systems; frames; fuel systems; lighting devices (headlamps, tail lamps, stop lamps, turn signals and lamps/flags on projecting loads); securement of cargo; steering mechanisms; suspensions; tires; van and open-top trailer bodies; wheels, rims and hubs; windshield wipers; emergency exits and/or electrical cables and systems in engine and battery compartments (buses), and HM/DG requirements as applicable. HM/DG required inspection items will be inspected by certified HM/DG inspectors. It is contemplated that the walk-around driver/vehicle inspection will include only those items, which can be inspected without physically getting under the vehicle.<br>
                 <br>
-                <br>
-                Back to top<br>
-                <br>
-                <br>
-                <br>
-                <br>
                 LEVEL III<br>
                 Driver/Credential Inspection – An examination that includes those items specified under the North American Standard Level III Driver/Credential Inspection Procedure. As a minimum, Level III inspections must include, where required and/or applicable, examination of the driver’s license; medical examiner’s certificate and Skill Performance Evaluation (SPE) Certificate; driver’s record of duty status; hours of service; seat belt; vehicle inspection report(s); and HM/DG requirements. Those items not indicated in the North American Standard Level III Driver/Credential Inspection Procedure shall not be included on a Level III inspection.<br>
-                <br>
-                <br>
-                Back to top<br>
-                <br>
-                <br>
-                <br>
-                <br>
-                LEVEL IV<br>
+</p>
+              <p> LEVEL IV<br>
                 Special Inspections – Inspections under this heading typically include a one-time examination of a particular item. These examinations are normally made in support of a study or to verify or refute a suspected trend.<br>
-                <br>
-                <br>
-                Back to top<br>
-                <br>
-                <br>
-                <br>
                 <br>
                 LEVEL V<br>
                 Vehicle-Only Inspection – An inspection that includes each of the vehicle inspection items specified under the North American Standard Inspection (Level I), without a driver present, conducted at any location.<br>
                 <br>
-                <br>
-                Back to top<br>
-                <br>
-                <br>
-                <br>
-                <br>
                 LEVEL VI<br>
                 North American Standard Inspection for Transuranic Waste and Highway Route Controlled Quantities (HRCQ) of Radioactive Material – An inspection for select radiological shipments, which include inspection procedures, enhancements to the North American Standard Level I inspection, radiological requirements, and the North American Standard Out-of-Service Criteria for Transuranic Waste and Highway Route Controlled Quantities (HRCQ) of Radioactive Material.</h1>
+              </p>
               <h4 class="box-title"></h4>
               <div class="box-tools">
+                <!-- 
                 <ul class="pagination pagination-sm no-margin pull-right">
                   <li>
-                   <a href="orders.php?gather=pu">Page1</a></li>
+                   <a href="orders.php?gather=pu">Level1</a></li>
                   <li>
-                   <a href="orders.php?gather=del">Page2</a></li>
+                   <a href="orders.php?gather=del">Level2</a></li>
                 </ul>
               </div>
             </div>

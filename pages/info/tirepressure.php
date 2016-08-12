@@ -62,7 +62,6 @@ $drivername = $_SESSION['drivername'];
         <div class="col-md-8">
           <div class="box">
             <div class="box-header with-border">
-              <h1>Article</h1>
               <h1>What Exactly Constitutes an Underinflated Truck Tire?</h1>
               July 2013, TruckingInfo.com - WebXclusive<br>
               by Jim Park, Equipment Editor - <a href="http://www.truckinginfo.com/search/default.aspx?f_Author=Jim+Park" target="_blank">Also by this author</a><br>
@@ -74,7 +73,7 @@ $drivername = $_SESSION['drivername'];
                     We've all heard the claims that running tires underinflated hurts fuel economy (1 to 1.5% for every 10% under, they say), increases tire wear and wrecks casings.<br>
                       So what is underinflated?<br>
                       By definition, it's any pressure less than the minimum recommended for the tire load. For example, a steer tire with a load of 6,000 pounds would be underinflated at 105 psi (see below). A drive tire loaded to 4,520 pounds would be underinflated at 75 psi. It all depends on the load on the tire and the minimum inflation pressure for the load. <br>
-                      ADVERTISEMENT<br>
+                       <br>
                       <a href="http://oascentral.truckinginfo.com/RealMedia/ads/click_lx.ads/truckinginfo/essentials/L12/1374197176/Middle1/Bobit/House_HDT_EnewsSignup_June-Dec14/hdt_enews_160x600_20140612.jpg/52474e654e6c577645574541416f6e75;zip=US:85013?x" target="_blank"><span data-src="http://imagec18.247realmedia.com/RealMedia/ads/Creatives/Bobit/House_HDT_EnewsSignup_June-Dec14/hdt_enews_160x600_20140612.jpg"> </span></a>Why should we worry about defining underinflation? Because of the Federal Motor Carrier Safety Administration's CSA (Compliance, Safety, Accountability) enforcement program.<br>
                       The Commercial Vehicle Safety Alliance is currently exploring how to define underinflation for enforcement purposes. CVSA has already settled on a definition of a "flat" tire: 50% of the max cold inflation pressure stamped on the sidewall of the tire, e.g., 60 psi in a tire stamped for its max load at 120 psi inflation pressure. That's clean and simple; now CVSA wants a similarly clean and simple definition of under-inflated.<br>
                       That won't be as easy.<br>
