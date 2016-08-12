@@ -65,15 +65,32 @@ $drivername = $_SESSION['drivername'];
             </a>
             <label for="productivity_time"></label>
             <select name="productivity_time" id="productivity_time">
-              <option value="day" selected>Current Day</option>
+              <option value="day">Current Day</option>
               <option value="week">Current Week</option>
-              <option value="month">Current Month</option>
+              <option value="month" selected>Current Month</option>
               <option value="quarter">Current Quarter</option>
               <option value="year">Current Year</option>
               <option value="all">All</option>
             </select>
-          </h1>
+            <label for="textfield"></label>
+            <input name="textfield" type="text" id="textfield" value="From Date" size="12"> to
+            <input name="textfield2" type="text" id="textfield2" value="To Date" size="12">
+            
 
+            
+                  <div class="box-body"></div>           
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </h1>
+          <link href="<?php echo HTTP;?>/dist/css/bootstrap-datepicker.css" rel="stylesheet">
           <ol class="breadcrumb">
             <li><a href="/pages/main/index.php"><i class="fa fa-home"></i> Home</a></li>
             <li class="active">Productivity</li>
@@ -89,6 +106,8 @@ $drivername = $_SESSION['drivername'];
 
 <?php
 // Only show this portion to non-admins since it's user-specific
+// Lets Redo this section to show All Active users and stats so page looks same for both
+// admin and non admin, swap picture to .... 
 if ($_SESSION['login'] == 2)
 {
 ?>
@@ -101,9 +120,10 @@ if ($_SESSION['login'] == 2)
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-blue">
                   <div class="widget-user-image">
-                    <img class="img-circle" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
-                  </div><!-- /.widget-user-image -->
-                  <span class="info-box-text"> Shipments Updated</span>
+                   <img src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; }?>" alt="User Image" width="128" height="128" class="img-circle" />
+                  </div>
+                  <!-- /.widget-user-image -->
+                  <span class="info-box-text"> Shipments</span>
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
@@ -129,24 +149,21 @@ if ($_SESSION['login'] == 2)
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-red">
                   <div class="widget-user-image">
-                    <img class="img-circle" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
-                  </div><!-- /.widget-user-image -->
-                  <span class="info-box-text"> Shipments Updated</span>
+                    <img src="/pages/dispatch/images/allusers.JPG" alt="User Avatar" width="128" height="128" class="img-circle">
+                  </div>
+                  <!-- /.widget-user-image -->
+                  <span class="info-box-text"> VIRS</span>
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
-                    <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
-                    <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
-                    <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
-                    <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
-                    <li><a href="#">Arrived Consignee Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
-                    <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered"></span></a></li>
-                    <li><a href="#">Delivered Points<span class="pull-right badge bg-blue" id="shp_delivered_points"></span></a></li>
-                    <li><a href="#">Accessorials Added <span class="pull-right badge bg-blue" id="shp_accessorials"></span></a></li>
-                    <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue" id="shp_accessorials_points"></span></a></li>
-                    <li><a href="#">Other Status Change <span class="pull-right badge bg-blue" id="shp_other_status"></span></a></li>
-                    <li><a href="#">Other Status Change Points<span class="pull-right badge bg-blue" id="shp_other_status_points"></span></a></li>
+                    <li><a href="#">Days Worked <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
+                    <li><a href="#">Pre-Trips <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
+                    <li><a href="#">Pre-Trip Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
+                    <li><a href="#">Post-Trips <span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
+                    <li><a href="#">Post-Trip Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
+                    <li><a href="#">Breakdowns <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
+                    <li><a href="#">Breakdown Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
+                    
                   </ul>
                 </div>
               </div><!-- /.widget-user -->
@@ -156,25 +173,19 @@ if ($_SESSION['login'] == 2)
               <div class="box box-widget widget-user-2">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-purple">
-                  <div class="widget-user-image">
-                    <img class="img-circle" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
-                  </div><!-- /.widget-user-image -->
-                  <span class="info-box-text"> Shipments Updated</span>
+                  <div class="widget-user-image"><img src="/pages/dispatch/images/allusers.JPG" alt="User Avatar" width="128" height="128" class="img-circle"></div>
+                  <!-- /.widget-user-image -->
+                  <span class="info-box-text"> Productivity</span>
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
-                    <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
-                    <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
-                    <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
-                    <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
-                    <li><a href="#">Arrived Consignee Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
-                    <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered"></span></a></li>
-                    <li><a href="#">Delivered Points<span class="pull-right badge bg-blue" id="shp_delivered_points"></span></a></li>
-                    <li><a href="#">Accessorials Added <span class="pull-right badge bg-blue" id="shp_accessorials"></span></a></li>
-                    <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue" id="shp_accessorials_points"></span></a></li>
-                    <li><a href="#">Other Status Change <span class="pull-right badge bg-blue" id="shp_other_status"></span></a></li>
-                    <li><a href="#">Other Status Change Points<span class="pull-right badge bg-blue" id="shp_other_status_points"></span></a></li>
+                    <li><a href="#">Tasks<span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
+                    <li><a href="#">Task Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
+                    <li><a href="#">Projects<span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
+                    <li><a href="#">Project Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
+                    <li><a href="#">Company Compliance <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
+                    <li><a href="#">Compnay Compliance Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
+                                        
                   </ul>
                 </div>
               </div><!-- /.widget-user -->
@@ -184,31 +195,24 @@ if ($_SESSION['login'] == 2)
               <div class="box box-widget widget-user-2">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-orange">
-                  <div class="widget-user-image">
-                    <img class="img-circle" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
-                  </div><!-- /.widget-user-image -->
-                  <span class="info-box-text"> Shipments Updated</span>
+                  <div class="widget-user-image"><img src="/pages/dispatch/images/allusers.JPG" alt="User Avatar" width="128" height="128" class="img-circle"></div>
+                  <!-- /.widget-user-image -->
+                  <span class="info-box-text"> CSA</span>
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
+                    <li><a href="#">CSA Score<span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
                     <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
                     <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
                     <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
                     <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
-                    <li><a href="#">Arrived Consignee Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
-                    <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered"></span></a></li>
-                    <li><a href="#">Delivered Points<span class="pull-right badge bg-blue" id="shp_delivered_points"></span></a></li>
-                    <li><a href="#">Accessorials Added <span class="pull-right badge bg-blue" id="shp_accessorials"></span></a></li>
-                    <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue" id="shp_accessorials_points"></span></a></li>
-                    <li><a href="#">Other Status Change <span class="pull-right badge bg-blue" id="shp_other_status"></span></a></li>
-                    <li><a href="#">Other Status Change Points<span class="pull-right badge bg-blue" id="shp_other_status_points"></span></a></li>
+                    
                   </ul>
                 </div>
               </div><!-- /.widget-user -->
             </div>
 
-          </div>
+        </div>
 
 <?php
 // END Only show this portion to non-admins since it's user-specific
@@ -226,7 +230,7 @@ if ($_SESSION['login'] == 2)
                   <h4 id="shp_percent"></h4>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
-                </div>
+              </div>
             </div>
             <!-- ./col -->
             <div class="col-lg-3 col-xs-6">
@@ -493,7 +497,7 @@ if ($_SESSION['login'] == 2)
                   <h4 id="shp_percent"></h4>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
-                </div>
+              </div>
             </div>
             <!-- ./col -->
             <div class="col-lg-3 col-xs-6">
