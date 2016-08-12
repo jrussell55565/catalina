@@ -7,7 +7,9 @@ if ($_SESSION['login'] != 1)
 }
 
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
-$mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
+$mysqli = mysqli_init();
+$mysqli->options(MYSQLI_OPT_LOCAL_INFILE, true);
+$mysqli->real_connect($db_hostname, $db_username, $db_password, $db_name);
 
 if ($_POST['btn_csa'])
 {
@@ -100,6 +102,7 @@ if ($_POST['btn_trips'])
 <BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
 <title>Imports</title>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
