@@ -269,7 +269,7 @@ if (! empty($_FILES["fuelUpload"]["name"]))
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Dashboard</title>
+<title>Users</title>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -802,7 +802,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
      </td>
      <td style="padding: 5px">
       <label for="quietTimeVal1">Quiet (start)</label>
-       <select class="form-control" name="quietTimeVal1" id="quietTimeVal1" data-toggle="tooltip" data-placement="top" title="Quiet time will turn off your email and text messages at this time">
+       <select class="form-control" name="quietTimeVal1" id="quietTimeVal1" data-toggle="tooltip" data-placement="top" title="Quiet (START) will turn off your email and text messages at this time. Leaving 0:00 to 0:00 will leave messages on 24 7">
          <option value="00:00" <?php if ($row['quiet_time_begin'] == '00:00') { echo " selected "; }?>>00:00</option>
          <option value="01:00" <?php if ($row['quiet_time_begin'] == '01:00') { echo " selected "; }?>>01:00</option>
          <option value="02:00" <?php if ($row['quiet_time_begin'] == '02:00') { echo " selected "; }?>>02:00</option>
@@ -831,7 +831,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
      </td>
      <td style="padding: 5px">
       <label for="quietTimeVal2">Quiet (end)</label>
-       <select class="form-control" name="quietTimeVal2" id="quietTimeVal2">
+       <select class="form-control" name="quietTimeVal2" id="quietTimeVal2" data-toggle="tooltip" data-placement="top" title="Quite (END) will turn on your email and text messages at this time. Leaving 0:00 to 0:00 will leave messages on 24 7">
          <option value="00:00" <?php if ($row['quiet_time_end'] == '00:00') { echo " selected "; }?>>00:00</option>
          <option value="01:00" <?php if ($row['quiet_time_end'] == '01:00') { echo " selected "; }?>>01:00</option>
          <option value="02:00" <?php if ($row['quiet_time_end'] == '02:00') { echo " selected "; }?>>02:00</option>
@@ -942,7 +942,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 <tr>
      <td style="padding: 5px">
       <label for="vir_pretrip_time">VIR Pretrip</label>
-       <select class="form-control" name="vir_pretrip_time" id="vir_pretrip_time">
+       <select class="form-control" name="vir_pretrip_time" id="vir_pretrip_time" data-toggle="tooltip" data-placement="top" title="PreTrip (START) will turn on your email and text messages at this time. Leaving 0:00 to 0:00 will leave messages on 24 7">
          <option value="00:00" <?php if ($row['vir_pretrip_time'] == '00:00') { echo " selected "; }?>>00:00</option>
          <option value="01:00" <?php if ($row['vir_pretrip_time'] == '01:00') { echo " selected "; }?>>01:00</option>
          <option value="02:00" <?php if ($row['vir_pretrip_time'] == '02:00') { echo " selected "; }?>>02:00</option>
@@ -971,7 +971,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
      </td>
      <td style="padding: 5px">
       <label for="vir_posttrip_time">VIR Posttrip</label>
-       <select class="form-control" name="vir_posttrip_time" id="vir_posttrip_time">
+       <select class="form-control" name="vir_posttrip_time" id="vir_posttrip_time" data-toggle="tooltip" data-placement="top" title="PostTrip (END) will turn on your email and text messages at this time. Leaving 0:00 to 0:00 will leave messages on 24 7">
          <option value="00:00" <?php if ($row['vir_posttrip_time'] == '00:00') { echo " selected "; }?>>00:00</option>
          <option value="01:00" <?php if ($row['vir_posttrip_time'] == '01:00') { echo " selected "; }?>>01:00</option>
          <option value="02:00" <?php if ($row['vir_posttrip_time'] == '02:00') { echo " selected "; }?>>02:00</option>
@@ -1003,7 +1003,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
     <tr>
       <td><div class="checkbox">
           <label>
-            <input name="vir_vtextEnabled" id="vir_vtextEnabled" type="checkbox" value="on" <?php if ($row['vir_vtext_enabled'] == "1") { echo "checked"; }?>>
+            <input name="vir_vtextEnabled" id="vir_vtextEnabled" type="checkbox" value="on" <?php if ($row['vir_vtext_enabled'] == "1") { echo "checked"; }?> data-toggle="tooltip" data-placement="top" title="Check box if you would like to recieve VIR Pre/Post trip notifications.">
           </label>
         </div>
         </div></td>
@@ -1014,7 +1014,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
     <tr>
       <td><div class="checkbox">
           <label>
-            <input name="vir_emailEnabled" id="vir_emailEnabled" type="checkbox" value="on" <?php if ($row['vir_email_enabled'] == "1") { echo "checked"; }?>>
+            <input name="vir_emailEnabled" id="vir_emailEnabled" type="checkbox" value="on" <?php if ($row['vir_email_enabled'] == "1") { echo "checked"; }?> data-toggle="tooltip" data-placement="top" title="Check box if you would like to recieve Email Pre/Post trip notifications.">
           </label>
         </div>
         </div></td>
@@ -1032,7 +1032,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 <tr>
      <td style="padding: 5px">
       <label for="bom_time">BOM Time</label>
-       <select class="form-control" name="bom_time" id="bom_time">
+       <select class="form-control" name="bom_time" id="bom_time" data-toggle="tooltip" data-placement="top" title="Select the time you would like to receive Begining of Month (BOM) messages. Leaving 0:00 to 0:00 will send message at midnight">
          <option value="00:00" <?php if ($row['bom_time'] == '00:00') { echo " selected "; }?>>00:00</option>
          <option value="01:00" <?php if ($row['bom_time'] == '01:00') { echo " selected "; }?>>01:00</option>
          <option value="02:00" <?php if ($row['bom_time'] == '02:00') { echo " selected "; }?>>02:00</option>
@@ -1061,7 +1061,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
      </td>
      <td style="padding: 5px">
       <label for="eom_time">EOM Time</label>
-       <select class="form-control" name="eom_time" id="eom_time">
+       <select class="form-control" name="eom_time" id="eom_time" data-toggle="tooltip" data-placement="top" title="Select the time you would like to receive End of Month (EOM) messages. Leaving 0:00 to 0:00 will send message at midnight">
          <option value="00:00" <?php if ($row['eom_time'] == '00:00') { echo " selected "; }?>>00:00</option>
          <option value="01:00" <?php if ($row['eom_time'] == '01:00') { echo " selected "; }?>>01:00</option>
          <option value="02:00" <?php if ($row['eom_time'] == '02:00') { echo " selected "; }?>>02:00</option>
@@ -1093,7 +1093,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
     <tr>
       <td><div class="checkbox">
           <label>
-            <input name="bom_vtextEnabled" id="bom_vtextEnabled" type="checkbox" value="on" <?php if ($row['bom_vtext_enabled'] == "1") { echo "checked"; }?>>
+            <input name="bom_vtextEnabled" id="bom_vtextEnabled" type="checkbox" value="on" <?php if ($row['bom_vtext_enabled'] == "1") { echo "checked"; }?> data-toggle="tooltip" data-placement="top" title="Check box if you would like to recieve Begining of Month trip notifications via text.">
           </label>
         </div>
         </div></td>
@@ -1104,7 +1104,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
     <tr>
       <td><div class="checkbox">
           <label>
-            <input name="eom_vtextEnabled" id="eom_vtextEnabled" type="checkbox" value="on" <?php if ($row['eom_vtext_enabled'] == "1") { echo "checked"; }?>>
+            <input name="eom_vtextEnabled" id="eom_vtextEnabled" type="checkbox" value="on" <?php if ($row['eom_vtext_enabled'] == "1") { echo "checked"; }?> data-toggle="tooltip" data-placement="top" title="Check box if you would like to recieve End of Month trip notifications via text.">
           </label>
         </div>
         </div></td>
@@ -1115,7 +1115,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
     <tr>
       <td><div class="checkbox">
           <label>
-            <input name="bom_emailEnabled" id="bom_emailEnabled" type="checkbox" value="on" <?php if ($row['bom_email_enabled'] == "1") { echo "checked"; }?>>
+            <input name="bom_emailEnabled" id="bom_emailEnabled" type="checkbox" value="on" <?php if ($row['bom_email_enabled'] == "1") { echo "checked"; }?> data-toggle="tooltip" data-placement="top" title="Check box if you would like to recieve begining of Month trip notifications via email.">
           </label>
         </div>
         </div></td>
@@ -1126,7 +1126,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
     <tr>
       <td><div class="checkbox">
           <label>
-            <input name="eom_emailEnabled" id="eom_emailEnabled" type="checkbox" value="on" <?php if ($row['eom_email_enabled'] == "1") { echo "checked"; }?>>
+            <input name="eom_emailEnabled" id="eom_emailEnabled" type="checkbox" value="on" <?php if ($row['eom_email_enabled'] == "1") { echo "checked"; }?> data-toggle="tooltip" data-placement="top" title="Check box if you would like to recieve End of Month trip notifications via email.">
           </label>
         </div>
         </div></td>
@@ -1773,11 +1773,11 @@ onClick="$(this).toggleClass('glyphicon-chevron-down glyphicon-chevron-right');"
 <tr>
      <td style="padding: 5px">
       <label for="bom_message">BOM Message</label>
-      <input type="text" class="form-control" name="bom_message" id="bom_message" placeholder="" value="">
+      <input type="text" class="form-control" name="bom_message" id="bom_message" placeholder="" value="" data-toggle="tooltip" data-placement="top" title="Select the time you would like to receive Begining of Month (BOM) messages. Leaving 0:00 to 0:00 will send message at midnight">
      </td>
      <td style="padding: 5px">
       <label for="eom_message">EOM Message</label>
-      <input type="text" class="form-control" name="eom_message" id="eom_message" placeholder="" value="">
+      <input type="text" class="form-control" name="eom_message" id="eom_message" placeholder="">
      </td>
 </tr>
     <tr>
