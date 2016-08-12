@@ -249,15 +249,22 @@ if (isset($_POST['add_ifta'])) {
                        'compliance_permits' => 'Permits are missing',
                        //'compliance_gps',
                        'compliance_dot' => 'DOT violations are missing');
+					   //Need to include General Notes for driver (top section),
+					   //Need to add Date Specific "issue" to the email and DB, this will come from multiple lines,
+					   //Because of multiple lines, need to add specific date/driver to the email,
+					   //Need to add Choose Issue (selected) email details also,
+					   //Need to add Comments from each specific line.  Note:  If N/A then skip....,
   $counter = 0;
-  $subject = "IFTA Trip Incomplete";
+  $subject = "Trip Pack Incomplete";
   $body = "Notice: IFTA trip pack ".$_POST['txt_tripnum']." has been entered.\n";
+  $body = "Start Date: ".$_POST['txt_date_start']." End Date: ".$_POST['txt_date_end']." .\n";
+  //Need to enter 2 new values that will come from the DB.  Not in there yet.  Trip Origin: Trip Destination (this is for the OTR Drivers)
   $body .= "Please note that the following is missing:\n";
   foreach ($compliance as $key => $value)
   {
     if ( ($_POST[$key] == 'Incomplete' ) || ($_POST[$key] == 'Not in Packet') )
     {
-      $body .= $value . "\n";
+      $body .= $value . "If no Items are listed, thank you for turning in the trip sheet correctly.\n";
       $counter++;
     }
   }
