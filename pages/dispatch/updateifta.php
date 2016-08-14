@@ -63,7 +63,7 @@
      // IFTA
      $ifta_results = array();
      $query = "SELECT trip_no,date_format(date_started,'%m/%d/%Y') as date_started,date_format(date_ended,'%m/%d/%Y') as date_ended
-               ,driver1,driver2,truck_no,odo_start,odo_end,compliance_trip_filed_correctly,compliance_logs_included
+               ,driver1,driver2,truck_no,odo_start,odo_end,notes_gen_trip,notes_trip_driver,compliance_trip_filed_correctly,compliance_logs_included
                ,compliance_vir_included,compliance_fuel_included,compliance_bol_included,compliance_permits
                ,compliance_gps_reports,compliance_dot_violations
                FROM ifta WHERE trip_no = '".$_GET['trip_no']."'";
@@ -228,7 +228,7 @@
                      <!-- Default box -->
                      <div class="box">
                         <div class="box-header" style="text-align: center;">
-                           <h3 class="box-title">IFTA Trip / Status = Open/Closed</h3>
+                           <h3 class="box-title">IFTA Trip / Status = Insert Current Status From DB</h3>
                            <?php
                             if (isset($_GET['error'])) {
                               echo "<br>";
@@ -245,7 +245,7 @@
                                  <tr>
                                     <td width="103">Trip #
                                     <td width="144"><input class="input-sm form-control" name="txt_tripnum" type="text" id="txt_tripnum" value="<?php echo $ifta_results['trip_no'];?>" readonly></td>
-                                    <td width="156">Trip Filed Correctly</td>
+                                    <td width="156"><div align="right"><strong>Trip Compliance</strong></div></td>
                                     <td width="214"><select class="input-sm form-control" name="compliance_trip" id="compliance_trip">
                                       <?php foreach ($compliance_options as $i) { ?>
                                       <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_trip_filed_correctly']) { echo "selected"; }?>><?php echo $i;?></option>
@@ -255,8 +255,8 @@
                                  </tr>
                                  <tr>
                                     <td>Start Date
-                                    <td><input class="input-sm form-control datepicker" name="txt_date_start" type="text" id="txt_date_start" value="<?php echo $ifta_results['date_started'];?>" required></td>
-                                    <td>Logs Included</td>
+                                    <td><input class="input datepicker" name="txt_date_start" type="text" id="txt_date_start" value="<?php echo $ifta_results['date_started'];?>" required></td>
+                                    <td><div align="right"><strong>Logs Included</strong></div></td>
                                     <td>
                                       <select class="input-sm form-control" name="compliance_logs" id="compliance_logs">
                                         <?php foreach ($compliance_options as $i) { ?>
@@ -267,8 +267,8 @@
                                  </tr>
                                  <tr>
                                     <td>End Date
-                                    <td><input class="input-sm form-control datepicker" name="txt_date_end" type="text" id="txt_date_end" value="<?php echo $ifta_results['date_ended'];?>" required></td>
-                                    <td>VIR Included</td>
+                                    <td><input class="input datepicker" name="txt_date_end" type="text" id="txt_date_end" value="<?php echo $ifta_results['date_ended'];?>" required></td>
+                                    <td><div align="right"><strong>VIR Included</strong></div></td>
                                     <td><select class="input-sm form-control" name="compliance_vir" id="compliance_vir">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
@@ -287,7 +287,7 @@
                                           <?php } ?>
                                        </select>
                                     </td>
-                                    <td>Fuel Reciepts included</td>
+                                    <td><div align="right"><strong>Fuel Reciepts</strong></div></td>
                                     <td><select class="input-sm form-control" name="compliance_fuel" id="compliance_fuel">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
@@ -306,7 +306,7 @@
                                           <?php } ?>
                                        </select>
                                     </td>
-                                    <td>Original BOL included</td>
+                                    <td><div align="right"><strong>BOL Included</strong></div></td>
                                     <td><select class="input-sm form-control" name="compliance_bol" id="compliance_bol">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
@@ -317,7 +317,7 @@
                                  <tr>
                                     <td>Truck #
                                     <td><input class="input-sm form-control" name="txt_truckno" type="text" id="txt_truckno" value="<?php echo $ifta_results['truck_no'];?>" required></td>
-                                    <td>Permits</td>
+                                    <td><div align="right"><strong>Permits</strong></div></td>
                                     <td><select class="input-sm form-control" name="compliance_permits" id="compliance_permits">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
@@ -328,7 +328,7 @@
                                  <tr>
                                     <td>Start OD
                                     <td><input class="input-sm form-control" name="txt_od_start" type="text" id="txt_od_start" value="<?php echo $ifta_results['odo_start'];?>" required></td>
-                                    <td>GPS Reports</td>
+                                    <td><div align="right"><strong>GPS Reports</strong></div></td>
                                     <td><select class="input-sm form-control" name="compliance_gps" id="compliance_gps">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
@@ -339,7 +339,7 @@
                                  <tr>
                                     <td>End OD
                                     <td><input class="input-sm form-control" name="txt_od_end" type="text" id="txt_od_end" value="<?php echo $ifta_results['odo_end'];?>" required></td>
-                                   <td>DOT Violations</td>
+                                   <td><div align="right"><strong>DOT Violations</strong></div></td>
                                     <td><select class="input-sm form-control" name="compliance_dot" id="compliance_dot">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
@@ -350,30 +350,39 @@
                                  <tr>
                                     <td height="24">Total  Miles
                                    <td><input class="input-sm form-control" name="txt_od_total" type="text" id="txt_od_total" value="<?php echo $ifta_results['odo_end'] - $ifta_results['odo_start']; ?>"></td>
-                                   <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
+                                   <td><div align="right"><strong> Notes For Drivers</strong></div></td>
+                                    <td><input class="input-sm form-control" name="notes_trip_driver" type="text" id="notes_trip_driver" value="<?php echo $notes_trip_driver['notes_trip_driver'];?>" data-toggle="tooltip" data-placement="top" title="These notes will populate as a General note about the Trip report if there are any issues that Driver needs to resolve."></td>
                                  </tr>
                                  <tr>
-                                   <td>Trip States
-                                   <td>Populate All Exit States
-                                   Read Only
-                                   <td>&nbsp;</td>
-                                   <td>&nbsp;</td>
+                                   <td>Starting City &amp; State
+                                   <td><input class="input-sm form-control" name="txt_od_start" type="text" id="txt_od_start" value="<?php echo $ifta_results['odo_start'];?>" required>
+                                   <td><div align="right"><strong>Available Points for Trip</strong></div></td>
+                                   <td><input class="input-sm form-control" name="ifta_trip_points_available2" type="text" id="ifta_trip_points_available2" value="<?php echo $ifta_trip_points_available['ifta_trip_points_available'];?>"></td>
                                  </tr>
                                  <tr>
-                                   <td>Trip Routes                                     
-                                   <td>Populate Routes here                                     Read Only
-                                   <td>&nbsp;</td>
-                                   <td>&nbsp;</td>
+                                   <td>Stops Cities States
+                                   <td><input class="input-sm form-control" name="txt_location_mid_stops" type="text" id="txt_location_mid_stops" value="" data-toggle="tooltip" data-placement="top" title="Enter a few of the inbetween cities and states. This will help the driver understand any alerts via email if problems with Trip.">
+                                   <td><div align="right"><strong>Available Points for Fuel</strong></div></td>
+                                   <td><input class="input-sm form-control" name="ifta_trip_points_available3" type="text" id="ifta_trip_points_available3" value="<?php echo $ifta_trip_points_available['ifta_trip_points_available'];?>"></td>
+                                 </tr>
+                                 <tr>
+                                   <td>Ending City &amp; State
+                                   <td><input class="input-sm form-control" name="txt_location_end" type="text" id="txt_location_end" value="" data-toggle="tooltip" data-placement="top" title="Enter the ending state and city. This will help the driver understand any alerts via email if problems with Trip.">
+                                   <td><div align="right"><strong>Available Points for Images</strong></div></td>
+                                   <td><input class="input-sm form-control" name="ifta_trip_points_available4" type="text" id="ifta_trip_points_available4" value="<?php echo $ifta_trip_points_available['ifta_trip_points_available'];?>"></td>
                                  </tr>
                                  <tr>
                                    <td>Internal  Notes
-                                   <td><input class="input-sm form-control" name="txt_notes_gen_trip" type="text" id="notes_gen_trip" value="<?php echo $notes_gen_trip['notes_gen_trip'];?>">                                 
-                                   <td>Notes For Drivers</td>
-                                   <td><input class="input-sm form-control" name="notes_gen_trip" type="text" id="notes_gen_trip2" value="<?php echo $notes_gen_trip['notes_gen_trip'];?>"></td>
+                                   <td><input class="input-sm form-control" name="notes_gen_trip" type="text" id="notes_gen_trip" value="<?php echo $notes_gen_trip['notes_gen_trip'];?>" data-toggle="tooltip" data-placement="top" title="Internal notes does not distribute to anyone.">
+                                   <td><div align="right"><strong>Max available Points For Trip</strong></div></td>
+                                   <td><input class="input-sm form-control" name="ifta_trip_points_available" type="text" id="ifta_trip_points_available" value="Sum the Available Points" data-toggle="tooltip" data-placement="top" title="3 different categories: Trip / Fuel / Images." readonly></td>
+                                 </tr>
+                                 <tr>
+                                   <td>                                     <td>                                     <td><div align="right"><strong>Points Awarded For Trip</strong></div></td>
+                                   <td><input class="input-sm form-control" name="ifta_trip_points_available5" type="text" id="ifta_trip_points_available5" value="Add Points based on Data Entry" data-toggle="tooltip" data-placement="top" title="Points Awarded / If team drivers total points will be awarded to both drivers. If Local Points will be assigned to specific drivers." readonly></td>
                                  </tr>
                            </table>
-                         <p></p>
+<p></p>
                            <table width="1646" class="table table-condensed table-striped" id="add_ifta_table">
                               <tr>
                                  <td colspan="15" style="text-align: center; font-weight: bold;">Enter Trip info Below</td>
@@ -388,7 +397,7 @@
                                  <td>Ent</td>
                                  <td>OD State Line</td>
                                  <td>State Miles</td>
-                                 <td width="65">Permits                                 </td>
+                                 <td width="65">Permit                                 </td>
                                  <td width="45"> Issue</td>
                                  <td width="83">Choose Issue</td>
                                  <td width="180">Comments                                </td>
@@ -442,16 +451,15 @@
                                    <input class="input-sm" type="checkbox" name="txt_permit_req_details[]" id="txt_permit_req_details_<?php echo $random;?>" <?php if($ifta_details[$i]['permit_required'] == 'Y') { echo " checked ";} ?> value="<?php echo $ifta_details[$i]['id'];?>">
                                  </div></td>
                                  <td><div align="center">
-                                   <input class="input-sm" type="checkbox" name="txt_permit_req_details_<?php echo $random;?>" id="txt_permit_req_details_<?php echo $random;?>2" <?php if($ifta_details[$i]['permit_required'] == 'Y') { echo " checked ";} ?> value="<?php echo $ifta_details[$i]['id'];?>">
+                                   <input class="input-sm" type="checkbox" name="cb_trip_detail_issue<?php echo $random;?>" id="cb_trip_detail_issue<?php echo $random;?>2" <?php if($ifta_details[$i]['cb_trip_detail_issue'] == 'Y') { echo " checked ";} ?> value="<?php echo $cb_trip_detail_issue[$i]['id'];?>">
                                  </div></td>
                                  <td><div align="center">
                                    <label for="ifta_specificdate_issue"></label>
-                                   <select name="ifta_specificdate_issue" id="ifta_specificdate_issue">
+                                   <select name="sl_trip_detail_issue" id="sl_trip_detail_issue">
                                      <option selected>N/A</option>
-                                     <option>BOL</option>
-                                     <option>Fuel</option>
-                                     <option>Logs</option>
-                                     <option>VIR</option>
+                                     <option>Logs/VIR</option>
+                                     <option>No Trip Pack</option>
+                                     <option>Other</option>
                                    </select>
                                  </div></td>
                                  <td><div align="center">
@@ -471,24 +479,28 @@
                               </tbody>
                            </table>
             <p></p>
-                           <table id="add_ifta_fuel" class="table table-condensed table-striped">
+                           <table width="1789" class="table table-condensed table-striped" id="add_ifta_fuel">
                               <tbody>
                                  <tr style="text-align: center; font-weight: bold;">
-                                    <td colspan="12">Enter Fuel Info for Trip</td>
+                                    <td colspan="16">Enter Fuel Info for Trip</td>
                                  </tr>
                                  <tr>
-                                    <td>Trip #</td>
-                                    <td>Date</td>
-                                    <td>Truck Gallons</td>
-                                    <td>Reefer Fuel</td>
-                                    <td>Other Fuel</td>
-                                    <td>Vendor</td>
-                                    <td>City</td>
-                                    <td>State</td>
-                                    <td>Odometer</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                    <td width="131">Trip #</td>
+                                    <td width="94">Date</td>
+                                    <td width="91">Truck Gallons</td>
+                                    <td width="152">Reefer Fuel</td>
+                                    <td width="179">Other Fuel</td>
+                                    <td width="162">Vendor</td>
+                                    <td width="162">City</td>
+                                    <td width="46">State</td>
+                                    <td width="162">Odometer</td>
+                                    <td width="80">Issue</td>
+                                    <td width="100">Choose Issue</td>
+                                    <td width="44">Comments</td>
+                                    <td width="44">Resolved</td>
+                                    <td width="12">&nbsp;</td>
+                                    <td width="9">&nbsp;</td>
+                                    <td width="111" style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  </tr>
                                  <tr id="tr_add_fuel_details_0">
                                  <?php
@@ -501,11 +513,11 @@
                                     <td><input name="txt_fuel_tripnum[]" type="text" class="input-sm form-control" id="txt_fuel_tripnum_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['trip_no'];?>" size="16" readonly>
                         <input type="hidden" name="hdn_fuel_id[]" id="hdn_fuel_id_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['id'];?>"></td>
                                     <td><input class="input-sm form-control datepicker" name="txt_fuel_date[]" type="text" id="txt_fuel_date_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['trip_date'];?>" size="14"></td>
-                                    <td><input class="input-sm form-control" name="txt_fuel_gallons[]" type="text" id="txt_fuel_gallons_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['fuel_gallons'];?>"></td>
-                                    <td><input class="input-sm form-control" name="txt_fuel_reefer[]" type="text" id="txt_fuel_reefer_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['fuel_reefer'];?>"></td>
-                                    <td style="width: 10em;"><input class="input-sm form-control" name="txt_fuel_other[]" type="text" id="txt_fuel_other_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['fuel_other'];?>"></td>
+                                    <td><input name="txt_fuel_gallons[]" type="text" class="input-sm form-control" id="txt_fuel_gallons_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['fuel_gallons'];?>" size="12"></td>
+                                    <td><input name="txt_fuel_reefer[]" type="text" class="input-sm form-control" id="txt_fuel_reefer_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['fuel_reefer'];?>" size="12"></td>
+                                    <td style="width: 10em;"><input name="txt_fuel_other[]" type="text" class="input-sm form-control" id="txt_fuel_other_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['fuel_other'];?>" size="12"></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_vendor[]" type="text" id="txt_fuel_vendor_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['vendor'];?>"></td>
-                                    <td><input class="input-sm form-control" name="txt_fuel_city[]" type="text" id="txt_fuel_city_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['city'];?>"></td>
+                                    <td><input name="txt_fuel_city[]" type="text" class="input-sm form-control" id="txt_fuel_city_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['city'];?>" size="16"></td>
                                     <td>
                                        <select class="input-sm form-control" name="txt_fuel_state[]" id="txt_fuel_state_<?php echo $random;?>" value="">
                                           <?php
@@ -515,6 +527,19 @@
                                        </select>
                                     </td>
                                     <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_odo[]" type="text" id="txt_fuel_odo_<?php echo $random;?>" value="<?php echo $ifta_fuel[$i]['odometer'];?>"></td>
+                                    <td style="width: 5em;"><div align="center">
+                                      <input class="input-sm" type="checkbox" name="cb_trip_detail_issue<?php echo $random;?>2" id="cb_trip_detail_issue<?php echo $random;?>" <?php if($ifta_details[$i]['cb_trip_detail_issue'] == 'Y') { echo " checked ";} ?> value="<?php echo $cb_trip_detail_issue[$i]['id'];?>">
+                                    </div></td>
+                                    <td style="width: 5em;"><select name="sl_trip_detail_issue2" id="sl_trip_detail_issue2">
+                                      <option selected>N/A</option>
+                                      <option>BOL</option>
+                                      <option>Fuel</option>
+                                      <option>Logs</option>
+                                      <option>VIR</option>
+                                      <option>Other</option>
+                                    </select></td>
+                                    <td style="width: 5em;"><input name="issue_comment2" type="text" id="issue_comment2" size="30"></td>
+                                    <td style="width: 5em;"><input class="input-sm form-control datepicker" name="txt_date_details_<?php echo $random;?>2" type="text" id="txt_date_details_<?php echo $random;?>3" value="<?php echo $ifta_details[$i]['trip_date'];?>" size="16"></td>
                                     <td colspan="2" style="text-align: right;"><button class="btn btn-sm btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                     <td style="text-align: right;" id="ifta_fuel|<?php echo $ifta_fuel[$i]['id'];?>">
                                        <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_fuel[]" id="txt_delete_row_fuel_<?php echo $random;?>" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
@@ -527,7 +552,7 @@
                               </tbody>
                            </table>
 <p></p>
-                           <table width="436" class="table table-condensed table-striped">
+                           <table width="725" class="table table-condensed table-striped">
                             <tbody>
                               <tr>
                                  <td colspan="3" style="text-align: center; font-weight: bold;">Upload Trip Images</td>
@@ -537,8 +562,8 @@
                               </td>
                               </tr>
                               <tr>
-                                 <td width="159">Image IFTA Trip Report</td>
-                                 <td width="463">
+                                 <td width="111">Image IFTA Trip Report</td>
+                                 <td width="602">
                                     <?php if (isset($ifta_uploads['ifta_image_trip']['name'])) {?>
                                        <input name="ifta_image_trip[]" type="text" class="input-sm" style="border: 1px solid #CCC; width: 80%;" id="ifta_image_trip" value="<?php echo $ifta_uploads['ifta_image_trip']['name']; ?>">
                                        <div style="float: right;">
@@ -625,19 +650,24 @@
                                      <?php }else{ ?>
                                     <input name="ifta_image_bol[]" type="file" class="file-loading input-sm form-control" id="ifta_image_bol" multiple=false>
                                      <?php } ?>
-                                    <input type="hidden" name="hdn_upload[]" id="hdn_upload_6" value="ifta_image_bol">
-                                 </td>
+                                 <input type="hidden" name="hdn_upload[]" id="hdn_upload_6" value="ifta_image_bol">                                 <div align="center"></div></td>
                               </tr>
-                            </tbody>
+                             </tbody>
                            </table>
                         <p></p>
                         <button type="submit" class="btn btn-danger" name="update_ifta">Update</button>
-                        <span class="box-title">Open
-                        <input name="radio" type="radio" id="trip_status2" value="open" checked>
-                        <label for="trip_status2"></label>
+                        <table width="200" border="1">
+                          <tr>
+                            <td><span class="box-title">Open
+                                <input name="radio" type="radio" id="trip_status2" value="open" checked>
+                                <label for="trip_status2"></label>
 Closed
 <input type="radio" name="radio" id="trip_status2" value="closed">
-                        </span>
+                            </span></td>
+                            <td>Create Task For Driver
+                            <input type="checkbox" name="cb_ifta_create_task" id="cb_ifta_create_task" data-toggle="tooltip" data-placement="top" title="This button will create a task for the driver based on this trip sheet, if Multiple drivers assigned then it will create multiple tasks for all the drivers."></td>
+                          </tr>
+                        </table>
                         </form>
                         </div>
                         <!-- /.box-body -->

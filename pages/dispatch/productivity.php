@@ -24,6 +24,7 @@ $drivername = $_SESSION['drivername'];
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo HTTP;?>/bootstrap/css/custom.css" rel="stylesheet" type="text/css" />
 <!-- Font Awesome Icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <!-- Ionicons -->
@@ -771,11 +772,11 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
  
            <!--  Google Pie Chart start -->
           <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-4">
               <div class="box">
                 <div class="box-header">
                   
-                  <h3 class="box-title"> Company Stats</h3>
+                  <h3 class="box-title"> Company Stats YTD</h3>
 
                   <!-- Remove Search Tool
                   <div class="box-tools">
@@ -870,22 +871,22 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
                       <th width="15%">Name</th>
                       <th width="26%">Graph Score</th>
                       <th width="9%">Score</th>
-                      <th width="11%">Positive Points</th>
-                      <th width="9%"> Negative Points</th>
-                      <th width="7%">Total Points</th>
+                      <th width="10%">+ Points</th>
+                      <th width="9%"> - Points</th>
+                      <th width="8%">Total Points</th>
                       <th width="10%">Best Category</th>
                       <th width="10%">Worst Category</th>
                     </tr>
                     <tr>
                       <td>1</td>
-                      <td><img src="../../dist/img/dash.jpg" alt="" width="24" height="24" class="img-circle"> Crayston MiddleBrook</td>
+                      <td><img src="../../dist/img/dash.jpg" alt="" width="24" height="24" class="img-circle"> Jack Jack</td>
                       <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-success" style="width: 99%"></div>
+                        <div class="progress-bar progress-bar-success" style="width: 100%"></div>
                       </div></td>
-                      <td><span class="badge bg-green">99%</span></td>
+                      <td><span class="badge bg-green">100%</span></td>
                       <td><span class="badge bg-green">1800</span></td>
-                      <td><span class="badge bg-red">32</span></td>
-                      <td><span class="badge bg-light-blue">1768</span></td>
+                      <td><span class="badge bg-black">10</span></td>
+                      <td><span class="badge bg-purple">1790</span></td>
                       <td><span class="label label-success">Boards</span></td>
                       <td><span class="label label-danger">VIR</span></td>
                     </tr>
@@ -893,12 +894,12 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
                       <td>2</td>
                       <td><img src="../../dist/img/violet.jpg" alt="" width="24" height="24" class="img-circle"> Violote</td>
                       <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-success" style="width: 85%"></div>
+                        <div class="progress-bar progress-bar-success" style="width: 90%"></div>
                       </div></td>
-                      <td><span class="badge bg-green">80%</span></td>
-                      <td><span class="badge bg-green">1800</span></td>
-                      <td><span class="badge bg-red">32</span></td>
-                      <td><span class="badge bg-light-blue">1768</span></td>
+                      <td><span class="badge bg-green">90%</span></td>
+                      <td><span class="badge bg-green">1655</span></td>
+                      <td><span class="badge bg-black">15</span></td>
+                      <td><span class="badge bg-purple">1640</span></td>
                       <td><span class="label label-success">Boards</span></td>
                       <td><span class="label label-danger">VIR</span></td>
                     </tr>
@@ -906,12 +907,12 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
                       <td>3</td>
                       <td><img src="../../dist/img/jack.jpg" alt="" width="24" height="24" class="img-circle">Jack Jack</td>
                       <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-primary" style="width: 66%"></div>
+                        <div class="progress-bar progress-bar-primary" style="width: 89%"></div>
                       </div></td>
-                      <td><span class="badge bg-light-blue">79%</span></td>
-                      <td><span class="badge bg-green">1800</span></td>
-                      <td><span class="badge bg-red">32</span></td>
-                      <td><span class="badge bg-light-blue">1768</span></td>
+                      <td><span class="badge bg-light-blue">89%</span></td>
+                      <td><span class="badge bg-green">1501</span></td>
+                      <td><span class="badge bg-black">32</span></td>
+                      <td><span class="badge bg-purple">1469</span></td>
                       <td><span class="label label-success">Boards</span></td>
                       <td><span class="label label-danger">VIR</span></td>
                     </tr>
@@ -919,12 +920,12 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
                       <td>4</td>
                       <td><img src="../../dist/img/edna.jpg" alt="" width="24" height="24" class="img-circle">Edna Mode</td>
                       <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-primary" style="width: 66%"></div>
+                        <div class="progress-bar progress-bar-primary" style="width: 70%"></div>
                       </div></td>
-                      <td><span class="badge bg-light-blue">79%</span></td>
-                      <td><span class="badge bg-green">1800</span></td>
-                      <td><span class="badge bg-red">32</span></td>
-                      <td><span class="badge bg-light-blue">1768</span></td>
+                      <td><span class="badge bg-light-blue">70%</span></td>
+                      <td><span class="badge bg-green">1312</span></td>
+                      <td><span class="badge bg-black">56</span></td>
+                      <td><span class="badge bg-purple">1256</span></td>
                       <td><span class="label label-success">Boards</span></td>
                       <td><span class="label label-danger">VIR</span></td>
                     </tr>
@@ -932,12 +933,12 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
                       <td>5</td>
                       <td><img src="../../dist/img/Gilbert Huph.jpg" alt="" width="24" height="24" class="img-circle">Gilbert Huph</td>
                       <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-yellow" style="width: 58%"></div>
+                        <div class="progress-bar progress-bar-yellow" style="width: 69%"></div>
                       </div></td>
-                      <td><span class="badge bg-yellow">59%</span></td>
-                      <td><span class="badge bg-green">1800</span></td>
-                      <td><span class="badge bg-red">32</span></td>
-                      <td><span class="badge bg-light-blue">1768</span></td>
+                      <td><span class="badge bg-yellow">69%</span></td>
+                      <td><span class="badge bg-green">1122</span></td>
+                      <td><span class="badge bg-black">98</span></td>
+                      <td><span class="badge bg-purple">1024</span></td>
                       <td><span class="label label-success">Boards</span></td>
                       <td><span class="label label-danger">VIR</span></td>
                     </tr>
@@ -945,12 +946,12 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
                       <td>6</td>
                       <td><img src="../../dist/img/syndrome.jpg" alt="" width="24" height="24" class="img-circle">Syndrome</td>
                       <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-yellow" style="width: 40%"></div>
+                        <div class="progress-bar progress-bar-yellow" style="width: 50%"></div>
                       </div></td>
-                      <td><span class="badge bg-yellow">59%</span></td>
-                      <td><span class="badge bg-green">1800</span></td>
-                      <td><span class="badge bg-red">32</span></td>
-                      <td><span class="badge bg-light-blue">1768</span></td>
+                      <td><span class="badge bg-yellow">50%</span></td>
+                      <td><span class="badge bg-green">938</span></td>
+                      <td><span class="badge bg-black">122</span></td>
+                      <td><span class="badge bg-purple">816</span></td>
                       <td><span class="label label-success">Boards</span></td>
                       <td><span class="label label-danger">VIR</span></td>
                     </tr>
@@ -958,12 +959,12 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
                       <td>7</td>
                       <td><img src="../../dist/img/bernie kropp.jpg" alt="" width="24" height="24" class="img-circle"> Burnie Kropp</td>
                       <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 19%"></div>
+                        <div class="progress-bar progress-bar-danger" style="width: 49%"></div>
                       </div></td>
-                      <td><span class="badge bg-red">39%</span></td>
-                      <td><span class="badge bg-green">1800</span></td>
-                      <td><span class="badge bg-red">32</span></td>
-                      <td><span class="badge bg-light-blue">1768</span></td>
+                      <td><span class="badge bg-red">49%</span></td>
+                      <td><span class="badge bg-green">743</span></td>
+                      <td><span class="badge bg-black">155</span></td>
+                      <td><span class="badge bg-purple">588</span></td>
                       <td><span class="label label-success">Boards</span></td>
                       <td><span class="label label-danger">VIR</span></td>
                     </tr>
@@ -971,38 +972,45 @@ $row = mysql_fetch_array($result,MYSQL_BOTH);
                       <td>8</td>
                       <td><img src="../../dist/img/frank.jpg" alt="" width="24" height="24" class="img-circle"> Frank</td>
                       <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 20%"></div>
+                        <div class="progress-bar progress-bar-danger" style="width: 26%"></div>
                       </div></td>
-                      <td><span class="badge bg-red">39%</span></td>
-                      <td><span class="badge bg-green">1800</span></td>
-                      <td><span class="badge bg-red">32</span></td>
-                      <td><span class="badge bg-light-blue">1768</span></td>
+                      <td><span class="badge bg-red">26%</span></td>
+                      <td><span class="badge bg-green">422</span></td>
+                      <td><span class="badge bg-black">187</span></td>
+                      <td><span class="badge bg-purple">235</span></td>
                       <td><span class="label label-success">Boards</span></td>
                       <td><span class="label label-danger">VIR</span></td>
                     </tr>
                     <tr>
                       <td>9</td>
                       <td><img src="../../dist/img/h2tyd 3.jpg" alt="" width="24" height="24" class="img-circle"> Hector Axe</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 20%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">39%</span></td>
-                      <td><span class="badge bg-green">1800</span></td>
-                      <td><span class="badge bg-red">32</span></td>
-                      <td><span class="badge bg-light-blue">1768</span></td>
+                      <td>
+                      <!-- Changed CSS to Custom CSS Sytel for Grey Bar.... -->
+                      <div class="progress progress-striped active">
+                      <div class="progress-bar progress-bar-black" style="width: 25%"></div>
+                      </div>
+                      <!-- Original CSS Danger Style removed for Grey Bar
+                      <div class="progress progress-xs progress-striped active">
+                      <div class="progress-bar progress-bar-danger" style="width: 25%"></div>
+                      </div> --> 
+                      </td>
+                      <td><span class="badge bg-black">25%</span></td>
+                      <td><span class="badge bg-green">375</span></td>
+                      <td><span class="badge bg-black">234</span></td>
+                      <td><span class="badge bg-purple">141</span></td>
                       <td><span class="label label-success">Boards</span></td>
                       <td><span class="label label-danger">VIR</span></td>
                     </tr>
                     <tr>
                       <td>10</td>
                       <td><img src="../../dist/img/tony rydinger.jpg" alt="" width="24" height="24" class="img-circle"> Troy Hydinger</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 20%"></div>
+                      <td><div class="progress progress-striped active">
+                        <div class="progress-bar progress-bar-black" style="width: 1%"></div>
                       </div></td>
-                      <td><span class="badge bg-red">39%</span></td>
-                      <td><span class="badge bg-green">1800</span></td>
-                      <td><span class="badge bg-red">32</span></td>
-                      <td><span class="badge bg-light-blue">1768</span></td>
+                      <td><span class="badge bg-black">1%</span></td>
+                      <td><span class="badge bg-green">303</span></td>
+                      <td><span class="badge bg-black">255</span></td>
+                      <td><span class="badge bg-purple">48</span></td>
                       <td><span class="label label-success">Boards</span></td>
                       <td><span class="label label-danger">VIR</span></td>
                     </tr>
