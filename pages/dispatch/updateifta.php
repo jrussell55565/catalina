@@ -465,7 +465,7 @@
                                  <td><div align="center">
                                    <input name="issue_comment" type="text" id="issue_comment" size="30">
                                  </div>                                   <label for="issue_comment"></label></td>
-                                 <td><input class="input-sm form-control datepicker" name="txt_date_details_<?php echo $random;?>" type="text" id="txt_date_details_<?php echo $random;?>2" value="<?php echo $ifta_details[$i]['trip_date'];?>" size="16"></td>
+                                 <td><input class="input-sm form-control datepicker" name="date_resolved_details<?php echo $random;?>" type="text" id="txt_date_details_<?php echo $random;?>2" value="<?php echo $ifta_details[$i]['trip_date'];?>" size="16"></td>
                                  <td style="text-align: right;"><button class="btn btn-sm btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  <td style="text-align: right;" id="ifta_details|<?php echo $ifta_details[$i]['id'];?>">
                                     <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_details[]" id="txt_delete_row_details_<?php echo $random;?>" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
