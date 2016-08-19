@@ -94,6 +94,10 @@ if (isset($_POST['add_ifta'])) {
         if ($_POST['txt_state_odo_details'][$i] == '') { $_POST['txt_state_odo_details'][$i] = 'NULL'; }
         if ($_POST['txt_state_miles_details'][$i] == '') { $_POST['txt_state_miles_details'][$i] = 'NULL'; }
         if (isset($_POST['txt_permit_req_details'][$i])) { $permit = 'Y'; }else{ $permit = 'N'; }
+        if (isset($_POST['cb_trip_issue_details'][$i])) { $issue = 'Y'; }else{ $issue = 'N'; }
+        if ($_POST['sl_trip_issue_details'][$i] == '') { $_POST['sl_trip_issue_details'][$i] = 'NULL'; }
+        if ($_POST['issue_comment_details'][$i] == '') { $_POST['issue_comment_details'][$i] = 'NULL'; }
+        if ($_POST['date_resolved_details'][$i] == '') { $_POST['date_resolved_details'][$i] = 'NULL'; }
       
         $sql_details = 
         "INSERT INTO ifta_details
@@ -107,7 +111,11 @@ if (isset($_POST['add_ifta'])) {
         st_enter,
         state_line_odometer,
         state_miles,
-        permit_required
+        permit_required,
+        cb_trip_issue,
+        sl_trip_issue,
+        issue_comment,
+        date_resolved
         )
         VALUES
         (
@@ -120,7 +128,11 @@ if (isset($_POST['add_ifta'])) {
         '".$_POST['txt_state_enter_details'][$i]."',
         ".$_POST['txt_state_odo_details'][$i].",
         ".$_POST['txt_state_miles_details'][$i].",
-        '$permit'
+        '$permit',
+        '$issue',
+        ".$_POST['sl_trip_issue_details'][$i].",
+        ".$_POST['issue_comment_details'][$i].",
+        str_to_date('".$_POST['date_resolved_details'][$i]."','%m/%d/%Y')
         )";
 
         if ($mysqli->query($sql_details) === false)
@@ -249,15 +261,22 @@ if (isset($_POST['add_ifta'])) {
                        'compliance_permits' => 'Permits are missing',
                        //'compliance_gps',
                        'compliance_dot' => 'DOT violations are missing');
+					   //Need to include General Notes for driver (top section),
+					   //Need to add Date Specific "issue" to the email and DB, this will come from multiple lines,
+					   //Because of multiple lines, need to add specific date/driver to the email,
+					   //Need to add Choose Issue (selected) email details also,
+					   //Need to add Comments from each specific line.  Note:  If N/A then skip....,
   $counter = 0;
-  $subject = "IFTA Trip Incomplete";
+  $subject = "Trip Pack Incomplete";
   $body = "Notice: IFTA trip pack ".$_POST['txt_tripnum']." has been entered.\n";
+  $body = "Start Date: ".$_POST['txt_date_start']." End Date: ".$_POST['txt_date_end']." .\n";
+  //Need to enter 2 new values that will come from the DB.  Not in there yet.  Trip Origin: Trip Destination (this is for the OTR Drivers)
   $body .= "Please note that the following is missing:\n";
   foreach ($compliance as $key => $value)
   {
     if ( ($_POST[$key] == 'Incomplete' ) || ($_POST[$key] == 'Not in Packet') )
     {
-      $body .= $value . "\n";
+      $body .= $value . "If no Items are listed, thank you for turning in the trip sheet correctly.\n";
       $counter++;
     }
   }
@@ -327,6 +346,9 @@ if (isset($_POST['update_ifta'])) {
         if ($_POST['txt_state_enter_details'][$i] == '') { $_POST['txt_state_enter_details'][$i] = 'NULL'; }
         if ($_POST['txt_state_odo_details'][$i] == '') { $_POST['txt_state_odo_details'][$i] = 'NULL'; }
         if ($_POST['txt_state_miles_details'][$i] == '') { $_POST['txt_state_miles_details'][$i] = 'NULL'; }
+        if ($_POST['sl_trip_issue_details'][$i] == '') { $_POST['sl_trip_issue_details'][$i] = 'NULL'; }
+        if ($_POST['issue_comment_details'][$i] == '') { $_POST['issue_comment_details'][$i] = 'NULL'; }
+        if ($_POST['date_resolved_details'][$i] == '') { $_POST['date_resolved_details'][$i] = 'NULL'; }
         
         $count = 0;
         foreach($_POST['txt_permit_req_details'] as $permit_value) {
@@ -339,6 +361,17 @@ if (isset($_POST['update_ifta'])) {
         }else{
             $permit = 'N';
         }
+        $count = 0;
+        foreach($_POST['cb_trip_issue_details'] as $issue_value) {
+          if ($issue_value == $_POST['hdn_details_id'][$i]) {
+              $count = 1;
+          }
+        }
+        if ($count == 1) {
+            $issue = 'Y';
+        }else{
+            $issue = 'N';
+        }
       
         $sql_details = "UPDATE ifta_details SET
         trip_date = str_to_date('".$_POST['txt_date_details'][$i]."','%m/%d/%Y'),
@@ -349,15 +382,25 @@ if (isset($_POST['update_ifta'])) {
         st_enter = '".$_POST['txt_state_enter_details'][$i]."',
         state_line_odometer = ".$_POST['txt_state_odo_details'][$i].",
         state_miles = ".$_POST['txt_state_miles_details'][$i].",
-        permit_required = '$permit'
+        permit_required = '$permit',
+        cb_trip_issue = '$issue',
+        sl_trip_issue = '".$_POST['sl_trip_issue_details'][$i]."',
+        issue_comment = '".$_POST['issue_comment_details'][$i]."',
+        date_resolved = str_to_date('".$_POST['date_resolved_details'][$i]."','%m/%d/%Y')
         WHERE id = ".$_POST['hdn_details_id'][$i];
-        #print $sql_details . "\n";
-        #continue;
+        /* Used for debug
+        print $sql_details . "\n";
+        continue;
+        */
         if ($mysqli->query($sql_details) === false)
         {
             throw new Exception("Error UPDATING IFTA_DETAILS: ".$mysqli->error);
         }
     }
+
+    /* Used for debug
+    exit;
+    */
 
     $id = $_POST['hdn_details_id_add'];
     for ($i=0; $i<sizeof($id); $i++)
@@ -372,6 +415,10 @@ if (isset($_POST['update_ifta'])) {
         if ($_POST['txt_state_odo_details_add'][$i] == '') { $_POST['txt_state_odo_details_add'][$i] = 'NULL'; }
         if ($_POST['txt_state_miles_details_add'][$i] == '') { $_POST['txt_state_miles_details_add'][$i] = 'NULL'; }
         if (isset($_POST['txt_permit_req_details_add'][$i])) { $permit = 'Y'; }else{ $permit = 'N'; }
+        if (isset($_POST['cb_trip_issue_details_add'][$i])) { $issue = 'Y'; }else{ $issue = 'N'; }
+        if ($_POST['sl_trip_issue_details_add'][$i] == '') { $_POST['sl_trip_issue_details_add'][$i] = 'NULL'; }
+        if ($_POST['issue_comment_details_add'][$i] == '') { $_POST['issue_comment_details_add'][$i] = 'NULL'; }
+        if ($_POST['date_resolved_details_add'][$i] == '') { $_POST['date_resolved_details_add'][$i] = 'NULL'; }
       
         $sql_details_add = 
         "INSERT INTO ifta_details
@@ -385,7 +432,11 @@ if (isset($_POST['update_ifta'])) {
         st_enter,
         state_line_odometer,
         state_miles,
-        permit_required
+        permit_required,
+        cb_trip_issue,
+        sl_trip_issue,
+        issue_comment,
+        date_resolved
         )
         VALUES
         (
@@ -398,9 +449,16 @@ if (isset($_POST['update_ifta'])) {
         '".$_POST['txt_state_enter_details_add'][$i]."',
         ".$_POST['txt_state_odo_details_add'][$i].",
         ".$_POST['txt_state_miles_details_add'][$i].",
-        '$permit'
+        '$permit',
+        '$issue',
+        '".$_POST['sl_trip_issue_details_add'][$i]."',
+        '".$_POST['issue_comment_details_add'][$i]."',
+        str_to_date('".$_POST['date_resolved_details_add'][$i]."','%m/%d/%Y')
         )";
-
+        /*
+        Used for debug
+        print $sql_details_add; exit;
+        */
         if ($mysqli->query($sql_details_add) === false)
         {
             throw new Exception("Error INSERTING into table IFTA_DETAILS: ".$mysqli->error);
@@ -420,6 +478,22 @@ if (isset($_POST['update_ifta'])) {
         if ($_POST['txt_fuel_city'][$i] == '') { $_POST['txt_fuel_city'][$i] = 'NULL'; }
         if ($_POST['txt_fuel_state'][$i] == '') { $_POST['txt_fuel_state'][$i] = 'NULL'; }
         if ($_POST['txt_fuel_odo'][$i] == '') { $_POST['txt_fuel_odo'][$i] = 'NULL'; }
+        if ($_POST['sl_trip_issue_fuel'][$i] == '') { $_POST['sl_trip_issue_fuel'][$i] = 'NULL'; }
+        if ($_POST['issue_comment_fuel'][$i] == '') { $_POST['issue_comment_fuel'][$i] = 'NULL'; }
+        if ($_POST['date_resolved_fuel'][$i] == '') { $_POST['date_resolved_fuel'][$i] = 'NULL'; }
+
+        $count = 0;
+
+        foreach($_POST['cb_trip_issue_fuel'] as $issue_value) {
+          if ($issue_value == $_POST['hdn_fuel_id'][$i]) {
+              $count = 1;
+          }
+        }
+        if ($count == 1) {
+            $issue = 'Y';
+        }else{
+            $issue = 'N';
+        }
         
         $sql_fuel = "UPDATE ifta_fuel SET
         trip_date = str_to_date('".$_POST['txt_fuel_date'][$i]."','%m/%d/%Y'),
@@ -429,7 +503,11 @@ if (isset($_POST['update_ifta'])) {
         vendor = '".$_POST['txt_fuel_vendor'][$i]."',
         city = '".$_POST['txt_fuel_city'][$i]."',
         state = '".$_POST['txt_fuel_state'][$i]."',
-        odometer = ".$_POST['txt_fuel_odo'][$i]."
+        odometer = ".$_POST['txt_fuel_odo'][$i].",
+        cb_trip_issue = '$issue',
+        sl_trip_issue = '".$_POST['sl_trip_issue_fuel'][$i]."',
+        issue_comment = '".$_POST['issue_comment_fuel'][$i]."',
+        date_resolved = str_to_date('".$_POST['date_resolved_fuel'][$i]."','%m/%d/%Y')
         WHERE id = ".$_POST['hdn_fuel_id'][$i];
 
         if ($mysqli->query($sql_fuel) === false)
@@ -450,6 +528,10 @@ if (isset($_POST['update_ifta'])) {
         if ($_POST['txt_fuel_city_add'][$i] == '') { $_POST['txt_fuel_city_add'][$i] = 'NULL'; }
         if ($_POST['txt_fuel_state_add'][$i] == '') { $_POST['txt_fuel_state_add'][$i] = 'NULL'; }
         if ($_POST['txt_fuel_odo_add'][$i] == '') { $_POST['txt_fuel_odo_add'][$i] = 'NULL'; }
+        if (isset($_POST['cb_trip_issue_fuel_add'][$i])) { $issue = 'Y'; }else{ $issue = 'N'; }
+        if ($_POST['sl_trip_issue_fuel_add'][$i] == '') { $_POST['sl_trip_issue_fuel_add'][$i] = 'NULL'; }
+        if ($_POST['issue_comment_fuel_add'][$i] == '') { $_POST['issue_comment_fuel_add'][$i] = 'NULL'; }
+        if ($_POST['date_resolved_fuel_add'][$i] == '') { $_POST['date_resolved_fuel_add'][$i] = 'NULL'; }
         
         $sql_fuel = "INSERT INTO ifta_fuel
         (
@@ -461,7 +543,11 @@ if (isset($_POST['update_ifta'])) {
         vendor,
         city,
         state,
-        odometer
+        odometer,
+        cb_trip_issue,
+        sl_trip_issue,
+        issue_comment,
+        date_resolved
         )
         VALUES
         (
@@ -473,7 +559,11 @@ if (isset($_POST['update_ifta'])) {
         '".$_POST['txt_fuel_vendor_add'][$i]."',
         '".$_POST['txt_fuel_city_add'][$i]."',
         '".$_POST['txt_fuel_state_add'][$i]."',
-        ".$_POST['txt_fuel_odo_add'][$i]."
+        ".$_POST['txt_fuel_odo_add'][$i].",
+        '$issue',
+        '".$_POST['sl_trip_issue_fuel_add'][$i]."',
+        '".$_POST['issue_comment_fuel_add'][$i]."',
+        str_to_date('".$_POST['date_resolved_fuel_add'][$i]."','%m/%d/%Y')
         )";
 
         if ($mysqli->query($sql_fuel) === false)

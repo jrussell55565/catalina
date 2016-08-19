@@ -199,7 +199,7 @@ if (isset($_GET['exportDisplay']))
                </div>
                 <div class="input-group" style="margin-top: 5px">
                  <p>
-                 <input type="checkbox" name="remove_dup" id="remove_dup" value="true"> Remove Day Duplicates
+                 <input name="remove_dup" type="checkbox" id="remove_dup" value="true" checked> Remove Day Duplicates
                  </p> 
                  <label class="radio-inline">
                   <input name="inlineRadioOptions" type="radio" id="inlineRadio1" value="exportDisplay" checked> Display
@@ -217,7 +217,7 @@ if (isset($_GET['exportDisplay']))
                    ?>
                    <table class="table" style="display: block;">
                    <th>drivername</th>
-                   <th>id</th>
+                   <th>Phone</th>
                    <th>truck number</th>
                    <th>trailer number</th>
                    <th>rental</th>

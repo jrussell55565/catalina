@@ -289,13 +289,18 @@ if ($row['status'] == "Delivered")
                   <tr role="row" class="odd">
                     <td width="70"><label>User</label></td>
                     <td width="33"><label>Date</label></td>
-                    <td width="56"><label> Change</label></td>
+                    <td width="56"><label> Status</label></td>
                     <td width="101"><label> Notes</label></td>
                     <td width="76"><label>Acc</label></td>
                     <td width="90"><label>Pcs/Plt</label></td>
                   </tr>
               <?php
-              $result = mysql_query($sql);
+			  $result = mysql_query($sql);
+			  // I can't figure this thing out.......
+              // $datetime is something like: 2014-01-31 13:05:59
+              $date = strtotime($date);
+              $date = date("m/d/y g:i A", $date);
+              // $myFormatForView is something like: 01/31/14 1:05 PM
               while ($export_row = mysql_fetch_array($result, MYSQL_BOTH))
               {
               ?>

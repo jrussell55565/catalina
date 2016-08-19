@@ -27,7 +27,7 @@
                 <li><a href="<?php echo HTTP;?>/pages/info/inspectiontypes.php"><i class="fa fa-bank"></i>CSA Inspection Types</a></li>                
                 <li><a href="<?php echo HTTP;?>/pages/info/virinfo.php"><i class="fa fa-truck"></i>VIR Info</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/info/kingpin.php"><i class="fa fa-truck"></i> King Pin Settings Info</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/info/tirepressure.php"><i class="fa truck"></i> Tire Pressure Info</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/info/tirepressure.php"><i class="fa fa-life-ring"></i> Tire Pressure Info</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/layout/fixed.html"><i class="fa fa-chain"></i>Chain Laws Info</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/info/otrpodimage.php"><i class="fa fa-newspaper-o"></i>OTR Documents Policy</a></li>
                 <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/location.php"><i class="fa fa-globe"></i> Map Users</a></li>

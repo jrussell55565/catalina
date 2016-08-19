@@ -3,7 +3,7 @@ session_start();
 
 if ($_SESSION['login'] != 1)
 {
-        header('Location: /pages/login/driverlogin.php');
+        header('Location: /pages/dispatch/adminonly.php');
 }
 
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
@@ -102,6 +102,7 @@ if ($_POST['btn_trips'])
 <BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
 <title>Imports</title>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />

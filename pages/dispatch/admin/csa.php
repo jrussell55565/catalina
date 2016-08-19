@@ -53,7 +53,7 @@ if ($_POST['update_csa'])
           violation_time_weight,
           violation_description,
           co_driver,
-          score,
+          total_points,
           author) 
           VALUES (
           '".$row['employee_id']."',
@@ -65,7 +65,7 @@ if ($_POST['update_csa'])
           ".$_POST['time_weight'].",
           '".$_POST['description']."',
           '".$_POST['co_driver']."',
-          ".$_POST['score'].",
+          ".$_POST['total_points'].",
           '".$_SESSION['employee_id']."'
           )";
 
@@ -74,6 +74,313 @@ if ($_POST['update_csa'])
   header("Location: csa.php");
 }
 ?>
+
+
+
+<?php
+                     $sql = "SELECT
+                      total_today.counts   AS total_today_count,
+                      pu_today.counts      AS pu_today_count,
+                      del_today.counts     AS del_today_count,
+                      total_alltime.counts AS total_alltime_count,
+                      pu_alltime.counts    AS pu_alltime_count,
+                      del_alltime.counts   AS del_alltime_count,
+                      archived.counts      AS archived_count,
+                      virs_daily.count     AS virs_daily_count,
+                      virs_weekly.count    AS virs_weekly_count
+                    FROM
+                      (
+                        SELECT
+                          COUNT(*) AS counts
+                        FROM
+                          dispatch
+                        WHERE
+                          (
+                            puAgentDriverPhone=
+                            (
+                              SELECT
+                                driverid
+                              FROM
+                                users
+                              WHERE
+                                username=\"$username\"
+                            )
+                          AND str_to_date(hawbDate,'%c/%e/%Y') = CURDATE()
+                          AND deleted                          =\"F\"
+                          AND archived                         =\"F\"
+                          )
+                        OR
+                          (
+                            delAgentDriverPhone=
+                            (
+                              SELECT
+                                driverid
+                              FROM
+                                users
+                              WHERE
+                                username =\"$username\"
+                            )
+                          AND str_to_date(dueDate,'%c/%e/%Y') = CURDATE()
+                          AND deleted                         =\"F\"
+                          AND archived                        =\"F\"
+                          )
+                      )
+                      total_today,
+                      (
+                        SELECT
+                          COUNT(*) AS counts
+                        FROM
+                          dispatch
+                        WHERE
+                          puAgentDriverPhone=
+                          (
+                            SELECT
+                              driverid
+                            FROM
+                              users
+                            WHERE
+                              username=\"$username\"
+                          )
+                        AND str_to_date(hawbDate,'%c/%e/%Y') = DATE(now())
+                        AND deleted                          =\"F\"
+                        AND archived                         =\"F\"
+                        AND deleted                          =\"F\"
+                        AND archived                         =\"F\"
+                      )
+                      pu_today,
+                      (
+                        SELECT
+                          COUNT(*) AS counts
+                        FROM
+                          dispatch
+                        WHERE
+                          delAgentDriverPhone=
+                          (
+                            SELECT
+                              driverid
+                            FROM
+                              users
+                            WHERE
+                              username=\"$username\"
+                          )
+                        AND str_to_date(dueDate,'%c/%e/%Y') = DATE(now())
+                        AND deleted                         =\"F\"
+                        AND archived                        =\"F\"
+                        AND deleted                         =\"F\"
+                        AND archived                        =\"F\"
+                      )
+                      del_today,
+                      (
+                        SELECT
+                          COUNT(*) AS counts
+                        FROM
+                          dispatch
+                        WHERE
+                          (
+                            delAgentDriverPhone=
+                            (
+                              SELECT
+                                driverid
+                              FROM
+                                users
+                              WHERE
+                                username=\"$username\"
+                            )
+                          OR puAgentDriverPhone=
+                            (
+                              SELECT
+                                driverid
+                              FROM
+                                users
+                              WHERE
+                                username=\"$username\"
+                            )
+                          )
+                        AND deleted =\"F\"
+                        AND archived=\"F\"
+                      )
+                      total_alltime,
+                      (
+                        SELECT
+                          COUNT(*) AS counts
+                        FROM
+                          dispatch
+                        WHERE
+                          puAgentDriverPhone=
+                          (
+                            SELECT
+                              driverid
+                            FROM
+                              users
+                            WHERE
+                              username=\"$username\"
+                          )
+                        AND deleted =\"F\"
+                        AND archived=\"F\"
+                      )
+                      pu_alltime,
+                      (
+                        SELECT
+                          COUNT(*) AS counts
+                        FROM
+                          dispatch
+                        WHERE
+                          delAgentDriverPhone=
+                          (
+                            SELECT
+                              driverid
+                            FROM
+                              users
+                            WHERE
+                              username=\"$username\"
+                          )
+                        AND deleted =\"F\"
+                        AND archived=\"F\"
+                      )
+                      del_alltime,
+                      (
+                      SELECT
+                          COUNT(*) AS counts
+                        FROM
+                          dispatch
+                        WHERE
+                          (
+                            delAgentDriverPhone=
+                            (
+                              SELECT
+                                driverid
+                              FROM
+                                users
+                              WHERE
+                                username=\"$username\"
+                            )
+                          OR puAgentDriverPhone=
+                            (
+                              SELECT
+                                driverid
+                              FROM
+                                users
+                              WHERE
+                                username=\"$username\"
+                            )
+                          )
+                        AND deleted =\"F\"
+                        AND archived=\"T\"
+                      )
+                      archived,
+                     (
+                      SELECT
+                          COUNT(*) AS count
+                        FROM
+                          virs
+                        WHERE
+                        driver_name=\"$username\"
+                        AND insp_date = date(now())
+                      ) virs_daily,
+                      (
+                      SELECT
+                          COUNT(*) AS count
+                        FROM
+                          virs
+                        WHERE
+                        driver_name=\"$username\"
+                        AND insp_date BETWEEN date(now()) AND date(now()) - INTERVAL 8 DAY
+                      ) virs_weekly";
+
+                      $sql = mysql_query($sql);
+                      while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
+                      {
+                        $total_today_count   = $row['total_today_count'];
+                        $pu_today_count      = $row['pu_today_count'];
+                        $del_today_count     = $row['del_today_count'];
+                        $total_alltime_count = $row['total_alltime_count'];
+                        $pu_alltime_count    = $row['pu_alltime_count'];
+                        $del_alltime_count   = $row['del_alltime_count'];
+                        $archived_count      = $row['archived_count'];
+                        $virs_daily_count    = $row['virs_daily_count'];
+                        $virs_weekly_count   = $row['virs_weekly_count'];
+                      }
+                      mysql_free_result($sql);
+
+if (isset($_POST['submit']) && $_POST['submit'] == 'share')
+{
+  $audience = $_POST['audience'];
+  if ($audience == 'PHX')
+  {
+    $predicate = "AND office='PHX'";
+  }
+  if ($audience == 'TUS')
+  {
+    $predicate = "AND office='TUS'";
+  }
+    if ($audience == 'PHL')
+  {
+    $predicate = "AND office='PHL'";
+  }
+    if ($audience == 'DEN')
+  {
+    $predicate = "AND office='DEN'";
+  }
+    if ($audience == 'LAX')
+  {
+    $predicate = "AND office='LAX'";
+  }
+    if ($audience == 'MIA')
+  {
+    $predicate = "AND office='MIA'";
+  }
+    if ($audience == 'ORD')
+  {
+    $predicate = "AND office='ORD'";
+  }
+  $message = $_POST['message'];
+  $sql = "SELECT 1";
+  if (isset($_POST['sendEmail']))
+  {
+    $sql .= ",email";
+  } 
+  if (isset($_POST['sendText']))
+  {
+    $sql .= ",vtext";
+  } 
+  $sql .= " FROM users WHERE 1=1 $predicate AND status='Active'";
+
+  $sql = mysql_query($sql);
+  while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
+  {
+    if (isset($_POST['sendEmail']))
+    {
+      sendEmail($row['email'],'Broadcast Message',$message); 
+    } 
+    if (isset($_POST['sendText']))
+    {
+      sendEmail($row['vtext'],'Broadcast Message',$message); 
+    }
+  }
+  mysql_free_result($sql);
+
+}
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -114,11 +421,11 @@ if ($_POST['update_csa'])
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Admin Dashboard</h1>
+            CSA Compliance</h1>
             
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
-            <li class="active">Dashboard</li>
+            <li class="active">CSA Compliance</li>
           </ol>
         </section>
 
@@ -134,7 +441,24 @@ if ($_POST['update_csa'])
             <div class="col-md-12">
               <div class="box box-default collapsed-box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">CSA Compliance</h3>
+                  <h3 class="box-title">CSA Compliance 
+                    <input name="radio" type="radio" id="activeusers" value="activeusers" checked>
+                    <label for="activeusers"></label>
+                    <label for="userstatus"></label>
+Active Users /
+<input type="radio" name="radio" id="inactiveusers" value="inactiveusers">
+<label for="inactiveusers"></label>
+Inactive Users /
+<input type="radio" name="radio" id="allusers" value="allusers">
+<label for="allusers"></label>
+All Users 
+<select name="productivity_time" id="productivity_time">
+  <option value="24">24 Months</option>
+  <option value="12">12 Months</option>
+  <option value="6">6 Months</option>
+  <option value="all">All</option>
+</select>
+                  </h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -145,7 +469,7 @@ if ($_POST['update_csa'])
  <thead>
   <tr>
     <th>Name</th>
-    <th>Score</th>
+    <th>Points</th>
   </tr>
  </thead>
  <tbody>
@@ -171,14 +495,15 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
   </a></div>
 </td>
 <td><?php echo $row['date'];?></td>
-<td><?php echo $row['score'];?></td>
+<td><?php echo $row['total_points'];?></td>
 </tr>
 <tr class="collapse" id="<?php echo $row['last_name'];?>_details">
 <td colspan="9">
   <div class="well">
+
 <table>
 <tr>
- <?php 
+  <?php 
        $first_name = $row['first_name'];
        $last_name = $row['last_name'];
        $sqlDetails = "SELECT date,
@@ -188,7 +513,8 @@ code,
 violation_weight,
 time_weight,description,
 co_driver_first_name,
-co_driver_last_name
+co_driver_last_name,
+total_points
 from csadata where first_name = '$first_name' and last_name= '$last_name'
 UNION ALL
 select creation_date,
@@ -198,6 +524,7 @@ violation_code,
 violation_weight,
 violation_time_weight,
 violation_description,
+total_points,
 (SELECT fname from users WHERE drivername = co_driver) co_driver_first_name,
 (SELECT lname from users WHERE drivername = co_driver) co_driver_last_name
 from csadata_int where employee_id = (select employee_id from users
@@ -207,44 +534,45 @@ where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name')
        while ($rowDetails = mysql_fetch_array($sqlDetails, MYSQL_BOTH))
        { 
  ?>
- <td style="padding: 5px">
-  <label for="status">Violation Date</label>
-  <input type="text" class="form-control"  value="<?php echo $rowDetails['date'];?>" readonly>
- </td>
- <td style="padding: 5px">
-  <label for="status">Violation Cat.</label>
-  <input type="text" class="form-control"  value="<?php echo $rowDetails['basic'];?>" readonly>
- </td>
- <td style="padding: 5px">
-  <label for="addr1">Violation Group</label>
-  <input type="text" class="form-control"  value="<?php echo $rowDetails['violation_group'];?>" readonly>
- </td>
- <td style="padding: 5px">
-  <label for="addr1">Violation Code</label>
-  <input type="text" class="form-control"  value="<?php echo $rowDetails['code'];?>" readonly>
- </td>
- <td style="padding: 5px">
-  <label for="addr1">Violation Weight</label>
-  <input type="text" class="form-control"  value="<?php echo $rowDetails['violation_weight'];?>" readonly>
- </td>
- <td style="padding: 5px">
-  <label for="addr1">Time Weight</label>
-  <input type="text" class="form-control"  value="<?php echo $rowDetails['time_weight'];?>" readonly>
- </td>
- <td style="padding: 5px" colspan="2">
-  <label for="addr1">Description</label>
-  <input type="text" class="form-control"  value="<?php echo $rowDetails['description'];?>" readonly>
- </td>
- <td style="padding: 5px" colspan="2">
-  <label for="addr1">Co-Driver</label>
-  <input type="text" class="form-control"  value="<?php echo $rowDetails['co_driver_first_name'] . ' ' . $rowDetails['co_driver_last_name'];?>" readonly>
- </td>
- <td style="padding: 5px" colspan="2">
-  <label for="addr1">Score</label>
-  <input type="text" class="form-control"  value="1" readonly>
- </td>
+  <td style="padding: 5px">
+    <label for="status">V Date</label></td>
+  <td style="padding: 5px">
+    <label for="status">V Catagory</label></td>
+  <td style="padding: 5px">
+    <label for="addr1">V Group</label></td>
+  <td style="padding: 5px">
+    <label for="addr1"> Code</label></td>
+  <td style="padding: 5px">
+    <label for="addr1">V Weight</label></td>
+  <td style="padding: 5px">
+    <label for="addr1">T Weight</label></td>
+  <td colspan="2" style="padding: 5px">
+    <label for="addr1">Description</label></td>
+  <td colspan="2" style="padding: 5px">
+    <label for="addr1">Co-Driver</label></td>
+  <td colspan="2" style="padding: 5px">
+    <label for="addr1">Points</label></td>
 </tr>
- <?php
+<tr>
+  <td style="padding: 5px"><input type="text" class="form-control"  value="<?php echo $rowDetails['date'];?>" size="12" readonly></td>
+  <td style="padding: 5px"><input type="text" class="form-control"  value="<?php echo $rowDetails['basic'];   if (empty($rowDetails['basic'])) {
+    echo 'No Violation';
+}?>" size="15"readonly></td>
+  <td style="padding: 5px"><input type="text" class="form-control"  value="<?php echo $rowDetails['violation_group'];   if (empty($rowDetails['violation_group'])) {
+    echo 'None';
+}?>" size="18"readonly></td>
+  <td style="padding: 5px"><input type="text" class="form-control"  value="<?php echo $rowDetails['code'];   if (empty($rowDetails['code'])) {
+    echo 'None';
+}?>" size="5"readonly></td>
+  <td style="padding: 5px"><input type="text" class="form-control"  value="<?php echo $rowDetails['violation_weight'];?>" size="10" readonly></td>
+  <td style="padding: 5px"><input type="text" class="form-control"  value="<?php echo $rowDetails['time_weight'];?>" size="10" readonly></td>
+  <td colspan="2" style="padding: 5px"><input type="text" class="form-control"  value="<?php echo $rowDetails['description'];   if (empty($rowDetails['description'])) {
+    echo 'No Violations Discovered';
+}?>" size="45"readonly></td>
+  <td colspan="2" style="padding: 5px"><input type="text" class="form-control"  value="<?php echo $rowDetails['co_driver_first_name'] . ' ' . $rowDetails['co_driver_last_name'];?>" size="15" readonly></td>
+  <td colspan="2" style="padding: 5px"><input type="text" class="form-control"  value="<?php echo $rowDetails['total_points'] . ' ' . $rowDetails['total_points'];?>" size="12" readonly></td>
+</tr>
+<?php
  }
  mysql_free_result($sqlDetails);
  ?>
@@ -259,7 +587,7 @@ where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name')
 </tbody>
 </table>
                 </div><!-- ./box-body -->
-               </div><!-- /.col -->
+              </div><!-- /.col -->
           </div><!-- /.row -->
 
 <?php if ($_SESSION['login'] == 1)
@@ -301,7 +629,7 @@ where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name')
             <div class="col-md-12">
               <div class="box box-defualt collapsed-box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Add Company Violations</h3>
+                  <h3 class="box-title">Company Violations</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -403,8 +731,8 @@ where lower(fname) = lower('$first_name') and lower(lname) = lower('$last_name')
   </select>
  </td>
  <td style="padding: 5px" colspan="2">
-  <label for="addr1">Score</label>
-  <input type="text" class="form-control"  value="1" name="score" required>
+  <label for="addr1">Total Points</label>
+  <input type="text" class="form-control"  value="1" name="totoal_points" required>
  </td>
   </tr>
    <tr>
