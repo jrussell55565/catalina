@@ -64,10 +64,14 @@
 
      // IFTA
      $ifta_results = array();
-     $query = "SELECT trip_no,date_format(date_started,'%m/%d/%Y') as date_started,date_format(date_ended,'%m/%d/%Y') as date_ended
-               ,driver1,driver2,truck_no,odo_start,odo_end,notes_gen_trip,notes_trip_driver,compliance_trip_filed_correctly,compliance_logs_included
-               ,compliance_vir_included,compliance_fuel_included,compliance_bol_included,compliance_permits
-               ,compliance_gps_reports,compliance_dot_violations
+     $query = "SELECT trip_no,date_format(date_started,'%m/%d/%Y') as date_started
+               ,date_format(date_ended,'%m/%d/%Y') as date_ended
+               ,driver1,driver2,truck_no,odo_start,odo_end,notes_trip_internal
+               ,compliance_trip, compliance_logs, compliance_vir
+               ,compliance_fuel, compliance_bol, compliance_permits
+               ,compliance_gps, compliance_dot, notes_trip_driver
+               ,points_trip, points_fuel
+               ,points_images, notes_trip_internal
                FROM ifta WHERE trip_no = '".$_GET['trip_no']."'";
      if ($result = $mysqli->query($query)) {
          while($obj = $result->fetch_object()){ 
@@ -79,16 +83,20 @@
            $ifta_results['truck_no'] = $obj->truck_no; 
            $ifta_results['odo_start'] = $obj->odo_start; 
            $ifta_results['odo_end'] = $obj->odo_end;
-		   $ifta_results['notes_gen_trip'] = $obj->notes_gen_trip;
-           $ifta_results['compliance_trip_filed_correctly'] = $obj->compliance_trip_filed_correctly;
-           $ifta_results['compliance_logs_included'] = $obj->compliance_logs_included;
-           $ifta_results['compliance_vir_included'] = $obj->compliance_vir_included;
-           $ifta_results['compliance_fuel_included'] = $obj->compliance_fuel_included;
-           $ifta_results['compliance_bol_included'] = $obj->compliance_bol_included;
+		   $ifta_results['notes_trip_internal'] = $obj->notes_trip_internal;
+           $ifta_results['compliance_trip'] = $obj->compliance_trip;
+           $ifta_results['compliance_logs'] = $obj->compliance_logs;
+           $ifta_results['compliance_vir'] = $obj->compliance_vir;
+           $ifta_results['compliance_fuel'] = $obj->compliance_fuel;
+           $ifta_results['compliance_bol'] = $obj->compliance_bol;
            $ifta_results['compliance_permits'] = $obj->compliance_permits;
-           $ifta_results['compliance_gps_reports'] = $obj->compliance_gps_reports;
-           $ifta_results['compliance_dot_violations'] = $obj->compliance_dot_violations;
+           $ifta_results['compliance_gps'] = $obj->compliance_gps;
+           $ifta_results['compliance_dot'] = $obj->compliance_dot;
 		   $ifta_results['notes_trip_driver'] = $obj->notes_trip_driver;
+		   $ifta_results['points_trip'] = $obj->points_trip;
+		   $ifta_results['points_fuel'] = $obj->points_fuel;
+		   $ifta_results['points_images'] = $obj->points_images;
+		   $ifta_results['notes_trip_internal'] = $obj->notes_trip_internal;
          } 
        $result->close();
      }
@@ -264,7 +272,7 @@
                                     <td width="156"><div align="right"><strong>Trip Compliance</strong></div></td>
                                     <td width="214"><select class="input-sm form-control" name="compliance_trip" id="compliance_trip">
                                       <?php foreach ($compliance_options as $i) { ?>
-                                      <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_trip_filed_correctly']) { echo "selected"; }?>><?php echo $i;?></option>
+                                      <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_trip']) { echo "selected"; }?>><?php echo $i;?></option>
                                       <?php } ?>
                                     </select>
                                    </label> </td>
@@ -276,7 +284,7 @@
                                     <td>
                                       <select class="input-sm form-control" name="compliance_logs" id="compliance_logs">
                                         <?php foreach ($compliance_options as $i) { ?>
-                                        <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_logs_included']) { echo "selected"; }?>><?php echo $i;?></option>
+                                        <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_logs']) { echo "selected"; }?>><?php echo $i;?></option>
                                         <?php } ?>
                                       </select>
                                     </label></td>
@@ -288,7 +296,7 @@
                                     <td><select class="input-sm form-control" name="compliance_vir" id="compliance_vir">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
-                                      <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_vir_included']) { echo "selected"; }?>><?php echo $i;?></option>
+                                      <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_vir']) { echo "selected"; }?>><?php echo $i;?></option>
                                       <?php } ?>
                                     </select></td>
                                  </tr>
@@ -307,7 +315,7 @@
                                     <td><select class="input-sm form-control" name="compliance_fuel" id="compliance_fuel">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
-                                      <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_fuel_included']) { echo "selected"; }?>><?php echo $i;?></option>
+                                      <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_fuel']) { echo "selected"; }?>><?php echo $i;?></option>
                                       <?php } ?>
                                     </select></td>
                                  </tr>
@@ -326,7 +334,7 @@
                                     <td><select class="input-sm form-control" name="compliance_bol" id="compliance_bol">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
-                                      <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_bol_included']) { echo "selected"; }?>><?php echo $i;?></option>
+                                      <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_bol']) { echo "selected"; }?>><?php echo $i;?></option>
                                       <?php } ?>
                                     </select></td>
                                  </tr>
@@ -348,7 +356,7 @@
                                     <td><select class="input-sm form-control" name="compliance_gps" id="compliance_gps">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
-                                      <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_gps_reports']) { echo "selected"; }?>><?php echo $i;?></option>
+                                      <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_gps']) { echo "selected"; }?>><?php echo $i;?></option>
                                       <?php } ?>
                                     </select></td>
                                  </tr>
@@ -359,7 +367,7 @@
                                     <td><select class="input-sm form-control" name="compliance_dot" id="compliance_dot">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
-                                      <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_dot_violations']) { echo "selected"; }?>><?php echo $i;?></option>
+                                      <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_dot']) { echo "selected"; }?>><?php echo $i;?></option>
                                       <?php } ?>
                                     </select></td>
                                  </tr>
@@ -367,29 +375,29 @@
                                     <td height="24">Total  Miles
                                    <td><input class="input-sm form-control" name="txt_od_total" type="text" id="txt_od_total" value="<?php echo $ifta_results['odo_end'] - $ifta_results['odo_start']; ?>"></td>
                                    <td><div align="right"><strong> Notes For Drivers</strong></div></td>
-                                    <td><input class="input-sm form-control" name="notes_trip_driver" type="text" id="notes_trip_driver" value="<?php echo $notes_trip_driver['notes_trip_driver'];?>" data-toggle="tooltip" data-placement="top" title="These notes will populate as a General note about the Trip report if there are any issues that Driver needs to resolve."></td>
+                                    <td><input class="input-sm form-control" name="notes_trip_driver" type="text" id="notes_trip_driver" value="<?php echo $ifta_results['notes_trip_driver'];?>" data-toggle="tooltip" data-placement="top" title="These notes will populate as a General note about the Trip report if there are any issues that Driver needs to resolve."></td>
                                  </tr>
                                  <tr>
                                    <td>Starting City &amp; State
                                    <td><input class="input-sm form-control" name="txt_od_start" type="text" id="txt_od_start" value="<?php echo $ifta_results['odo_start'];?>" required>
                                    <td><div align="right"><strong>Available Points for Trip</strong></div></td>
-                                   <td><input class="input-sm form-control" name="ifta_trip_points_available2" type="text" id="ifta_trip_points_available2" value="<?php echo $ifta_trip_points_available['ifta_trip_points_available'];?>"></td>
+                                   <td><input class="input-sm form-control" name="points_trip" type="number" id="points_trip" value="<?php echo $ifta_results['points_trip'];?>" placeholder=0></td>
                                  </tr>
                                  <tr>
                                    <td>Stops Cities States
                                    <td><input class="input-sm form-control" name="txt_location_mid_stops" type="text" id="txt_location_mid_stops" value="" data-toggle="tooltip" data-placement="top" title="Enter a few of the inbetween cities and states. This will help the driver understand any alerts via email if problems with Trip.">
                                    <td><div align="right"><strong>Available Points for Fuel</strong></div></td>
-                                   <td><input class="input-sm form-control" name="ifta_trip_points_available3" type="text" id="ifta_trip_points_available3" value="<?php echo $ifta_trip_points_available['ifta_trip_points_available'];?>"></td>
+                                   <td><input class="input-sm form-control" name="points_fuel" type="number" id="points_fuel" value="<?php echo $ifta_results['points_fuel'];?>" placeholder=0></td>
                                  </tr>
                                  <tr>
                                    <td>Ending City &amp; State
                                    <td><input class="input-sm form-control" name="txt_location_end" type="text" id="txt_location_end" value="" data-toggle="tooltip" data-placement="top" title="Enter the ending state and city. This will help the driver understand any alerts via email if problems with Trip.">
                                    <td><div align="right"><strong>Available Points for Images</strong></div></td>
-                                   <td><input class="input-sm form-control" name="ifta_trip_points_available4" type="text" id="ifta_trip_points_available4" value="<?php echo $ifta_trip_points_available['ifta_trip_points_available'];?>"></td>
+                                   <td><input class="input-sm form-control" name="points_images" type="number" id="points_images" value="<?php echo $ifta_results['points_images'];?>" placeholder=0></td>
                                  </tr>
                                  <tr>
                                    <td>Internal  Notes
-                                   <td><input class="input-sm form-control" name="notes_gen_trip" type="text" id="notes_gen_trip" value="<?php echo $notes_gen_trip['notes_gen_trip'];?>" data-toggle="tooltip" data-placement="top" title="Internal notes does not distribute to anyone.">
+                                   <td><input class="input-sm form-control" name="notes_trip_internal" type="text" id="notes_trip_internal" value="<?php echo $ifta_results['notes_trip_internal'];?>" data-toggle="tooltip" data-placement="top" title="Internal notes does not distribute to anyone.">
                                    <td><div align="right"><strong>Max available Points For Trip</strong></div></td>
                                    <td><input class="input-sm form-control" name="ifta_trip_points_available" type="text" id="ifta_trip_points_available" value="Sum the Available Points" data-toggle="tooltip" data-placement="top" title="3 different categories: Trip / Fuel / Images." readonly></td>
                                  </tr>

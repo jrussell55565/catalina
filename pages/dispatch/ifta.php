@@ -340,21 +340,21 @@ if ($_SESSION['login'] != 1)
                                    </strong>
                                    <td><input class="input-sm form-control" name="txt_location_start" type="text" id="txt_location_start" value="" data-toggle="tooltip" data-placement="top" title="Enter the starting state and city. This will help the driver understand any alerts via email if problems with Trip.">                                   
                                    <td><div align="right"><strong>Available Points for Trip</strong></div></td>
-                                   <td><input class="input-sm form-control" name="ifta_trip_points_available2" type="text" id="ifta_trip_points_available2" value="<?php echo $ifta_trip_points_available['ifta_trip_points_available'];?>"></td>
+                                   <td><input class="input-sm form-control" name="points_trip" type="text" id="points_trip"></td>
                                  </tr>
                                  <tr>
                                    <td><strong> Stops Cities States 
                                    </strong>
                                    <td><input class="input-sm form-control" name="txt_location_mid_stops" type="text" id="txt_location_mid_stops" value="" data-toggle="tooltip" data-placement="top" title="Enter a few of the inbetween cities and states. This will help the driver understand any alerts via email if problems with Trip.">                                   
                                    <td><div align="right"><strong>Available Points for Fuel</strong></div></td>
-                                   <td><input class="input-sm form-control" name="ifta_trip_points_available3" type="text" id="ifta_trip_points_available3" value="<?php echo $ifta_trip_points_available['ifta_trip_points_available'];?>"></td>
+                                   <td><input class="input-sm form-control" name="points_fuel" type="text" id="points_fuel"></td>
                                  </tr>
                                  <tr>
                                    <td><strong>Ending City &amp; State
                                    </strong>
                                    <td><input class="input-sm form-control" name="txt_location_end" type="text" id="txt_location_end" value="" data-toggle="tooltip" data-placement="top" title="Enter the ending state and city. This will help the driver understand any alerts via email if problems with Trip.">                                   
                                    <td><div align="right"><strong>Available Points for Images</strong></div></td>
-                                   <td><input class="input-sm form-control" name="ifta_trip_points_available4" type="text" id="ifta_trip_points_available4" value="<?php echo $ifta_trip_points_available['ifta_trip_points_available'];?>"></td>
+                                   <td><input class="input-sm form-control" name="points_images" type="text" id="points_images"></td>
                                  </tr>
                                  <tr>
                                    <td><strong>Internal Notes                                 
