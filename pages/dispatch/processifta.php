@@ -358,9 +358,14 @@ if (isset($_POST['update_ifta'])) {
     compliance_gps = '".$_POST['compliance_gps']."',
     compliance_dot = '".$_POST['compliance_dot']."',
     notes_trip_driver = '".$_POST['notes_trip_driver']."',
+    notes_trip_internal = '".$_POST['notes_trip_internal']."',
+    location_start = '".$_POST['location_start']."',
+    location_stops = '".$_POST['location_stops']."',
+    location_end = '".$_POST['location_end']."',
     points_trip = ".(!$_POST['points_trip'] ? 0 : $_POST['points_trip']) .",
     points_fuel = ".(!$_POST['points_fuel'] ? 0 : $_POST['points_fuel']) .",
-    points_images = ".(!$_POST['points_images'] ? 0 : $_POST['points_images']) ."
+    points_images = ".(!$_POST['points_images'] ? 0 : $_POST['points_images']) .",
+    trip_status = '".$_POST['trip_status']."'
     WHERE trip_no = '".$_POST['txt_tripnum']."'";
 
     if ($mysqli->query($sql_ifta) === false)

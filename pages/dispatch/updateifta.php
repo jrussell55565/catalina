@@ -72,7 +72,10 @@
                ,compliance_gps, compliance_dot, notes_trip_driver
                ,points_trip, points_fuel
                ,points_images, notes_trip_internal
+               ,location_start, location_stops, location_end
+               ,trip_status
                FROM ifta WHERE trip_no = '".$_GET['trip_no']."'";
+
      if ($result = $mysqli->query($query)) {
          while($obj = $result->fetch_object()){ 
            $ifta_results['trip_no'] = $obj->trip_no; 
@@ -97,6 +100,10 @@
 		   $ifta_results['points_fuel'] = $obj->points_fuel;
 		   $ifta_results['points_images'] = $obj->points_images;
 		   $ifta_results['notes_trip_internal'] = $obj->notes_trip_internal;
+		   $ifta_results['location_start'] = $obj->location_start;
+		   $ifta_results['location_stops'] = $obj->location_stops;
+		   $ifta_results['location_end'] = $obj->location_end;
+		   $ifta_results['trip_status'] = $obj->trip_status;
          } 
        $result->close();
      }
@@ -378,20 +385,20 @@
                                     <td><input class="input-sm form-control" name="notes_trip_driver" type="text" id="notes_trip_driver" value="<?php echo $ifta_results['notes_trip_driver'];?>" data-toggle="tooltip" data-placement="top" title="These notes will populate as a General note about the Trip report if there are any issues that Driver needs to resolve."></td>
                                  </tr>
                                  <tr>
-                                   <td>Starting City &amp; State
-                                   <td><input class="input-sm form-control" name="txt_od_start" type="text" id="txt_od_start" value="<?php echo $ifta_results['odo_start'];?>" required>
+                                   <td>Starting City &amp; State</td>
+                                   <td><input class="input-sm form-control" name="location_start" type="text" id="location_start" value="<?php echo $ifta_results['location_start'];?>" required>
                                    <td><div align="right"><strong>Available Points for Trip</strong></div></td>
                                    <td><input class="input-sm form-control" name="points_trip" type="number" id="points_trip" value="<?php echo $ifta_results['points_trip'];?>" placeholder=0></td>
                                  </tr>
                                  <tr>
-                                   <td>Stops Cities States
-                                   <td><input class="input-sm form-control" name="txt_location_mid_stops" type="text" id="txt_location_mid_stops" value="" data-toggle="tooltip" data-placement="top" title="Enter a few of the inbetween cities and states. This will help the driver understand any alerts via email if problems with Trip.">
+                                   <td>Stops Cities States</td>
+                                   <td><input class="input-sm form-control" name="location_stops" type="text" id="location_stops" data-toggle="tooltip" data-placement="top" title="Enter a few of the inbetween cities and states. This will help the driver understand any alerts via email if problems with Trip." value="<?php echo $ifta_results['location_stops'];?>"></td>
                                    <td><div align="right"><strong>Available Points for Fuel</strong></div></td>
                                    <td><input class="input-sm form-control" name="points_fuel" type="number" id="points_fuel" value="<?php echo $ifta_results['points_fuel'];?>" placeholder=0></td>
                                  </tr>
                                  <tr>
-                                   <td>Ending City &amp; State
-                                   <td><input class="input-sm form-control" name="txt_location_end" type="text" id="txt_location_end" value="" data-toggle="tooltip" data-placement="top" title="Enter the ending state and city. This will help the driver understand any alerts via email if problems with Trip.">
+                                   <td>Ending City &amp; State</td>
+                                   <td><input class="input-sm form-control" name="location_end" type="text" id="location_end" data-toggle="tooltip" data-placement="top" title="Enter the ending state and city. This will help the driver understand any alerts via email if problems with Trip." value="<?php echo $ifta_results['location_end'];?>">
                                    <td><div align="right"><strong>Available Points for Images</strong></div></td>
                                    <td><input class="input-sm form-control" name="points_images" type="number" id="points_images" value="<?php echo $ifta_results['points_images'];?>" placeholder=0></td>
                                  </tr>
@@ -680,13 +687,13 @@
                            </table>
                         <p></p>
                         <button type="submit" class="btn btn-danger" name="update_ifta">Update</button>
-                        <table width="200" border="1">
+                        <table width="200" border="0">
                           <tr>
                             <td><span class="box-title">Open
-                                <input name="radio" type="radio" id="trip_status2" value="open" checked>
-                                <label for="trip_status2"></label>
+                                <input name="trip_status" type="radio" id="trip_status" value="open" <?php if ($ifta_results['trip_status'] == 'open') { echo 'checked'; } ?>>
+                                <label for="trip_status"></label>
 Closed
-<input type="radio" name="radio" id="trip_status2" value="closed">
+<input type="radio" name="trip_status" id="trip_status" value="closed" <?php if ($ifta_results['trip_status'] == 'closed') { echo 'checked'; } ?>>
                             </span></td>
                             <td>Create Task For Driver
                             <input type="checkbox" name="cb_ifta_create_task" id="cb_ifta_create_task" data-toggle="tooltip" data-placement="top" title="This button will create a task for the driver based on this trip sheet, if Multiple drivers assigned then it will create multiple tasks for all the drivers."></td>
