@@ -56,6 +56,10 @@ if (isset($_POST['add_ifta'])) {
     compliance_gps,
     compliance_dot,
     notes_trip_driver,
+    notes_trip_internal,
+    location_start,
+    location_stops,
+    location_end,
     points_trip,
     points_fuel,
     points_images
@@ -79,6 +83,10 @@ if (isset($_POST['add_ifta'])) {
     '".$_POST['compliance_gps']."',
     '".$_POST['compliance_dot']."',
     '".$_POST['notes_trip_driver']."',
+    '".$_POST['notes_trip_internal']."',
+    '".$_POST['location_start']."',
+    '".$_POST['location_stops']."',
+    '".$_POST['location_end']."',
     ".(!$_POST['points_trip'] ? 0 : $_POST['points_trip']) .",
     ".(!$_POST['points_fuel'] ? 0 : $_POST['points_fuel']) .",
     ".(!$_POST['points_images'] ? 0 : $_POST['points_images']) ."
@@ -87,6 +95,20 @@ if (isset($_POST['add_ifta'])) {
     if ($mysqli->query($sql_ifta) === false)
     {
         throw new Exception("Error INSERTING into table IFTA: ".$mysqli->error);
+    }
+
+    // Insert into the ifta_updated_by
+    $ifta_updated_by_sql = "INSERT INTO ifta_updated_by
+    (trip_no, updated_by)
+    VALUES
+    (
+    '".$_POST['txt_tripnum']."',
+    '".$_SESSION['employee_id']."'
+    )";
+
+    if ($mysqli->query($ifta_updated_by_sql) === false)
+    {
+        throw new Exception("Error INSERTING into table IFTA_UPDATED_BY: ".$mysqli->error);
     }
 
     $id = $_POST['hdn_details_id'];
@@ -138,8 +160,8 @@ if (isset($_POST['add_ifta'])) {
         ".$_POST['txt_state_miles_details'][$i].",
         '$permit',
         '$issue',
-        ".$_POST['sl_trip_issue_details'][$i].",
-        ".$_POST['issue_comment_details'][$i].",
+        '".$_POST['sl_trip_issue_details'][$i]."',
+        '".$_POST['issue_comment_details'][$i]."',
         str_to_date('".$_POST['date_resolved_details'][$i]."','%m/%d/%Y')
         )";
 

@@ -28,6 +28,8 @@ if ($_SESSION['login'] != 1)
    }
    mysql_free_result($results);
 
+   $issue_options = array('N/A', 'Logs/VIR', 'No Trip Pack', 'Other');
+
    # Create associative array for the border states
    $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
    $state_border_array = array();
@@ -338,28 +340,28 @@ if ($_SESSION['login'] != 1)
                                  <tr>
                                    <td><strong>Starting City &amp; State
                                    </strong>
-                                   <td><input class="input-sm form-control" name="txt_location_start" type="text" id="txt_location_start" value="" data-toggle="tooltip" data-placement="top" title="Enter the starting state and city. This will help the driver understand any alerts via email if problems with Trip.">                                   
+                                   <td><input class="input-sm form-control" name="location_start" type="text" id="location_start" value="" data-toggle="tooltip" data-placement="top" title="Enter the starting state and city. This will help the driver understand any alerts via email if problems with Trip.">                                   
                                    <td><div align="right"><strong>Available Points for Trip</strong></div></td>
-                                   <td><input class="input-sm form-control" name="points_trip" type="text" id="points_trip"></td>
+                                   <td><input class="input-sm form-control" name="points_trip" type="number" id="points_trip"></td>
                                  </tr>
                                  <tr>
                                    <td><strong> Stops Cities States 
                                    </strong>
-                                   <td><input class="input-sm form-control" name="txt_location_mid_stops" type="text" id="txt_location_mid_stops" value="" data-toggle="tooltip" data-placement="top" title="Enter a few of the inbetween cities and states. This will help the driver understand any alerts via email if problems with Trip.">                                   
+                                   <td><input class="input-sm form-control" name="location_stops" type="text" id="location_stops" value="" data-toggle="tooltip" data-placement="top" title="Enter a few of the inbetween cities and states. This will help the driver understand any alerts via email if problems with Trip.">                                   
                                    <td><div align="right"><strong>Available Points for Fuel</strong></div></td>
-                                   <td><input class="input-sm form-control" name="points_fuel" type="text" id="points_fuel"></td>
+                                   <td><input class="input-sm form-control" name="points_fuel" type="number" id="points_fuel"></td>
                                  </tr>
                                  <tr>
                                    <td><strong>Ending City &amp; State
                                    </strong>
-                                   <td><input class="input-sm form-control" name="txt_location_end" type="text" id="txt_location_end" value="" data-toggle="tooltip" data-placement="top" title="Enter the ending state and city. This will help the driver understand any alerts via email if problems with Trip.">                                   
+                                   <td><input class="input-sm form-control" name="location_end" type="text" id="location_end" value="" data-toggle="tooltip" data-placement="top" title="Enter the ending state and city. This will help the driver understand any alerts via email if problems with Trip.">                                   
                                    <td><div align="right"><strong>Available Points for Images</strong></div></td>
-                                   <td><input class="input-sm form-control" name="points_images" type="text" id="points_images"></td>
+                                   <td><input class="input-sm form-control" name="points_images" type="number" id="points_images"></td>
                                  </tr>
                                  <tr>
                                    <td><strong>Internal Notes                                 
                                    </strong>
-                                   <td><input class="input-sm form-control" name="notes_gen_trip" type="text" id="notes_gen_trip" value="" data-toggle="tooltip" data-placement="top" title="Internal notes does not distribute to anyone.">                                 
+                                   <td><input class="input-sm form-control" name="notes_trip_internal" type="text" id="notes_trip_internal" value="" data-toggle="tooltip" data-placement="top" title="Internal notes does not distribute to anyone.">                                 
                                    <td><div align="right"><strong>Max available Points For Trip</strong></div></td>
                                    <td><input class="input-sm form-control" name="ifta_trip_points_available" type="text" id="ifta_trip_points_available" value="Sum the Available Points" data-toggle="tooltip" data-placement="top" title="3 different categories: Trip / Fuel / Images." readonly></td>
                                  </tr>
@@ -579,11 +581,24 @@ Closed
                                        <option></option>
                                     </select>
                                  </td>
-                                 <td><input class="input-sm form-control" name="txt_state_odo_details[]" type="text" id="txt_state_odo_details_`+random+`"></td>
+                                 <td><input class="input-sm form-control" name="txt_state_odo_details[]" type="number" id="txt_state_odo_details_`+random+`"></td>
                                  <td>
-                                    <input class="input-sm form-control" name="txt_state_miles_details[]" type="text" id="txt_state_miles_details_`+random+`" value="">
+                                    <input class="input-sm form-control" name="txt_state_miles_details[]" type="number" id="txt_state_miles_details_`+random+`" value="">
                                  </td>
                                  <td><input class="input-sm" type="checkbox" name="txt_permit_req_details[]" id="txt_permit_req_details_`+random+`"></td>
+                                 <td><input class="input-sm" type="checkbox" name="cb_trip_issue_details[]" id="cb_trip_issue_details_`+random+`"></td>
+                                    <td>
+                                   <select name="sl_trip_issue_details[]" id="sl_trip_issue_details_`+random+`">
+                                     <?php
+                                       foreach ($issue_options as $issue) { ?>
+                                     <option> <?php echo $issue;?></option>
+                                     <?php } ?>
+                                   </select>
+                                    </td>
+                                   <td><div align="center">
+                                   <input name="issue_comment_details[]" type="text" class="input-sm form-control" id="issue_comment_details_`+random+`" size="30">
+                                 </div></td>
+                                 <td><input class="input-sm form-control datepicker" name="date_resolved_details[]" type="text" id="date_resolved_details_`+random+`" size="16"></td>
                                  <td style="text-align: right;"><button class="btn btn-sm btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  <td style="text-align: right;">
                                     <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_details[]" id="txt_delete_row_details_`+random+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
