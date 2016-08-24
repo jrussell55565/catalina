@@ -333,7 +333,6 @@ if (isset($_POST['add_ifta'])) {
     $mysqli->close();
     exit;
   }
-exit;
 }
 
 // Run this part if we're UPDATING an IFTA
