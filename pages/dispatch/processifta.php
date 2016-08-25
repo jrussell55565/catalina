@@ -296,20 +296,22 @@ if (isset($_POST['add_ifta'])) {
 					   //Because of multiple lines, need to add specific date/driver to the email,
 					   //Need to add Choose Issue (selected) email details also,
 					   //Need to add Comments from each specific line.  Note:  If N/A then skip....,
-  $counter = 0;
-  $subject = "Trip Pack Incomplete";
+  $subject = "Trip Pack Submitted - ".$_POST['txt_tripnum'];
   $body = "Notice: IFTA trip pack ".$_POST['txt_tripnum']." has been entered.\n";
-  $body = "Start Date: ".$_POST['txt_date_start']." End Date: ".$_POST['txt_date_end']." .\n";
+  $body .= "Start Date: ".$_POST['txt_date_start']." End Date: ".$_POST['txt_date_end']." .\n";
+  $body .= "Start city/state: ".$_POST['location_start']."\n";
+  $body .= "Stop city/state: ".$_POST['location_stops']."\n";
+  $body .= "End city/state: ".$_POST['location_end']."\n";
+  $body .= "Notes:\n";
+  $body .= $_POST['notes_trip_driver'] . "\n\n";
+
   //Need to enter 2 new values that will come from the DB.  Not in there yet.  Trip Origin: Trip Destination (this is for the OTR Drivers)
-  $body .= "Please note that the following is missing:\n";
+  $body .= "Details below:\n\n";
   foreach ($compliance as $key => $value)
   {
-    if ( ($_POST[$key] == 'Incomplete' ) || ($_POST[$key] == 'Not in Packet') )
-    {
-      $body .= $value . "If no Items are listed, thank you for turning in the trip sheet correctly.\n";
-      $counter++;
-    }
+    $body .= $value . "\t\t\t" . $_POST[$key] . "\n";
   }
+
   // Pull the drivers email from the DB
   try {
     $statement = "SELECT email from users where employee_id IN ('".$_POST['sel_add_driver_1']."','".$_POST['sel_add_driver_2']."')";
@@ -317,7 +319,7 @@ if (isset($_POST['add_ifta'])) {
     {
         while($obj = $result->fetch_object()){
           $f = $obj->email;
-          sendEmail($f,$subject,$body,null);
+          sendEmail($f,$subject,$body,"ifta@catalinacartage.com");
         }
         $result->close();
     }else{
