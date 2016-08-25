@@ -170,7 +170,7 @@ if ($_SESSION['login'] != 1)
                                    <td><select class="input-sm form-control" name="txt_state_enter_details[]" id="txt_state_enter_details_<?php echo $random;?>" value="">
                                      <?php
                                           foreach ($us_state_abbrevs as $state) { ?>
-                                     <option <?php if($state == $ifta_details[$i]['st_enter']){echo " selected ";}?>><?php echo $state;?></option>
+                                     <option><?php echo $state;?></option>
                                      <?php } ?>
                                    </select></td>
                                    <td>&nbsp;</td>
@@ -479,7 +479,7 @@ if ($_SESSION['login'] != 1)
                               <tr>
                                 <td>Resolved (All Items Must be in)</td>
                                 <td><span style="width: 5em;">
-                                  <input class="input datepicker" name="txt_date_details_<?php echo $random;?>2" type="text" id="txt_date_details_<?php echo $random;?>3" value="<?php echo $ifta_details[$i]['trip_date'];?>" size="16">
+                                  <input class="input datepicker" name="txt_date_details_<?php echo $random;?>2" type="text" id="txt_date_details_<?php echo $random;?>3" value="" size="16">
                                 </span></td>
                               </tr>
                             </tbody>
