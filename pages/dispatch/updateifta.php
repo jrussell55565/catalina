@@ -152,6 +152,7 @@
                from ifta_fuel
                WHERE trip_no = '".$_GET['trip_no']."'
                ORDER BY odometer ASC";
+
      if ($result = $mysqli->query($query)) {
          while($obj = $result->fetch_object()){ 
            $ifta_fuel[$counter]['id'] = $obj->id;
@@ -171,6 +172,8 @@
            $counter++;
          } 
        $result->close();
+     }else{
+       echo "<script>console.log('Unable to pull trip from ifta_fuel');</script>";
      }
 
      // IFTA_UPLOADS
@@ -259,7 +262,7 @@
                      <!-- Default box -->
                      <div class="box">
                         <div class="box-header" style="text-align: center;">
-                           <h3 class="box-title">IFTA Trip / Status = Insert Current Status From DB</h3>
+                           <h3 class="box-title">IFTA Trip / Status = <?php echo $ifta_results['trip_status']; ?></h3>
                            <?php
                             if (isset($_GET['error'])) {
                               echo "<br>";
