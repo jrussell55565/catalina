@@ -20,7 +20,14 @@ if ($_SESSION['login'] != 1)
    
    # Get the driver names and employee_id
    $driver_array = array();
-   $statement = 'SELECT fname, lname, employee_id from users WHERE title = "Driver" ORDER BY fname';
+   $statement = "select * from
+   (
+   select FNAME, LNAME, EMPLOYEE_ID from USERS where TITLE = 'Driver'
+   union
+   select 'Unknown' as FNAME, 'Driver' as LNAME, 'null' as EMPLOYEE_ID from DUAL
+   union
+   select 'Multiple' as FNAME, 'Drivers' as LNAME, 'null' as EMPLOYEE_ID from DUAL
+   ) a order by FNAME";
    $results = mysql_query($statement);
    while($row = mysql_fetch_array($results, MYSQL_BOTH))
    {
@@ -182,6 +189,7 @@ if ($_SESSION['login'] != 1)
                                     <td>Driver</td>
                                    <td><select class="input-sm form-control" name="trip_search_driver" id="trip_search_driver" value="">
                                      <option value="null">Choose Driver...</option>
+                                     <option value="null">Unknown Driver</option>
                                      <?php
                                              foreach ($driver_array as $employee_id => $driver) { ?>
                                      <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
@@ -219,6 +227,31 @@ if ($_SESSION['login'] != 1)
                               echo "<br>";
                               echo '<div style="width: 50%; text-align: center; margin:auto" class="alert alert-danger" role="alert">Error adding record: ',urldecode($_GET['error']),'</div>';
                             }?>
+                            <?php
+                            if (isset($_GET['trip_no'])) {
+                            ?>
+                                <!-- Modal -->
+                                <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        <h4 class="modal-title">IFTA <?php echo $_GET['trip_no']; ?></h4>
+                                      </div>
+                                      <div class="modal-body">
+                                        Trip <?php echo $_GET['trip_no']; ?> successfully created.  Click <a href="updateifta.php?trip_no=<?php echo $_GET['trip_no']; ?>">
+                                        here</a> to view it.
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      </div>
+                                    </div><!-- /.modal-content -->
+                                  </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+                              </div>
+                             <?php
+                              }
+                             ?>
                            <div class="box-tools pull-right">
                               <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                            </div>
@@ -722,6 +755,12 @@ Closed
 
 <script>
 $(document).ready(function(){
+  // Load the modal on successful post of ifta
+  <?php
+    if (isset($_GET['trip_no'])) { ?>
+      $('#myModal1').modal('show');
+    <?php } ?>
+
   // Ajax calls for search
   $("#btn_display_results").click(function() {
     // If no trip number was specified then make sure we enter a date range

@@ -703,8 +703,9 @@ if (isset($_POST['delete_ifta'])) {
 $mysqli->autocommit(TRUE);
 $mysqli->close();
 if (isset($_POST['add_ifta'])) {
-    header("location: /pages/dispatch/ifta.php");
+    header("location: /pages/dispatch/ifta.php?trip_no=".$_POST['txt_tripnum']);
 }
+
 if (isset($_POST['update_ifta'])) {
     header("location: /pages/dispatch/updateifta.php?trip_no=".$_POST['txt_tripnum']);
 }
