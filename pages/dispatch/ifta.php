@@ -84,6 +84,7 @@ if ($_SESSION['login'] != 1)
       <script>
         var odo_counter = 0;
         var fuel_counter = 0;
+        var delayTimer;
       </script>
    </head>
   
@@ -168,7 +169,7 @@ if ($_SESSION['login'] != 1)
                                  </tr>
                                  <tr>
                                     <td>State Exit/Enter</td>
-                                   <td><select class="input-sm form-control" name="txt_state_enter_details[]" id="txt_state_enter_details_<?php echo $random;?>" value="">
+                                   <td><select class="input-sm form-control" name="txt_state_enter_details[]" id="txt_state_enter_details_<?php echo $rowNum;?>" value="">
                                      <?php
                                           foreach ($us_state_abbrevs as $state) { ?>
                                      <option><?php echo $state;?></option>
@@ -480,7 +481,7 @@ if ($_SESSION['login'] != 1)
                               <tr>
                                 <td>Resolved (All Items Must be in)</td>
                                 <td><span style="width: 5em;">
-                                  <input class="input datepicker" name="txt_date_details_<?php echo $random;?>2" type="text" id="txt_date_details_<?php echo $random;?>3" value="" size="16">
+                                  <input class="input datepicker" name="txt_date_details_<?php echo $rowNum;?>2" type="text" id="txt_date_details_<?php echo $rowNum;?>3" value="" size="16">
                                 </span></td>
                               </tr>
                             </tbody>
@@ -545,7 +546,7 @@ Closed
       <script>
          function addOdoRow() {
          odo_counter = odo_counter + 1;
-         var random = odo_counter;
+         var rowNum = odo_counter;
          var tripnum = $("#txt_tripnum").val();
 
          var driver_list = [];
@@ -558,19 +559,20 @@ Closed
                                  "name": $("#sel_add_driver_2 option:selected").text()
                                };
 
-         var new_row = `<tr id="tr_add_driver_details_`+random+`">
-                                 <td style="width: 5em;"><input class="input-sm form-control" name="txt_tripnum_details[]" type="text" id="txt_tripnum_details_`+random+`" value="`+tripnum+`" readonly>
-                                    <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_`+random+`" value="1"></td>
-                                    <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_`+random+`" value="" size=""></td>
+         var new_row = `<tr id="tr_add_driver_details_`+rowNum+`">
+                                 <td style="width: 5em;"><input class="input-sm form-control" name="txt_tripnum_details[]" type="text" id="txt_tripnum_details_`+rowNum+`" value="`+tripnum+`" readonly>
+                                 <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_`+rowNum+`" value="1"></td>
+                                 <input type="hidden" name="hdn_rownum_`+rowNum+`" id="hdn_rownum_`+rowNum+`" value="`+rowNum+`"></td>
+                                 <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_`+rowNum+`" value="" size=""></td>
                                  <td>
-                                  <select class="input-sm form-control" name="txt_driver_details[]" type="text" id="txt_driver_details_`+random+`" value="">
+                                  <select class="input-sm form-control" name="txt_driver_details[]" type="text" id="txt_driver_details_`+rowNum+`" value="">
                                    <option value="null">Choose...</option>
                                   </select>
                                  </td>
-                                 <td style="width: 5em;"><input class="input-sm form-control hwb" name="txt_hwb_details[]" type="text" id="txt_hwb_details_`+random+`"></td>
-                                 <td><input class="input-sm form-control" name="txt_routes_details[]" type="text" id="txt_routes_details_`+random+`"></td>
+                                 <td style="width: 5em;"><input class="input-sm form-control hwb" name="txt_hwb_details[]" type="text" id="txt_hwb_details_`+rowNum+`"></td>
+                                 <td><input class="input-sm form-control" name="txt_routes_details[]" type="text" id="txt_routes_details_`+rowNum+`"></td>
                                  <td>
-                                    <select class="input-sm form-control" name="txt_state_exit_details[]" id="txt_state_exit_details_`+random+`" value="">
+                                    <select class="input-sm form-control" name="txt_state_exit_details[]" id="txt_state_exit_details_`+rowNum+`" value="">
                                        <?php
                                           foreach ($us_state_abbrevs as $state) { ?>
                                        <option><?php echo $state;?></option>
@@ -578,18 +580,21 @@ Closed
                                     </select>
                                  </td>
                                  <td>
-                                    <select class="input-sm form-control" name="txt_state_enter_details[]" id="txt_state_enter_details_`+random+`" value="">
+                                    <select class="input-sm form-control" name="txt_state_enter_details[]" id="txt_state_enter_details_`+rowNum+`" value="">
                                        <option></option>
                                     </select>
                                  </td>
-                                 <td><input class="input-sm form-control" name="txt_state_odo_details[]" type="number" id="txt_state_odo_details_`+random+`"></td>
                                  <td>
-                                    <input class="input-sm form-control" name="txt_state_miles_details[]" type="number" id="txt_state_miles_details_`+random+`" value="">
+                                    <input class="input-sm form-control" name="txt_state_odo_details[]" type="number" id="txt_state_odo_details_`+rowNum+`"
+                                    onkeyup="calculate_state_miles(`+rowNum+`,delayTimer)">
                                  </td>
-                                 <td><input class="input-sm" type="checkbox" name="txt_permit_req_details[]" id="txt_permit_req_details_`+random+`"></td>
-                                 <td><input class="input-sm" type="checkbox" name="cb_trip_issue_details[]" id="cb_trip_issue_details_`+random+`"></td>
+                                 <td>
+                                    <input class="input-sm form-control" name="txt_state_miles_details[]" type="number" id="txt_state_miles_details_`+rowNum+`" readonly>
+                                 </td>
+                                 <td><input class="input-sm" type="checkbox" name="txt_permit_req_details[]" id="txt_permit_req_details_`+rowNum+`"></td>
+                                 <td><input class="input-sm" type="checkbox" name="cb_trip_issue_details[]" id="cb_trip_issue_details_`+rowNum+`"></td>
                                     <td>
-                                   <select class="input-sm form-control" name="sl_trip_issue_details[]" id="sl_trip_issue_details_`+random+`">
+                                   <select class="input-sm form-control" name="sl_trip_issue_details[]" id="sl_trip_issue_details_`+rowNum+`">
                                      <?php
                                        foreach ($issue_options as $issue) { ?>
                                      <option> <?php echo $issue;?></option>
@@ -597,12 +602,12 @@ Closed
                                    </select>
                                     </td>
                                    <td><div align="center">
-                                   <input name="issue_comment_details[]" type="text" class="input-sm form-control" id="issue_comment_details_`+random+`" size="30">
+                                   <input name="issue_comment_details[]" type="text" class="input-sm form-control" id="issue_comment_details_`+rowNum+`" size="30">
                                  </div></td>
-                                 <td><input class="input-sm form-control datepicker" name="date_resolved_details[]" type="text" id="date_resolved_details_`+random+`" size="16"></td>
+                                 <td><input class="input-sm form-control datepicker" name="date_resolved_details[]" type="text" id="date_resolved_details_`+rowNum+`" size="16"></td>
                                  <td style="text-align: right;"><button class="btn btn-sm btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  <td style="text-align: right;">
-                                    <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_details[]" id="txt_delete_row_details_`+random+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
+                                    <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_details[]" id="txt_delete_row_details_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                  </td>
                               </tr>`;
          
@@ -610,8 +615,8 @@ Closed
          $("#add_ifta_table > tbody:last-child").append(new_row);
 
          // Set the hwb to the value of the hwb on the previous row
-         var prev_hwb = $("#tr_add_driver_details_"+random).prev().children('td').eq(3).children(':text').val();
-         $("#txt_hwb_details_"+random).val(prev_hwb);
+         var prev_hwb = $("#tr_add_driver_details_"+rowNum).prev().children('td').eq(3).children(':text').val();
+         $("#txt_hwb_details_"+rowNum).val(prev_hwb);
 
 
          // Set the value of txt_state_enter_details select box to states that surround the txt_state_exit_details select box
@@ -633,21 +638,21 @@ Closed
            echo "        };\n";
          ?>
 
-         var prev_st_enter = $("#tr_add_driver_details_"+random).prev().children('td').eq(6).find('option:selected').text();
+         var prev_st_enter = $("#tr_add_driver_details_"+rowNum).prev().children('td').eq(6).find('option:selected').text();
 
          // Set the Exit state to the value of the "enter" state of the previous line
          if (prev_st_enter) {
-             $("#txt_state_exit_details_"+random+" option:contains(" + prev_st_enter + ")").attr('selected', 'selected');
+             $("#txt_state_exit_details_"+rowNum+" option:contains(" + prev_st_enter + ")").attr('selected', 'selected');
          }
 
-         $("#txt_state_enter_details_"+random)
+         $("#txt_state_enter_details_"+rowNum)
          .find('option')
          .remove()
          .end()
 
          // Only set the state_enter values if we're NOT the first row
-         if (random == 1) {
-           $("#txt_state_enter_details_"+random)
+         if (rowNum == 1) {
+           $("#txt_state_enter_details_"+rowNum)
            <?php
            foreach ($us_state_abbrevs as $state) {
              ?>
@@ -655,16 +660,16 @@ Closed
              <?php
            }?>
          }else{
-           var primary_state = $("#txt_state_exit_details_"+random).children("option").filter(":selected").text();
+           var primary_state = $("#txt_state_exit_details_"+rowNum).children("option").filter(":selected").text();
            for (var i = 0; i <= states[primary_state].length - 1; i++) {
                //console.log(states[primary_state][i]);
-               $("#txt_state_enter_details_"+random)
+               $("#txt_state_enter_details_"+rowNum)
                .append('<option>'+states[primary_state][i]+'</option>')
            }
          }
 
          // Append Driver 1 to the select box
-         $("#txt_driver_details_"+random)
+         $("#txt_driver_details_"+rowNum)
          .find('option')
          .remove()
          .end()
@@ -673,41 +678,41 @@ Closed
 
          // If we chose a driver 2 then we'll append that
          if (driver_list[1].id != 'null') {
-           $("#txt_driver_details_"+random)
+           $("#txt_driver_details_"+rowNum)
            .append('<option value="'+driver_list[1].id+'">'+driver_list[1].name+'</option>')
            .val(driver_list[1].name);
          }
 
          // Make the first driver the selected driver
-         $("#txt_driver_details_"+random+" option[value="+driver_list[0].id+"]").prop('selected', true);
+         $("#txt_driver_details_"+rowNum+" option[value="+driver_list[0].id+"]").prop('selected', true);
 
          }
          
          function addFuelRow(id) {
          fuel_counter = fuel_counter + 1;
-         var random = fuel_counter;
+         var rowNum = fuel_counter;
          var tripnum = $("#txt_tripnum").val();
-         var new_row = `<tr id="tr_add_fuel_details_`+random+`">
-                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_tripnum[]" type="text" id="txt_fuel_tripnum_`+random+`" value="`+tripnum+`" readonly>
-                                    <input type="hidden" name="hdn_fuel_id[]" id="hdn_fuel_id_`+random+`" value="1"></td>
-                                    <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_fuel_date[]" type="text" id="txt_fuel_date_`+random+`" value="" size=""></td>
-                                    <td><input class="input-sm form-control" name="txt_fuel_gallons[]" type="text" id="txt_fuel_gallons_`+random+`" value=""></td>
-                                    <td><input class="input-sm form-control" name="txt_fuel_reefer[]" type="text" id="txt_fuel_reefer_`+random+`" value=""></td>
-                                    <td style="width: 10em;"><input class="input-sm form-control" name="txt_fuel_other[]" type="text" id="txt_fuel_other_`+random+`" value=""></td>
-                                    <td><input class="input-sm form-control" name="txt_fuel_vendor[]" type="text" id="txt_fuel_vendor_`+random+`" value=""></td>
-                                    <td><input class="input-sm form-control" name="txt_fuel_city[]" type="text" id="txt_fuel_city_`+random+`" value=""></td>
+         var new_row = `<tr id="tr_add_fuel_details_`+rowNum+`">
+                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_tripnum[]" type="text" id="txt_fuel_tripnum_`+rowNum+`" value="`+tripnum+`" readonly>
+                                    <input type="hidden" name="hdn_fuel_id[]" id="hdn_fuel_id_`+rowNum+`" value="1"></td>
+                                    <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_fuel_date[]" type="text" id="txt_fuel_date_`+rowNum+`" value="" size=""></td>
+                                    <td><input class="input-sm form-control" name="txt_fuel_gallons[]" type="text" id="txt_fuel_gallons_`+rowNum+`" value=""></td>
+                                    <td><input class="input-sm form-control" name="txt_fuel_reefer[]" type="text" id="txt_fuel_reefer_`+rowNum+`" value=""></td>
+                                    <td style="width: 10em;"><input class="input-sm form-control" name="txt_fuel_other[]" type="text" id="txt_fuel_other_`+rowNum+`" value=""></td>
+                                    <td><input class="input-sm form-control" name="txt_fuel_vendor[]" type="text" id="txt_fuel_vendor_`+rowNum+`" value=""></td>
+                                    <td><input class="input-sm form-control" name="txt_fuel_city[]" type="text" id="txt_fuel_city_`+rowNum+`" value=""></td>
                                     <td>
-                                       <select class="input-sm form-control" name="txt_fuel_state[]" id="txt_fuel_state_`+random+`" value="<?php echo $row['st_enter'];?>">
+                                       <select class="input-sm form-control" name="txt_fuel_state[]" id="txt_fuel_state_`+rowNum+`" value="<?php echo $row['st_enter'];?>">
                                           <?php
                                              foreach ($us_state_abbrevs as $state) { ?>
                                           <option><?php echo $state;?></option>
                                           <?php } ?>
                                        </select>
                                     </td>
-                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_odo[]" type="text" id="txt_fuel_odo_`+random+`" value=""></td>
+                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_odo[]" type="text" id="txt_fuel_odo_`+rowNum+`" value=""></td>
                                     <td style="text-align: right;"><button class="btn btn-sm btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                     <td style="text-align: right;">
-                                       <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_fuel[]" id="txt_delete_row_fuel_`+random+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
+                                       <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_fuel[]" id="txt_delete_row_fuel_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                     </td>
                                  </tr>`;
 
@@ -872,6 +877,27 @@ function deleteRow(z) {
   }
 }
 
+function calculate_state_miles(rowNum,delayTimer) {
+  if (rowNum == 1) {
+    // We're the first row so get the beginning odo from txt_od_start
+    subtrahend = $("#txt_od_start").val();
+  }else{
+    previous_row = rowNum - 1;
+    subtrahend = $("#txt_state_odo_details_"+previous_row).val();
+  }    
+  minuend = $("#txt_state_odo_details_"+rowNum).val();
+
+  // On keypress calculate the difference between the current txt_state_odo_details_n and the previous
+  // Then populate that difference in txt_state_miles_details_n
+    console.log(subtrahend);
+    clearTimeout(delayTimer);
+    delayTimer = setTimeout(function() {
+        difference = parseInt(minuend - subtrahend);
+        $("#txt_state_miles_details_"+rowNum).text(difference);
+        $("#txt_state_miles_details_"+rowNum).val(difference);
+    }, 1000); // Will do the ajax stuff after 1000 ms, or 1 s
+
+}
 </script>
    </body>
 </html>
