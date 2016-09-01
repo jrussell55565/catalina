@@ -80,6 +80,9 @@ if (isset($_GET['exportDisplay']))
     $fileDir = '/tmp/';
     $file = fopen($fileDir . $fileName, "w") or die("Unable to open file!");
     $sql = mysql_query($loginSql);
+    # Add header to the csv file
+    $row = "drivername,driver_driverid,truck_number,trailer_number,rental,login_time,truck_odometer\n";
+    file_put_contents($fileDir . $fileName, $row, FILE_APPEND | LOCK_EX);
     while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
     {
       $fullRow = $row['drivername'] . "," .
