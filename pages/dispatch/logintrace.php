@@ -9,19 +9,14 @@ if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
 mysql_select_db($db_name) or DIE('Database name is not available!');
+$mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
 
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
 
 # Get the driver names and employee_id
-$driver_array = array();
-$statement = 'SELECT fname, lname, employee_id from users WHERE title = "Driver" ORDER BY fname';
-$results = mysql_query($statement);
-while($row = mysql_fetch_array($results, MYSQL_BOTH))
-{
-    $driver_array[$row['employee_id']] = $row['fname']." ".$row['lname'];
-}
-mysql_free_result($results);
+$driver_array = get_drivers($mysqli);
+$mysqli->close();
 
 # Process GET requests.  Made by the driver export calls
 if (isset($_GET['exportDisplay']))
@@ -191,10 +186,9 @@ if (isset($_GET['exportDisplay']))
                <div class="input-group" id="driver" style="width: 25%;">
                  <select class="input-sm form-control" name="trip_search_driver" id="trip_search_driver" value="" style="margin-top: 5px;">
                   <option value="null">Choose Driver...</option>
-                  <?php
-                  foreach ($driver_array as $employee_id => $driver) { ?>
-                    <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
-                  <?php } ?>
+                    <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
+                      <option value=<?php echo $driver_array[$i]['employee_id'];?>><?php echo $driver_array[$i]['name'];?></option>
+                    <?php } ?>
                 </select>
                </div>
                <div class="input-group">

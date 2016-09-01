@@ -28,16 +28,8 @@
        exit();
      }
 
-     # Get the driver names and employee_id
-     $driver_array = array();
-     $statement = 'SELECT fname, lname, employee_id from users WHERE title = "Driver" ORDER BY fname';
-     if ($result = $mysqli->query($statement)) {
-       while($row = $result->fetch_array(MYSQL_BOTH))
-       {
-         $driver_array[$row['employee_id']] = $row['fname']." ".$row['lname'];
-       }
-       $result->close();
-     }
+   # Get the driver names and employee_id
+   $driver_array = get_drivers($mysqli);
 
    # Create associative array for the border states
    $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
@@ -274,7 +266,7 @@
                           </div>
                      </div>
                         <div class="box-body">
-                        <form name="frm_ifta_add" method="POST" action="processifta.php" role="form" enctype="multipart/form-data">
+                        <form name="frm_ifta_add" method="POST" action="processifta.php" role="form" enctype="multipart/form-data" onSubmit="sendEmail();">
                            <table width="637" class="table table-condensed table-striped" id="tbl_ifta_add">
                               <tbody>
                                  <tr>
@@ -316,10 +308,9 @@
                                     <td>
                                        <select class="input-sm form-control" name="sel_add_driver_1" id="sel_add_driver_1" value="">
                                           <option value="null">Choose Driver...</option>
-                                          <?php
-                                             foreach ($driver_array as $employee_id => $driver) { ?>
-                                          <option value=<?php echo "$employee_id ";?> <?php if($employee_id == $ifta_results['driver1']) { echo "selected"; }?>><?php echo $driver;?></option>
-                                          <?php } ?>
+                                     <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
+                                       <option value=<?php echo $driver_array[$i]['employee_id'];?>><?php echo $driver_array[$i]['name'];?></option>
+                                     <?php } ?>
                                        </select>
                                     </td>
                                     <td><div align="right"><strong>Fuel Reciepts</strong></div></td>
@@ -335,10 +326,9 @@
                                     <td>
                                        <select class="input-sm form-control" name="sel_add_driver_2" id="sel_add_driver_2" value="">
                                           <option value="null">Choose Driver...</option>
-                                          <?php
-                                             foreach ($driver_array as $employee_id => $driver) { ?>
-                                          <option value=<?php echo "$employee_id ";?><?php if($employee_id == $ifta_results['driver2']) { echo "selected"; }?>><?php echo $driver;?></option>
-                                          <?php } ?>
+                                     <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
+                                       <option value=<?php echo $driver_array[$i]['employee_id'];?>><?php echo $driver_array[$i]['name'];?></option>
+                                     <?php } ?>
                                        </select>
                                     </td>
                                     <td><div align="right"><strong>BOL Included</strong></div></td>
@@ -454,10 +444,9 @@
                                  <td width="150">
                                   <select class="input-sm form-control" size="1" style="width:150px;" name="txt_driver_details[]" type="text" id="txt_driver_details_<?php echo $rowNum;?>" value="">
                                    <option value="null">Choose...</option>
-                                   <?php
-                                    foreach ($driver_array as $employee_id => $driver) { ?>
-                                    <option value=<?php echo "$employee_id ";?> <?php if($employee_id == $ifta_details[$i]['driver']) { echo "selected"; }?>><?php echo $driver;?></option>
-                                   <?php } ?>
+                                     <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
+                                       <option value=<?php echo $driver_array[$i]['employee_id'];?> <?php if $driver_array[$i]['employee_id'] == $ifta_details[$i]['driver']) { echo "selected"; }?>><?php echo $driver_array[$i]['name'];?></option>
+                                     <?php } ?>
                                   </select>
                                  </td>
                                  <td style="width: 7em;"><input class="input-sm form-control hwb" name="txt_hwb_details[]" type="text" id="txt_hwb_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['hwb'];?>"></td>
@@ -690,7 +679,8 @@
                              </tbody>
                            </table>
                         <p></p>
-                        <button type="submit" class="btn btn-danger" name="update_ifta">Update</button>
+                        <button type="submit" class="btn btn-danger" name="update_ifta" id="update_ifta">Update</button>
+                        <input type="hidden" name="send_email" id="send_email"/>
                         <table width="200" border="0">
                           <tr>
                             <td><span class="box-title">Open
@@ -710,6 +700,9 @@ Closed
                         <!-- /.box-footer-->
                      </div>
                      <!-- /.box -->
+
+
+
                      <!-- END PAGE CONTENT HERE -->
                   </div>
                   <!-- /.box -->
@@ -1043,6 +1036,14 @@ function calculate_state_miles(rowNum,delayTimer) {
         $("#txt_state_miles_details_add_"+rowNum).val(difference);
     }, 1000); // Will do the ajax stuff after 1000 ms, or 1 s
 
+}
+
+function sendEmail() {
+  if (confirm("Do you want to send an email now?")) {
+    $("#send_email").val('yes');
+  }else{
+    $("#send_email").val('no');
+  }
 }
 
 </script>

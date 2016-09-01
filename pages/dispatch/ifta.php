@@ -8,8 +8,7 @@ if ($_SESSION['login'] != 1)
 
    
    include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
-   mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
-   mysql_select_db($db_name) or DIE('Database name is not available!');
+   $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
    
    $username = $_SESSION['userid'];
    $drivername = $_SESSION['drivername'];
@@ -17,29 +16,14 @@ if ($_SESSION['login'] != 1)
    $trailerid = $_SESSION['trailerid'];
    
    $us_state_abbrevs = array('AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY');
-   
+  
    # Get the driver names and employee_id
-   $driver_array = array();
-   $statement = "select * from
-   (
-   select FNAME, LNAME, EMPLOYEE_ID from USERS where TITLE = 'Driver'
-   union
-   select 'Unknown' as FNAME, 'Driver' as LNAME, 'null' as EMPLOYEE_ID from DUAL
-   union
-   select 'Multiple' as FNAME, 'Drivers' as LNAME, 'null' as EMPLOYEE_ID from DUAL
-   ) a order by FNAME";
-   $results = mysql_query($statement);
-   while($row = mysql_fetch_array($results, MYSQL_BOTH))
-   {
-       $driver_array[$row['employee_id']] = $row['fname']." ".$row['lname'];
-   }
-   mysql_free_result($results);
+   $driver_array = get_drivers($mysqli);
 
    $issue_options = array('NA', 'Date Missing', 'Driver Missing', 'HWB Missing', 'Route HWY Missing', 'State Ext Ent Missing', 'Miles Missing', 'Odometer Missing', 'Other');
    $fuel_issue_options = array('NA', 'Fuel Inv # Missing', 'Fuel Gallons Missing', 'Fuel Vendor Missing', 'Fuel City Missing', 'Fuel State Missing', 'Fuel Odometer Missing', 'Other');
 
    # Create associative array for the border states
-   $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
    $state_border_array = array();
    $statement = "select state_extent,bs_01,bs_02,bs_03,bs_04,bs_05,bs_06,bs_07,bs_08,bs_09 from ifta_stateboarders";
    if ($result = $mysqli->query($statement)) {
@@ -188,11 +172,9 @@ if ($_SESSION['login'] != 1)
                                  <tr>
                                     <td>Driver</td>
                                    <td><select class="input-sm form-control" name="trip_search_driver" id="trip_search_driver" value="">
-                                     <option value="null">Choose Driver...</option>
-                                     <option value="null">Unknown Driver</option>
-                                     <?php
-                                             foreach ($driver_array as $employee_id => $driver) { ?>
-                                     <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
+                                          <option value="null">Choose Driver...</option>
+                                     <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
+                                       <option value=<?php echo $driver_array[$i]['employee_id'];?>><?php echo $driver_array[$i]['name'];?></option>
                                      <?php } ?>
                                    </select></td>
                                    <td>&nbsp;</td>
@@ -303,9 +285,8 @@ if ($_SESSION['login'] != 1)
                                    </strong>
                                    <td><select class="input-sm form-control" name="sel_add_driver_1" id="sel_add_driver_1" value="">
                                      <option value="null">Choose Driver...</option>
-                                     <?php
-                                             foreach ($driver_array as $employee_id => $driver) { ?>
-                                     <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
+                                     <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
+                                       <option value=<?php echo $driver_array[$i]['employee_id'];?>><?php echo $driver_array[$i]['name'];?></option>
                                      <?php } ?>
                                    </select>                                    
                                     <td><div align="right"><strong>Fuel Reciepts</strong></div></td>
@@ -320,9 +301,8 @@ if ($_SESSION['login'] != 1)
                                    </strong>
                                    <td><select class="input-sm form-control" name="sel_add_driver_2" id="sel_add_driver_2" value="">
                                      <option value="null">Choose Driver...</option>
-                                     <?php
-                                             foreach ($driver_array as $employee_id => $driver) { ?>
-                                     <option value=<?php echo $employee_id;?>><?php echo $driver;?></option>
+                                     <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
+                                       <option value=<?php echo $driver_array[$i]['employee_id'];?>><?php echo $driver_array[$i]['name'];?></option>
                                      <?php } ?>
                                    </select>                                    
                                     <td><div align="right"><strong>BOL Included</strong></div></td>
