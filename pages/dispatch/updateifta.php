@@ -408,27 +408,27 @@
                                  </tr>
                            </table>
 <p></p>
-                           <table width="1646" class="table table-condensed table-striped" id="add_ifta_table">
+                           <table class="table table-condensed table-striped" id="add_ifta_table">
                               <tr>
-                                 <td colspan="15" style="text-align: center; font-weight: bold;">Enter Trip info Below</td>
+                                 <td colspan="16" style="text-align: center; font-weight: bold;">Enter Trip info Below</td>
                               </tr>
                               <tr>
-                                 <td width="112" height="41">Trip #</td>
-                                 <td width="96">Date</td>
-                                 <td>Driver</td>
-                                 <td width="144">HWB #</td>
-                                 <td width="160">Routes Hwys</td>
-                                 <td>Exit</td>
-                                 <td>Ent</td>
-                                 <td>OD State Line</td>
-                                 <td>State Miles</td>
-                                 <td width="65">Permit                                 </td>
-                                 <td width="45"> Issue</td>
-                                 <td width="83">Choose Issue</td>
-                                 <td width="180">Comments                                </td>
-                                 <td width="96">Resolved</td>
-                                 <td width="23"><div align="center"></div></td>
-                                 <td width="55" style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                 <td>Trip #</td>
+                                 <td>Date</td>
+                                 <td style="width:8em;">Driver</td>
+                                 <td>HWB #</td>
+                                 <td>Routes Hwys</td>
+                                 <td style="width:4em;">Exit</td>
+                                 <td style="width:4em;">Ent</td>
+                                 <td style="width:5em;">OD SL</td>
+                                 <td style="width:5em;">St Miles</td>
+                                 <td>Permit                                 </td>
+                                 <td>Issue</td>
+                                 <td>Type</td>
+                                 <td>Comments                                </td>
+                                 <td>Resolved</td>
+                                 <td></td>
+                                 <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                               </tr>
                               <tr id="tr_add_driver_details_0">
                               <?php
@@ -438,20 +438,20 @@
                                   $counter++;
                               ?>
                                 <tr id="tr_add_driver_details_<?php echo $rowNum;?>" value="ifta_details">
-                                 <td style="width: 7em;"><input name="txt_tripnum_details[]" type="text" class="input-sm form-control" id="txt_tripnum_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['trip_no'];?>" size="18" readonly>
+                                 <td><input name="txt_tripnum_details[]" type="text" class="input-sm form-control" id="txt_tripnum_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['trip_no'];?>" readonly>
                                     <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['id'];?>"></td>
-                                    <td width="96"><input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['trip_date'];?>" size="16"></td>
-                                 <td width="150">
+                                    <td ><input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['trip_date'];?>"></td>
+                                 <td>
                                   <select class="input-sm form-control" size="1" style="width:150px;" name="txt_driver_details[]" type="text" id="txt_driver_details_<?php echo $rowNum;?>" value="">
                                    <option value="null">Choose...</option>
                                      <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
-                                       <option value=<?php echo $driver_array[$i]['employee_id'];?> <?php if $driver_array[$i]['employee_id'] == $ifta_details[$i]['driver']) { echo "selected"; }?>><?php echo $driver_array[$i]['name'];?></option>
+                                       <option value=<?php echo $driver_array[$i]['employee_id'];?> <?php if ($driver_array[$i]['employee_id'] == $ifta_details[$i]['driver']) { echo "selected"; }?>><?php echo $driver_array[$i]['name'];?></option>
                                      <?php } ?>
                                   </select>
                                  </td>
-                                 <td style="width: 7em;"><input class="input-sm form-control hwb" name="txt_hwb_details[]" type="text" id="txt_hwb_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['hwb'];?>"></td>
-                                 <td style="width: 10em;"><input class="input-sm form-control" name="txt_routes_details[]" type="text" id="txt_routes_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['route'];?>"></td>
-                                 <td width="89">
+                                 <td><input class="input-sm form-control hwb" name="txt_hwb_details[]" type="text" id="txt_hwb_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['hwb'];?>"></td>
+                                 <td><input class="input-sm form-control" name="txt_routes_details[]" type="text" id="txt_routes_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['route'];?>"></td>
+                                 <td>
                                     <select class="input-sm form-control" name="txt_state_exit_details[]" id="txt_state_exit_details_<?php echo $rowNum;?>" value="">
                                        <?php
                                           foreach ($us_state_abbrevs as $state) { ?>
@@ -459,7 +459,7 @@
                                        <?php } ?>
                                     </select>
                                  </td>
-                                 <td width="84">
+                                 <td>
                                     <select class="input-sm form-control" name="txt_state_enter_details[]" id="txt_state_enter_details_<?php echo $rowNum;?>" value="">
                                        <?php
                                           foreach ($us_state_abbrevs as $state) { ?>
@@ -467,9 +467,9 @@
                                        <?php } ?>
                                     </select>
                                  </td>
-                                 <td width="107"><input name="txt_state_odo_details[]" type="text" class="input-sm form-control" id="txt_state_odo_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['state_line_odometer'];?>" size="8"></td>
-                                 <td width="89">
-                                    <input name="txt_state_miles_details[]" type="text" class="input-sm form-control" id="txt_state_miles_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['state_miles'];?>" size="6">
+                                 <td><input name="txt_state_odo_details[]" type="text" class="input-sm form-control" id="txt_state_odo_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['state_line_odometer'];?>"></td>
+                                 <td>
+                                    <input name="txt_state_miles_details[]" type="text" class="input-sm form-control" id="txt_state_miles_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['state_miles'];?>">
                                  </td>
                                  <td><div align="center">
                                    <input class="input-sm" type="checkbox" name="txt_permit_req_details[]" id="txt_permit_req_details_<?php echo $rowNum;?>" <?php if($ifta_details[$i]['permit_required'] == 'Y') { echo " checked ";} ?> value="<?php echo $ifta_details[$i]['id'];?>">
@@ -487,12 +487,12 @@
                                    </select>
                                  </div></td>
                                  <td><div align="center">
-                                   <input name="issue_comment_details[]" type="text" class="input-sm form-control" id="issue_comment_details_<?php echo $rowNum;?>" size="30" value="<?php echo $ifta_details[$i]['issue_comment'];?>">
+                                   <input name="issue_comment_details[]" type="text" class="input-sm form-control" id="issue_comment_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['issue_comment'];?>">
                                  </div></td>
-                                 <td><input class="input-sm form-control datepicker" name="date_resolved_details[]" type="text" id="date_resolved_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['date_resolved'];?>" size="16"></td>
-                                 <td style="text-align: right;"><button class="btn btn-sm btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                 <td><input class="input-sm form-control datepicker" name="date_resolved_details[]" type="text" id="date_resolved_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['date_resolved'];?>"></td>
+                                 <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  <td style="text-align: right;" id="ifta_details|<?php echo $ifta_details[$i]['id'];?>">
-                                    <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_details[]" id="txt_delete_row_details_<?php echo $rowNum;?>" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
+                                    <button class="btn btn-xs btn-danger" type="button" name="txt_delete_row_details[]" id="txt_delete_row_details_<?php echo $rowNum;?>" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                  </td>
                               </tr>
                               <?php
@@ -503,26 +503,26 @@
                               </tbody>
                            </table>
             <p></p>
-                           <table width="1789" class="table table-condensed table-striped" id="add_ifta_fuel">
+                           <table class="table table-condensed table-striped" id="add_ifta_fuel">
                               <tbody>
                                  <tr style="text-align: center; font-weight: bold;">
                                     <td colspan="16">Enter Fuel Info for Trip</td>
                                  </tr>
                                  <tr>
-                                    <td width="131">Trip #</td>
-                                    <td width="94">Date</td>
-                                    <td width="91">Truck Gallons</td>
-                                    <td width="152">Reefer Fuel</td>
-                                    <td width="179">Other Fuel</td>
-                                    <td width="162">Vendor</td>
-                                    <td width="162">City</td>
-                                    <td width="46">State</td>
-                                    <td width="162">Odometer</td>
-                                    <td width="80">Issue</td>
-                                    <td width="100">Choose Issue</td>
-                                    <td width="44">Comments</td>
-                                    <td width="44">Resolved</td>
-                                    <td width="111" style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                    <td>Trip #</td>
+                                    <td>Date</td>
+                                    <td style="width:5em;">Gallons</td>
+                                    <td style="width:5em;">Reefer</td>
+                                    <td style="width:5em;">Other</td>
+                                    <td>Vendor</td>
+                                    <td>City</td>
+                                    <td style="width:4em;">State</td>
+                                    <td style="width:5em;">Odometer</td>
+                                    <td>Issue</td>
+                                    <td style="width:8em;">Type</td>
+                                    <td>Comments</td>
+                                    <td>Resolved</td>
+                                    <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  </tr>
                                  <tr id="tr_add_fuel_details_0">
                                  <?php
@@ -532,14 +532,14 @@
                                   $counter++;
                               ?>
                                 <tr id="tr_add_fuel_details_<?php echo $rowNum;?>"  value="ifta_fuel">
-                                    <td><input name="txt_fuel_tripnum[]" type="text" class="input-sm form-control" id="txt_fuel_tripnum_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['trip_no'];?>" size="16" readonly>
+                                    <td><input name="txt_fuel_tripnum[]" type="text" class="input-sm form-control" id="txt_fuel_tripnum_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['trip_no'];?>" readonly>
                         <input type="hidden" name="hdn_fuel_id[]" id="hdn_fuel_id_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['id'];?>"></td>
-                                    <td><input class="input-sm form-control datepicker" name="txt_fuel_date[]" type="text" id="txt_fuel_date_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['trip_date'];?>" size="14"></td>
-                                    <td><input name="txt_fuel_gallons[]" type="text" class="input-sm form-control" id="txt_fuel_gallons_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['fuel_gallons'];?>" size="12"></td>
-                                    <td><input name="txt_fuel_reefer[]" type="text" class="input-sm form-control" id="txt_fuel_reefer_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['fuel_reefer'];?>" size="12"></td>
-                                    <td style="width: 10em;"><input name="txt_fuel_other[]" type="text" class="input-sm form-control" id="txt_fuel_other_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['fuel_other'];?>" size="12"></td>
+                                    <td><input class="input-sm form-control datepicker" name="txt_fuel_date[]" type="text" id="txt_fuel_date_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['trip_date'];?>" ></td>
+                                    <td><input name="txt_fuel_gallons[]" type="text" class="input-sm form-control" id="txt_fuel_gallons_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['fuel_gallons'];?>" ></td>
+                                    <td><input name="txt_fuel_reefer[]" type="text" class="input-sm form-control" id="txt_fuel_reefer_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['fuel_reefer'];?>" ></td>
+                                    <td ><input name="txt_fuel_other[]" type="text" class="input-sm form-control" id="txt_fuel_other_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['fuel_other'];?>" ></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_vendor[]" type="text" id="txt_fuel_vendor_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['vendor'];?>"></td>
-                                    <td><input name="txt_fuel_city[]" type="text" class="input-sm form-control" id="txt_fuel_city_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['city'];?>" size="16"></td>
+                                    <td><input name="txt_fuel_city[]" type="text" class="input-sm form-control" id="txt_fuel_city_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['city'];?>" ></td>
                                     <td>
                                        <select class="input-sm form-control" name="txt_fuel_state[]" id="txt_fuel_state_<?php echo $rowNum;?>" value="">
                                           <?php
@@ -548,8 +548,8 @@
                                           <?php } ?>
                                        </select>
                                     </td>
-                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_odo[]" type="text" id="txt_fuel_odo_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['odometer'];?>"></td>
-                                    <td style="width: 5em;"><div align="center">
+                                    <td><input class="input-sm form-control" name="txt_fuel_odo[]" type="text" id="txt_fuel_odo_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['odometer'];?>"></td>
+                                    <td><div align="center">
                                       <input class="input-sm" type="checkbox" name="cb_trip_issue_fuel[]" id="cb_trip_issue_fuel_<?php echo $rowNum;?>" <?php if($ifta_fuel[$i]['cb_trip_issue'] == 'Y') { echo " checked ";} ?> value="<?php echo $ifta_fuel[$i]['id'];?>">
                                     </div></td>
                                     <td>
@@ -563,10 +563,10 @@
                                     <td><div align="center">
                                    <input name="issue_comment_fuel[]" type="text" class="input-sm form-control" id="issue_comment_fuel_<?php echo $rowNum;?>" size="30" value="<?php echo $ifta_fuel[$i]['issue_comment'];?>">
                                  </div></td>
-                                 <td><input class="input-sm form-control datepicker" name="date_resolved_fuel[]" type="text" id="date_resolved_fuel_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['date_resolved'];?>" size="16"></td>
-                                    <td colspan="2" style="text-align: right;"><button class="btn btn-sm btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                 <td><input class="input-sm form-control datepicker" name="date_resolved_fuel[]" type="text" id="date_resolved_fuel_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['date_resolved'];?>" ></td>
+                                    <td colspan="2" style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                     <td style="text-align: right;" id="ifta_fuel|<?php echo $ifta_fuel[$i]['id'];?>">
-                                       <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_fuel[]" id="txt_delete_row_fuel_<?php echo $rowNum;?>" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
+                                       <button class="btn btn-xs btn-danger" type="button" name="txt_delete_row_fuel[]" id="txt_delete_row_fuel_<?php echo $rowNum;?>" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                     </td>
                                 </tr>
                                  <?php 
@@ -591,8 +591,8 @@
                                     <?php if (isset($ifta_uploads['ifta_image_trip']['name'])) {?>
                                        <input name="ifta_image_trip[]" type="text" class="input-sm" style="border: 1px solid #CCC; width: 80%;" id="ifta_image_trip" value="<?php echo $ifta_uploads['ifta_image_trip']['name']; ?>">
                                        <div style="float: right;">
-                                         <button class="btn btn-sm btn-danger" type="button" name="btn_delete_file_ifta_image_trip" id="btn_delete_file_ifta_image_trip" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_trip']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
-                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_trip" id="btn_view_file_ifta_image_trip" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_trip']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
+                                         <button class="btn btn-xs btn-danger" type="button" name="btn_delete_file_ifta_image_trip" id="btn_delete_file_ifta_image_trip" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_trip']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
+                                         <button class="btn btn-xs btn-primary" type="button" name="btn_view_file_ifta_image_trip" id="btn_view_file_ifta_image_trip" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_trip']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
                                        </div>
                                      <?php }else{ ?>
                                     <input name="ifta_image_trip[]" type="file" class="file-loading input-sm form-control" id="ifta_image_trip" multiple=false>
@@ -606,8 +606,8 @@
                                     <?php if (isset($ifta_uploads['ifta_image_fuel']['name'])) {?>
                                        <input name="ifta_image_fuel[]" type="text" class="input-sm" style="border: 1px solid #CCC; width: 80%;" id="ifta_image_fuel" value="<?php echo $ifta_uploads['ifta_image_fuel']['name']; ?>">
                                        <div style="float: right;">
-                                         <button class="btn btn-sm btn-danger" type="button" name="btn_delete_file_ifta_image_fuel" id="btn_delete_file_ifta_image_fuel" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_fuel']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
-                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_fuel" id="btn_view_file_ifta_image_fuel" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_fuel']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
+                                         <button class="btn btn-xs btn-danger" type="button" name="btn_delete_file_ifta_image_fuel" id="btn_delete_file_ifta_image_fuel" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_fuel']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
+                                         <button class="btn btn-xs btn-primary" type="button" name="btn_view_file_ifta_image_fuel" id="btn_view_file_ifta_image_fuel" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_fuel']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
                                        </div>
                                      <?php }else{ ?>
                                       <input name="ifta_image_fuel[]" type="file" class="file-loading input-sm form-control" id="ifta_image_fuel" multiple=false>
@@ -621,8 +621,8 @@
                                     <?php if (isset($ifta_uploads['ifta_image_gps']['name'])) {?>
                                        <input name="ifta_image_gps[]" type="text" class="input-sm" style="border: 1px solid #CCC; width: 80%;" id="ifta_image_gps" value="<?php echo $ifta_uploads['ifta_image_gps']['name']; ?>">
                                        <div style="float: right;">
-                                         <button class="btn btn-sm btn-danger" type="button" name="btn_delete_file_ifta_image_gps" id="btn_delete_file_ifta_image_gps" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_gps']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
-                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_gps" id="btn_view_file_ifta_image_gps" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_gps']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
+                                         <button class="btn btn-xs btn-danger" type="button" name="btn_delete_file_ifta_image_gps" id="btn_delete_file_ifta_image_gps" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_gps']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
+                                         <button class="btn btn-xs btn-primary" type="button" name="btn_view_file_ifta_image_gps" id="btn_view_file_ifta_image_gps" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_gps']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
                                        </div>
                                      <?php }else{ ?>
                                     <input name="ifta_image_gps[]" type="file" class="file-loading input-sm form-control" id="ifta_image_gps" multiple=false>
@@ -636,8 +636,8 @@
                                     <?php if (isset($ifta_uploads['ifta_image_permits']['name'])) {?>
                                        <input name="ifta_image_permits[]" type="text" class="input-sm" style="border: 1px solid #CCC; width: 80%;" id="ifta_image_permits" value="<?php echo $ifta_uploads['ifta_image_permits']['name']; ?>">
                                        <div style="float: right;">
-                                         <button class="btn btn-sm btn-danger" type="button" name="btn_delete_file_ifta_image_permits" id="btn_delete_file_ifta_image_permits" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_permits']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
-                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_permits" id="btn_view_file_ifta_image_permits" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_permits']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
+                                         <button class="btn btn-xs btn-danger" type="button" name="btn_delete_file_ifta_image_permits" id="btn_delete_file_ifta_image_permits" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_permits']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
+                                         <button class="btn btn-xs btn-primary" type="button" name="btn_view_file_ifta_image_permits" id="btn_view_file_ifta_image_permits" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_permits']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
                                        </div>
                                      <?php }else{ ?>
                                     <input name="ifta_image_permits[]" type="file" class="file-loading input-sm form-control" id="ifta_image_permits" multiple=false>
@@ -652,8 +652,8 @@
                                      if (isset($ifta_uploads['ifta_image_drivers_logs']['name'])) {?>
                                        <input name="ifta_image_drivers_logs[]" type="text" class="input-sm" style="border: 1px solid #CCC; width: 80%;" id="ifta_image_drivers_logs" value="<?php echo $ifta_uploads['ifta_image_drivers_logs']['name']; ?>">
                                        <div style="float: right;">
-                                         <button class="btn btn-sm btn-danger" type="button" name="btn_delete_file_ifta_image_drivers_logs" id="btn_delete_file_ifta_image_drivers_logs" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_drivers_logs']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
-                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_drivers_logs" id="btn_view_file_ifta_image_drivers_logs" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_drivers_logs']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
+                                         <button class="btn btn-xs btn-danger" type="button" name="btn_delete_file_ifta_image_drivers_logs" id="btn_delete_file_ifta_image_drivers_logs" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_drivers_logs']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
+                                         <button class="btn btn-xs btn-primary" type="button" name="btn_view_file_ifta_image_drivers_logs" id="btn_view_file_ifta_image_drivers_logs" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_drivers_logs']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
                                        </div>
                                      <?php }else{ ?>
                                     <input name="ifta_image_drivers_logs[]" type="file" class="file-loading input-sm form-control" id="ifta_image_drivers_logs" multiple=false>
@@ -668,8 +668,8 @@
                                      if (isset($ifta_uploads['ifta_image_bol']['name'])) {?>
                                        <input name="ifta_image_bol[]" type="text" class="input-sm" style="border: 1px solid #CCC; width: 80%;" id="ifta_image_bol" value="<?php echo $ifta_uploads['ifta_image_bol']['name']; ?>">
                                        <div style="float: right;">
-                                         <button class="btn btn-sm btn-danger" type="button" name="btn_delete_file_ifta_image_bol" id="btn_delete_file_ifta_image_bol" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_bol']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
-                                         <button class="btn btn-sm btn-primary" type="button" name="btn_view_file_ifta_image_bol" id="btn_view_file_ifta_image_bol" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_bol']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
+                                         <button class="btn btn-xs btn-danger" type="button" name="btn_delete_file_ifta_image_bol" id="btn_delete_file_ifta_image_bol" data-toggle="tooltip" data-placement="top" title="Delete" onClick="deleteUpload(this);" value="<?php echo $ifta_uploads['ifta_image_bol']['id']; ?>"><span class="glyphicon glyphicon-remove"></span></button>
+                                         <button class="btn btn-xs btn-primary" type="button" name="btn_view_file_ifta_image_bol" id="btn_view_file_ifta_image_bol" data-toggle="tooltip" data-placement="top" title="View" onClick='OpenInNewTab("processifta.php?download_file=1&id=<?php echo $ifta_uploads['ifta_image_bol']['id']; ?>");' ><span class="glyphicon glyphicon-search"></span></button>
                                        </div>
                                      <?php }else{ ?>
                                     <input name="ifta_image_bol[]" type="file" class="file-loading input-sm form-control" id="ifta_image_bol" multiple=false>
@@ -759,15 +759,15 @@ Closed
                                };
 
          var new_row = `<tr id="tr_add_driver_details_add_`+rowNum+`" value="ifta_details">
-                                 <td style="width: 5em;"><input class="input-sm form-control" name="txt_tripnum_details_add[]" type="text" id="txt_tripnum_details_add_`+rowNum+`" value="`+tripnum+`" readonly>
+                                 <td ><input class="input-sm form-control" name="txt_tripnum_details_add[]" type="text" id="txt_tripnum_details_add_`+rowNum+`" value="`+tripnum+`" readonly>
                                     <input type="hidden" name="hdn_details_id_add[]" id="hdn_details_id_add_`+rowNum+`" value="0"></td>
-                                    <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_date_details_add[]" type="text" id="txt_date_details_add_`+rowNum+`" value="" size=""></td>
+                                    <td ><input class="input-sm form-control datepicker" name="txt_date_details_add[]" type="text" id="txt_date_details_add_`+rowNum+`" value="" size=""></td>
                                  <td>
                                   <select class="input-sm form-control" name="txt_driver_details_add[]" type="text" id="txt_driver_details_add_`+rowNum+`" value="">
                                    <option value="null">Choose...</option>
                                   </select>
                                  </td>
-                                 <td style="width: 5em;"><input class="input-sm form-control hwb" name="txt_hwb_details_add[]" type="text" id="txt_hwb_details_add_`+rowNum+`"></td>
+                                 <td ><input class="input-sm form-control hwb" name="txt_hwb_details_add[]" type="text" id="txt_hwb_details_add_`+rowNum+`"></td>
                                  <td><input class="input-sm form-control" name="txt_routes_details_add[]" type="text" id="txt_routes_details_add_`+rowNum+`"></td>
                                  <td>
                                     <select class="input-sm form-control" name="txt_state_exit_details_add[]" id="txt_state_exit_details_add_`+rowNum+`" value="">
@@ -793,7 +793,6 @@ Closed
                                    <input class="input-sm" type="checkbox" name="cb_trip_issue_details_add[]" id="cb_trip_issue_details_add_`+rowNum+`">
                                  </div></td>
                                  <td><div align="center">
-                                   <label for="ifta_specificdate_issue"></label>
                                    <select class="input-sm form-control" name="sl_trip_issue_details_add[]" id="sl_trip_issue_details_add_`+rowNum+`">
                                      <?php
                                        foreach ($issue_options as $issue) { ?>
@@ -806,9 +805,9 @@ Closed
                                  </div>                                   <label for="issue_comment"></label></td>
                                  <td><input class="input-sm form-control datepicker" name="date_resolved_details_add[]" type="text" id="date_resolved_details_add_`+rowNum+`" size="16"></td> 
                                  <td style="text-align: right;">
-                                    <button class="btn btn-sm btn-primary" type="button" name="txt_new_row_details[]" id="txt_delete_row_details_add_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                    <button class="btn btn-xs btn-primary" type="button" name="txt_new_row_details[]" id="txt_delete_row_details_add_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  <td style="text-align: right;" id="ifta_details|<?php echo $ifta_details[$i]['id'];?>">
-                                    <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_details_add[]" id="txt_delete_row_details_add_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
+                                    <button class="btn btn-xs btn-danger" type="button" name="txt_delete_row_details_add[]" id="txt_delete_row_details_add_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                  </td>
                               </tr>`;
          
@@ -892,12 +891,12 @@ Closed
          var rowNum = fuel_counter;
          var tripnum = $("#txt_tripnum").val();
          var new_row = `<tr id="tr_add_fuel_details_add_`+rowNum+`" value="ifta_fuel">
-                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_tripnum_add[]" type="text" id="txt_fuel_tripnum_add_`+rowNum+`" value="`+tripnum+`" readonly>
+                                    <td ><input class="input-sm form-control" name="txt_fuel_tripnum_add[]" type="text" id="txt_fuel_tripnum_add_`+rowNum+`" value="`+tripnum+`" readonly>
                                     <input type="hidden" name="hdn_fuel_id_add[]" id="hdn_fuel_id_add_`+rowNum+`" value="0"></td>
-                                    <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_fuel_date_add[]" type="text" id="txt_fuel_date_add_`+rowNum+`" value="" size=""></td>
+                                    <td ><input class="input-sm form-control datepicker" name="txt_fuel_date_add[]" type="text" id="txt_fuel_date_add_`+rowNum+`" value="" size=""></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_gallons_add[]" type="text" id="txt_fuel_gallons_add_`+rowNum+`" value=""></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_reefer_add[]" type="text" id="txt_fuel_reefer_add_`+rowNum+`" value=""></td>
-                                    <td style="width: 10em;"><input class="input-sm form-control" name="txt_fuel_other_add[]" type="text" id="txt_fuel_other_add_`+rowNum+`" value=""></td>
+                                    <td ><input class="input-sm form-control" name="txt_fuel_other_add[]" type="text" id="txt_fuel_other_add_`+rowNum+`" value=""></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_vendor_add[]" type="text" id="txt_fuel_vendor_add_`+rowNum+`" value=""></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_city_add[]" type="text" id="txt_fuel_city_add_`+rowNum+`" value=""></td>
                                     <td>
@@ -908,8 +907,8 @@ Closed
                                           <?php } ?>
                                        </select>
                                     </td>
-                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_odo_add[]" type="text" id="txt_fuel_odo_add_`+rowNum+`" value=""></td>
- <td style="width: 5em;"><div align="center">
+                                    <td ><input class="input-sm form-control" name="txt_fuel_odo_add[]" type="text" id="txt_fuel_odo_add_`+rowNum+`" value=""></td>
+ <td ><div align="center">
                                       <input class="input-sm" type="checkbox" name="cb_trip_issue_fuel_add[]" id="cb_trip_issue_fuel_add_`+rowNum+`">
                                     </div></td>
                                     <td>
@@ -927,9 +926,9 @@ Closed
                                  <td><input class="input-sm form-control datepicker" name="date_resolved_fuel_add[]" type="text" id="date_resolved_fuel_add_`+rowNum+`" size="16"></td>
 
                                     <td style="text-align: right;">
-                                       <button class="btn btn-sm btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_delete_row_fuel_add_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                       <button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_delete_row_fuel_add_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                     <td style="text-align: right;" id="ifta_fuel|<?php echo $ifta_fuel[$i]['id'];?>">
-                                       <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_fuel_add[]" id="txt_delete_row_fuel_add_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
+                                       <button class="btn btn-xs btn-danger" type="button" name="txt_delete_row_fuel_add[]" id="txt_delete_row_fuel_add_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                     </td>
                                  </tr>`;
 
