@@ -87,4 +87,27 @@ function rtrim_limit($str, $delim, $count = 0)
 
     return $str;
 }
+
+function get_drivers($mysqli) {
+   # Get the driver names and employee_id
+   $driver_array = [];
+   $statement = "select * from
+   (
+   select fname, lname, employee_id from users where title = 'Driver'
+   union
+   select 'Unknown' as fname, 'Driver' as lname, 'null' as employee_id from DUAL
+   union
+   select 'Multiple' as fname, 'Drivers' as lname, 'null' as employee_id from DUAL
+   ) a order by fname";
+
+   $counter = 0;
+   if ($result = $mysqli->query($statement)) {
+     while($obj = $result->fetch_object()){
+       $driver_array[$counter]['employee_id'] = $obj->employee_id;
+       $driver_array[$counter]['name'] = $obj->fname. " ". $obj->lname;
+       $counter++;
+     }
+   }
+   return $driver_array;
+}
 ?>
