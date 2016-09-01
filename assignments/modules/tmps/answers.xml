@@ -1,0 +1,12 @@
+    <tr>
+        <td align="left" class="qst_ans_table"  >
+           <table style="background-color:white;" border="0"  width="100%" class="table table-striped table-bordered">
+                <tr >
+                    <td  colspan="2">
+                        [group_name]
+                    </td>
+                </tr>
+                [answers]
+            </table>            
+        </td>
+    </tr>

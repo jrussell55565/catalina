@@ -1,0 +1,2 @@
+configurate auto increment values 
+report 26 is tru

@@ -1,0 +1,18 @@
+<users>
+	<user>
+		<name>Name</name>
+		<surname>Surname</surname>
+		<email>test@test.com</email>
+		<login>test123web</login>
+		<password>mypassword</password>
+		<country>Turkey</country>
+		<branch_name>Head Office</branch_name>
+		<group_name>Imported group</group_name>
+		<role>Users</role>
+		<address>Istanbul</address>
+		<phone>777 87 87</phone>
+		<comments>some comments</comments>
+		<approved>1</approved>
+		<disabled>0</disabled>
+	</user>
+</users>

@@ -1,0 +1,45 @@
+&nbsp;<table align="left" cellpadding="5" cellspacing="5" border="0" width="90%">   
+    <tr style="display:[success_display]">
+        <td align="left">
+            <table width="100%" align="left" border=0>
+                <tr >
+                    <td width="10%">
+                       <img width="50px" src="i/icons/[success_icon]" />
+                    </td>
+                    <td>
+                        <b>[success_msg]</b>
+                    </td>
+                </td>    
+            </table>
+            <br/>
+        </td>
+    </tr>
+      <tr style="display:[point_display]">
+        <td align="left">
+            <b>[point_info]</b>
+            <hr />
+        </td>
+    </tr>
+    <tr>
+        <td class="header_text">
+            [header_text]
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+           [additional_text] [question_text]
+        </td>
+    </tr>  
+    <tr>
+        <td><br /></td>
+    </tr>  
+ [answers_template]
+
+    <tr>
+        <td class="footer_text">[hiddens]
+            [footer_text]
+            <input type=hidden id=hdnTempID value="1" />
+        </td>
+    </tr>
+    [buttons]
+</table>

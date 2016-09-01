@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link href="style.css" media="all" rel="StyleSheet" type="text/css">
+<meta name="generator" content="www.DrExplain.com">
+<title>Topic: Importing users from IPB</title></head>
+<body>
+<table class="pagetable" cellpadding="0" cellspacing="0" align="center" id="Table1">
+<tr class="page">
+<td class="page_area" width="100%"><a id="top" name="top"></a><table width="100%" border="0" cellspacing="0" id="Table3">
+<tr>
+<td align="left" class="navigation">
+<font size="1"><a class="navigation" href="module_6_1.htm" id="a1prev">&lt; Previous page</a></font>
+</td>
+<td align="right" class="navigation">
+<font size="1"><a class="navigation" href="module_7.htm" id="a1next">Next page &gt;</a></font>
+</td>
+</tr>
+</table>
+<h1 id="_680898">Importing users from IPB</h1>
+<div class="description_on_page"><p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">Here  is  the  example  of  importing  users  from &nbsp;  Invision  Power  Board  . &nbsp;  (Tested  with  version  3.4.5).</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">1)Execute  the  following  lines  of  code  in  your  MySQL  database  :  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"></font><font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">CREATE  OR  REPLACE  VIEW  v_imported_users</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+AS</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+SELECT</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  member_id  AS  UserID,</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  members_display_name  AS  `Name`,</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  ''  AS  `Surname`,</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  members_l_username  AS  `UserName`,</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  CONCAT(members_pass_hash,  '[sep]',  members_pass_salt)  AS  `Password`,</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  email  AS  `email`,</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  1  AS  branch_id,</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  1  AS  group_id,</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  'nophoto.jpg'  as  user_photo</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+FROM  `ipb`.`members`</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+WHERE  (`ipb`.`members`.`member_group_id`  NOT  IN  (1,  5))</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">2)Change  Imported_Users_Password_Hash  method  in  config.php  file  of  els  PHP  Web  Quiz  as  below  :  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"></font><font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff"> &nbsp;  function  Imported_Users_Password_Hash($entered_password,$password_from_db)</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+ &nbsp;  {</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+	 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  $password_details  =  explode('[sep]',  $password_from_db);</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+	 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  $hashed_password  =  $password_details[0];</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+	 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  $salt  =  $password_details[1];</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+	 &nbsp;  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  return  md5(  md5(  $salt  )  .  md5(  $entered_password  )  )."[sep]".$salt;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+ &nbsp;  }</font></p>
+</div>
+<p align="right">
+<font size="1"><a style="color:#aaaaaa;" href="http://www.DrExplain.com">Created with DrExplain</a></font>
+</p>
+</td></tr>
+<tr>
+<td class="pagearea" width="100%" valign="bottom">
+<table width="100%" border="0" cellspacing="0" id="Table4">
+<tr><td align="left" class="navigation">
+<font size="1"><a class="navigation" href="module_6_1.htm" id="a2prev">&lt; Previous page</a></font>
+</td>
+<td align="right" class="navigation">
+<font size="1"><a class="navigation" href="module_7.htm" id="a2next">Next page &gt;</a></font>
+</td>
+</tr>
+</table>
+</td></tr>
+</table>
+
+</body> 
+</html>

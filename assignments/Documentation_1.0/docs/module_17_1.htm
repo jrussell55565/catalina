@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link href="style.css" media="all" rel="StyleSheet" type="text/css">
+<meta name="generator" content="www.DrExplain.com">
+<title>Topic: Integration with Paypal</title></head>
+<body>
+<table class="pagetable" cellpadding="0" cellspacing="0" align="center" id="Table1">
+<tr class="page">
+<td class="page_area" width="100%"><a id="top" name="top"></a><table width="100%" border="0" cellspacing="0" id="Table3">
+<tr>
+<td align="left" class="navigation">
+<font size="1"><a class="navigation" href="module_17.htm" id="a1prev">&lt; Previous page</a></font>
+</td>
+<td align="right" class="navigation">
+<font size="1"><a class="navigation" href="module_17_2.htm" id="a1next">Next page &gt;</a></font>
+</td>
+</tr>
+</table>
+<h1 id="_680898">Integration with Paypal</h1>
+<div class="description_on_page"><p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"><b>Integration  Php  Web  Quiz  with  Paypal</b></font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">To  integrate  with  paypal  you  need  to  have  business  account  ,  not  personal  .</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"></font><font  style="font-family:Arial; font-size: 11pt" color="#ff8040"><i>*  It  will  be  better  if  you  test  Paypal  with  Sandbox  account  before  </i></font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">1)  Open  config.php  file  and  enter  you  paypal  account  details  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"> &nbsp;  define("PAYPAL_ENABLED","yes");  //  no/yes  enable  disable  integration  with  paypal</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("PAYPAL_SELLER_EMAIL","els11@yandex.ru");  //  email  of  your  business  paypal  account  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("PAYPAL_NOTIFY_SUCCESS_PAYMENT","yes");  //  yes/no  receive  e-mails  on  success  payment</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("PAYPAL_NOTIFY_FAIL_PAYMENT","yes");  //  yes/no  receive  e-mails  on  fail  payment</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("PAYPAL_CURRENCY","USD");  //  currency  of  your  paypal  account  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("PAYPAL_DATA_NAME","Load  balance");  //  Data  name  during  the  payment</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("PAYPAL_USE_SANDBOX","yes");  //  yes/no  . &nbsp;  yes  =  sandbox  ,  no  =  production</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">2)  Login  into  your  Paypal  business  account  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">3)  Click  My  Account  -&gt;  Profile  -&gt;  My  selling  tools  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"><img style="margin:0" width="1200" height="771" align="bottom" src="module_17_1_image_0.png"></img></font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">4)  Click  Update  button  on  "Website  preferences"</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"><img style="margin:0" width="870" height="438" align="bottom" src="module_17_1_image_1.png"></img></font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">5)  Turn  on  "Auto  return"  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">6)  Enter  the  below  return  url  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">http://YOUR_SITE/index.php?module=my_balance&check=1</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">In  our  web  site  ,  the  return  URL  is  :  http://phpexamscript.net/phpwebquiz_business/index.php?module=my_balance&check=1</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">7)  Click  My  Account  -&gt;  My  profile  -&gt;  My  selling  tools  and  click  "Update  button"  on  Instant  Payment  Notifications  .  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"><img style="margin:0" width="1147" height="521" align="bottom" src="module_17_1_image_2.png"></img></font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">8) &nbsp;  Turn  on  Notifications  and  enter  Notification  URL  as  below  :</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"><img style="margin:0" width="772" height="195" align="bottom" src="module_17_1_image_3.png"></img></font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">http://YOUR_SITE/modules/payment_methods/paypal/ipn.php</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">In  our  web  site  the  Notification  URL  is  :  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">http://phpexamscript.net/phpwebquiz_business/modules/payment_methods/paypal/ipn.php</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">-----------------------------------------------------------------------------------------------</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">All  payments  will  be  storing  in  payment_orders  table  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"><img style="margin:0" width="464" height="395" align="bottom" src="module_17_1_image_4.png"></img></font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+</font></p>
+</div>
+<p align="right">
+<font size="1"><a style="color:#aaaaaa;" href="http://www.DrExplain.com">Created with DrExplain</a></font>
+</p>
+</td></tr>
+<tr>
+<td class="pagearea" width="100%" valign="bottom">
+<table width="100%" border="0" cellspacing="0" id="Table4">
+<tr><td align="left" class="navigation">
+<font size="1"><a class="navigation" href="module_17.htm" id="a2prev">&lt; Previous page</a></font>
+</td>
+<td align="right" class="navigation">
+<font size="1"><a class="navigation" href="module_17_2.htm" id="a2next">Next page &gt;</a></font>
+</td>
+</tr>
+</table>
+</td></tr>
+</table>
+
+</body> 
+</html>

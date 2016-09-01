@@ -1,0 +1,39 @@
+.t_style1
+{
+	color:black;	
+	font-size : 12px;		
+	font-family:tahoma;
+	
+}
+
+.c_style1
+{	
+	width: 200px;
+}
+
+.c_style_textarea1
+{
+	width: 200px;	
+	height: 200px;
+}
+
+.d_main_table
+{
+	border : 0;
+	width: 100%;
+}
+.remove_file{
+        color:black;	
+	font-size : 12px;		
+	font-family:tahoma;
+}
+
+.d_nfile{
+        color:black;	
+	font-size : 12px;		
+	font-family:tahoma;
+}
+
+
+.d_btn_save {FONT-WEIGHT: bold; FONT-SIZE: 11px; border-width: 1;border-color: black; FONT-FAMILY: arial, helvetica, sans-serif; COLOR: black; BACKGROUND-COLOR: #E7EEF8; width: 150px;}
+

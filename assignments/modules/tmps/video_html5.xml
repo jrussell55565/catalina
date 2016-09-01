@@ -1,0 +1,9 @@
+<tr style="display:[video_display]">
+        <td align="left">
+            	<div class="player" id="p[id]" style="width:280px;height:200px"></div>                		
+		<script type="text/javascript">                                                  
+                        this.player = new Uppod({m:"video",uid:"p[id]",file:"video_files/[video_file]",poster:"www.phpexamscript.net"});                                                
+                </script>
+	
+        </td>
+</tr>  

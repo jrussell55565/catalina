@@ -1,0 +1,55 @@
+ <table style="width:100%" border="0">
+          <tr>
+              <td style="width:50%">
+                      <table>
+                            <tr>
+                                <td>
+                                    [INSERT_INFO] <hr />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td >
+                                    <img style="height:100px" src="user_photos/[iUserPhoto]" ></img>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    [INSERTED_BY]
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    [INSERTED_DATE]
+                                </td>
+                            </tr>
+                       </table>
+              </td>
+              <td style="display:{update_display}">
+                      <table>
+                            <tr>
+                                <td>
+                                    [UPDATE_INFO] <hr />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td >
+                                    <img style="height:100px" src="user_photos/[uUserPhoto]" ></img>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    [UPDATED_BY]
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    [UPDATED_DATE]
+                                </td>
+                            </tr>
+                       </table>
+              </td>
+          </tr>
+      </table>
+	   <br>
+		<hr/>
+	   <p>[BRANCH_NAME]</p>

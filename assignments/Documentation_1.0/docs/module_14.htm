@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link href="style.css" media="all" rel="StyleSheet" type="text/css">
+<meta name="generator" content="www.DrExplain.com">
+<title>Topic: Backend events</title></head>
+<body>
+<table class="pagetable" cellpadding="0" cellspacing="0" align="center" id="Table1">
+<tr class="page">
+<td class="page_area" width="100%"><a id="top" name="top"></a><table width="100%" border="0" cellspacing="0" id="Table3">
+<tr>
+<td align="left" class="navigation">
+<font size="1"><a class="navigation" href="module_13.htm" id="a1prev">&lt; Previous page</a></font>
+</td>
+<td align="right" class="navigation">
+<font size="1"><a class="navigation" href="module_15.htm" id="a1next">Next page &gt;</a></font>
+</td>
+</tr>
+</table>
+<h1 id="_680898">Backend events</h1>
+<div class="description_on_page"><p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">You  can  find  3  files  in  "events"  folder  .</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">1)  assignments_events.php</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">2)  questions_events.php</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">3)  users_events.php</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">There  are  some  functions  in  this  files  that  can  be  modified  by  you  .  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">For  example  ,  if  you  want  to  do  some  operations  on  "user_deleted"  event  .  Maybe  ,  you  would  like  to  log  this  operation.  To  do  that  you  can  modify  this  function  in  this  way  .</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"></font><font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">function  user_deleted($id)</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+{</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+ &nbsp; &nbsp; &nbsp;  //  $id  is  id  of  user  that  has  been  deleted</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff"> &nbsp; &nbsp; &nbsp; &nbsp;  $log_text  =  "User  has  been  deleted  by  $id  ";</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff"> &nbsp; &nbsp; &nbsp; &nbsp;  db::exec_sql("insert  into  logs  (log_text)  values('$log_text')  ");</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+}</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#000000">Or  you  just  want  to  do  something  when  user  clicks  "Start"  button  on  "assignments"  page  .  Then  ,  you  can  modify  this  function  in  this  way  .</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#000000"></font><font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">function  assignment_started($id)</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+{</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+ &nbsp; &nbsp; &nbsp;  //  $id  is  id  of  assignment  that  will  be  stoped</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff"> &nbsp; &nbsp; &nbsp;  //  do  some  operations  here  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">
+}</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+All  other  functions  you  can  find  in  that  files  .  </font></p>
+</div>
+<p align="right">
+<font size="1"><a style="color:#aaaaaa;" href="http://www.DrExplain.com">Created with DrExplain</a></font>
+</p>
+</td></tr>
+<tr>
+<td class="pagearea" width="100%" valign="bottom">
+<table width="100%" border="0" cellspacing="0" id="Table4">
+<tr><td align="left" class="navigation">
+<font size="1"><a class="navigation" href="module_13.htm" id="a2prev">&lt; Previous page</a></font>
+</td>
+<td align="right" class="navigation">
+<font size="1"><a class="navigation" href="module_15.htm" id="a2next">Next page &gt;</a></font>
+</td>
+</tr>
+</table>
+</td></tr>
+</table>
+
+</body> 
+</html>
