@@ -28,7 +28,8 @@ if ($_SESSION['login'] != 1)
    }
    mysql_free_result($results);
 
-   $issue_options = array('N/A', 'Logs/VIR', 'No Trip Pack', 'Other');
+   $issue_options = array('NA', 'Date Missing', 'Driver Missing', 'HWB Missing', 'Route HWY Missing', 'State Ext Ent Missing', 'Miles Missing', 'Odometer Missing', 'Other');
+   $fuel_issue_options = array('NA', 'Fuel Inv # Missing', 'Fuel Gallons Missing', 'Fuel Vendor Missing', 'Fuel City Missing', 'Fuel State Missing', 'Fuel Odometer Missing', 'Other');
 
    # Create associative array for the border states
    $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
@@ -340,21 +341,21 @@ if ($_SESSION['login'] != 1)
                                  <tr>
                                    <td><strong>Starting City &amp; State
                                    </strong>
-                                   <td><input class="input-sm form-control" name="location_start" type="text" id="location_start" value="" data-toggle="tooltip" data-placement="top" title="Enter the starting state and city. This will help the driver understand any alerts via email if problems with Trip.">                                   
+                                   <td><input class="input-sm form-control" name="location_start" type="text" id="location_start" value="" data-toggle="tooltip" data-placement="top" title="Enter the starting state and city. This will help the driver understand any alerts via email if problems with Trip." required>                                   
                                    <td><div align="right"><strong>Available Points for Trip</strong></div></td>
                                    <td><input class="input-sm form-control" name="points_trip" type="number" id="points_trip"></td>
                                  </tr>
                                  <tr>
                                    <td><strong> Stops Cities States 
                                    </strong>
-                                   <td><input class="input-sm form-control" name="location_stops" type="text" id="location_stops" value="" data-toggle="tooltip" data-placement="top" title="Enter a few of the inbetween cities and states. This will help the driver understand any alerts via email if problems with Trip.">                                   
+                                   <td><input class="input-sm form-control" name="location_stops" type="text" id="location_stops" value="" data-toggle="tooltip" data-placement="top" title="Enter a few of the inbetween cities and states. This will help the driver understand any alerts via email if problems with Trip." required>                                   
                                    <td><div align="right"><strong>Available Points for Fuel</strong></div></td>
                                    <td><input class="input-sm form-control" name="points_fuel" type="number" id="points_fuel"></td>
                                  </tr>
                                  <tr>
                                    <td><strong>Ending City &amp; State
                                    </strong>
-                                   <td><input class="input-sm form-control" name="location_end" type="text" id="location_end" value="" data-toggle="tooltip" data-placement="top" title="Enter the ending state and city. This will help the driver understand any alerts via email if problems with Trip.">                                   
+                                   <td><input class="input-sm form-control" name="location_end" type="text" id="location_end" value="" data-toggle="tooltip" data-placement="top" title="Enter the ending state and city. This will help the driver understand any alerts via email if problems with Trip." required>                                   
                                    <td><div align="right"><strong>Available Points for Images</strong></div></td>
                                    <td><input class="input-sm form-control" name="points_images" type="number" id="points_images"></td>
                                  </tr>
@@ -383,8 +384,8 @@ if ($_SESSION['login'] != 1)
                                  <td width="54">Driver</td>
                                  <td width="74">HWB</td>
                                  <td width="105">Routes Hwys</td>
-                                 <td width="38">Exit</td>
-                                 <td width="44">Ent</td>
+                                 <td width="55">Exit</td>
+                                 <td width="55">Ent</td>
                                  <td width="112">OD State Line</td>
                                  <td width="64">St Miles</td>
                                  <td width="49">Permit</td>
@@ -467,7 +468,7 @@ if ($_SESSION['login'] != 1)
                                 <td>Choose Issue</td>
                                 <td><span style="width: 5em;">
                                   <select name="sl_trip_detail_issue2" id="sl_trip_detail_issue2">
-                                    <option selected>N/A</option>
+                                    <option selected>NA</option>
                                     <option>BOL</option>
                                     <option>Fuel</option>
                                     <option>Logs</option>
