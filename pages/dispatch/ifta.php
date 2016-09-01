@@ -130,31 +130,31 @@ if ($_SESSION['login'] != 1)
                               <table width="646" class="table table-condensed table-striped">
                                  <tr>
                                     <td width="111">Trip Number </td>
-                                    <td width="444"><input name="trip_search_tripnum" type="text" class="input-sm form-control" id="search_tripnum" value="" size="10"></td>
+                                    <td width="444"><input name="trip_search_tripnum" type="text" class="input-sm form-control" id="search_tripnum" value="" ></td>
                                     <td width="18">&nbsp;</td>
                                     <td width="53">&nbsp;</td>
                                  </tr>
                                  <tr>
                                     <td>HWB Number </td>
-                                    <td><input name="trip_search_hwbnum" type="text" class="input-sm form-control" id="search_hwbnum" value="" size="10"></td>
+                                    <td><input name="trip_search_hwbnum" type="text" class="input-sm form-control" id="search_hwbnum" value="" ></td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                  </tr>
                                  <tr>
                                     <td>Trip Starting </td>
-                                    <td><input name="trip_search_startdate" type="text" class="input-sm form-control datepicker" id="trip_search_startdate" size="10" data-date-format="mm/dd/yyyy"></td>
+                                    <td><input name="trip_search_startdate" type="text" class="input-sm form-control datepicker" id="trip_search_startdate"  data-date-format="mm/dd/yyyy"></td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                  </tr>
                                  <tr>
                                     <td>Trip Ending</td>
-                                    <td><input name="trip_search_enddate" type="text" class="input-sm form-control datepicker" id="trip_search_enddate" size="10" data-date-format="mm/dd/yyyy"></td>
+                                    <td><input name="trip_search_enddate" type="text" class="input-sm form-control datepicker" id="trip_search_enddate"  data-date-format="mm/dd/yyyy"></td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                  </tr>
                                  <tr>
                                     <td>Truck #</td>
-                                    <td><input name="trip_search_trucknumber" type="text" class="input-sm form-control" id="trip_search_trucknumber" size="10"></td>
+                                    <td><input name="trip_search_trucknumber" type="text" class="input-sm form-control" id="trip_search_trucknumber" ></td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                  </tr>
@@ -388,49 +388,53 @@ if ($_SESSION['login'] != 1)
                                  </tr>
                            </table>
                           <p></p>
-                           <table width="1130" class="table table-condensed table-striped" id="add_ifta_table">
+                           <table class="table table-condensed table-striped" id="add_ifta_table">
                               <tr>
-                                 <td colspan="15" style="text-align: center; font-weight: bold;">Enter Trip info Below</td>
+                                 <td colspan="16" style="text-align: center; font-weight: bold;">Enter Trip info Below</td>
                               </tr>
                               <tr>
-                                 <td width="52">Trip #</td>
-                                 <td width="42">Date</td>
-                                 <td width="54">Driver</td>
-                                 <td width="74">HWB</td>
-                                 <td width="105">Routes Hwys</td>
-                                 <td width="55">Exit</td>
-                                 <td width="55">Ent</td>
-                                 <td width="112">OD State Line</td>
-                                 <td width="64">St Miles</td>
-                                 <td width="49">Permit</td>
-                                 <td width="34">Issue</td>
-                                 <td width="53">Choose</td>
-                                 <td width="9">Comments</td>
-                                <td width="9">Resolved</td>
-                                 <td width="41" style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                 <td>Trip #</td>
+                                 <td>Date</td>
+                                 <td style="width:8em;">Driver</td>
+                                 <td>HWB #</td>
+                                 <td>Routes Hwys</td>
+                                 <td style="width:4em;">Exit</td>
+                                 <td style="width:4em;">Ent</td>
+                                 <td style="width:5em;">OD SL</td>
+                                 <td style="width:5em;">St Miles</td>
+                                 <td>Permit                                 </td>
+                                 <td>Issue</td>
+                                 <td>Type</td>
+                                 <td>Comments                                </td>
+                                 <td>Resolved</td>
+                                 <td></td>
+                                 <td  style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                               </tr>
                               <tr id="tr_add_driver_details_0">
                               </tr>
                               <td></tbody>
                            </table>
                 <p></p>
-                           <table width="805" class="table table-condensed table-striped" id="add_ifta_fuel">
+                           <table  class="table table-condensed table-striped" id="add_ifta_fuel">
                               <tbody>
                                  <tr style="text-align: center; font-weight: bold;">
-                                    <td colspan="11">Enter Fuel Info for Trip</td>
+                                    <td colspan="16">Enter Fuel Info for Trip</td>
                                  </tr>
                                  <tr>
-                                    <td width="37">Trip #</td>
-                                    <td width="29">Date</td>
-                                    <td width="85">Truck Gallons</td>
-                                    <td width="70">Reefer Fuel</td>
-                                    <td width="65">Other Fuel</td>
-                                    <td width="46">Vendor</td>
-                                    <td width="25">City</td>
-                                    <td width="31">State</td>
-                                    <td width="62">Odometer</td>
-                                    <td width="6">&nbsp;</td>
-                                    <td width="97" style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                    <td>Trip #</td>
+                                    <td>Date</td>
+                                    <td style="width:5em;">Gallons</td>
+                                    <td style="width:5em;">Reefer</td>
+                                    <td style="width:5em;">Other</td>
+                                    <td>Vendor</td>
+                                    <td>City</td>
+                                    <td style="width:4em;">State</td>
+                                    <td style="width:5em;">Odometer</td>
+                                    <td>Issue</td>
+                                    <td style="width:8em;">Type</td>
+                                    <td>Comments</td>
+                                    <td>Resolved</td>
+                                    <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  </tr>
                                  <tr id="tr_add_fuel_details_0">
                                  </tr>
@@ -475,7 +479,7 @@ if ($_SESSION['login'] != 1)
                               <tr>
                                 <td>Comments</td>
                                 <td><span style="width: 5em;">
-                                  <input class="input-sm form-control input name="issue_comment2" type="text" id="issue_comment2" size="50">
+                                  <input class="input-sm form-control input" name="issue_comment2" type="text" id="issue_comment2" >
                                 </span></td>
                               </tr>
                               <tr>
@@ -494,7 +498,7 @@ if ($_SESSION['login'] != 1)
                               <tr>
                                 <td>Resolved (All Items Must be in)</td>
                                 <td><span style="width: 5em;">
-                                  <input class="input datepicker" name="txt_date_details_<?php echo $rowNum;?>2" type="text" id="txt_date_details_<?php echo $rowNum;?>3" value="" size="16">
+                                  <input class="input datepicker" name="" type="text" id="" value="" >
                                 </span></td>
                               </tr>
                             </tbody>
@@ -573,16 +577,16 @@ Closed
                                };
 
          var new_row = `<tr id="tr_add_driver_details_`+rowNum+`">
-                                 <td style="width: 5em;"><input class="input-sm form-control" name="txt_tripnum_details[]" type="text" id="txt_tripnum_details_`+rowNum+`" value="`+tripnum+`" readonly>
+                                 <td ><input class="input-sm form-control" name="txt_tripnum_details[]" type="text" id="txt_tripnum_details_`+rowNum+`" value="`+tripnum+`" readonly>
                                  <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_`+rowNum+`" value="1"></td>
                                  <input type="hidden" name="hdn_rownum_`+rowNum+`" id="hdn_rownum_`+rowNum+`" value="`+rowNum+`"></td>
-                                 <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_`+rowNum+`" value="" size=""></td>
+                                 <td ><input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_`+rowNum+`" value="" size=""></td>
                                  <td>
                                   <select class="input-sm form-control" name="txt_driver_details[]" type="text" id="txt_driver_details_`+rowNum+`" value="">
                                    <option value="null">Choose...</option>
                                   </select>
                                  </td>
-                                 <td style="width: 5em;"><input class="input-sm form-control hwb" name="txt_hwb_details[]" type="text" id="txt_hwb_details_`+rowNum+`"></td>
+                                 <td ><input class="input-sm form-control hwb" name="txt_hwb_details[]" type="text" id="txt_hwb_details_`+rowNum+`"></td>
                                  <td><input class="input-sm form-control" name="txt_routes_details[]" type="text" id="txt_routes_details_`+rowNum+`"></td>
                                  <td>
                                     <select class="input-sm form-control" name="txt_state_exit_details[]" id="txt_state_exit_details_`+rowNum+`" value="">
@@ -615,12 +619,12 @@ Closed
                                    </select>
                                     </td>
                                    <td><div align="center">
-                                   <input name="issue_comment_details[]" type="text" class="input-sm form-control" id="issue_comment_details_`+rowNum+`" size="30">
+                                   <input name="issue_comment_details[]" type="text" class="input-sm form-control" id="issue_comment_details_`+rowNum+`" >
                                  </div></td>
-                                 <td><input class="input-sm form-control datepicker" name="date_resolved_details[]" type="text" id="date_resolved_details_`+rowNum+`" size="16"></td>
-                                 <td style="text-align: right;"><button class="btn btn-sm btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                 <td><input class="input-sm form-control datepicker" name="date_resolved_details[]" type="text" id="date_resolved_details_`+rowNum+`" ></td>
+                                 <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_details[]" id="txt_new_row_details_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  <td style="text-align: right;">
-                                    <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_details[]" id="txt_delete_row_details_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
+                                    <button class="btn btn-xs btn-danger" type="button" name="txt_delete_row_details[]" id="txt_delete_row_details_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                  </td>
                               </tr>`;
          
@@ -706,26 +710,43 @@ Closed
          var rowNum = fuel_counter;
          var tripnum = $("#txt_tripnum").val();
          var new_row = `<tr id="tr_add_fuel_details_`+rowNum+`">
-                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_tripnum[]" type="text" id="txt_fuel_tripnum_`+rowNum+`" value="`+tripnum+`" readonly>
+                                    <td><input class="input-sm form-control" name="txt_fuel_tripnum[]" type="text" id="txt_fuel_tripnum_`+rowNum+`" value="`+tripnum+`" readonly>
                                     <input type="hidden" name="hdn_fuel_id[]" id="hdn_fuel_id_`+rowNum+`" value="1"></td>
-                                    <td style="width: 7em;"><input class="input-sm form-control datepicker" name="txt_fuel_date[]" type="text" id="txt_fuel_date_`+rowNum+`" value="" size=""></td>
+                                    <td><input class="input-sm form-control datepicker" name="txt_fuel_date[]" type="text" id="txt_fuel_date_`+rowNum+`" value="" size=""></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_gallons[]" type="text" id="txt_fuel_gallons_`+rowNum+`" value=""></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_reefer[]" type="text" id="txt_fuel_reefer_`+rowNum+`" value=""></td>
-                                    <td style="width: 10em;"><input class="input-sm form-control" name="txt_fuel_other[]" type="text" id="txt_fuel_other_`+rowNum+`" value=""></td>
+                                    <td><input class="input-sm form-control" name="txt_fuel_other[]" type="text" id="txt_fuel_other_`+rowNum+`" value=""></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_vendor[]" type="text" id="txt_fuel_vendor_`+rowNum+`" value=""></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_city[]" type="text" id="txt_fuel_city_`+rowNum+`" value=""></td>
                                     <td>
-                                       <select class="input-sm form-control" name="txt_fuel_state[]" id="txt_fuel_state_`+rowNum+`" value="<?php echo $row['st_enter'];?>">
+                                       <select class="input-sm form-control" name="txt_fuel_state[]" id="txt_fuel_state_`+rowNum+`" value="">
                                           <?php
                                              foreach ($us_state_abbrevs as $state) { ?>
                                           <option><?php echo $state;?></option>
                                           <?php } ?>
                                        </select>
                                     </td>
-                                    <td style="width: 5em;"><input class="input-sm form-control" name="txt_fuel_odo[]" type="text" id="txt_fuel_odo_`+rowNum+`" value=""></td>
-                                    <td style="text-align: right;"><button class="btn btn-sm btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
+                                    <td><input class="input-sm form-control" name="txt_fuel_odo[]" type="text" id="txt_fuel_odo_`+rowNum+`" value=""></td>
+ <td ><div align="center">
+                                      <input class="input-sm" type="checkbox" name="cb_trip_issue_fuel[]" id="cb_trip_issue_fuel_`+rowNum+`">
+                                    </div></td>
+                                    <td>
+
+                                   <select class="input-sm form-control" name="sl_trip_issue_fuel[]" id="sl_trip_issue_fuel_`+rowNum+`">
+                                     <?php
+                                       foreach ($fuel_issue_options as $issue) { ?>
+                                     <option> <?php echo $issue;?></option>
+                                     <?php } ?>
+                                   </select>
+                                    </td>
+                                    <td><div align="center">
+                                   <input name="issue_comment_fuel[]" type="text" class="input-sm form-control" id="issue_comment_fuel_`+rowNum+`" >
+                                 </div></td>
+                                 <td><input class="input-sm form-control datepicker" name="date_resolved_fuel[]" type="text" id="date_resolved_fuel_`+rowNum+`" ></td>
+
+                                    <td style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                     <td style="text-align: right;">
-                                       <button class="btn btn-sm btn-danger" type="button" name="txt_delete_row_fuel[]" id="txt_delete_row_fuel_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
+                                       <button class="btn btn-xs btn-danger" type="button" name="txt_delete_row_fuel[]" id="txt_delete_row_fuel_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Delete Row" onClick="deleteRow(this);"><span class="glyphicon glyphicon-remove"></span></button>
                                     </td>
                                  </tr>`;
 

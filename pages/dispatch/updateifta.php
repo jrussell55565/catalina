@@ -442,7 +442,7 @@
                                     <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['id'];?>"></td>
                                     <td ><input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['trip_date'];?>"></td>
                                  <td>
-                                  <select class="input-sm form-control" size="1" style="width:150px;" name="txt_driver_details[]" type="text" id="txt_driver_details_<?php echo $rowNum;?>" value="">
+                                  <select class="input-sm form-control"  style="width:150px;" name="txt_driver_details[]" type="text" id="txt_driver_details_<?php echo $rowNum;?>" value="">
                                    <option value="null">Choose...</option>
                                      <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
                                        <option value=<?php echo $driver_array[$i]['employee_id'];?> <?php if ($driver_array[$i]['employee_id'] == $ifta_details[$i]['driver']) { echo "selected"; }?>><?php echo $driver_array[$i]['name'];?></option>
@@ -561,7 +561,7 @@
                                    </select>
                                     </td>
                                     <td><div align="center">
-                                   <input name="issue_comment_fuel[]" type="text" class="input-sm form-control" id="issue_comment_fuel_<?php echo $rowNum;?>" size="30" value="<?php echo $ifta_fuel[$i]['issue_comment'];?>">
+                                   <input name="issue_comment_fuel[]" type="text" class="input-sm form-control" id="issue_comment_fuel_<?php echo $rowNum;?>"  value="<?php echo $ifta_fuel[$i]['issue_comment'];?>">
                                  </div></td>
                                  <td><input class="input-sm form-control datepicker" name="date_resolved_fuel[]" type="text" id="date_resolved_fuel_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['date_resolved'];?>" ></td>
                                     <td colspan="2" style="text-align: right;"><button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_new_row_fuel_0" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
@@ -801,9 +801,9 @@ Closed
                                    </select>
                                  </div></td>
                                  <td><div align="center">
-                                   <input name="issue_comment_details_add[]" type="text" class="input-sm form-control" id="issue_comment_details_add_`+rowNum+`" size="30">
+                                   <input name="issue_comment_details_add[]" type="text" class="input-sm form-control" id="issue_comment_details_add_`+rowNum+`" >
                                  </div>                                   <label for="issue_comment"></label></td>
-                                 <td><input class="input-sm form-control datepicker" name="date_resolved_details_add[]" type="text" id="date_resolved_details_add_`+rowNum+`" size="16"></td> 
+                                 <td><input class="input-sm form-control datepicker" name="date_resolved_details_add[]" type="text" id="date_resolved_details_add_`+rowNum+`" ></td> 
                                  <td style="text-align: right;">
                                     <button class="btn btn-xs btn-primary" type="button" name="txt_new_row_details[]" id="txt_delete_row_details_add_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addOdoRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
                                  <td style="text-align: right;" id="ifta_details|<?php echo $ifta_details[$i]['id'];?>">
@@ -921,9 +921,9 @@ Closed
                                    </select>
                                     </td>
                                     <td><div align="center">
-                                   <input name="issue_comment_fuel_add[]" type="text" class="input-sm form-control" id="issue_comment_fuel_add_`+rowNum+`" size="30">
+                                   <input name="issue_comment_fuel_add[]" type="text" class="input-sm form-control" id="issue_comment_fuel_add_`+rowNum+`" >
                                  </div></td>
-                                 <td><input class="input-sm form-control datepicker" name="date_resolved_fuel_add[]" type="text" id="date_resolved_fuel_add_`+rowNum+`" size="16"></td>
+                                 <td><input class="input-sm form-control datepicker" name="date_resolved_fuel_add[]" type="text" id="date_resolved_fuel_add_`+rowNum+`" ></td>
 
                                     <td style="text-align: right;">
                                        <button class="btn btn-xs btn-primary" type="button" name="txt_new_row_fuel[]" id="txt_delete_row_fuel_add_`+rowNum+`" value="" data-toggle="tooltip" data-placement="top" title="Add New Row" onClick="addFuelRow(this);"><span class="glyphicon glyphicon-plus"></span></button></td>
