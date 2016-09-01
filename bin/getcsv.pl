@@ -62,7 +62,7 @@ if (! -d $wwwroot)
 
 our @ftproot	= ("CatalinaCartage");
 our @list = ();
-our $debug = 1;
+our $debug = 0;
 
 get_file();
 
