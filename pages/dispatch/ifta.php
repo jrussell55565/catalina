@@ -169,7 +169,7 @@ if ($_SESSION['login'] != 1)
                                  </tr>
                                  <tr>
                                     <td>State Exit/Enter</td>
-                                   <td><select class="input-sm form-control" name="txt_state_enter_details[]" id="txt_state_enter_details_<?php echo $rowNum;?>" value="">
+                                   <td><select class="input-sm form-control" name="txt_state_enter_details[]" id="trip_search_state" value="">
                                      <?php
                                           foreach ($us_state_abbrevs as $state) { ?>
                                      <option><?php echo $state;?></option>
