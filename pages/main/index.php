@@ -272,7 +272,8 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
   {
     $predicate = "AND office='ORD'";
   }
-  $message = $_POST['message'];
+  $message = $_SESSION('username') . ": ";
+  $message .= $_POST['message'];
   $sql = "SELECT 1";
   if (isset($_POST['sendEmail']))
   {
