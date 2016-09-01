@@ -1,0 +1,60 @@
+.deleted_rate
+{
+	color:red;
+	font-size : 11px;
+	font-family:tahoma;	
+}
+.main_txt_lt
+{
+	color:#7D848C;
+	font-size : 11px;
+	font-family:tahoma;
+	font-weight : bold;
+}
+.login_box
+{
+	width:200px;
+	height:17px;
+	font-size:11px;
+	color:#7D848C;
+	font-size : 11px;
+	font-family:tahoma;
+
+}
+.rated
+{
+        color:red;
+	font-size : 12px;
+	font-family:tahoma;	
+}
+.rateheader
+{
+     color:black;
+	font-size : 11px;
+	font-family:tahoma;	
+}
+
+.ratefooter
+{
+     color:black;
+	font-size : 11px;
+	font-family:tahoma;	
+}
+
+.borderless table {
+border-top-style: none;
+border-left-style: none;
+border-right-style: none;
+border-bottom-style: none;
+border-left-width: 0px;
+border-right-width: 0px;
+}
+
+.borderless td {
+    border: none;
+}
+
+.table-borderless td,
+.table-borderless th {
+    border: 0;
+}

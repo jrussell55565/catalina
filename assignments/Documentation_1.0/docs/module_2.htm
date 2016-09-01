@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link href="style.css" media="all" rel="StyleSheet" type="text/css">
+<meta name="generator" content="www.DrExplain.com">
+<title>Topic: Menu management</title></head>
+<body>
+<table class="pagetable" cellpadding="0" cellspacing="0" align="center" id="Table1">
+<tr class="page">
+<td class="page_area" width="100%"><a id="top" name="top"></a><table width="100%" border="0" cellspacing="0" id="Table3">
+<tr>
+<td align="left" class="navigation">
+<font size="1"><a class="navigation" href="module_1.htm" id="a1prev">&lt; Previous page</a></font>
+</td>
+<td align="right" class="navigation">
+<font size="1"><a class="navigation" href="module_3.htm" id="a1next">Next page &gt;</a></font>
+</td>
+</tr>
+</table>
+<h1 id="_680898">Menu management</h1>
+<div class="description_on_page"><p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">All  menu  items  are  storing  in  table  "modules"</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"><img style="margin:0" width="1130" height="136" align="bottom" src="module_2_image_0.png"></img></font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">How  to  add  a  new  menu  item &nbsp;  ?</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">To  add  a  new  menu  item  you  need  to  add  new  row  into  the  "modules"  table  .  For  example  ,  you  want  to  add  new  menu  "Reports"  under  the  menu  "Assignments".  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">Insert  one  row  into  modules  table  as  below  .</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"></font><font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">insert  into  modules  (module_name,file_name,parent_id,priority,  access_key,  can_be_default)</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">values('Reports',  'reports_file',  5,  3,  'myreports',  0)  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">We  are  passing  "5"  as  parent_id  ,  because  the  id  from  Assignments  menu  is  5.  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">After  you  have  created  new  menu  item  in  "modules"  table  you  need  to  define  access  list  for  this  menu  item  ,  to  display  it  in  "Users"-&gt;"Access  Management"  .  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">For  example  ,  you  need  4  accesses  - &nbsp;  "View  reports"  ,  "Add  report"  ,  "Edit  report"  ,  "Delete  report  "  .  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">You  can  define  this  access  in  "modules_access"  table  .  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"><img style="margin:0" width="989" height="100" align="bottom" src="module_2_image_1.png"></img></font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">Just  insert  4  rows  to  "modules_access"  table  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"></font><font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">insert  into  modules_access  (access_name,parent_id,  access_key  ,  priority  )</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">values  ('View  reports'  ,  34  ,  'view_reports',  1  );  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">insert  into  modules_access  (access_name,parent_id,  access_key  ,  priority  )</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">values  ('Add  reports'  ,  34  ,  'add_reports',  2  );  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">insert  into  modules_access  (access_name,parent_id,  access_key  ,  priority  )</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">values  ('Edit  reports'  ,  34  ,  'edit_reports',  3  );  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">insert  into  modules_access  (access_name,parent_id,  access_key  ,  priority  )</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">values  ('Delete  reports'  ,  34  ,  'delete_reports',  4  );  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">After &nbsp;  inserting  this  rows  ,  you  need  to  add  this  menu  item  to  "language"  files  .  To  do  this  ,  open  "english.php"  and  all  other  language  files  from  "lang"  folder  ,  and  add  this  changes  as  below  .</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"></font><font  style="font-family:Arial; font-size: 11pt" color="#0000ff">$MODULES['Reports']='Reports  example';</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#0000ff">$MODULE_ACCESS['</font><font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">Add  reports</font><font  style="font-family:Arial; font-size: 11pt" color="#0000ff">']='</font><font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">Add  reports</font><font  style="font-family:Arial; font-size: 11pt" color="#0000ff">';</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#0000ff">$MODULE_ACCESS['</font><font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">Edit  reports</font><font  style="font-family:Arial; font-size: 11pt" color="#0000ff">']='</font><font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">Edit  reports</font><font  style="font-family:Arial; font-size: 11pt" color="#0000ff">';</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#0000ff">$MODULE_ACCESS['</font><font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">Delete  reports</font><font  style="font-family:Arial; font-size: 11pt" color="#0000ff">']='</font><font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">Delete  reports</font><font  style="font-family:Arial; font-size: 11pt" color="#0000ff">';</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#0000ff">$MODULE_ACCESS['</font><font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">View  reports</font><font  style="font-family:Arial; font-size: 11pt" color="#0000ff">']='</font><font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">View  reports</font><font  style="font-family:Arial; font-size: 11pt" color="#0000ff">';</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Tahoma; font-size: 10pt" color="#0000ff">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">Now  ,  you  can  go  to  "Users-&gt;Roles-&gt;Access  management"  and  define  access  for  roles  to  this  modules  .  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">After  that  ,  you  need  to  create  2  files  "reports_file.php"  and  reports_file_temp.php"  and  write  you  php  codes  there  .</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">To  check  having  access  to  "Reports"  menu  ,  you  can  use  "menu"  function  of  "access"  class.  As  a  first  parameter  you  need  to  pass  "access_key"  column  of  "modules"  table  .  Here  is  an  example  :  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">access::menu("branches",false);  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">Will  return  true  if  has  access  .  Pass  "true"  as  a  second  parameter  if  you  want  to  redirect  to  login  page  if  user  doesn't  have  access.</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">To  check  access  list  (  items  in  modules_access  table)  you  can  use  "has"  method  of  "access"  class.  For  example  :</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">access::has("edit_reports") &nbsp;  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">Will  return  true  if  has  access  .  Pass  "1"  as  second  parameter  if  you  want  to  redirect  to  login  page  if  user  doesn't  have  access  ,  and  pass  "2"  if  you  want  to  redirect  to  "No  Access"  page.  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+</div>
+<p align="right">
+<font size="1"><a style="color:#aaaaaa;" href="http://www.DrExplain.com">Created with DrExplain</a></font>
+</p>
+</td></tr>
+<tr>
+<td class="pagearea" width="100%" valign="bottom">
+<table width="100%" border="0" cellspacing="0" id="Table4">
+<tr><td align="left" class="navigation">
+<font size="1"><a class="navigation" href="module_1.htm" id="a2prev">&lt; Previous page</a></font>
+</td>
+<td align="right" class="navigation">
+<font size="1"><a class="navigation" href="module_3.htm" id="a2next">Next page &gt;</a></font>
+</td>
+</tr>
+</table>
+</td></tr>
+</table>
+
+</body> 
+</html>

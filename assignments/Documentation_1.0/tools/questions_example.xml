@@ -1,0 +1,125 @@
+<questions QuizName="Imported Quiz Example 1" Category="Test Category">
+    <question>
+        <text>Which is correct ?</text>
+        <type>multi answer</type>
+        <point>3</point>		
+        <header_text>header</header_text>		
+        <footer_text>footer</footer_text>	
+		<success_message>success message</success_message>	
+		<fail_message>fail message</fail_message>	
+		<partly_success_message>partly success message</partly_success_message>	
+		<subject>General</subject>	
+		<penalty_point>3</penalty_point>
+		<difficult>Easy</difficult>
+		<answers>
+			<answer>				
+				<text>2+2=4</text>
+				<desc>description text</desc>
+				<correct>yes</correct>                           
+			</answer>	
+            <answer>				
+				<text>2*2=4</text>
+				<desc>description text</desc>
+				<correct>yes</correct>                           
+			</answer>	
+			<answer>				
+				<text>2+2=3</text>
+				<correct>no</correct>                           
+			</answer>
+            <answer>				
+				<text>2*2=3</text>
+				<desc>description text</desc>
+				<correct>no</correct>                           
+			</answer>
+		</answers>
+    </question>
+    <question>
+        <text>Which is correct ? </text>
+        <type>one answer</type>
+        <point>4</point>
+        <header_text></header_text>		
+        <footer_text></footer_text>	
+		<success_message>success message</success_message>	
+		<fail_message>fail message</fail_message>	
+		<partly_success_message>partly success message</partly_success_message>	
+		<subject>General</subject>	
+		<penalty_point>3</penalty_point>
+		<difficult>Medium</difficult>
+		<answers>
+			<answer>				
+				<text>3+3=7</text>
+				<desc>description text</desc>
+				<correct>no</correct>                           
+			</answer>	
+            <answer>				
+				<text>3+3=6</text>
+				<desc>description text</desc>
+				<correct>yes</correct>                           
+			</answer>	
+           <answer>				
+				<text>2+2=3</text>
+				<desc>description text</desc>
+				<correct>no</correct>                           
+			</answer>
+			<answer>				
+				<text>2*2=3</text>
+				<desc>description text</desc>
+				<correct>no</correct>                           
+			</answer>
+		</answers>
+    </question>
+    <question>
+        <text>Please, answer below listed questions . </text>
+        <type>multi text</type>
+        <point>4</point>
+        <header_text></header_text>		
+        <footer_text></footer_text>	
+		<success_message>success message</success_message>	
+		<fail_message>fail message</fail_message>	
+		<partly_success_message>partly success message</partly_success_message>	
+		<subject>General</subject>	
+		<penalty_point>3</penalty_point>
+		<difficult>Hard</difficult>
+		<answers>
+			<answer>				
+				<text>1+1=?</text>
+				<desc>description text</desc>
+				<correct>2</correct>                           
+			</answer>	
+                        <answer>				
+				<text>3+3=?</text>
+				<desc>description text</desc>
+				<correct>6</correct>                           
+			</answer>	
+                        <answer>				
+				<text>2+2=?</text>
+				<desc>description text</desc>
+				<correct>4</correct>                           
+			</answer>
+                         <answer>				
+				<text>5*5=?</text>
+				<desc>description text</desc>
+				<correct>10</correct>                           
+			</answer>
+		</answers>
+    </question>
+    <question>
+        <text>Enter the name of the biggest software company in the world  </text>
+        <type>free text</type>
+        <point>4</point>
+        <header_text></header_text>		
+        <footer_text></footer_text>	
+		<success_message>success message</success_message>	
+		<fail_message>fail message</fail_message>	
+		<partly_success_message>partly success message</partly_success_message>	
+		<subject>General</subject>	
+		<penalty_point>3</penalty_point>
+		<answers>
+			<answer>				
+				<text></text>
+				<desc>description text</desc>
+				<correct>Microsoft</correct>                           
+			</answer>	                     
+		</answers>
+    </question>
+</questions>

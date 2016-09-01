@@ -1,0 +1,83 @@
+
+
+.ticket_subject_unread{
+        color:black;	
+	font-size : 13px;		
+	font-family:tahoma;
+        font-weight : bold;
+}
+
+.ticket_subject_read{
+        color:#606060;	
+	font-size : 13px;		
+	font-family:tahoma;   
+        font-weight : normal;
+}
+
+.comments_box{
+     width:250px;
+     height:150px;
+}
+.commented_by{
+        color:blue;	
+	font-size : 11px;		
+	font-family:tahoma;
+}
+.comment_body{
+        color:black;	
+	font-size : 15px;		
+	font-family:tahoma;
+}
+.lbl_pages
+{
+        color:blue;	
+	font-size : 12px;		
+	font-family:tahoma;
+}
+
+.lbl_export
+{
+        color:blue;	
+	font-size : 12px;		
+	font-family:tahoma;
+}
+
+.report_header
+{
+        color:black;	
+	font-size : 17px;		
+	font-family:tahoma;
+}
+
+.text1
+{
+        color:black;	
+	font-size : 13px;		
+	font-family:tahoma;
+}
+
+
+.menu_header_name
+{
+	color :#B0B0B0 ;
+	font-size : 13px;	
+	font-weight : bold;
+	font-family:tahoma;
+}
+
+.c_menu_td
+{
+    width:150px;
+    valign:top;
+    align:rigth;    
+    background-color : white;
+    padding-left: 20px;
+}
+
+.menu_child_name
+{
+	color:#18A0FF;
+	font-size : 12px;
+	font-weight : regular;
+	font-family:tahoma;
+}

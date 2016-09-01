@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link href="style.css" media="all" rel="StyleSheet" type="text/css">
+<meta name="generator" content="www.DrExplain.com">
+<title>Topic: Integration with LDAP</title></head>
+<body>
+<table class="pagetable" cellpadding="0" cellspacing="0" align="center" id="Table1">
+<tr class="page">
+<td class="page_area" width="100%"><a id="top" name="top"></a><table width="100%" border="0" cellspacing="0" id="Table3">
+<tr>
+<td align="left" class="navigation">
+<font size="1"><a class="navigation" href="module_15.htm" id="a1prev">&lt; Previous page</a></font>
+</td>
+<td align="right" class="navigation">
+<font size="1"><a class="navigation" href="module_17.htm" id="a1next">Next page &gt;</a></font>
+</td>
+</tr>
+</table>
+<h1 id="_680898">Integration with LDAP</h1>
+<div class="description_on_page"><p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">Integration  with  LDAP  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"> &nbsp;  To  integrate  PHP  Web  Quiz  with  LDAP  ,  you  need  to  enter  you  server  details  into  config.php  file  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">&nbsp;</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000"> &nbsp;  define("LDAP_ENABLED","yes");  //  no/yes &nbsp;  -  enable  and  disable  LDAP  login</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("LDAP_SERVER","localhost");  //  LDAP  server  ip  address  </font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("LDAP_PORT","1389");  //  port  for  connecting  to  LDAP</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("LDAP_STRING","uid=[USER_NAME],ou=People,dc=example,dc=com"); &nbsp;  //  string  for  logining  in  to  LDAP</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("LDAP_PROTOCOL_VERSION","3");  //  LDAP  protocol  version</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("LDAP_FILTER_STRING","(uid=[USER_NAME])");  //  Searching  for  user  details  in  LDAP</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("LDAP_NAME_STR","givenname");  //  the  name  of  user  in  ldap</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("LDAP_SURNAME_STR","sn");  //  the  surname  of  user  in  ldap</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("LDAP_LOGIN_STR","uid");  //  the  login  of  user  in  ldap</font></p>
+<p align="left" style="margin-top:0px;margin-bottom:0px;font-style:auto;font-weight:normal;text-decoration:auto;">
+<font  style="font-family:Arial; font-size: 11pt" color="#000000">
+ &nbsp;  define("LDAP_MAIL_STR","mail");  //  the  mail  of  user  in  ldap</font></p>
+</div>
+<p align="right">
+<font size="1"><a style="color:#aaaaaa;" href="http://www.DrExplain.com">Created with DrExplain</a></font>
+</p>
+</td></tr>
+<tr>
+<td class="pagearea" width="100%" valign="bottom">
+<table width="100%" border="0" cellspacing="0" id="Table4">
+<tr><td align="left" class="navigation">
+<font size="1"><a class="navigation" href="module_15.htm" id="a2prev">&lt; Previous page</a></font>
+</td>
+<td align="right" class="navigation">
+<font size="1"><a class="navigation" href="module_17.htm" id="a2next">Next page &gt;</a></font>
+</td>
+</tr>
+</table>
+</td></tr>
+</table>
+
+</body> 
+</html>

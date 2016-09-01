@@ -1,0 +1,20 @@
+<tr style="display:[video_display]">
+        <td align="left">
+            	<a  
+			 href="video_files/[video_file]"
+			 style="display:block;width:520px;height:330px"  
+			 id="p[id]"> 
+		</a> 
+	
+		<!-- this will install flowplayer inside previous A- tag. -->
+		<script language="javascript">                        
+			flowplayer("p[id]", "flowplayer/flowplayer-3.2.16.swf" , {
+                         clip:  {
+                                autoPlay: false,
+                                autoBuffering: true
+                            }
+                        });
+		</script>
+	
+        </td>
+</tr>  
