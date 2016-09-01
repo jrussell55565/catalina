@@ -329,8 +329,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td width="91" height="86"><div align="center">
                     <p>D Steer
                       <select name="truck_tires_driverside_steer_combo" id="truck_tires_driverside_steer_combo">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -364,8 +364,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td width="93" height="86"><div align="center">
                     <p>P Steer
                       <select name="truck_tires_passenger_steer_combo" id="truck_tires_passenger_steer_combo">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -404,8 +404,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td height="117"><div align="center">
                     <p>A1 D Front
                       <select name="truck_tires_driverside_ax1front_combo" id="truck_tires_driverside_ax1front_combo">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -443,8 +443,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td><div align="center">
                     <p>A1 P Front
                       <select name="truck_tires_passenger_ax1front_combo" id="truck_tires_passenger_ax1front_combo">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -485,8 +485,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                     <p>A2 D
                       Rear
                       <select name="truck_tires_driverside_ax2rear_combo" id="truck_tires_driverside_ax2rear_combo">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -526,8 +526,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td height="117"><div align="center">
                     <p>A2 P Rear
                       <select name="truck_tires_passenger_ax2rear_combo" id="truck_tires_passenger_ax2rear_combo">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -638,8 +638,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td height="159"><div align="center">
                     <p>TA1D Front
                       <select name="trailer_tires_driverside_ax1front_trailer" id="trailer_tires_driverside_ax1front_trailer">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -679,8 +679,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td height="159"><div align="center">
                     <p>TA1P Front
                       <select name="trailer_tires_passenger_ax1front_trailer" id="trailer_tires_passenger_ax1front_trailer">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -722,8 +722,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td height="24"><div align="center">
                     <p>TA2D Rear
                       <select name="trailer_tires_driverside_ax2rear_trailer" id="trailer_tires_driverside_ax2rear_trailer">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -763,8 +763,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td height="24"><div align="center">
                     <p>TA2P Rear
                       <select name="trailer_tires_passenger_ax2rear_trailer" id="trailer_tires_passenger_ax2rear_trailer">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -857,8 +857,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td width="91" height="86"><div align="center">
                     <p>BTD Steer
                       <select name="truck_tires_driverside_steer_boxtruck" id="truck_tires_driverside_steer_boxtruck">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -887,8 +887,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td width="93" height="86"><div align="center">
                     <p>BTP Steer
                       <select name="truck_tires_passenger_steer_boxtruck" id="truck_tires_passenger_steer_boxtruck">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -922,8 +922,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td height="71"><div align="center">
                     <p>BTD Drive
                       <select name="truck_tires_driverside_ax1front_boxtruck" id="truck_tires_driverside_ax1front_boxtruck">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -958,8 +958,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td height="71"><div align="center">
                     <p>BTPF Drive
                       <select name="truck_tires_passenger_ax1front_boxtruck" id="truck_tires_passenger_ax1front_boxtruck">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -1047,8 +1047,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td width="91" height="149"><div align="center">
                     <p>SD Steer
                       <select name="truck_tires_driverside_steer_sprinter" id="truck_tires_driverside_steer_sprinter">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -1077,8 +1077,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td width="96" height="149"><div align="center">
                     <p>SP Steer
                       <select name="truck_tires_passenger_steer_sprinter" id="truck_tires_passenger_steer_sprinter">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -1113,8 +1113,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                     <p>SD
                       R
                       <select name="truck_tires_driverside_ax1front_sprinter" id="truck_tires_driverside_ax1front_sprinter">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
@@ -1142,8 +1142,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td height="71"><div align="center">
                     <p>SP R
                       <select name="truck_tires_passenger_ax1front_sprinter" id="truck_tires_passenger_ax1front_sprinter">
-                        <option selected>Excellent</option>
-                        <option>Ok</option>
+                        <option>Excellent</option>
+                        <option selected>Good</option>
                         <option>Poor</option>
                         <option>Red Tag</option>
                       </select>
