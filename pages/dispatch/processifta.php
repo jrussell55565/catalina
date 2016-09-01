@@ -283,58 +283,7 @@ if (isset($_POST['add_ifta'])) {
 
   // This part will email the driver1 (and driver2 if applicable)
   // to inform them of any missing compliance info
-  $compliance = array ('compliance_trip' => 'Did not fill out Trip Pack correctly',
-                       'compliance_logs' => 'Logs were missing',
-                       'compliance_vir' => 'VIR not included',
-                       'compliance_fuel' => 'Fuel receipts not included',
-                       'compliance_bol' => 'Bill of Lading is missing',
-                       'compliance_permits' => 'Permits are missing',
-                       //'compliance_gps',
-                       'compliance_dot' => 'DOT violations are missing');
-					   //Need to include General Notes for driver (top section),
-					   //Need to add Date Specific "issue" to the email and DB, this will come from multiple lines,
-					   //Because of multiple lines, need to add specific date/driver to the email,
-					   //Need to add Choose Issue (selected) email details also,
-					   //Need to add Comments from each specific line.  Note:  If N/A then skip....,
-  $subject = "Trip Pack Submitted - ".$_POST['txt_tripnum'];
-  $body = "Notice: IFTA trip pack ".$_POST['txt_tripnum']." has been entered.\n";
-  $body .= "Start Date: ".$_POST['txt_date_start']." End Date: ".$_POST['txt_date_end']." .\n";
-  $body .= "Start city/state: ".$_POST['location_start']."\n";
-  $body .= "Stop city/state: ".$_POST['location_stops']."\n";
-  $body .= "End city/state: ".$_POST['location_end']."\n";
-  $body .= "Notes:\n";
-  $body .= $_POST['notes_trip_driver'] . "\n\n";
-
-  //Need to enter 2 new values that will come from the DB.  Not in there yet.  Trip Origin: Trip Destination (this is for the OTR Drivers)
-  $body .= "Details below:\n\n";
-  foreach ($compliance as $key => $value)
-  {
-    $body .= $value . "\t\t\t" . $_POST[$key] . "\n";
-  }
-
-  // Pull the drivers email from the DB
-  try {
-    $statement = "SELECT email from users where employee_id IN ('".$_POST['sel_add_driver_1']."','".$_POST['sel_add_driver_2']."')";
-    if ($result = $mysqli->query($statement))
-    {
-        while($obj = $result->fetch_object()){
-          $f = $obj->email;
-          sendEmail($f,$subject,$body,"ifta@catalinacartage.com");
-        }
-        $result->close();
-    }else{
-        throw new Exception("Unable to retrieve drivers email for notification: ". $mysqli->error);
-    }
-  } catch (Exception $e) {
-    // An exception has been thrown
-    // We must rollback the transaction
-    $url_error = urlencode($e->getMessage());
-    $mysqli->rollback();
-    header("location: /pages/dispatch/ifta.php?error=$url_error");
-    $mysqli->autocommit(TRUE);
-    $mysqli->close();
-    exit;
-  }
+  sendIftaEmail($mysqli);
 }
 
 // Run this part if we're UPDATING an IFTA
@@ -665,7 +614,12 @@ if (isset($_POST['update_ifta'])) {
         }
     }
 
-
+  // This part will email the driver1 (and driver2 if applicable)
+  // to inform them of any missing compliance info
+  if ($_POST['send_email'] == 'yes')
+  {
+    sendIftaEmail($mysqli);
+  }
 
   } catch (Exception $e) {
     // An exception has been thrown
@@ -790,6 +744,101 @@ function downloadFile($file_name, $file_name_uploaded) {
        readfile($temp);
        unlink($temp);
        exit;
+  }
+}
+
+function sendIftaEmail($mysqli) {
+  $compliance = array ('compliance_trip' => 'Did not fill out Trip Pack correctly',
+                       'compliance_logs' => 'Logs were missing',
+                       'compliance_vir' => 'VIR not included',
+                       'compliance_fuel' => 'Fuel receipts not included',
+                       'compliance_bol' => 'Bill of Lading is missing',
+                       'compliance_permits' => 'Permits are missing',
+                       //'compliance_gps',
+                       'compliance_dot' => 'DOT violations are missing');
+					   //Need to include General Notes for driver (top section),
+					   //Need to add Date Specific "issue" to the email and DB, this will come from multiple lines,
+					   //Because of multiple lines, need to add specific date/driver to the email,
+					   //Need to add Choose Issue (selected) email details also,
+					   //Need to add Comments from each specific line.  Note:  If N/A then skip....,
+  $subject = "Trip Pack Submitted - ".$_POST['txt_tripnum'];
+  $body = "Notice: IFTA trip pack ".$_POST['txt_tripnum']." has been entered.\n";
+  $body .= "Start Date: ".$_POST['txt_date_start']." End Date: ".$_POST['txt_date_end']." .\n";
+  $body .= "Start city/state: ".$_POST['location_start']."\n";
+  $body .= "Stop city/state: ".$_POST['location_stops']."\n";
+  $body .= "End city/state: ".$_POST['location_end']."\n";
+  $body .= "Notes:\n";
+  $body .= $_POST['notes_trip_driver'] . "\n\n";
+
+  //Need to enter 2 new values that will come from the DB.  Not in there yet.  Trip Origin: Trip Destination (this is for the OTR Drivers)
+  $body .= "General Trip Compliance:\n\n";
+  foreach ($compliance as $key => $value)
+  {
+    $body .= $value . "\t\t\t" . $_POST[$key] . "\n";
+  }
+
+  // Pull the drivers email and names from the DB
+  try {
+    if ($_POST['sel_add_driver_1'] == 'null') {
+      // If the driver1 is 'Choose Driver, Unknown Driver, or Multiple Drivers then we need to get the
+      // emails for the drivers in the 'details' section
+      $statement = [];
+      foreach($_POST['txt_driver_details'] as $driver) {
+        if ($driver == 'null') { continue; }
+        array_push($statement, $driver);
+      }
+      $statement = '"' . implode('","',$statement) . '"';
+      $statement = "SELECT distinct email, username, employee_id from users where employee_id IN ($statement)";
+    }else{
+      $statement = "SELECT email, username, employee_id from users where employee_id IN ('".$_POST['sel_add_driver_1']."','".$_POST['sel_add_driver_2']."')";
+    }
+
+    if ($result = $mysqli->query($statement))
+    {
+        $driver_detail = [];
+        while($obj = $result->fetch_object()){
+          $driver_detail[$obj->employee_id]['username'] = $obj->username;
+          $driver_detail[$obj->employee_id]['email'] = $obj->email;
+        }
+        $result->close();
+    }else{
+        throw new Exception("Unable to retrieve drivers email for notification: ". $mysqli->error);
+    }
+  } catch (Exception $e) {
+    // An exception has been thrown
+    // We must rollback the transaction
+    $url_error = urlencode($e->getMessage());
+    header("location: /pages/dispatch/ifta.php?error=$url_error");
+    $mysqli->close();
+    exit;
+  }
+
+  $body .= "\n\nDetails:\n\n";
+  // Now look at the details to create a list of items that need to be addressed.
+  for ($i=0; $i<count($_POST['hdn_details_id']); $i++) {
+    // Skip is the driver is null or there are no issues
+    if ($_POST['txt_driver_details'][$i] == 'null') { continue; }
+    if ($_POST['hdn_details_id'][$i] != $_POST['cb_trip_issue_details'][$i]) { 
+      // The issue checkbox was not checked
+      if ($_POST['date_resolved_details'][$i] == '') {
+        // AND the date is empty (meaning it was not resolved)
+        continue; 
+      }
+    }
+    $body .= $driver_detail[$_POST['txt_driver_details'][$i]]['username'] . "\t";
+    $body .= $_POST['txt_date_details'][$i] . "\t";
+    $body .= $_POST['txt_routes_details'][$i] . "\t";
+    $body .= $_POST['txt_state_exit_details'][$i] . "\t";
+    $body .= $_POST['txt_state_enter_details'][$i] . "\t";
+    $body .= $_POST['txt_state_miles_details'][$i] . "\t";
+    $body .= $_POST['sl_trip_issue_details'][$i] . "\t";
+    $body .= $_POST['issue_comment_details'][$i] . "\t";
+    $body .= $_POST['date_resolved_details'][$i] . "\n";
+  }
+
+  // Now that we have the body we'll send an email out.
+  foreach($driver_detail as $i) {
+    sendEmail($i['email'],$subject,$body,"ifta@catalinacartage.com");
   }
 }
 ?>
