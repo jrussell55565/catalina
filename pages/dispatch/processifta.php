@@ -763,7 +763,8 @@ function sendIftaEmail($mysqli) {
 					   //Need to add Choose Issue (selected) email details also,
 					   //Need to add Comments from each specific line.  Note:  If N/A then skip....,
   $subject = "Trip Pack Submitted - ".$_POST['txt_tripnum'];
-  $body = "Notice: IFTA trip pack ".$_POST['txt_tripnum']." has been entered.\n";
+  $body = "Notice: IFTA trip pack ".$_POST['txt_tripnum']." entered on truck ".$_POST['txt_truckno'].". \n";
+  $body .= "You are recieving this email because we may require additional information to be turned in. \n";
   $body .= "Start Date: ".$_POST['txt_date_start']." End Date: ".$_POST['txt_date_end']." .\n";
   $body .= "Start city/state: ".$_POST['location_start']."\n";
   $body .= "Stop city/state: ".$_POST['location_stops']."\n";
