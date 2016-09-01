@@ -73,6 +73,28 @@ array_push($mechanics,$row[0]);
 array_push($mechanic_id,$row[1]);
 }
 mysql_free_result($results);
+
+# Defaults for sorting
+$order_by_unit = 'desc';
+$glyph_icon_unit = "right";
+$orderSql = "ORDER BY insp_date DESC, vir_itemnum ASC";
+
+if ($_GET['sort'] == 'unit')
+{
+  if ($_GET['order'] == 'desc')
+  {
+    $order_by_unit = 'asc';
+    $glyph_icon_unit = "bottom";
+    $orderSql = "ORDER BY truck_number,trailer_number DESC";
+  }
+  if ($_GET['order'] == 'asc')
+  {
+    $order_by_unit = 'desc';
+    $glyph_icon_unit = "top";
+    $orderSql = "ORDER BY truck_number,trailer_number ASC";
+  }
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -174,7 +196,7 @@ $statement = "SELECT vir_itemnum, date_format(insp_date,'%m/%d/%Y') insp_date, i
                      updated_status
                FROM virs WHERE 1=1 $restricted_predicate
                AND insp_date >= date(now()) - INTERVAL $max_results DAY
-               ORDER BY insp_date DESC, vir_itemnum ASC";
+               $orderSql";
 
 $counter = 0;
 $virs = array();
@@ -220,7 +242,8 @@ href="#vir_details" aria-expanded="false" aria-controls="vir_details" style="pad
                     <thead>
                       <tr>
                         <th>PO</th>
-                        <th>Unit</th>
+                        <th>Unit <a href="?sort=unit&order=<?php echo $order_by_unit;?>">
+                                 <i class="glyphicon glyphicon-triangle-<?php echo $glyph_icon_unit;?>"></i></a></th>
                         <th>Type</th>
                         <th>Status</th>
                         <th>Tires</th>
