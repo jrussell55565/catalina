@@ -182,6 +182,7 @@ sub email_alert
   	$smtp->dataend();
   
   	$smtp->quit;
+    exit 1;
 }
 
 sub compare_status
