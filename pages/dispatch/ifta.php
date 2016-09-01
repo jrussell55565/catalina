@@ -589,7 +589,7 @@ Closed
                                  <td><input class="input-sm" type="checkbox" name="txt_permit_req_details[]" id="txt_permit_req_details_`+random+`"></td>
                                  <td><input class="input-sm" type="checkbox" name="cb_trip_issue_details[]" id="cb_trip_issue_details_`+random+`"></td>
                                     <td>
-                                   <select name="sl_trip_issue_details[]" id="sl_trip_issue_details_`+random+`">
+                                   <select class="input-sm form-control" name="sl_trip_issue_details[]" id="sl_trip_issue_details_`+random+`">
                                      <?php
                                        foreach ($issue_options as $issue) { ?>
                                      <option> <?php echo $issue;?></option>
