@@ -309,7 +309,11 @@
                                        <select class="input-sm form-control" name="sel_add_driver_1" id="sel_add_driver_1" value="">
                                           <option value="null">Choose Driver...</option>
                                      <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
-                                       <option value=<?php echo $driver_array[$i]['employee_id'];?>><?php echo $driver_array[$i]['name'];?></option>
+                                       <option value=<?php echo $driver_array[$i]['employee_id'];?> 
+                                        <?php if ($driver_array[$i]['employee_id'] == $ifta_results['driver1']) { echo " selected "; } ?>
+                                       >
+                                        <?php echo $driver_array[$i]['name'];?>
+                                       </option>
                                      <?php } ?>
                                        </select>
                                     </td>
@@ -327,7 +331,11 @@
                                        <select class="input-sm form-control" name="sel_add_driver_2" id="sel_add_driver_2" value="">
                                           <option value="null">Choose Driver...</option>
                                      <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
-                                       <option value=<?php echo $driver_array[$i]['employee_id'];?>><?php echo $driver_array[$i]['name'];?></option>
+                                       <option value=<?php echo $driver_array[$i]['employee_id'];?>
+                                        <?php if ($driver_array[$i]['employee_id'] == $ifta_results['driver2']) { echo " selected "; } ?>
+                                       >
+                                        <?php echo $driver_array[$i]['name'];?>
+                                       </option>
                                      <?php } ?>
                                        </select>
                                     </td>
@@ -410,10 +418,9 @@
 <p></p>
                            <table class="table table-condensed table-striped" id="add_ifta_table">
                               <tr>
-                                 <td colspan="16" style="text-align: center; font-weight: bold;">Enter Trip info Below</td>
+                                 <td colspan="15" style="text-align: center; font-weight: bold;">Enter Trip info Below</td>
                               </tr>
                               <tr>
-                                 <td>Trip #</td>
                                  <td>Date</td>
                                  <td style="width:8em;">Driver</td>
                                  <td>HWB #</td>
@@ -438,14 +445,18 @@
                                   $counter++;
                               ?>
                                 <tr id="tr_add_driver_details_<?php echo $rowNum;?>" value="ifta_details">
-                                 <td><input name="txt_tripnum_details[]" type="text" class="input-sm form-control" id="txt_tripnum_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['trip_no'];?>" readonly>
-                                    <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['id'];?>"></td>
                                     <td ><input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['trip_date'];?>"></td>
+                                    <input name="txt_tripnum_details[]" type="hidden" class="input-sm form-control" id="txt_tripnum_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['trip_no'];?>" readonly>
+                                    <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['id'];?>">
                                  <td>
                                   <select class="input-sm form-control"  style="width:150px;" name="txt_driver_details[]" type="text" id="txt_driver_details_<?php echo $rowNum;?>" value="">
                                    <option value="null">Choose...</option>
-                                     <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
-                                       <option value=<?php echo $driver_array[$i]['employee_id'];?> <?php if ($driver_array[$i]['employee_id'] == $ifta_details[$i]['driver']) { echo "selected"; }?>><?php echo $driver_array[$i]['name'];?></option>
+                                     <?php for ($j=0; $j<count($driver_array); $j++) { ?>
+                                       <option value=<?php echo $driver_array[$j]['employee_id'];?> 
+                                        <?php if ($driver_array[$j]['employee_id'] == $ifta_details[$i]['driver']) { echo " selected "; }?>
+                                        >
+                                        <?php echo $driver_array[$j]['name'];?>
+                                       </option>
                                      <?php } ?>
                                   </select>
                                  </td>
@@ -478,7 +489,6 @@
                                    <input class="input-sm" type="checkbox" name="cb_trip_issue_details[]" id="cb_trip_issue_details_<?php echo $rowNum;?>" <?php if($ifta_details[$i]['cb_trip_issue'] == 'Y') { echo " checked ";} ?> value="<?php echo $ifta_details[$i]['id'];?>">
                                  </div></td>
                                  <td><div align="center">
-                                   <label for="ifta_specificdate_issue"></label>
                                    <select class="input-sm form-control" name="sl_trip_issue_details[]" id="sl_trip_issue_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['sl_trip_issue'];?>">
                                      <?php
                                        foreach ($issue_options as $issue) { ?>
@@ -506,10 +516,9 @@
                            <table class="table table-condensed table-striped" id="add_ifta_fuel">
                               <tbody>
                                  <tr style="text-align: center; font-weight: bold;">
-                                    <td colspan="16">Enter Fuel Info for Trip</td>
+                                    <td colspan="15">Enter Fuel Info for Trip</td>
                                  </tr>
                                  <tr>
-                                    <td>Trip #</td>
                                     <td>Date</td>
                                     <td style="width:5em;">Gallons</td>
                                     <td style="width:5em;">Reefer</td>
@@ -532,9 +541,10 @@
                                   $counter++;
                               ?>
                                 <tr id="tr_add_fuel_details_<?php echo $rowNum;?>"  value="ifta_fuel">
-                                    <td><input name="txt_fuel_tripnum[]" type="text" class="input-sm form-control" id="txt_fuel_tripnum_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['trip_no'];?>" readonly>
-                        <input type="hidden" name="hdn_fuel_id[]" id="hdn_fuel_id_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['id'];?>"></td>
-                                    <td><input class="input-sm form-control datepicker" name="txt_fuel_date[]" type="text" id="txt_fuel_date_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['trip_date'];?>" ></td>
+                                    <td><input class="input-sm form-control datepicker" name="txt_fuel_date[]" type="text" id="txt_fuel_date_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['trip_date'];?>" >
+                                    <input name="txt_fuel_tripnum[]" type="hidden" class="input-sm form-control" id="txt_fuel_tripnum_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['trip_no'];?>" readonly>
+                        <input type="hidden" name="hdn_fuel_id[]" id="hdn_fuel_id_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['id'];?>">
+                                    </td>
                                     <td><input name="txt_fuel_gallons[]" type="text" class="input-sm form-control" id="txt_fuel_gallons_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['fuel_gallons'];?>" ></td>
                                     <td><input name="txt_fuel_reefer[]" type="text" class="input-sm form-control" id="txt_fuel_reefer_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['fuel_reefer'];?>" ></td>
                                     <td ><input name="txt_fuel_other[]" type="text" class="input-sm form-control" id="txt_fuel_other_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['fuel_other'];?>" ></td>
@@ -759,9 +769,11 @@ Closed
                                };
 
          var new_row = `<tr id="tr_add_driver_details_add_`+rowNum+`" value="ifta_details">
-                                 <td ><input class="input-sm form-control" name="txt_tripnum_details_add[]" type="text" id="txt_tripnum_details_add_`+rowNum+`" value="`+tripnum+`" readonly>
-                                    <input type="hidden" name="hdn_details_id_add[]" id="hdn_details_id_add_`+rowNum+`" value="0"></td>
-                                    <td ><input class="input-sm form-control datepicker" name="txt_date_details_add[]" type="text" id="txt_date_details_add_`+rowNum+`" value="" size=""></td>
+                                 <td >
+                                   <input class="input-sm form-control datepicker" name="txt_date_details_add[]" type="text" id="txt_date_details_add_`+rowNum+`" value="" size="">
+                                    <input class="input-sm form-control" name="txt_tripnum_details_add[]" type="hidden" id="txt_tripnum_details_add_`+rowNum+`" value="`+tripnum+`" readonly>
+                                    <input type="hidden" name="hdn_details_id_add[]" id="hdn_details_id_add_`+rowNum+`" value="0">
+                                 </td>
                                  <td>
                                   <select class="input-sm form-control" name="txt_driver_details_add[]" type="text" id="txt_driver_details_add_`+rowNum+`" value="">
                                    <option value="null">Choose...</option>
@@ -788,7 +800,7 @@ Closed
                                  <td>
                                     <input class="input-sm form-control" name="txt_state_miles_details_add[]" type="text" id="txt_state_miles_details_add_`+rowNum+`" value="" readonly>
                                  </td>
-                                 <td><input class="input-sm" type="checkbox" name="txt_permit_req_details_add[]" id="txt_permit_req_details_add_`+rowNum+`"></td>
+                                 <td><div align="center"><input class="input-sm" type="checkbox" name="txt_permit_req_details_add[]" id="txt_permit_req_details_add_`+rowNum+`"></div></td>
                                   <td><div align="center">
                                    <input class="input-sm" type="checkbox" name="cb_trip_issue_details_add[]" id="cb_trip_issue_details_add_`+rowNum+`">
                                  </div></td>
@@ -814,7 +826,7 @@ Closed
          // Append a new tr to the table based on the 'new_row' variables         
          $("#add_ifta_table > tbody:last-child").append(new_row);
 
-         var prev_hwb = $("#tr_add_driver_details_add_"+rowNum).prev().children('td').eq(3).children(':text').val();
+         var prev_hwb = $("#tr_add_driver_details_add_"+rowNum).prev().children('td').eq(2).children(':text').val();
 
          // Set the value of txt_state_enter_details select box to states that surround the txt_state_exit_details select box
          <?php
@@ -891,9 +903,11 @@ Closed
          var rowNum = fuel_counter;
          var tripnum = $("#txt_tripnum").val();
          var new_row = `<tr id="tr_add_fuel_details_add_`+rowNum+`" value="ifta_fuel">
-                                    <td ><input class="input-sm form-control" name="txt_fuel_tripnum_add[]" type="text" id="txt_fuel_tripnum_add_`+rowNum+`" value="`+tripnum+`" readonly>
-                                    <input type="hidden" name="hdn_fuel_id_add[]" id="hdn_fuel_id_add_`+rowNum+`" value="0"></td>
-                                    <td ><input class="input-sm form-control datepicker" name="txt_fuel_date_add[]" type="text" id="txt_fuel_date_add_`+rowNum+`" value="" size=""></td>
+                                    <td>
+                                     <input class="input-sm form-control datepicker" name="txt_fuel_date_add[]" type="text" id="txt_fuel_date_add_`+rowNum+`" value="" size="">
+                                     <input class="input-sm form-control" name="txt_fuel_tripnum_add[]" type="hidden" id="txt_fuel_tripnum_add_`+rowNum+`" value="`+tripnum+`" readonly>
+                                     <input type="hidden" name="hdn_fuel_id_add[]" id="hdn_fuel_id_add_`+rowNum+`" value="0">
+                                    </td>
                                     <td><input class="input-sm form-control" name="txt_fuel_gallons_add[]" type="text" id="txt_fuel_gallons_add_`+rowNum+`" value=""></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_reefer_add[]" type="text" id="txt_fuel_reefer_add_`+rowNum+`" value=""></td>
                                     <td ><input class="input-sm form-control" name="txt_fuel_other_add[]" type="text" id="txt_fuel_other_add_`+rowNum+`" value=""></td>
@@ -907,7 +921,7 @@ Closed
                                           <?php } ?>
                                        </select>
                                     </td>
-                                    <td ><input class="input-sm form-control" name="txt_fuel_odo_add[]" type="text" id="txt_fuel_odo_add_`+rowNum+`" value=""></td>
+                                    <td ><input class="input-sm form-control" name="txt_fuel_odo_add[]" type="text" id="txt_fuel_odo_add_`+rowNum+`" value="" required></td>
  <td ><div align="center">
                                       <input class="input-sm" type="checkbox" name="cb_trip_issue_fuel_add[]" id="cb_trip_issue_fuel_add_`+rowNum+`">
                                     </div></td>

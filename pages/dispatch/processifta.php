@@ -183,6 +183,10 @@ if (isset($_POST['add_ifta'])) {
         if ($_POST['txt_fuel_city'][$i] == '') { $_POST['txt_fuel_city'][$i] = 'NULL'; }
         if ($_POST['txt_fuel_state'][$i] == '') { $_POST['txt_fuel_state'][$i] = 'NULL'; }
         if ($_POST['txt_fuel_odo'][$i] == '') { $_POST['txt_fuel_odo'][$i] = 'NULL'; }
+        if (isset($_POST['cb_trip_issue_fuel'][$i])) { $issue = 'Y'; }else{ $issue = 'N'; }
+        if ($_POST['sl_trip_issue_fuel'][$i] == '') { $_POST['sl_trip_issue_fuel'][$i] = 'NULL'; }
+        if ($_POST['issue_comment_fuel'][$i] == '') { $_POST['issue_comment_fuel'][$i] = 'NULL'; }
+        if ($_POST['date_resolved_fuel'][$i] == '') { $_POST['date_resolved_fuel'][$i] = 'NULL'; }
         
         $sql_fuel = "INSERT INTO ifta_fuel
         (
@@ -194,7 +198,11 @@ if (isset($_POST['add_ifta'])) {
         vendor,
         city,
         state,
-        odometer
+        odometer,
+        cb_trip_issue,
+        sl_trip_issue,
+        issue_comment,
+        date_resolved
         )
         VALUES
         (
@@ -206,7 +214,11 @@ if (isset($_POST['add_ifta'])) {
         '".$_POST['txt_fuel_vendor'][$i]."',
         '".$_POST['txt_fuel_city'][$i]."',
         '".$_POST['txt_fuel_state'][$i]."',
-        ".$_POST['txt_fuel_odo'][$i]."
+        ".$_POST['txt_fuel_odo'][$i].",
+        '$issue',
+        '".$_POST['sl_trip_issue_fuel'][$i]."',
+        '".$_POST['issue_comment_fuel'][$i]."',
+        str_to_date('".$_POST['date_resolved_fuel'][$i]."','%m/%d/%Y')
         )";
 
         if ($mysqli->query($sql_fuel) === false)
@@ -702,6 +714,7 @@ if (isset($_POST['delete_ifta'])) {
 
 $mysqli->autocommit(TRUE);
 $mysqli->close();
+
 if (isset($_POST['add_ifta'])) {
     header("location: /pages/dispatch/ifta.php?trip_no=".$_POST['txt_tripnum']);
 }
@@ -765,6 +778,8 @@ function sendIftaEmail($mysqli) {
   $subject = "Trip Pack Submitted - ".$_POST['txt_tripnum'];
   $body = "Notice: IFTA trip pack ".$_POST['txt_tripnum']." entered on truck ".$_POST['txt_truckno'].". \n";
   $body .= "You are recieving this email because we may require additional information to be turned in. \n";
+  $body .= "If any items are incomplete, negative productivity points have been added to your profile: \n";
+  $body .= "Please Contact Catalina Compliance Department to fix issues: see below for details.\n";
   $body .= "Start Date: ".$_POST['txt_date_start']." End Date: ".$_POST['txt_date_end']." .\n";
   $body .= "Start city/state: ".$_POST['location_start']."\n";
   $body .= "Stop city/state: ".$_POST['location_stops']."\n";
