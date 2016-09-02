@@ -390,10 +390,9 @@ if ($_SESSION['login'] != 1)
                           <p></p>
                            <table class="table table-condensed table-striped" id="add_ifta_table">
                               <tr>
-                                 <td colspan="16" style="text-align: center; font-weight: bold;">Enter Trip info Below</td>
+                                 <td colspan="15" style="text-align: center; font-weight: bold;">Enter Trip info Below</td>
                               </tr>
                               <tr>
-                                 <td>Trip #</td>
                                  <td>Date</td>
                                  <td style="width:8em;">Driver</td>
                                  <td>HWB #</td>
@@ -418,10 +417,9 @@ if ($_SESSION['login'] != 1)
                            <table  class="table table-condensed table-striped" id="add_ifta_fuel">
                               <tbody>
                                  <tr style="text-align: center; font-weight: bold;">
-                                    <td colspan="16">Enter Fuel Info for Trip</td>
+                                    <td colspan="15">Enter Fuel Info for Trip</td>
                                  </tr>
                                  <tr>
-                                    <td>Trip #</td>
                                     <td>Date</td>
                                     <td style="width:5em;">Gallons</td>
                                     <td style="width:5em;">Reefer</td>
@@ -577,10 +575,12 @@ Closed
                                };
 
          var new_row = `<tr id="tr_add_driver_details_`+rowNum+`">
-                                 <td ><input class="input-sm form-control" name="txt_tripnum_details[]" type="text" id="txt_tripnum_details_`+rowNum+`" value="`+tripnum+`" readonly>
-                                 <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_`+rowNum+`" value="1"></td>
-                                 <input type="hidden" name="hdn_rownum_`+rowNum+`" id="hdn_rownum_`+rowNum+`" value="`+rowNum+`"></td>
-                                 <td ><input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_`+rowNum+`" value="" size=""></td>
+                                 <td>
+                                  <input class="input-sm form-control datepicker" name="txt_date_details[]" type="text" id="txt_date_details_`+rowNum+`" value="" size="">
+                                  <input class="input-sm form-control" name="txt_tripnum_details[]" type="hidden" id="txt_tripnum_details_`+rowNum+`" value="`+tripnum+`" readonly>
+                                  <input type="hidden" name="hdn_details_id[]" id="hdn_details_id_`+rowNum+`" value="1">
+                                  <input type="hidden" name="hdn_rownum_`+rowNum+`" id="hdn_rownum_`+rowNum+`" value="`+rowNum+`">
+                                 </td>
                                  <td>
                                   <select class="input-sm form-control" name="txt_driver_details[]" type="text" id="txt_driver_details_`+rowNum+`" value="">
                                    <option value="null">Choose...</option>
@@ -632,7 +632,7 @@ Closed
          $("#add_ifta_table > tbody:last-child").append(new_row);
 
          // Set the hwb to the value of the hwb on the previous row
-         var prev_hwb = $("#tr_add_driver_details_"+rowNum).prev().children('td').eq(3).children(':text').val();
+         var prev_hwb = $("#tr_add_driver_details_"+rowNum).prev().children('td').eq(2).children(':text').val();
          $("#txt_hwb_details_"+rowNum).val(prev_hwb);
 
 
@@ -710,9 +710,11 @@ Closed
          var rowNum = fuel_counter;
          var tripnum = $("#txt_tripnum").val();
          var new_row = `<tr id="tr_add_fuel_details_`+rowNum+`">
-                                    <td><input class="input-sm form-control" name="txt_fuel_tripnum[]" type="text" id="txt_fuel_tripnum_`+rowNum+`" value="`+tripnum+`" readonly>
-                                    <input type="hidden" name="hdn_fuel_id[]" id="hdn_fuel_id_`+rowNum+`" value="1"></td>
-                                    <td><input class="input-sm form-control datepicker" name="txt_fuel_date[]" type="text" id="txt_fuel_date_`+rowNum+`" value="" size=""></td>
+                                    <td>
+                                     <input class="input-sm form-control datepicker" name="txt_fuel_date[]" type="text" id="txt_fuel_date_`+rowNum+`" value="" size="">
+                                     <input class="input-sm form-control" name="txt_fuel_tripnum[]" type="hidden" id="txt_fuel_tripnum_`+rowNum+`" value="`+tripnum+`" readonly>
+                                     <input type="hidden" name="hdn_fuel_id[]" id="hdn_fuel_id_`+rowNum+`" value="1">
+                                    </td>
                                     <td><input class="input-sm form-control" name="txt_fuel_gallons[]" type="text" id="txt_fuel_gallons_`+rowNum+`" value=""></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_reefer[]" type="text" id="txt_fuel_reefer_`+rowNum+`" value=""></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_other[]" type="text" id="txt_fuel_other_`+rowNum+`" value=""></td>
