@@ -79,7 +79,7 @@
   // function that you need to modify if you want to import users from another application . Read help for more info
   function Imported_Users_Password_Hash($entered_password,$password_from_db)
   {
-      return md5($entered_password);
+      return $entered_password;
   }
 
   @session_start();
