@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+print_r($_POST); exit;
 if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 {
         header('Location: /pages/login/driverlogin.php');
@@ -833,7 +833,7 @@ function sendIftaEmail($mysqli) {
   $body .= "\n\nDetails:\n\n";
   // Now look at the details to create a list of items that need to be addressed.
   for ($i=0; $i<count($_POST['hdn_details_id']); $i++) {
-    // Skip is the driver is null or there are no issues
+    // Skip if the driver is null or there are no issues
     if ($_POST['txt_driver_details'][$i] == 'null') { continue; }
     if ($_POST['hdn_details_id'][$i] != $_POST['cb_trip_issue_details'][$i]) { 
       // The issue checkbox was not checked
@@ -851,6 +851,25 @@ function sendIftaEmail($mysqli) {
     $body .= $_POST['sl_trip_issue_details'][$i] . "\t";
     $body .= $_POST['issue_comment_details'][$i] . "\t";
     $body .= $_POST['date_resolved_details'][$i] . "\n";
+
+  // Now look at the fuel to create a list of items that need to be addressed.
+  for ($i=0; $i<count($_POST['hdn_fuel_id']); $i++) {
+    // Skip if there are no issues
+    if ($_POST['hdn_details_id'][$i] != $_POST['cb_trip_issue_fuel'][$i]) { 
+      // The issue checkbox was not checked
+      if ($_POST['date_resolved_fuel'][$i] == '') {
+        // AND the date is empty (meaning it was not resolved)
+        continue; 
+      }
+    }
+    $body .= $_POST['txt_fuel_date'][$i] . "\t";
+    $body .= $_POST['txt_fuel_gallons'][$i] . "\t";
+    $body .= $_POST['txt_fuel_reefer'][$i] . "\t";
+    $body .= $_POST['txt_fuel_other'][$i] . "\t";
+    $body .= $_POST['txt_fuel_vendor'][$i] . "\t";
+    $body .= $_POST['sl_trip_issue_fuel'][$i] . "\t";
+    $body .= $_POST['issue_comment_fuel'][$i] . "\t";
+    $body .= $_POST['date_resolved_fuel'][$i] . "\n";
   }
 
   // Now that we have the body we'll send an email out.
