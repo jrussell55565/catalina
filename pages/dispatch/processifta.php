@@ -1,6 +1,6 @@
 <?php
 session_start();
-print_r($_POST); exit;
+
 if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 {
         header('Location: /pages/login/driverlogin.php');
@@ -62,7 +62,7 @@ if (isset($_POST['add_ifta'])) {
     location_end,
     points_trip,
     points_fuel,
-    points_images
+    points_details
     )
     VALUES
     (
@@ -89,7 +89,7 @@ if (isset($_POST['add_ifta'])) {
     '".$_POST['location_end']."',
     ".(!$_POST['points_trip'] ? 0 : $_POST['points_trip']) .",
     ".(!$_POST['points_fuel'] ? 0 : $_POST['points_fuel']) .",
-    ".(!$_POST['points_images'] ? 0 : $_POST['points_images']) ."
+    ".(!$_POST['points_details'] ? 0 : $_POST['points_details']) ."
     )";
 
     if ($mysqli->query($sql_ifta) === false)
@@ -326,7 +326,7 @@ if (isset($_POST['update_ifta'])) {
     location_end = '".$_POST['location_end']."',
     points_trip = ".(!$_POST['points_trip'] ? 0 : $_POST['points_trip']) .",
     points_fuel = ".(!$_POST['points_fuel'] ? 0 : $_POST['points_fuel']) .",
-    points_images = ".(!$_POST['points_images'] ? 0 : $_POST['points_images']) .",
+    points_details = ".(!$_POST['points_details'] ? 0 : $_POST['points_details']) .",
     trip_status = '".$_POST['trip_status']."'
     WHERE trip_no = '".$_POST['txt_tripnum']."'";
 
@@ -851,6 +851,7 @@ function sendIftaEmail($mysqli) {
     $body .= $_POST['sl_trip_issue_details'][$i] . "\t";
     $body .= $_POST['issue_comment_details'][$i] . "\t";
     $body .= $_POST['date_resolved_details'][$i] . "\n";
+  }
 
   // Now look at the fuel to create a list of items that need to be addressed.
   for ($i=0; $i<count($_POST['hdn_fuel_id']); $i++) {
