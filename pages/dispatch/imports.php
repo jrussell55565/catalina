@@ -250,10 +250,11 @@ if ($_POST['btn_trips'])
                 <div class="box-body table-responsive no-padding">
                   <table width="98%" class="table table-hover">
                     <tr>
-                      <th><a href="http://login.intouchgps.com/users/sign_in">Download Trip Example</a> Download CSV File &amp; Upload...</th>
+                      <th><a href="http://login.intouchgps.com/users/sign_in">Intouch GPS Link</a> Download CSV File &amp; Upload..</th>
                     </tr>
                     <tr>
-                      <th>Example File: <a href="../pages/examples/intouchGPS/Idle-Totals-w-Multiple-multiple.csv">Example Idle Totals</a></th>
+                      <th><p>Example File: <a href="../pages/examples/intouchGPS/Idle-Totals-w-Multiple-multiple.csv">Example Trips</a></p>
+                      <p><img src="../pages/dispatch/images/trips.jpg" width="251" height="446"></p></th>
                     </tr>
                   </table>
                   <p>
