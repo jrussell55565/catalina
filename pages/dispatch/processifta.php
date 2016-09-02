@@ -1,5 +1,6 @@
 <?php
 session_start();
+#print_r($_POST); exit;
 
 if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 {
@@ -87,9 +88,9 @@ if (isset($_POST['add_ifta'])) {
     '".$_POST['location_start']."',
     '".$_POST['location_stops']."',
     '".$_POST['location_end']."',
-    ".(!$_POST['points_trip'] ? 0 : $_POST['points_trip']) .",
-    ".(!$_POST['points_fuel'] ? 0 : $_POST['points_fuel']) .",
-    ".(!$_POST['points_details'] ? 0 : $_POST['points_details']) ."
+    GREATEST(".(!$_POST['points_trip'] ? 0 : $_POST['points_trip']) .",0),
+    GREATEST(".(!$_POST['points_fuel'] ? 0 : $_POST['points_fuel']) .",0),
+    GREATEST(".(!$_POST['points_details'] ? 0 : $_POST['points_details']) .",0)
     )";
 
     if ($mysqli->query($sql_ifta) === false)
@@ -324,9 +325,9 @@ if (isset($_POST['update_ifta'])) {
     location_start = '".$_POST['location_start']."',
     location_stops = '".$_POST['location_stops']."',
     location_end = '".$_POST['location_end']."',
-    points_trip = ".(!$_POST['points_trip'] ? 0 : $_POST['points_trip']) .",
-    points_fuel = ".(!$_POST['points_fuel'] ? 0 : $_POST['points_fuel']) .",
-    points_details = ".(!$_POST['points_details'] ? 0 : $_POST['points_details']) .",
+    points_trip = GREATEST(".(!$_POST['points_trip'] ? 0 : $_POST['points_trip']) .",0),
+    points_fuel = GREATEST(".(!$_POST['points_fuel'] ? 0 : $_POST['points_fuel']) .",0),
+    points_details = GREATEST(".(!$_POST['points_details'] ? 0 : $_POST['points_details']) .",0),
     trip_status = '".$_POST['trip_status']."'
     WHERE trip_no = '".$_POST['txt_tripnum']."'";
 
@@ -349,7 +350,12 @@ if (isset($_POST['update_ifta'])) {
         if ($_POST['txt_state_miles_details'][$i] == '') { $_POST['txt_state_miles_details'][$i] = 'NULL'; }
         if ($_POST['sl_trip_issue_details'][$i] == '') { $_POST['sl_trip_issue_details'][$i] = 'NULL'; }
         if ($_POST['issue_comment_details'][$i] == '') { $_POST['issue_comment_details'][$i] = 'NULL'; }
-        if ($_POST['date_resolved_details'][$i] == '') { $_POST['date_resolved_details'][$i] = 'NULL'; }
+        
+        if ($_POST['date_resolved_details'][$i] == '') { 
+          $date_resolved = 'NULL'; 
+        }else{
+          $date_resolved = "str_to_date('".$_POST['date_resolved_details'][$i]."','%m/%d/%Y')";
+        }
         
         $count = 0;
         foreach($_POST['txt_permit_req_details'] as $permit_value) {
@@ -387,19 +393,21 @@ if (isset($_POST['update_ifta'])) {
         cb_trip_issue = '$issue',
         sl_trip_issue = '".$_POST['sl_trip_issue_details'][$i]."',
         issue_comment = '".$_POST['issue_comment_details'][$i]."',
-        date_resolved = str_to_date('".$_POST['date_resolved_details'][$i]."','%m/%d/%Y')
+        date_resolved = $date_resolved
         WHERE id = ".$_POST['hdn_details_id'][$i];
-        /* Used for debug
+
+        /* DEBUG
         print $sql_details . "\n";
         continue;
         */
+
         if ($mysqli->query($sql_details) === false)
         {
             throw new Exception("Error UPDATING IFTA_DETAILS: ".$mysqli->error);
         }
     }
 
-    /* Used for debug
+    /* DEBUG
     exit;
     */
 

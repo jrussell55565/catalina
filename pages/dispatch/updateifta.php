@@ -63,7 +63,7 @@
                ,compliance_fuel, compliance_bol, compliance_permits
                ,compliance_gps, compliance_dot, notes_trip_driver
                ,points_trip, points_fuel
-               ,points_images, notes_trip_internal
+               ,points_details, notes_trip_internal
                ,location_start, location_stops, location_end
                ,trip_status
                FROM ifta WHERE trip_no = '".$_GET['trip_no']."'";
@@ -90,7 +90,7 @@
 		   $ifta_results['notes_trip_driver'] = $obj->notes_trip_driver;
 		   $ifta_results['points_trip'] = $obj->points_trip;
 		   $ifta_results['points_fuel'] = $obj->points_fuel;
-		   $ifta_results['points_images'] = $obj->points_images;
+		   $ifta_results['points_details'] = $obj->points_details;
 		   $ifta_results['notes_trip_internal'] = $obj->notes_trip_internal;
 		   $ifta_results['location_start'] = $obj->location_start;
 		   $ifta_results['location_stops'] = $obj->location_stops;
@@ -273,7 +273,7 @@
                                     <td width="103">Trip #
                                     <td width="144"><input class="input-sm form-control" name="txt_tripnum" type="text" id="txt_tripnum" value="<?php echo $ifta_results['trip_no'];?>" readonly></td>
                                     <td width="156"><div align="right"><strong>Trip Compliance</strong></div></td>
-                                    <td width="214"><select class="input-sm form-control" name="compliance_trip" id="compliance_trip">
+                                    <td width="214"><select class="input-sm form-control" name="compliance_trip" id="compliance_trip" onChange="calculate_points(this,'points_trip');">
                                       <?php foreach ($compliance_options as $i) { ?>
                                       <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_trip']) { echo "selected"; }?>><?php echo $i;?></option>
                                       <?php } ?>
@@ -285,7 +285,7 @@
                                     <td><input class="input datepicker" name="txt_date_start" type="text" id="txt_date_start" value="<?php echo $ifta_results['date_started'];?>" required></td>
                                     <td><div align="right"><strong>Logs Included</strong></div></td>
                                     <td>
-                                      <select class="input-sm form-control" name="compliance_logs" id="compliance_logs">
+                                      <select class="input-sm form-control" name="compliance_logs" id="compliance_logs" onChange="calculate_points(this,'points_trip');">
                                         <?php foreach ($compliance_options as $i) { ?>
                                         <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_logs']) { echo "selected"; }?>><?php echo $i;?></option>
                                         <?php } ?>
@@ -296,7 +296,7 @@
                                     <td>End Date
                                     <td><input class="input datepicker" name="txt_date_end" type="text" id="txt_date_end" value="<?php echo $ifta_results['date_ended'];?>" required></td>
                                     <td><div align="right"><strong>VIR Included</strong></div></td>
-                                    <td><select class="input-sm form-control" name="compliance_vir" id="compliance_vir">
+                                    <td><select class="input-sm form-control" name="compliance_vir" id="compliance_vir" onChange="calculate_points(this,'points_trip');">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
                                       <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_vir']) { echo "selected"; }?>><?php echo $i;?></option>
@@ -318,7 +318,7 @@
                                        </select>
                                     </td>
                                     <td><div align="right"><strong>Fuel Reciepts</strong></div></td>
-                                    <td><select class="input-sm form-control" name="compliance_fuel" id="compliance_fuel">
+                                    <td><select class="input-sm form-control" name="compliance_fuel" id="compliance_fuel" onChange="calculate_points(this,'points_trip');">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
                                       <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_fuel']) { echo "selected"; }?>><?php echo $i;?></option>
@@ -340,7 +340,7 @@
                                        </select>
                                     </td>
                                     <td><div align="right"><strong>BOL Included</strong></div></td>
-                                    <td><select class="input-sm form-control" name="compliance_bol" id="compliance_bol">
+                                    <td><select class="input-sm form-control" name="compliance_bol" id="compliance_bol" onChange="calculate_points(this,'points_trip');">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
                                       <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_bol']) { echo "selected"; }?>><?php echo $i;?></option>
@@ -351,7 +351,7 @@
                                     <td>Truck #
                                     <td><input class="input-sm form-control" name="txt_truckno" type="text" id="txt_truckno" value="<?php echo $ifta_results['truck_no'];?>" required></td>
                                     <td><div align="right"><strong>Permits</strong></div></td>
-                                    <td><select class="input-sm form-control" name="compliance_permits" id="compliance_permits">
+                                    <td><select class="input-sm form-control" name="compliance_permits" id="compliance_permits" onChange="calculate_points(this,'points_trip');">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
                                       <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_permits']) { echo "selected"; }?>><?php echo $i;?></option>
@@ -373,7 +373,7 @@
                                     <td>End OD
                                     <td><input class="input-sm form-control" name="txt_od_end" type="text" id="txt_od_end" value="<?php echo $ifta_results['odo_end'];?>" required></td>
                                    <td><div align="right"><strong>DOT Violations</strong></div></td>
-                                    <td><select class="input-sm form-control" name="compliance_dot" id="compliance_dot">
+                                    <td><select class="input-sm form-control" name="compliance_dot" id="compliance_dot" onChange="calculate_points(this,'points_trip');">
                                       <?php
                                     foreach ($compliance_options as $i) { ?>
                                       <option value=<?php echo "$i ";?> <?php if($i == $ifta_results['compliance_dot']) { echo "selected"; }?>><?php echo $i;?></option>
@@ -389,20 +389,20 @@
                                  <tr>
                                    <td>Starting City &amp; State</td>
                                    <td><input class="input-sm form-control" name="location_start" type="text" id="location_start" value="<?php echo $ifta_results['location_start'];?>" required>
-                                   <td><div align="right"><strong>Available Points for Trip</strong></div></td>
+                                   <td><div align="right"><strong>General Points</strong></div></td>
                                    <td><input class="input-sm form-control" name="points_trip" type="number" id="points_trip" value="<?php echo $ifta_results['points_trip'];?>" placeholder=0></td>
                                  </tr>
                                  <tr>
                                    <td>Stops Cities States</td>
                                    <td><input class="input-sm form-control" name="location_stops" type="text" id="location_stops" data-toggle="tooltip" data-placement="top" title="Enter a few of the inbetween cities and states. This will help the driver understand any alerts via email if problems with Trip." value="<?php echo $ifta_results['location_stops'];?>"></td>
-                                   <td><div align="right"><strong>Available Points for Fuel</strong></div></td>
-                                   <td><input class="input-sm form-control" name="points_fuel" type="number" id="points_fuel" value="<?php echo $ifta_results['points_fuel'];?>" placeholder=0></td>
+                                   <td><div align="right"><strong>Details Points</strong></div></td>
+                                   <td><input class="input-sm form-control" name="points_details" type="number" id="points_details" value="<?php echo $ifta_results['points_details'];?>" placeholder=0></td>
                                  </tr>
                                  <tr>
                                    <td>Ending City &amp; State</td>
                                    <td><input class="input-sm form-control" name="location_end" type="text" id="location_end" data-toggle="tooltip" data-placement="top" title="Enter the ending state and city. This will help the driver understand any alerts via email if problems with Trip." value="<?php echo $ifta_results['location_end'];?>">
-                                   <td><div align="right"><strong>Available Points for Images</strong></div></td>
-                                   <td><input class="input-sm form-control" name="points_images" type="number" id="points_images" value="<?php echo $ifta_results['points_images'];?>" placeholder=0></td>
+                                   <td><div align="right"><strong>Fuel Points</strong></div></td>
+                                   <td><input class="input-sm form-control" name="points_fuel" type="number" id="points_fuel" value="<?php echo $ifta_results['points_fuel'];?>" placeholder=0></td>
                                  </tr>
                                  <tr>
                                    <td>Internal  Notes
@@ -412,7 +412,7 @@
                                  </tr>
                                  <tr>
                                    <td>                                     <td>                                     <td><div align="right"><strong>Points Awarded For Trip</strong></div></td>
-                                   <td><input class="input-sm form-control" name="ifta_trip_points_available5" type="text" id="ifta_trip_points_available5" value="Add Points based on Data Entry" data-toggle="tooltip" data-placement="top" title="Points Awarded / If team drivers total points will be awarded to both drivers. If Local Points will be assigned to specific drivers." readonly></td>
+                                   <td><input class="input-sm form-control" name="ifta_trip_points_awarded" type="text" id="ifta_trip_points_awarded" value="0" data-toggle="tooltip" data-placement="top" title="Points Awarded / If team drivers total points will be awarded to both drivers. If Local Points will be assigned to specific drivers." readonly></td>
                                  </tr>
                            </table>
 <p></p>
@@ -486,7 +486,7 @@
                                    <input class="input-sm" type="checkbox" name="txt_permit_req_details[]" id="txt_permit_req_details_<?php echo $rowNum;?>" <?php if($ifta_details[$i]['permit_required'] == 'Y') { echo " checked ";} ?> value="<?php echo $ifta_details[$i]['id'];?>">
                                  </div></td>
                                  <td><div align="center">
-                                   <input class="input-sm" type="checkbox" name="cb_trip_issue_details[]" id="cb_trip_issue_details_<?php echo $rowNum;?>" <?php if($ifta_details[$i]['cb_trip_issue'] == 'Y') { echo " checked ";} ?> value="<?php echo $ifta_details[$i]['id'];?>">
+                                   <input class="input-sm" type="checkbox" name="cb_trip_issue_details[]" id="cb_trip_issue_details_<?php echo $rowNum;?>" <?php if($ifta_details[$i]['cb_trip_issue'] == 'Y') { echo " checked "; } ?> value="<?php echo $ifta_details[$i]['id'];?>" onClick="calculate_points(this,'points_details');">
                                  </div></td>
                                  <td><div align="center">
                                    <select class="input-sm form-control" name="sl_trip_issue_details[]" id="sl_trip_issue_details_<?php echo $rowNum;?>" value="<?php echo $ifta_details[$i]['sl_trip_issue'];?>">
@@ -560,7 +560,7 @@
                                     </td>
                                     <td><input class="input-sm form-control" name="txt_fuel_odo[]" type="text" id="txt_fuel_odo_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['odometer'];?>"></td>
                                     <td><div align="center">
-                                      <input class="input-sm" type="checkbox" name="cb_trip_issue_fuel[]" id="cb_trip_issue_fuel_<?php echo $rowNum;?>" <?php if($ifta_fuel[$i]['cb_trip_issue'] == 'Y') { echo " checked ";} ?> value="<?php echo $ifta_fuel[$i]['id'];?>">
+                                      <input class="input-sm" type="checkbox" name="cb_trip_issue_fuel[]" id="cb_trip_issue_fuel_<?php echo $rowNum;?>" <?php if($ifta_fuel[$i]['cb_trip_issue'] == 'Y') { echo " checked "; } ?> value="<?php echo $ifta_fuel[$i]['id'];?>" onClick="calculate_points(this,'points_fuel');">
                                     </div></td>
                                     <td>
                                    <select class="input-sm form-control" name="sl_trip_issue_fuel[]" id="sl_trip_issue_fuel_<?php echo $rowNum;?>" value="<?php echo $ifta_fuel[$i]['sl_trip_issue'];?>">
@@ -773,6 +773,7 @@ Closed
                                    <input class="input-sm form-control datepicker" name="txt_date_details_add[]" type="text" id="txt_date_details_add_`+rowNum+`" value="" size="">
                                     <input class="input-sm form-control" name="txt_tripnum_details_add[]" type="hidden" id="txt_tripnum_details_add_`+rowNum+`" value="`+tripnum+`" readonly>
                                     <input type="hidden" name="hdn_details_id_add[]" id="hdn_details_id_add_`+rowNum+`" value="0">
+                                    <input type="hidden" name="new_row" id="new_row">
                                  </td>
                                  <td>
                                   <select class="input-sm form-control" name="txt_driver_details_add[]" type="text" id="txt_driver_details_add_`+rowNum+`" value="">
@@ -802,7 +803,7 @@ Closed
                                  </td>
                                  <td><div align="center"><input class="input-sm" type="checkbox" name="txt_permit_req_details_add[]" id="txt_permit_req_details_add_`+rowNum+`"></div></td>
                                   <td><div align="center">
-                                   <input class="input-sm" type="checkbox" name="cb_trip_issue_details_add[]" id="cb_trip_issue_details_add_`+rowNum+`">
+                                   <input class="input-sm" type="checkbox" name="cb_trip_issue_details_add[]" id="cb_trip_issue_details_add_`+rowNum+`" onClick="calculate_points(this,'points_details');">
                                  </div></td>
                                  <td><div align="center">
                                    <select class="input-sm form-control" name="sl_trip_issue_details_add[]" id="sl_trip_issue_details_add_`+rowNum+`">
@@ -895,6 +896,12 @@ Closed
          // Make the first driver the selected driver
          $("#txt_driver_details_add_"+rowNum+" option[value="+driver_list[0].id+"]").prop('selected', true);
 
+         // Update the points in points_details
+         /// Get the current points
+         current_detail_points = parseInt($("#points_details").val());
+         current_detail_points++;
+         $("#points_details").val(current_detail_points);
+         $("#ifta_trip_points_awarded").val(parseInt($("#ifta_trip_points_awarded").val())+1);
          }
          
          function addFuelRow(id) {
@@ -907,6 +914,7 @@ Closed
                                      <input class="input-sm form-control datepicker" name="txt_fuel_date_add[]" type="text" id="txt_fuel_date_add_`+rowNum+`" value="" size="">
                                      <input class="input-sm form-control" name="txt_fuel_tripnum_add[]" type="hidden" id="txt_fuel_tripnum_add_`+rowNum+`" value="`+tripnum+`" readonly>
                                      <input type="hidden" name="hdn_fuel_id_add[]" id="hdn_fuel_id_add_`+rowNum+`" value="0">
+                                     <input type="hidden" name="new_row" id="new_row">
                                     </td>
                                     <td><input class="input-sm form-control" name="txt_fuel_gallons_add[]" type="text" id="txt_fuel_gallons_add_`+rowNum+`" value=""></td>
                                     <td><input class="input-sm form-control" name="txt_fuel_reefer_add[]" type="text" id="txt_fuel_reefer_add_`+rowNum+`" value=""></td>
@@ -923,7 +931,7 @@ Closed
                                     </td>
                                     <td ><input class="input-sm form-control" name="txt_fuel_odo_add[]" type="text" id="txt_fuel_odo_add_`+rowNum+`" value="" required></td>
  <td ><div align="center">
-                                      <input class="input-sm" type="checkbox" name="cb_trip_issue_fuel_add[]" id="cb_trip_issue_fuel_add_`+rowNum+`">
+                                      <input class="input-sm" type="checkbox" name="cb_trip_issue_fuel_add[]" id="cb_trip_issue_fuel_add_`+rowNum+`" onClick="calculate_points(this,'points_fuel');">
                                     </div></td>
                                     <td>
 
@@ -947,6 +955,14 @@ Closed
                                  </tr>`;
 
          $("#add_ifta_fuel > tbody:last-child").append(new_row);
+
+         // Update the points in points_fuel
+         /// Get the current points
+         current_fuel_points = parseInt($("#points_fuel").val());
+         current_fuel_points++;
+         $("#points_fuel").val(current_fuel_points);
+         $("#ifta_trip_points_awarded").val(parseInt($("#ifta_trip_points_awarded").val())+1);
+
          }
       </script>
 
@@ -954,6 +970,19 @@ Closed
 $(document).ready(function(){
   // Are You Sure form validator
   $('form').areYouSure();
+
+  // Calculate points for the trip
+  // First, general points
+  var general_points = 0;
+  if ($("#compliance_trip").val().indexOf('Complete') > -1) { general_points++; }
+  if ($("#compliance_logs").val().indexOf('Complete') > -1) { general_points++; }
+  if ($("#compliance_vir").val().indexOf('Complete') > -1) { general_points++; }
+  if ($("#compliance_fuel").val().indexOf('Complete') > -1) { general_points++; }
+  if ($("#compliance_bol").val().indexOf('Complete') > -1) { general_points++; }
+  if ($("#compliance_permits").val().indexOf('Complete') > -1) { general_points++; }
+  if ($("#compliance_dot").val().indexOf('Complete') > -1) { general_points++; }
+  $("#points_trip").val(general_points);
+  $("#ifta_trip_points_awarded").val(general_points);
 
   // Date Picker
   $('body').on('focus',".datepicker", function(){
@@ -983,20 +1012,63 @@ function deleteRow(z) {
   // Get the size of the table.  If it's > 1 then we'll allow a row to be deleted
   // (don't want to delete all the rows)
   if ($("#"+v_table_id+" tr").length > 3) {
-    if(confirm("Are you sure you want to delete this record?")){
-      var parent_td = $("#"+z.id).parent().get(0).id;
-      parent_td = parent_td.split("|");
-     $.post( "processifta.php", { delete_ifta: 1, ifta_type: parent_td[0], ifta_id: parent_td[1] })
-      .success(function() {
+    // If this is a row we just added in this session then we can delete it
+    if ($('#'+v_id).find('td').eq(0).children().get(3) && $('#'+v_id).find('td').eq(0).children().get(3).id == "new_row") {
+        // Decrement the count of the respective trip point text box
+        if ($('#'+v_id).attr('id').indexOf('driver_details') > -1) {
+          // If the child 'issue' box is checked then add a point back before deleting
+          if ($('#'+v_id).find('td').eq(9).children().prop('checked')) {
+            $("#points_details").val(parseInt($("#points_details").val() + 1));
+          }
+          $("#points_details").val(parseInt($("#points_details").val() - 1));
+          $("#ifta_trip_points_awarded").val(parseInt($("#ifta_trip_points_awarded").val() - 1));
+        }
+        // Decrement the count of the respective trip point text box
+        if ($('#'+v_id).attr('id').indexOf('fuel_details') > -1) {
+          if ($('#'+v_id).find('td').eq(8).children().children().prop('checked')) {
+            $("#points_fuel").val(parseInt($("#points_fuel").val() + 1));
+          }
+          $("#points_fuel").val(parseInt($("#points_fuel").val() - 1));
+          $("#ifta_trip_points_awarded").val(parseInt($("#ifta_trip_points_awarded").val() - 1));
+        }
         $('#'+v_id).remove();
-      })
-      .fail( function(xhr, textStatus, errorThrown) {
-        var obj = jQuery.parseJSON( xhr.responseText );
-        z = '<div style="width: 50%; text-align: center; margin:auto" class="alert alert-danger" role="alert">'+obj.message+'</div>';
-        $("#upload_error").html(z);
-      });
-     }     
-  }
+    }else{
+        if(confirm("Are you sure you want to delete this record?")){
+          var parent_td = $("#"+z.id).parent().get(0).id;
+          parent_td = parent_td.split("|");
+         $.post( "processifta.php", { delete_ifta: 1, ifta_type: parent_td[0], ifta_id: parent_td[1] })
+          .success(function() {
+            // Decrement the count of the respective trip point text box
+            if ($('#'+v_id).attr('id').indexOf('driver_details') > -1) {
+              // If the child 'issue' box is checked then add a point back before deleting
+              if ($('#'+v_id).find('td').eq(9).children().children().prop('checked')) {
+                var v = parseInt($("#points_details").val()) + 1;
+                $("#points_details").val(v);
+              }
+              var v = parseInt($("#points_details").val()) - 1;
+              $("#points_details").val(v);
+              $("#ifta_trip_points_awarded").val(parseInt($("#ifta_trip_points_awarded").val() - 1));
+            }
+            // Decrement the count of the respective trip point text box
+            if ($('#'+v_id).attr('id').indexOf('fuel_details') > -1) {
+              if ($('#'+v_id).find('td').eq(8).children().children().prop('checked')) {
+                var v = parseInt($("#points_fuel").val()) + 1;
+                $("#points_fuel").val(v);
+              }
+              var v = parseInt($("#points_details").val()) - 1;
+              $("#points_fuel").val(v);
+              $("#ifta_trip_points_awarded").val(parseInt($("#ifta_trip_points_awarded").val() - 1));
+            }
+            $('#'+v_id).remove();
+          })
+          .fail( function(xhr, textStatus, errorThrown) {
+            var obj = jQuery.parseJSON( xhr.responseText );
+            z = '<div style="width: 50%; text-align: center; margin:auto" class="alert alert-danger" role="alert">'+obj.message+'</div>';
+            $("#upload_error").html(z);
+          });
+         }     
+      }
+    }
 }
 
 function deleteUpload(z) {
@@ -1059,6 +1131,28 @@ function sendEmail() {
   }
 }
 
+function calculate_points(i,dom) {
+    var current_val = parseInt($("#"+dom).val());
+
+    // This block is for check boxes
+    if ($(i).attr('type') == 'checkbox') {
+      if ($(i).prop('checked')) {
+        $("#"+dom).val(current_val - 1);
+      }else{
+        $("#"+dom).val(current_val + 1);
+      }
+      return;
+    }
+
+    // This block is for select boxes
+    if ($( i ).val().indexOf('Complete') > -1) {
+      $("#"+dom).val(current_val + 1);
+      $("#ifta_trip_points_awarded").val(current_val + 1);
+    }else{
+      $("#"+dom).val(current_val - 1);
+      $("#ifta_trip_points_awarded").val(current_val - 1);
+    }
+}
 </script>
    </body>
 </html>
