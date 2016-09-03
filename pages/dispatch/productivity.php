@@ -7,17 +7,353 @@ if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 }
 
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
+$mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
+
+# Get the driver names and employee_id
+$driver_array = get_drivers($mysqli);
 
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
 
+// Get the current quarter if no date range was specified.
+
+$current_month = date('m');
+$current_year = date('Y');
+if($current_month>=1 && $current_month<=3)
+{
+  $default_start_date = strtotime('1-January-'.$current_year);  // timestamp or 1-Januray 12:00:00 AM
+  $default_end_date = strtotime('1-April-'.$current_year);  // timestamp or 1-April 12:00:00 AM means end of 31 March
+}
+else  if($current_month>=4 && $current_month<=6)
+{
+  $default_start_date = strtotime('1-April-'.$current_year);  // timestamp or 1-April 12:00:00 AM
+  $default_end_date = strtotime('1-July-'.$current_year);  // timestamp or 1-July 12:00:00 AM means end of 30 June
+}
+else  if($current_month>=7 && $current_month<=9)
+{
+  $default_start_date = strtotime('1-July-'.$current_year);  // timestamp or 1-July 12:00:00 AM
+  $default_end_date = strtotime('1-October-'.$current_year);  // timestamp or 1-October 12:00:00 AM means end of 30 September
+}
+else  if($current_month>=10 && $current_month<=12)
+{
+  $default_start_date = strtotime('1-October-'.$current_year);  // timestamp or 1-October 12:00:00 AM
+  $default_end_date = strtotime('1-January-'.($current_year+1));  // timestamp or 1-January Next year 12:00:00 AM means end of 31 December this year
+}
+if (empty($_GET['start'])) { $start_date = $default_start_date; }else{ $start_date = strtotime($_GET['start']); }
+if (empty($_GET['end'])) { $end_date = $default_end_date; }else{ $end_date = strtotime($_GET['end']); }
+
+if ($_SESSION['login'] == 1)
+{
+    $emp_id = $_GET['trip_search_driver'];
+    $ship_sql = generate_ship_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $shp_aggregate = get_sql_results($ship_sql,$mysqli);
+  
+    $vir_sql = generate_vir_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $vir_aggregate = get_sql_results($vir_sql,$mysqli);
+
+    $vir_clockin_sql = generate_clockin_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $vir_clockin_aggregate = get_sql_results($vir_clockin_sql,$mysqli);
+}else{
+    $ship_sql = generate_ship_sql($_SESSION['employee_id'],date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $shp_aggregate = get_sql_results($ship_sql,$mysqli);
+  
+    $vir_sql = generate_vir_sql($_SESSION['employee_id'],date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $vir_aggregate = get_sql_results($vir_sql,$mysqli);
+
+    $vir_clockin_sql = generate_clockin_sql($_SESSION['employee_id'],date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $vir_clockin_aggregate = get_sql_results($vir_clockin_sql,$mysqli);
+
+    $csa_compliance_sql = generate_compliance_sql($_SESSION['employee_id']);
+    $csa_compliance_aggregate = get_sql_results($csa_compliance_sql,$mysqli);
+print $csa_compliance_sql;
+print_r($_SESSION);
+}
+
+// Let's iterate through each vir to make sure we have each category
+// (vir_posttrip, vir_pretrip, vir_breakdown)
+$vir_aggregate = validate_vir($vir_aggregate);
+
+function validate_vir($array) {
+    foreach(array("vir_pretrip","vir_posttrip","vir_breakdown") as $val) {
+        $found = 0;
+        for ($i=0;$i<count($array);$i++) {   
+          if ($array[$i]['insp_type'] == "$val") {
+              $found = 1;
+              break;
+          }
+        }
+      if ($found == 0) {
+        $new_count = count($array);
+        $array[$new_count]['insp_type'] = "$val";
+        $array[$new_count]['count(*)'] = 0;
+      }
+    } 
+    return $array;
+}
+
+function generate_compliance_sql($emp_id) {
+    $sql = "select sum(total_points) as total_points,
+            sum(points_cash_value) as points_cash_value
+            from csadata WHERE employee_id='$emp_id'";
+    return $sql;
+}
+
+function generate_clockin_sql($emp_id,$sd,$ed) {
+    $sql = "select count(*) from DAYS_WORKED
+        where `DATE WORKED` between STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
+        and `EMPLOYEE NUMBER` = '$emp_id'
+        and worked = 1";
+    return $sql;
+}
+
+function generate_vir_sql($emp_id,$sd,$ed) {
+    $sql="select count(*),insp_type from VIRS WHERE
+                employee_id ='$emp_id'
+                and INSP_DATE between STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d') 
+                group by insp_type";
+    return $sql;
+}
+function generate_ship_sql($emp_id,$sd,$ed) {
+    $sql = "SELECT '$emp_id'    AS 'employee_id',
+             b.*,
+             Round((Coalesce(b.earned_points / b.max_points, 0) * 100), 1) AS 'percentage_earned'
+      FROM   (
+                    SELECT a.*,
+                           Round(a.arrived_to_shipper_points     + a.picked_up_points + a.arrived_to_consignee_points + a.delivered_points + a.accessorial_points + a.noncore_points, 1)                     AS 'earned_points',
+                           Round(a.max_arrived_to_shipper_points + a.max_picked_up_points + a.max_arrived_to_consignee_points + a.max_delivered_points + a.max_accessorial_points + a.max_noncore_points, 1) AS 'max_points'
+                    FROM   (
+                                  SELECT _a.count                                                                                                  AS 'as_puagent',
+                                         _b.count                                                                                                  AS 'as_delagent',
+                                         _c.count                                                                                                  AS 'as_pu_and_delagent',
+                                         _a.count + _b.count + _c.count                                                                            AS 'sum_count',
+                                         _a.count * 2                                                                                              AS 'puagent_required_updates',
+                                         _b.count * 2                                                                                              AS 'delagent_required_updates',
+                                         _c.count * 4                                                                                              AS 'puagent_and_delagent_required_updates',
+                                         _d.count                                                                                                  AS 'core_updates_sum',
+                                         _e.count                                                                                                  AS 'misc_updates_sum',
+                                         _f.count                                                                                                  AS 'picked_up',
+                                         _g.count                                                                                                  AS 'arrived_to_shipper',
+                                         _h.count                                                                                                  AS 'delivered',
+                                         _i.count                                                                                                  AS 'arrived_to_consignee',
+                                         _j.count                                                                                                  AS 'accessorial_count',
+                                         (_cp_shipments.arrived_shipper_apoint   * _g.count) * _cp_shipments.arrived_shipper_cpoint                AS 'arrived_to_shipper_points',
+                                         (_cp_shipments.arrived_shipper_apoint   * (_a.count + _c.count)) * _cp_shipments.arrived_shipper_cpoint   AS 'max_arrived_to_shipper_points',
+                                         (_cp_shipments.picked_up_apoint         * _f.count) * _cp_shipments.picked_up_cpoint                      AS 'picked_up_points',
+                                         (_cp_shipments.picked_up_apoint         * (_a.count + _c.count)) * _cp_shipments.picked_up_cpoint         AS 'max_picked_up_points',
+                                         (_cp_shipments.arrived_consignee_apoint * _i.count) * _cp_shipments.arrived_consignee_cpoint              AS 'arrived_to_consignee_points',
+                                         (_cp_shipments.arrived_consignee_apoint * (_b.count + _c.count)) * _cp_shipments.arrived_consignee_cpoint AS 'max_arrived_to_consignee_points',
+                                         (_cp_shipments.delivered_apoint         * _h.count) * _cp_shipments.delivered_cpoint                      AS 'delivered_points',
+                                         (_cp_shipments.delivered_apoint         * (_b.count + _c.count)) * _cp_shipments.delivered_cpoint         AS 'max_delivered_points',
+                                         (_cp_shipments.accessorials_apoint      * _j.count) * _cp_shipments.accessorials_cpoint                   AS 'accessorial_points',
+                                         0                                                                                                         AS 'max_accessorial_points',
+                                         (_cp_shipments.noncore_apoint * _e.count) * _cp_shipments.noncore_cpoint                                  AS 'noncore_points',
+                                         0                                                                                                         AS 'max_noncore_points'
+                                  FROM   (
+                                                SELECT Count(*) AS count
+                                                FROM   dispatch
+                                                WHERE  (
+                                                              puagentdriverphone =
+                                                              (
+                                                                     SELECT driverid
+                                                                     FROM   users
+                                                                     WHERE  username =
+                                                                            (
+                                                                                   SELECT username
+                                                                                   FROM   users
+                                                                                   WHERE  employee_id = '$emp_id')))
+                                                AND    (
+                                                              delagentdriverphone !=
+                                                              (
+                                                                     SELECT driverid
+                                                                     FROM   users
+                                                                     WHERE  username =
+                                                                            (
+                                                                                   SELECT username
+                                                                                   FROM   users
+                                                                                   where  EMPLOYEE_ID = '$emp_id')) )
+                                                AND    Str_to_date(hawbdate, '%c/%e/%Y') BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _a,
+                                         (
+                                                SELECT Count(*) AS count
+                                                FROM   dispatch
+                                                WHERE  (
+                                                              delagentdriverphone =
+                                                              (
+                                                                     SELECT driverid
+                                                                     FROM   users
+                                                                     WHERE  username =
+                                                                            (
+                                                                                   SELECT username
+                                                                                   FROM   users
+                                                                                   WHERE  employee_id = '$emp_id')))
+                                                AND    (
+                                                              puagentdriverphone !=
+                                                              (
+                                                                     SELECT driverid
+                                                                     FROM   users
+                                                                     WHERE  username =
+                                                                            (
+                                                                                   SELECT username
+                                                                                   FROM   users
+                                                                                   WHERE  employee_id = '$emp_id')))
+                                                AND    Str_to_date(duedate, '%c/%e/%Y') BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _b,
+                                         (
+                                                SELECT Count(*) AS count
+                                                FROM   dispatch
+                                                WHERE  (
+                                                              delagentdriverphone =
+                                                              (
+                                                                     SELECT driverid
+                                                                     FROM   users
+                                                                     WHERE  username =
+                                                                            (
+                                                                                   SELECT username
+                                                                                   FROM   users
+                                                                                   WHERE  employee_id = '$emp_id')))
+                                                AND    (
+                                                              puagentdriverphone =
+                                                              (
+                                                                     SELECT driverid
+                                                                     FROM   users
+                                                                     WHERE  username =
+                                                                            (
+                                                                                   SELECT username
+                                                                                   FROM   users
+                                                                                   WHERE  employee_id = '$emp_id')))
+                                                AND    Str_to_date(hawbdate, '%c/%e/%Y') BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
+                                  and    str_to_date(duedate, '%c/%e/%Y') BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _c,
+                           (
+                                  SELECT count(*) AS count
+                                  FROM   driverexport
+                                  WHERE  updated_by =
+                                         (
+                                                SELECT drivername
+                                                FROM   users
+                                                WHERE  username =
+                                                       (
+                                                              SELECT username
+                                                              FROM   users
+                                                              WHERE  employee_id = '$emp_id'))
+                                  AND    status IN ('Picked Up' ,
+                                                    'Arrived to Shipper',
+                                                    'Delivered',
+                                                    'Arrived To Consignee')
+                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _d,
+                           (
+                                  SELECT count(*) AS count
+                                  FROM   driverexport
+                                  WHERE  updated_by =
+                                         (
+                                                SELECT drivername
+                                                FROM   users
+                                                WHERE  username =
+                                                       (
+                                                              SELECT username
+                                                              FROM   users
+                                                              WHERE  employee_id = '$emp_id'))
+                                  AND    status NOT IN ('Picked Up' ,
+                                                        'Arrived to Shipper',
+                                                        'Delivered',
+                                                        'Arrived To Consignee')
+                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _e,
+                           (
+                                  SELECT count(*) AS count
+                                  FROM   driverexport
+                                  WHERE  updated_by =
+                                         (
+                                                SELECT drivername
+                                                FROM   users
+                                                WHERE  username =
+                                                       (
+                                                              SELECT username
+                                                              FROM   users
+                                                              WHERE  employee_id = '$emp_id'))
+                                  AND    status = 'Picked Up'
+                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _f,
+                           (
+                                  SELECT count(*) AS count
+                                  FROM   driverexport
+                                  WHERE  updated_by =
+                                         (
+                                                SELECT drivername
+                                                FROM   users
+                                                WHERE  username =
+                                                       (
+                                                              SELECT username
+                                                              FROM   users
+                                                              WHERE  employee_id = '$emp_id'))
+                                  AND    status = 'Arrived to Shipper'
+                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _g,
+                           (
+                                  SELECT count(*) AS count
+                                  FROM   driverexport
+                                  WHERE  updated_by =
+                                         (
+                                                SELECT drivername
+                                                FROM   users
+                                                WHERE  username =
+                                                       (
+                                                              SELECT username
+                                                              FROM   users
+                                                              WHERE  employee_id = '$emp_id'))
+                                  AND    status = 'Delivered'
+                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _h,
+                           (
+                                  SELECT count(*) AS count
+                                  FROM   driverexport
+                                  WHERE  updated_by =
+                                         (
+                                                SELECT drivername
+                                                FROM   users
+                                                WHERE  username =
+                                                       (
+                                                              SELECT username
+                                                              FROM   users
+                                                              WHERE  employee_id = '$emp_id'))
+                                  AND    status = 'Arrived To Consignee'
+                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _i,
+                           (
+                                  SELECT count(*) AS count
+                                  FROM   driverexport
+                                  WHERE  employee_id =
+                                         (
+                                                SELECT employee_id
+                                                FROM   users
+                                                WHERE  username =
+                                                       (
+                                                              SELECT username
+                                                              FROM   users
+                                                              WHERE  employee_id = '$emp_id'))
+                                  AND    accessorials <> status
+                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _j,
+                           (
+                                  select *
+                                  FROM   cp_shipments) _cp_shipments) a) b";
+    return $sql;
+}
+function get_sql_results($sql,$mysqli) {
+       try {
+          if ($result = $mysqli->query($sql))
+           {
+               while ($row = $result->fetch_assoc()) {
+                   $emparray[] = $row;
+               }
+               $result->close();
+           }else{
+               throw new Exception("Query error: ". $mysqli->error);
+           }
+         } catch (Exception $e) {
+           // An exception has been thrown
+           $data = array('type' => 'error', 'message' => $e->getMessage());
+           header('Content-Type: application/json; charset=UTF-8');
+           $mysqli->close();
+           exit;
+         }
+        return $emparray;
+}
 ?>
-
-
 <!DOCTYPE html>
 <html>
 <head>
-<BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
 <title>Productivity</title>
 <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>
@@ -34,6 +370,8 @@ $drivername = $_SESSION['drivername'];
 <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
 <link href="<?php echo HTTP;?>/dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+<!-- Date Picker -->
+<link href="<?php echo HTTP;?>/dist/css/bootstrap-datepicker3.css" rel="stylesheet">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -61,37 +399,9 @@ $drivername = $_SESSION['drivername'];
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Productivity / <span class="box-title"><?php echo "$_SESSION[drivername]"; ?></span> <a href="#">
-            <?php if ($_SESSION['login'] == 1) { echo "(Admin)"; }?>
-            </a>
-            <label for="productivity_time"></label>
-            <select name="productivity_time" id="productivity_time">
-              <option value="day">Current Day</option>
-              <option value="week">Current Week</option>
-              <option value="month" selected>Current Month</option>
-              <option value="quarter">Current Quarter</option>
-              <option value="year">Current Year</option>
-              <option value="all">All</option>
-            </select>
-            <label for="textfield"></label>
-            <input name="textfield" type="text" id="textfield" value="From Date" size="12"> to
-            <input name="textfield2" type="text" id="textfield2" value="To Date" size="12">
-            
-
-            
-                  <div class="box-body"></div>           
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+            Productivity
           </h1>
-          <link href="<?php echo HTTP;?>/dist/css/bootstrap-datepicker.css" rel="stylesheet">
+                  <div class="box-body"></div>           
           <ol class="breadcrumb">
             <li><a href="/pages/main/index.php"><i class="fa fa-home"></i> Home</a></li>
             <li class="active">Productivity</li>
@@ -100,18 +410,38 @@ $drivername = $_SESSION['drivername'];
 
 <!-- Animated Top Menu Insert PHP Reference to /wwwlive/dist/menus_sidebars_elements  -->
 
+          <div class="row">
+           <div class="col-md-3">
+           <form name="frm_productivity" method="GET" action="" role="form" enctype="multipart/form-data">
+              <div class="box-body">
+               <div class="input-daterange input-group" id="datepicker">
+                <input type="text" class="input-sm form-control datepicker" name="start" id="dt_start" data-date-format="mm/dd/yyyy"/ required>
+                <span class="input-group-addon">to</span>
+                <input type="text" class="input-sm form-control datepicker" name="end" id="dt_end" data-date-format="mm/dd/yyyy"/ required>
+               </div>
+               <?php if ($_SESSION['login'] == 1) { ?>
+               <div class="input-group" id="driver">
+                 <select class="input-sm form-control" name="trip_search_driver" id="trip_search_driver" value="" style="margin-top: 5px;">
+                  <option value="null">Choose Driver...</option>
+                    <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
+                      <option value=<?php echo $driver_array[$i]['employee_id']; 
+                       if ($driver_array[$i]['employee_id'] == $_GET['trip_search_driver']) { echo " selected "; } ?>
+                      ><?php echo $driver_array[$i]['name'];?></option>
+                    <?php } ?>
+                </select>
+               </div>
+               <?php } ?>
+            <button type="submit" class="btn btn-danger" name="btn_submit" value='true' style="margin-top: 5px;">Submit</button>
+           </form>
+          </div>
+         </div>
+         </div>
+
 <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/topmenuanimation.php');?>
 
 <!-- End Animated Top Menu -->  
 <!-- =============Productivity Menu================================ -->
 
-<?php
-// Only show this portion to non-admins since it's user-specific
-// Lets Redo this section to show All Active users and stats so page looks same for both
-// admin and non admin, swap picture to .... 
-if ($_SESSION['login'] == 2)
-{
-?>
 
           <div class="row">
 
@@ -121,25 +451,57 @@ if ($_SESSION['login'] == 2)
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-blue">
                   <div class="widget-user-image">
-                   <img src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; }?>" alt="User Image" width="128" height="128" class="img-circle" />
-                  </div>
-                  <!-- /.widget-user-image -->
-                  <span class="info-box-text"> Shipments</span>
+                   <img src="
+                    <?php 
+                     if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
+                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { 
+                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; 
+                      }
+                     }?>" 
+                   alt="User Image" width="100" height="100" class="img-circle" />
+                  <span class="fa-2x">Shipment</span></div>
+                  <!-- Add text below Image Removed....
+                  <span class="info-box-text">Shipments</span>
+                  --> 
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
-                    <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
-                    <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
-                    <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
-                    <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
-                    <li><a href="#">Arrived Consignee Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
-                    <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered"></span></a></li>
-                    <li><a href="#">Delivered Points<span class="pull-right badge bg-blue" id="shp_delivered_points"></span></a></li>
-                    <li><a href="#">Accessorials Added <span class="pull-right badge bg-blue" id="shp_accessorials"></span></a></li>
-                    <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue" id="shp_accessorials_points"></span></a></li>
-                    <li><a href="#">Other Status Change <span class="pull-right badge bg-blue" id="shp_other_status"></span></a></li>
-                    <li><a href="#">Other Status Change Points<span class="pull-right badge bg-blue" id="shp_other_status_points"></span></a></li>
+                    <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper">
+                     <?php echo round($shp_aggregate[0]['arrived_to_shipper'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points">
+                     <?php echo round($shp_aggregate[0]['arrived_to_shipper_points'],0) ." of ".round($shp_aggregate[0]['max_arrived_to_shipper_points'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up">
+                     <?php echo round($shp_aggregate[0]['picked_up'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue" id="shp_picked_up_points">
+                     <?php echo round($shp_aggregate[0]['picked_up_points'],0) ." of ".round($shp_aggregate[0]['max_picked_up_points'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee">
+                     <?php echo round($shp_aggregate[0]['arrived_to_consignee'],0) ." of ".round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Arrived Consignee Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points">
+                     <?php echo round($shp_aggregate[0]['arrived_to_consignee_points'],0) ." of ".round($shp_aggregate[0]['max_arrived_to_consignee_points'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered">
+                     <?php echo round($shp_aggregate[0]['delivered'],0) ." of ".round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Delivered Points<span class="pull-right badge bg-blue" id="shp_delivered_points">
+                     <?php echo round($shp_aggregate[0]['delivered_points'],0) ." of ".round($shp_aggregate[0]['max_delivered_points'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Accessorials Added <span class="pull-right badge bg-blue" id="shp_accessorials">
+                     <?php echo round($shp_aggregate[0]['accessorial_count'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue" id="shp_accessorials_points">
+                     <?php echo round($shp_aggregate[0]['accessorial_points'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Other Status Change <span class="pull-right badge bg-blue" id="shp_other_status">
+                     <?php echo round($shp_aggregate[0]['misc_updates_sum'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Other Status Change Points<span class="pull-right badge bg-blue" id="shp_other_status_points">
+                     <?php echo round($shp_aggregate[0]['misc_updates_sum'],0);?></span></a>
+                    </li>
                   </ul>
                 </div>
               </div><!-- /.widget-user -->
@@ -150,20 +512,105 @@ if ($_SESSION['login'] == 2)
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-red">
                   <div class="widget-user-image">
-                    <img src="/pages/dispatch/images/allusers.JPG" alt="User Avatar" width="128" height="128" class="img-circle">
-                  </div>
-                  <!-- /.widget-user-image -->
+                    <img src="
+                    <?php
+                     if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
+                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
+                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg";
+                      }
+                     }?>"
+                    alt="User Avatar" width="100" height="100" class="img-circle">
+                  <span class="fa-2x">VIR'S</span></div>
+                  <!-- Add text below Image Removed.... 
                   <span class="info-box-text"> VIRS</span>
+                  -->
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">Days Worked <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
-                    <li><a href="#">Pre-Trips <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
-                    <li><a href="#">Pre-Trip Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
-                    <li><a href="#">Post-Trips <span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
-                    <li><a href="#">Post-Trip Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
-                    <li><a href="#">Breakdowns <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
-                    <li><a href="#">Breakdown Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
+                    <li><a href="#">Days Worked <span class="pull-right badge bg-blue" id="vir_days_worked">
+                     <?php
+                        echo $vir_clockin_aggregate[0]['count(*)'];
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Pre-Trips <span class="pull-right badge bg-blue" id="vir_pretrip">
+                     <?php for($i=0;$i<count($vir_aggregate);$i++) { ?>
+                       <?php if ($vir_aggregate[$i]['insp_type'] == 'vir_pretrip'){
+                        echo $vir_aggregate[$i]['count(*)'];
+                       }
+                     }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Pre-Trip Points<span class="pull-right badge bg-blue" id="vir_pretrip_points">
+                     <?php for($i=0;$i<count($vir_clockin_aggregate);$i++) { ?>
+                       <?php $pre_trip_login_count = $vir_clockin_aggregate[$i]['count(*)'];
+                        for($j=0;$j<count($vir_aggregate);$j++) {
+                         if ($vir_aggregate[$j]['insp_type'] == 'vir_pretrip') {
+                           // Calculate the number of pretrips vs. the number of days the user has clocked in.
+                           if ($vir_aggregate[$j]['count(*)'] > $pre_trip_login_count) {
+                             echo $pre_trip_login_count;
+                           }else{
+                             echo $vir_aggregate[$j]['count(*)'];
+                           }
+                         }
+                      }
+                     }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Post-Trips <span class="pull-right badge bg-blue" id="vir_posttrip">
+                     <?php for($i=0;$i<count($vir_aggregate);$i++) { ?>
+                       <?php if ($vir_aggregate[$i]['insp_type'] == 'vir_posttrip') {
+                        echo $vir_aggregate[$i]['count(*)'];
+                       }
+                     }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Post-Trip Points<span class="pull-right badge bg-blue" id="vir_posttrip_points">
+                     <?php for($i=0;$i<count($vir_clockin_aggregate);$i++) { ?>
+                        <?php $post_trip_login_count = $vir_clockin_aggregate[$i]['count(*)'];
+                        for($j=0;$j<count($vir_aggregate);$j++) {
+                         if ($vir_aggregate[$j]['insp_type'] == 'vir_posttrip') {
+                           // Calculate the number of pretrips vs. the number of days the user has clocked in.
+                           if ($vir_aggregate[$j]['count(*)'] > $post_trip_login_count) {
+                             echo $post_trip_login_count;
+                           }else{
+                             echo $vir_aggregate[$j]['count(*)'];
+                           }
+                         }
+                      }
+                     }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Breakdowns <span class="pull-right badge bg-blue" id="vir_breakdown">
+                     <?php for($i=0;$i<count($vir_aggregate);$i++) { ?>
+                       <?php if ($vir_aggregate[$i]['insp_type'] == 'vir_breakdown') {
+                        echo $vir_aggregate[$i]['count(*)'];
+                       }
+                     }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Breakdown Points<span class="pull-right badge bg-blue" id="vir_breakdown_points">
+                     <?php for($i=0;$i<count($vir_clockin_aggregate);$i++) { ?>
+                        <?php $post_trip_login_count = $vir_clockin_aggregate[$i]['count(*)'];
+                        for($j=0;$j<count($vir_aggregate);$j++) {
+                         if ($vir_aggregate[$j]['insp_type'] == 'vir_breakdown') {
+                           // Calculate the number of pretrips vs. the number of days the user has clocked in.
+                           if ($vir_aggregate[$j]['count(*)'] > $post_trip_login_count) {
+                             echo $post_trip_login_count;
+                           }else{
+                             echo $vir_aggregate[$j]['count(*)'];
+                           }
+                         }
+                      }
+                     }
+                     ?>
+                     </span></a>
+                    </li>
                     
                   </ul>
                 </div>
@@ -174,18 +621,26 @@ if ($_SESSION['login'] == 2)
               <div class="box box-widget widget-user-2">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-purple">
-                  <div class="widget-user-image"><img src="/pages/dispatch/images/allusers.JPG" alt="User Avatar" width="128" height="128" class="img-circle"></div>
-                  <!-- /.widget-user-image -->
+                  <div class="widget-user-image"><span class="fa-2x"><img src="
+                    <?php
+                     if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
+                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
+                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg";
+                      }
+                     }?>"
+                     alt="User Avatar" width="100" height="100" class="img-circle">Productivity</span></div>
+                  <!-- Add text below Image Removed....
                   <span class="info-box-text"> Productivity</span>
+                  -->
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">Tasks<span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
-                    <li><a href="#">Task Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
-                    <li><a href="#">Projects<span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
-                    <li><a href="#">Project Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
-                    <li><a href="#">Company Compliance <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
-                    <li><a href="#">Compnay Compliance Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
+                    <li><a href="#">Tasks<span class="pull-right badge bg-blue" id="prod_task"></span></a></li>
+                    <li><a href="#">Task Points<span class="pull-right badge bg-blue" id="prod_task_points"></span></a></li>
+                    <li><a href="#">Projects<span class="pull-right badge bg-blue" id="prod_project"></span></a></li>
+                    <li><a href="#">Project Points<span class="pull-right badge bg-blue" id="prod_project_points"></span></a></li>
+                    <li><a href="#">Company Compliance <span class="pull-right badge bg-blue" id="prod_company_compliance"></span></a></li>
+                    <li><a href="#">Compnay Compliance Points<span class="pull-right badge bg-blue" id="prod_company_compliance_points"></span></a></li>
                                         
                   </ul>
                 </div>
@@ -196,17 +651,42 @@ if ($_SESSION['login'] == 2)
               <div class="box box-widget widget-user-2">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-orange">
-                  <div class="widget-user-image"><img src="/pages/dispatch/images/allusers.JPG" alt="User Avatar" width="128" height="128" class="img-circle"></div>
-                  <!-- /.widget-user-image -->
-                  <span class="info-box-text"> CSA</span>
+                  <div class="widget-user-image"><img src="
+                    <?php
+                     if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
+                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
+                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg";
+                      }
+                     }?>"
+                    alt="User Avatar" width="100" height="100" class="img-circle"><span class="fa-2x">Compliance</span></div>
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">CSA Score<span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
-                    <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
-                    <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
-                    <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
-                    <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
+                    <li><a href="#">Compliance Points<span class="pull-right badge bg-blue" id="csa_points">
+                     </span></a>
+<?php var_dump($csa_compliance_aggregate); ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['insp_type'] == 'vir_breakdown') {
+                        echo $csa_compliance_aggregate[$i]['count(*)'];
+                       }
+                     }
+                     ?>
+                    </li>
+                    <li><a href="#">Compliance Cash<span class="pull-right badge bg-blue" id="csa_cash">
+                     </span></a>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['insp_type'] == 'vir_breakdown') {
+                        echo $csa_compliance_aggregate[$i]['count(*)'];
+                       }
+                     }
+                     ?>
+                    </li>
+                    <li><a href="#">Company Compliance<span class="pull-right badge bg-blue" id="csa_company">
+                     </span></a>
+                    </li>
+                    <li><a href="#">Attendance<span class="pull-right badge bg-blue" id="csa_attendance">
+                     </span></a>
+                    </li>
                     
                   </ul>
                 </div>
@@ -215,10 +695,6 @@ if ($_SESSION['login'] == 2)
 
         </div>
 
-<?php
-// END Only show this portion to non-admins since it's user-specific
-}
-?>
 <!-- ======================New Section Colored Boxes============ -->
           <!-- Boxes with Icon on Right side (Status box) -->
           <div class="row">
@@ -227,8 +703,8 @@ if ($_SESSION['login'] == 2)
               <div class="small-box bg-blue">
                 <div class="inner">
                   <!-- =========================================================== -->
-                  <h4 id="shp_points"></h4>
-                  <h4 id="shp_percent"></h4>
+                  <h3 id="shp_points">Points: <?php echo round($shp_aggregate[0]['earned_points'],0) . " of " + round($shp_aggregate[0]['max_points'],0);?></h3>
+                  <h3 id="shp_percent"><?php echo round($shp_aggregate[0]['percentage_earned'],2) . "%";?></h3>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
               </div>
@@ -238,7 +714,7 @@ if ($_SESSION['login'] == 2)
               <!-- small box -->
               <div class="small-box bg-red">
                 <div class="inner">
-                  <h3>Score <?php echo "$pu_today_count";?> 85%</h3>
+                  <h3>Score VIR <?php echo "$pu_today_count";?> 85%</h3>
                   <p>As of PHP Select Year, Quarter, Month</p>
                 </div>
                 <div class="icon"> <i class="ion ion-stats-bars"></i> </div>
@@ -2217,6 +2693,10 @@ $(document).ready(function(){
       }
     });
   });
+
+// Set the default values for the datepicker
+$("#dt_start").val('<?php echo date('m/d/y',$start_date);?>');
+$("#dt_end").val('<?php echo date('m/d/y',$end_date);?>');
 });
 </script>
 
@@ -2339,7 +2819,7 @@ function get_productivity_report(username,frequency)
           {
               // Update the shipment board if non-admin
           ?>
-              update_shipment_info(json);
+              //update_shipment_info(json);
           <?php
           }elseif($_SESSION['login'] == 1){
           ?>
@@ -2353,6 +2833,17 @@ function get_productivity_report(username,frequency)
       }
     });
 }
+</script>
+    <!-- Date Picker -->
+    <script src="<?php echo HTTP;?>/dist/js/bootstrap-datepicker.js"></script>
+    <script>
+    $('.datepicker').datepicker({
+    startDate: "2015-01-01",
+    todayBtn: "linked",
+    autoclose: true,
+    datesDisabled: '0',
+    todayHighlight: true,
+    });
 </script>
 
 </body>
