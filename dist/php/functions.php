@@ -130,6 +130,27 @@ function validate_vir($array) {
 }
 
 function generate_compliance_sql($emp_id,$time) {
+
+    $predicates = generate_compliance_predicate($emp_id, $time);
+    $predicate = $predicates[0];
+    $time_predicate = $predicates[1];
+   
+    $sql = "SELECT 'Total Company Points' AS basic, sum(total_points) AS total_points, sum(points_cash_value) AS points_cash_value FROM csadata
+         WHERE $time_predicate
+         union
+         select 'Total Points' as basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from CSADATA
+         where $predicate
+         and $time_predicate
+         union
+         select basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from CSADATA
+         where $predicate
+         and basic in ('Vehicle Maint.','HOS Compliance','No Violation','Unsafe Driving','Driver Fitness','Controlled Substances/Alcohol','Hazardous Materials (HM)','Crash Indicator')
+         and $time_predicate
+         group by basic";
+    return $sql;
+}
+
+function generate_compliance_predicate($emp_id,$time) {
     // Do some mangling if the $emp_id = 'all'.  This specific user is from the csa.php page.
     if ($emp_id == 'all') {
         $predicate = '1=1';
@@ -154,21 +175,8 @@ function generate_compliance_sql($emp_id,$time) {
        $time_predicate = "date BETWEEN curdate() - INTERVAL 24 MONTH AND curdate()";
    }
 
-    $sql = "SELECT 'Total Company Points' AS basic, sum(total_points) AS total_points, sum(points_cash_value) AS points_cash_value FROM csadata
-         WHERE $time_predicate
-         union
-         select 'Total Points' as basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from CSADATA
-         where $predicate
-         and $time_predicate
-         union
-         select basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from CSADATA
-         where $predicate
-         and basic in ('Vehicle Maint.','HOS Compliance','No Violation','Unsafe Driving','Driver Fitness','Controlled Substances/Alcohol','Hazardous Materials (HM)','Crash Indicator')
-         and $time_predicate
-         group by basic";
-    return $sql;
+   return array ($predicate,$time_predicate);
 }
-
 function generate_clockin_sql($emp_id,$sd,$ed) {
     $sql = "select count(*) from DAYS_WORKED
         where `DATE WORKED` between STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
