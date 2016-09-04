@@ -53,6 +53,9 @@ if ($_SESSION['login'] == 1)
 
     $vir_clockin_sql = generate_clockin_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $vir_clockin_aggregate = get_sql_results($vir_clockin_sql,$mysqli);
+
+    $csa_compliance_sql = generate_compliance_sql($emp_id);
+    $csa_compliance_aggregate = get_sql_results($csa_compliance_sql,$mysqli);
 }else{
     $ship_sql = generate_ship_sql($_SESSION['employee_id'],date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $shp_aggregate = get_sql_results($ship_sql,$mysqli);
@@ -514,7 +517,6 @@ $vir_aggregate = validate_vir($vir_aggregate);
               <!-- small box -->
               <div class="small-box bg-blue">
                 <div class="inner">
-                  <!-- =========================================================== -->
                   <h4 id="shp_points" style="text-align: center; font-size: 2em;">Points: <?php echo round($shp_aggregate[0]['earned_points'],2);?> of <?php echo round($shp_aggregate[0]['max_points'],2);?></h4>
                   <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php echo round($shp_aggregate[0]['percentage_earned'],2) . "%";?></h4>
                 </div>
@@ -548,11 +550,23 @@ $vir_aggregate = validate_vir($vir_aggregate);
               <!-- small box -->
               <div class="small-box bg-orange">
                 <div class="inner">
-                  <h3>Score <?php echo "$pu_today_count";?> 85%</h3>
-                  <p>As of PHP Select Year, Quarter, Month</p>
+                  <h4 id="shp_points" style="text-align: center; font-size: 2em;">Points:
+                       <?php
+                       for($i=0;$i<count($csa_compliance_aggregate);$i++) {
+                         if ($csa_compliance_aggregate[$i]['basic'] == 'Total Points') {
+                            $my_total_points = $csa_compliance_aggregate[$i]['total_points'];
+                         }
+                         if ($csa_compliance_aggregate[$i]['basic'] == 'Total Company Points') {
+                            $company_total_points = $csa_compliance_aggregate[$i]['total_points'];
+                         }
+                       }
+                       ?>
+                      <?php echo $my_total_points;?> of <?php echo $company_total_points; ?>
+                  </h4>
+                  <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php echo round($company_total_points / $my_total_points,2) . "%";?></h4>
                 </div>
-                <div class="icon"> <i class="ion ion-pie-graph"></i> </div>
-                <a href="#" class="small-box-footer">More info (go to below item current page)<i class="fa fa-arrow-circle-right"></i> <i class="fa fa-arrow-circle-right"></i> </a> </div>
+                <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
+              </div>
             </div>
             <!-- ./col -->
           </div>
