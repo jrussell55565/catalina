@@ -160,13 +160,13 @@ function generate_compliance_predicate($emp_id,$time) {
 
    // Set some time ranges
    if (isset($time)) {
-       if ($time = "24") {
+       if ($time == "24") {
            // We only want the last 24 months
            $time_predicate = "date BETWEEN curdate() - INTERVAL 24 MONTH AND curdate()";
-       }elseif($time = "all") {
+       }elseif($time == "all") {
            // Get all time
            $time_predicate = "1=1";
-       }elseif($time = "24+1") {
+       }elseif($time == "24+1") {
           // Get month 25 only
           $time_predicate = "date_format(date,'%Y-%m') = date_format(curdate() - INTERVAL 25 MONTH,'%Y-%m')";
        }
@@ -428,5 +428,20 @@ function get_sql_results($sql,$mysqli) {
            exit;
          }
         return $emparray;
+}
+
+function generate_user_csa_sql($emp_id,$time) {
+    $sql = "SELECT date,
+        basic,
+        violation_group,
+        code,
+        violation_weight,
+        time_weight,description,
+        co_driver_first_name,
+        co_driver_last_name,
+        total_points
+        from csadata where $emp_id
+        and ".$time;
+    return $sql;
 }
 ?>
