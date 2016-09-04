@@ -30,7 +30,7 @@ if ($_POST['btn_csa'])
     $statement = "load data local infile \"".$_FILES['file_csa']["tmp_name"]."\"
                REPLACE INTO TABLE csadata FIELDS TERMINATED BY ','
                ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 LINES
-               (@v_date,state,number,level,placard_inspection,hm_inspection,basic,violation_group,code,description,out_of_service,convicted_diff_charge,violation_weight,time_weight,total_points,basic_violation_inspection,last_name,first_name,co_driver_last_name,co_driver_first_name)
+               (@v_date,state,number,level,placard_inspection,hm_inspection,basic,violation_group,code,description,out_of_service,convicted_diff_charge,violation_weight,time_weight,total_points,basic_violation_inspection,last_name,first_name,co_driver_last_name,co_driver_first_name,employee_id)
                SET date = str_to_date(@v_date, '%m/%d/%Y')";
 
     if ($mysqli->query($statement) === false)
