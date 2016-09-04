@@ -65,291 +65,11 @@ if ($_SESSION['login'] == 1)
 
     $csa_compliance_sql = generate_compliance_sql($_SESSION['employee_id']);
     $csa_compliance_aggregate = get_sql_results($csa_compliance_sql,$mysqli);
-print $csa_compliance_sql;
-print_r($_SESSION);
 }
 
 // Let's iterate through each vir to make sure we have each category
 // (vir_posttrip, vir_pretrip, vir_breakdown)
 $vir_aggregate = validate_vir($vir_aggregate);
-
-function validate_vir($array) {
-    foreach(array("vir_pretrip","vir_posttrip","vir_breakdown") as $val) {
-        $found = 0;
-        for ($i=0;$i<count($array);$i++) {   
-          if ($array[$i]['insp_type'] == "$val") {
-              $found = 1;
-              break;
-          }
-        }
-      if ($found == 0) {
-        $new_count = count($array);
-        $array[$new_count]['insp_type'] = "$val";
-        $array[$new_count]['count(*)'] = 0;
-      }
-    } 
-    return $array;
-}
-
-function generate_compliance_sql($emp_id) {
-    $sql = "select sum(total_points) as total_points,
-            sum(points_cash_value) as points_cash_value
-            from csadata WHERE employee_id='$emp_id'";
-    return $sql;
-}
-
-function generate_clockin_sql($emp_id,$sd,$ed) {
-    $sql = "select count(*) from DAYS_WORKED
-        where `DATE WORKED` between STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
-        and `EMPLOYEE NUMBER` = '$emp_id'
-        and worked = 1";
-    return $sql;
-}
-
-function generate_vir_sql($emp_id,$sd,$ed) {
-    $sql="select count(*),insp_type from VIRS WHERE
-                employee_id ='$emp_id'
-                and INSP_DATE between STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d') 
-                group by insp_type";
-    return $sql;
-}
-function generate_ship_sql($emp_id,$sd,$ed) {
-    $sql = "SELECT '$emp_id'    AS 'employee_id',
-             b.*,
-             Round((Coalesce(b.earned_points / b.max_points, 0) * 100), 1) AS 'percentage_earned'
-      FROM   (
-                    SELECT a.*,
-                           Round(a.arrived_to_shipper_points     + a.picked_up_points + a.arrived_to_consignee_points + a.delivered_points + a.accessorial_points + a.noncore_points, 1)                     AS 'earned_points',
-                           Round(a.max_arrived_to_shipper_points + a.max_picked_up_points + a.max_arrived_to_consignee_points + a.max_delivered_points + a.max_accessorial_points + a.max_noncore_points, 1) AS 'max_points'
-                    FROM   (
-                                  SELECT _a.count                                                                                                  AS 'as_puagent',
-                                         _b.count                                                                                                  AS 'as_delagent',
-                                         _c.count                                                                                                  AS 'as_pu_and_delagent',
-                                         _a.count + _b.count + _c.count                                                                            AS 'sum_count',
-                                         _a.count * 2                                                                                              AS 'puagent_required_updates',
-                                         _b.count * 2                                                                                              AS 'delagent_required_updates',
-                                         _c.count * 4                                                                                              AS 'puagent_and_delagent_required_updates',
-                                         _d.count                                                                                                  AS 'core_updates_sum',
-                                         _e.count                                                                                                  AS 'misc_updates_sum',
-                                         _f.count                                                                                                  AS 'picked_up',
-                                         _g.count                                                                                                  AS 'arrived_to_shipper',
-                                         _h.count                                                                                                  AS 'delivered',
-                                         _i.count                                                                                                  AS 'arrived_to_consignee',
-                                         _j.count                                                                                                  AS 'accessorial_count',
-                                         (_cp_shipments.arrived_shipper_apoint   * _g.count) * _cp_shipments.arrived_shipper_cpoint                AS 'arrived_to_shipper_points',
-                                         (_cp_shipments.arrived_shipper_apoint   * (_a.count + _c.count)) * _cp_shipments.arrived_shipper_cpoint   AS 'max_arrived_to_shipper_points',
-                                         (_cp_shipments.picked_up_apoint         * _f.count) * _cp_shipments.picked_up_cpoint                      AS 'picked_up_points',
-                                         (_cp_shipments.picked_up_apoint         * (_a.count + _c.count)) * _cp_shipments.picked_up_cpoint         AS 'max_picked_up_points',
-                                         (_cp_shipments.arrived_consignee_apoint * _i.count) * _cp_shipments.arrived_consignee_cpoint              AS 'arrived_to_consignee_points',
-                                         (_cp_shipments.arrived_consignee_apoint * (_b.count + _c.count)) * _cp_shipments.arrived_consignee_cpoint AS 'max_arrived_to_consignee_points',
-                                         (_cp_shipments.delivered_apoint         * _h.count) * _cp_shipments.delivered_cpoint                      AS 'delivered_points',
-                                         (_cp_shipments.delivered_apoint         * (_b.count + _c.count)) * _cp_shipments.delivered_cpoint         AS 'max_delivered_points',
-                                         (_cp_shipments.accessorials_apoint      * _j.count) * _cp_shipments.accessorials_cpoint                   AS 'accessorial_points',
-                                         0                                                                                                         AS 'max_accessorial_points',
-                                         (_cp_shipments.noncore_apoint * _e.count) * _cp_shipments.noncore_cpoint                                  AS 'noncore_points',
-                                         0                                                                                                         AS 'max_noncore_points'
-                                  FROM   (
-                                                SELECT Count(*) AS count
-                                                FROM   dispatch
-                                                WHERE  (
-                                                              puagentdriverphone =
-                                                              (
-                                                                     SELECT driverid
-                                                                     FROM   users
-                                                                     WHERE  username =
-                                                                            (
-                                                                                   SELECT username
-                                                                                   FROM   users
-                                                                                   WHERE  employee_id = '$emp_id')))
-                                                AND    (
-                                                              delagentdriverphone !=
-                                                              (
-                                                                     SELECT driverid
-                                                                     FROM   users
-                                                                     WHERE  username =
-                                                                            (
-                                                                                   SELECT username
-                                                                                   FROM   users
-                                                                                   where  EMPLOYEE_ID = '$emp_id')) )
-                                                AND    Str_to_date(hawbdate, '%c/%e/%Y') BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _a,
-                                         (
-                                                SELECT Count(*) AS count
-                                                FROM   dispatch
-                                                WHERE  (
-                                                              delagentdriverphone =
-                                                              (
-                                                                     SELECT driverid
-                                                                     FROM   users
-                                                                     WHERE  username =
-                                                                            (
-                                                                                   SELECT username
-                                                                                   FROM   users
-                                                                                   WHERE  employee_id = '$emp_id')))
-                                                AND    (
-                                                              puagentdriverphone !=
-                                                              (
-                                                                     SELECT driverid
-                                                                     FROM   users
-                                                                     WHERE  username =
-                                                                            (
-                                                                                   SELECT username
-                                                                                   FROM   users
-                                                                                   WHERE  employee_id = '$emp_id')))
-                                                AND    Str_to_date(duedate, '%c/%e/%Y') BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _b,
-                                         (
-                                                SELECT Count(*) AS count
-                                                FROM   dispatch
-                                                WHERE  (
-                                                              delagentdriverphone =
-                                                              (
-                                                                     SELECT driverid
-                                                                     FROM   users
-                                                                     WHERE  username =
-                                                                            (
-                                                                                   SELECT username
-                                                                                   FROM   users
-                                                                                   WHERE  employee_id = '$emp_id')))
-                                                AND    (
-                                                              puagentdriverphone =
-                                                              (
-                                                                     SELECT driverid
-                                                                     FROM   users
-                                                                     WHERE  username =
-                                                                            (
-                                                                                   SELECT username
-                                                                                   FROM   users
-                                                                                   WHERE  employee_id = '$emp_id')))
-                                                AND    Str_to_date(hawbdate, '%c/%e/%Y') BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
-                                  and    str_to_date(duedate, '%c/%e/%Y') BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _c,
-                           (
-                                  SELECT count(*) AS count
-                                  FROM   driverexport
-                                  WHERE  updated_by =
-                                         (
-                                                SELECT drivername
-                                                FROM   users
-                                                WHERE  username =
-                                                       (
-                                                              SELECT username
-                                                              FROM   users
-                                                              WHERE  employee_id = '$emp_id'))
-                                  AND    status IN ('Picked Up' ,
-                                                    'Arrived to Shipper',
-                                                    'Delivered',
-                                                    'Arrived To Consignee')
-                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _d,
-                           (
-                                  SELECT count(*) AS count
-                                  FROM   driverexport
-                                  WHERE  updated_by =
-                                         (
-                                                SELECT drivername
-                                                FROM   users
-                                                WHERE  username =
-                                                       (
-                                                              SELECT username
-                                                              FROM   users
-                                                              WHERE  employee_id = '$emp_id'))
-                                  AND    status NOT IN ('Picked Up' ,
-                                                        'Arrived to Shipper',
-                                                        'Delivered',
-                                                        'Arrived To Consignee')
-                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _e,
-                           (
-                                  SELECT count(*) AS count
-                                  FROM   driverexport
-                                  WHERE  updated_by =
-                                         (
-                                                SELECT drivername
-                                                FROM   users
-                                                WHERE  username =
-                                                       (
-                                                              SELECT username
-                                                              FROM   users
-                                                              WHERE  employee_id = '$emp_id'))
-                                  AND    status = 'Picked Up'
-                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _f,
-                           (
-                                  SELECT count(*) AS count
-                                  FROM   driverexport
-                                  WHERE  updated_by =
-                                         (
-                                                SELECT drivername
-                                                FROM   users
-                                                WHERE  username =
-                                                       (
-                                                              SELECT username
-                                                              FROM   users
-                                                              WHERE  employee_id = '$emp_id'))
-                                  AND    status = 'Arrived to Shipper'
-                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _g,
-                           (
-                                  SELECT count(*) AS count
-                                  FROM   driverexport
-                                  WHERE  updated_by =
-                                         (
-                                                SELECT drivername
-                                                FROM   users
-                                                WHERE  username =
-                                                       (
-                                                              SELECT username
-                                                              FROM   users
-                                                              WHERE  employee_id = '$emp_id'))
-                                  AND    status = 'Delivered'
-                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _h,
-                           (
-                                  SELECT count(*) AS count
-                                  FROM   driverexport
-                                  WHERE  updated_by =
-                                         (
-                                                SELECT drivername
-                                                FROM   users
-                                                WHERE  username =
-                                                       (
-                                                              SELECT username
-                                                              FROM   users
-                                                              WHERE  employee_id = '$emp_id'))
-                                  AND    status = 'Arrived To Consignee'
-                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _i,
-                           (
-                                  SELECT count(*) AS count
-                                  FROM   driverexport
-                                  WHERE  employee_id =
-                                         (
-                                                SELECT employee_id
-                                                FROM   users
-                                                WHERE  username =
-                                                       (
-                                                              SELECT username
-                                                              FROM   users
-                                                              WHERE  employee_id = '$emp_id'))
-                                  AND    accessorials <> status
-                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _j,
-                           (
-                                  select *
-                                  FROM   cp_shipments) _cp_shipments) a) b";
-    return $sql;
-}
-function get_sql_results($sql,$mysqli) {
-       try {
-          if ($result = $mysqli->query($sql))
-           {
-               while ($row = $result->fetch_assoc()) {
-                   $emparray[] = $row;
-               }
-               $result->close();
-           }else{
-               throw new Exception("Query error: ". $mysqli->error);
-           }
-         } catch (Exception $e) {
-           // An exception has been thrown
-           $data = array('type' => 'error', 'message' => $e->getMessage());
-           header('Content-Type: application/json; charset=UTF-8');
-           $mysqli->close();
-           exit;
-         }
-        return $emparray;
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -662,26 +382,118 @@ function get_sql_results($sql,$mysqli) {
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">Compliance Points<span class="pull-right badge bg-blue" id="csa_points">
-                     </span></a>
-<?php var_dump($csa_compliance_aggregate); ?>
+                    <li><a href="#">Total Compliance Points<span class="pull-right badge bg-blue" id="csa_total_points">
                      <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
-                       <?php if ($csa_compliance_aggregate[$i]['insp_type'] == 'vir_breakdown') {
-                        echo $csa_compliance_aggregate[$i]['count(*)'];
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Total Points') {
+                        if (empty($csa_compliance_aggregate[$i]['total_points'])) { echo 0; }else{ echo $csa_compliance_aggregate[$i]['total_points']; }
                        }
                      }
                      ?>
+                     </span></a>
                     </li>
                     <li><a href="#">Compliance Cash<span class="pull-right badge bg-blue" id="csa_cash">
-                     </span></a>
                      <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
-                       <?php if ($csa_compliance_aggregate[$i]['insp_type'] == 'vir_breakdown') {
-                        echo $csa_compliance_aggregate[$i]['count(*)'];
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Total Points') {
+                        if (empty($csa_compliance_aggregate[$i]['points_cash_value'])){ echo 0; }else{ echo $csa_compliance_aggregate[$i]['points_cash_value']; }
                        }
                      }
                      ?>
+                     </span></a>
                     </li>
-                    <li><a href="#">Company Compliance<span class="pull-right badge bg-blue" id="csa_company">
+                    <li><a href="#">HOS Compliance<span class="pull-right badge bg-blue" id="csa_hos">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'HOS Compliance') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if ($found != 1 ) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Unsafe Driving<span class="pull-right badge bg-blue" id="csa_unsafe">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Unsafe Driving') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if (empty($found)) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Vehicle Maint.<span class="pull-right badge bg-blue" id="csa_maint">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Vehicle Maint.') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if (empty($found)) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Driver Fitness<span class="pull-right badge bg-blue" id="csa_fitness">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Driver Fitness') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if (empty($found)) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Controlled Substances/Alcohol<span class="pull-right badge bg-blue" id="csa_substance">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Controlled Substances/Alcohol') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if (empty($found)) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Hazardous Materials (HM)<span class="pull-right badge bg-blue" id="csa_hazardous">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Hazardous Materials (HM)') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if (empty($found)) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Crash Indicator<span class="pull-right badge bg-blue" id="csa_crash">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Crash Indicator') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if (empty($found)) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">No Violation<span class="pull-right badge bg-blue" id="csa_no_violation">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'No Violation') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if (empty($found)) { echo 0; }
+                     ?>
                      </span></a>
                     </li>
                     <li><a href="#">Attendance<span class="pull-right badge bg-blue" id="csa_attendance">
@@ -703,8 +515,8 @@ function get_sql_results($sql,$mysqli) {
               <div class="small-box bg-blue">
                 <div class="inner">
                   <!-- =========================================================== -->
-                  <h3 id="shp_points">Points: <?php echo round($shp_aggregate[0]['earned_points'],0) . " of " + round($shp_aggregate[0]['max_points'],0);?></h3>
-                  <h3 id="shp_percent"><?php echo round($shp_aggregate[0]['percentage_earned'],2) . "%";?></h3>
+                  <h4 id="shp_points" style="text-align: center; font-size: 2em;">Points: <?php echo round($shp_aggregate[0]['earned_points'],2);?> of <?php echo round($shp_aggregate[0]['max_points'],2);?></h4>
+                  <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php echo round($shp_aggregate[0]['percentage_earned'],2) . "%";?></h4>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
               </div>
@@ -2699,56 +2511,6 @@ $("#dt_start").val('<?php echo date('m/d/y',$start_date);?>');
 $("#dt_end").val('<?php echo date('m/d/y',$end_date);?>');
 });
 </script>
-
-<?php if ($_SESSION['login'] == 2) { ?>
-
-<script>
-function update_shipment_info(json)
-{
-        var arrived_to_shipper = parseInt(json[0]["arrived_to_shipper"],10);
-        var arrived_to_consignee = parseInt(json[0]["arrived_to_consignee"],10);
-        var as_puagent = parseInt(json[0]["as_puagent"],10);
-        var as_pu_and_delagent = parseInt(json[0]["as_pu_and_delagent"],10);
-        var picked_up = parseInt(json[0]["picked_up"],10);
-        var as_delagent = parseInt(json[0]["as_delagent"],10);
-        var delivered = parseInt(json[0]["delivered"],10);
-        var accessorial_count = parseInt(json[0]["accessorial_count"],10);
-        var misc_updates_sum = parseInt(json[0]["misc_updates_sum"],10);
-        var arrived_to_shipper_points = parseInt(json[0]["arrived_to_shipper_points"],10);
-        var max_arrived_to_shipper_points = parseInt(json[0]["max_arrived_to_shipper_points"],10);
-        var picked_up_points = parseInt(json[0]["picked_up_points"],10);
-        var max_picked_up_points = parseInt(json[0]["max_picked_up_points"],10);
-        var arrived_to_consignee_points = parseInt(json[0]["arrived_to_consignee_points"],10);
-        var max_arrived_to_consignee_points = parseInt(json[0]["max_arrived_to_consignee_points"],10);
-        var delivered_points = parseInt(json[0]["delivered_points"],10);
-        var max_delivered_points = parseInt(json[0]["max_delivered_points"],10);
-        var accessorial_points = parseInt(json[0]["accessorial_points"],10);
-        var earned_points = parseInt(json[0]["earned_points"],10);
-        var max_points = parseInt(json[0]["max_points"],10);
-        var percentage_earned = parseInt(json[0]["percentage_earned"],10);
-
-        // Order count
-        $("#shp_arrived_shipper").html(arrived_to_shipper + " of " + (as_puagent + as_pu_and_delagent) );
-        $("#shp_picked_up").html(picked_up + " of " + (as_puagent + as_pu_and_delagent) );
-        $("#shp_arrived_consignee").html(arrived_to_consignee + " of " + (as_delagent + as_pu_and_delagent) );
-        $("#shp_delivered").html(delivered + " of " + (as_delagent + as_pu_and_delagent) );
-        $("#shp_accessorials").html(accessorial_count + " of " + (as_puagent + as_delagent + as_pu_and_delagent) );
-        $("#shp_other_status").html(misc_updates_sum + " of " + (as_puagent + as_delagent + as_pu_and_delagent) );
-        // Order points
-        $("#shp_arrived_shipper_points").html(arrived_to_shipper_points + " of " + max_arrived_to_shipper_points );
-        $("#shp_picked_up_points").html(picked_up_points + " of " + max_picked_up_points );
-        $("#shp_arrived_consignee_points").html(arrived_to_consignee_points + " of " + max_arrived_to_consignee_points );
-        $("#shp_delivered_points").html(delivered_points + " of " + max_delivered_points );
-        $("#shp_accessorials_points").html(accessorial_points);
-        $("#shp_other_status_points").html(misc_updates_sum);
-
-        // Totals
-        $("#shp_points").html("Points: " + earned_points + " of " + max_points);
-        $("#shp_percent").html(percentage_earned + "%");
-}
-
-</script>
-<?php } ?>
 
 <?php if ($_SESSION['login'] == 1) { ?>
 <script>
