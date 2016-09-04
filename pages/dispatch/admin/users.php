@@ -18,7 +18,8 @@ if ($_GET['action'] == 'loginas')
   $statement = "SELECT username,
                        drivername,
                        fname,
-                       lname
+                       lname,
+                       employee_id
                 FROM users WHERE employee_id = '" . mysql_real_escape_string($_GET['employee_id']) . "'";
 
   $results = mysql_query($statement);
@@ -28,6 +29,7 @@ if ($_GET['action'] == 'loginas')
   $_SESSION['drivername'] = $row['drivername'];
   $_SESSION['fname'] = $row['fname'];
   $_SESSION['lname'] = $row['lname'];
+  $_SESSION['employee_id'] = $row['employee_id'];
   $_SESSION['login'] = 2;
   header("Location: /pages/main/index.php");
 }
