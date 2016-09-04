@@ -430,7 +430,13 @@ function get_sql_results($sql,$mysqli) {
         return $emparray;
 }
 
-function generate_user_csa_sql($emp_id,$time) {
+function generate_user_csa_sql($emp_id,$time,$basic) {
+    // If the BASIC type wasn't specified then get them all
+    if (empty($basic)) {
+       $basic_predicate = "1=1";
+    }else{
+       $basic_predicate = "basic = '$basic'";
+    }
     $sql = "SELECT date,
         basic,
         violation_group,
@@ -439,9 +445,10 @@ function generate_user_csa_sql($emp_id,$time) {
         time_weight,description,
         co_driver_first_name,
         co_driver_last_name,
-        total_points
+        total_points,
+        CONCAT_WS(' ',first_name,last_name) as name
         from csadata where $emp_id
-        and ".$time;
+        and $time and $basic_predicate";
     return $sql;
 }
 ?>
