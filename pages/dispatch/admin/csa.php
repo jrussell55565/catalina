@@ -60,47 +60,6 @@ for($i=0;$i<count($v);$i++) {
   array_push($violations,$v[$i]['basic']);
 }
 
-if ($_POST['update_csa'])
-{
-  # Get the employee_id for the user specified
-  $statement = "SELECT employee_id FROM users WHERE
-                drivername = '".$_POST['driver']."'";
-
-  $result = mysql_query($statement);
-  $row = mysql_fetch_array($result,MYSQL_BOTH);
-  mysql_free_result($result);
-                
-  $sql = "INSERT INTO csadata_int (
-          employee_id,
-          creation_date,
-          violation_cat,
-          violation_group,
-          violation_code,
-          violation_weight,
-          violation_time_weight,
-          violation_description,
-          co_driver,
-          total_points,
-          author) 
-          VALUES (
-          '".$row['employee_id']."',
-          str_to_date('".$_POST['violation_date']."','%m/%d/%Y'),
-          '".$_POST['violation_cat']."',
-          '".$_POST['violation_group']."',
-          '".$_POST['violation_code']."',
-          ".$_POST['violation_weight'].",
-          ".$_POST['time_weight'].",
-          '".$_POST['description']."',
-          '".$_POST['co_driver']."',
-          ".$_POST['total_points'].",
-          '".$_SESSION['employee_id']."'
-          )";
-
-  $result = mysql_query($sql) or die ("unable to insert into csadata_int: ".mysql_error()); 
-  unset($_POST);
-  header("Location: csa.php");
-}
-
 // Let's get the CSA data now for the supplied user,time, and if specified, basic
 if (isset($_GET['reqtype'])) {
     $predicates = generate_compliance_predicate($_GET['driver'], $_GET['productivity_time']);
@@ -150,6 +109,9 @@ if (isset($_GET['reqtype'])) {
 for ($i=0;$i<count($csa_compliance_aggregate);$i++) {
   if ($csa_compliance_aggregate[$i]['basic'] == 'Total Points') {
     $my_total_points = $csa_compliance_aggregate[$i]['total_points'];
+  }
+  if ($csa_compliance_aggregate[$i]['basic'] == 'Total Points') {
+    $my_total_cash_points = $csa_compliance_aggregate[$i]['points_cash_value'];
   }
 }
 ?>
@@ -304,7 +266,8 @@ for ($i=0;$i<count($csa_compliance_aggregate);$i++) {
  <div class="col-md-12">
               <div class="box box-default">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Compliance Chart</h3>
+                  <h3 class="box-title">Compliance Chart</h3><br>
+                  </h5>total points:<?php echo $my_total_points;?> | total cash points:<?php echo $my_total_cash_points;?> </h5>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
