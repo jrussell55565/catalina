@@ -62,7 +62,6 @@ $sql = "select id,
          from tasks
          where 1=1 and  $driver_predicate and $task_status_predicate 
          order by submit_date DESC";
-
 $tasks_aggregate = get_sql_results($sql,$mysqli);
 
 if (isset($_POST['type'])) {
@@ -153,6 +152,21 @@ if (isset($_POST['btn_update_task'])) {
         {
             throw new Exception("Error inserting into tasks table: ".$mysqli->error);
         }
+        // Send an email out to the task recipient.
+        for($i=0;$i<count($driver_array);$i++) {
+          if ($driver_array[$i]['employee_id'] == $_POST['task_assign_to']) {
+            $employee_email = $driver_array[$i]['email'];
+          }
+        }
+        if (empty($employee_email)) {
+          // We did not find a suitable email address.  Throw an exception
+          throw new Exception("Unable to find an email address for ".$_POST['task_assign_to']);
+        }
+        $body = "A new task has been created!\n";
+        $body .= "Description: ".$_POST['task_notes']."\n\n";
+        $body .= "Due: ".$_POST['task_due_date']."\n";
+        sendEmail($employee_email, 'New task alsert', $body, 'drivers@catalinacartage.com');
+
     } catch (Exception $e) {
     // An exception has been thrown
     // We must rollback the transaction
