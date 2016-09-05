@@ -396,11 +396,11 @@ if ($_SESSION['login'] != 1)
                               <tr>
                                  <td>Date</td>
                                  <td style="width:8em;">Driver</td>
-                                 <td>HWB #</td>
-                                 <td>Routes Hwys</td>
-                                 <td style="width:4em;">Exit</td>
-                                 <td style="width:4em;">Ent</td>
-                                 <td style="width:5em;">OD SL</td>
+                                 <td style="width:5em;">HWB #</td>
+                                 <td style="width:10em;">Routes Hwys</td>
+                                 <td style="width:6em;">Exit</td>
+                                 <td style="width:6em;">Ent</td>
+                                 <td style="width:7em;">OD SL</td>
                                  <td style="width:5em;">St Miles</td>
                                  <td>Permit                                 </td>
                                  <td>Issue</td>
@@ -427,7 +427,7 @@ if ($_SESSION['login'] != 1)
                                     <td style="width:5em;">Other</td>
                                     <td>Vendor</td>
                                     <td>City</td>
-                                    <td style="width:4em;">State</td>
+                                    <td style="width:6em;">State</td>
                                     <td style="width:5em;">Odometer</td>
                                     <td>Issue</td>
                                     <td style="width:8em;">Type</td>
