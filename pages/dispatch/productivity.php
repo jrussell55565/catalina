@@ -7,17 +7,76 @@ if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 }
 
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
+$mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
+
+# Get the driver names and employee_id
+$driver_array = get_drivers($mysqli);
 
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
 
+// Get the current quarter if no date range was specified.
+
+$current_month = date('m');
+$current_year = date('Y');
+if($current_month>=1 && $current_month<=3)
+{
+  $default_start_date = strtotime('1-January-'.$current_year);  // timestamp or 1-Januray 12:00:00 AM
+  $default_end_date = strtotime('1-April-'.$current_year);  // timestamp or 1-April 12:00:00 AM means end of 31 March
+}
+else  if($current_month>=4 && $current_month<=6)
+{
+  $default_start_date = strtotime('1-April-'.$current_year);  // timestamp or 1-April 12:00:00 AM
+  $default_end_date = strtotime('1-July-'.$current_year);  // timestamp or 1-July 12:00:00 AM means end of 30 June
+}
+else  if($current_month>=7 && $current_month<=9)
+{
+  $default_start_date = strtotime('1-July-'.$current_year);  // timestamp or 1-July 12:00:00 AM
+  $default_end_date = strtotime('1-October-'.$current_year);  // timestamp or 1-October 12:00:00 AM means end of 30 September
+}
+else  if($current_month>=10 && $current_month<=12)
+{
+  $default_start_date = strtotime('1-October-'.$current_year);  // timestamp or 1-October 12:00:00 AM
+  $default_end_date = strtotime('1-January-'.($current_year+1));  // timestamp or 1-January Next year 12:00:00 AM means end of 31 December this year
+}
+if (empty($_GET['start'])) { $start_date = $default_start_date; }else{ $start_date = strtotime($_GET['start']); }
+if (empty($_GET['end'])) { $end_date = $default_end_date; }else{ $end_date = strtotime($_GET['end']); }
+
+if ($_SESSION['login'] == 1)
+{
+    $emp_id = $_GET['trip_search_driver'];
+    $ship_sql = generate_ship_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $shp_aggregate = get_sql_results($ship_sql,$mysqli);
+  
+    $vir_sql = generate_vir_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $vir_aggregate = get_sql_results($vir_sql,$mysqli);
+
+    $vir_clockin_sql = generate_clockin_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $vir_clockin_aggregate = get_sql_results($vir_clockin_sql,$mysqli);
+
+    $csa_compliance_sql = generate_compliance_sql($emp_id);
+    $csa_compliance_aggregate = get_sql_results($csa_compliance_sql,$mysqli);
+}else{
+    $ship_sql = generate_ship_sql($_SESSION['employee_id'],date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $shp_aggregate = get_sql_results($ship_sql,$mysqli);
+  
+    $vir_sql = generate_vir_sql($_SESSION['employee_id'],date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $vir_aggregate = get_sql_results($vir_sql,$mysqli);
+
+    $vir_clockin_sql = generate_clockin_sql($_SESSION['employee_id'],date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $vir_clockin_aggregate = get_sql_results($vir_clockin_sql,$mysqli);
+
+    $csa_compliance_sql = generate_compliance_sql($_SESSION['employee_id']);
+    $csa_compliance_aggregate = get_sql_results($csa_compliance_sql,$mysqli);
+}
+
+// Let's iterate through each vir to make sure we have each category
+// (vir_posttrip, vir_pretrip, vir_breakdown)
+$vir_aggregate = validate_vir($vir_aggregate);
 ?>
-
-
 <!DOCTYPE html>
 <html>
 <head>
-<BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
 <title>Productivity</title>
 <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>
@@ -34,6 +93,8 @@ $drivername = $_SESSION['drivername'];
 <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
 <link href="<?php echo HTTP;?>/dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+<!-- Date Picker -->
+<link href="<?php echo HTTP;?>/dist/css/bootstrap-datepicker3.css" rel="stylesheet">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -61,37 +122,9 @@ $drivername = $_SESSION['drivername'];
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Productivity / <span class="box-title"><?php echo "$_SESSION[drivername]"; ?></span> <a href="#">
-            <?php if ($_SESSION['login'] == 1) { echo "(Admin)"; }?>
-            </a>
-            <label for="productivity_time"></label>
-            <select name="productivity_time" id="productivity_time">
-              <option value="day">Current Day</option>
-              <option value="week">Current Week</option>
-              <option value="month" selected>Current Month</option>
-              <option value="quarter">Current Quarter</option>
-              <option value="year">Current Year</option>
-              <option value="all">All</option>
-            </select>
-            <label for="textfield"></label>
-            <input name="textfield" type="text" id="textfield" value="From Date" size="12"> to
-            <input name="textfield2" type="text" id="textfield2" value="To Date" size="12">
-            
-
-            
-                  <div class="box-body"></div>           
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+            Productivity
           </h1>
-          <link href="<?php echo HTTP;?>/dist/css/bootstrap-datepicker.css" rel="stylesheet">
+                  <div class="box-body"></div>           
           <ol class="breadcrumb">
             <li><a href="/pages/main/index.php"><i class="fa fa-home"></i> Home</a></li>
             <li class="active">Productivity</li>
@@ -103,15 +136,35 @@ $drivername = $_SESSION['drivername'];
 <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/topmenuanimation.php');?>
 
 <!-- End Animated Top Menu -->  
+<div class="container">
+  <div class="row text-center">
+    <div class="col-sm-<?php if ($_SESSION['login'] == 1) { echo 10; }else{ echo 6; }?> pull-left well">
+           <form name="frm_productivity" method="GET" action="" role="form" enctype="multipart/form-data">
+              <div class="box-body">
+               <div class="input-daterange input-group" id="datepicker">
+                <input type="text" class="input-sm form-control datepicker" name="start" id="dt_start" data-date-format="mm/dd/yyyy"/ required>
+                <span class="input-group-addon">to</span>
+                <input type="text" class="input-sm form-control datepicker" name="end" id="dt_end" data-date-format="mm/dd/yyyy"/ required>
+               </div>
+               <?php if ($_SESSION['login'] == 1) { ?>
+               <div class="input-group" id="driver">
+                 <select class="input-sm form-control" name="trip_search_driver" id="trip_search_driver" value="" style="margin-top: 5px;">
+                  <option value="null">Choose Driver...</option>
+                    <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
+                      <option value=<?php echo $driver_array[$i]['employee_id'];
+                       if ($driver_array[$i]['employee_id'] == $_GET['trip_search_driver']) { echo " selected "; } ?>
+                      ><?php echo $driver_array[$i]['name'];?></option>
+                    <?php } ?>
+                </select>
+               </div>
+               <?php } ?>
+            <button type="submit" class="btn btn-danger" name="btn_submit" value='true' style="margin-top: 5px;">Submit</button>
+           </form>
+    </div>
+  </div>
+</div>
 <!-- =============Productivity Menu================================ -->
 
-<?php
-// Only show this portion to non-admins since it's user-specific
-// Lets Redo this section to show All Active users and stats so page looks same for both
-// admin and non admin, swap picture to .... 
-if ($_SESSION['login'] == 2)
-{
-?>
 
           <div class="row">
 
@@ -121,25 +174,57 @@ if ($_SESSION['login'] == 2)
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-blue">
                   <div class="widget-user-image">
-                   <img src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; }?>" alt="User Image" width="128" height="128" class="img-circle" />
-                  </div>
-                  <!-- /.widget-user-image -->
-                  <span class="info-box-text"> Shipments</span>
+                   <img src="
+                    <?php 
+                     if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
+                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { 
+                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; 
+                      }
+                     }?>" 
+                   alt="User Image" width="100" height="100" class="img-circle" />
+                  <span class="fa-2x">Shipment</span></div>
+                  <!-- Add text below Image Removed....
+                  <span class="info-box-text">Shipments</span>
+                  --> 
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
-                    <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
-                    <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
-                    <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
-                    <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
-                    <li><a href="#">Arrived Consignee Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
-                    <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered"></span></a></li>
-                    <li><a href="#">Delivered Points<span class="pull-right badge bg-blue" id="shp_delivered_points"></span></a></li>
-                    <li><a href="#">Accessorials Added <span class="pull-right badge bg-blue" id="shp_accessorials"></span></a></li>
-                    <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue" id="shp_accessorials_points"></span></a></li>
-                    <li><a href="#">Other Status Change <span class="pull-right badge bg-blue" id="shp_other_status"></span></a></li>
-                    <li><a href="#">Other Status Change Points<span class="pull-right badge bg-blue" id="shp_other_status_points"></span></a></li>
+                    <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper">
+                     <?php echo round($shp_aggregate[0]['arrived_to_shipper'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points">
+                     <?php echo round($shp_aggregate[0]['arrived_to_shipper_points'],0) ." of ".round($shp_aggregate[0]['max_arrived_to_shipper_points'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up">
+                     <?php echo round($shp_aggregate[0]['picked_up'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue" id="shp_picked_up_points">
+                     <?php echo round($shp_aggregate[0]['picked_up_points'],0) ." of ".round($shp_aggregate[0]['max_picked_up_points'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee">
+                     <?php echo round($shp_aggregate[0]['arrived_to_consignee'],0) ." of ".round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Arrived Consignee Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points">
+                     <?php echo round($shp_aggregate[0]['arrived_to_consignee_points'],0) ." of ".round($shp_aggregate[0]['max_arrived_to_consignee_points'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered">
+                     <?php echo round($shp_aggregate[0]['delivered'],0) ." of ".round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Delivered Points<span class="pull-right badge bg-blue" id="shp_delivered_points">
+                     <?php echo round($shp_aggregate[0]['delivered_points'],0) ." of ".round($shp_aggregate[0]['max_delivered_points'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Accessorials Added <span class="pull-right badge bg-blue" id="shp_accessorials">
+                     <?php echo round($shp_aggregate[0]['accessorial_count'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue" id="shp_accessorials_points">
+                     <?php echo round($shp_aggregate[0]['accessorial_points'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Other Status Change <span class="pull-right badge bg-blue" id="shp_other_status">
+                     <?php echo round($shp_aggregate[0]['misc_updates_sum'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
+                    </li>
+                    <li><a href="#">Other Status Change Points<span class="pull-right badge bg-blue" id="shp_other_status_points">
+                     <?php echo round($shp_aggregate[0]['misc_updates_sum'],0);?></span></a>
+                    </li>
                   </ul>
                 </div>
               </div><!-- /.widget-user -->
@@ -150,20 +235,105 @@ if ($_SESSION['login'] == 2)
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-red">
                   <div class="widget-user-image">
-                    <img src="/pages/dispatch/images/allusers.JPG" alt="User Avatar" width="128" height="128" class="img-circle">
-                  </div>
-                  <!-- /.widget-user-image -->
+                    <img src="
+                    <?php
+                     if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
+                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
+                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg";
+                      }
+                     }?>"
+                    alt="User Avatar" width="100" height="100" class="img-circle">
+                  <span class="fa-2x">VIR'S</span></div>
+                  <!-- Add text below Image Removed.... 
                   <span class="info-box-text"> VIRS</span>
+                  -->
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">Days Worked <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
-                    <li><a href="#">Pre-Trips <span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
-                    <li><a href="#">Pre-Trip Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
-                    <li><a href="#">Post-Trips <span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
-                    <li><a href="#">Post-Trip Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
-                    <li><a href="#">Breakdowns <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
-                    <li><a href="#">Breakdown Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
+                    <li><a href="#">Days Worked <span class="pull-right badge bg-blue" id="vir_days_worked">
+                     <?php
+                        echo $vir_clockin_aggregate[0]['count(*)'];
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Pre-Trips <span class="pull-right badge bg-blue" id="vir_pretrip">
+                     <?php for($i=0;$i<count($vir_aggregate);$i++) { ?>
+                       <?php if ($vir_aggregate[$i]['insp_type'] == 'vir_pretrip'){
+                        echo $vir_aggregate[$i]['count(*)'];
+                       }
+                     }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Pre-Trip Points<span class="pull-right badge bg-blue" id="vir_pretrip_points">
+                     <?php for($i=0;$i<count($vir_clockin_aggregate);$i++) { ?>
+                       <?php $pre_trip_login_count = $vir_clockin_aggregate[$i]['count(*)'];
+                        for($j=0;$j<count($vir_aggregate);$j++) {
+                         if ($vir_aggregate[$j]['insp_type'] == 'vir_pretrip') {
+                           // Calculate the number of pretrips vs. the number of days the user has clocked in.
+                           if ($vir_aggregate[$j]['count(*)'] > $pre_trip_login_count) {
+                             echo $pre_trip_login_count;
+                           }else{
+                             echo $vir_aggregate[$j]['count(*)'];
+                           }
+                         }
+                      }
+                     }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Post-Trips <span class="pull-right badge bg-blue" id="vir_posttrip">
+                     <?php for($i=0;$i<count($vir_aggregate);$i++) { ?>
+                       <?php if ($vir_aggregate[$i]['insp_type'] == 'vir_posttrip') {
+                        echo $vir_aggregate[$i]['count(*)'];
+                       }
+                     }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Post-Trip Points<span class="pull-right badge bg-blue" id="vir_posttrip_points">
+                     <?php for($i=0;$i<count($vir_clockin_aggregate);$i++) { ?>
+                        <?php $post_trip_login_count = $vir_clockin_aggregate[$i]['count(*)'];
+                        for($j=0;$j<count($vir_aggregate);$j++) {
+                         if ($vir_aggregate[$j]['insp_type'] == 'vir_posttrip') {
+                           // Calculate the number of pretrips vs. the number of days the user has clocked in.
+                           if ($vir_aggregate[$j]['count(*)'] > $post_trip_login_count) {
+                             echo $post_trip_login_count;
+                           }else{
+                             echo $vir_aggregate[$j]['count(*)'];
+                           }
+                         }
+                      }
+                     }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Breakdowns <span class="pull-right badge bg-blue" id="vir_breakdown">
+                     <?php for($i=0;$i<count($vir_aggregate);$i++) { ?>
+                       <?php if ($vir_aggregate[$i]['insp_type'] == 'vir_breakdown') {
+                        echo $vir_aggregate[$i]['count(*)'];
+                       }
+                     }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Breakdown Points<span class="pull-right badge bg-blue" id="vir_breakdown_points">
+                     <?php for($i=0;$i<count($vir_clockin_aggregate);$i++) { ?>
+                        <?php $post_trip_login_count = $vir_clockin_aggregate[$i]['count(*)'];
+                        for($j=0;$j<count($vir_aggregate);$j++) {
+                         if ($vir_aggregate[$j]['insp_type'] == 'vir_breakdown') {
+                           // Calculate the number of pretrips vs. the number of days the user has clocked in.
+                           if ($vir_aggregate[$j]['count(*)'] > $post_trip_login_count) {
+                             echo $post_trip_login_count;
+                           }else{
+                             echo $vir_aggregate[$j]['count(*)'];
+                           }
+                         }
+                      }
+                     }
+                     ?>
+                     </span></a>
+                    </li>
                     
                   </ul>
                 </div>
@@ -174,18 +344,26 @@ if ($_SESSION['login'] == 2)
               <div class="box box-widget widget-user-2">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-purple">
-                  <div class="widget-user-image"><img src="/pages/dispatch/images/allusers.JPG" alt="User Avatar" width="128" height="128" class="img-circle"></div>
-                  <!-- /.widget-user-image -->
+                  <div class="widget-user-image"><span class="fa-2x"><img src="
+                    <?php
+                     if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
+                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
+                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg";
+                      }
+                     }?>"
+                     alt="User Avatar" width="100" height="100" class="img-circle">Productivity</span></div>
+                  <!-- Add text below Image Removed....
                   <span class="info-box-text"> Productivity</span>
+                  -->
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">Tasks<span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
-                    <li><a href="#">Task Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
-                    <li><a href="#">Projects<span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
-                    <li><a href="#">Project Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
-                    <li><a href="#">Company Compliance <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
-                    <li><a href="#">Compnay Compliance Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points"></span></a></li>
+                    <li><a href="#">Tasks<span class="pull-right badge bg-blue" id="prod_task"></span></a></li>
+                    <li><a href="#">Task Points<span class="pull-right badge bg-blue" id="prod_task_points"></span></a></li>
+                    <li><a href="#">Projects<span class="pull-right badge bg-blue" id="prod_project"></span></a></li>
+                    <li><a href="#">Project Points<span class="pull-right badge bg-blue" id="prod_project_points"></span></a></li>
+                    <li><a href="#">Company Compliance <span class="pull-right badge bg-blue" id="prod_company_compliance"></span></a></li>
+                    <li><a href="#">Compnay Compliance Points<span class="pull-right badge bg-blue" id="prod_company_compliance_points"></span></a></li>
                                         
                   </ul>
                 </div>
@@ -196,17 +374,134 @@ if ($_SESSION['login'] == 2)
               <div class="box box-widget widget-user-2">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-orange">
-                  <div class="widget-user-image"><img src="/pages/dispatch/images/allusers.JPG" alt="User Avatar" width="128" height="128" class="img-circle"></div>
-                  <!-- /.widget-user-image -->
-                  <span class="info-box-text"> CSA</span>
+                  <div class="widget-user-image"><img src="
+                    <?php
+                     if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
+                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
+                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg";
+                      }
+                     }?>"
+                    alt="User Avatar" width="100" height="100" class="img-circle"><span class="fa-2x">Compliance</span></div>
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">CSA Score<span class="pull-right badge bg-blue" id="shp_arrived_shipper"></span></a></li>
-                    <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points"></span></a></li>
-                    <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up"></span></a></li>
-                    <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue" id="shp_picked_up_points"></span></a></li>
-                    <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee"></span></a></li>
+                    <li><a href="#">Total Compliance Points<span class="pull-right badge bg-blue" id="csa_total_points">
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Total Points') {
+                        if (empty($csa_compliance_aggregate[$i]['total_points'])) { echo 0; }else{ echo $csa_compliance_aggregate[$i]['total_points']; }
+                       }
+                     }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Compliance Cash<span class="pull-right badge bg-blue" id="csa_cash">
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Total Points') {
+                        if (empty($csa_compliance_aggregate[$i]['points_cash_value'])){ echo 0; }else{ echo $csa_compliance_aggregate[$i]['points_cash_value']; }
+                       }
+                     }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">HOS Compliance<span class="pull-right badge bg-blue" id="csa_hos">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'HOS Compliance') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if ($found != 1 ) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Unsafe Driving<span class="pull-right badge bg-blue" id="csa_unsafe">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Unsafe Driving') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if (empty($found)) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Vehicle Maint.<span class="pull-right badge bg-blue" id="csa_maint">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Vehicle Maint.') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if (empty($found)) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Driver Fitness<span class="pull-right badge bg-blue" id="csa_fitness">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Driver Fitness') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if (empty($found)) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Controlled Substances/Alcohol<span class="pull-right badge bg-blue" id="csa_substance">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Controlled Substances/Alcohol') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if (empty($found)) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Hazardous Materials (HM)<span class="pull-right badge bg-blue" id="csa_hazardous">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Hazardous Materials (HM)') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if (empty($found)) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Crash Indicator<span class="pull-right badge bg-blue" id="csa_crash">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Crash Indicator') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if (empty($found)) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">No Violation<span class="pull-right badge bg-blue" id="csa_no_violation">
+                     <?php $found = 0; ?>
+                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
+                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'No Violation') {
+                        echo $csa_compliance_aggregate[$i]['total_points'];
+                        $found = 1;
+                       }
+                     }
+                       if (empty($found)) { echo 0; }
+                     ?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Attendance<span class="pull-right badge bg-blue" id="csa_attendance">
+                     </span></a>
+                    </li>
                     
                   </ul>
                 </div>
@@ -215,10 +510,6 @@ if ($_SESSION['login'] == 2)
 
         </div>
 
-<?php
-// END Only show this portion to non-admins since it's user-specific
-}
-?>
 <!-- ======================New Section Colored Boxes============ -->
           <!-- Boxes with Icon on Right side (Status box) -->
           <div class="row">
@@ -226,9 +517,8 @@ if ($_SESSION['login'] == 2)
               <!-- small box -->
               <div class="small-box bg-blue">
                 <div class="inner">
-                  <!-- =========================================================== -->
-                  <h4 id="shp_points"></h4>
-                  <h4 id="shp_percent"></h4>
+                  <h4 id="shp_points" style="text-align: center; font-size: 2em;">Points: <?php echo round($shp_aggregate[0]['earned_points'],2);?> of <?php echo round($shp_aggregate[0]['max_points'],2);?></h4>
+                  <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php echo round($shp_aggregate[0]['percentage_earned'],2) . "%";?></h4>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
               </div>
@@ -238,7 +528,7 @@ if ($_SESSION['login'] == 2)
               <!-- small box -->
               <div class="small-box bg-red">
                 <div class="inner">
-                  <h3>Score <?php echo "$pu_today_count";?> 85%</h3>
+                  <h3>Score VIR <?php echo "$pu_today_count";?> 85%</h3>
                   <p>As of PHP Select Year, Quarter, Month</p>
                 </div>
                 <div class="icon"> <i class="ion ion-stats-bars"></i> </div>
@@ -260,11 +550,23 @@ if ($_SESSION['login'] == 2)
               <!-- small box -->
               <div class="small-box bg-orange">
                 <div class="inner">
-                  <h3>Score <?php echo "$pu_today_count";?> 85%</h3>
-                  <p>As of PHP Select Year, Quarter, Month</p>
+                  <h4 id="shp_points" style="text-align: center; font-size: 2em;">Points:
+                       <?php
+                       for($i=0;$i<count($csa_compliance_aggregate);$i++) {
+                         if ($csa_compliance_aggregate[$i]['basic'] == 'Total Points') {
+                            $my_total_points = $csa_compliance_aggregate[$i]['total_points'];
+                         }
+                         if ($csa_compliance_aggregate[$i]['basic'] == 'Total Company Points') {
+                            $company_total_points = $csa_compliance_aggregate[$i]['total_points'];
+                         }
+                       }
+                       ?>
+                      <?php echo $my_total_points;?> of <?php echo $company_total_points; ?>
+                  </h4>
+                  <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php echo round($company_total_points / $my_total_points,2) . "%";?></h4>
                 </div>
-                <div class="icon"> <i class="ion ion-pie-graph"></i> </div>
-                <a href="#" class="small-box-footer">More info (go to below item current page)<i class="fa fa-arrow-circle-right"></i> <i class="fa fa-arrow-circle-right"></i> </a> </div>
+                <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
+              </div>
             </div>
             <!-- ./col -->
           </div>
@@ -2217,58 +2519,12 @@ $(document).ready(function(){
       }
     });
   });
+
+// Set the default values for the datepicker
+$("#dt_start").val('<?php echo date('m/d/y',$start_date);?>');
+$("#dt_end").val('<?php echo date('m/d/y',$end_date);?>');
 });
 </script>
-
-<?php if ($_SESSION['login'] == 2) { ?>
-
-<script>
-function update_shipment_info(json)
-{
-        var arrived_to_shipper = parseInt(json[0]["arrived_to_shipper"],10);
-        var arrived_to_consignee = parseInt(json[0]["arrived_to_consignee"],10);
-        var as_puagent = parseInt(json[0]["as_puagent"],10);
-        var as_pu_and_delagent = parseInt(json[0]["as_pu_and_delagent"],10);
-        var picked_up = parseInt(json[0]["picked_up"],10);
-        var as_delagent = parseInt(json[0]["as_delagent"],10);
-        var delivered = parseInt(json[0]["delivered"],10);
-        var accessorial_count = parseInt(json[0]["accessorial_count"],10);
-        var misc_updates_sum = parseInt(json[0]["misc_updates_sum"],10);
-        var arrived_to_shipper_points = parseInt(json[0]["arrived_to_shipper_points"],10);
-        var max_arrived_to_shipper_points = parseInt(json[0]["max_arrived_to_shipper_points"],10);
-        var picked_up_points = parseInt(json[0]["picked_up_points"],10);
-        var max_picked_up_points = parseInt(json[0]["max_picked_up_points"],10);
-        var arrived_to_consignee_points = parseInt(json[0]["arrived_to_consignee_points"],10);
-        var max_arrived_to_consignee_points = parseInt(json[0]["max_arrived_to_consignee_points"],10);
-        var delivered_points = parseInt(json[0]["delivered_points"],10);
-        var max_delivered_points = parseInt(json[0]["max_delivered_points"],10);
-        var accessorial_points = parseInt(json[0]["accessorial_points"],10);
-        var earned_points = parseInt(json[0]["earned_points"],10);
-        var max_points = parseInt(json[0]["max_points"],10);
-        var percentage_earned = parseInt(json[0]["percentage_earned"],10);
-
-        // Order count
-        $("#shp_arrived_shipper").html(arrived_to_shipper + " of " + (as_puagent + as_pu_and_delagent) );
-        $("#shp_picked_up").html(picked_up + " of " + (as_puagent + as_pu_and_delagent) );
-        $("#shp_arrived_consignee").html(arrived_to_consignee + " of " + (as_delagent + as_pu_and_delagent) );
-        $("#shp_delivered").html(delivered + " of " + (as_delagent + as_pu_and_delagent) );
-        $("#shp_accessorials").html(accessorial_count + " of " + (as_puagent + as_delagent + as_pu_and_delagent) );
-        $("#shp_other_status").html(misc_updates_sum + " of " + (as_puagent + as_delagent + as_pu_and_delagent) );
-        // Order points
-        $("#shp_arrived_shipper_points").html(arrived_to_shipper_points + " of " + max_arrived_to_shipper_points );
-        $("#shp_picked_up_points").html(picked_up_points + " of " + max_picked_up_points );
-        $("#shp_arrived_consignee_points").html(arrived_to_consignee_points + " of " + max_arrived_to_consignee_points );
-        $("#shp_delivered_points").html(delivered_points + " of " + max_delivered_points );
-        $("#shp_accessorials_points").html(accessorial_points);
-        $("#shp_other_status_points").html(misc_updates_sum);
-
-        // Totals
-        $("#shp_points").html("Points: " + earned_points + " of " + max_points);
-        $("#shp_percent").html(percentage_earned + "%");
-}
-
-</script>
-<?php } ?>
 
 <?php if ($_SESSION['login'] == 1) { ?>
 <script>
@@ -2339,7 +2595,7 @@ function get_productivity_report(username,frequency)
           {
               // Update the shipment board if non-admin
           ?>
-              update_shipment_info(json);
+              //update_shipment_info(json);
           <?php
           }elseif($_SESSION['login'] == 1){
           ?>
@@ -2353,6 +2609,17 @@ function get_productivity_report(username,frequency)
       }
     });
 }
+</script>
+    <!-- Date Picker -->
+    <script src="<?php echo HTTP;?>/dist/js/bootstrap-datepicker.js"></script>
+    <script>
+    $('.datepicker').datepicker({
+    startDate: "2015-01-01",
+    todayBtn: "linked",
+    autoclose: true,
+    datesDisabled: '0',
+    todayHighlight: true,
+    });
 </script>
 
 </body>
