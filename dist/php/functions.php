@@ -408,6 +408,7 @@ function generate_ship_sql($emp_id,$sd,$ed) {
                            (
                                   select *
                                   FROM   cp_shipments) _cp_shipments) a) b";
+
     return $sql;
 }
 function get_sql_results($sql,$mysqli) {
@@ -431,6 +432,22 @@ function get_sql_results($sql,$mysqli) {
         return $emparray;
 }
 
+function run_sql($sql,$mysqli) {
+       try {
+          if ($result = $mysqli->query($sql))
+           {
+               return;
+           }else{
+               throw new Exception("Query error: ". $mysqli->error);
+           }
+         } catch (Exception $e) {
+           // An exception has been thrown
+           $data = array('type' => 'error', 'message' => $e->getMessage());
+           print $e->getMessage();
+           $mysqli->close();
+           exit;
+         }
+}
 function generate_user_csa_sql($emp_id,$time,$basic) {
     // If the BASIC type wasn't specified then get them all
     if (empty($basic)) {

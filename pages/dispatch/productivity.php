@@ -70,6 +70,16 @@ if ($_SESSION['login'] == 1)
     $csa_compliance_aggregate = get_sql_results($csa_compliance_sql,$mysqli);
 }
 
+// We'll generate another shp_aggregate array.  This time we'll loop
+// through each employee.  This is for the stats section below.
+// Truncate the existing table
+$complete_ship_sql = "call company_shp_stats('".date('Y-m-d',$start_date)."','".date('Y-m-d',$end_date)."')";
+//run_sql($complete_ship_sql,$mysqli);
+$complete_ship_sql = "select a.*, users.username from productivity_shipments a, users where a.date_start <= STR_TO_DATE('".date('Y-m-d',$start_date)."','%Y-%m-%d') 
+                      and a.date_end >= STR_TO_DATE('".date('Y-m-d',$end_date)."','%Y-%m-%d')
+                      and a.employee_id = users.employee_id ORDER BY percentage_earned desc";
+$complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
+
 // Let's iterate through each vir to make sure we have each category
 // (vir_posttrip, vir_pretrip, vir_breakdown)
 $vir_aggregate = validate_vir($vir_aggregate);
@@ -811,6 +821,37 @@ $vir_aggregate = validate_vir($vir_aggregate);
                 </div><!-- /.box-header -->
                 <div class="box-body" style="overflow: auto; height: 500px;">
                   <table class="table table-bordered" id="shp_admin_stats">
+                    <tr>
+                      <th style="width: 10px">#</th>
+                      <th>Name</th>
+                      <th>Graph Score</th>
+                      <th style="width: 40px">Score</th>
+                    </tr>
+<?php
+for ($shp_i=0;$shp_i<count($complete_ship_aggregate);$shp_i++)
+{
+// Get our colors and width
+if ($complete_ship_aggregate[$shp_i]['percentage_earned'] >= 90) { $color = 'green'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned'];}
+if ($complete_ship_aggregate[$shp_i]['percentage_earned'] >= 70 && $complete_ship_aggregate[$shp_i]['percentage_earned'] < 90) { $color = 'blue'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned']; }
+if ($complete_ship_aggregate[$shp_i]['percentage_earned'] > 50 && $complete_ship_aggregate[$shp_i]['percentage_earned'] < 70) { $color = 'yellow'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned']; }
+if ($complete_ship_aggregate[$shp_i]['percentage_earned'] > 25 && $complete_ship_aggregate[$shp_i]['percentage_earned'] < 50) { $color = 'red'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned']; }
+if ($complete_ship_aggregate[$shp_i]['percentage_earned'] <= 25) { $color = 'black'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned']; }
+
+// If the user is over 100% then drop it to 100
+if ($complete_ship_aggregate[$shp_i]['percentage_earned'] > 100) { $percent = 100; }
+?>
+<tr>
+                 <td><?php echo $shp_i+1;?></td>
+                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $complete_ship_aggregate[$shp_i]['username'];?></td>
+
+                 <td><div class="progress progress-xs progress-striped active">
+                 <div class="progress-bar progress-bar-<?php echo "$color";?>" style="width: <?php echo $percent;?>%"></div>
+
+                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $percent;?></span></td>
+                 </tr>
+<?php                 
+}
+?>
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -824,15 +865,6 @@ $vir_aggregate = validate_vir($vir_aggregate);
 
               <div class="box">
                 <div class="box-header">
-    
-              <!-- Adding the Spinner Box Icon here
-              <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php">
-                 <span class="info-box-icon bg-aqua"><i class="fa fa-bank fa-zoomIn"></i></span>
-                </a>                    
-              </div>
-              </div>
-              -->
               
                  <h3 class="box-title">Compliance</h3>
 <div class="box-tools pull-right">
