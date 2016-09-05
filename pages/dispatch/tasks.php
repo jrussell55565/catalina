@@ -54,13 +54,14 @@ $sql = "select id,
                               ,subitem
                               ,pos_neg
                               ,notes
-                              ,date_format(complete_by_date,'%m/%d/%Y') as complete_by_date
+                              ,date_format(due_date,'%m/%d/%Y') as due_date
+                              ,date_format(completed_date,'%m/%d/%Y') as completed_date
                               ,points
                               ,complete_user
                               ,complete_approved
          from tasks
          where 1=1 and  $driver_predicate and $task_status_predicate 
-         order by submit_date";
+         order by submit_date DESC";
 
 $tasks_aggregate = get_sql_results($sql,$mysqli);
 
@@ -74,7 +75,8 @@ if (isset($_POST['type'])) {
     if ($_POST['column'] == 'subitem') { $_POST['value'] = '"'.$_POST['value'].'"'; }
     if ($_POST['column'] == 'pos_neg') { $_POST['value'] = '"'.$_POST['value'].'"'; }
     if ($_POST['column'] == 'notes') { $_POST['value'] = '"'.$_POST['value'].'"'; }
-    if ($_POST['column'] == 'complete_by_date') { $_POST['value'] = 'str_to_date("'.$_POST['value'].'","%m/%d/%Y")'; }
+    if ($_POST['column'] == 'due_date') { $_POST['value'] = 'str_to_date("'.$_POST['value'].'","%m/%d/%Y")'; }
+    if ($_POST['column'] == 'completed_date') { $_POST['value'] = 'str_to_date("'.$_POST['value'].'","%m/%d/%Y")'; }
     $sql = "UPDATE tasks SET ".$_POST['column']." = ".$_POST['value']." WHERE id = ".$_POST['id'];
 
   try {
@@ -98,10 +100,15 @@ if (isset($_POST['type'])) {
 
 if (isset($_POST['btn_update_task'])) {
     // We'll update the db with our tasks
-    if(empty($_POST['task_complete_by_date'])) {
-      $task_complete_by_date = 'null';
+    if(empty($_POST['task_due_date'])) {
+      $task_due_date = 'null';
     }else{
-      $task_complete_by_date = "'".$_POST['task_complete_by_date']."'";
+      $task_due_date = "str_to_date('".$_POST['task_due_date']."','%m/%d/%Y')";
+    }
+    if(empty($_POST['task_completed_date'])) {
+      $task_completed_date = 'null';
+    }else{
+      $task_completed_date = "str_to_date('".$_POST['task_completed_date']."','%m/%d/%Y')";
     }
     if (empty($_POST['task_complete_user'])) { 
         $task_completed_user = 0;
@@ -121,7 +128,8 @@ if (isset($_POST['btn_update_task'])) {
                               ,subitem
                               ,pos_neg
                               ,notes
-                              ,complete_by_date
+                              ,due_date
+                              ,completed_date
                               ,points
                               ,complete_user
                               ,complete_approved)
@@ -134,7 +142,8 @@ if (isset($_POST['btn_update_task'])) {
                                ,'".$_POST['task_subitem']."'
                                ,'".$_POST['task_pos_neg']."'
                                ,'".$_POST['task_notes']."'
-                               ,$task_complete_by_date
+                               ,$task_due_date
+                               ,$task_completed_date
                                ,".$_POST['task_points']."
                                ,$task_completed_user
                                ,$task_complete_approved
@@ -635,6 +644,7 @@ if (isset($_POST['btn_update_task'])) {
                   <td style="padding: 5px"><label for="">SubItem</label></td>
                   <td style="padding: 5px"><label for="">+ | -</label></td>
                   <td style="padding: 5px"><label for="">Notes</label></td>
+                  <td style="padding: 5px"><label for="">Due date</label></td>
                   <td style="padding: 5px"><label for="">Completed date</label></td>
                   <td style="padding: 5px"><label for="">Task points</label></td>
                   <td style="padding: 5px"><label for="">User resolved</label></td>
@@ -686,9 +696,12 @@ if (isset($_POST['btn_update_task'])) {
                     <option value="negative">-</option>
                   </select></td>
                   <td style="padding: 5px;"><input type="text" class="form-control"  value="" name="task_notes" id="task_notes" required></td>
-                  <td style="padding: 5px"><span class="input-daterange input-group">
-                    <input type="text" class="input-sm form-control datepicker" name="task_complete_by_date" id="task_complete_by_date" data-date-format="mm/dd/yyyy"/>
-                  </span></td>
+                  <td style="padding: 5px">
+                    <input type="text" class="input-sm form-control datepicker" name="task_due_date" id="task_due_date" data-date-format="mm/dd/yyyy"/ required>
+                  </td>
+                  <td style="padding: 5px">
+                    <input type="text" class="input-sm form-control datepicker" name="task_completed_date" id="task_completed_date" data-date-format="mm/dd/yyyy"/>
+                  </td>
                   <td style="padding: 5px;"><input type="number" class="form-control"  value="" name="task_points" id="task_points" required></td>
                   <td style="padding: 5px;"><input type="checkbox"  value="" name="task_complete_user" id="task_complete_user" ></td>
                   <td style="padding: 5px;"><input type="checkbox"   value="" name="task_complete_approved" id="task_complete_approved"></td>
@@ -746,7 +759,10 @@ if (isset($_POST['btn_update_task'])) {
                   </select></td>
                   <td style="padding: 5px;"><input type="text" class="form-control"  value="<?php echo $tasks_aggregate[$j]['notes']; ?>" name="task_notes" id="task_notes_<?php echo $tasks_aggregate[$j]['id'];?>" required onkeypress="update_tasks(this);"></td>
                   <td style="padding: 5px">
-                    <input type="text" class="input-sm form-control datepicker" name="task_complete_by_date" id="task_complete_by_date_<?php echo $tasks_aggregate[$j]['id'];?>" data-date-format="mm/dd/yyyy"/ value="<?php echo $tasks_aggregate[$j]['complete_by_date']; ?>" onchange="update_tasks(this);">
+                    <input type="text" class="input-sm form-control datepicker" name="task_due_date" id="task_due_date_<?php echo $tasks_aggregate[$j]['id'];?>" data-date-format="mm/dd/yyyy"/ value="<?php echo $tasks_aggregate[$j]['due_date']; ?>" onchange="update_tasks(this);">
+                  </td>
+                  <td style="padding: 5px">
+                    <input type="text" class="input-sm form-control datepicker" name="task_completed_date" id="task_completed_date_<?php echo $tasks_aggregate[$j]['id'];?>" data-date-format="mm/dd/yyyy"/ value="<?php echo $tasks_aggregate[$j]['completed_date']; ?>" onchange="update_tasks(this);">
                   </td>
                   <td style="padding: 5px;"><input type="number" class="form-control"  value="<?php echo $tasks_aggregate[$j]['points'];?>" name="task_points" id="task_points_<?php echo $tasks_aggregate[$j]['id'];?>" required onchange="update_tasks(this);"></td>
                   <td style="padding: 5px;"><input type="checkbox"  <?php if ($tasks_aggregate[$j]['complete_user'] == "1") { echo ' checked '; }?> name="task_complete_user" id="task_complete_user_<?php echo $tasks_aggregate[$j]['id'];?>" onchange="update_tasks(this);"></td>
