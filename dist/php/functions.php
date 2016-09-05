@@ -139,11 +139,11 @@ function generate_compliance_sql($emp_id,$time) {
     $sql = "SELECT 'Total Company Points' AS basic, sum(total_points) AS total_points, sum(points_cash_value) AS points_cash_value FROM csadata
          WHERE $time_predicate
          union
-         select 'Total Points' as basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from CSADATA
+         select 'Total Points' as basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from csadata
          where $predicate
          and $time_predicate
          union
-         select basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from CSADATA
+         select basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from csadata
          where $predicate
          and basic in ('Vehicle Maint.','HOS Compliance','No Violation','Unsafe Driving','Driver Fitness','Controlled Substances/Alcohol','Hazardous Materials (HM)','Crash Indicator')
          and $time_predicate
@@ -179,7 +179,7 @@ function generate_compliance_predicate($emp_id,$time) {
    return array ($predicate,$time_predicate);
 }
 function generate_clockin_sql($emp_id,$sd,$ed) {
-    $sql = "select count(*) from DAYS_WORKED
+    $sql = "select count(*) from days_worked
         where `DATE WORKED` between STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
         and `EMPLOYEE NUMBER` = '$emp_id'
         and worked = 1";
@@ -187,7 +187,7 @@ function generate_clockin_sql($emp_id,$sd,$ed) {
 }
 
 function generate_vir_sql($emp_id,$sd,$ed) {
-    $sql="select count(*),insp_type from VIRS WHERE
+    $sql="select count(*),insp_type from virs WHERE
                 employee_id ='$emp_id'
                 and INSP_DATE between STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
                 group by insp_type";
