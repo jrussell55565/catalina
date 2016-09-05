@@ -1,3 +1,138 @@
+<?php
+$sql = "SELECT total_today.counts   AS total_today_count, 
+       pu_today.counts      AS pu_today_count, 
+       del_today.counts     AS del_today_count, 
+       total_alltime.counts AS total_alltime_count, 
+       pu_alltime.counts    AS pu_alltime_count, 
+       del_alltime.counts   AS del_alltime_count, 
+       archived.counts      AS archived_count, 
+       virs_daily.count     AS virs_daily_count, 
+       virs_weekly.count    AS virs_weekly_count 
+FROM   ( 
+              SELECT Count(*) AS counts 
+              FROM   dispatch 
+              WHERE  ( 
+                            puagentdriverphone= 
+                            ( 
+                                   SELECT driverid 
+                                   FROM   users 
+                                   WHERE  username=\"$username\" ) 
+                     AND    Str_to_date(hawbdate,'%c/%e/%Y') = Curdate() 
+                     AND    deleted =\"F\" 
+                     AND    archived =\"F\" ) 
+              OR     ( 
+                            delagentdriverphone= 
+                            ( 
+                                   SELECT driverid 
+                                   FROM   users 
+                                   WHERE  username =\"$username\" ) 
+                     AND    Str_to_date(duedate,'%c/%e/%Y') = Curdate() 
+                     AND    deleted =\"F\" 
+                     AND    archived =\"F\" ) ) total_today, 
+       ( 
+              SELECT Count(*) AS counts 
+              FROM   dispatch 
+              WHERE  puagentdriverphone= 
+                     ( 
+                            SELECT driverid 
+                            FROM   users 
+                            WHERE  username=\"$username\" ) 
+              AND    Str_to_date(hawbdate,'%c/%e/%Y') = Date(Now()) 
+              AND    deleted =\"F\" 
+              AND    archived =\"F\" 
+              AND    deleted =\"F\" 
+              AND    archived =\"F\" ) pu_today, 
+       ( 
+              SELECT Count(*) AS counts 
+              FROM   dispatch 
+              WHERE  delagentdriverphone= 
+                     ( 
+                            SELECT driverid 
+                            FROM   users 
+                            WHERE  username=\"$username\" ) 
+              AND    Str_to_date(duedate,'%c/%e/%Y') = Date(Now()) 
+              AND    deleted =\"F\" 
+              AND    archived =\"F\" 
+              AND    deleted =\"F\" 
+              AND    archived =\"F\" ) del_today, 
+       ( 
+              SELECT Count(*) AS counts 
+              FROM   dispatch 
+              WHERE  ( 
+                            delagentdriverphone= 
+                            ( 
+                                   SELECT driverid 
+                                   FROM   users 
+                                   WHERE  username=\"$username\" ) 
+                     OR     puagentdriverphone= 
+                            ( 
+                                   SELECT driverid 
+                                   FROM   users 
+                                   WHERE  username=\"$username\" ) ) 
+              AND    deleted =\"F\" 
+              AND    archived=\"F\" ) total_alltime, 
+       ( 
+              SELECT Count(*) AS counts 
+              FROM   dispatch 
+              WHERE  puagentdriverphone= 
+                     ( 
+                            SELECT driverid 
+                            FROM   users 
+                            WHERE  username=\"$username\" ) 
+              AND    deleted =\"F\" 
+              AND    archived=\"F\" ) pu_alltime, 
+       ( 
+              SELECT Count(*) AS counts 
+              FROM   dispatch 
+              WHERE  delagentdriverphone= 
+                     ( 
+                            SELECT driverid 
+                            FROM   users 
+                            WHERE  username=\"$username\" ) 
+              AND    deleted =\"F\" 
+              AND    archived=\"F\" ) del_alltime, 
+       ( 
+              SELECT Count(*) AS counts 
+              FROM   dispatch 
+              WHERE  ( 
+                            delagentdriverphone= 
+                            ( 
+                                   SELECT driverid 
+                                   FROM   users 
+                                   WHERE  username=\"$username\" ) 
+                     OR     puagentdriverphone= 
+                            ( 
+                                   SELECT driverid 
+                                   FROM   users 
+                                   WHERE  username=\"$username\" ) ) 
+              AND    deleted =\"F\" 
+              AND    archived=\"T\" ) archived, 
+       ( 
+              SELECT Count(*) AS count 
+              FROM   virs 
+              WHERE  driver_name =\"$username\" 
+              AND    insp_date = Date(Now()) ) virs_daily, 
+       ( 
+              SELECT Count(*) AS count 
+              FROM   virs 
+              WHERE  driver_name=\"$username\" 
+              AND    insp_date BETWEEN Date(Now()) AND    Date(Now()) - interval 8 day ) virs_weekly";
+
+                      $sql = mysql_query($sql);
+                      while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
+                      {
+                        $total_today_count   = $row['total_today_count'];
+                        $pu_today_count      = $row['pu_today_count'];
+                        $del_today_count     = $row['del_today_count'];
+                        $total_alltime_count = $row['total_alltime_count'];
+                        $pu_alltime_count    = $row['pu_alltime_count'];
+                        $del_alltime_count   = $row['del_alltime_count'];
+                        $archived_count      = $row['archived_count'];
+                        $virs_daily_count    = $row['virs_daily_count'];
+                        $virs_weekly_count   = $row['virs_weekly_count'];
+                      }
+                      mysql_free_result($sql);
+?>
         <!-- Main content -->
         <section class="content">
           <!-- Info boxes -->
