@@ -30,7 +30,7 @@ if ($_POST['btn_csa'])
     $statement = "load data local infile \"".$_FILES['file_csa']["tmp_name"]."\"
                REPLACE INTO TABLE csadata FIELDS TERMINATED BY ','
                ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 LINES
-               (@v_date,state,number,level,placard_inspection,hm_inspection,basic,violation_group,code,description,out_of_service,convicted_diff_charge,violation_weight,time_weight,total_points,basic_violation_inspection,last_name,first_name,co_driver_last_name,co_driver_first_name)
+               (@v_date,state,number,level,placard_inspection,hm_inspection,basic,violation_group,code,description,out_of_service,convicted_diff_charge,violation_weight,time_weight,total_points,points_cash_value,basic_violation_inspection,last_name,first_name,co_driver_last_name,co_driver_first_name,employee_id)
                SET date = str_to_date(@v_date, '%m/%d/%Y')";
 
     if ($mysqli->query($statement) === false)
@@ -52,6 +52,46 @@ if ($_POST['btn_csa'])
     exit;
 }
 
+if ($_POST['btn_users'])
+{
+  try
+  {
+    switch ($_FILES['file_csa']['error'])
+    {
+        case UPLOAD_ERR_OK:
+            break;
+        case UPLOAD_ERR_NO_FILE:
+            throw new Exception('No file found.');
+        case UPLOAD_ERR_INI_SIZE:
+        case UPLOAD_ERR_FORM_SIZE:
+            throw new Exception('Exceeded filesize limit.');
+        default:
+            throw new Exception('Unknown error uploading '.$_FILES['file_csa']['name']);
+    }
+    $statement = "load data local infile \"".$_FILES['file_csa']["tmp_name"]."\"
+               REPLACE INTO TABLE days_worked FIELDS TERMINATED BY ','
+               ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 LINES
+               (`Employee Number`,`First`,`Last`,@v_date_worked,@v_time_begin,@v_time_end,`Hours`,`Amount`,`Code`,`worked`)
+               SET `Date Worked` = str_to_date(@v_date_worked,'%m/%d/%y'), `Time In` = str_to_date(@v_time_begin, '%l:%i %p'), `Time Out` = str_to_date(@v_time_end,'%l:%i %p')";
+
+    if ($mysqli->query($statement) === false)
+    {
+        throw new Exception("Unable to load file into csadata: ". $mysqli->error);
+    }
+
+    } catch (Exception $e) {
+        // An exception has been thrown
+        // We must rollback the transaction
+        $url_error = urlencode($e->getMessage());
+        $mysqli->rollback();
+        header("location: " . HTTP . "/pages/dispatch/imports.php?error=$url_error");
+        $mysqli->autocommit(TRUE);
+        $mysqli->close();
+        exit;
+    }
+    header("location: " . HTTP . "/pages/dispatch/imports.php?status=success");
+    exit;
+}
 if ($_POST['btn_trips'])
 {
   try
@@ -220,8 +260,8 @@ if ($_POST['btn_trips'])
                   <p>
                     <input id="file_csa" name="file_csa" type="file" multiple=false class="file-loading">
                   </p>
-                  <input type="submit" class="btn btn-primary" value="Import" name="btn_csa" id="btn_csa">
-                Only CSV File Imports will Work</div><!-- /.box-body -->
+                  <input type="submit" class="btn btn-primary" value="Import CSA" name="btn_csa" id="btn_csa">
+                  <input type="submit" class="btn btn-primary" value="Import Timesheets" name="btn_users" id="btn_users">
               </div><!-- /.box -->
             </div>
           </div>         
@@ -250,11 +290,10 @@ if ($_POST['btn_trips'])
                 <div class="box-body table-responsive no-padding">
                   <table width="98%" class="table table-hover">
                     <tr>
-                      <th><a href="http://login.intouchgps.com/users/sign_in">Intouch GPS Link</a> Download CSV File &amp; Upload..</th>
+                      <th><a href="http://login.intouchgps.com/users/sign_in">Download Trip Example</a> Download CSV File &amp; Upload...</th>
                     </tr>
                     <tr>
-                      <th><p>Example File: <a href="../pages/examples/intouchGPS/Idle-Totals-w-Multiple-multiple.csv">Example Trips</a></p>
-                      <p><img src="../pages/dispatch/images/trips.jpg" width="251" height="446"></p></th>
+                      <th>Example File: <a href="../pages/examples/intouchGPS/Idle-Totals-w-Multiple-multiple.csv">Example Idle Totals</a></th>
                     </tr>
                   </table>
                   <p>

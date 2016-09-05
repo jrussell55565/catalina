@@ -9,6 +9,7 @@ if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
 mysql_select_db($db_name) or DIE('Database name is not available!');
+$mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
 
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
@@ -297,8 +298,45 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
     }
   }
   mysql_free_result($sql);
-
 }
+
+  # Let's get an array of user info
+  $driver_array = [];
+  try {
+    // If I'm an admin we'll get all users, else just get the current user
+    if ($_SESSION['login'] == 1) { $predicate = 'where 1 = 1'; }else{ $predicate = 'where username="'.$_SESSION['username'].'"'; }
+    $statement = "
+    select max(username) as username ,max(employee_id) as employee_id 
+    ,max(DRIVER_LICENSE_EXP) as driver_license_exp 
+    ,max(MED_CARD_EXP) as med_card_exp ,max(TSA_STA) as tsa_sta from
+    (
+    select USERNAME,EMPLOYEE_ID,DRIVER_LICENSE_EXP,null as MED_CARD_EXP, null as TSA_STA from USERS 
+      where STATUS='Active' and DRIVER_LICENSE_EXP between current_date and current_date + interval 30 day
+    union
+    select USERNAME,EMPLOYEE_ID,null as DRIVER_LICENSE_EXP,MED_CARD_EXP, null as TSA_STA from USERS 
+      where STATUS='Active' and MED_CARD_EXP between current_date and current_date + interval 30 day
+    union
+    select USERNAME,EMPLOYEE_ID,null as DRIVER_LICENSE_EXP,null as MED_CARD_EXP, coalesce(TSA_STA,'NF') from USERS where STATUS='Active' and (TSA_STA is null or TSA_STA = '')
+    ) a $predicate group by a.username order by a.username";
+
+    if ($result = $mysqli->query($statement)) {
+      $counter = 0;
+      while($obj = $result->fetch_object()){
+        $driver_array[$counter]['username'] = $obj->username;
+        $driver_array[$counter]['employee_id'] = $obj->employee_id;
+        $driver_array[$counter]['driver_license_exp'] = $obj->driver_license_exp;
+        $driver_array[$counter]['med_card_exp'] = $obj->med_card_exp;
+        $driver_array[$counter]['tsa_sta'] = $obj->tsa_sta;
+        $counter++;
+      }
+    }else{
+      throw new Exception("Unable to query users: ".$mysqli->error);
+    }
+  } catch (Exception $e) {
+    // An exception has been thrown
+    echo "<script>console.log(".$e->getMessage().");</script>";
+  }
+  $mysqli->close();
 ?>
 
 
@@ -619,99 +657,52 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 <div class="box-body">
                   <!-- Conversations are loaded here -->
                   <div class="direct-chat-messages">
-                    <!-- Message. Default to the left I mean right LOL -->
-                    <div class="direct-chat-msg right">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left">Gilbert Huph</span>
-                        <span class="direct-chat-timestamp pull-right">06/23/2006 00:04</span>
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
-                      <!-- /.direct-chat-img -->
-                  <div class="direct-chat-text">Medical Card Expiration on 10/10/2016 Email / Text Sent</div>
-                    <!-- /.direct-chat-text -->
-                    </div>
-                    <!-- /.direct-chat-msg -->
-
-                    <!-- Message. Default to the left I mean right LOL -->
-                    <div class="direct-chat-msg right">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left">Syndrome</span>
-                        <span class="direct-chat-timestamp pull-right">06/23/2006 00:04</span>
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      <img src="../../dist/img/syndrome.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
-                      <!-- /.direct-chat-img -->
-                  <div class="direct-chat-text">Medical Card Expiration on 10/10/2016 Email / Text Sent</div>
-                    <!-- /.direct-chat-text -->
-                    </div>
-                    <!-- /.direct-chat-msg -->
-
-
-
-
+                    <?php for($i=0;$i<count($driver_array);$i++) { ?>
+                      <?php // If I'm an admin let's view all the drivers ?>
+                           <?php if ($driver_array[$i]['driver_license_exp'] != '') {?>
+                           <div class="direct-chat-msg right">
+                           <div class="direct-chat-info clearfix">
+                           <span class="direct-chat-name pull-left">Administrator</span>
+                           <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
+                           </div>
+                           <!-- /.direct-chat-info -->
+                           <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
+                           <!-- /.direct-chat-img -->
+                         <div class="direct-chat-text">Drivers license expires soon for <?php echo $driver_array[$i]['username']?> </div>
+                         <!-- /.direct-chat-text -->
+                         </div>
+                         <!-- /.direct-chat-msg -->
+                         <?php } ?>
+                           <?php if ($driver_array[$i]['med_card_exp'] != '') {?>
+                           <div class="direct-chat-msg right">
+                           <div class="direct-chat-info clearfix">
+                           <span class="direct-chat-name pull-left">Administrator</span>
+                           <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
+                           </div>
+                           <!-- /.direct-chat-info -->
+                           <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
+                           <!-- /.direct-chat-img -->
+                         <div class="direct-chat-text">Medical card expires soon for <?php echo $driver_array[$i]['username']?></div>
+                         <!-- /.direct-chat-text -->
+                         </div>
+                         <!-- /.direct-chat-msg -->
+                         <?php } ?>
+                           <?php if ($driver_array[$i]['tsa_sta'] == 'NF') {?>
+                           <div class="direct-chat-msg right">
+                           <div class="direct-chat-info clearfix">
+                           <span class="direct-chat-name pull-left">Administrator</span>
+                           <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
+                           </div>
+                           <!-- /.direct-chat-info -->
+                           <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
+                           <!-- /.direct-chat-img -->
+                         <div class="direct-chat-text">No TSA number entered for <?php echo $driver_array[$i]['username']?></div>
+                         <!-- /.direct-chat-text -->
+                         </div>
+                         <!-- /.direct-chat-msg -->
+                         <?php } ?>
+                    <?php } ?>
                     
-                    
-                    <!-- Message. Default to the left I mean right LOL -->
-                    <div class="direct-chat-msg right">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left">Bernie Kropp</span>
-                        <span class="direct-chat-timestamp pull-right">06/23/2006 00:04</span>
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      <img src="../../dist/img/bernie kropp.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
-                      <!-- /.direct-chat-img -->
-                  <div class="direct-chat-text">Drivers Licence Card Expiration on 9/08/2016 Email / Text Sent</div>
-                    <!-- /.direct-chat-text -->
-                    </div>
-                    <!-- /.direct-chat-msg -->
- 
-                     <!-- Message. Default to the left I mean right LOL -->
-                    <div class="direct-chat-msg right">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left">Frank Tank</span>
-                        <span class="direct-chat-timestamp pull-right">06/23/2006 00:04</span>
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      <img src="../../dist/img/frank.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
-                      <!-- /.direct-chat-img -->
-                  <div class="direct-chat-text">TSA # Missing on 10/10/2016 Email / Text Sent</div>
-                    <!-- /.direct-chat-text -->
-                    </div>
-                    <!-- /.direct-chat-msg -->                   
-                                        
-                    <!-- Message. Default to the left I mean right LOL -->
-                    <div class="direct-chat-msg right">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-right">EDNA</span>
-                        <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      <img src="../../dist/img/edna.jpg" alt="message user image" width="27" height="31" class="direct-chat-img">
-                      <!-- /.direct-chat-img -->
-                      <div class="direct-chat-text">Driver Licence Expiration on 9/18/2016 Email / Text Sent</div>
-                    <!-- /.direct-chat-text -->
-                    </div>
-                  <!-- /.direct-chat-msg -->
-
-
-                     <!-- Message. Default to the left -->
-                    <div class="direct-chat-msg left">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left">Hector Axe</span>
-                        <span class="direct-chat-timestamp pull-right">06/23/2006 00:04</span>
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      <img src="../../dist/img/h2tyd 3.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
-                      <!-- /.direct-chat-img -->
-                  <div class="direct-chat-text">Medical Card Expiration on 10/10/2016 Email / Text Sent</div>
-                    <!-- /.direct-chat-text -->
-                    </div>
-                    <!-- /.direct-chat-msg -->                      
-                  
-                  
-                  
-                  
                   </div>
                   <!--/.direct-chat-messages-->
                   <!-- Contacts are loaded here -->
@@ -779,16 +770,6 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 <!-- /.direct-chat-pane -->
                 </div>
 <!-- /.box-body -->
-                <div class="box-footer">
-                  <form action="#" method="post">
-                    <div class="input-group">
-                      <input type="text" name="message" placeholder="Share Message Might want to remove this..." class="form-control">
-                      <span class="input-group-btn">
-                        <button type="button" class="btn btn-danger btn-flat">Send</button>
-                      </span>
-                    </div>
-                  </form>
-                </div><!-- /.box-footer-->
               </div><!--/.direct-chat -->
             </div><!-- /.col -->
 
