@@ -133,8 +133,12 @@ $vir_aggregate = validate_vir($vir_aggregate);
 
 <!-- Animated Top Menu Insert PHP Reference to /wwwlive/dist/menus_sidebars_elements  -->
 
-          <div class="row">
-           <div class="col-md-3">
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/topmenuanimation.php');?>
+
+<!-- End Animated Top Menu -->  
+<div class="container">
+  <div class="row text-center">
+    <div class="col-sm-<?php if ($_SESSION['login'] == 1) { echo 10; }else{ echo 6; }?> pull-left well">
            <form name="frm_productivity" method="GET" action="" role="form" enctype="multipart/form-data">
               <div class="box-body">
                <div class="input-daterange input-group" id="datepicker">
@@ -147,7 +151,7 @@ $vir_aggregate = validate_vir($vir_aggregate);
                  <select class="input-sm form-control" name="trip_search_driver" id="trip_search_driver" value="" style="margin-top: 5px;">
                   <option value="null">Choose Driver...</option>
                     <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
-                      <option value=<?php echo $driver_array[$i]['employee_id']; 
+                      <option value=<?php echo $driver_array[$i]['employee_id'];
                        if ($driver_array[$i]['employee_id'] == $_GET['trip_search_driver']) { echo " selected "; } ?>
                       ><?php echo $driver_array[$i]['name'];?></option>
                     <?php } ?>
@@ -156,13 +160,9 @@ $vir_aggregate = validate_vir($vir_aggregate);
                <?php } ?>
             <button type="submit" class="btn btn-danger" name="btn_submit" value='true' style="margin-top: 5px;">Submit</button>
            </form>
-          </div>
-         </div>
-         </div>
-
-<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/topmenuanimation.php');?>
-
-<!-- End Animated Top Menu -->  
+    </div>
+  </div>
+</div>
 <!-- =============Productivity Menu================================ -->
 
 
