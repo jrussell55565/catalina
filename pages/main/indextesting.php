@@ -301,7 +301,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 }
 
   # Let's get an array of user info
-  $driver_array = [];
+  $expiration_array = [];
   try {
     // If I'm an admin we'll get all users, else just get the current user
     if ($_SESSION['login'] == 1) { $predicate = 'where 1 = 1'; }else{ $predicate = 'where username="'.$_SESSION['username'].'"'; }
@@ -322,11 +322,11 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
     if ($result = $mysqli->query($statement)) {
       $counter = 0;
       while($obj = $result->fetch_object()){
-        $driver_array[$counter]['username'] = $obj->username;
-        $driver_array[$counter]['employee_id'] = $obj->employee_id;
-        $driver_array[$counter]['driver_license_exp'] = $obj->driver_license_exp;
-        $driver_array[$counter]['med_card_exp'] = $obj->med_card_exp;
-        $driver_array[$counter]['tsa_sta'] = $obj->tsa_sta;
+        $expiration_array[$counter]['username'] = $obj->username;
+        $expiration_array[$counter]['employee_id'] = $obj->employee_id;
+        $expiration_array[$counter]['driver_license_exp'] = $obj->driver_license_exp;
+        $expiration_array[$counter]['med_card_exp'] = $obj->med_card_exp;
+        $expiration_array[$counter]['tsa_sta'] = $obj->tsa_sta;
         $counter++;
       }
     }else{
@@ -336,6 +336,51 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
     // An exception has been thrown
     echo "<script>console.log(".$e->getMessage().");</script>";
   }
+
+  // Get the tasks assigned to the user.
+  $sql = "select id,
+                              date_format(submit_date,'%m/%d/%Y') as submit_date
+                              ,assign_to
+                              ,assigned_by
+                              ,category
+                              ,item
+                              ,subitem
+                              ,pos_neg
+                              ,notes
+                              ,date_format(due_date,'%m/%d/%Y') as due_date
+                              ,date_format(completed_date,'%m/%d/%Y') as completed_date
+                              ,points
+                              ,complete_user
+                              ,complete_approved
+         from tasks
+         where assign_to = '".$_SESSION['employee_id']."'
+         and complete_user = 0
+         and complete_approved = 0
+         order by submit_date";
+
+  $tasks_aggregate = get_sql_results($sql,$mysqli);
+
+  // Let's update the task (done via ajax)
+  if (isset($_POST['type'])) {
+    $sql = "update tasks set complete_user = 1 where id = ".$_POST['id'];
+    try {
+        if ($mysqli->query($sql) === false)
+        {
+            throw new Exception("Error updating tasks table: ".$mysqli->error);
+        }
+    } catch (Exception $e) {
+    // An exception has been thrown
+    // We must rollback the transaction
+    $url_error = $e->getMessage();
+    $mysqli->rollback();
+    header('HTTP/1.1 500 Internal Server Booboo');
+    header('Content-Type: application/json; charset=UTF-8');
+    $mysqli->close();
+    die(json_encode(array("failure" => true,"error" => "Some random error happened")));
+  }
+  exit;
+ }
+
   $mysqli->close();
 ?>
 
@@ -343,7 +388,6 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 <!DOCTYPE html>
 <html>
 <head>
-<BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
 <title>Index Testing</title>
 <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>
@@ -508,54 +552,32 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 <div class="box-body">
                   <!-- Conversations are loaded here -->
                   <div class="direct-chat-messages">
-                    <!-- Message. Default to the left -->
-                    <div class="direct-chat-msg">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left">Gilbert Huph</span>
-                        <span class="time pull-right"><i class="fa fa-clock-o"></i> 2 days ago</span>
-<!--                        <span class="direct-chat-timestamp pull-right">Posted: 06/23/2006</span> -->
-                        
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      <img src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; }?>" class="direct-chat-img" alt="User Image" /><!-- /.direct-chat-img -->
-                      <div class="direct-chat-text">
-                      <span class="input-group-addon" style="border: 0px; background: transparent"></span> Congrats to Billy Bob &quot;1&quot; Year Work Anniversary in &quot;2&quot; PHP Here Days</div>
-                      <!-- /.direct-chat-text -->
-                    </div><!-- /.direct-chat-msg -->
-                    
-<!-- Message. Default to the left -->
-                    <div class="direct-chat-msg">
-                      <div class="direct-chat-info clearfix">
-                        <span class="time pull-right"><i class="fa fa-clock-o"></i> 2 days ago</span>
-<!--                        <span class="direct-chat-timestamp pull-right">Posted: 06/23/2006</span> -->
-                      </div>
-                      <!-- /.direct-chat-info --><!-- /.direct-chat-img -->
-                      <div class="direct-chat-text">
-                      <span class="input-group-addon" style="border: 0px; background: transparent"></span>Happy Birthday  to Edna   &quot;10&quot; PHP Here Days</div>
-                      <!-- /.direct-chat-text -->
-                    </div><!-- /.direct-chat-msg -->
-                    
-<!-- Message. Default to the left -->
-                    <div class="direct-chat-msg">
-                      <div class="direct-chat-info clearfix">
-                        <span class="time pull-right"><i class="fa fa-clock-o"></i> 2 days ago</span>
-<!--                        <span class="direct-chat-timestamp pull-right">Posted: 06/23/2006</span> -->
-                      </div>
-                      <!-- /.direct-chat-info --><img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="47" height="36" class="direct-chat-img"><!-- /.direct-chat-img -->
-                      <div class="direct-chat-text">
-                    <span class="input-group-addon" style="border: 0px; background: transparent"></span>  Welcome Gilbert Huph to the team &quot;php date of arrival&quot; Cron Job to check the DB for new Users added daily at midnight...</div>
-                      <!-- /.direct-chat-text -->
-                    </div><!-- /.direct-chat-msg --> 
-                    <!-- Message to the right -->
-                    <div class="direct-chat-msg right">
-                      <div class="direct-chat-info clearfix">
-                        <span class="time pull-right"><i class="fa fa-clock-o"></i> 2 days ago</span>
-<!--                        <span class="direct-chat-timestamp pull-right">Posted: 06/23/2006</span> -->
-                      </div><!-- /.direct-chat-info --><img class="direct-chat-img" src="../dist/img/server.jpg" alt="message user image"><!-- /.direct-chat-img -->
-                      <div class="direct-chat-text">
-                    System Messages Sent to All Users!
-                  </div><!-- /.direct-chat-text -->
-                    </div><!-- /.direct-chat-msg -->
+                  <!-- Begin Task notifications -->
+                    <?php for($i=0;$i<count($tasks_aggregate);$i++) { ?>
+                           <div class="direct-chat-msg right" id="top_level_<?php echo $tasks_aggregate[$i]['id'];?>">
+                           <div class="direct-chat-info clearfix">
+                           <span class="direct-chat-name pull-left">Task Master</span>
+                           <span class="direct-chat-timestamp pull-right"><?php echo $tasks_aggregate[$i]['submit_date'];?></span>
+                           </div>
+                           <!-- /.direct-chat-info -->
+                           <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
+                           <!-- /.direct-chat-img -->
+                         <div class="direct-chat-text"><?php echo $tasks_aggregate[$i]['notes']?><br><span style="font-size:.8em;">Due: <?php echo $tasks_aggregate[$i]['due_date'];?></span></div>
+                         <table border="0">
+                         <tr>
+                          <td>
+                            <div class="img-push">
+                             <button class='btn btn-default btn-xs' name="btn_updatetask" id="btn_updatetask_<?php echo $tasks_aggregate[$i]['id'];?>" 
+                                onclick="update_task(this);" value="<?php echo $tasks_aggregate[$i]['id'];?>"><i class='fa fa-check-circle'></i>Done!</button>
+                            </div>
+                         </td>
+                        </tr>
+                        </table>
+                         <!-- /.direct-chat-text -->
+                         </div>
+                         <!-- /.direct-chat-msg -->
+                    <?php } ?>
+                  <!-- End Task notifications -->
                   </div><!--/.direct-chat-messages-->
                   <!-- Contacts are loaded here -->
                   <div class="direct-chat-contacts">
@@ -657,9 +679,8 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 <div class="box-body">
                   <!-- Conversations are loaded here -->
                   <div class="direct-chat-messages">
-                    <?php for($i=0;$i<count($driver_array);$i++) { ?>
-                      <?php // If I'm an admin let's view all the drivers ?>
-                           <?php if ($driver_array[$i]['driver_license_exp'] != '') {?>
+                    <?php for($i=0;$i<count($expiration_array);$i++) { ?>
+                           <?php if ($expiration_array[$i]['driver_license_exp'] != '') {?>
                            <div class="direct-chat-msg right">
                            <div class="direct-chat-info clearfix">
                            <span class="direct-chat-name pull-left">Administrator</span>
@@ -668,12 +689,12 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                            <!-- /.direct-chat-info -->
                            <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
                            <!-- /.direct-chat-img -->
-                         <div class="direct-chat-text">Drivers license expires soon for <?php echo $driver_array[$i]['username']?> </div>
+                         <div class="direct-chat-text">Drivers license expires soon for <?php echo $expiration_array[$i]['username']?> </div>
                          <!-- /.direct-chat-text -->
                          </div>
                          <!-- /.direct-chat-msg -->
                          <?php } ?>
-                           <?php if ($driver_array[$i]['med_card_exp'] != '') {?>
+                           <?php if ($expiration_array[$i]['med_card_exp'] != '') {?>
                            <div class="direct-chat-msg right">
                            <div class="direct-chat-info clearfix">
                            <span class="direct-chat-name pull-left">Administrator</span>
@@ -682,12 +703,12 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                            <!-- /.direct-chat-info -->
                            <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
                            <!-- /.direct-chat-img -->
-                         <div class="direct-chat-text">Medical card expires soon for <?php echo $driver_array[$i]['username']?></div>
+                         <div class="direct-chat-text">Medical card expires soon for <?php echo $expiration_array[$i]['username']?></div>
                          <!-- /.direct-chat-text -->
                          </div>
                          <!-- /.direct-chat-msg -->
                          <?php } ?>
-                           <?php if ($driver_array[$i]['tsa_sta'] == 'NF') {?>
+                           <?php if ($expiration_array[$i]['tsa_sta'] == 'NF') {?>
                            <div class="direct-chat-msg right">
                            <div class="direct-chat-info clearfix">
                            <span class="direct-chat-name pull-left">Administrator</span>
@@ -696,7 +717,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                            <!-- /.direct-chat-info -->
                            <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
                            <!-- /.direct-chat-img -->
-                         <div class="direct-chat-text">No TSA number entered for <?php echo $driver_array[$i]['username']?></div>
+                         <div class="direct-chat-text">No TSA number entered for <?php echo $expiration_array[$i]['username']?></div>
                          <!-- /.direct-chat-text -->
                          </div>
                          <!-- /.direct-chat-msg -->
@@ -1493,6 +1514,21 @@ x = myLineChart.generateLegend();
 $("#js-legend").html(x);
 </script>
 
-<!-- Demo -->
+<script>
+function update_task(i) {
+    // Update the status of our task
+    my_db_id = $(i).val();
+    my_id = $(i).attr('id');
+
+    $("#top_level_"+my_db_id).hide();
+    $.post( "<?php echo $_SERVER['PHP_SELF'];?>", { id: my_db_id, type: 'ajax' })
+    .done(function(data, textStatus, request) { 
+      var objData = jQuery.parseJSON(data); 
+      if (objData.failure) { $("#top_level_"+my_db_id).show();}
+     })
+    .fail(function(data, textStatus, request) { console.log(data); });
+}
+</script>
+
 </body>
 </html>
