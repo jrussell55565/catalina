@@ -151,7 +151,7 @@ if (isset($_POST['btn_update_task'])) {
     try {
         if ($mysqli->query($sql) === false)
         {
-            throw new Exception("Error UPDATING IFTA: ".$mysqli->error);
+            throw new Exception("Error inserting into tasks table: ".$mysqli->error);
         }
     } catch (Exception $e) {
     // An exception has been thrown
