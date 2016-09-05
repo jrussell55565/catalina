@@ -168,7 +168,6 @@ if (isset($_POST['btn_update_task'])) {
 <!DOCTYPE html>
 <html>
 <head>
-<BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
 <title>Projects 2</title>
 <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>
@@ -884,7 +883,7 @@ function update_tasks(i) {
      }
      my_col = my_col.replace('task_','');
 
-     $.post( "<?php echo HTTP;?>/pages/dispatch/tasks.php", { id: my_hdn_val, column: my_col, value: my_val, type: 'ajax' })
+     $.post( "<?php echo $_SERVER['PHP_SELF'];?>", { id: my_hdn_val, column: my_col, value: my_val, type: 'ajax' })
      .success(function(data, textStatus, request) { console.log(data); })
      .error(function(data, textStatus, request) { console.log(data); });
     }, 1000); // Will do the ajax stuff after 1000 ms, or 1 s
