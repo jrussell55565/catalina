@@ -446,7 +446,8 @@ function generate_user_csa_sql($emp_id,$time,$basic) {
         co_driver_first_name,
         co_driver_last_name,
         total_points,
-        CONCAT_WS(' ',first_name,last_name) as name
+        CONCAT_WS(' ',first_name,last_name) as name,
+        points_cash_value
         from csadata where $emp_id
         and $time and $basic_predicate";
     return $sql;
