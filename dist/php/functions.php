@@ -93,11 +93,11 @@ function get_drivers($mysqli) {
    $driver_array = [];
    $statement = "select * from
    (
-   select fname, lname, employee_id from users where title = 'Driver'
+   select fname, lname, employee_id, email from users where title = 'Driver'
    union
-   select 'Unknown' as fname, 'Driver' as lname, 'null' as employee_id from DUAL
+   select 'Unknown' as fname, 'Driver' as lname, 'null' as employee_id, 'null' as email from DUAL
    union
-   select 'Multiple' as fname, 'Drivers' as lname, 'null' as employee_id from DUAL
+   select 'Multiple' as fname, 'Drivers' as lname, 'null' as employee_id, 'null' as email from DUAL
    ) a order by fname";
 
    $counter = 0;
@@ -105,6 +105,7 @@ function get_drivers($mysqli) {
      while($obj = $result->fetch_object()){
        $driver_array[$counter]['employee_id'] = $obj->employee_id;
        $driver_array[$counter]['name'] = $obj->fname. " ". $obj->lname;
+       $driver_array[$counter]['email'] = $obj->email;
        $counter++;
      }
    }
