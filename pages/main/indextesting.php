@@ -646,17 +646,6 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                   </div><!-- /.direct-chat-pane -->
                 </div><!-- /.box-body -->
 
-                <div class="box-footer">
-                  <form action="#" method="post">
-                    <div class="input-group">
-                      <input type="text" name="message" placeholder="Share Message Might want to remove this..." class="form-control">
-                      <span class="input-group-btn">
-                        <button type="button" class="btn btn-primary btn-flat">Send</button>
-                      </span>
-                    </div>
-                  </form>
-                </div><!-- /.box-footer-->
-
               </div><!--/.direct-chat -->
             </div><!-- /.col -->
 
