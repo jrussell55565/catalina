@@ -347,7 +347,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            3 Colums / <span class="box-title"><?php echo "$_SESSION[drivername]"; ?></span> <a href="#">
+            3 Colums Test/ <span class="box-title"><?php echo "$_SESSION[drivername]"; ?></span> <a href="#">
             <?php if ($_SESSION['login'] == 1) { echo "(Admin)"; }?>
             </a></h1>
 
