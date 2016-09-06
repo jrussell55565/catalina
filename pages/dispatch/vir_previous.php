@@ -158,10 +158,10 @@ folder instead of downloading all of them to reduce the load. -->
         <h3 class="box-title">VIR</h3>
         <p>
          <label for="allvir"></label>
-         <input name="radio" type="radio" id="allvir" value="allvir" checked>
+         <input name="radio" type="radio" id="allvir" value="allvir">
          All
          <label for="openvir"></label>
-         <input name="radio" type="radio" id="openvir" value="openvir" >
+         <input name="radio" type="radio" id="openvir" value="openvir" checked >
          Open
         </p>
       </div>
@@ -232,11 +232,11 @@ $result->close();
             <tr>
               <td style="width: 20px;"><i class="glyphicon glyphicon-wrench"></i></td>
               <td><?php echo "$max_results days ago";?>
-                <a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse"
-href="#vir_details" aria-expanded="false" aria-controls="vir_details" style="padding-left: 15px;">
+                <a class="glyphicon glyphicon-chevron-down" role="button" data-toggle="collapse"
+href="#vir_details" aria-expanded="false" aria-controls="vir_details" style="padding-left: 15px;" id="expand_chevron">
                 </a></td>
             </tr>
-            <tr class="collapse" id="vir_details">
+            <tr id="vir_details">
               <td colspan="9"><div class="well table-responsive">
                   <table class="table">
                     <thead>
@@ -664,7 +664,7 @@ if (sel.value == "Close")
 
 $(document).ready(function() {
   // Default visibility for users
-  $('[name="closed_vir"]').show();
+  $('[name="closed_vir"]').hide();
   $('[name="notclosed_vir"]').show();
 
   $("#allvir").click(function() {
