@@ -242,62 +242,38 @@ $role = $_SESSION['role'];
                       }
                       mysql_free_result($sql);
 
-if (isset($_POST['submit']) && $_POST['submit'] == 'share')
+if (isset($_POST['broadcast_message']))
 {
   $audience = $_POST['audience'];
-  if ($audience == 'PHX')
-  {
-    $predicate = "AND office='PHX'";
-  }
-  if ($audience == 'TUS')
-  {
-    $predicate = "AND office='TUS'";
-  }
-    if ($audience == 'PHL')
-  {
-    $predicate = "AND office='PHL'";
-  }
-    if ($audience == 'DEN')
-  {
-    $predicate = "AND office='DEN'";
-  }
-    if ($audience == 'LAX')
-  {
-    $predicate = "AND office='LAX'";
-  }
-    if ($audience == 'MIA')
-  {
-    $predicate = "AND office='MIA'";
-  }
-    if ($audience == 'ORD')
-  {
-    $predicate = "AND office='ORD'";
-  }
+  if ($audience == 'PHX') { $predicate = "AND office='PHX'"; }
+  if ($audience == 'TUS') { $predicate = "AND office='TUS'"; }
+  if ($audience == 'PHL') { $predicate = "AND office='PHL'"; }
+  if ($audience == 'DEN') { $predicate = "AND office='DEN'"; }
+  if ($audience == 'LAX') { $predicate = "AND office='LAX'"; }
+  if ($audience == 'MIA') { $predicate = "AND office='MIA'"; }
+  if ($audience == 'ORD') { $predicate = "AND office='ORD'"; }
+  if ($audience == 'All') { $predicate = "AND office like '%'"; }
+
   $message = $_POST['message'];
-  $sql = "SELECT 1";
-  if (isset($_POST['sendEmail']))
-  {
-    $sql .= ",email";
-  } 
-  if (isset($_POST['sendText']))
-  {
-    $sql .= ",vtext";
-  } 
+  $sql = "SELECT 1 ";
+
+  if (isset($_POST['sendEmail'])) { $sql .= ",email"; } 
+  if (isset($_POST['sendText'])) { $sql .= ",vtext"; } 
+
   $sql .= " FROM users WHERE 1=1 $predicate AND status='Active'";
 
-  $sql = mysql_query($sql);
-  while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
+  $broadcast_users = get_sql_results($sql,$mysqli);
+  for($broadcast_i=0;$broadcast_i<count($broadcast_users);$broadcast_i++)
   {
     if (isset($_POST['sendEmail']))
     {
-      sendEmail($row['email'],'Broadcast Message',$message); 
+      sendEmail($broadcast_users[$broadcast_i]['email'],'Broadcast Message',$message); 
     } 
     if (isset($_POST['sendText']))
     {
-      sendEmail($row['vtext'],'Broadcast Message',$message); 
+      sendEmail($broadcast_users[$broadcast_i]['vtext'],'Broadcast Message',$message); 
     }
   }
-  mysql_free_result($sql);
 }
 
   # Let's get an array of user info
@@ -470,6 +446,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 <!-- Box with New Email Message -->
 
 
+           <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
             <div class="col-md-4">
               <div class="box box-primary">
                 <div class="box-header with-border">
@@ -488,46 +465,34 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 					   <option>MIA</option>
 					   <option>ORD</option>
 			        </select>
-                    <input class="form-control" placeholder="CC Additionals:">
+                    <input class="form-control" placeholder="CC Additionals:" disabled>
                     <div class="input-group-inline">
 
-<div class="checkbox">
-  <label><input type="checkbox" name="sendEmail" value="on" checked="">Email</label>
-  <label style="margin-left:10px;"><input name="sendText" type="checkbox" value="on" checked>Text</label>
-  <label style="margin-left:10px;"><input name="Post" type="checkbox" value="on" checked disabled>Post</label>
-</div>                        
+                    <div class="checkbox">
+                      <label><input type="checkbox" name="sendEmail" value="on" checked="">Email</label>
+                      <label style="margin-left:10px;"><input name="sendText" type="checkbox" value="on" checked>Text</label>
+                      <label style="margin-left:10px;"><input name="Post" type="checkbox" value="on" checked disabled>Post</label>
+                    </div>                        
                        
                        
 					</div>
                   </div>
                   <div class="form-group"> 
-                  <input class="form-control" placeholder="Subject:">
+                  <input class="form-control" placeholder="Subject:" disabled>
                  </div>
                   <div class="form-group">
-                    <textarea id="textarea"  class="form-control" placeholder="Type your message here...."  style="height: 100px">
-                    </textarea>
-                    <!-- Note: If Text is not checked do not show the below Field.  If Text is checked, then populate only 166 characters including (subject line) That is only seen when viewing a text message  -->
-                    <input type="text" class="form-control" name="message" id="message" placeholder="1st 166 Characters only show if text box checked..." value="" required="">
-                  <span class="direct-chat-msg"><img src="../../dist/img/edna.jpg" alt="message user image" width="47" height="36" class="direct-chat-img"></span></div>
-                  <div class="form-group">
-                    <div class="btn btn-default btn-file">
-                      <i class="fa fa-paperclip"></i> Attachment
-                      <input type="file" name="attachment">
-                    </div>
-                    <p class="help-block">Max. 32MB Pixl 480x300</p>
-                  </div>
+                    <textarea id="textarea"  class="form-control" placeholder="Type your message here...."  style="height: 100px" required></textarea>
+                    <input type="text" class="form-control" name="message" id="message" placeholder="1st 166 Characters only show if text box checked..." value="" disabled>
+                 </div>
                 </div><!-- /.box-body -->
                 <div class="box-footer">
                   <div class="pull-right">
-                    <!-- /.box-body
-                    <button class="btn btn-default"><i class="fa fa-pencil"></i> Draft</button>
-                    -->
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-share-alt"></i> Share</button>
+                    <button type="submit" class="btn btn-primary" name="broadcast_message" id="broadcast_message" ><i class="fa fa-share-alt"></i> Share</button>
                   </div>
-                  <button class="btn btn-default"><i class="fa fa-times"></i> Discard</button>
                 </div><!-- /.box-footer -->
               </div><!-- /. box -->
             </div><!-- /.col -->
+           </form>
             
             
             
@@ -810,12 +775,6 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 </div><!-- /.box-header -->
                 <div class='box-body'>
                 Medical Card Expiration on 10/10/2016 Email / Text Sent to User
-                  <!-- Removing Original Position of Share Like Options
-                  <p>Check out this cool video. What do you guys think?</p>
-                  <button class='btn btn-default btn-xs'><i class='fa fa-share'></i> Share</button>
-                  <button class='btn btn-default btn-xs'><i class='fa fa-thumbs-o-up'></i> Like</button>
-                  <span class='pull-right text-muted'>127 likes - 3 comments</span>
-                  -->
                 (PHP user Name)</div>
                 <div class='box-footer box-comments'><!-- /.box-comment -->
                   <div class='box-comment'>
@@ -908,12 +867,6 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 <div class='box-body'>
                 This video is kick ass.  Check it out....
                   <iframe width="480" height="300" src="https://www.youtube.com/embed/OmnDEUD9NyI" frameborder="0" allowfullscreen alt="..." class="margin"></iframe>
-                  <!-- Removing Original Position of Share Like Options
-                  <p>Check out this cool video. What do you guys think?</p>
-                  <button class='btn btn-default btn-xs'><i class='fa fa-share'></i> Share</button>
-                  <button class='btn btn-default btn-xs'><i class='fa fa-thumbs-o-up'></i> Like</button>
-                  <span class='pull-right text-muted'>127 likes - 3 comments</span>
-                  -->
                 </div>
                 <div class='box-footer box-comments'>
                   <div class='box-comment'>
