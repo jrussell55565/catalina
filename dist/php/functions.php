@@ -477,4 +477,21 @@ function generate_user_csa_sql($emp_id,$time,$basic) {
         and $time and $basic_predicate";
     return $sql;
 }
+function generate_task_sql($sd,$ed){
+    $sql = "select assign_to,sum(number_of_tasks) tasks ,sum(number_of_points) points from 
+       (
+       select assign_to,count(*) as number_of_tasks, 0 as number_of_points from tasks
+       where submit_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
+       and complete_approved = 0
+       group by assign_to
+       union
+       select assign_to, 0 as number_of_tasks, sum(points) as number_of_points from tasks
+       where submit_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
+       and complete_approved = 0
+       group by assign_to
+       union
+       select employee_id as assign_to, 0 as number_of_tasks, 0 as number_of_points from users
+       )a group by assign_to";
+    return $sql;
+}
 ?>
