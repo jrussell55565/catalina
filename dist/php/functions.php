@@ -174,7 +174,9 @@ function generate_vir_sql($sd,$ed) {
             coalesce(round((virs.vir_posttrip / worked.days_worked) * 100,0),0) as vir_posttrip_percent,
             coalesce(round((virs.vir_breakdown / worked.days_worked) * 100,0),0) as vir_breakdown_percent,
             coalesce(round(((virs.vir_pretrip + virs.vir_posttrip) / (worked.days_worked * 2)) * 100,0),0) as vir_total_percent,
-            users.username
+            users.username,
+            users.status,
+            concat_ws(' ',users.fname,users.lname) as real_name
             from
             (
             select
@@ -190,10 +192,11 @@ function generate_vir_sql($sd,$ed) {
             group by `employee number`
             ) worked ,
             (
-            select username,employee_id from users
+            select username,employee_id,status,fname,lname from users
             ) users
             where virs.employee_id = worked.`employee number`
             and virs.employee_id = users.employee_id
+            and users.status = 'Active'
             order by vir_total_percent desc";
     return $sql;
 }
