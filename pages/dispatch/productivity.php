@@ -532,11 +532,19 @@ $complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
               <!-- small box -->
               <div class="small-box bg-red">
                 <div class="inner">
-                  <h3>Score VIR <?php echo "$pu_today_count";?> 85%</h3>
-                  <p>As of PHP Select Year, Quarter, Month</p>
+                <?php
+                    for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
+                      if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                        $total_vir_percent = $vir_aggregate[$vir_i]['vir_total_percent'];
+                        $total_vir_points = $vir_aggregate[$vir_i]['vir_pretrip'] + $vir_aggregate[$vir_i]['vir_posttrip'] + $vir_aggregate[$vir_i]['vir_breakdown'];
+                        $days_worked = $vir_aggregate[$vir_i]['days_worked'];
+                      }
+                    }
+                 ?> 
+                  <h4 id="shp_points" style="text-align: center; font-size: 2em;">Points: <?php echo $total_vir_points;?> of <?php echo $days_worked;?></h4>
+                  <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php echo round($total_vir_percent,2) . "%";?></h4>
                 </div>
-                <div class="icon"> <i class="ion ion-stats-bars"></i> </div>
-                <a href="#" class="small-box-footer"> More info (go to below item current page)<i class="fa fa-arrow-circle-right"></i> <i class="fa fa-arrow-circle-right"></i> </a> </div>
+               </div>
             </div>
             <!-- ./col -->
             <div class="col-lg-3 col-xs-6">
@@ -806,7 +814,7 @@ $complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
               <div class="box">
                 <div class="box-header">
 
-                    <h3 class="box-title"> Shipment Updates</h3><br><h5><?php echo date('d/m/y',$start_date) . " - " . date('d/m/y',$end_date);?></h5>
+                    <h3 class="box-title"> Shipment Updates</h3><br><h5><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></h5>
                        <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -997,7 +1005,7 @@ if ($complete_ship_aggregate[$shp_i]['percentage_earned'] > 100) { $percent = 10
             <!-- Start Left Side Box Menus -->
               <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title"> VIR</h3><br><h5><?php echo date('d/m/y',$start_date) . " - " . date('d/m/y',$end_date);?></h5>
+                  <h3 class="box-title"> VIR</h3><br><h5><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></h5>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -1031,7 +1039,7 @@ if ($vir_aggregate[$vir_i]['vir_total_percent'] > 100) { $percent = 100; }
 ?>
 <tr>
                  <td><?php echo $vir_i+1;?></td>
-                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $vir_aggregate[$vir_i]['username'];?></td>
+                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $vir_aggregate[$vir_i]['real_name'];?></td>
 
                  <td><div class="progress progress-xs progress-striped active">
                  <div class="progress-bar progress-bar-<?php echo "$color";?>" style="width: <?php echo $percent;?>%"></div>
