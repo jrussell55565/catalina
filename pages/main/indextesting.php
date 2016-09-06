@@ -256,7 +256,6 @@ if (isset($_POST['broadcast_message']))
 
   $message = $_POST['message'];
   $sql = "SELECT 1 ";
-
   if (isset($_POST['sendEmail'])) { $sql .= ",email"; } 
   if (isset($_POST['sendText'])) { $sql .= ",vtext"; } 
 
@@ -267,11 +266,11 @@ if (isset($_POST['broadcast_message']))
   {
     if (isset($_POST['sendEmail']))
     {
-      sendEmail($broadcast_users[$broadcast_i]['email'],'Broadcast Message',$message); 
+      sendEmail($broadcast_users[$broadcast_i]['email'],'Broadcast message from  '.$_SESSION['username'],$message); 
     } 
     if (isset($_POST['sendText']))
     {
-      sendEmail($broadcast_users[$broadcast_i]['vtext'],'Broadcast Message',$message); 
+      sendEmail($broadcast_users[$broadcast_i]['vtext'],'Broadcast '.$_SESSION['username'],$message); 
     }
   }
 }
@@ -481,7 +480,7 @@ if (isset($_POST['broadcast_message']))
                   <input class="form-control" placeholder="Subject:" disabled>
                  </div>
                   <div class="form-group">
-                    <textarea id="textarea"  class="form-control" placeholder="Type your message here...."  style="height: 100px" required></textarea>
+                    <textarea name="message" id="message"  class="form-control" placeholder="Type your message here...."  style="height: 100px" required></textarea>
                     <input type="text" class="form-control" name="message" id="message" placeholder="1st 166 Characters only show if text box checked..." value="" disabled>
                  </div>
                 </div><!-- /.box-body -->
