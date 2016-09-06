@@ -108,7 +108,8 @@ if ($_POST['btn_trips'])
         default:
             throw new Exception('Unknown error uploading '.$_FILES['file_trips']['name']);
     }
-    $statement = "load data local infile \"".$_FILES['file_trips']["tmp_name"]."\"
+
+    $statement = "load data local infile \"".$_FILES['file_csa']["tmp_name"]."\"
                REPLACE INTO TABLE import_gps_trips FIELDS TERMINATED BY ','
                ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 LINES
                (employee_id,`Category`,`Device`,`Driver`,`Start Address`,@v_began,`Stop Address`,@v_ended,`Miles`,`Max Speed`,`Avg Speed`,`Travel Time`,`Idle Time`)
