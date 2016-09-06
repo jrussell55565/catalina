@@ -262,7 +262,7 @@ if ($_POST['btn_trips'])
                   </p>
                   <input type="submit" class="btn btn-primary" value="Import CSA" name="btn_csa" id="btn_csa">
                   <input type="submit" class="btn btn-primary" value="Import Timesheets" name="btn_users" id="btn_users">
-                  <input type="submit" class="btn btn-primary" value="Import Driver" name="btn_trips" id="btn_trips">
+                  <input type="submit" class="btn btn-primary" value="Import Trip / GPS Data" name="btn_trips" id="btn_trips">
               </div><!-- /.box -->
             </div>
           </div>         
