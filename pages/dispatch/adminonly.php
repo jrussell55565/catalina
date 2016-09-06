@@ -305,7 +305,6 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 <!DOCTYPE html>
 <html>
 <head>
-<BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
 <title>Productivity</title>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>

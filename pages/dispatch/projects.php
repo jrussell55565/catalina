@@ -305,7 +305,6 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 <!DOCTYPE html>
 <html>
 <head>
-<BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
 <title>Projects</title>
 <link rel="shortcut icon" href="/dist/favicon/gears.ico" type="image/x-icon" />

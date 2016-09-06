@@ -139,7 +139,6 @@ if ($_POST['btn_trips'])
 <!DOCTYPE html>
 <html>
 <head>
-<BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
 <title>Imports</title>
 <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>

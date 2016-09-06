@@ -17,7 +17,6 @@ $drivername = $_SESSION['drivername'];
 <!DOCTYPE html>
 <html>
 <head>
-<BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
 <title>Productivity</title>
 <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>
