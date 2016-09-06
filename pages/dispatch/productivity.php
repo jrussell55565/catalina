@@ -48,7 +48,7 @@ if ($_SESSION['login'] == 1)
     $ship_sql = generate_ship_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $shp_aggregate = get_sql_results($ship_sql,$mysqli);
   
-    $vir_sql = generate_vir_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $vir_sql = generate_vir_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $vir_aggregate = get_sql_results($vir_sql,$mysqli);
 
     $vir_clockin_sql = generate_clockin_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
@@ -60,7 +60,7 @@ if ($_SESSION['login'] == 1)
     $ship_sql = generate_ship_sql($_SESSION['employee_id'],date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $shp_aggregate = get_sql_results($ship_sql,$mysqli);
   
-    $vir_sql = generate_vir_sql($_SESSION['employee_id'],date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $vir_sql = generate_vir_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $vir_aggregate = get_sql_results($vir_sql,$mysqli);
 
     $vir_clockin_sql = generate_clockin_sql($_SESSION['employee_id'],date('Y-m-d',$start_date),date('Y-m-d',$end_date));
@@ -70,9 +70,15 @@ if ($_SESSION['login'] == 1)
     $csa_compliance_aggregate = get_sql_results($csa_compliance_sql,$mysqli);
 }
 
-// Let's iterate through each vir to make sure we have each category
-// (vir_posttrip, vir_pretrip, vir_breakdown)
-$vir_aggregate = validate_vir($vir_aggregate);
+// We'll generate another shp_aggregate array.  This time we'll loop
+// through each employee.  This is for the stats section below.
+// Truncate the existing table
+$complete_ship_sql = "call company_shp_stats('".date('Y-m-d',$start_date)."','".date('Y-m-d',$end_date)."')";
+run_sql($complete_ship_sql,$mysqli);
+$complete_ship_sql = "select a.*, users.username from productivity_shipments a, users where a.date_start <= STR_TO_DATE('".date('Y-m-d',$start_date)."','%Y-%m-%d') 
+                      and a.date_end >= STR_TO_DATE('".date('Y-m-d',$end_date)."','%Y-%m-%d')
+                      and a.employee_id = users.employee_id ORDER BY percentage_earned desc";
+$complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
 ?>
 <!DOCTYPE html>
 <html>
@@ -252,85 +258,83 @@ $vir_aggregate = validate_vir($vir_aggregate);
                   <ul class="nav nav-stacked">
                     <li><a href="#">Days Worked <span class="pull-right badge bg-blue" id="vir_days_worked">
                      <?php
-                        echo $vir_clockin_aggregate[0]['count(*)'];
+                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                            echo $vir_aggregate[$vir_i]['days_worked'];
+                          }
+                        }
                      ?>
                      </span></a>
                     </li>
                     <li><a href="#">Pre-Trips <span class="pull-right badge bg-blue" id="vir_pretrip">
-                     <?php for($i=0;$i<count($vir_aggregate);$i++) { ?>
-                       <?php if ($vir_aggregate[$i]['insp_type'] == 'vir_pretrip'){
-                        echo $vir_aggregate[$i]['count(*)'];
+                       <?php
+                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                            echo $vir_aggregate[$vir_i]['vir_pretrip'];
                        }
                      }
                      ?>
                      </span></a>
                     </li>
                     <li><a href="#">Pre-Trip Points<span class="pull-right badge bg-blue" id="vir_pretrip_points">
-                     <?php for($i=0;$i<count($vir_clockin_aggregate);$i++) { ?>
-                       <?php $pre_trip_login_count = $vir_clockin_aggregate[$i]['count(*)'];
-                        for($j=0;$j<count($vir_aggregate);$j++) {
-                         if ($vir_aggregate[$j]['insp_type'] == 'vir_pretrip') {
-                           // Calculate the number of pretrips vs. the number of days the user has clocked in.
-                           if ($vir_aggregate[$j]['count(*)'] > $pre_trip_login_count) {
-                             echo $pre_trip_login_count;
+                     <?php
+                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                           if ($vir_aggregate[$vir_i]['vir_pretrip'] > $vir_aggregate[$vir_i]['days_worked']) {
+                             echo $vir_aggregate[$vir_i]['days_worked'];
                            }else{
-                             echo $vir_aggregate[$j]['count(*)'];
+                             echo $vir_aggregate[$vir_i]['vir_pretrip'];
                            }
-                         }
-                      }
-                     }
+                          }
+                        } 
                      ?>
                      </span></a>
                     </li>
                     <li><a href="#">Post-Trips <span class="pull-right badge bg-blue" id="vir_posttrip">
-                     <?php for($i=0;$i<count($vir_aggregate);$i++) { ?>
-                       <?php if ($vir_aggregate[$i]['insp_type'] == 'vir_posttrip') {
-                        echo $vir_aggregate[$i]['count(*)'];
-                       }
-                     }
+                     <?php
+                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                           echo $vir_aggregate[$vir_i]['vir_posttrip'];
+                          }
+                        }
                      ?>
                      </span></a>
                     </li>
                     <li><a href="#">Post-Trip Points<span class="pull-right badge bg-blue" id="vir_posttrip_points">
-                     <?php for($i=0;$i<count($vir_clockin_aggregate);$i++) { ?>
-                        <?php $post_trip_login_count = $vir_clockin_aggregate[$i]['count(*)'];
-                        for($j=0;$j<count($vir_aggregate);$j++) {
-                         if ($vir_aggregate[$j]['insp_type'] == 'vir_posttrip') {
-                           // Calculate the number of pretrips vs. the number of days the user has clocked in.
-                           if ($vir_aggregate[$j]['count(*)'] > $post_trip_login_count) {
-                             echo $post_trip_login_count;
+                     <?php
+                       for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                           if ($vir_aggregate[$vir_i]['vir_posttrip'] > $vir_aggregate[$vir_i]['days_worked']) {
+                             echo $vir_aggregate[$vir_i]['days_worked'];
                            }else{
-                             echo $vir_aggregate[$j]['count(*)'];
+                             echo $vir_aggregate[$vir_i]['vir_posttrip'];
                            }
-                         }
-                      }
-                     }
+                          }
+                        }
                      ?>
                      </span></a>
                     </li>
                     <li><a href="#">Breakdowns <span class="pull-right badge bg-blue" id="vir_breakdown">
-                     <?php for($i=0;$i<count($vir_aggregate);$i++) { ?>
-                       <?php if ($vir_aggregate[$i]['insp_type'] == 'vir_breakdown') {
-                        echo $vir_aggregate[$i]['count(*)'];
-                       }
-                     }
+                     <?php
+                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                           echo $vir_aggregate[$vir_i]['vir_breakdown'];
+                          }
+                        }
                      ?>
                      </span></a>
                     </li>
                     <li><a href="#">Breakdown Points<span class="pull-right badge bg-blue" id="vir_breakdown_points">
-                     <?php for($i=0;$i<count($vir_clockin_aggregate);$i++) { ?>
-                        <?php $post_trip_login_count = $vir_clockin_aggregate[$i]['count(*)'];
-                        for($j=0;$j<count($vir_aggregate);$j++) {
-                         if ($vir_aggregate[$j]['insp_type'] == 'vir_breakdown') {
-                           // Calculate the number of pretrips vs. the number of days the user has clocked in.
-                           if ($vir_aggregate[$j]['count(*)'] > $post_trip_login_count) {
-                             echo $post_trip_login_count;
+                     <?php
+                    for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                           if ($vir_aggregate[$vir_i]['vir_breakdown'] > $vir_aggregate[$vir_i]['days_worked']) {
+                             echo $vir_aggregate[$vir_i]['days_worked'];
                            }else{
-                             echo $vir_aggregate[$j]['count(*)'];
+                             echo $vir_aggregate[$vir_i]['vir_breakdown'];
                            }
-                         }
-                      }
-                     }
+                          }
+                        } 
                      ?>
                      </span></a>
                     </li>
@@ -802,7 +806,7 @@ $vir_aggregate = validate_vir($vir_aggregate);
               <div class="box">
                 <div class="box-header">
 
-                    <h3 class="box-title"> Shipment Updates</h3>
+                    <h3 class="box-title"> Shipment Updates</h3><br><h5><?php echo date('d/m/y',$start_date) . " - " . date('d/m/y',$end_date);?></h5>
                        <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -811,6 +815,37 @@ $vir_aggregate = validate_vir($vir_aggregate);
                 </div><!-- /.box-header -->
                 <div class="box-body" style="overflow: auto; height: 500px;">
                   <table class="table table-bordered" id="shp_admin_stats">
+                    <tr>
+                      <th style="width: 10px">#</th>
+                      <th>Name</th>
+                      <th>Graph Score</th>
+                      <th style="width: 40px">Score</th>
+                    </tr>
+<?php
+for ($shp_i=0;$shp_i<count($complete_ship_aggregate);$shp_i++)
+{
+// Get our colors and width
+if ($complete_ship_aggregate[$shp_i]['percentage_earned'] >= 90) { $color = 'green'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned'];}
+if ($complete_ship_aggregate[$shp_i]['percentage_earned'] >= 70 && $complete_ship_aggregate[$shp_i]['percentage_earned'] < 90) { $color = 'blue'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned']; }
+if ($complete_ship_aggregate[$shp_i]['percentage_earned'] > 50 && $complete_ship_aggregate[$shp_i]['percentage_earned'] < 70) { $color = 'yellow'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned']; }
+if ($complete_ship_aggregate[$shp_i]['percentage_earned'] > 25 && $complete_ship_aggregate[$shp_i]['percentage_earned'] < 50) { $color = 'red'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned']; }
+if ($complete_ship_aggregate[$shp_i]['percentage_earned'] <= 25) { $color = 'black'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned']; }
+
+// If the user is over 100% then drop it to 100
+if ($complete_ship_aggregate[$shp_i]['percentage_earned'] > 100) { $percent = 100; }
+?>
+<tr>
+                 <td><?php echo $shp_i+1;?></td>
+                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $complete_ship_aggregate[$shp_i]['username'];?></td>
+
+                 <td><div class="progress progress-xs progress-striped active">
+                 <div class="progress-bar progress-bar-<?php echo "$color";?>" style="width: <?php echo $percent;?>%"></div>
+
+                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $percent;?></span></td>
+                 </tr>
+<?php                 
+}
+?>
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -824,15 +859,6 @@ $vir_aggregate = validate_vir($vir_aggregate);
 
               <div class="box">
                 <div class="box-header">
-    
-              <!-- Adding the Spinner Box Icon here
-              <div class="col-md-3 col-sm-6 col-xs-12">
-              <div class="info-box"><a href="<?php echo HTTP;?>/pages/dispatch/orders.php">
-                 <span class="info-box-icon bg-aqua"><i class="fa fa-bank fa-zoomIn"></i></span>
-                </a>                    
-              </div>
-              </div>
-              -->
               
                  <h3 class="box-title">Compliance</h3>
 <div class="box-tools pull-right">
@@ -971,26 +997,18 @@ $vir_aggregate = validate_vir($vir_aggregate);
             <!-- Start Left Side Box Menus -->
               <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title"> VIR</h3>
+                  <h3 class="box-title"> VIR</h3><br><h5><?php echo date('d/m/y',$start_date) . " - " . date('d/m/y',$end_date);?></h5>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                   </div>
                   <!-- /.Removing the Box Tools side element -->
                  <div class="box-tools">
-                 <!--
-                    <ul class="pagination pagination-sm no-margin pull-right">
-                      <li><a href="#">&laquo;</a></li>
-                      <li><a href="#">1</a></li>
-                      <li><a href="#">2</a></li>
-                      <li><a href="#">3</a></li>
-                      <li><a href="#">&raquo;</a></li>
-                    </ul>
-                  -->  
+
                   </div>
                  
                 </div><!-- /.box-header -->
-                <div class="box-body no-padding">
+                <div class="box-body" style="overflow: auto; height: 500px;">
                   <table class="table table-bordered">
                     <tr>
                       <th style="width: 10px">#</th>
@@ -998,86 +1016,31 @@ $vir_aggregate = validate_vir($vir_aggregate);
                       <th>Graph Score</th>
                       <th style="width: 40px">Score</th>
                     </tr>
-                    <tr>
-                      <td>1.</td>
-                      <td><img src="../../dist/img/dash.jpg" alt="" width="24" height="24" class="img-circle"> Dash</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-success" style="width: 99%"></div>
-                      </div></td>
-                      <td><span class="badge bg-green">99%</span></td>
-                    </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td><img src="../../dist/img/violet.jpg" alt="" width="24" height="24" class="img-circle"> Violote</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-success" style="width: 85%"></div>
-                      </div></td>
-                      <td><span class="badge bg-green">80%</span></td>
-                    </tr>
-                    <tr>
-                      <td>3.</td>
-                      <td><img src="../../dist/img/jack.jpg" alt="" width="24" height="24" class="img-circle">Jack Jack</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-primary" style="width: 79%"></div>
-                      </div></td>
-                      <td><span class="badge bg-light-blue">79%</span></td>
-                    </tr>
-                    <tr>
-                      <td>4.</td>
-                      <td><img src="../../dist/img/edna.jpg" alt="" width="24" height="24" class="img-circle">Edna Mode</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-primary" style="width: 66%"></div>
-                      </div></td>
-                      <td><span class="badge bg-light-blue">60%</span></td>
-                    </tr>
-                    <tr>
-                      <td>5.</td>
-                      <td><img src="../../dist/img/Gilbert Huph.jpg" alt="" width="24" height="24" class="img-circle">Gilbert Huph</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-yellow" style="width: 58%"></div>
-                      </div></td>
-                      <td><span class="badge bg-yellow">59%</span></td>
-                    </tr>
-                    <tr>
-                      <td>6.</td>
-                      <td><img src="../../dist/img/syndrome.jpg" alt="" width="24" height="24" class="img-circle">Syndrome</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-yellow" style="width: 40%"></div>
-                      </div></td>
-                      <td><span class="badge bg-yellow">40%</span></td>
-                    </tr>
-                    <tr>
-                      <td>7.</td>
-                      <td><img src="../../dist/img/bernie kropp.jpg" alt="" width="24" height="24" class="img-circle"> Burnie Kropp</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 19%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">39%</span></td>
-                    </tr>
-                    <tr>
-                      <td>8.</td>
-                      <td><img src="../../dist/img/frank.jpg" alt="" width="24" height="24" class="img-circle"> Frank</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 19%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">20%</span></td>
-                    </tr>
-                    <tr>
-                      <td>9.</td>
-                      <td><img src="../../dist/img/h2tyd 3.jpg" alt="" width="24" height="24" class="img-circle"> Hector Axe</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 19%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">19%</span></td>
-                    </tr>
-                    <tr>
-                      <td>10.</td>
-                      <td><img src="../../dist/img/tony rydinger.jpg" alt="" width="24" height="24" class="img-circle"> Troy Hydinger</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 01%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">01%</span></td>
-                    </tr>
+<?php
+for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++)
+{
+// Get our colors and width
+if ($vir_aggregate[$vir_i]['vir_total_percent'] >= 90) { $color = 'green'; $percent = $vir_aggregate[$vir_i]['vir_total_percent'];}
+if ($vir_aggregate[$vir_i]['vir_total_percent'] >= 70 && $vir_aggregate[$vir_i]['vir_total_percent'] < 90) { $color = 'blue'; $percent = $vir_aggregate[$vir_i]['vir_total_percent']; }
+if ($vir_aggregate[$vir_i]['vir_total_percent'] > 50 && $vir_aggregate[$vir_i]['vir_total_percent'] < 70) { $color = 'yellow'; $percent = $vir_aggregate[$vir_i]['vir_total_percent']; }
+if ($vir_aggregate[$vir_i]['vir_total_percent'] > 25 && $vir_aggregate[$vir_i]['vir_total_percent'] < 50) { $color = 'red'; $percent = $vir_aggregate[$vir_i]['vir_total_percent']; }
+if ($vir_aggregate[$vir_i]['vir_total_percent'] <= 25) { $color = 'black'; $percent = $vir_aggregate[$vir_i]['vir_total_percent']; }
+
+// If the user is over 100% then drop it to 100
+if ($vir_aggregate[$vir_i]['vir_total_percent'] > 100) { $percent = 100; }
+?>
+<tr>
+                 <td><?php echo $vir_i+1;?></td>
+                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $vir_aggregate[$vir_i]['username'];?></td>
+
+                 <td><div class="progress progress-xs progress-striped active">
+                 <div class="progress-bar progress-bar-<?php echo "$color";?>" style="width: <?php echo $percent;?>%"></div>
+
+                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $percent;?></span></td>
+                 </tr>
+<?php
+}
+?>
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->

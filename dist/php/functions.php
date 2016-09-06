@@ -112,24 +112,6 @@ function get_drivers($mysqli) {
    return $driver_array;
 }
 
-function validate_vir($array) {
-    foreach(array("vir_pretrip","vir_posttrip","vir_breakdown") as $val) {
-        $found = 0;
-        for ($i=0;$i<count($array);$i++) {
-          if ($array[$i]['insp_type'] == "$val") {
-              $found = 1;
-              break;
-          }
-        }
-      if ($found == 0) {
-        $new_count = count($array);
-        $array[$new_count]['insp_type'] = "$val";
-        $array[$new_count]['count(*)'] = 0;
-      }
-    }
-    return $array;
-}
-
 function generate_compliance_sql($emp_id,$time) {
 
     $predicates = generate_compliance_predicate($emp_id, $time);
@@ -186,11 +168,33 @@ function generate_clockin_sql($emp_id,$sd,$ed) {
     return $sql;
 }
 
-function generate_vir_sql($emp_id,$sd,$ed) {
-    $sql="select count(*),insp_type from virs WHERE
-                employee_id ='$emp_id'
-                and INSP_DATE between STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
-                group by insp_type";
+function generate_vir_sql($sd,$ed) {
+    $sql = "select virs.employee_id, virs.vir_pretrip, virs.vir_posttrip, virs.vir_breakdown, worked.days_worked,
+            coalesce(round((virs.vir_pretrip / worked.days_worked) * 100,0),0) as vir_pretrip_percent,
+            coalesce(round((virs.vir_posttrip / worked.days_worked) * 100,0),0) as vir_posttrip_percent,
+            coalesce(round((virs.vir_breakdown / worked.days_worked) * 100,0),0) as vir_breakdown_percent,
+            coalesce(round(((virs.vir_pretrip + virs.vir_posttrip) / (worked.days_worked * 2)) * 100,0),0) as vir_total_percent,
+            users.username
+            from
+            (
+            select
+            virs.employee_id,
+            sum(case when virs.insp_type = 'vir_pretrip' then 1 else 0 end) as vir_pretrip,
+            sum(case when virs.insp_type = 'vir_posttrip' then 1 else 0 end) as vir_posttrip,
+            sum(case when virs.insp_type = 'vir_breakdown' then 1 else 0 end) as vir_breakdown
+            from virs where insp_date between str_to_date('$sd','%Y-%m-%d') and str_to_date('$ed','%Y-%m-%d')
+            group by employee_id
+            ) virs ,
+            (
+            select count(*) as days_worked,`employee number` from days_worked where worked = 1 and `date worked` between str_to_date('$sd','%Y-%m-%d') and str_to_date('$ed','%Y-%m-%d')
+            group by `employee number`
+            ) worked ,
+            (
+            select username,employee_id from users
+            ) users
+            where virs.employee_id = worked.`employee number`
+            and virs.employee_id = users.employee_id
+            order by vir_total_percent desc";
     return $sql;
 }
 function generate_ship_sql($emp_id,$sd,$ed) {
@@ -408,6 +412,7 @@ function generate_ship_sql($emp_id,$sd,$ed) {
                            (
                                   select *
                                   FROM   cp_shipments) _cp_shipments) a) b";
+
     return $sql;
 }
 function get_sql_results($sql,$mysqli) {
@@ -431,6 +436,22 @@ function get_sql_results($sql,$mysqli) {
         return $emparray;
 }
 
+function run_sql($sql,$mysqli) {
+       try {
+          if ($result = $mysqli->query($sql))
+           {
+               return;
+           }else{
+               throw new Exception("Query error: ". $mysqli->error);
+           }
+         } catch (Exception $e) {
+           // An exception has been thrown
+           $data = array('type' => 'error', 'message' => $e->getMessage());
+           print $e->getMessage();
+           $mysqli->close();
+           exit;
+         }
+}
 function generate_user_csa_sql($emp_id,$time,$basic) {
     // If the BASIC type wasn't specified then get them all
     if (empty($basic)) {
