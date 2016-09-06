@@ -727,7 +727,7 @@ $(document).ready(function(){
         clearTimeout(delayTimer);
         delayTimer = setTimeout(function() {
           $("#import_alert").hide();
-        }, 5000);
+        }, 30000);
     }
 });
 
