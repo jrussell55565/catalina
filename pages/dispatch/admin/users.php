@@ -284,6 +284,8 @@ if (! empty($_FILES["fuelUpload"]["name"]))
 <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
 <link href="<?php echo HTTP;?>/dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+<!-- Date Picker -->
+<link href="<?php echo HTTP;?>/dist/css/bootstrap-datepicker3.css" rel="stylesheet">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -868,7 +870,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
      </td>
      <td style="padding: 5px">
       <label for="dob">DOB</label>
-      <input type="text" class="form-control" name="dob" id="dob" placeholder="mm/dd/yyyy" value="<?php echo $row['dob'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
+      <input type="text" class="form-control datepicker" name="dob" id="dob" placeholder="mm/dd/yyyy" value="<?php echo $row['dob'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="driverLicense">License No.</label>
@@ -876,7 +878,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
      </td>
      <td style="padding: 5px">
       <label for="driverLicenseExpire">License Exp.</label>
-      <input type="text" class="form-control" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['driver_license_exp'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
+      <input type="text" class="form-control datepicker" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['driver_license_exp'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="mobilePhone">Mobile</label>
@@ -884,11 +886,11 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
      </td>
      <td style="padding: 5px">
       <label for="startDate">Start Date</label>
-      <input type="text" class="form-control" name="startDate" id="startDate" placeholder="mm/dd/yyyy" value="<?php echo $row['start_dt'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
+      <input type="text" class="form-control datepicker" name="startDate" id="startDate" placeholder="mm/dd/yyyy" value="<?php echo $row['start_dt'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="departureDate">Depart Date</label>
-      <input type="text" class="form-control" data-date-format="mm/dd/yyyy" name="departureDate" id="departureDate" placeholder="mm/dd/yyyy" value="<?php echo $row['depart_dt'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
+      <input type="text" class="form-control datepicker" data-date-format="mm/dd/yyyy" name="departureDate" id="departureDate" placeholder="mm/dd/yyyy" value="<?php echo $row['depart_dt'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
     </tr>
     <tr>
@@ -906,7 +908,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
      </td>
      <td style="padding: 5px">
       <label for="medCardExpire">Med Exp Date</label>
-      <input type="text" class="form-control" name="medCardExpire" id="medCardExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['med_card_exp'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
+      <input type="text" class="form-control datepicker" name="medCardExpire" id="medCardExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['med_card_exp'];?>" <?php if ($_SESSION['login'] == 2) { echo 'readonly'; }?>>
      </td>
      <td style="padding: 5px">
       <label for="salary">Salary</label>
@@ -1505,7 +1507,7 @@ onClick="$(this).toggleClass('glyphicon-chevron-down glyphicon-chevron-right');"
      </td>
      <td style="padding: 5px">
       <label for="dob">DOB</label>
-      <input type="text" class="form-control" name="dob" id="dob" placeholder="mm/dd/yyyy" value="">
+      <input type="text" class="form-control datepicker" name="dob" id="dob" placeholder="mm/dd/yyyy" value="">
      </td>
      <td style="padding: 5px">
       <label for="driverLicense">License No.</label>
@@ -1513,7 +1515,7 @@ onClick="$(this).toggleClass('glyphicon-chevron-down glyphicon-chevron-right');"
      </td>
      <td style="padding: 5px">
       <label for="driverLicenseExpire">License Exp.</label>
-      <input type="text" class="form-control" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="">
+      <input type="text" class="form-control datepicker" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="">
      </td>
      <td style="padding: 5px">
       <label for="mobilePhone">Mobile</label>
@@ -1521,11 +1523,11 @@ onClick="$(this).toggleClass('glyphicon-chevron-down glyphicon-chevron-right');"
      </td>
      <td style="padding: 5px">
       <label for="startDate">Start Date</label>
-      <input type="text" class="form-control" name="startDate" id="startDate" placeholder="mm/dd/yyyy" value="">
+      <input type="text" class="form-control datepicker" name="startDate" id="startDate" placeholder="mm/dd/yyyy" value="">
      </td>
      <td style="padding: 5px">
       <label for="departureDate">Depart Date</label>
-      <input type="text" class="form-control" data-date-format="mm/dd/yyyy" name="departureDate" id="departureDate" placeholder="mm/dd/yyyy" value="">
+      <input type="text" class="form-control datepicker" data-date-format="mm/dd/yyyy" name="departureDate" id="departureDate" placeholder="mm/dd/yyyy" value="">
      </td>
     </tr>
     <tr>
@@ -1543,7 +1545,7 @@ onClick="$(this).toggleClass('glyphicon-chevron-down glyphicon-chevron-right');"
      </td>
      <td style="padding: 5px">
       <label for="medCardExpire">Med Exp Date</label>
-      <input type="text" class="form-control" name="medCardExpire" id="medCardExpire" placeholder="mm/dd/yyyy" value="">
+      <input type="text" class="form-control datepicker" name="medCardExpire" id="medCardExpire" placeholder="mm/dd/yyyy" value="">
      </td>
      <td style="padding: 5px">
       <label for="salary">Salary</label>
@@ -1841,6 +1843,8 @@ onClick="$(this).toggleClass('glyphicon-chevron-down glyphicon-chevron-right');"
 <script src='<?php echo HTTP;?>/plugins/fastclick/fastclick.min.js'></script> 
 <!-- AdminLTE App --> 
 <script src="<?php echo HTTP;?>/dist/js/app.min.js" type="text/javascript"></script> 
+<!-- Date Picker -->
+<script src="<?php echo HTTP;?>/dist/js/bootstrap-datepicker.js"></script>
 
 <!-- Demo -->
 <script src="<?php echo HTTP;?>/dist/js/demo.js" type="text/javascript"></script>
@@ -1872,19 +1876,30 @@ $(document).ready(function() {
 });
 
 function validate_user_status(i) {
-// Make sure that, when we submit, if the status is not
-// active then make sure there is a departureDate
+    // Make sure that, when we submit, if the status is not
+    // active then make sure there is a departureDate
 
-var my_status = $(i).find('#status').val();
-var my_departureDate = $(i).find('#departureDate').val();
-if (my_status != 'Active') {
-  if (my_departureDate == false) {
-    alert('Termination date not entered!');
-    return false;
-  }
+    var my_status = $(i).find('#status').val();
+    var my_departureDate = $(i).find('#departureDate').val();
+    if (my_status != 'Active') {
+      if (my_departureDate == false) {
+        alert('Termination date not entered!');
+        return false;
+      }
+    }
 }
 
-}
+  // Date Picker
+  $('body').on('focus',".datepicker", function(){
+    $(this).datepicker({
+         startDate: "2015-01-01",
+         todayBtn: "linked",
+         autoclose: true,
+         datesDisabled: '0',
+         todayHighlight: true,
+    });
+  });
+
 </script>
 
 </body>
