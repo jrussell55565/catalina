@@ -27,8 +27,10 @@
                 <li><a href="<?php echo HTTP;?>/pages/info/inspectiontypes.php"><i class="fa fa-bank"></i>CSA Inspection Types</a></li>                
                 <li><a href="<?php echo HTTP;?>/pages/info/virinfo.php"><i class="fa fa-truck"></i>VIR Info</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/info/kingpin.php"><i class="fa fa-truck"></i> King Pin Settings Info</a></li>
+                <li><a href="https://www.fmcsa.dot.gov/sites/fmcsa.dot.gov/files/docs/HOS_Logbook_Examples_2015MAY_508.PDF"><i class="fa fa-truck"></i> CSA HOS Test</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/info/tirepressure.php"><i class="fa fa-life-ring"></i> Tire Pressure Info</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/layout/fixed.html"><i class="fa fa-chain"></i>Chain Laws Info</a></li>
+                <li><a href="https://www.youtube.com/watch?v=tVayTNgPYds"><i class="fa fa-tasks"></i>APU Instruction Video</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/info/otrpodimage.php"><i class="fa fa-newspaper-o"></i>OTR Documents Policy</a></li>
                 <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/location.php"><i class="fa fa-globe"></i> Map Users</a></li>
               </ul>
@@ -174,13 +176,14 @@
               <ul class="treeview-menu">
                 <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/accessorials.php"><i class="fa fa-exchange"></i>Accessorials</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/dispatch/ifta.php"><i class="fa fa-newspaper-o"></i>IFTA</a></li>
+                <li><a href="/pages/dispatch/imports.php"><i class="fa fa-random"></i> Imports</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/dispatch/orders.php"><i class="fa fa-spinner"></i>Load Board</a></li>
                 <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/logintrace.php"><i class="fa fa-group"></i>Login Trace</a></li>
                 <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/location.php"><i class="fa fa-globe"></i>Map Users</a></li>
                 <li><a href="<?php echo HTTP;?>/pages/info/otrpodimage.php"><i class="fa fa-line-chart"></i>Productivity</a></li>
                 <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/users.php"><i class="fa fa-child"></i> Users</a></li>
                 <li class="active"><a href="<?php echo HTTP;?>/pages/dispatch/admin/adminvir.php"><i class="fa fa-wrench"></i>VIR Accessorials</a></li>
-                <li><a href="<?php echo HTTP;?>/pages/dispatch/vir_previous.php"><i class="fa fa-wrench"></i>VIR Previous</a></li>
+                <li><a href="<?php echo HTTP;?>/pages/dispatch/vir_previous.php"><i class="fa fa-wrench"></i>VIR Previous</a></li>                
   </ul>
 </li>
 
@@ -253,19 +256,23 @@
 
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-gears"></i> <span>Big Project II</span>
+                <i class="fa fa-gears"></i> <span>Big Project III</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="active treeview-menu">
                 <li><a href="/pages/main/indextesting.php"><i class="fa fa-server"></i> Index Testing</a></li>
                 <li><a href="/pages/dispatch/projects.php"><i class="fa fa-area-chart"></i> Tasks &amp; Projects</a></li>
                 <li><a href="/pages/dispatch/admin/controlpanel.php"><i class="fa fa-area-chart"></i> Control Panel</a></li>
-                <li><a href="/pages/dispatch/imports.php"><i class="fa fa-random"></i> Imports</a></li>
                 <li><a href="/pages/dispatch/3columnstest.php"><i class="fa fa-area-chart"></i> 3 Column Test</a></li>
                 <li><a href="/pages/main/user_request.php"><i class="fa fa-question-circle"></i> Request User</a></li>
                 <li><a href="/pages/examples/index_starter_page.php"><i class="fa fa-cube"></i>Default Template</a></li>
                 <li><a href="/AdminLTE230/index.html"><i class="fa fa-flask"></i> AdminLTE Index</a></li>
                 <li><a href="/pages/dispatch/securitytesting.php"><i class="fa fa-lock"></i> Site Admin Testing</a></li>
+                <li><a href="/webquiz/login.php"><i class="fa fa-pie-chart"></i> WebQuiz Old Version</a></li>
+                <li><a href="/assignments/Documentation_1.0/index.htm"><i class="fa fa-pie-chart"></i> WebQuiz Instalation QA </a></li>
+                <li><a href="/assignments/login.php"><i class="fa fa-pie-chart"></i> Assignments </a></li>
+                <li><a href="/pages/dispatch/securitytesting.php"><i class="fa fa-list"></i> Testing</a></li>
+                <li><a href="http://linux.catalinacartage.com/savsoftquiz_v3.0/index.php/login"><i class="fa fa-question"></i>Savsoft Quiz Example</a></li>
                 
 <!--                <li><a href="/pages/dispatch/admin/adminvir.php"><i class="fa fa-circle-o"></i> Admin IFTA All</a></li>
                 <li><a href="/pages/dispatch/admin/csa.php"><i class="fa fa-circle-o"></i> Admin DOT Safety All</a></li>
