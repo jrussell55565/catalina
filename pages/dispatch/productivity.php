@@ -44,7 +44,11 @@ if (empty($_GET['end'])) { $end_date = $default_end_date; }else{ $end_date = str
 
 if ($_SESSION['login'] == 1)
 {
-    $emp_id = $_GET['trip_search_driver'];
+    if(isset($_GET['trip_search_driver'])) {
+        $emp_id = $_GET['trip_search_driver'];
+    }else{
+        $emp_id = $_SESSION['employee_id'];
+    }
     $ship_sql = generate_ship_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $shp_aggregate = get_sql_results($ship_sql,$mysqli);
   
@@ -57,16 +61,17 @@ if ($_SESSION['login'] == 1)
     $csa_compliance_sql = generate_compliance_sql($emp_id);
     $csa_compliance_aggregate = get_sql_results($csa_compliance_sql,$mysqli);
 }else{
-    $ship_sql = generate_ship_sql($_SESSION['employee_id'],date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $emp_id = $_SESSION['employee_id'];
+    $ship_sql = generate_ship_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $shp_aggregate = get_sql_results($ship_sql,$mysqli);
   
     $vir_sql = generate_vir_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $vir_aggregate = get_sql_results($vir_sql,$mysqli);
 
-    $vir_clockin_sql = generate_clockin_sql($_SESSION['employee_id'],date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $vir_clockin_sql = generate_clockin_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $vir_clockin_aggregate = get_sql_results($vir_clockin_sql,$mysqli);
 
-    $csa_compliance_sql = generate_compliance_sql($_SESSION['employee_id']);
+    $csa_compliance_sql = generate_compliance_sql($emp_id);
     $csa_compliance_aggregate = get_sql_results($csa_compliance_sql,$mysqli);
 }
 
@@ -79,6 +84,11 @@ $complete_ship_sql = "select a.*, users.username from productivity_shipments a, 
                       and a.date_end >= STR_TO_DATE('".date('Y-m-d',$end_date)."','%Y-%m-%d')
                       and a.employee_id = users.employee_id ORDER BY percentage_earned desc";
 $complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
+
+// Generate the sql for tasks
+$task_sql = generate_task_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+$task_aggregate = get_sql_results($task_sql,$mysqli);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -259,7 +269,7 @@ $complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
                     <li><a href="#">Days Worked <span class="pull-right badge bg-blue" id="vir_days_worked">
                      <?php
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
-                          if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                             echo $vir_aggregate[$vir_i]['days_worked'];
                           }
                         }
@@ -269,7 +279,7 @@ $complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
                     <li><a href="#">Pre-Trips <span class="pull-right badge bg-blue" id="vir_pretrip">
                        <?php
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
-                          if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                             echo $vir_aggregate[$vir_i]['vir_pretrip'];
                        }
                      }
@@ -279,7 +289,7 @@ $complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
                     <li><a href="#">Pre-Trip Points<span class="pull-right badge bg-blue" id="vir_pretrip_points">
                      <?php
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
-                          if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                            if ($vir_aggregate[$vir_i]['vir_pretrip'] > $vir_aggregate[$vir_i]['days_worked']) {
                              echo $vir_aggregate[$vir_i]['days_worked'];
                            }else{
@@ -293,7 +303,7 @@ $complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
                     <li><a href="#">Post-Trips <span class="pull-right badge bg-blue" id="vir_posttrip">
                      <?php
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
-                          if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                            echo $vir_aggregate[$vir_i]['vir_posttrip'];
                           }
                         }
@@ -303,7 +313,7 @@ $complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
                     <li><a href="#">Post-Trip Points<span class="pull-right badge bg-blue" id="vir_posttrip_points">
                      <?php
                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
-                          if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                            if ($vir_aggregate[$vir_i]['vir_posttrip'] > $vir_aggregate[$vir_i]['days_worked']) {
                              echo $vir_aggregate[$vir_i]['days_worked'];
                            }else{
@@ -317,7 +327,7 @@ $complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
                     <li><a href="#">Breakdowns <span class="pull-right badge bg-blue" id="vir_breakdown">
                      <?php
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
-                          if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                            echo $vir_aggregate[$vir_i]['vir_breakdown'];
                           }
                         }
@@ -327,7 +337,7 @@ $complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
                     <li><a href="#">Breakdown Points<span class="pull-right badge bg-blue" id="vir_breakdown_points">
                      <?php
                     for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
-                          if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                            if ($vir_aggregate[$vir_i]['vir_breakdown'] > $vir_aggregate[$vir_i]['days_worked']) {
                              echo $vir_aggregate[$vir_i]['days_worked'];
                            }else{
@@ -362,13 +372,30 @@ $complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">Tasks<span class="pull-right badge bg-blue" id="prod_task"></span></a></li>
-                    <li><a href="#">Task Points<span class="pull-right badge bg-blue" id="prod_task_points"></span></a></li>
-                    <li><a href="#">Projects<span class="pull-right badge bg-blue" id="prod_project"></span></a></li>
-                    <li><a href="#">Project Points<span class="pull-right badge bg-blue" id="prod_project_points"></span></a></li>
+                    <li><a href="#">Tasks<span class="pull-right badge bg-blue" id="prod_task">
+                    <?php for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {?>
+                     <?php if ($task_aggregate[$task_i]['assign_to'] == $emp_id) { ?>
+                     <?php echo $task_aggregate[$task_i]['tasks']; ?>
+                     <?php } ?>
+                    <?php } ?>
+                    </span>
+                     </a>
+                    </li>
+                    <li><a href="#">Task Points<span class="pull-right badge bg-blue" id="prod_task_points">
+                    <?php for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {?>
+                    <?php if ($task_aggregate[$task_i]['assign_to'] == $emp_id) { ?>
+                     <?php echo $task_aggregate[$task_i]['tasks']; ?>
+                     <?php } ?>
+                    <?php } ?>
+                    </span>
+                     </a>
+                    </li>
+                    <li><a href="#">Quiz<span class="pull-right badge bg-blue" id="prod_quiz"></span></a></li>
+                    <li><a href="#">Quiz Points<span class="pull-right badge bg-blue" id="prod_quit_points"></span></a></li>
+                    <li><a href="#">Idle Time<span class="pull-right badge bg-blue" id="prod_idletime"></span></a></li>
+                    <li><a href="#">Idle Time Score<span class="pull-right badge bg-blue" id="prod_idletime_points"></span></a></li>
                     <li><a href="#">Company Compliance <span class="pull-right badge bg-blue" id="prod_company_compliance"></span></a></li>
                     <li><a href="#">Compnay Compliance Points<span class="pull-right badge bg-blue" id="prod_company_compliance_points"></span></a></li>
-                                        
                   </ul>
                 </div>
               </div><!-- /.widget-user -->
@@ -503,10 +530,6 @@ $complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
                      ?>
                      </span></a>
                     </li>
-                    <li><a href="#">Attendance<span class="pull-right badge bg-blue" id="csa_attendance">
-                     </span></a>
-                    </li>
-                    
                   </ul>
                 </div>
               </div><!-- /.widget-user -->
@@ -534,7 +557,7 @@ $complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
                 <div class="inner">
                 <?php
                     for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
-                      if ($vir_aggregate[$vir_i]['employee_id'] == $_SESSION['employee_id']) {
+                      if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                         $total_vir_percent = $vir_aggregate[$vir_i]['vir_total_percent'];
                         $total_vir_points = $vir_aggregate[$vir_i]['vir_pretrip'] + $vir_aggregate[$vir_i]['vir_posttrip'] + $vir_aggregate[$vir_i]['vir_breakdown'];
                         $days_worked = $vir_aggregate[$vir_i]['days_worked'];
