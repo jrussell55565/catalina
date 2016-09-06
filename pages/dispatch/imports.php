@@ -111,7 +111,7 @@ if ($_POST['btn_trips'])
     $statement = "load data local infile \"".$_FILES['file_trips']["tmp_name"]."\"
                REPLACE INTO TABLE import_gps_trips FIELDS TERMINATED BY ','
                ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 LINES
-               (`Category`,`Device`,`Driver`,`Start Address`,@v_began,`Stop Address`,@v_ended,`Miles`,`Max Speed`,`Avg Speed`,`Travel Time`,`Idle Time`)
+               (employee_id,`Category`,`Device`,`Driver`,`Start Address`,@v_began,`Stop Address`,@v_ended,`Miles`,`Max Speed`,`Avg Speed`,`Travel Time`,`Idle Time`)
                SET `began` = str_to_date(@v_began, '%m/%d/%Y %H:%i'), `ended` = str_to_date(@v_ended,'%m/%d/%Y %H:%i')";
 
     if ($mysqli->query($statement) === false)
@@ -262,6 +262,7 @@ if ($_POST['btn_trips'])
                   </p>
                   <input type="submit" class="btn btn-primary" value="Import CSA" name="btn_csa" id="btn_csa">
                   <input type="submit" class="btn btn-primary" value="Import Timesheets" name="btn_users" id="btn_users">
+                  <input type="submit" class="btn btn-primary" value="Import Driver" name="btn_trips" id="btn_trips">
               </div><!-- /.box -->
             </div>
           </div>         
@@ -271,41 +272,7 @@ if ($_POST['btn_trips'])
 
 
 
-          <!-- Top Box Centered Full sized window -->
-         <form enctype="multipart/form-data" role="form" method="post" action="<?php echo HTTP . $_SERVER['PHP_SELF']; ?>">
-          <div class="row">
-            <div class="col-xs-12">
-              <div class="box">
-                <div class="box-header">
-                  <h3 class="box-title">Daily Trips / Miles / Idle</h3>
-                  
-                  <!-- Insert Plus Minus tool -->
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div>
-                </div>
-                
-                <!-- /.box-header -->
-                <div class="box-body table-responsive no-padding">
-                  <table width="98%" class="table table-hover">
-                    <tr>
-                      <th><a href="http://login.intouchgps.com/users/sign_in">Download Trip Example</a> Download CSV File &amp; Upload...</th>
-                    </tr>
-                    <tr>
-                      <th>Example File: <a href="../pages/examples/intouchGPS/Idle-Totals-w-Multiple-multiple.csv">Example Idle Totals</a></th>
-                    </tr>
-                  </table>
-                  <p>
-                    <input class="file-loading" type="file" multiple=true class="file-loading" name="file_trips" id="file_trips"/>
-                  </p>
-                    <input type="submit" class="btn btn-primary" value="Import" name="btn_trips" id="btn_trips">
-                Only CSV File Imports will Work</div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div>
-          </div>         
-         </form>
-         <!-- Top Box Full sized window Close Out-->
+          <!-- Top Box Centered Full sized window --><!-- Top Box Full sized window Close Out-->
 
 
 
