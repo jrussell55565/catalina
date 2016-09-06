@@ -565,7 +565,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
 <tr class="collapse" id="<?php echo $row['username'];?>_details">
 <td colspan="9">
   <div class="well">
-<form enctype="multipart/form-data" role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<form enctype="multipart/form-data" role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" onsubmit='return validate_user_status(this);'>
 <table>
 <tr>
  <td rowspan="3">
@@ -1870,6 +1870,21 @@ $(document).ready(function() {
     $('[name="Inactive"]').show();
   });
 });
+
+function validate_user_status(i) {
+// Make sure that, when we submit, if the status is not
+// active then make sure there is a departureDate
+
+var my_status = $(i).find('#status').val();
+var my_departureDate = $(i).find('#departureDate').val();
+if (my_status != 'Active') {
+  if (my_departureDate == false) {
+    alert('Termination date not entered!');
+    return false;
+  }
+}
+
+}
 </script>
 
 </body>
