@@ -202,12 +202,10 @@ if ($_POST['btn_trips'])
           <!-- Top Box Centered Full sized window -->
           <?php
           if (isset($_GET['error'])) {
-            echo "<br>";
-            echo '<div style="width: 50%; text-align: center; margin:auto" class="alert alert-danger" role="alert">Error adding record: ',urldecode($_GET['error']),'</div>';
+            echo '<div style="width: 50%; text-align: center; margin:auto" class="alert alert-danger" role="alert" id="import_alert">Error adding record: ',urldecode($_GET['error']),'</div>';
           }
           if (isset($_GET['status'])) {
-            echo "<br>";
-            echo '<div style="width: 50%; text-align: center; margin:auto" class="alert alert-success" role="alert">File added successfully.</div>';
+            echo '<div style="width: 50%; text-align: center; margin:auto" class="alert alert-success" role="alert" id="import_alert" >File added successfully.</div>';
           }?>
           <div class="row">
             <div class="col-xs-12">
@@ -719,6 +717,20 @@ if ($_POST['btn_trips'])
 <!-- AdminLTE App -->
 <script src="<?php echo HTTP;?>/dist/js/app.min.js" type="text/javascript"></script>
 
-<!-- Demo -->
+<script>
+
+$(document).ready(function(){
+    // If the import_alert div is set then let's make it disappear after 20s
+    var delayTimer;
+    if ($("#import_alert").length) {
+        // div is visible.  Let's start the countdown
+        clearTimeout(delayTimer);
+        delayTimer = setTimeout(function() {
+          $("#import_alert").hide();
+        }, 20000);
+    }
+});
+
+</script>
 </body>
 </html>
