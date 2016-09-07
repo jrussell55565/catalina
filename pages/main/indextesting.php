@@ -304,7 +304,7 @@ if (isset($_POST['broadcast_message']))
         $expiration_array[$counter]['tsa_sta'] = $obj->tsa_sta;
         $counter++;
       }
-print $statement;
+
     }else{
       throw new Exception("Unable to query users: ".$mysqli->error);
     }
