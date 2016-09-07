@@ -526,7 +526,7 @@
                                     <td>Vendor</td>
                                     <td>City</td>
                                     <td style="width:5em;">State</td>
-                                    <td style="width:5em;">Odometer</td>
+                                    <td style="width:7em;">Odometer</td>
                                     <td>Issue</td>
                                     <td style="width:8em;">Type</td>
                                     <td>Comments</td>

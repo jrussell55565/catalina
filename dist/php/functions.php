@@ -112,24 +112,6 @@ function get_drivers($mysqli) {
    return $driver_array;
 }
 
-function validate_vir($array) {
-    foreach(array("vir_pretrip","vir_posttrip","vir_breakdown") as $val) {
-        $found = 0;
-        for ($i=0;$i<count($array);$i++) {
-          if ($array[$i]['insp_type'] == "$val") {
-              $found = 1;
-              break;
-          }
-        }
-      if ($found == 0) {
-        $new_count = count($array);
-        $array[$new_count]['insp_type'] = "$val";
-        $array[$new_count]['count(*)'] = 0;
-      }
-    }
-    return $array;
-}
-
 function generate_compliance_sql($emp_id,$time) {
 
     $predicates = generate_compliance_predicate($emp_id, $time);
@@ -139,11 +121,11 @@ function generate_compliance_sql($emp_id,$time) {
     $sql = "SELECT 'Total Company Points' AS basic, sum(total_points) AS total_points, sum(points_cash_value) AS points_cash_value FROM csadata
          WHERE $time_predicate
          union
-         select 'Total Points' as basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from CSADATA
+         select 'Total Points' as basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from csadata
          where $predicate
          and $time_predicate
          union
-         select basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from CSADATA
+         select basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from csadata
          where $predicate
          and basic in ('Vehicle Maint.','HOS Compliance','No Violation','Unsafe Driving','Driver Fitness','Controlled Substances/Alcohol','Hazardous Materials (HM)','Crash Indicator')
          and $time_predicate
@@ -179,18 +161,43 @@ function generate_compliance_predicate($emp_id,$time) {
    return array ($predicate,$time_predicate);
 }
 function generate_clockin_sql($emp_id,$sd,$ed) {
-    $sql = "select count(*) from DAYS_WORKED
+    $sql = "select count(*) from days_worked
         where `DATE WORKED` between STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
         and `EMPLOYEE NUMBER` = '$emp_id'
         and worked = 1";
     return $sql;
 }
 
-function generate_vir_sql($emp_id,$sd,$ed) {
-    $sql="select count(*),insp_type from VIRS WHERE
-                employee_id ='$emp_id'
-                and INSP_DATE between STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
-                group by insp_type";
+function generate_vir_sql($sd,$ed) {
+    $sql = "select virs.employee_id, virs.vir_pretrip, virs.vir_posttrip, virs.vir_breakdown, worked.days_worked,
+            coalesce(round((virs.vir_pretrip / worked.days_worked) * 100,0),0) as vir_pretrip_percent,
+            coalesce(round((virs.vir_posttrip / worked.days_worked) * 100,0),0) as vir_posttrip_percent,
+            coalesce(round((virs.vir_breakdown / worked.days_worked) * 100,0),0) as vir_breakdown_percent,
+            coalesce(round(((virs.vir_pretrip + virs.vir_posttrip) / (worked.days_worked * 2)) * 100,0),0) as vir_total_percent,
+            users.username,
+            users.status,
+            concat_ws(' ',users.fname,users.lname) as real_name
+            from
+            (
+            select
+            virs.employee_id,
+            sum(case when virs.insp_type = 'vir_pretrip' then 1 else 0 end) as vir_pretrip,
+            sum(case when virs.insp_type = 'vir_posttrip' then 1 else 0 end) as vir_posttrip,
+            sum(case when virs.insp_type = 'vir_breakdown' then 1 else 0 end) as vir_breakdown
+            from virs where insp_date between str_to_date('$sd','%Y-%m-%d') and str_to_date('$ed','%Y-%m-%d')
+            group by employee_id
+            ) virs ,
+            (
+            select count(*) as days_worked,`employee number` from days_worked where worked = 1 and `date worked` between str_to_date('$sd','%Y-%m-%d') and str_to_date('$ed','%Y-%m-%d')
+            group by `employee number`
+            ) worked ,
+            (
+            select username,employee_id,status,fname,lname from users
+            ) users
+            where virs.employee_id = worked.`employee number`
+            and virs.employee_id = users.employee_id
+            and users.status = 'Active'
+            order by vir_total_percent desc";
     return $sql;
 }
 function generate_ship_sql($emp_id,$sd,$ed) {
@@ -408,6 +415,7 @@ function generate_ship_sql($emp_id,$sd,$ed) {
                            (
                                   select *
                                   FROM   cp_shipments) _cp_shipments) a) b";
+
     return $sql;
 }
 function get_sql_results($sql,$mysqli) {
@@ -431,6 +439,22 @@ function get_sql_results($sql,$mysqli) {
         return $emparray;
 }
 
+function run_sql($sql,$mysqli) {
+       try {
+          if ($result = $mysqli->query($sql))
+           {
+               return;
+           }else{
+               throw new Exception("Query error: ". $mysqli->error);
+           }
+         } catch (Exception $e) {
+           // An exception has been thrown
+           $data = array('type' => 'error', 'message' => $e->getMessage());
+           print $e->getMessage();
+           $mysqli->close();
+           exit;
+         }
+}
 function generate_user_csa_sql($emp_id,$time,$basic) {
     // If the BASIC type wasn't specified then get them all
     if (empty($basic)) {
@@ -451,6 +475,23 @@ function generate_user_csa_sql($emp_id,$time,$basic) {
         points_cash_value
         from csadata where $emp_id
         and $time and $basic_predicate";
+    return $sql;
+}
+function generate_task_sql($sd,$ed){
+    $sql = "select assign_to,sum(number_of_tasks) tasks ,sum(number_of_points) points from 
+       (
+       select assign_to,count(*) as number_of_tasks, 0 as number_of_points from tasks
+       where submit_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
+       and complete_approved = 0
+       group by assign_to
+       union
+       select assign_to, 0 as number_of_tasks, sum(points) as number_of_points from tasks
+       where submit_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
+       and complete_approved = 0
+       group by assign_to
+       union
+       select employee_id as assign_to, 0 as number_of_tasks, 0 as number_of_points from users
+       )a group by assign_to";
     return $sql;
 }
 ?>
