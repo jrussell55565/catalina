@@ -153,7 +153,7 @@ $task_aggregate = get_sql_results($task_sql,$mysqli);
 
 <!-- End Animated Top Menu -->  
 <div class="container">
-  <div class="row text-center">
+
     <div class="col-sm-<?php if ($_SESSION['login'] == 1) { echo 10; }else{ echo 6; }?> pull-left well">
            <form name="frm_productivity" method="GET" action="" role="form" enctype="multipart/form-data">
               <div class="box-body">
