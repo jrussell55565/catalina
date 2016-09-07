@@ -285,13 +285,13 @@ if (isset($_POST['broadcast_message']))
     ,max(DRIVER_LICENSE_EXP) as driver_license_exp 
     ,max(MED_CARD_EXP) as med_card_exp ,max(TSA_STA) as tsa_sta from
     (
-    select USERNAME,EMPLOYEE_ID,DRIVER_LICENSE_EXP,null as MED_CARD_EXP, null as TSA_STA from USERS 
+    select USERNAME,EMPLOYEE_ID,DRIVER_LICENSE_EXP,null as MED_CARD_EXP, null as TSA_STA from users 
       where STATUS='Active' and DRIVER_LICENSE_EXP between current_date and current_date + interval 30 day
     union
-    select USERNAME,EMPLOYEE_ID,null as DRIVER_LICENSE_EXP,MED_CARD_EXP, null as TSA_STA from USERS 
+    select USERNAME,EMPLOYEE_ID,null as DRIVER_LICENSE_EXP,MED_CARD_EXP, null as TSA_STA from users 
       where STATUS='Active' and MED_CARD_EXP between current_date and current_date + interval 30 day
     union
-    select USERNAME,EMPLOYEE_ID,null as DRIVER_LICENSE_EXP,null as MED_CARD_EXP, coalesce(TSA_STA,'NF') from USERS where STATUS='Active' and (TSA_STA is null or TSA_STA = '')
+    select USERNAME,EMPLOYEE_ID,null as DRIVER_LICENSE_EXP,null as MED_CARD_EXP, coalesce(TSA_STA,'NF') from users where STATUS='Active' and (TSA_STA is null or TSA_STA = '')
     ) a $predicate group by a.username order by a.username";
 
     if ($result = $mysqli->query($statement)) {
@@ -304,6 +304,7 @@ if (isset($_POST['broadcast_message']))
         $expiration_array[$counter]['tsa_sta'] = $obj->tsa_sta;
         $counter++;
       }
+print $statement;
     }else{
       throw new Exception("Unable to query users: ".$mysqli->error);
     }
