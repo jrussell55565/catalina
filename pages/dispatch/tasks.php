@@ -162,10 +162,17 @@ if (isset($_POST['btn_update_task'])) {
           // We did not find a suitable email address.  Throw an exception
           throw new Exception("Unable to find an email address for ".$_POST['task_assign_to']);
         }
-        $body = "A new task has been created!\n";
+        $body = "A new task has been created for you to complete!\n";
+		$body = "Please login to the driver boards to the home dash board.  Please click on Done when complete!\n";
+		$body .= "Assigned by: ".$_POST['name']."\n";
+		$body .= "Category: ".$_POST['task_category']."\n";
+		$body .= "Item: ".$_POST['task_item']."\n";
+		$body .= "Sub: ".$_POST['task_subitem']."\n";
+		$body .= "+/-: ".$_POST['task_pos_neg']."\n";
+		$body .= "Points: ".$_POST['task_points']."\n";
         $body .= "Description: ".$_POST['task_notes']."\n\n";
-        $body .= "Due: ".$_POST['task_due_date']."\n";
-        sendEmail($employee_email, 'New task alsert', $body, 'drivers@catalinacartage.com');
+		$body .= "Due: ".$_POST['task_due_date']."\n";
+		sendEmail($employee_email, 'New Task Alert', $body, 'drivers@catalinacartage.com');
 
     } catch (Exception $e) {
     // An exception has been thrown
@@ -253,29 +260,28 @@ if (isset($_POST['btn_update_task'])) {
 
       <form enctype="multipart/form-data" role="form" method="get" action="<?php echo HTTP . $_SERVER['PHP_SELF']; ?>">
         <div class="row">
-          <div class="col-lg-8 col-xs-8">
+          <div class="col-lg-12 col-xs-8">
             <!-- small box -->
             <div class="small-box bg-purple">
               <div class="inner">
                 <!-- =========================================================== -->
                 <center>
-                  <h2>Tasks | Projects | Compliance</h2>
+                  <h2>Assign Tasks &amp; Projects</h2>
                 </center>
                 <center>
-                  <p>You have (PHP) Uncompleated Task(s) <span style="padding: 5px">
-                  Admin Select all or jut 1 driver</span></p>
+                  <p>
                     <select class="form-control"  value="" name="driver" required style="width:150px;">
-                    <option value="null">Select Driver</option>
-                    <option value="all">-All-</option>
-                   <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
-                   <option value=<?php echo $driver_array[$i]['employee_id'];?> <?php if ($driver_array[$i]['employee_id'] == $_GET['driver']) { echo " selected "; }?>>
-                   <?php echo $driver_array[$i]['name'];?>
-                   </option>
-                   <?php } ?>
-                        </select>
+                      <option value="null">Select Driver</option>
+                      <option value="all" selected>-All-</option>
+                      <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
+                      <option value=<?php echo $driver_array[$i]['employee_id'];?> <?php if ($driver_array[$i]['employee_id'] == $_GET['driver']) { echo " selected "; }?>>
+                        <?php echo $driver_array[$i]['name'];?>
+                        </option>
+                      <?php } ?>
+                    </select>
                   </span>
                     Open
-                    <input type="radio" name="task_status" id="opentasksprojects" value="open"
+                    <input name="task_status" type="radio" id="opentasksprojects" value="open" checked
                      <?php if (isset($_GET['task_status'])) { 
                              if ($_GET['task_status'] == 'open') { 
                               echo " checked "; 
@@ -291,6 +297,7 @@ if (isset($_POST['btn_update_task'])) {
                              } 
                       ?>
                     >
+                </p>
                 </center>
                 <center>
                   <button type="submit" name="btn_search_task" class="btn btn-primary" value='search'>Search</button>
@@ -313,315 +320,7 @@ if (isset($_POST['btn_update_task'])) {
 
 <!-- End ............ Header Tasks & Expirations .............. End --> 
 
-<!-- Tasks & Expirations Notifications Start -->
-            <div class="col-md-4">
-<!-- DIRECT CHAT DANGER -->
-              <div class="box box-danger direct-chat direct-chat-danger">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Tasks
-                    <input name="radio" type="radio" id="Active Tasks" value="Active Tasks" checked>
-                    <label for="Active Tasks"></label>Active
-                    <input type="radio" name="radio" id="Completed" value="Completed">
-                    All</h3>
-                  <div class="box-tools pull-right">
-                  <!-- Total New Messages Add PHP Here -->
-                    <span data-toggle="tooltip" title="XX New Messages Today See Below" class="badge bg-red">2</span>
-                    <button class="btn btn-box-tool" data-toggle="tooltip" title="FutureEXP" data-widget="chat-pane-toggle"><i class="fa fa-warning text-red"></i></button>
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                  </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                  <!-- Conversations are loaded here -->
-                  <div class="direct-chat-messages">
-                    <!-- Message. Default to the left I mean right LOL -->
-                    <div class="direct-chat-msg right">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left"><img src="../dist/img/server.jpg" width="24" height="21" class="contacts-list-img"> System: Task!</span>
-                        <span class="direct-chat-timestamp pull-right">06/23/2006 00:04</span>
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" name="Gilbert" width="37" height="32" class="direct-chat-img" id="Gilbert"><!-- /.direct-chat-img .....This is where we add the color change for different messages-->
-                      <div class="direct-chat-text" style="color:#010000;background-color:danger">Medical Card Expires on 10/10/2016 
-                        <table width="208" border="0">
-                      <tr>
-                        <td>
-                        <label for="textfield"></label>
-
-
-              <form action="#" method="post">
-                <!-- .img-push is used to add margin to elements next to floating images -->
-                <div class="img-push">
-                  <!-- Note: Not sure if the share button is a good idea.  As this is just internal and not face book. -->
-                  <button class='btn btn-default btn-xs'><i class='fa fa-share'></i> Comment</button>
-                  <!-- Note: Only User that Posted will have the Remove Post feature / And Admin will have remove for everything -->
-                  <button class='btn btn-default btn-xs'><i class='fa fa-check-circle'></i> UpDate</button>
-                  <!-- <span class='pull-right'>1 likes - 1 comments</span> --></div>
-              </form>                        </td>
-                  </tr>
-                  </table>
-              </div>
-                <!-- /.direct-chat-text -->
-                </div>
-                <!-- /.direct-chat-msg -->
-
-
-                 <!-- Message. Default to the left -->
-                <div class="direct-chat-msg left">
-                  <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left">Gilbert Huph: Replied!</span>
-                    <span class="direct-chat-timestamp pull-right">06/23/2006 08:35</span>
-                  </div>
-                  <!-- /.direct-chat-info -->
-                  <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
-                  <!-- /.direct-chat-img -->
-              <div class="direct-chat-text">I will Get My Medical Card Taken Care of Soon.</div>
-                <!-- /.direct-chat-text -->
-                </div>
-                <!-- /.direct-chat-msg --> 
-
-
-
-
-
-
-
-
-
-
-
-                <!-- Message. Default to the right -->
-                <div class="direct-chat-msg right">
-                  <div class="direct-chat-info clearfix"> <span class="direct-chat-name pull-left"><img src="../dist/img/bernie kropp.jpg" alt="server" width="24" height="21" class="contacts-list-img"> Bernie Kropp: Task!</span> <span class="direct-chat-timestamp pull-right">06/23/2006 00:04</span> </div>
-                  <!-- /.direct-chat-info -->
-                  <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" name="Gilbert" width="37" height="32" class="direct-chat-img" id="Gilbert2">
-
-
-
-
-
-                  <!-- /.direct-chat-img -->
-                  <div class="direct-chat-text" style="color:#010000;background-color:orange">Clean your truck out...
-                    <table width="208" border="0">
-                      <tr>
-                        <td><label for="textfield2"></label>
-                          <form action="#" method="post">
-                            <!-- .img-push is used to add margin to elements next to floating images -->
-                            <div class="img-push">
-                              <!-- Note: Not sure if the share button is a good idea.  As this is just internal and not face book. -->
-                              <button class='btn btn-default btn-xs'><i class='fa fa-share'></i> Comment</button>
-                              <!-- Note: Only User that Posted will have the Remove Post feature / And Admin will have remove for everything -->
-                              <button class='btn btn-default btn-xs'><i class='fa fa-check-circle'></i> UpDate</button>
-                              <!-- <span class='pull-right'>1 likes - 1 comments</span> -->
-                            </div>
-                          </form></td>
-                      </tr>
-                    </table>
-                  </div>
-                  <!-- /.direct-chat-text -->
-                </div>
-                <!-- /.direct-chat-msg -->
-
-
-
-
-
-                 <!-- Message. Default to the left -->
-                <div class="direct-chat-msg left">
-                  <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left">Gilbert Huph: Replied!</span>
-                    <span class="direct-chat-timestamp pull-right">06/25/2006 18:08</span>
-                  </div>
-                  <!-- /.direct-chat-info -->
-                  <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
-                  <!-- /.direct-chat-img -->
-              <div class="direct-chat-text">You fucking Retard!!! My truck is clean....</div>
-                <!-- /.direct-chat-text -->
-                </div>
-                <!-- /.direct-chat-msg --> 
-
-
-                
-                
-
-
-
-
-
-<!-- Message. Default to the right -->
-                <div class="direct-chat-msg right">
-                  <div class="direct-chat-info clearfix"> <span class="direct-chat-name pull-left"><img src="../dist/img/bernie kropp.jpg" alt="server" width="24" height="21" class="contacts-list-img"> Bernie Kropp has sent you a task.</span> <span class="direct-chat-timestamp pull-right">06/23/2006 00:04</span> </div>
-                  <!-- /.direct-chat-info -->
-                  <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" name="Gilbert" width="37" height="32" class="direct-chat-img" id="Gilbert2">
-
-
-
-
-
-                  <!-- /.direct-chat-img -->
-                  <div class="direct-chat-text">I will get those to you next time I get back to town<span class="direct-chat-info clearfix"><span class="direct-chat-timestamp pull-right">06/24/2006 14:20</span></span>
-                    <table width="208" border="0">
-                  <tr>
-                    <td><label for="textfield4"></label>
-                      <select name="task_status2" id="task_status2" style="color:#010000;background-color:#d2d6de">
-                        <option>Action Required</option>
-                        <option value="1" selected>Acknowledged</option>
-                        <option value="1">Completed</option>
-                    </select></td>
-                        <td width="51">&nbsp;</td>
-                  </tr>
-                      <tr>
-                        <td width="147">&nbsp;</td>
-                        <td>&nbsp;</td>
-                      </tr>
-                      <tr>
-                        <td><input name="textfield2" type="text" id="textfield4" style="color:#010000;background-color:#d2d6de" value="Date Picker Here" size="12" div></td>
-                        <td><input type="submit" name="submit2" value="submit" style="color:#010000;background-color:#d2d6de"></td>
-                      </tr>
-                    </table>
-                  </div>
-                  <!-- /.direct-chat-text -->
-                </div>
-                <!-- /.direct-chat-msg -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                 <!-- Message. Default to the left I mean right LOL -->
-                <div class="direct-chat-msg right">
-                  <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left">Frank Tank</span>
-                    <span class="direct-chat-timestamp pull-right">06/23/2006 00:04</span>
-                  </div>
-                  <!-- /.direct-chat-info --><span class="direct-chat-msg left"><img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img"></span><!-- /.direct-chat-img -->
-              <div class="direct-chat-text">TSA # Missing on 10/10/2016 Email / Text Sent</div>
-                <!-- /.direct-chat-text -->
-                </div>
-                <!-- /.direct-chat-msg -->                   
-                                    
-                <!-- Message. Default to the left I mean right LOL -->
-                <div class="direct-chat-msg right">
-                  <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-right">EDNA</span>
-                    <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
-                  </div>
-                  <!-- /.direct-chat-info -->
-                  <img src="../../dist/img/edna.jpg" alt="message user image" width="27" height="31" class="direct-chat-img">
-                  <!-- /.direct-chat-img -->
-                  <div class="direct-chat-text">Driver Licence Expiration on 9/18/2016 Email / Text Sent</div>
-                <!-- /.direct-chat-text -->
-                </div>
-              <!-- /.direct-chat-msg -->
-
-
-                 <!-- Message. Default to the left -->
-                <div class="direct-chat-msg left">
-                  <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left">Hector Axe</span>
-                    <span class="direct-chat-timestamp pull-right">06/23/2006 00:04</span>
-                  </div>
-                  <!-- /.direct-chat-info --><img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img"><!-- /.direct-chat-img -->
-              <div class="direct-chat-text">I will Get My Medical Card Take Care of Soon.</div>
-                <!-- /.direct-chat-text -->
-                </div>
-                <!-- /.direct-chat-msg -->                      
-              
-              
-              
-              
-              </div>
-              <!--/.direct-chat-messages-->
-              <!-- Contacts are loaded here -->
-              <div class="direct-chat-contacts">
-                <ul class="contacts-list">
-                  <li>
-                    <a href="link to users current stats visible public">
-                      <img class="contacts-list-img" src="../dist/img/server.jpg"><span class="direct-chat-msg right"> Upcomming Triggered Events</span>
-                      <div class="contacts-list-info">
-                        <span class="contacts-list-name">
-                          Gilbert Huph
-                          <small class="contacts-list-date pull-right">10/28/2016</small>
-                        </span>
-                        <span class="contacts-list-msg">Work Anniversary October 2016</span>
-                      </div><!-- /.contacts-list-info -->
-                    </a>
-                  </li><!-- End Contact Item -->
-                </ul><!-- /.contatcts-list -->
-
-<!-- Insert New PHP for upcomming users next row here -->                  
-
-              <ul class="contacts-list">
-                  <li>
-                      <div class="contacts-list-info">
-                        <span class="contacts-list-name">
-                          Billy Bob
-                          <small class="contacts-list-date pull-right">Future Date PHP: 10/28/2016</small>
-                        </span>
-                        <span class="contacts-list-msg">Birthday in PHP Month of September</span>
-                      </div><!-- /.contacts-list-info -->
-                    </a>
-                  </li><!-- End Contact Item -->
-                </ul><!-- /.contatcts-list -->
-
-<!-- Insert New PHP for upcomming users next row here -->                  
-
-              <ul class="contacts-list">
-                  <li>
-                      <div class="contacts-list-info">
-                        <span class="contacts-list-name">
-                          Edna
-                          <small class="contacts-list-date pull-right">Future Date PHP: 10/28/2016</small>
-                        </span>
-                        <span class="contacts-list-msg">Work Anniversary in PHP Month of Septembe</span>
-                      </div><!-- /.contacts-list-info -->
-                    </a>
-                  </li><!-- End Contact Item -->
-                </ul><!-- /.contatcts-list -->                  
-              
-<!-- Insert New PHP for upcomming users next row here -->                  
-
-              <ul class="contacts-list">
-                  <li>
-                      <div class="contacts-list-info">
-                        <span class="contacts-list-name">
-                          Edna
-                          <small class="contacts-list-date pull-right">Future Date PHP: 10/28/2016</small>
-                        </span>
-                        <span class="contacts-list-msg">Work Anniversary in PHP Month of Septembe</span>
-                      </div><!-- /.contacts-list-info -->
-                    </a>
-                  </li><!-- End Contact Item -->
-                </ul><!-- /.contatcts-list -->                  
-              </div>
-<!-- /.direct-chat-pane -->
-            </div>
-<!-- /.box-body -->
-            <div class="box-footer">
-              <form action="#" method="post">
-                <div class="input-group">
-                  <input type="text" name="message" placeholder="Post Message to Task/Expiration Board" class="form-control">
-                  <span class="input-group-btn">
-                    <button type="button" class="btn btn-danger btn-flat">Send</button>
-                  </span>
-                </div>
-              </form>
-            </div><!-- /.box-footer-->
-          </div><!--/.direct-chat -->
-       </div><!-- /.col -->
+<!-- Tasks & Expirations Notifications Start --><!-- /.col -->
 
 <!-- Expirations Notifications End -->
 
@@ -639,7 +338,7 @@ if (isset($_POST['btn_update_task'])) {
 <div class="row">
       <div class="col-lg-12 col-xs-12">
         <!-- small box -->
-        <div class="small-box bg-green">
+        <div class="small-box bg-blue">
           <div class="inner">
             <center>
               <h2>Tasks</h2>

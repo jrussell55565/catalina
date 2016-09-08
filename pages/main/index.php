@@ -281,16 +281,19 @@ if (isset($_POST['broadcast_message']))
     // If I'm an admin we'll get all users, else just get the current user
     if ($_SESSION['login'] == 1) { $predicate = 'where 1 = 1'; }else{ $predicate = 'where username="'.$_SESSION['username'].'"'; }
     $statement = "
-    select max(username) as username ,max(employee_id) as employee_id 
+    select max(username) as username 
+	,max(employee_id) as employee_id 
     ,max(DRIVER_LICENSE_EXP) as driver_license_exp 
     ,max(MED_CARD_EXP) as med_card_exp ,max(TSA_STA) as tsa_sta from
     (
-    select USERNAME,EMPLOYEE_ID,DRIVER_LICENSE_EXP,null as MED_CARD_EXP, null as TSA_STA from users 
+	select USERNAME,EMPLOYEE_ID,DRIVER_LICENSE_EXP,null as MED_CARD_EXP, null as TSA_STA from users 
       where STATUS='Active' and DRIVER_LICENSE_EXP between current_date and current_date + interval 30 day
-    union
+    
+	union
     select USERNAME,EMPLOYEE_ID,null as DRIVER_LICENSE_EXP,MED_CARD_EXP, null as TSA_STA from users 
       where STATUS='Active' and MED_CARD_EXP between current_date and current_date + interval 30 day
-    union
+    
+	union
     select USERNAME,EMPLOYEE_ID,null as DRIVER_LICENSE_EXP,null as MED_CARD_EXP, coalesce(TSA_STA,'NF') from users where STATUS='Active' and (TSA_STA is null or TSA_STA = '')
     ) a $predicate group by a.username order by a.username";
 
@@ -301,6 +304,7 @@ if (isset($_POST['broadcast_message']))
         $expiration_array[$counter]['employee_id'] = $obj->employee_id;
         $expiration_array[$counter]['driver_license_exp'] = $obj->driver_license_exp;
         $expiration_array[$counter]['med_card_exp'] = $obj->med_card_exp;
+		$expiration_array[$counter]['dob'] = $obj->dob;
         $expiration_array[$counter]['tsa_sta'] = $obj->tsa_sta;
         $counter++;
       }
@@ -508,8 +512,8 @@ if (isset($_POST['broadcast_message']))
                   <h3 class="box-title">Event Notifications</h3>
                   <div class="box-tools pull-right">
                   <!-- Total New Messages Add PHP Here Just for new messages Events today -->
-                    <span data-toggle="tooltip" title="XX New Messages Today See Below" class="badge bg-light-blue">XX</span>
-                    <button class="btn btn-box-tool" data-toggle="tooltip" title="FutureEvents" data-widget="chat-pane-toggle"><i class="fa fa-comments"></i></button>
+                    <a href="../dispatch/tasks.php"><span data-toggle="tooltip" title="Add Tasks" class="badge bg-light-blue">Add Task</span></a>
+<button class="btn btn-box-tool" data-toggle="tooltip" title="FutureEvents" data-widget="chat-pane-toggle"><i class="fa fa-comments"></i></button>
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 <!--                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> -->
                   </div>
@@ -624,7 +628,7 @@ if (isset($_POST['broadcast_message']))
                   <h3 class="box-title">Expiration Notifications</h3>
                   <div class="box-tools pull-right">
                   <!-- Total New Messages Add PHP Here -->
-                    <span data-toggle="tooltip" title="XX New Messages Today See Below" class="badge bg-red">XX</span>
+                    <span data-toggle="tooltip" title="Update Expirations" class="badge bg-red">Update</span>
                     <button class="btn btn-box-tool" data-toggle="tooltip" title="FutureEXP" data-widget="chat-pane-toggle"><i class="fa fa-warning text-red"></i></button>
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                   </div>
@@ -637,13 +641,13 @@ if (isset($_POST['broadcast_message']))
                            <?php if ($expiration_array[$i]['driver_license_exp'] != '') {?>
                            <div class="direct-chat-msg right">
                            <div class="direct-chat-info clearfix">
-                           <span class="direct-chat-name pull-left">Administrator</span>
+                           <span class="direct-chat-name pull-left">Admin</span>
                            <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
                            </div>
                            <!-- /.direct-chat-info -->
-                           <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
+                           <img src="../../dist/img/server.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
                            <!-- /.direct-chat-img -->
-                         <div class="direct-chat-text">Drivers license expires soon for <?php echo $expiration_array[$i]['username']?> </div>
+                         <div class="direct-chat-text">Drivers license expires on <?php echo $expiration_array[$i]['driver_license_exp']?>  for <?php echo $expiration_array[$i]['username']?> </div>
                          <!-- /.direct-chat-text -->
                          </div>
                          <!-- /.direct-chat-msg -->
@@ -651,15 +655,43 @@ if (isset($_POST['broadcast_message']))
                            <?php if ($expiration_array[$i]['med_card_exp'] != '') {?>
                            <div class="direct-chat-msg right">
                            <div class="direct-chat-info clearfix">
-                           <span class="direct-chat-name pull-left">Administrator</span>
+                           <span class="direct-chat-name pull-left">Admin</span>
                            <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
                            </div>
                            <!-- /.direct-chat-info -->
-                           <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
+                           <img src="../../dist/img/server.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
                            <!-- /.direct-chat-img -->
-                         <div class="direct-chat-text">Medical card expires soon for <?php echo $expiration_array[$i]['username']?></div>
+                         <div class="direct-chat-text">Medical card expires <?php echo $expiration_array[$i]['med_card_exp']?> for <?php echo $expiration_array[$i]['username']?></div>
                          <!-- /.direct-chat-text -->
                          </div>
+
+
+
+
+
+
+
+
+                         <?php } ?>
+                           <?php if ($expiration_array[$i]['dob'] != '') {?>
+                           <div class="direct-chat-msg right">
+                           <div class="direct-chat-info clearfix">
+                           <span class="direct-chat-name pull-left">Admin</span>
+                           <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
+                           </div>
+                           <!-- /.direct-chat-info -->
+                           <img src="../../dist/img/server.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
+                           <!-- /.direct-chat-img -->
+                         <div class="direct-chat-text">Happy B Day <?php echo $expiration_array[$i]['dob']?> for <?php echo $expiration_array[$i]['username']?></div>
+                         <!-- /.direct-chat-text -->
+                         </div>
+
+
+
+
+
+
+                         
                          <!-- /.direct-chat-msg -->
                          <?php } ?>
                            <?php if ($expiration_array[$i]['tsa_sta'] == 'NF') {?>
@@ -669,7 +701,7 @@ if (isset($_POST['broadcast_message']))
                            <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
                            </div>
                            <!-- /.direct-chat-info -->
-                           <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
+                           <img src="../../dist/img/server.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
                            <!-- /.direct-chat-img -->
                          <div class="direct-chat-text">No TSA number entered for <?php echo $expiration_array[$i]['username']?></div>
                          <!-- /.direct-chat-text -->
