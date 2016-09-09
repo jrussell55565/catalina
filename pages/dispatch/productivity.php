@@ -662,20 +662,20 @@ $task_aggregate = get_sql_results($task_sql,$mysqli);
                 
                 <!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
-                  <table width="118%" class="table table-hover">
+                  <table width="100%" class="table table-hover">
                     <tr>
                       <th width="3%">#</th>
                       <th width="15%">Name</th>
-                      <th width="26%">Graph Score</th>
-                      <th width="9%">Score</th>
-                      <th width="10%">+ Points</th>
-                      <th width="9%"> - Points</th>
-                      <th width="8%">Total Points</th>
-                      <th width="10%">Best Category</th>
-                      <th width="10%">Worst Category</th>
+                      <th width="14%">Graph Score</th>
+                      <th width="10%">Total Score</th>
+                      <th width="6%">+ Points</th>
+                      <th width="7%"> - Points</th>
+                      <th width="9%">Total Points</th>
+                      <th width="11%">Best Category</th>
+                      <th width="25%">Worst Category</th>
                     </tr>
                     <tr>
-                      <td>1</td>
+                      <td height="30">1</td>
                       <td><img src="../../dist/img/dash.jpg" alt="" width="24" height="24" class="img-circle"> Jack Jack</td>
                       <td><div class="progress progress-xs progress-striped active">
                         <div class="progress-bar progress-bar-success" style="width: 100%"></div>

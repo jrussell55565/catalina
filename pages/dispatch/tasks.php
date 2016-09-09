@@ -402,6 +402,7 @@ if (isset($_POST['btn_update_task'])) {
                     <option value="arrived_consignee">Arrived to Consignee</option>
                     <option value="delivered">Delivered</option>
                     <option value="accessorials">Accessorials</option>
+                    <option value="breakdown">Breakdown</option>
                    </select></td>
                   <td style="padding: 5px;"><select class="form-control"  value="" name="task_pos_neg" id="task_pos_neg">
                     <option value="positive">+</option>
