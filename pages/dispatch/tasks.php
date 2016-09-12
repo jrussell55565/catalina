@@ -170,8 +170,9 @@ if (isset($_POST['btn_update_task'])) {
 		$body .= "Sub: ".$_POST['task_subitem']."\n";
 		$body .= "+/-: ".$_POST['task_pos_neg']."\n";
 		$body .= "Points: ".$_POST['task_points']."\n";
+		$body .= "This Task will Auto Close at midnight on the Due date, to avoid negative points please complete the task, login and submit you have completed task on the dashboards.  If you have any questions please call dispatch and ask for Liz. 520-664-9188 \n";
         $body .= "Description: ".$_POST['task_notes']."\n\n";
-		$body .= "Due: ".$_POST['task_due_date']."\n";
+		$body .= "Due: ".$_POST['task_due_date']." 23:59\n";
 		sendEmail($employee_email, 'New Task Alert', $body, 'drivers@catalinacartage.com');
 
     } catch (Exception $e) {
@@ -403,6 +404,7 @@ if (isset($_POST['btn_update_task'])) {
                     <option value="delivered">Delivered</option>
                     <option value="accessorials">Accessorials</option>
                     <option value="breakdown">Breakdown</option>
+                    <option value="notupdating">Not Updating Boards</option>
                    </select></td>
                   <td style="padding: 5px;"><select class="form-control"  value="" name="task_pos_neg" id="task_pos_neg">
                     <option value="positive">+</option>
