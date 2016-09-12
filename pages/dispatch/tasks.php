@@ -154,9 +154,10 @@ if (isset($_POST['btn_update_task'])) {
             throw new Exception("Error inserting into tasks table: ".$mysqli->error);
         }
         // Send an email out to the task recipient.
-        for($i=0;$i<count($driver_array);$i++) {
-          if ($driver_array[$i]['employee_id'] == $_POST['task_assign_to']) {
-            $employee_email = $driver_array[$i]['email'];
+        for($i=0;$i<count($all_users_array);$i++) {
+          if ($all_users_array[$i]['employee_id'] == $_POST['task_assign_to']) {
+            $employee_email = $all_users_array[$i]['email'];
+            $employee_vtext = $all_users_array[$i]['vtext'];
           }
         }
         if (empty($employee_email)) {
@@ -166,7 +167,8 @@ if (isset($_POST['btn_update_task'])) {
         $body = "A new task has been created!\n";
         $body .= "Description: ".$_POST['task_notes']."\n\n";
         $body .= "Due: ".$_POST['task_due_date']."\n";
-        sendEmail($employee_email, 'New task alsert', $body, 'drivers@catalinacartage.com');
+        sendEmail($employee_email, 'New task alert', $body, 'drivers@catalinacartage.com');
+        sendEmail($employee_vtext, 'New task alert', $body);
 
     } catch (Exception $e) {
     // An exception has been thrown
