@@ -17,6 +17,7 @@ $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
 
 # Get the driver names and employee_id
 $driver_array = get_drivers($mysqli);
+$all_users_array = get_all_users($mysqli);
 
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
@@ -162,18 +163,10 @@ if (isset($_POST['btn_update_task'])) {
           // We did not find a suitable email address.  Throw an exception
           throw new Exception("Unable to find an email address for ".$_POST['task_assign_to']);
         }
-        $body = "A new task has been created for you to complete!\n";
-		$body = "Please login to the driver boards to the home dash board.  Please click on Done when complete!\n";
-		$body .= "Assigned by: ".$_POST['name']."\n";
-		$body .= "Category: ".$_POST['task_category']."\n";
-		$body .= "Item: ".$_POST['task_item']."\n";
-		$body .= "Sub: ".$_POST['task_subitem']."\n";
-		$body .= "+/-: ".$_POST['task_pos_neg']."\n";
-		$body .= "Points: ".$_POST['task_points']."\n";
-		$body .= "This Task will Auto Close at midnight on the Due date, to avoid negative points please complete the task, login and submit you have completed task on the dashboards.  If you have any questions please call dispatch and ask for Liz. 520-664-9188 \n";
+        $body = "A new task has been created!\n";
         $body .= "Description: ".$_POST['task_notes']."\n\n";
-		$body .= "Due: ".$_POST['task_due_date']." 23:59\n";
-		sendEmail($employee_email, 'New Task Alert', $body, 'drivers@catalinacartage.com');
+        $body .= "Due: ".$_POST['task_due_date']."\n";
+        sendEmail($employee_email, 'New task alsert', $body, 'drivers@catalinacartage.com');
 
     } catch (Exception $e) {
     // An exception has been thrown
@@ -261,28 +254,29 @@ if (isset($_POST['btn_update_task'])) {
 
       <form enctype="multipart/form-data" role="form" method="get" action="<?php echo HTTP . $_SERVER['PHP_SELF']; ?>">
         <div class="row">
-          <div class="col-lg-12 col-xs-8">
+          <div class="col-lg-8 col-xs-8">
             <!-- small box -->
             <div class="small-box bg-purple">
               <div class="inner">
                 <!-- =========================================================== -->
                 <center>
-                  <h2>Assign Tasks &amp; Projects</h2>
+                  <h2>Tasks | Projects | Compliance</h2>
                 </center>
                 <center>
-                  <p>
+                  <p>You have (PHP) Uncompleated Task(s) <span style="padding: 5px">
+                  Admin Select all or jut 1 driver</span></p>
                     <select class="form-control"  value="" name="driver" required style="width:150px;">
-                      <option value="null">Select Driver</option>
-                      <option value="all" selected>-All-</option>
-                      <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
-                      <option value=<?php echo $driver_array[$i]['employee_id'];?> <?php if ($driver_array[$i]['employee_id'] == $_GET['driver']) { echo " selected "; }?>>
-                        <?php echo $driver_array[$i]['name'];?>
-                        </option>
-                      <?php } ?>
-                    </select>
+                    <option value="null">Select Employee</option>
+                    <option value="all">-All-</option>
+                   <?php for ($i=0; $i<sizeof($all_users_array); $i++) { ?>
+                   <option value=<?php echo $all_users_array[$i]['employee_id'];?> <?php if ($all_users_array[$i]['employee_id'] == $_GET['driver']) { echo " selected "; }?>>
+                   <?php echo $all_users_array[$i]['name'];?>
+                   </option>
+                   <?php } ?>
+                        </select>
                   </span>
                     Open
-                    <input name="task_status" type="radio" id="opentasksprojects" value="open" checked
+                    <input type="radio" name="task_status" id="opentasksprojects" value="open"
                      <?php if (isset($_GET['task_status'])) { 
                              if ($_GET['task_status'] == 'open') { 
                               echo " checked "; 
@@ -298,7 +292,6 @@ if (isset($_POST['btn_update_task'])) {
                              } 
                       ?>
                     >
-                </p>
                 </center>
                 <center>
                   <button type="submit" name="btn_search_task" class="btn btn-primary" value='search'>Search</button>
@@ -326,7 +319,7 @@ if (isset($_POST['btn_update_task'])) {
 <!-- Expirations Notifications End -->
 
 <!-- Top Row End -->            
-     </div><!-- /.row -->
+         </div><!-- /.row -->
 <!-- Top Row End -->
 <!-- /.col -->
 <!-- /.col -->
@@ -339,7 +332,7 @@ if (isset($_POST['btn_update_task'])) {
 <div class="row">
       <div class="col-lg-12 col-xs-12">
         <!-- small box -->
-        <div class="small-box bg-blue">
+        <div class="small-box bg-green">
           <div class="inner">
             <center>
               <h2>Tasks</h2>
@@ -371,17 +364,17 @@ if (isset($_POST['btn_update_task'])) {
                   </td>
                   <td style="padding: 5px">
                    <select class="form-control" name="task_assign_to" id="task_assign_to">
-                   <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
-                   <option value=<?php echo $driver_array[$i]['employee_id'];?>><?php echo $driver_array[$i]['name'];?>
+                   <?php for ($i=0; $i<sizeof($all_users_array); $i++) { ?>
+                   <option value=<?php echo $all_users_array[$i]['employee_id'];?>><?php echo $all_users_array[$i]['name'];?>
                    </option>
                    <?php } ?>
                    </select>
                   </td>
                   <td style="padding: 5px">
                    <select class="form-control"  value="" name="task_assign_by" id="task_assign_by">
-                   <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
-                   <?php if ($driver_array[$i]['employee_id'] != $_SESSION['employee_id']) { continue; } ?>
-                   <option value=<?php echo $driver_array[$i]['employee_id'];?>><?php echo $driver_array[$i]['name'];?>
+                   <?php for ($i=0; $i<sizeof($all_users_array); $i++) { ?>
+                   <?php if ($all_users_array[$i]['employee_id'] != $_SESSION['employee_id']) { continue; } ?>
+                   <option value=<?php echo $all_users_array[$i]['employee_id'];?>><?php echo $all_users_array[$i]['name'];?>
                    </option>
                    <?php } ?>
                    </select>
@@ -403,8 +396,6 @@ if (isset($_POST['btn_update_task'])) {
                     <option value="arrived_consignee">Arrived to Consignee</option>
                     <option value="delivered">Delivered</option>
                     <option value="accessorials">Accessorials</option>
-                    <option value="breakdown">Breakdown</option>
-                    <option value="notupdating">Not Updating Boards</option>
                    </select></td>
                   <td style="padding: 5px;"><select class="form-control"  value="" name="task_pos_neg" id="task_pos_neg">
                     <option value="positive">+</option>
