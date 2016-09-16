@@ -237,22 +237,39 @@ if ($_POST['btn_trips'])
                 <div class="box-body table-responsive no-padding">
                   <table width="98%" class="table table-hover">
                     <tr>
-                      <th><a href="/pages/examples/CSA_Template.csv">Download Import Template CSV</a> Need Help Matt This file does not work....</th>
+                      <th width="38%">CSA Import Instructions</th>
+                      <th width="27%">Time Sheet Import Instructions</th>
+                      <th width="35%">GPS Import Instructions</th>
                     </tr>
                     <tr>
-                      <th><a href="/pages/examples/CSA_Template.csv">Download Modification Template XLXS</a> Megan And Jaime Working on this file for download</th>
+                      <th><a href="/pages/examples/CSA_Template.csv">Example CSV Import CSA</a></th>
+                      <th width="27%">Example CSV Import</th>
+                      <th width="35%">&nbsp;</th>
                     </tr>
                     <tr>
-                      <th><a href="https://csa.fmcsa.dot.gov/default.aspx">https://csa.fmcsa.dot.gov/default.aspx</a> This is where you log in to download the current CSA data</th>
+                      <th><a href="/pages/examples/CSA_Template.csv">CSA MOD  XLS</a></th>
+                      <th>Time Sheet MOD XLS</th>
+                      <th>&nbsp;</th>
                     </tr>
                     <tr>
-                      <th>DOT: 1959805 (Enter Password Ask Jaime If you do not know this!)</th>
+                      <th><a href="https://csa.fmcsa.dot.gov/default.aspx">https://csa.fmcsa.dot.gov/default.aspx</a> Download the current CSA data</th>
+                      <th><a href="https://application.fingercheck.com/FingerCheck/Login.aspx">Finger Check Site</a> (Use Template Import for wwwlive)</th>
+                      <th>&nbsp;</th>
                     </tr>
                     <tr>
-                      <th>Then Download All, Excel; Copy Lines 2 below to Mod Spread Sheet</th>
+                      <th>DOT: 1959805 (Enter Password)</th>
+                      <th>Run Report On Payroll Dates</th>
+                      <th>&nbsp;</th>
+                    </tr>
+                    <tr>
+                      <th>Then Download All, Excel; Copy Lines 2 below to Mod Template Sheet</th>
+                      <th>&nbsp;</th>
+                      <th>&nbsp;</th>
                     </tr>
                     <tr>
                       <th>First Export the Current Data from CSA. Then Add the new File to the current Data</th>
+                      <th>&nbsp;</th>
+                      <th>&nbsp;</th>
                     </tr>
                   </table>
                   <p>
