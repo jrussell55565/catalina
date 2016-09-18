@@ -848,7 +848,7 @@ Closed
            echo "        };\n";
          ?>
 
-         var prev_st_enter = $("#tr_add_driver_details_add_"+rowNum).prev().children('td').eq(6).find('option:selected').text();
+         var prev_st_enter = $("#tr_add_driver_details_add_"+rowNum).prev().children('td').eq(5).find('option:selected').text();
          $("#txt_hwb_details_add_"+rowNum).val(prev_hwb);
 
          // Set the Exit state to the value of the "enter" state of the previous line
