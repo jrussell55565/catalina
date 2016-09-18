@@ -209,7 +209,7 @@ a.button2 {
                <span class="info-box-icon bg-orange"><i class="fa fa-bank"></i></span>
 </a>
 
-                <div class="info-box-content"><span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/csa.php">COMPLIANCE</a></span> <span class="info-box-number">Your CSA Score: <?php echo $virs_daily_count;?><br />
+                <div class="info-box-content"><span class="info-box-text"><a href="<?php echo HTTP;?>/pages/dispatch/admin/csa.php">COMPLIANCE</a></span> <span class="info-box-number"> CSA Score: <?php echo $my_total_points;?><br />
 Int. Compliance Score: <?php echo $virs_weekly_count;?></span></div>
                 <!-- /.info-box-content -->
               </div><!-- /.info-box -->

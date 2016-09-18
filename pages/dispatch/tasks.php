@@ -396,6 +396,7 @@ if (isset($_POST['btn_update_task'])) {
                     <option value="productivity">Productivity</option>
                     <option value="csa">CSA</option>
                     <option value="other">Other</option>
+                    <option value="truck">Truck</option>
                    </select></td>
                   <td style="padding: 5px"><select class="form-control" required name="task_subitem" id="task_subitem">
                     <option value="arrived_shipper">Arrived to Shipper</option>
@@ -405,6 +406,8 @@ if (isset($_POST['btn_update_task'])) {
                     <option value="accessorials">Accessorials</option>
                     <option value="breakdown">Breakdown</option>
                     <option value="notupdating">Not Updating Boards</option>
+                    <option value="idle_time">Idle Time</option>
+                    <option value="complete_pre_post_trip">Complete PrePost Trip</option>
                    </select></td>
                   <td style="padding: 5px;"><select class="form-control"  value="" name="task_pos_neg" id="task_pos_neg">
                     <option value="positive">+</option>
@@ -459,6 +462,7 @@ if (isset($_POST['btn_update_task'])) {
                     <option value="vir" <?php if ($tasks_aggregate[$j]['item'] == 'vir') { echo " selected "; } ?>>VIR</option>
                     <option value="productivity" <?php if ($tasks_aggregate[$j]['item'] == 'productivity') { echo " selected "; } ?>>Productivity</option>
                     <option value="csa" <?php if ($tasks_aggregate[$j]['item'] == 'csa') { echo " selected "; } ?>>CSA</option>
+                    <option value="truck">Truck</option>
                     <option value="other" <?php if ($tasks_aggregate[$j]['item'] == 'other') { echo " selected "; } ?>>Other</option>
                    </select></td>
                   <td style="padding: 5px"><select class="form-control" required name="task_subitem" id="task_subitem_<?php echo $tasks_aggregate[$j]['id'];?>" onchange="update_tasks(this);">
@@ -467,6 +471,7 @@ if (isset($_POST['btn_update_task'])) {
                     <option value="arrived_consignee" <?php if ($tasks_aggregate[$j]['subitem'] == 'arrived_consignee') { echo " selected "; } ?>>Arrived to Consignee</option>
                     <option value="delivered" <?php if ($tasks_aggregate[$j]['subitem'] == 'delivered') { echo " selected "; } ?>>Delivered</option>
                     <option value="accessorials" <?php if ($tasks_aggregate[$j]['subitem'] == 'accessorials') { echo " selected "; } ?>>Accessorials</option>
+                    <option value="idle_time">Idle Time</option>
                    </select></td>
                   <td style="padding: 5px;"><select class="form-control"  value="" name="task_pos_neg" id="task_pos_neg_<?php echo $tasks_aggregate[$j]['id'];?>" onchange="update_tasks(this);">
                     <option value="positive" <?php if ($tasks_aggregate[$j]['pos_neg'] == 'positive') { echo " selected "; } ?>>+</option>

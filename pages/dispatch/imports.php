@@ -242,34 +242,39 @@ if ($_POST['btn_trips'])
                       <th width="35%">GPS Import Instructions</th>
                     </tr>
                     <tr>
-                      <th><a href="/pages/examples/CSA_Template.csv">Example CSV Import CSA</a></th>
-                      <th width="27%">Example CSV Import</th>
-                      <th width="35%">&nbsp;</th>
+                      <th><a href="/pages/examples/CSA/CSA_csv_export_example.csv">Example CSV Import CSA</a></th>
+                      <th width="27%"><a href="/pages/examples/TimeCardImportXLSMaster/Time_Sheet_csv_export_example.csv">Example CSV Import Time Sheet</a></th>
+                      <th width="35%"><a href="/pages/examples/TimeCardImportXLSMaster/GPS_csv_export_example.csv">Example CSV Import GPS Data</a></th>
                     </tr>
                     <tr>
-                      <th><a href="/pages/examples/CSA_Template.csv">CSA MOD  XLS</a></th>
-                      <th>Time Sheet MOD XLS</th>
-                      <th>&nbsp;</th>
+                      <th><a href="/pages/examples/CSA/CSA_MOD.xlsx">CSA MOD  XLS</a></th>
+                      <th><a href="/pages/examples/TimeCardImportXLSMaster/time_sheet_MOD.xlsx">Time Sheet MOD XLS</a></th>
+                      <th><a href="/pages/examples/TimeCardImportXLSMaster/GPS_trips_MOD.xlsx">GPS  MOD XLS</a></th>
                     </tr>
                     <tr>
                       <th><a href="https://csa.fmcsa.dot.gov/default.aspx">https://csa.fmcsa.dot.gov/default.aspx</a> Download the current CSA data</th>
-                      <th><a href="https://application.fingercheck.com/FingerCheck/Login.aspx">Finger Check Site</a> (Use Template Import for wwwlive)</th>
-                      <th>&nbsp;</th>
+                      <th><a href="https://application.fingercheck.com/FingerCheck/Login.aspx">Finger Check Login</a></th>
+                      <th>Download Trips Into MOD</th>
                     </tr>
                     <tr>
                       <th>DOT: 1959805 (Enter Password)</th>
-                      <th>Run Report On Payroll Dates</th>
-                      <th>&nbsp;</th>
+                      <th>Use Template Import for wwwlive</th>
+                      <th>Update the Drivers Assigned</th>
                     </tr>
                     <tr>
                       <th>Then Download All, Excel; Copy Lines 2 below to Mod Template Sheet</th>
-                      <th>&nbsp;</th>
+                      <th>Run Report On Payroll Dates</th>
                       <th>&nbsp;</th>
                     </tr>
                     <tr>
                       <th>First Export the Current Data from CSA. Then Add the new File to the current Data</th>
                       <th>&nbsp;</th>
                       <th>&nbsp;</th>
+                    </tr>
+                    <tr>
+                      <th>Upload FTP New MOD File</th>
+                      <th>Upload FTP New MOD File</th>
+                      <th>Upload FTP New MOD File</th>
                     </tr>
                   </table>
                   <p>
