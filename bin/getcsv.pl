@@ -166,7 +166,7 @@ sub email_alert
 {
 	my $error = shift;
 
-	my $toaddress = 'jaime@catalinacartage.com';
+	my $toaddress = 'helpdesk@catalinacartage.com';
 
 	$smtp = Net::SMTP->new('localhost');
   
