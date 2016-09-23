@@ -245,7 +245,8 @@ $drivername = $_SESSION['drivername'];
                <label class="sr-only" for="manualHwb">Search for HWB</label>
                <input type="text" class="form-control" id="hwb" name="hwb" placeholder="Search for HWB">
               </div>
-             <input type="submit" class="btn btn-primary" value="Search / Request"/>
+             <input type="submit" class="btn btn-primary" value="Search / Request">
+             <!-- <input type="submit" class="btn btn-primary" value="Search / Request" disabled/> -->
              </form>
             </div>
             <!-- /.box-header -->
