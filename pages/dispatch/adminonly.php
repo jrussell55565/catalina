@@ -387,7 +387,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
                 <div class="box-body table-responsive no-padding">
                   <table width="39%" class="table table-hover">
                     <tr>
-                      <th><img src="..//pages/dispatch/images/minionerror.JPG" width="351" height="175"></th>
+                      <th><img src="images/minionerror.JPG" width="499" height="308"></th>
                     </tr>
                   </table>
                 </div><!-- /.box-body -->
@@ -408,6 +408,40 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'share')
 
            
         </section><!-- /.content -->
+        <div class="box-header">
+          
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <p><span class="box-title">Server Error 500 Admin Only Access</span>.......................................................................................................................................</p>
+          <!-- 
+                  Remove Search Tool
+                  <div class="box-tools">
+                    <div class="input-group" style="width: 150px;">
+                      <input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
+                      <div class="input-group-btn">
+                        <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                  -->
+          <!-- Insert Plus Minus tool -->
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+          </div>
+        </div>
     </div><!-- /.content-wrapper -->
 
 

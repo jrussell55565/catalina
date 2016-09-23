@@ -254,7 +254,7 @@ if (isset($_POST['btn_update_task'])) {
 
       <form enctype="multipart/form-data" role="form" method="get" action="<?php echo HTTP . $_SERVER['PHP_SELF']; ?>">
         <div class="row">
-          <div class="col-lg-8 col-xs-8">
+          <div class="col-lg-12 col-xs-12">
             <!-- small box -->
             <div class="small-box bg-purple">
               <div class="inner">

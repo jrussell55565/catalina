@@ -416,7 +416,6 @@ if (isset($_POST['broadcast_message']))
 
           <ol class="breadcrumb">
             <li><a href="/pages/main/index.php"><i class="fa fa-home"></i> Home</a></li>
-            <li class="active">Index Testing</li>
           </ol>
         </section>
 
