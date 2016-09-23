@@ -112,6 +112,23 @@ function get_drivers($mysqli) {
    return $driver_array;
 }
 
+function get_all_users($mysqli) {
+   $all_users_array = [];
+   $statement = "select fname, lname, employee_id, email, vtext from users where status = 'Active' order by fname";
+
+   $counter = 0;
+   if ($result = $mysqli->query($statement)) {
+     while($obj = $result->fetch_object()){
+       $all_users_array[$counter]['employee_id'] = $obj->employee_id;
+       $all_users_array[$counter]['name'] = $obj->fname. " ". $obj->lname;
+       $all_users_array[$counter]['email'] = $obj->email;
+       $all_users_array[$counter]['vtext'] = $obj->vtext;
+       $counter++;
+     }
+   }
+   return $all_users_array;
+}
+
 function generate_compliance_sql($emp_id,$time) {
 
     $predicates = generate_compliance_predicate($emp_id, $time);

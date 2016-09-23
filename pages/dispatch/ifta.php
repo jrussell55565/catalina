@@ -655,8 +655,7 @@ Closed
            }
            echo "        };\n";
          ?>
-
-         var prev_st_enter = $("#tr_add_driver_details_"+rowNum).prev().children('td').eq(6).find('option:selected').text();
+         var prev_st_enter = $("#tr_add_driver_details_"+rowNum).prev().children('td').eq(5).find('option:selected').text();
 
          // Set the Exit state to the value of the "enter" state of the previous line
          if (prev_st_enter) {
