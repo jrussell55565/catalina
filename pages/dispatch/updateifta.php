@@ -1124,7 +1124,7 @@ function calculate_state_miles(rowNum,delayTimer) {
 }
 
 function sendEmail() {
-  if (confirm("Do you want to send an email now?")) {
+  if (confirm("Send Email Alert? Click OK to Send or Cancel to Not Send Email! Changes that you have made will save regardless of email send or not.")) {
     $("#send_email").val('yes');
   }else{
     $("#send_email").val('no');
