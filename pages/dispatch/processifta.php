@@ -770,14 +770,14 @@ function downloadFile($file_name, $file_name_uploaded) {
 }
 
 function sendIftaEmail($mysqli) {
-  $compliance = array ('compliance_trip' => 'Did not fill out Trip Pack correctly',
-                       'compliance_logs' => 'Logs were missing',
-                       'compliance_vir' => 'VIR not included',
-                       'compliance_fuel' => 'Fuel receipts not included',
-                       'compliance_bol' => 'Bill of Lading is missing',
-                       'compliance_permits' => 'Permits are missing',
+  $compliance = array ('compliance_trip' => 'Driver Filled out Trip Pack Correctly.',
+                       'compliance_logs' => 'Driver Included Logs...................',
+                       'compliance_vir' => 'Driver Included VIR.....................',
+                       'compliance_fuel' => 'Driver Included in Fuel receipts......',
+                       'compliance_bol' => 'Driver Included BOL(s)................',
+                       'compliance_permits' => 'Driver Included Permits..............',
                        //'compliance_gps',
-                       'compliance_dot' => 'DOT violations are missing');
+                       'compliance_dot' => 'Driver Included DOT violations........');
 					   //Need to include General Notes for driver (top section),
 					   //Need to add Date Specific "issue" to the email and DB, this will come from multiple lines,
 					   //Because of multiple lines, need to add specific date/driver to the email,
@@ -786,12 +786,16 @@ function sendIftaEmail($mysqli) {
   $subject = "Trip Pack Submitted - ".$_POST['txt_tripnum'];
   $body = "Notice: IFTA trip pack ".$_POST['txt_tripnum']." entered on truck ".$_POST['txt_truckno'].". \n";
   $body .= "You are recieving this email because we may require additional information to be turned in. \n";
-  $body .= "If any items are incomplete, negative productivity points have been added to your profile: \n";
+  $body .= "We may require your assistance in locating paperwork. \n";
+  $body .= "Due to the additional work required if any items were marked inconplete, negative productivity points will be added to your profile. \n";
+  $body .= "Please Contact Catalina Compliance Department to fix any issues marked as incomplete: see below details. \n";
+  $body .= "If any items are incomplete, negative productivity points have been added to your profile. \n";
   $body .= "Please Contact Catalina Compliance Department to fix issues: see below for details.\n";
+  $body .= " \n";
   $body .= "Start Date: ".$_POST['txt_date_start']." End Date: ".$_POST['txt_date_end']." .\n";
-  $body .= "Start city/state: ".$_POST['location_start']."\n";
-  $body .= "Stop city/state: ".$_POST['location_stops']."\n";
-  $body .= "End city/state: ".$_POST['location_end']."\n";
+  $body .= "Start City/State: ".$_POST['location_start']."\n";
+  $body .= "Stop City/State: ".$_POST['location_stops']."\n";
+  $body .= "End City/State: ".$_POST['location_end']."\n";
   $body .= "Notes:\n";
   $body .= $_POST['notes_trip_driver'] . "\n\n";
 
