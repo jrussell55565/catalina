@@ -166,7 +166,7 @@ if (isset($_POST['btn_update_task'])) {
         $body = "A new task has been created!\n";
         $body .= "Description: ".$_POST['task_notes']."\n\n";
         $body .= "Due: ".$_POST['task_due_date']."\n";
-        sendEmail($employee_email, 'New task alsert', $body, 'drivers@catalinacartage.com');
+        sendEmail($employee_email, 'New task alert', $body, 'drivers@catalinacartage.com');
 
     } catch (Exception $e) {
     // An exception has been thrown
@@ -388,6 +388,7 @@ if (isset($_POST['btn_update_task'])) {
                     <option value="vir">VIR</option>
                     <option value="productivity">Productivity</option>
                     <option value="csa">CSA</option>
+                    <option value="expirations">Expirations</option>
                     <option value="other">Other</option>
                    </select></td>
                   <td style="padding: 5px"><select class="form-control" required name="task_subitem" id="task_subitem">
@@ -452,6 +453,7 @@ if (isset($_POST['btn_update_task'])) {
                     <option value="productivity" <?php if ($tasks_aggregate[$j]['item'] == 'productivity') { echo " selected "; } ?>>Productivity</option>
                     <option value="csa" <?php if ($tasks_aggregate[$j]['item'] == 'csa') { echo " selected "; } ?>>CSA</option>
                     <option value="other" <?php if ($tasks_aggregate[$j]['item'] == 'other') { echo " selected "; } ?>>Other</option>
+                    <option value="expirations">Expirations</option>
                    </select></td>
                   <td style="padding: 5px"><select class="form-control" required name="task_subitem" id="task_subitem_<?php echo $tasks_aggregate[$j]['id'];?>" onchange="update_tasks(this);">
                     <option value="arrived_shipper" <?php if ($tasks_aggregate[$j]['subitem'] == 'arrived_shipper') { echo " selected "; } ?>>Arrived to Shipper</option>
