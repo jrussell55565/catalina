@@ -116,17 +116,17 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
         <div class="box-body">
           <form class="form" name="virForm" id="virForm" method="post" action="viractions.php" onsubmit="return validateSubmit(this);">
             
-            <table width="313" border="1">
+            <table width="292" border="1">
               <tr>
-                <td colspan="4">Start Time:
+                <td colspan="5">Start Time:
                   <input name="insp_start_time" type="text" id="insp_start_time" value="<?php echo $localtime; ?>" size="8"/>
                   Date
                   <input name="insp_date" type="text" id="insp_date" value="<?php echo $localdate; ?>" size="8" readonly/>
                   <span class="active"><?php echo "$truck_number"; ?></span>
               </tr>
               <tr>
-                <td width="94">Truck
-                <td width="79"><div align="center">
+                <td width="67">Truck
+                <td width="73"><div align="center">
                   <input name="truck_number" type="text" id="truck_number" value="<?php echo $truckid; ?>" size="8" readonly />
                   <?php
                 $statement = "SELECT truck_vir_condition from virs WHERE truck_number = $truckid ORDER BY vir_itemnum DESC LIMIT 1";
@@ -135,7 +135,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 $a = explode(',',$record[0]);
                 ?>
                 </div>
-                <td colspan="2" ><div align="center"><?php echo $a[0];?> on 7/1/2016</div>                </tr>
+                <td colspan="3" ><div align="center"><?php echo $a[0];?> on 7/1/2016</div>                </tr>
               <tr>
                 <td>Trailer
                 <td><div align="center">
@@ -148,33 +148,42 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 $record = mysql_fetch_array($record);
                 $a = explode(',',$record[0]);
                 ?>
-                <td colspan="2"><div align="center"><?php echo $a[0];?> on 7/1/2016</div>                </tr>
+                <td colspan="3"><div align="center"><?php echo $a[0];?> on 7/1/2016</div>                </tr>
               <tr>
-                <td colspan="4">
+                <td colspan="5">
                 <div align="center">
                     Pre Trip:
                     <input name="preorposttrip" type="radio" id="pretrip" value="vir_pretrip">
                     <label for="vir_pretrip"></label>
                     Post Trip:
                     <input type="radio" name="preorposttrip" id="posttrip" value="vir_posttrip">
-                    <label for="vir_posttrip"></label>
+                    <label for="vir_breakdown3"></label>
                 </div>
-                  <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none" id="preorpostdiv">Choose pre/post trip or Breakdown</div>
+                  <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none" id="preorpostdiv">Choose pre/post trip or Breakdown Comming soon Trailer Swaps</div>
               </tr>
               <tr>
-                <td colspan="4"><div align="center">Breakdown:
-                    <input name="preorposttrip" type="radio" id="breakdown" value="vir_breakdown">
-                    <label for="vir_breakdown"></label>
-                </div>                
+                <td colspan="5"><div align="center">Previously Reported:
+                  <input type="radio" name="preorposttrip" id="previously_reported" value="previously_reported">
+                  <label for="type_sprinter7"></label>
+                </div>              </tr>
+              <tr>
+                <td colspan="5"><div align="center">
+                  <label for="vir_posttrip3"></label>
+                Breakdown:
+                <input name="preorposttrip" type="radio" id="breakdown" value="vir_breakdown">
+                </div>              
               </tr>
               <tr>
-                <td colspan="4"><div align="center">Truck Type</div>
+                <td colspan="5"><div align="center"><a href="vir_previous.php">Previous VIRS</a></div>                </tr>
+              <tr>
+                <td colspan="5"><div align="center">Truck Type / Trailer</div>
                   <div align="center"></div>
               </tr>
               <tr>
-                <td><div align="center"><span class="box-title"><img src="../images/semismall.gif" alt="tire"></span></div>
-                <td colspan="2"><div align="center"><span class="box-title"><img src="../images/boxtrucksmall.gif" alt="tire"></span></div>
-                <td width="96"><div align="center"><span class="box-title"><img src="../images/sprintersmall.gif" alt="tire"></span></div>
+                <td height="34"><div align="center"><span class="box-title"><img src="../images/semismall.gif" alt="tire"></span></div>
+                <td colspan="2"><div align="center"><span class="box-title"><img src="../images/trailersmall.gif" alt="tire"></span></div>
+                <td width="66"><div align="center"><span class="box-title"><img src="../images/boxtrucksmall.gif" alt="tire"></span></div>
+                <td width="64"><span class="box-title"><img src="../images/sprintersmall.gif" alt="tire"></span>                
               </tr>
               <tr>
                 <td><div align="center">
@@ -182,28 +191,26 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                     <label for="type_semi"></label>
                   </div>
                 <td colspan="2"><div align="center">
-                  <input type="radio" name="trucktype" id="trucktype_boxtruck" value="boxtruck">
-                  <label for="type_boxtruck"></label>
+                    <div align="center">
+                    <div align="center">
+                    <input type="radio" name="trucktype" id="trucktype_sprinter" value="sprinter">
+                    </div>
                   </div>
+                </div>
                   <div align="center"></div>
                 <td><div align="center">
-                    <input type="radio" name="trucktype" id="trucktype_sprinter" value="sprinter">
-                    <label for="type_sprinter"></label>
-                  </div>
-              </tr>
-              <tr>
-              <td colspan="4"><div align="center"> If you are reporting vir items that have not been fixed on the truck or trailer but were previously reported in the last week, Select Option Below.</div>              
-              </tr>
-              <tr>
-                <td colspan="3"><div align="center">Previously Reported
-                  <input type="radio" name="previously_reported" id="previously_reported" value="previously_reported">
-                  <label for="type_sprinter2"></label>
+                  <input type="radio" name="trucktype" id="trucktype_boxtruck" value="boxtruck">
                 </div>
-                             
-                <td><a href="vir_previous.php">Previous VIRS</a></tr>
+                <td><div align="center">
+                  <label for="type_sprinter4"></label>
+                  <input type="radio" name="trucktype" id="trucktype_sprinter" value="sprinter">
+                </div>                
+              </tr>
               <tr>
-                <td colspan="3"><div align="center"></div>
-                <td><div align="center"></div>                </tr>
+                <td colspan="5"><div align="center"> If you are reporting vir items that have been previously reported in the last week, Select Previously Reported.</div>              
+                  <div align="center"></div>
+                <div align="center"></div>                
+              </tr>
             </table>
 
         <!-- /.box-body -->
