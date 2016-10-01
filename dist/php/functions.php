@@ -93,11 +93,11 @@ function get_drivers($mysqli) {
    $driver_array = [];
    $statement = "select * from
    (
-   select fname, lname, employee_id, email from users where title = 'Driver'
+   select fname, lname, employee_id, email from users where title = 'Driver' AND status = 'Active'
    union
-   select 'Unknown' as fname, 'Driver' as lname, 'null' as employee_id, 'null' as email from DUAL
+   select 'Unknown' as fname, 'Driver' as lname, 'unknown' as employee_id, 'unknown' as email from DUAL
    union
-   select 'Multiple' as fname, 'Drivers' as lname, 'null' as employee_id, 'null' as email from DUAL
+   select 'Multiple' as fname, 'Drivers' as lname, 'multiple' as employee_id, 'multiple' as email from DUAL
    ) a order by fname";
 
    $counter = 0;

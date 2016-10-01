@@ -165,7 +165,7 @@ $task_aggregate = get_sql_results($task_sql,$mysqli);
                <?php if ($_SESSION['login'] == 1) { ?>
                <div class="input-group" id="driver">
                  <select class="input-sm form-control" name="trip_search_driver" id="trip_search_driver" value="" style="margin-top: 5px;">
-                  <option value="null">Choose Driver...</option>
+                  <option value="null">All Drivers<option>
                     <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
                       <option value=<?php echo $driver_array[$i]['employee_id'];
                        if ($driver_array[$i]['employee_id'] == $_GET['trip_search_driver']) { echo " selected "; } ?>
