@@ -1420,7 +1420,7 @@ $(document).ready(function(){
 
 // Set the default values for the datepicker
 $("#dt_start").val('<?php echo date('m/d/y',$start_date);?>');
-$("#dt_end").val('<?php echo date('m/d/y',$end_date);?>');
+$("#dt_end").val('<?php echo date('m/d/y',$end_date - 1);?>');
 });
 </script>
 
