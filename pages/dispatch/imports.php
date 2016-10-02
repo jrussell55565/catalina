@@ -244,12 +244,14 @@ if ($_POST['btn_trips'])
                     <tr>
                       <th><a href="/pages/examples/CSA/CSA_csv_export_example.csv">Example CSV Import CSA</a></th>
                       <th width="27%"><a href="/pages/examples/TimeCardImportXLSMaster/Time_Sheet_csv_export_example.csv">Example CSV Import Time Sheet</a></th>
-                      <th width="35%"><a href="/pages/examples/TimeCardImportXLSMaster/GPS_csv_export_example.csv">Example CSV Import GPS Data</a></th>
+                      <th width="35%"><p><a href="/pages/examples/intouchGPS/2016_09_GPSCSV_import.csv">Example CSV Import GPS Data</a></p>
+                      <p><a href="/pages/examples/intouchGPS/GPS_trips_MOD_EOM_Sept.xlsx">GPS  CSV Import Sept 16</a></p></th>
                     </tr>
                     <tr>
                       <th><a href="/pages/examples/CSA/CSA_MOD.xlsx">CSA MOD  XLS</a></th>
                       <th><a href="/pages/examples/TimeCardImportXLSMaster/time_sheet_MOD.xlsx">Time Sheet MOD XLS</a></th>
-                      <th><a href="/pages/examples/TimeCardImportXLSMaster/GPS_trips_MOD.xlsx">GPS  MOD XLS</a></th>
+                      <th><p><a href="/pages/examples/TimeCardImportXLSMaster/GPS_trips_MOD.xlsx">GPS  MOD XLS</a></p>
+                      <p><a href="/pages/examples/TimeCardImportXLSMaster/GPS_trips_MOD.xlsx">GPS  MOD Sept 16</a></p></th>
                     </tr>
                     <tr>
                       <th><a href="https://csa.fmcsa.dot.gov/default.aspx">https://csa.fmcsa.dot.gov/default.aspx</a> Download the current CSA data</th>
@@ -264,7 +266,7 @@ if ($_POST['btn_trips'])
                     <tr>
                       <th>Then Download All, Excel; Copy Lines 2 below to Mod Template Sheet</th>
                       <th>Run Report On Payroll Dates</th>
-                      <th>&nbsp;</th>
+                      <th>Then Upload to DB!!</th>
                     </tr>
                     <tr>
                       <th>First Export the Current Data from CSA. Then Add the new File to the current Data</th>
