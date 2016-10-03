@@ -62,7 +62,19 @@ if (empty($_POST['addr2'])) { $addr2 = 'NULL'; }else{ $addr2 = "\"$_POST[addr2]\
 if (empty($_POST['city'])) { $city = 'NULL'; }else{ $city = "\"$_POST[city]\"";}
 if (empty($_POST['state'])) { $state = 'NULL'; }else{ $state = "\"$_POST[state]\"";}
 if (empty($_POST['zip'])) { $zipcode = 'NULL'; }else{ $zipcode = "\"$_POST[zip]\"";}
-if (empty($_POST['jobTitle'])) { $title = 'NULL'; }else{ $title = "\"$_POST[jobTitle]\"";}
+
+if (empty($_POST['jobTitle'])) {
+    $title = 'NULL';
+}else{
+    $title = "\"$_POST[jobTitle]\"";
+    if (preg_match('/Driver/',$title)) {
+        $subtitle = preg_replace('/Driver\s-\s/','',$title);
+        $title = "\"Driver\"";
+    }else{
+        $subtitle = 'NULL';
+    }
+}
+
 if (empty($_POST['email'])) { $email = 'NULL'; }else{ $email = "\"$_POST[email]\"";}
 if (isset($_POST['emailEnabled']) && $_POST['emailEnabled'] == 'on') { $emailEnabled = '"1"'; }else{ $emailEnabled = '"0"';}
 if (empty($_POST['vtext'])) { $vtext = 'NULL'; }else{ $vtext = "\"$_POST[vtext]\"";}
@@ -89,8 +101,11 @@ if (empty($_POST['fuelcard'])) { $fuelcard = 'NULL'; }else{ $fuelcard = "\"$_POS
 if (empty($_POST['notes'])) { $notes = 'NULL'; }else{ $notes = "\"$_POST[notes]\"";}
 if (empty($_POST['tsName'])) { $tsName = 'NULL'; }else{ $tsName = "\"$_POST[tsName]\"";}
 if (empty($_POST['tsPhone'])) { $tsPhone = 'NULL'; }else{ $tsPhone = $_POST['tsPhone'];}
+
 # Strip non-digits from the phone
-$tsPhone = preg_replace('/\D/','',$tsPhone);
+if ($tsPhone != 'NULL') {
+    $tsPhone = preg_replace('/\D/','',$tsPhone);
+}
 
 if (empty($_POST['vir_pretrip_time'])) { $vir_pretrip_time = 'NULL'; }else{ $vir_pretrip_time = "\"$_POST[vir_pretrip_time]\"";}
 if (empty($_POST['vir_posttrip_time'])) { $vir_posttrip_time = 'NULL'; }else{ $vir_posttrip_time = "\"$_POST[vir_posttrip_time]\"";}
@@ -186,6 +201,7 @@ if (! empty($_FILES["fileToUpload"]["name"]))
    state = $state,
    zipcode = $zipcode,
    title = $title,
+   subtitle = $subtitle, 
    email = $email,
    emailupdate = $emailEnabled,
    vtext = $vtext,
@@ -499,6 +515,7 @@ $sql = "SELECT
      state,
      zipcode,
      title,
+     subtitle,
      email,
      emailupdate,
      vtext,
@@ -641,7 +658,9 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
          <option value="Office" <?php if ($row['title'] == 'Office') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Office</option>
          <option value="Dispatch"<?php if ($row['title'] == 'Dispatch') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Dispatch</option>
          <option value="Accounting" <?php if ($row['title'] == 'Accounting') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Accounting</option>
-         <option value="Driver"<?php if ($row['title'] == 'Driver') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Driver</option>
+         <option value="Driver - OTR"<?php if ($row['subtitle'] == 'OTR') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Driver - OTR</option>
+         <option value="Driver - Local"<?php if ($row['subtitle'] == 'Local') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Driver - Local</option>
+         <option value="Driver - Both"<?php if ($row['subtitle'] == 'Both') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Driver - Both</option>
          <option value="Mechanic"<?php if ($row['title'] == 'Mechanic') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Mechanic</option>
        </select> 
      </td>
@@ -1288,8 +1307,10 @@ onClick="$(this).toggleClass('glyphicon-chevron-down glyphicon-chevron-right');"
          <option value="Office">Office</option>
          <option value="Dispatch">Dispatch</option>
          <option value="Accounting">Accounting</option>
-         <option value="Driver">Driver</option>
-         <option value="Driver">Mechanic</option>
+         <option value="Driver - OTR">Driver - OTR</option>
+         <option value="Driver - Local">Driver - Local</option>
+         <option value="Driver - Both">Driver - Both</option>
+         <option value="Mechanic">Mechanic</option>
        </select>
      </td>
     </tr>
