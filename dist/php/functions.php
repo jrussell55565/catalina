@@ -511,4 +511,14 @@ function generate_task_sql($sd,$ed){
        )a group by assign_to";
     return $sql;
 }
+function generate_quiz_sql($sd,$ed) {
+    $sql = "SELECT cu.username,cu.employee_id,q.user_id,q.assignment_id,MAX(q.pass_score_point) AS max_score
+      FROM assignments.user_quizzes q, catalina.users cu, assignments.users au
+      WHERE cu.employee_id = au.comments
+      AND au.userid = q.user_id
+      AND q.added_date BETWEEN str_to_date('$sd','%Y-%m-%d') AND str_to_date('$ed','%Y-%m-%d')
+      GROUP BY username, employee_id, user_id, assignment_id
+      ORDER BY max_score DESC";
+    return $sql;
+}
 ?>

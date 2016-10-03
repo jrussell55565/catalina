@@ -89,6 +89,10 @@ $complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
 $task_sql = generate_task_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
 $task_aggregate = get_sql_results($task_sql,$mysqli);
 
+// Generate the sql for quizzes
+$quiz_sql = generate_quiz_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+$quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
+
 ?>
 <!DOCTYPE html>
 <html>
