@@ -244,7 +244,7 @@ if ($_POST['btn_trips'])
                     <tr>
                       <th><a href="/pages/examples/CSA/CSA_csv_export_example.csv">Example CSV Import CSA</a></th>
                       <th width="27%"><a href="/pages/examples/TimeCardImportXLSMaster/Time_Sheet_csv_export_example.csv">Example CSV Import Time Sheet</a></th>
-                      <th width="35%"><p><a href="/pages/examples/intouchGPS/2016_09_GPSCSV_import.csv">Example CSV Import GPS Data</a></p>
+                      <th width="35%"><p><a href="/pages/examples/TimeCardImportXLSMaster/Time_Sheet_csv_export_example.csv">Example CSV Import GPS Data</a></p>
                       <p><a href="/pages/examples/intouchGPS/GPS_trips_MOD_EOM_Sept.xlsx">GPS  CSV Import Sept 16</a></p></th>
                     </tr>
                     <tr>
@@ -254,7 +254,7 @@ if ($_POST['btn_trips'])
                       <p><a href="/pages/examples/TimeCardImportXLSMaster/GPS_trips_MOD.xlsx">GPS  MOD Sept 16</a></p></th>
                     </tr>
                     <tr>
-                      <th><a href="https://csa.fmcsa.dot.gov/default.aspx">https://csa.fmcsa.dot.gov/default.aspx</a> Download the current CSA data</th>
+                      <th><a href="https://csa.fmcsa.dot.gov/default.aspx" target="_blank">https://csa.fmcsa.dot.gov/default.aspx</a> Download the current CSA data</th>
                       <th><a href="https://application.fingercheck.com/FingerCheck/Login.aspx">Finger Check Login</a></th>
                       <th>Download Trips Into MOD</th>
                     </tr>
