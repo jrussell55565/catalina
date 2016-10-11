@@ -786,11 +786,8 @@ function sendIftaEmail($mysqli) {
   $subject = "Trip Pack Submitted - ".$_POST['txt_tripnum'];
   $body = "Notice: IFTA trip pack ".$_POST['txt_tripnum']." entered on truck ".$_POST['txt_truckno'].". \n";
   $body .= "You are recieving this email because we may require additional information to be turned in. \n";
-  $body .= "We may require your assistance in locating paperwork. \n";
-  $body .= "Due to the additional work required if any items were marked inconplete, negative productivity points will be added to your profile. \n";
-  $body .= "Please Contact Catalina Compliance Department to fix any issues marked as incomplete: see below details. \n";
-  $body .= "If any items are incomplete, negative productivity points have been added to your profile. \n";
-  $body .= "Please Contact Catalina Compliance Department to fix issues: see below for details.\n";
+  $body .= "Due to the additional work required, if any items were marked incomplete, negative productivity points will be added to your profile. \n";
+  $body .= "Catalina Compliance Department will contact you if additional information is needed \n";
   $body .= " \n";
   $body .= "Start Date: ".$_POST['txt_date_start']." End Date: ".$_POST['txt_date_end']." .\n";
   $body .= "Start City/State: ".$_POST['location_start']."\n";
