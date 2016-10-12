@@ -31,7 +31,7 @@ $row = mysql_fetch_array(mysql_query($sql),MYSQL_BOTH);
 $hawb       = $row['hawbNumber'];
 $puDriver   = $row['PUAgentDriverName'];
 $delDriver  = $row['delAgentDriverName'];
-$exportdest = $row['puAgentCode'];
+$exportdest = $row['control'];
 $dueDate    = $row['dueDate'];
 $username	= $_SESSION['userid'];
 

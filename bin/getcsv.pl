@@ -60,7 +60,7 @@ if (! -d $wwwroot)
     exit 1;
 }
 
-our @ftproot	= ("CatalinaCartage");
+our @ftproot	= ("CatalinaCartage","FreightServices");
 our @list = ();
 our $debug = 0;
 

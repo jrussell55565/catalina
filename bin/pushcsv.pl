@@ -71,20 +71,19 @@ sub wanted
     $fileType = $1;
     $exportdest = $2;
 
-    switch ($exportdest)
+switch ($exportdest)
     {
-        case "CATTUS1"     { $exportdest = "CatalinaCartage" }
-        case "CATPHX1"     { $exportdest = "CatalinaCartage" }
-        case "JNAIRTUS1"{ $exportdest = "CatalinaCartage" }
-        case "JNAIRPHX1"{ $exportdest = "CatalinaCartage" }
-        case "CATOKC1"    { $exportdest = "CatalinaCartage" }
-        case "CATLAX1"    { $exportdest = "CatalinaCartage" }
-        case "CATTUS2"     { $exportdest = "JNAirfreight" }
-        case "CATPHX2"     { $exportdest = "JNAirfreight" }
-        case "JNAIRTUS2"{ $exportdest = "JNAirfreight" }
-        case "JNAIRPHX2"{ $exportdest = "JNAirfreight" }
-        case "JNAIROKC2"{ $exportdest = "JNAirfreight" }
-        case "JNAIRLAX2"{ $exportdest = "JNAirfreight" }
+        case "PHX"     { $exportdest = "CatalinaCartage" }
+        case "TLPHX"     { $exportdest = "CatalinaCartage" }
+        case "TUS"{ $exportdest = "CatalinaCartage" }
+        case "TLTUS"{ $exportdest = "CatalinaCartage" }
+        case "PDX"    { $exportdest = "CatalinaCartage" }
+        case "CAT"    { $exportdest = "CatalinaCartage" }
+        case "CATTUS2"     { $exportdest = "CatalinaCartage" }
+        case "CATPHX2"     { $exportdest = "CatalinaCartage" }
+        case "CCLH"{ $exportdest = "CatalinaCartage" }
+        case "FSIBK"{ $exportdest = "FreightServices" }
+        case "FSITUS"{ $exportdest = "FreightServices" }
         else        { $exportdest = "CatalinaCartage" }
     }
         # Open the file and look at the hwb to determine if its prod or qa
