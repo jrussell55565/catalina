@@ -16,7 +16,8 @@ mysql_select_db($db_name) or DIE('Database name is not available!');
 $recordid = $_POST[recordid];
 $sql = "select 
         hawbNumber, PUAgentDriverName, delAgentDriverName, COALESCE(puAgentCode,'CATTUS1') puAgentCode,
-        date_format(str_to_date(dueDate, '%c/%e/%Y'),'%c/%e/%Y') dueDate
+        date_format(str_to_date(dueDate, '%c/%e/%Y'),'%c/%e/%Y') dueDate,
+        control
         from dispatch where recordId = $recordid";
 
 $statement = 'SELECT drivername,employee_id,fname,lname,email from users where username = "'.$_SESSION['userid'].'"';
