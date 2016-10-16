@@ -129,13 +129,13 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td width="73"><div align="center">
                   <input name="truck_number" type="text" id="truck_number" value="<?php echo $truckid; ?>" size="8" readonly />
                   <?php
-                $statement = "SELECT truck_vir_condition from virs WHERE truck_number = $truckid ORDER BY vir_itemnum DESC LIMIT 1";
+                $statement = "SELECT truck_vir_condition,insp_date from virs WHERE truck_number = $truckid ORDER BY vir_itemnum DESC LIMIT 1";
                 $record = mysql_query($statement);
                 $record = mysql_fetch_array($record);
                 $a = explode(',',$record[0]);
                 ?>
                 </div>
-                <td colspan="3" ><div align="center"><?php echo $a[0];?> on 7/1/2016</div>                </tr>
+                <td colspan="3" ><div align="center"><?php echo $a[0];?> on <?php echo $record[1];?></div>                </tr>
               <tr>
                 <td>Trailer
                 <td><div align="center">
@@ -143,12 +143,12 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                   <input name="truck_odometer" type="hidden" id="truck_odometer" value="<?php echo $truckOdometer; ?>" size="8" readonly>
                 </div></td>
                 <?php
-                $statement = "SELECT trailer_vir_condition from virs WHERE trailer_number = $trailerid ORDER BY vir_itemnum DESC LIMIT 1";
+                $statement = "SELECT trailer_vir_condition,insp_date from virs WHERE trailer_number = $trailerid ORDER BY vir_itemnum DESC LIMIT 1";
                 $record = mysql_query($statement);
                 $record = mysql_fetch_array($record);
                 $a = explode(',',$record[0]);
                 ?>
-                <td colspan="3"><div align="center"><?php echo $a[0];?> on 7/1/2016</div>                </tr>
+                <td colspan="3"><div align="center"><?php echo $a[0];?> on <?php echo $record[1];?></div>                </tr>
               <tr>
                 <td colspan="5">
                 <div align="center">
