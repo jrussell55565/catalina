@@ -146,6 +146,25 @@ switch ($statustype)
 		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
 	break;
+	
+	
+    case "Dropped":
+        $status = "Dropped";
+        // If I'm the PU driver then give me a PU accessorial credit for this status
+	    if ($puDriver == $drivername)
+	    {
+		    $accessorials = processAccessorials($hawb,"PU",$username,$status);
+	    }
+        // If I'm the DEL driver then give me a DEL accessorial credit for this status
+	    if ($delDriver == $drivername)
+	    {
+		    $accessorials = processAccessorials($hawb,"DEL",$username,$status);
+	    }
+	    if ($remarks != '')
+		{
+		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+	    }
+	break;	
 
     case "On Dock PHX":
         $status = "On Dock PHX";
@@ -394,7 +413,7 @@ function processAccessorials($hawb,$action,$driver_full_name,$status)
 
     $sqlSearchIn = array();
     // Create an array for the simplestatus
-    $simple_status = array('In Transit','On Dock PHX','On Dock TUS',
+    $simple_status = array('In Transit','Dropped','On Dock PHX','On Dock TUS',
                            'Trailer Dropped','Reject PU DEL','Refused','Freight At Dock');
     foreach ($simple_status as $i)
     {

@@ -43,6 +43,7 @@ $queryCount = mysql_num_rows($sql);
 <head>
 <meta charset="UTF-8">
 <title>HWB Info</title>
+<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -242,13 +243,15 @@ if ($row['status'] == "Delivered")
                 </div>
                 <!-- /btn-group -->
                 <select class="form-control" name="sel_quickStatus" id="sel_quickStatus">
-                  <option>In Transit</option>
+                  <option selected>Dropped</option>
+                  <option>Freight At Dock</option>
+                  <option>Trailer Dropped</option>
                   <option>On Dock PHX</option>
                   <option>On Dock TUS</option>
-                  <option>Trailer Dropped</option>
-                  <option>Reject PU DEL</option>
+                  <option>In Transit</option>
                   <option>Refused</option>
-                  <option selected>Freight At Dock</option>
+                  <option>Reject PU DEL</option>
+                  <option>Accept PU DEL</option>
                 </select>
               </div>
             </form></td>
