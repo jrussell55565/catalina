@@ -313,6 +313,8 @@ if ($trucktype == 'trailer')
     {
         die('Unable to INSERT trailer VIR into table: ' . mysql_error());
     }
+    $truck_po = "N/A";
+    $trailer_po = mysql_insert_id();
 }
 
 if (($trucktype == 'combo') && ($trailer_number != ''))
