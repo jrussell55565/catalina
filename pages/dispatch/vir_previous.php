@@ -165,8 +165,8 @@ folder instead of downloading all of them to reduce the load. -->
         </p>
       </div>
       <!-- /.box-header -->
-      <div class="box-body">
-        <table class="table table-striped">
+      <div class="box-body table-responsive">
+        <table class="table table-striped ">
           <tbody>
             <?php
 # If non-admin logs in then only show their info
@@ -236,7 +236,7 @@ href="#vir_details" aria-expanded="false" aria-controls="vir_details" style="pad
                 </a></td>
             </tr>
             <tr id="vir_details">
-              <td colspan="9"><div class="well table-responsive">
+              <td colspan="9"><div class="well">
                   <table class="table">
                     <thead>
                       <tr>
