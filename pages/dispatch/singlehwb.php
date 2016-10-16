@@ -242,13 +242,15 @@ if ($row['status'] == "Delivered")
                 </div>
                 <!-- /btn-group -->
                 <select class="form-control" name="sel_quickStatus" id="sel_quickStatus">
-                  <option>In Transit</option>
+                  <option selected>Dropped</option>
+                  <option>Freight At Dock</option>
+                  <option>Trailer Dropped</option>
                   <option>On Dock PHX</option>
                   <option>On Dock TUS</option>
-                  <option>Trailer Dropped</option>
-                  <option>Reject PU DEL</option>
+                  <option>In Transit</option>
                   <option>Refused</option>
-                  <option selected>Freight At Dock</option>
+                  <option>Reject PU DEL</option>
+                  <option>Accept PU DEL</option>
                 </select>
               </div>
             </form></td>
