@@ -129,13 +129,21 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 <td width="73"><div align="center">
                   <input name="truck_number" type="text" id="truck_number" value="<?php echo $truckid; ?>" size="8" readonly />
                   <?php
-                $statement = "SELECT truck_vir_condition,insp_date from virs WHERE truck_number = $truckid ORDER BY vir_itemnum DESC LIMIT 1";
+                $statement = "SELECT truck_vir_condition,date_format(insp_date,'%m/%d/%Y') from virs WHERE truck_number = $truckid ORDER BY vir_itemnum DESC LIMIT 1";
                 $record = mysql_query($statement);
                 $record = mysql_fetch_array($record);
                 $a = explode(',',$record[0]);
+                if (preg_match('/^Green/',$a[0]))
+                {
+                $status = '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
+                }elseif (preg_match('/^Yellow/',$a[0])){
+                $status = '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
+                }elseif (preg_match('/^Red/',$a[0])){
+                $status = '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
+                }
                 ?>
                 </div>
-                <td colspan="3" ><div align="center"><?php echo $a[0];?> on <?php echo $record[1];?></div>                </tr>
+                <td colspan="3" ><div align="center"><?php echo $status;?> <?php echo $record[1];?></div>                </tr>
               <tr>
                 <td>Trailer
                 <td><div align="center">
@@ -143,12 +151,20 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                   <input name="truck_odometer" type="hidden" id="truck_odometer" value="<?php echo $truckOdometer; ?>" size="8" readonly>
                 </div></td>
                 <?php
-                $statement = "SELECT trailer_vir_condition,insp_date from virs WHERE trailer_number = $trailerid ORDER BY vir_itemnum DESC LIMIT 1";
+                $statement = "SELECT trailer_vir_condition,date_format(insp_date,'%m/%d/%Y') from virs WHERE trailer_number = $trailerid ORDER BY vir_itemnum DESC LIMIT 1";
                 $record = mysql_query($statement);
                 $record = mysql_fetch_array($record);
                 $a = explode(',',$record[0]);
+                if (preg_match('/^Green/',$a[0]))
+                {
+                $status = '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
+                }elseif (preg_match('/^Yellow/',$a[0])){
+                $status = '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
+                }elseif (preg_match('/^Red/',$a[0])){
+                $status = '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
+                }
                 ?>
-                <td colspan="3"><div align="center"><?php echo $a[0];?> on <?php echo $record[1];?></div>                </tr>
+                <td colspan="3"><div align="center"><?php echo $status;?> <?php echo $record[1];?></div>                </tr>
               <tr>
                 <td colspan="5">
                 <div align="center">
