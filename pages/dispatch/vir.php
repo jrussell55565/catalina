@@ -180,31 +180,24 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                   <div align="center"></div>
               </tr>
               <tr>
-                <td height="34"><div align="center"><span class="box-title"><img src="../images/semismall.gif" alt="tire"></span></div>
-                <td colspan="2"><div align="center"><span class="box-title"><img src="../images/trailersmall.gif" alt="tire"></span></div>
-                <td width="66"><div align="center"><span class="box-title"><img src="../images/boxtrucksmall.gif" alt="tire"></span></div>
-                <td width="64"><span class="box-title"><img src="../images/sprintersmall.gif" alt="tire"></span>                
+                <td height="34"><div align="center"><span class="box-title"><img src="../images/semismall.gif" alt="tire"></span></div></td>
+                <td><div align="center"><span class="box-title"><img src="../images/trailersmall.gif" alt="tire"></span></div></td>
+                <td width="66"><div align="center"><span class="box-title"><img src="../images/boxtrucksmall.gif" alt="tire"></span></div></td>
+                <td width="64"><span class="box-title"><img src="../images/sprintersmall.gif" alt="tire"></span></td>
               </tr>
               <tr>
                 <td><div align="center">
                     <input type="radio" name="trucktype" id="trucktype_combo" value="combo">
-                    <label for="type_semi"></label>
-                  </div>
-                <td colspan="2"><div align="center">
-                    <div align="center">
-                    <div align="center">
-                    <input type="radio" name="trucktype" id="trucktype_sprinter" value="sprinter">
-                    </div>
-                  </div>
-                </div>
-                  <div align="center"></div>
+                  </div></td>
+                <td><div align="center">
+                    <input type="radio" name="trucktype" id="trucktype_trailer" value="trailer">
+                    </div></td>
                 <td><div align="center">
                   <input type="radio" name="trucktype" id="trucktype_boxtruck" value="boxtruck">
-                </div>
+                </div></td>
                 <td><div align="center">
-                  <label for="type_sprinter4"></label>
                   <input type="radio" name="trucktype" id="trucktype_sprinter" value="sprinter">
-                </div>                
+                </div></td>
               </tr>
               <tr>
                 <td colspan="5"><div align="center"> If you are reporting vir items that have been previously reported in the last week, Select Previously Reported.</div>              
@@ -265,7 +258,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
       <!-- Default box -->
       <!--          <div class="box"> -->
       <!--Remove the div Class "box" above and add below primary collapsed -->
-      <div name="div_trailer_vir" id="div_trailer_vir" class="box box-primary collapsed-box vir combo">
+      <div name="div_trailer_vir" id="div_trailer_vir" class="box box-primary collapsed-box vir trailer">
         <div class="box-header with-border">
           <h3 class="box-title"><img src="../images/trailersmall.gif" alt="tire"> Trailer Inspection <img src="../images/trailersmall.gif" alt="tire"></h3>
         <table width="200" border="1">
@@ -595,7 +588,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
       <!-- Default box -->
       <!--          <div class="box"> -->
       <!--Remove the div Class "box" above and add below primary collapsed -->
-      <div name="div_trailer_tire_vir" id="div_trailer_tire_vir" class="box box-primary collapsed-box vir combo">
+      <div name="div_trailer_tire_vir" id="div_trailer_tire_vir" class="box box-primary collapsed-box vir trailer">
         <div class="box-header with-border">
           <h3 class="box-title"><img src="../images/smalltires.gif" width="25" height="25" alt="tire"> Trailer Tires <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
           
@@ -1358,7 +1351,22 @@ $(document).ready(function(){
           {
             $(".vir").not(".combo").hide();
             $(".combo").show();
+            $(".trailer").show();
             $(".truckvir").show();
+            $(".virsubmit").show();
+            $(".virconfirmation").hide();
+          }else{
+            $('#preorpostdiv').css('display', 'block');
+            $(this).prop('checked', false);
+          }
+        }
+        if($(this).attr("value")=="trailer")
+        {
+          if ((document.getElementById('pretrip').checked) || (document.getElementById('posttrip').checked) || (document.getElementById('breakdown').checked))
+          {
+            $(".vir").not(".trailer").hide();
+            $(".trailer").show();
+            $(".truckvir").hide();
             $(".virsubmit").show();
             $(".virconfirmation").hide();
           }else{
@@ -1396,13 +1404,16 @@ $(document).ready(function(){
 });
 
 function validateSubmit( obj ){
-    if(!$('#vir_truck_green').is(':checked') &&
-       !$('#vir_truck_yellow').is(':checked') &&
-       !$('#vir_truck_red').is(':checked'))
-    {
-      $('#generalStatus').html("Must specify truck condition")
-      $('#generalStatus').css('display', 'block');
-      return false
+    // If we've chosen anything other than a trailer then make sure a condition is selected
+    if(!$('#trucktype_trailer').is(':checked')) { 
+        if(!$('#vir_truck_green').is(':checked') &&
+           !$('#vir_truck_yellow').is(':checked') &&
+           !$('#vir_truck_red').is(':checked'))
+        {
+          $('#generalStatus').html("Must specify truck condition")
+          $('#generalStatus').css('display', 'block');
+          return false
+        }
     }
     // Check for sprinter
     if($('#trucktype_sprinter').is(':checked'))
@@ -1439,6 +1450,26 @@ function validateSubmit( obj ){
           $('#generalStatus').css('display', 'block');
           return false
         }
+        if(!$('#vir_trailer_green').is(':checked') &&
+           !$('#vir_trailer_yellow').is(':checked') && 
+           !$('#vir_trailer_red').is(':checked'))
+        {
+           $('#generalStatus').html("Choose an option for trailer condition")
+           $('#generalStatus').css('display', 'block');
+           return false
+        }
+        if(!$('#vir_trailer_tire_green').is(':checked') &&
+           !$('#vir_trailer_tire_yellow').is(':checked') && 
+           !$('#vir_trailer_tire_red').is(':checked'))
+        {
+           $('#generalStatus').html("Choose an option for trailer tire conditions")
+           $('#generalStatus').css('display', 'block');
+           return false
+        }
+    }
+    // Now only check the following if a trailer was selected
+    if($('#trucktype_trailer').is(':checked'))
+    {
         if(!$('#vir_trailer_green').is(':checked') &&
            !$('#vir_trailer_yellow').is(':checked') && 
            !$('#vir_trailer_red').is(':checked'))
