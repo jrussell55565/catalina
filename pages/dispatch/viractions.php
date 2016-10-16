@@ -295,7 +295,7 @@ if ($trucktype == 'trailer')
     '$trailer_tires_driverside_ax2rear',
     '$trailer_tires_passenger_ax2rear',
     '$trailer_tires_notes',
-    NULL,
+    '$vir_notes_finish',
     '$trucktype',
     NULL,
     '$trailer_vir_condition_tire',
