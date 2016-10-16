@@ -522,12 +522,12 @@ if ($virs[$x]['updated_status'] == '')
                               <div class="col-md-6">
                                 <?php 
                                   echo "<br>\n";
+                                  echo '<strong>Steer (driver)</strong> '.$virs[$x][$tot.'_tires_driverside_steer']."<br>\n";
+                                  echo '<strong>Steer (passenger)</strong> '.$virs[$x][$tot.'_tires_passenger_steer']."<br>\n";
                                   echo '<strong>Axel 1 (driver)</strong> '.$virs[$x][$tot.'_tires_driverside_ax1front']."<br>\n";
                                   echo '<strong>Axel 1 (passenger)</strong> '.$virs[$x][$tot.'_tires_passenger_ax1front']."<br>\n";
                                   echo '<strong>Axel 2 (driver)</strong> '.$virs[$x][$tot.'_tires_driverside_ax2rear']."<br>\n";
                                   echo '<strong>Axel 2 (passenger)</strong> '.$virs[$x][$tot.'_tires_passenger_ax2rear']."<br>\n";
-                                  echo '<strong>Steer (driver)</strong> '.$virs[$x][$tot.'_tires_driverside_steer']."<br>\n";
-                                  echo '<strong>Steer (passenger)</strong> '.$virs[$x][$tot.'_tires_passenger_steer'];
                                  ?>
                               </div>
                             </div>
