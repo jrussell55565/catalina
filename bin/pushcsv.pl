@@ -112,7 +112,7 @@ sub push_file
 
     if ($fileType =~ /accessorial/)
     {
-        $ftpPath = "/DriverDispatch/CatalinaCartage/$env/Inbound/Accessorials";
+        $ftpPath = "/DriverDispatch/$exportdest/$env/Inbound/Accessorials";
     }
     if ($fileType =~ /status/)
     {
