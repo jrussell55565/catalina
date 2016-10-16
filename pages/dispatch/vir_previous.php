@@ -192,7 +192,12 @@ $statement = "SELECT vir_itemnum, date_format(insp_date,'%m/%d/%Y') insp_date, i
                      trailer_vir_items, trailer_vir_notes,
                      trailer_tires_notes, vir_finish_notes,
                      truck_tires_overall, trailer_tires_overall,
-                     updated_status
+                     updated_status,truck_tires_driverside_steer,
+                     truck_tires_passenger_steer, truck_tires_driverside_ax1front,
+                     truck_tires_passenger_ax1front, truck_tires_driverside_ax2rear,
+                     truck_tires_passenger_ax2rear, trailer_tires_driverside_ax1front,
+                     trailer_tires_passenger_ax1front, trailer_tires_driverside_ax2rear,
+                     trailer_tires_passenger_ax2rear
                FROM virs WHERE 1=1 $restricted_predicate
                AND insp_date >= date(now()) - INTERVAL $max_results DAY
                $orderSql";
@@ -220,6 +225,16 @@ if ($result = $mysqli->query($statement)) {
     $virs[$counter]['truck_tires_overall'] = $obj->truck_tires_overall;
     $virs[$counter]['trailer_tires_overall'] = $obj->trailer_tires_overall;
     $virs[$counter]['updated_status'] = $obj->updated_status;
+    $virs[$counter]['truck_tires_driverside_steer'] = $obj->truck_tires_driverside_steer;
+    $virs[$counter]['truck_tires_passenger_steer'] = $obj->truck_tires_passenger_steer;
+    $virs[$counter]['truck_tires_driverside_ax1front'] = $obj->truck_tires_driverside_ax1front;
+    $virs[$counter]['truck_tires_passenger_ax1front'] = $obj->truck_tires_passenger_ax1front;
+    $virs[$counter]['truck_tires_driverside_ax2rear'] = $obj->truck_tires_driverside_ax2rear;
+    $virs[$counter]['truck_tires_passenger_ax2rear'] = $obj->truck_tires_passenger_ax2rear;
+    $virs[$counter]['trailer_tires_driverside_ax1front'] = $obj->trailer_tires_driverside_ax1front;
+    $virs[$counter]['trailer_tires_passenger_ax1front'] = $obj->trailer_tires_passenger_ax1front;
+    $virs[$counter]['trailer_tires_driverside_ax2rear'] = $obj->trailer_tires_driverside_ax2rear;
+    $virs[$counter]['trailer_tires_passenger_ax2rear'] = $obj->trailer_tires_passenger_ax2rear;
     $counter++;
   }
 }
@@ -443,61 +458,77 @@ if ($virs[$x]['updated_status'] == '')
                               <div class="col-md-4">
                                 General Notes
                               </div>
-                              <div class="col-md-4 col-md-offset-4">
+                              <div class="col-md-6">
                                 <?php if ($virs[$x]['vir_finish_notes'] == '')
-{
-if ($tot == 'trailer')
-{
-echo '<span class="label label-info">See Truck Notes</span>';
-}else{
-echo '<span class="label label-danger">No Notes</span>';
-}
-}else{
-echo $virs[$x]['vir_finish_notes'];
-}
-?>
+                                      {
+                                      if ($tot == 'trailer')
+                                      {
+                                      echo '<span class="label label-info">See Truck Notes</span>';
+                                      }else{
+                                      echo '<span class="label label-danger">No Notes</span>';
+                                      }
+                                      }else{
+                                      echo $virs[$x]['vir_finish_notes'];
+                                      }
+                                 ?>
                               </div>
                             </div>
                             <div class="row">
                               <div class="col-md-4">
                                 Items
                               </div>
-                              <div class="col-md-4 col-md-offset-4">
+                              <div class="col-md-6">
                                 <?php if ($virs[$x][$tot.'_vir_items'] == '')
-{
-echo '<span class="label label-danger">No Items</span>';
-}else{
-echo $virs[$x][$tot.'_vir_items'];
-}
-?>
+                                      {
+                                      echo '<span class="label label-danger">No Items</span>';
+                                      }else{
+                                      echo $virs[$x][$tot.'_vir_items'];
+                                      }
+                                 ?>
                               </div>
                             </div>
                             <div class="row">
                               <div class="col-md-4">
                                 Truck / Trailer Notes
                               </div>
-                              <div class="col-md-4 col-md-offset-4">
+                              <div class="col-md-6">
                                 <?php if ($virs[$x][$tot.'_vir_notes'] == '')
-{
-echo '<span class="label label-danger">No Notes</span>';
-}else{
-echo $virs[$x][$tot.'_vir_notes'];
-}
-?>
+                                      {
+                                      echo '<span class="label label-danger">No Notes</span>';
+                                      }else{
+                                      echo $virs[$x][$tot.'_vir_notes'];
+                                      }
+                                 ?>
                               </div>
                             </div>
                             <div class="row">
                               <div class="col-md-4">
                                 Tire Notes
                               </div>
-                              <div class="col-md-4 col-md-offset-4">
+                              <div class="col-md-6">
                                 <?php if ($virs[$x][$tot.'_tires_notes'] == '')
-{
-echo '<span class="label label-danger">No Notes</span>';
-}else{
-echo $virs[$x][$tot.'_tires_notes'];
-}
-?>
+                                      {
+                                      echo '<span class="label label-danger">No Notes</span>';
+                                      }else{
+                                      echo $virs[$x][$tot.'_tires_notes'];
+                                      }
+                                 ?>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-4">
+                                Tires Condition
+                              </div>
+                              <div class="col-md-6">
+                                <?php 
+                                  echo "<br>\n";
+                                  echo '<strong>Axel 1 (driver)</strong> '.$virs[$x][$tot.'_tires_driverside_ax1front']."<br>\n";
+                                  echo '<strong>Axel 1 (passenger)</strong> '.$virs[$x][$tot.'_tires_passenger_ax1front']."<br>\n";
+                                  echo '<strong>Axel 2 (driver)</strong> '.$virs[$x][$tot.'_tires_driverside_ax2rear']."<br>\n";
+                                  echo '<strong>Axel 2 (passenger)</strong> '.$virs[$x][$tot.'_tires_passenger_ax2rear']."<br>\n";
+                                  echo '<strong>Steer (driver)</strong> '.$virs[$x][$tot.'_tires_driverside_steer']."<br>\n";
+                                  echo '<strong>Steer (passenger)</strong> '.$virs[$x][$tot.'_tires_passenger_steer'];
+                                 ?>
                               </div>
                             </div>
                           </div>
