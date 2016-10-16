@@ -145,81 +145,169 @@ foreach ($_POST['trailer_ck_accessorials'] as $key => $val)
 $trailer_vir_items = rtrim($trailer_vir_items,",");
 
 # Insert TRUCK vir:
-$sql = "INSERT INTO virs (
-employee_id, /* employee_id = $employee_id */
-insp_date, /* str_to_date('\$insp_date','%m/%d/%y') = str_to_date('$insp_date','%m/%d/%y') */
-insp_start_time, /* \$insp_start_time = $insp_start_time */
-insp_end_time, /* CURTIME() */
-insp_duration, /* subtime(curtime(),'\$insp_start_time') = subtime(curtime(),'$insp_start_time') */
-insp_type, /* \$preorposttrip = $preorposttrip */
-driver_name, /* \$username = $username */
-vir_points, /* 1 */
-truck_number, /* \$truck_number = $truck_number */
-truck_odometer, /* \$truckodometer = $truckodometer */
-truck_vir_condition, /* \$truck_vir_condition = $truck_vir_condition */
-truck_vir_items, /* \$truck_vir_items = $truck_vir_items */
-truck_vir_notes, /* \$vir_notes_detailed_truck = $vir_notes_detailed_truck */
-vir_notes_quick_report, /* \$vir_notes_quick_report = $vir_notes_quick_report */
-truck_tires_driverside_steer, /* \$truck_tires_driverside_steer = $truck_tires_driverside_steer */
-truck_tires_passenger_steer, /* \$truck_tires_passenger_steer = $truck_tires_passenger_steer */
-truck_tires_driverside_ax1front, /* \$truck_tires_driverside_ax1front = $truck_tires_driverside_ax1front */
-truck_tires_passenger_ax1front, /* \$truck_tires_passenger_ax1front = $truck_tires_passenger_ax1front */
-truck_tires_driverside_ax2rear, /* \$truck_tires_driverside_ax2rear = $truck_tires_driverside_ax2rear */
-truck_tires_passenger_ax2rear, /* \$truck_tires_passenger_ax2rear = $truck_tires_passenger_ax2rear */
-truck_tires_notes, /* \$truck_tires_notes = $truck_tires_notes */
-trailer_number, /* \$trailer_number = $trailer_number */
-trailer_vir_condition,  /* \$trailer_vir_condition = $trailer_vir_condition */
-trailer_vir_items, /* \$trailer_vir_items = $trailer_vir_items */
-trailer_vir_notes, /* \$vir_notes_detailed_trailer = $vir_notes_detailed_trailer */
-trailer_tires_driverside_ax1front, /* \$trailer_tires_driverside_ax1front = $trailer_tires_driverside_ax1front */
-trailer_tires_passenger_ax1front, /* \$trailer_tires_passenger_ax1front = $trailer_tires_passenger_ax1front */
-trailer_tires_driverside_ax2rear, /* \$trailer_tires_driverside_ax2rear = $trailer_tires_driverside_ax2rear */
-trailer_tires_passenger_ax2rear, /* \$trailer_tires_passenger_ax2rear = $trailer_tires_passenger_ax2rear */
-trailer_tires_notes, /* \$trailer_tires_notes = $trailer_tires_notes */
-vir_finish_notes, /* \$vir_notes_finish = $vir_notes_finish */
-trucktype, /* \$trucktype = $trucktype */
-truck_tires_overall, /* \$truck_vir_condition_tire = $truck_vir_condition_tire */
-trailer_tires_overall, /* \$trailer_vir_condition_tire = $trailer_vir_condition_tire */
-truck_vir_itemnum
-)
-VALUES
-(
-'$employee_id',
-str_to_date('$insp_date','%m/%d/%y'),
-'$insp_start_time',
-CURTIME(),
-subtime(curtime(),'$insp_start_time'),
-'$preorposttrip',
-'$username',
-1,
-$truck_number,
-$truckodometer,
-'$truck_vir_condition',
-'$truck_vir_items',
-'$vir_notes_detailed_truck',
-'$vir_notes_quick_report',
-'$truck_tires_driverside_steer',
-'$truck_tires_passenger_steer',
-'$truck_tires_driverside_ax1front',
-'$truck_tires_passenger_ax1front',
-'$truck_tires_driverside_ax2rear',
-'$truck_tires_passenger_ax2rear',
-'$truck_tires_notes',
-NULL,
-NULL,
-NULL,
-NULL,
-NULL,
-NULL,
-NULL,
-NULL,
-NULL,
-'$vir_notes_finish',
-'$trucktype',
-'$truck_vir_condition_tire',
-NULL,
-NULL
-)";
+if ($trucktype != 'trailer')
+{
+    $sql = "INSERT INTO virs (
+    employee_id, /* employee_id = $employee_id */
+    insp_date, /* str_to_date('\$insp_date','%m/%d/%y') = str_to_date('$insp_date','%m/%d/%y') */
+    insp_start_time, /* \$insp_start_time = $insp_start_time */
+    insp_end_time, /* CURTIME() */
+    insp_duration, /* subtime(curtime(),'\$insp_start_time') = subtime(curtime(),'$insp_start_time') */
+    insp_type, /* \$preorposttrip = $preorposttrip */
+    driver_name, /* \$username = $username */
+    vir_points, /* 1 */
+    truck_number, /* \$truck_number = $truck_number */
+    truck_odometer, /* \$truckodometer = $truckodometer */
+    truck_vir_condition, /* \$truck_vir_condition = $truck_vir_condition */
+    truck_vir_items, /* \$truck_vir_items = $truck_vir_items */
+    truck_vir_notes, /* \$vir_notes_detailed_truck = $vir_notes_detailed_truck */
+    vir_notes_quick_report, /* \$vir_notes_quick_report = $vir_notes_quick_report */
+    truck_tires_driverside_steer, /* \$truck_tires_driverside_steer = $truck_tires_driverside_steer */
+    truck_tires_passenger_steer, /* \$truck_tires_passenger_steer = $truck_tires_passenger_steer */
+    truck_tires_driverside_ax1front, /* \$truck_tires_driverside_ax1front = $truck_tires_driverside_ax1front */
+    truck_tires_passenger_ax1front, /* \$truck_tires_passenger_ax1front = $truck_tires_passenger_ax1front */
+    truck_tires_driverside_ax2rear, /* \$truck_tires_driverside_ax2rear = $truck_tires_driverside_ax2rear */
+    truck_tires_passenger_ax2rear, /* \$truck_tires_passenger_ax2rear = $truck_tires_passenger_ax2rear */
+    truck_tires_notes, /* \$truck_tires_notes = $truck_tires_notes */
+    trailer_number, /* \$trailer_number = $trailer_number */
+    trailer_vir_condition,  /* \$trailer_vir_condition = $trailer_vir_condition */
+    trailer_vir_items, /* \$trailer_vir_items = $trailer_vir_items */
+    trailer_vir_notes, /* \$vir_notes_detailed_trailer = $vir_notes_detailed_trailer */
+    trailer_tires_driverside_ax1front, /* \$trailer_tires_driverside_ax1front = $trailer_tires_driverside_ax1front */
+    trailer_tires_passenger_ax1front, /* \$trailer_tires_passenger_ax1front = $trailer_tires_passenger_ax1front */
+    trailer_tires_driverside_ax2rear, /* \$trailer_tires_driverside_ax2rear = $trailer_tires_driverside_ax2rear */
+    trailer_tires_passenger_ax2rear, /* \$trailer_tires_passenger_ax2rear = $trailer_tires_passenger_ax2rear */
+    trailer_tires_notes, /* \$trailer_tires_notes = $trailer_tires_notes */
+    vir_finish_notes, /* \$vir_notes_finish = $vir_notes_finish */
+    trucktype, /* \$trucktype = $trucktype */
+    truck_tires_overall, /* \$truck_vir_condition_tire = $truck_vir_condition_tire */
+    trailer_tires_overall, /* \$trailer_vir_condition_tire = $trailer_vir_condition_tire */
+    truck_vir_itemnum
+    )
+    VALUES
+    (
+    '$employee_id',
+    str_to_date('$insp_date','%m/%d/%y'),
+    '$insp_start_time',
+    CURTIME(),
+    subtime(curtime(),'$insp_start_time'),
+    '$preorposttrip',
+    '$username',
+    1,
+    $truck_number,
+    $truckodometer,
+    '$truck_vir_condition',
+    '$truck_vir_items',
+    '$vir_notes_detailed_truck',
+    '$vir_notes_quick_report',
+    '$truck_tires_driverside_steer',
+    '$truck_tires_passenger_steer',
+    '$truck_tires_driverside_ax1front',
+    '$truck_tires_passenger_ax1front',
+    '$truck_tires_driverside_ax2rear',
+    '$truck_tires_passenger_ax2rear',
+    '$truck_tires_notes',
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    '$vir_notes_finish',
+    '$trucktype',
+    '$truck_vir_condition_tire',
+    NULL,
+    NULL
+    )";
+}
+if ($trucktype == 'trailer')
+{
+    // If we're a trailer only then insert this record
+    $sql = "INSERT INTO virs (
+    employee_id, /* employee_id = $employee_id */
+    insp_date, /* str_to_date('\$insp_date','%m/%d/%y') = str_to_date('$insp_date','%m/%d/%y') */
+    insp_start_time, /* \$insp_start_time = $insp_start_time */
+    insp_end_time, /* CURTIME() */
+    insp_duration, /* subtime(curtime(),'\$insp_start_time') = subtime(curtime(),'$insp_start_time') */
+    insp_type, /* \$preorposttrip = $preorposttrip */
+    driver_name, /* \$username = $username */
+    vir_points, /* 1 */
+    truck_number, /* \$truck_number = $truck_number */
+    truck_odometer, /* \$truckodometer = $truckodometer */
+    truck_vir_condition, /* \$truck_vir_condition = $truck_vir_condition */
+    truck_vir_items, /* \$truck_vir_items = $truck_vir_items */
+    truck_vir_notes, /* \$vir_notes_detailed_truck = $vir_notes_detailed_truck */
+    vir_notes_quick_report, /* \$vir_notes_quick_report = $vir_notes_quick_report */
+    truck_tires_driverside_steer, /* \$truck_tires_driverside_steer = $truck_tires_driverside_steer */
+    truck_tires_passenger_steer, /* \$truck_tires_passenger_steer = $truck_tires_passenger_steer */
+    truck_tires_driverside_ax1front, /* \$truck_tires_driverside_ax1front = $truck_tires_driverside_ax1front */
+    truck_tires_passenger_ax1front, /* \$truck_tires_passenger_ax1front = $truck_tires_passenger_ax1front */
+    truck_tires_driverside_ax2rear, /* \$truck_tires_driverside_ax2rear = $truck_tires_driverside_ax2rear */
+    truck_tires_passenger_ax2rear, /* \$truck_tires_passenger_ax2rear = $truck_tires_passenger_ax2rear */
+    truck_tires_notes, /* \$truck_tires_notes = $truck_tires_notes */
+    trailer_number, /* \$trailer_number = $trailer_number */
+    trailer_vir_condition,  /* \$trailer_vir_condition = $trailer_vir_condition */
+    trailer_vir_items, /* \$trailer_vir_items = $trailer_vir_items */
+    trailer_vir_notes, /* \$vir_notes_detailed_trailer = $vir_notes_detailed_trailer */
+    trailer_tires_driverside_ax1front, /* \$trailer_tires_driverside_ax1front = $trailer_tires_driverside_ax1front */
+    trailer_tires_passenger_ax1front, /* \$trailer_tires_passenger_ax1front = $trailer_tires_passenger_ax1front */
+    trailer_tires_driverside_ax2rear, /* \$trailer_tires_driverside_ax2rear = $trailer_tires_driverside_ax2rear */
+    trailer_tires_passenger_ax2rear, /* \$trailer_tires_passenger_ax2rear = $trailer_tires_passenger_ax2rear */
+    trailer_tires_notes, /* \$trailer_tires_notes = $trailer_tires_notes */
+    vir_finish_notes, /* \$vir_notes_finish = $vir_notes_finish */
+    trucktype, /* \$trucktype = $trucktype */
+    truck_tires_overall, /* \$truck_vir_condition_tire = $truck_vir_condition_tire */
+    trailer_tires_overall, /* \$trailer_vir_condition_tire = $trailer_vir_condition_tire */
+    truck_vir_itemnum
+    )
+    VALUES
+    (
+    '$employee_id',
+    str_to_date('$insp_date','%m/%d/%y'),
+    '$insp_start_time',
+    CURTIME(),
+    subtime(curtime(),'$insp_start_time'),
+    '$preorposttrip',
+    '$username',
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    $trailer_number,
+    '$trailer_vir_condition',
+    '$trailer_vir_items',
+    '$vir_notes_detailed_trailer',
+    '$trailer_tires_driverside_ax1front',
+    '$trailer_tires_passenger_ax1front',
+    '$trailer_tires_driverside_ax2rear',
+    '$trailer_tires_passenger_ax2rear',
+    '$trailer_tires_notes',
+    NULL,
+    '$trucktype',
+    NULL,
+    '$trailer_vir_condition_tire',
+    NULL
+    )";
+
+    if (! mysql_query($sql))
+    {
+        die('Unable to INSERT trailer VIR into table: ' . mysql_error());
+    }
+    $trailer_po = mysql_insert_id();
+}
 
 if (! mysql_query($sql))
 {
