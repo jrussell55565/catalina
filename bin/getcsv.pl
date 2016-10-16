@@ -149,8 +149,28 @@ sub update_db
 	my $sth = $dbh->prepare("load data local infile \"$wwwroot/imports/$file\" 
 				REPLACE INTO TABLE dispatch FIELDS TERMINATED BY ',' 
 				ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 LINES 
-				SET deleted = 'F', arrivedShipperTime = CURTIME() + 0, arrivedConsigneeTime = CURTIME() + 0, 
-				insertDate = DATE(NOW()), archived = 'F', modifiedDate = CURTIME()") or 
+                ( hawbNumber, messageDate, messageTime, status, pieces, weight, 
+                  pallets, serviceCode, isPickup, isDelivery, readyTime, 
+                   closeTime, shipperName, shipperCode, shipperAddress1, shipperAddress2, 
+                   shipperCity, shipperState, shipperPostalCode, shipperAttention, 
+                   shipperReference, shipperContact, shipperPhone, shipperAssembly, 
+                   consigneeName, consigneeCode, consigneeAddress1, consigneeAddress2, 
+                   consigneeCity, consigneeState, consigneePostalCode, consigneeAttention, 
+                   consigneeReference, consigneeContact, consigneePhone, consigneeAssembly, 
+                   appRequired, appDate, appTime, appNotes, puAgentName, puAgentCode, 
+                   puAgentDriverName, puAgentDriverPhone, puZone, puRemarks, delAgentName, 
+                   delAgentCode, delAgentDriverName, delAgentDriverPhone, delZone, delRemarks, 
+                   hawbDate, dueDate, dueTime, loadPosition, recordID, podName, podDate, 
+                   podTime, puConfirm, Origin, Destination, Control, Via, RevenueTotal, CustomerName, 
+                   CustomerPhone, CustomerAddress1, CustomerAddress2, CustomerCity, CustomerState, 
+                   CustomerPostalCode, BillToName, BillToPhone, BillToAddress1, BillToAddress2, 
+                   BillToCity, BillToState, BillToPostalCode, \@deleted, arrivedShipperTime, 
+                   arrivedConsigneeTime, insertDate, \@archived, modifiedDate)
+				SET deleted = IF(\@deleted = 'T', 'T', 'F'),
+                archived = IF(\@archived = 'T', 'T', 'F'),
+                arrivedShipperTime = CURTIME() + 0, arrivedConsigneeTime = CURTIME() + 0,
+                insertDate = DATE(NOW()), modifiedDate = CURTIME()"
+                ) or 
 	{email_alert("Unable to update database with file $file ". $$dbh->errstr)};
 	$sth->execute;
         if ($sth->err())
