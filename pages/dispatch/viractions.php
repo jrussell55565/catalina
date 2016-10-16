@@ -222,7 +222,14 @@ if ($trucktype != 'trailer')
     NULL,
     NULL
     )";
+
+    if (! mysql_query($sql))
+    {
+        die('Unable to INSERT truck VIR into table: ' . mysql_error());
+    }
+    $truck_po = mysql_insert_id();
 }
+
 if ($trucktype == 'trailer')
 {
     // If we're a trailer only then insert this record
@@ -306,14 +313,7 @@ if ($trucktype == 'trailer')
     {
         die('Unable to INSERT trailer VIR into table: ' . mysql_error());
     }
-    $trailer_po = mysql_insert_id();
 }
-
-if (! mysql_query($sql))
-{
-    die('Unable to INSERT truck VIR into table: ' . mysql_error());
-}
-$truck_po = mysql_insert_id();
 
 if (($trucktype == 'combo') && ($trailer_number != ''))
 {
