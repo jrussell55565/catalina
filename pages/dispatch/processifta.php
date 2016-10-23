@@ -296,7 +296,7 @@ if (isset($_POST['add_ifta'])) {
 
   // This part will email the driver1 (and driver2 if applicable)
   // to inform them of any missing compliance info
-  sendIftaEmail($mysqli);
+  sendIftaEmail($mysqli,$_POST['txt_tripnum']);
 }
 
 // Run this part if we're UPDATING an IFTA
@@ -638,7 +638,7 @@ if (isset($_POST['update_ifta'])) {
   // to inform them of any missing compliance info
   if ($_POST['send_email'] == 'yes')
   {
-    sendIftaEmail($mysqli);
+    sendIftaEmail($mysqli,$_POST['txt_tripnum']);
   }
 
   } catch (Exception $e) {
@@ -769,38 +769,68 @@ function downloadFile($file_name, $file_name_uploaded) {
   }
 }
 
-function sendIftaEmail($mysqli) {
-  $compliance = array ('compliance_trip' => 'Driver Filled out Trip Pack Correctly.',
-                       'compliance_logs' => 'Driver Included Logs...................',
-                       'compliance_vir' => 'Driver Included VIR.....................',
-                       'compliance_fuel' => 'Driver Included in Fuel receipts......',
-                       'compliance_bol' => 'Driver Included BOL(s)................',
-                       'compliance_permits' => 'Driver Included Permits..............',
-                       //'compliance_gps',
-                       'compliance_dot' => 'Driver Included DOT violations........');
-					   //Need to include General Notes for driver (top section),
-					   //Need to add Date Specific "issue" to the email and DB, this will come from multiple lines,
-					   //Because of multiple lines, need to add specific date/driver to the email,
-					   //Need to add Choose Issue (selected) email details also,
-					   //Need to add Comments from each specific line.  Note:  If N/A then skip....,
-  $subject = "Trip Pack Submitted - ".$_POST['txt_tripnum'];
-  $body = "Notice: IFTA trip pack ".$_POST['txt_tripnum']." entered on truck ".$_POST['txt_truckno'].". \n";
+function sendIftaEmail($mysqli,$trip_no) {
+
+  $compliance = array ('ifta_compliance_trip' => 'Driver Filled out Trip Pack Correctly.',
+                       'ifta_compliance_logs' => 'Driver Included Logs...................',
+                       'ifta_compliance_vir' => 'Driver Included VIR.....................',
+                       'ifta_compliance_fuel' => 'Driver Included in Fuel receipts......',
+                       'ifta_compliance_bol' => 'Driver Included BOL(s)................',
+                       'ifta_compliance_permits' => 'Driver Included Permits..............',
+                       'ifta_compliance_dot' => 'Driver Included DOT violations........');
+
+  $subject = "Trip Pack Submitted - $trip_no";
+
+  // First let's get the ifta general/details/fuel from the database.
+  try {
+    $sql_general = "select * from ifta where trip_no = '$trip_no'";
+    if ($result = $mysqli->query($sql_general)) {
+      while($obj = $result->fetch_object()){
+        $ifta_truck_no = $obj->truck_no;
+        $ifta_date_started = $obj->date_started;
+        $ifta_date_ended = $obj->date_ended;
+        $ifta_location_start = $obj->location_start;
+        $ifta_location_stops = $obj->location_stops;
+	$ifta_location_end = $obj->location_end;
+	$ifta_notes_trip_driver = $obj->notes_trip_driver;
+        $ifta_compliance_trip = $obj->compliance_trip;
+        $ifta_compliance_logs = $obj->compliance_logs;
+    	$ifta_compliance_vir = $obj->compliance_vir;
+        $ifta_compliance_fuel = $obj->compliance_fuel;
+	$ifta_compliance_bol = $obj->compliance_bol;
+ 	$ifta_compliance_permits = $obj->compliance_permits;
+	$ifta_compliance_dot = $obj->compliance_dot;
+      }
+    }else{
+        throw new Exception("Error selecting record from ifta table: ".$mysqli->error);
+    }
+
+  } catch (Exception $e) {
+    // An exception has been thrown
+    // We must rollback the transaction
+    $url_error = urlencode($e->getMessage());
+    header("location: /pages/dispatch/ifta.php?error=$url_error");
+    $mysqli->close();
+    exit;
+  }
+
+  $body = "Notice: IFTA trip pack $trip_no entered on truck $ifta_truck_no\n";
   $body .= "You are recieving this email because we may require additional information to be turned in. \n";
   $body .= "Due to the additional work required, if any items were marked incomplete, negative productivity points will be added to your profile. \n";
   $body .= "Catalina Compliance Department will contact you if additional information is needed \n";
   $body .= " \n";
-  $body .= "Start Date: ".$_POST['txt_date_start']." End Date: ".$_POST['txt_date_end']." .\n";
-  $body .= "Start City/State: ".$_POST['location_start']."\n";
-  $body .= "Stop City/State: ".$_POST['location_stops']."\n";
-  $body .= "End City/State: ".$_POST['location_end']."\n";
+  $body .= "Start Date: $ifta_date_started End Date:  $ifta_date_ended\n";
+  $body .= "Start City/State: $ifta_location_start\n";
+  $body .= "Stop City/State: $ifta_location_stops\n";
+  $body .= "End City/State: $ifta_location_end\n";
   $body .= "Notes:\n";
-  $body .= $_POST['notes_trip_driver'] . "\n\n";
+  $body .= "$ifta_notes_trip_driver\n\n";
 
   //Need to enter 2 new values that will come from the DB.  Not in there yet.  Trip Origin: Trip Destination (this is for the OTR Drivers)
   $body .= "General Trip Compliance:\n\n";
   foreach ($compliance as $key => $value)
   {
-    $body .= $value . "\t\t\t" . $_POST[$key] . "\n";
+    $body .= $value . "\t\t\t" . $key . "\n";
   }
 
   // Pull the drivers email and names from the DB
@@ -841,45 +871,60 @@ function sendIftaEmail($mysqli) {
 
   $body .= "\n\nDetails:\n\n";
   // Now look at the details to create a list of items that need to be addressed.
-  for ($i=0; $i<count($_POST['hdn_details_id']); $i++) {
-    // Skip if the driver is null or there are no issues
-    if ($_POST['txt_driver_details'][$i] == 'null') { continue; }
-    if ($_POST['hdn_details_id'][$i] != $_POST['cb_trip_issue_details'][$i]) { 
-      // The issue checkbox was not checked
-      if ($_POST['date_resolved_details'][$i] == '') {
-        // AND the date is empty (meaning it was not resolved)
-        continue; 
+  try {
+    $sql_general = "select ifta_details.*,users.drivername from ifta_details,users where trip_no = '$trip_no'
+                    and ifta_details.driver = users.employee_id";
+    if ($result = $mysqli->query($sql_general)) {
+      while($obj = $result->fetch_object()){
+    	$body .= $obj->drivername."\t";
+    	$body .= $obj->trip_date. "\t";
+    	$body .= $obj->route . "\t";
+    	$body .= $obj->st_exit . "\t";
+    	$body .= $obj->st_enter . "\t";
+    	$body .= $obj->state_line_odometer . "\t";
+    	$body .= $obj->sl_trip_issue. "\t";
+    	$body .= $obj->issue_comment . "\t";
+    	$body .= $obj->date_resolved . "\n";
       }
+    }else{
+        throw new Exception("Error selecting record from ifta_details: ".$mysqli->error);
     }
-    $body .= $driver_detail[$_POST['txt_driver_details'][$i]]['username'] . "\t";
-    $body .= $_POST['txt_date_details'][$i] . "\t";
-    $body .= $_POST['txt_routes_details'][$i] . "\t";
-    $body .= $_POST['txt_state_exit_details'][$i] . "\t";
-    $body .= $_POST['txt_state_enter_details'][$i] . "\t";
-    $body .= $_POST['txt_state_miles_details'][$i] . "\t";
-    $body .= $_POST['sl_trip_issue_details'][$i] . "\t";
-    $body .= $_POST['issue_comment_details'][$i] . "\t";
-    $body .= $_POST['date_resolved_details'][$i] . "\n";
+
+  } catch (Exception $e) {
+    // An exception has been thrown
+    // We must rollback the transaction
+    $url_error = urlencode($e->getMessage());
+    header("location: /pages/dispatch/ifta.php?error=$url_error");
+    $mysqli->close();
+    exit;
   }
 
   // Now look at the fuel to create a list of items that need to be addressed.
-  for ($i=0; $i<count($_POST['hdn_fuel_id']); $i++) {
-    // Skip if there are no issues
-    if ($_POST['hdn_details_id'][$i] != $_POST['cb_trip_issue_fuel'][$i]) { 
-      // The issue checkbox was not checked
-      if ($_POST['date_resolved_fuel'][$i] == '') {
-        // AND the date is empty (meaning it was not resolved)
-        continue; 
+  $body .= "\n\nFuel:\n\n";
+  try {
+    $sql_general = "select * from ifta_fuel where trip_no = '$trip_no'";
+    if ($result = $mysqli->query($sql_general)) {
+      while($obj = $result->fetch_object()){
+    	$body .= $obj->trip_date . "\t";
+    	$body .= $obj->fuel_gallons . "\t";
+    	$body .= $obj->fuel_reefer . "\t";
+    	$body .= $obj->fuel_other . "\t";
+    	$body .= $obj->vendor . "\t";
+    	$body .= $obj->sl_trip_issue . "\t";
+    	$body .= $obj->issue_comment . "\t";
+    	$body .= $obj->date_resolved . "\n";
       }
+    }else{
+        throw new Exception("Error selecting record from ifta_fuel: ".$mysqli->error);
     }
-    $body .= $_POST['txt_fuel_date'][$i] . "\t";
-    $body .= $_POST['txt_fuel_gallons'][$i] . "\t";
-    $body .= $_POST['txt_fuel_reefer'][$i] . "\t";
-    $body .= $_POST['txt_fuel_other'][$i] . "\t";
-    $body .= $_POST['txt_fuel_vendor'][$i] . "\t";
-    $body .= $_POST['sl_trip_issue_fuel'][$i] . "\t";
-    $body .= $_POST['issue_comment_fuel'][$i] . "\t";
-    $body .= $_POST['date_resolved_fuel'][$i] . "\n";
+
+  } catch (Exception $e) {
+    // An exception has been thrown
+    // We must rollback the transaction
+    $url_error = urlencode($e->getMessage());
+    header("location: /pages/dispatch/ifta.php?error=$url_error");
+    $mysqli->close();
+    exit;
   }
 
   // Now that we have the body we'll send an email out.
