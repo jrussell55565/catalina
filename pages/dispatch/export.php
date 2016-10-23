@@ -82,12 +82,15 @@ if ($statustype != 'Delivered')
 switch ($exportdest) {
     case "FSITUS":
         $export_email = "jaime.russell@freightservices.net";
+        $accessorial_email = "jaime.russell@freightservices.net";
         break;
     case "FSIBK":
         $export_email = "jaime.russell@freightservices.net";
+        $accessorial_email = "jaime.russell@freightservices.net";
         break;
     default:
         $export_email = "hwbcom@catalinacartage.com";
+        $accessorial_email = "accessorials@catalinacartage.com";
 }
 switch ($statustype)
 {
@@ -462,7 +465,7 @@ function processAccessorials($hawb,$action,$driver_full_name,$status)
 		if (count($accessorialsEmail) > 0 )
 		{
 			$accessorialsEmail = "Accessorials submitted by $driver_full_name\r\n\r\n$accessorialsEmail";
-			sendEmail('accessorials@catalinacartage.com',"Accessorials $hawb","$accessorialsEmail");
+			sendEmail($accessorial_email,"Accessorials $hawb","$accessorialsEmail");
 		}
 	        return $accessorials;
     }
