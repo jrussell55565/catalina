@@ -81,10 +81,10 @@ if ($statustype != 'Delivered')
 # otherwise send to hwbcom@catalinacartage.com 
 switch ($exportdest) {
     case "FSITUS":
-        $export_email = "operations@freightservices.net";
+        $export_email = "jaime.russell@freightservices.net";
         break;
     case "FSIBK":
-        $export_email = "operations@freightservices.net";
+        $export_email = "jaime.russell@freightservices.net";
         break;
     default:
         $export_email = "hwbcom@catalinacartage.com";
