@@ -77,6 +77,18 @@ if ($statustype != 'Delivered')
     $podtime = '';
 }
 
+# If the $exportdest is  FSITUS or FSIBK send email to  operations@freightservices.net 
+# otherwise send to hwbcom@catalinacartage.com 
+switch ($exportdest) {
+    case "FSITUS":
+        $export_email = "operations@freightservices.net";
+        break;
+    case "FSIBK":
+        $export_email = "operations@freightservices.net";
+        break;
+    default:
+        $export_email = "hwbcom@catalinacartage.com";
+}
 switch ($statustype)
 {
     case "Arrived to Shipper":
@@ -85,7 +97,7 @@ switch ($statustype)
         $drivername = $puDriver;
 	    if ($remarks != '')
 	    {
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
     break;
 
@@ -95,7 +107,7 @@ switch ($statustype)
         $drivername = $puDriver;
 	    if ($remarks != '')
 		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
     break;
 
@@ -105,7 +117,7 @@ switch ($statustype)
         $drivername = $delDriver;
 	    if ($remarks != '')
 		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	}
     break;
 
@@ -115,7 +127,7 @@ switch ($statustype)
         $drivername = $delDriver;
 	    if ($remarks != '')
 		    {
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
     break;
 
@@ -125,7 +137,7 @@ switch ($statustype)
         $drivername = $puDriver;
 	    if ($remarks != '')
 		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
 	break;
 
@@ -143,7 +155,7 @@ switch ($statustype)
 	    }
 	    if ($remarks != '')
 		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
 	break;
 	
@@ -162,7 +174,7 @@ switch ($statustype)
 	    }
 	    if ($remarks != '')
 		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
 	break;	
 
@@ -180,7 +192,7 @@ switch ($statustype)
 	    }
 	    if ($remarks != '')
 		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
 	break;
 
@@ -198,7 +210,7 @@ switch ($statustype)
 	    }
 	    if ($remarks != '')
 		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
 	break;
 
@@ -216,7 +228,7 @@ switch ($statustype)
 	    }
 	    if ($remarks != '')
 		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
 	break;
 
@@ -234,7 +246,7 @@ switch ($statustype)
 	    }
 	    if ($remarks != '')
 		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
 	break;
 
@@ -252,7 +264,7 @@ switch ($statustype)
 	    }
 	    if ($remarks != '')
 		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
 	break;
 
@@ -270,7 +282,7 @@ switch ($statustype)
 	    }
 	    if ($remarks != '')
 		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
 	break;
 
@@ -283,7 +295,7 @@ switch ($statustype)
 
 	    if ($remarks != '')
 	    {
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
 	break;
 
@@ -293,7 +305,7 @@ switch ($statustype)
         $drivername = $puDriver;
 	    if ($remarks != '')
 		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
     break;
 
@@ -303,7 +315,7 @@ switch ($statustype)
         $drivername = $delDriver;
 	    if ($remarks != '')
 		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$delDriver has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$delDriver has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
     break;
 
@@ -313,7 +325,7 @@ switch ($statustype)
         $drivername = $delDriver;
 	    if ($remarks != '')
 		{
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	}
     break;
 
@@ -327,7 +339,7 @@ switch ($statustype)
         $drivername = $delDriver;
 	    if ($remarks != '')
 	    {
-		    sendEmail('hwbcom@catalinacartage.com',"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
+		    sendEmail($export_email,"Remarks $hawb",("$drivername has submitted trace notes for $hawb\r\n\r\nStatus: $status\r\n\r\nComments Below:\r\n\r\n$remarks"),$driver_email);
 	    }
         $remarks = "POD Name: $podname @ $podtime $poddate " . $remarks;
     break;
