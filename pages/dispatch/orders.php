@@ -322,6 +322,7 @@ $drivername = $_SESSION['drivername'];
                "On Dock LAX" => "#80CBC4",
                "APPT. SCHEDULED" => "#80CBC4",
                "Delivered" => "#71f971",
+			   "Dropped" => "#71f971",
                "Ready To Invoice" => "#71f971",
                "Verify Pickup Date" => "#90A4AE",
                "Hold For Routing" => "#90A4AE",
