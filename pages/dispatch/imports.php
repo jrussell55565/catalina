@@ -235,48 +235,56 @@ if ($_POST['btn_trips'])
                 <!-- /.box-header -->
                <form enctype="multipart/form-data" role="form" method="post" action="<?php echo HTTP . $_SERVER['PHP_SELF']; ?>">
                 <div class="box-body table-responsive no-padding">
-                  <table width="98%" class="table table-hover">
+                  <table width="98%" border="0" class="table table-hover">
                     <tr>
-                      <th width="38%">CSA Import Instructions</th>
-                      <th width="27%">Time Sheet Import Instructions</th>
-                      <th width="35%">GPS Import Instructions</th>
+                      <th width="38%" bgcolor="#999999">CSA Imports</th>
+                      <th width="27%" bgcolor="#999999">Time Sheet Imports</th>
+                      <th width="35%" bgcolor="#999999">GPS Import Instructions</th>
                     </tr>
                     <tr>
-                      <th><a href="/pages/examples/CSA/CSA_csv_export_example.csv">Example CSV Import CSA</a></th>
-                      <th width="27%"><a href="/pages/examples/TimeCardImportXLSMaster/Time_Sheet_csv_export_example.csv">Example CSV Import Time Sheet</a></th>
-                      <th width="35%"><p><a href="/pages/examples/TimeCardImportXLSMaster/Time_Sheet_csv_export_example.csv">Example CSV Import GPS Data</a></p>
-                      <p><a href="/pages/examples/intouchGPS/GPS_trips_MOD_EOM_Sept.xlsx">GPS  CSV Import Sept 16</a></p></th>
+                      <th><a href="/pages/examples/CSA_Imports/XLS_CSA_MOD_Master.xlsx">CSA MOD  XLS</a></th>
+                      <th width="27%"><a href="/pages/examples/TIMECARD_Imports/XLS_Timesheet_MOD_JAN_SEPT_2016.xlsx">Time Sheet MOD XLS</a></th>
+                      <th width="35%"><p><a href="/pages/examples/GPS_Imports/XLS_GPS_trips_MOD_Master.xlsx">GPS  MOD XLS</a></p></th>
                     </tr>
                     <tr>
-                      <th><a href="/pages/examples/CSA/CSA_MOD.xlsx">CSA MOD  XLS</a></th>
-                      <th><a href="/pages/examples/TimeCardImportXLSMaster/time_sheet_MOD.xlsx">Time Sheet MOD XLS</a></th>
-                      <th><p><a href="/pages/examples/TimeCardImportXLSMaster/GPS_trips_MOD.xlsx">GPS  MOD XLS</a></p>
-                      <p><a href="/pages/examples/TimeCardImportXLSMaster/GPS_trips_MOD.xlsx">GPS  MOD Sept 16</a></p></th>
+                      <th><a href="/pages/examples/CSA_Imports/CSA_csv_Import_Example.csv">Example CSV Import CSA</a></th>
+                      <th width="27%"><a href="/pages/examples/TIMECARD_Imports/CSV_Timesheet_JAN_SEPT_2016.csv">Example CSV Import Time Sheet</a></th>
+                      <th width="35%"><a href="/pages/examples/GPS_Imports/CSV_GPS_Import_Example.csv">Example CSV Import GPS Data</a></th>
                     </tr>
                     <tr>
-                      <th><a href="https://csa.fmcsa.dot.gov/default.aspx" target="_blank">https://csa.fmcsa.dot.gov/default.aspx</a> Download the current CSA data</th>
-                      <th><a href="https://application.fingercheck.com/FingerCheck/Login.aspx">Finger Check Login</a></th>
-                      <th>Download Trips Into MOD</th>
+                      <th bgcolor="#999999">Updated Mods &amp; CSV Files</th>
+                      <th bgcolor="#999999">Updated Mods &amp; CSV Files</th>
+                      <th bgcolor="#999999"><p>Updated Mods &amp; CSV Files</p></th>
                     </tr>
                     <tr>
-                      <th>DOT: 1959805 (Enter Password)</th>
-                      <th>Use Template Import for wwwlive</th>
-                      <th>Update the Drivers Assigned</th>
+                      <th><a href="../examples/CSA_Imports/USDOT_1959805_All_BASICs_MotorCarrier_09-23-2016.xlsx">CSA Sept 23, 2016</a></th>
+                      <th>Time Sheet Sept CSV</th>
+                      <th><a href="/pages/examples/GPS_Imports/CSV_GPS_Sept_2016.csv">GPS Import CSV Sept 2016</a></th>
                     </tr>
                     <tr>
-                      <th>Then Download All, Excel; Copy Lines 2 below to Mod Template Sheet</th>
-                      <th>Run Report On Payroll Dates</th>
-                      <th>Then Upload to DB!!</th>
+                      <th>&nbsp;</th>
+                      <th>Time Sheet October CSV</th>
+                      <th>GPS Import CSV OCT 2016</th>
                     </tr>
                     <tr>
-                      <th>First Export the Current Data from CSA. Then Add the new File to the current Data</th>
+                      <th>&nbsp;</th>
                       <th>&nbsp;</th>
                       <th>&nbsp;</th>
                     </tr>
                     <tr>
-                      <th>Upload FTP New MOD File</th>
-                      <th>Upload FTP New MOD File</th>
-                      <th>Upload FTP New MOD File</th>
+                      <th>&nbsp;</th>
+                      <th>&nbsp;</th>
+                      <th>&nbsp;</th>
+                    </tr>
+                    <tr>
+                      <th bgcolor="#999999">Instructions Below</th>
+                      <th bgcolor="#999999">Instructions Below</th>
+                      <th bgcolor="#999999">Instructions Below</th>
+                    </tr>
+                    <tr>
+                      <th><a href="https://csa.fmcsa.dot.gov/default.aspx" target="_blank">https://csa.fmcsa.dot.gov/default.aspx</a> Download the current CSA dataDOT: 1959805 (Enter Password)Then Download All, Excel; Copy Lines 2 below to Mod Template Sheet Import TabPut date of Import on Side.Upload FTP New CSV File Only New Items</th>
+                      <th><a href="https://application.fingercheck.com/FingerCheck/Login.aspx">Finger Check Login</a>Use Template Import for wwwliveRun Report On Payroll DatesUpload FTP New CSV File</th>
+                      <th>Download Trips Into MODUpdate the Drivers AssignedThen Upload to DB!!Upload FTP New CSV File</th>
                     </tr>
                   </table>
                   <p>
