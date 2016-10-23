@@ -96,7 +96,7 @@ switch ($statustype)
 {
     case "Arrived to Shipper":
 	    $status = "Arrived to Shipper";
-	    $accessorials = processAccessorials($hawb,"PU",$username);
+	    $accessorials = processAccessorials($hawb,"PU",$username,null,$accessorial_email);
         $drivername = $puDriver;
 	    if ($remarks != '')
 	    {
@@ -106,7 +106,7 @@ switch ($statustype)
 
     case "Accepted PU":
 	    $status = "Accepted PU";
-	    $accessorials = processAccessorials($hawb,"PU",$username);
+	    $accessorials = processAccessorials($hawb,"PU",$username,null,$accessorial_email);
         $drivername = $puDriver;
 	    if ($remarks != '')
 		{
@@ -116,7 +116,7 @@ switch ($statustype)
 
     case "Arrived to Consignee":
         $status = "Arrived To Consignee";
-	    $accessorials = processAccessorials($hawb,"DEL",$username);
+	    $accessorials = processAccessorials($hawb,"DEL",$username,null,$accessorial_email);
         $drivername = $delDriver;
 	    if ($remarks != '')
 		{
@@ -126,7 +126,7 @@ switch ($statustype)
 
     case "Accepted DEL":
 	    $status = "Accepted DEL";
-	    $accessorials = processAccessorials($hawb,"PU",$username);
+	    $accessorials = processAccessorials($hawb,"PU",$username,null,$accessorial_email);
         $drivername = $delDriver;
 	    if ($remarks != '')
 		    {
@@ -136,7 +136,7 @@ switch ($statustype)
 
     case "Trace Note PU":
 	    $status = "Trace Note PU";
-	    $accessorials = processAccessorials($hawb,"PU",$username);
+	    $accessorials = processAccessorials($hawb,"PU",$username,null,$accessorial_email);
         $drivername = $puDriver;
 	    if ($remarks != '')
 		{
@@ -149,12 +149,12 @@ switch ($statustype)
         // If I'm the PU driver then give me a PU accessorial credit for this status
 	    if ($puDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"PU",$username,$status);
+		    $accessorials = processAccessorials($hawb,"PU",$username,$status,$accessorial_email);
 	    }
         // If I'm the DEL driver then give me a DEL accessorial credit for this status
 	    if ($delDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"DEL",$username,$status);
+		    $accessorials = processAccessorials($hawb,"DEL",$username,$status,$accessorial_email);
 	    }
 	    if ($remarks != '')
 		{
@@ -168,12 +168,12 @@ switch ($statustype)
         // If I'm the PU driver then give me a PU accessorial credit for this status
 	    if ($puDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"PU",$username,$status);
+		    $accessorials = processAccessorials($hawb,"PU",$username,$status,$accessorial_email);
 	    }
         // If I'm the DEL driver then give me a DEL accessorial credit for this status
 	    if ($delDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"DEL",$username,$status);
+		    $accessorials = processAccessorials($hawb,"DEL",$username,$status,$accessorial_email);
 	    }
 	    if ($remarks != '')
 		{
@@ -186,12 +186,12 @@ switch ($statustype)
         // If I'm the PU driver then give me a PU accessorial credit for this status
 	    if ($puDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"PU",$username,$status);
+		    $accessorials = processAccessorials($hawb,"PU",$username,$status,$accessorial_email);
 	    }
         // If I'm the DEL driver then give me a DEL accessorial credit for this status
 	    if ($delDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"DEL",$username,$status);
+		    $accessorials = processAccessorials($hawb,"DEL",$username,$status,$accessorial_email);
 	    }
 	    if ($remarks != '')
 		{
@@ -204,12 +204,12 @@ switch ($statustype)
         // If I'm the PU driver then give me a PU accessorial credit for this status
 	    if ($puDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"PU",$username,$status);
+		    $accessorials = processAccessorials($hawb,"PU",$username,$status,$accessorial_email);
 	    }
         // If I'm the DEL driver then give me a DEL accessorial credit for this status
 	    if ($delDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"DEL",$username,$status);
+		    $accessorials = processAccessorials($hawb,"DEL",$username,$status,$accessorial_email);
 	    }
 	    if ($remarks != '')
 		{
@@ -222,12 +222,12 @@ switch ($statustype)
         // If I'm the PU driver then give me a PU accessorial credit for this status
 	    if ($puDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"PU",$username);
+		    $accessorials = processAccessorials($hawb,"PU",$username,null,$accessorial_email);
 	    }
         // If I'm the DEL driver then give me a DEL accessorial credit for this status
 	    if ($delDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"DEL",$username);
+		    $accessorials = processAccessorials($hawb,"DEL",$username,null,$accessorial_email);
 	    }
 	    if ($remarks != '')
 		{
@@ -240,12 +240,12 @@ switch ($statustype)
         // If I'm the PU driver then give me a PU accessorial credit for this status
 	    if ($puDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"PU",$username);
+		    $accessorials = processAccessorials($hawb,"PU",$username,null,$accessorial_email);
 	    }
         // If I'm the DEL driver then give me a DEL accessorial credit for this status
 	    if ($delDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"DEL",$username);
+		    $accessorials = processAccessorials($hawb,"DEL",$username,null,$accessorial_email);
 	    }
 	    if ($remarks != '')
 		{
@@ -258,12 +258,12 @@ switch ($statustype)
         // If I'm the PU driver then give me a PU accessorial credit for this status
 	    if ($puDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"PU",$username);
+		    $accessorials = processAccessorials($hawb,"PU",$username,null,$accessorial_email);
 	    }
         // If I'm the DEL driver then give me a DEL accessorial credit for this status
 	    if ($delDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"DEL",$username);
+		    $accessorials = processAccessorials($hawb,"DEL",$username,null,$accessorial_email);
 	    }
 	    if ($remarks != '')
 		{
@@ -276,12 +276,12 @@ switch ($statustype)
         // If I'm the PU driver then give me a PU accessorial credit for this status
 	    if ($puDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"PU",$username,$status);
+		    $accessorials = processAccessorials($hawb,"PU",$username,$status,$accessorial_email);
 	    }
         // If I'm the DEL driver then give me a DEL accessorial credit for this status
 	    if ($delDriver == $drivername)
 	    {
-		    $accessorials = processAccessorials($hawb,"DEL",$username,$status);
+		    $accessorials = processAccessorials($hawb,"DEL",$username,$status,$accessorial_email);
 	    }
 	    if ($remarks != '')
 		{
@@ -293,7 +293,7 @@ switch ($statustype)
         $status = "Picked Up";
 	    $puconf = "X";
 	    $putime = $localtime;
-	    $accessorials = processAccessorials($hawb,"PU",$username);
+	    $accessorials = processAccessorials($hawb,"PU",$username,null,$accessorial_email);
         $drivername = $puDriver;
 
 	    if ($remarks != '')
@@ -304,7 +304,7 @@ switch ($statustype)
 
     case "Attempted Pick Up":
         $status = "Attempted Pick Up";
-	    $accessorials = processAccessorials($hawb,"PU",$username);
+	    $accessorials = processAccessorials($hawb,"PU",$username,null,$accessorial_email);
         $drivername = $puDriver;
 	    if ($remarks != '')
 		{
@@ -314,7 +314,7 @@ switch ($statustype)
 
     case "Attempted Delivery":
         $status = "Attempted Delivery";
-	    $accessorials = processAccessorials($hawb,"DEL",$username);
+	    $accessorials = processAccessorials($hawb,"DEL",$username,null,$accessorial_email);
         $drivername = $delDriver;
 	    if ($remarks != '')
 		{
@@ -324,7 +324,7 @@ switch ($statustype)
 
     case "Trace Note DEL":
 	    $status = "Trace Note DEL";
-	    $accessorials = processAccessorials($hawb,"DEL",$username);
+	    $accessorials = processAccessorials($hawb,"DEL",$username,null,$accessorial_email);
         $drivername = $delDriver;
 	    if ($remarks != '')
 		{
@@ -338,7 +338,7 @@ switch ($statustype)
         if ($podname == '') { returnWithError($recordid,'/pages/dispatch/delconfirmed.php','podName'); }
         if ($pieces < 1) { returnWithError($recordid,'/pages/dispatch/delconfirmed.php','pieces'); }
 
-	    $accessorials = processAccessorials($hawb,"DEL",$username);
+	    $accessorials = processAccessorials($hawb,"DEL",$username,null,$accessorial_email);
         $drivername = $delDriver;
 	    if ($remarks != '')
 	    {
@@ -374,7 +374,7 @@ if ($remarks != '')
   $trace_notes = 'NULL';
 }
 
-$accessorial_override = processAccessorials($hawb,'OVER',$username);
+$accessorial_override = processAccessorials($hawb,'OVER',$username,null,$accessorial_email);
 
 if ($accessorial_override != '')
 {
@@ -423,7 +423,7 @@ if ($status == "Delivered")
 
 header("Location: /pages/dispatch/orders.php");
 
-function processAccessorials($hawb,$action,$driver_full_name,$status)
+function processAccessorials($hawb,$action,$driver_full_name,$status,$accessorial_email)
 {
 
     $sqlSearchIn = array();
