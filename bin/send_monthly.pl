@@ -29,6 +29,14 @@ sub get_vtext
 {
   foreach("bom","eom")
   {
+     my $sql_date;
+     if ($_ eq 'bom') {
+         $sql_date = 'date_add(curdate(),interval -DAY(curdate())+1 DAY) = curdate()';
+     }
+     if ($_ eq 'eom') {
+         $sql_date = 'last_day(curdate()) = curdate()';
+     }
+
      my $sql = "SELECT
                 vtext, ".$_."_message, email, ".$_."_vtext_enabled, ".$_."_email_enabled
             FROM
@@ -37,7 +45,8 @@ sub get_vtext
                 status = 'Active'
                 AND ".$_."_message != ''
                 AND ".$_."_time != ''
-                AND HOUR(STR_TO_DATE(".$_."_time, '%H:%i')) = HOUR(NOW())";
+                AND HOUR(STR_TO_DATE(".$_."_time, '%H:%i')) = HOUR(NOW())
+                AND $sql_date";
 
     $dbh = DBI->connect("DBI:mysql:$dbname;mysql_local_infile=1", "$dbusername", "$dbpassword") or {email_alert("Could not connect to database: $DBI::errstr")};
     my $sth = $dbh->prepare("$sql") or
