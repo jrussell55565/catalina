@@ -830,7 +830,7 @@ function sendIftaEmail($mysqli,$trip_no) {
   $body .= "General Trip Compliance:\n\n";
   foreach ($compliance as $key => $value)
   {
-    $body .= $value . "\t\t\t" . $key . "\n";
+    $body .= $value . "\t\t\t" . $$key . "\n";
   }
 
   // Pull the drivers email and names from the DB
