@@ -922,6 +922,7 @@ function sendIftaEmail($mysqli,$trip_no) {
   }
 
   // Now that we have the body we'll send an email out.
-  sendEmail('ifta@catalinacartage.com',$subject,$body,implode("," , $driver_detail));
+  $driver_detail_string = implode("," , $driver_detail);
+  sendEmail('ifta@catalinacartage.com',$subject,$body,"$driver_detail_string");
 }
 ?>
