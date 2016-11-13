@@ -835,9 +835,6 @@ function sendIftaEmail($mysqli,$trip_no) {
 
   // Pull the drivers email and names from the DB
   try {
-    if ($_POST['sel_add_driver_1'] == 'null') {
-      // If the driver1 is 'Choose Driver, Unknown Driver, or Multiple Drivers then we need to get the
-      // emails for the drivers in the 'details' section
       $statement = [];
       foreach($_POST['txt_driver_details'] as $driver) {
         if ($driver == 'null') { continue; }
@@ -845,9 +842,6 @@ function sendIftaEmail($mysqli,$trip_no) {
       }
       $statement = '"' . implode('","',$statement) . '"';
       $statement = "SELECT distinct email, username, employee_id from users where employee_id IN ($statement)";
-    }else{
-      $statement = "SELECT email, username, employee_id from users where employee_id IN ('".$_POST['sel_add_driver_1']."','".$_POST['sel_add_driver_2']."')";
-    }
 
     if ($result = $mysqli->query($statement))
     {
@@ -928,8 +922,6 @@ function sendIftaEmail($mysqli,$trip_no) {
   }
 
   // Now that we have the body we'll send an email out.
-  foreach($driver_detail as $i) {
-    sendEmail($i['email'],$subject,$body,"ifta@catalinacartage.com");
-  }
+  sendEmail('ifta@catalinacartage.com',$subject,$body,implode("," , $driver_detail));
 }
 ?>
