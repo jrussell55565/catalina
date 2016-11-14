@@ -255,7 +255,7 @@ if ($row['status'] == "Delivered")
                 </select>
               </div>
               <div>
-                <input type="text" class="" value="" name='simple_status_mwb' id='simple_status_mwb' placeholder="Enter MWB info here" style="margin-top: 5px; width: 50em;"/>
+                <input type="text" class="" value="" name='simple_status_mwb' id='simple_status_mwb' placeholder="Enter MWB info here" style="margin-top: 5px; width: 10em;"/>
               </div>
             </form></td>
         </tr>
