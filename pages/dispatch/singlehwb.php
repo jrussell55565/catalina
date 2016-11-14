@@ -231,7 +231,7 @@ if ($row['status'] == "Delivered")
             </form></td>
         </tr>
         <tr>
-          <td colspan="2"><form role="form" class="form-inline" method="post" action="export.php">
+          <td colspan="2"><form role="form" class="form-inline" method="post" action="export.php" onSubmit="return validate_simple_status();">
               <div>
                 <label>Other Actions (Pickup and Delivery)</label>
               </div>
@@ -253,6 +253,9 @@ if ($row['status'] == "Delivered")
                   <option>Reject PU DEL</option>
                   <option>Accept PU DEL</option>
                 </select>
+              </div>
+              <div>
+                <input type="text" class="" value="" name='simple_status_mwb' id='simple_status_mwb' placeholder="Enter MWB info here" style="margin-top: 5px; width: 50em;"/>
               </div>
             </form></td>
         </tr>
@@ -668,5 +671,15 @@ if ($row['status'] == "Delivered")
 
 <!-- Demo -->
 <script src="<?php echo HTTP;?>/dist/js/demo.js" type="text/javascript"></script>
+
+<script>
+  // Local form check
+  function validate_simple_status() {
+    if ( $("#simple_status_mwb").val() == '') {
+      alert("Enter a note for simple status change");
+      return false;
+    }
+  }
+</script>
 </body>
 </html>
