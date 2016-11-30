@@ -328,6 +328,7 @@ $drivername = $_SESSION['drivername'];
                "Hold For Routing" => "#90A4AE",
                "Verify Delivery Date" => "#90A4AE",
                "Recovered" => "#90A4AE",
+			   "On Hand For Dest Agent" => "#90A4AE",			   
                "In Storage" => "#90A4AE",
                "Outside Carrier Scheduled" => "#F8D0D8",
                "Verify Shipment Assignment" => "#F8D0D8",
@@ -384,7 +385,7 @@ $drivername = $_SESSION['drivername'];
                     <span>DEL: <?php echo "$row[delAgentDriverName]";?></span><br></td> -->
                     <td>
                      <span>
-                     <?php echo "$row[pieces]"; ?> / <?php echo "$row[weight]"; ?>
+                     <?php echo "$row[pieces]"; ?> @ <?php echo "$row[weight]"; ?> LBS
                      <br>
                       <?php
                             switch($_GET['gather'])
