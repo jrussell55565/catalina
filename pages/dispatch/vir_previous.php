@@ -94,7 +94,6 @@ if ($_GET['sort'] == 'unit')
     $orderSql = "ORDER BY truck_number,trailer_number ASC";
   }
 }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -160,7 +159,7 @@ folder instead of downloading all of them to reduce the load. -->
          <input name="radio" type="radio" id="allvir" value="allvir">
          All
          <label for="openvir"></label>
-         <input name="radio" type="radio" id="openvir" value="openvir" checked >
+         <input name="radio" type="radio" id="openvir" value="openvir" checked>
          Open
         </p>
       </div>
@@ -177,6 +176,14 @@ $max_results = 8;
 }else{
 $restricted_predicate = '';
 $max_results = 30;
+}
+
+# Some overrides in case we got here with a specific truck/trailer type
+if (isset($_GET['type'])) {
+    $truck_or_trailer_predicate = "AND " . $_GET['type'] . "_number = " . $_GET['no'];
+    $max_results = 30;
+}else{
+    $truck_or_trailer_predicate = '';
 }
 
 // Get the previous VIRS
@@ -198,7 +205,7 @@ $statement = "SELECT vir_itemnum, date_format(insp_date,'%m/%d/%Y') insp_date, i
                      truck_tires_passenger_ax2rear, trailer_tires_driverside_ax1front,
                      trailer_tires_passenger_ax1front, trailer_tires_driverside_ax2rear,
                      trailer_tires_passenger_ax2rear
-               FROM virs WHERE 1=1 $restricted_predicate
+               FROM virs WHERE 1=1 $restricted_predicate $truck_or_trailer_predicate
                AND insp_date >= date(now()) - INTERVAL $max_results DAY
                $orderSql";
 

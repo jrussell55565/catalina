@@ -143,7 +143,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 }
                 ?>
                 </div>
-                <td colspan="3" ><div align="center"><?php echo $status;?> <?php echo $record[1];?></div>                </tr>
+                <td colspan="3" ><div align="center"><a href="vir_previous.php?type=truck&no=<?php echo $truckid;?>"><?php echo $status;?></a><?php echo $record[1];?></div>
+              </tr>
               <tr>
                 <td>Trailer
                 <td><div align="center">
@@ -164,7 +165,8 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                 $status = '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
                 }
                 ?>
-                <td colspan="3"><div align="center"><?php echo $status;?> <?php echo $record[1];?></div>                </tr>
+                <td colspan="3"><div align="center"><a href="vir_previous.php?type=trailer&no=<?php echo $trailerid;?>"><?php echo $status;?></a><?php echo $record[1];?></div>
+              </tr>
               <tr>
                 <td colspan="5">
                 <div align="center">
