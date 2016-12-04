@@ -163,9 +163,16 @@ if (isset($_POST['btn_update_task'])) {
           // We did not find a suitable email address.  Throw an exception
           throw new Exception("Unable to find an email address for ".$_POST['task_assign_to']);
         }
-        $body = "A new task has been created!\n";
-        $body .= "Description: ".$_POST['task_notes']."\n\n";
-        $body .= "Due: ".$_POST['task_due_date']."\n";
+        $body = "A new task has been created for you to complete!\n";
+        $body = "Please login to the driver boards to the home dash board.  Please click on Done when complete!\n";
+        $body .= "Assigned by: ".$_POST['name']."\n";
+        $body .= "Category: ".$_POST['task_category']."\n";
+        $body .= "Item: ".$_POST['task_item']."\n";
+        $body .= "Sub: ".$_POST['task_subitem']."\n";
+        $body .= "+/-: ".$_POST['task_pos_neg']."\n";
+        $body .= "Points: ".$_POST['task_points']."\n";
+        $body .= "This Task will Auto Close at midnight on the Due date, to avoid negative points please complete the task, login and submit you have completed task on the dashboards.  If you have any questions please call dispatch and ask for Liz. 520-664-9188 \n";
+        $body .= "Due: ".$_POST['task_due_date']." 23:59\n";
         sendEmail($employee_email, 'New task alert', $body, 'drivers@catalinacartage.com');
 
     } catch (Exception $e) {
