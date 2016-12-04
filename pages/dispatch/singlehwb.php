@@ -35,7 +35,6 @@ $sql = mysql_query($sql);
 
 # Get the count:
 $queryCount = mysql_num_rows($sql);
-
 ?>
 
 <!DOCTYPE html>
@@ -83,6 +82,36 @@ if ($row['status'] == "Delivered")
 {
     $disabledButton = 'disabled';
 }
+
+# Let's look at the control field. If it's FSITUS or
+# FSIBK then we need to disallow certain actions.
+# Ticket Z6U-9HE-EZVQ
+if ($row['Control'] == 'FSITUS' || $row['Control'] == 'FSIBK') {
+    if ($drivername == $row['puAgentDriverName']) {
+        $allow_pickup = true;
+    }else{
+        $allow_pickup = false;
+    }
+    if ($drivername == $row['delAgentDriverName']) {
+        $allow_delivery = true;
+    }else{
+        $allow_delivery = false;
+    }
+}else{
+    $allow_pickup = true;
+    $allow_delivery = true;
+}
+
+if ($allow_pickup === false) {
+    $disable_pickup_btn = ' disabled ';
+}else{
+    $disable_pickup_btn = '';
+}
+if ($allow_delivery === false) {
+    $disable_delivery_btn = ' disabled ';
+}else{
+    $disable_delivery_btn = '';
+}
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -125,7 +154,7 @@ if ($row['status'] == "Delivered")
             <input type="hidden" id="recordid" name="recordid"
                             value="<?php echo $row['recordID'];?>">
             <input type="submit" class="btn btn-danger btn-sm" id="btn_traceNotePickup"
-                            value="Trace Note Pick Up" <?php echo $disabledButton;?>>
+                            value="Trace Note Pick Up" <?php echo $disabledButton; echo $disable_pickup_btn;?>>
             </input>
             </form>
           </td>
@@ -135,34 +164,12 @@ if ($row['status'] == "Delivered")
             <input type="hidden" id="recordid" name="recordid"
                             value="<?php echo $row['recordID'];?>">
             <input type="submit" class="btn btn-danger btn-sm" id="btn_traceNoteDelivery"
-                            value="Trace Note Delivery" <?php echo $disabledButton;?>>
+                            value="Trace Note Delivery" <?php echo $disabledButton; echo $disable_delivery_btn;?>>
             </input>
             </form>
           </td>
         </tr>
         <tr>
-        <!-- Removing Accept PU and Accept DEL
-          <td><form method="GET" action="acceptpu.php">
-            <input type="hidden" id="hwb" name="hwb"
-                           value="<?php echo $row['hawbNumber'];?>">
-            <input type="hidden" id="recordid" name="recordid"
-                            value="<?php echo $row['recordID'];?>">
-            <input type="submit" class="btn btn-danger btn-sm" id="btn_acceptPickup"
-                            value="Accept Pick Up" <?php echo $disabledButton;?>>
-            </input>
-            </form>
-          </td>
-          <td><form method="GET" action="acceptdel.php">
-            <input type="hidden" id="hwb" name="hwb"
-                           value="<?php echo $row['hawbNumber'];?>">
-            <input type="hidden" id="recordid" name="recordid"
-                            value="<?php echo $row['recordID'];?>">
-            <input type="submit" class="btn btn-danger btn-sm" id="btn_acceptDelivery"
-                            value="Accept Delivery" <?php echo $disabledButton;?>>
-            </input>
-            </form>
-          </td>
-          -->
         </tr>
         <tr>
           <td><form method="GET" action="arriveship.php">
@@ -171,7 +178,7 @@ if ($row['status'] == "Delivered")
             <input type="hidden" id="recordid" name="recordid"
                             value="<?php echo $row['recordID'];?>">
             <input type="submit" class="btn btn-danger btn-sm" id="btn_arrivedShipper"
-                            value="Arrived to shipper" <?php echo $disabledButton;?>>
+                            value="Arrived to shipper" <?php echo $disabledButton; echo $disable_pickup_btn;?>>
             </input>
             </form>
           </td>
@@ -181,7 +188,7 @@ if ($row['status'] == "Delivered")
             <input type="hidden" id="recordid" name="recordid"
                             value="<?php echo $row['recordID'];?>">
             <input type="submit" class="btn btn-danger btn-sm" id="btn_arrivedConsignee"
-                           value="Arrived to consignee" <?php echo $disabledButton;?>>
+                           value="Arrived to consignee" <?php echo $disabledButton; echo $disable_delivery_btn;?>>
             </input>
             </form>
           </td>
@@ -194,7 +201,7 @@ if ($row['status'] == "Delivered")
             <input type="hidden" id="recordid" name="recordid"
                             value="<?php echo $row['recordID'];?>">
             <input type="submit" class="btn btn-danger btn-sm" id="btn_attemptPu"
-                          value="Attempt Pickup" <?php echo $disabledButton;?>>
+                          value="Attempt Pickup" <?php echo $disabledButton; echo $disable_pickup_btn;?>>
             </input>
           </form>
          </td
@@ -204,7 +211,7 @@ if ($row['status'] == "Delivered")
             <input type="hidden" id="recordid" name="recordid"
                             value="<?php echo $row['recordID'];?>">
             <input type="submit" class="btn btn-danger btn-sm" id="btn_attemptDel"
-                          value="Attempt Delivery" <?php echo $disabledButton;?>>
+                          value="Attempt Delivery" <?php echo $disabledButton; echo $disable_delivery_btn;?>>
             </input>
             </form>
           </td>
@@ -216,7 +223,7 @@ if ($row['status'] == "Delivered")
               <input type="hidden" id="recordid" name="recordid"
                             value="<?php echo $row['recordID'];?>">
               <input type="submit" class="btn btn-danger btn-sm" id="btn_pickedUp"
-                            value="Picked Up" <?php echo $disabledButton;?>>
+                            value="Picked Up" <?php echo $disabledButton; echo $disable_pickup_btn;?>>
               </input>
             </form>
           </td>
@@ -226,7 +233,7 @@ if ($row['status'] == "Delivered")
             <input type="hidden" id="recordid" name="recordid"
                             value="<?php echo $row['recordID'];?>">
               <input type="submit" class="btn btn-danger btn-sm" id="btn_delivered"
-                           value="Delivered" <?php echo $disabledButton;?>>
+                           value="Delivered" <?php echo $disabledButton; echo $disable_delivery_btn;?>>
               </input>
             </form></td>
         </tr>
