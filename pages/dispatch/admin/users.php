@@ -353,7 +353,7 @@ if (! empty($_FILES["fuelUpload"]["name"]))
                   <label for="allusers"></label>
                   All Users</h3>
 </div><!-- /.box-header -->
-                <div class="box-body">
+                <div class="box-body table-responsive">
 <table class="table table-striped">
  <thead>
   <tr>
