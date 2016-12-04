@@ -288,7 +288,6 @@ if (! empty($_FILES["fuelUpload"]["name"]))
 <head>
 <meta charset="UTF-8">
 <title>Users</title>
-<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/favicon/favicon.php');?>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -610,6 +609,7 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
    <select class="form-control" name="status" id="status">
      <option value="Active" <?php if ($row['status'] == 'Active') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Active</option>
      <option value="Inactive"<?php if ($row['status'] == 'Inactive') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Inactive</option>
+     <option value="Disabled"<?php if ($row['status'] == 'Disabled') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Disabled</option>
    </select> 
  </td>
  <td style="padding: 5px">
@@ -1257,6 +1257,7 @@ onClick="$(this).toggleClass('glyphicon-chevron-down glyphicon-chevron-right');"
        <select class="form-control" name="status" id="status">
          <option value="Active">Active</option>
          <option value="Inactive">Inactive</option>
+         <option value="Disabled">Disabled</option>
        </select>
      </td>
      <td style="padding: 5px">

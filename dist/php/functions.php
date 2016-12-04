@@ -93,7 +93,7 @@ function get_drivers($mysqli) {
    $driver_array = [];
    $statement = "select * from
    (
-   select fname, lname, employee_id, email from users where title = 'Driver' AND status = 'Active'
+   select fname, lname, employee_id, email from users where title = 'Driver' AND status in ('Active','Disabled')
    union
    select 'Unknown' as fname, 'Driver' as lname, 'unknown' as employee_id, 'unknown' as email from DUAL
    union
@@ -114,7 +114,8 @@ function get_drivers($mysqli) {
 
 function get_all_users($mysqli) {
    $all_users_array = [];
-   $statement = "select fname, lname, employee_id, email, vtext from users where status = 'Active' order by fname";
+   $statement = "select fname, lname, employee_id, email, vtext from users 
+                 where status in ('Active') order by fname";
 
    $counter = 0;
    if ($result = $mysqli->query($statement)) {
