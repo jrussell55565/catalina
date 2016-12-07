@@ -310,52 +310,51 @@ $drivername = $_SESSION['drivername'];
 
                 # Status: Red needs update(EF5350), Turquise (26A69A) Update not complete,
                 $array = array(
-               "Picked Up" => "#90A4AE",
-               "Trailer Dropped" => "#90A4AE",
-               "Trace Note PU" => "#90A4AE",
-               "Trace Note DEL" => "#90A4AE",
-               "Appointment Scheduled" => "#90A4AE",
-               "On Dock TUS" => "#90A4AE",
-               "Freight At Dock" => "#90A4AE",
-               "On Dock PHX" => "#90A4AE",
-               "In Transit" => "#90A4AE",
-               "On Dock LAX" => "#90A4AE",
-               "APPT. SCHEDULED" => "#90A4AE",
+               "Picked Up" => "#ffac4a",
+               "Trailer Dropped" => "#ffac4a",
+               "Trace Note PU" => "#ffac4a",
+               "Trace Note DEL" => "#ffac4a",
+               "Appointment Scheduled" => "#ffac4a",
+               "On Dock TUS" => "#ffac4a",
+               "Freight At Dock" => "#ffac4a",
+               "On Dock PHX" => "#ffac4a",
+               "In Transit" => "#ffac4a",
+               "On Dock LAX" => "#ffac4a",
+               "APPT. SCHEDULED" => "#ffac4a",
                "Delivered" => "#71f971",
 			   "Dropped" => "#71f971",
                "Ready To Invoice" => "#71f971",
-               "Verify Pickup Date" => "#90A4AE",
-			   "Attempted Pick Up" => "#90A4AE",
-			   "Attempted Delivery" => "#90A4AE",
-               "Hold For Routing" => "#90A4AE",
-               "Verify Delivery Date" => "#90A4AE",
-               "Recovered" => "#90A4AE",
-			   "On Hand For Dest Agent" => "#90A4AE",			   
-               "In Storage" => "#90A4AE",
-               "Outside Carrier Scheduled" => "#90A4AE",
-               "Verify Shipment Assignment" => "#90A4AE",
-               "Left Apt Message" => "#90A4AE",
-               "CALL FOR APPOINTMENT" => "#90A4AE",
-               "Need Routing" => "#90A4AE",
-               "Need 2 Sch Appt" => "#90A4AE",
-               "On Hand Destination" => "#90A4AE",
-               "ATTEMPT" => "#90A4AE",
-               "Attempted Delivery" => "#90A4AE",
-               "Unable to Locate" => "#90A4AE",
-               "New Hwb" => "#90A4AE",
-               "Booked" => "#90A4AE",
-               "Attempted Pick Up" => "90A4AE",
-               "Refused" => "#90A4AE",
-			   "Reject PU DEL" => "#90A4AE",
-               "Out for Delivery" => "#90A4AE",
-               "Terminate at Origin" => "#90A4AE",
-               "Accepted PU" => "#90A4AE",
-               "Accepted DEL" => "#90A4AE",
-               "Arrived To Consignee" => "#90A4AE",
-			   "Arrived to Consignee" => "#90A4AE",
-               "Dispatched" => "#90A4AE",
-               "Dispatched Confirmed" => "#90A4AE",
-               "Arrived to Shipper" => "#90A4AE",
+               "Verify Pickup Date" => "#ffac4a",
+			   "Attempted Pick Up" => "#ffac4a",
+			   "Attempted Delivery" => "#ffac4a",
+               "Hold For Routing" => "#ffac4a",
+               "Verify Delivery Date" => "#ffac4a",
+               "Recovered" => "#ffac4a",
+			   "On Hand For Dest Agent" => "#ffac4a",			   
+               "In Storage" => "#ffac4a",
+               "Outside Carrier Scheduled" => "#ffac4a",
+               "Verify Shipment Assignment" => "#ffac4a",
+               "Left Apt Message" => "#ffac4a",
+               "CALL FOR APPOINTMENT" => "#ffac4a",
+               "Need Routing" => "#ffac4a",
+               "Need 2 Sch Appt" => "#ffac4a",
+               "On Hand Destination" => "#ffac4a",
+               "ATTEMPT" => "#ffac4a",
+               "Attempted Delivery" => "#ffac4a",
+               "Unable to Locate" => "#ffac4a",
+               "New Hwb" => "#ffac4a",
+               "Booked" => "#ffac4a",
+               "Refused" => "#ffac4a",
+			   "Reject PU DEL" => "#ffac4a",
+               "Out for Delivery" => "#ffac4a",
+               "Terminate at Origin" => "#ffac4a",
+               "Accepted PU" => "#ffac4a",
+               "Accepted DEL" => "#ffac4a",
+               "Arrived To Consignee" => "#ffac4a",
+			   "Arrived to Consignee" => "#ffac4a",
+               "Dispatched" => "#ffac4a",
+               "Dispatched Confirmed" => "#ffac4a",
+               "Arrived to Shipper" => "#ffac4a",
                 );
                 $counter = 0;
                 while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
@@ -386,10 +385,10 @@ $drivername = $_SESSION['drivername'];
                     <td><span>PU<?php echo "$row[puAgentDriverName]";?></span><br>
                     <span>DEL: <?php echo "$row[delAgentDriverName]";?></span><br></td> -->
                     <td>
-                     <span>
-                     <?php echo "$row[pieces]"; ?> @ <?php echo "$row[weight]"; ?> LBS
-                     <br>
-                      <?php
+                      <p><span>
+                      <?php echo "$row[pieces]"; ?> @ <?php echo "$row[weight]"; ?> #</span></p>
+                      <p><span>S <br>
+                       <?php
                             switch($_GET['gather'])
                             {
                               case "pu":
@@ -403,9 +402,9 @@ $drivername = $_SESSION['drivername'];
                                 break;
                             }
                        ?>
-                     </span>
-                     <br>
-                    </td>
+                      </span>
+                        <br>
+                    </p></td>
                   </tr>
                 </div>
                 <?php
