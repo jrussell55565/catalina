@@ -656,12 +656,19 @@ while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
  <td style="padding: 5px">
   <label for="jobTitle">Title</label>
    <select class="form-control" name="jobTitle" id="jobTitle">
+         <?php
+          if ($row['subtitle'] === null) {
+            $subtitle = $row['title'];
+          }else{
+            $subtitle = $row['subtitle'];
+          }
+         ?>
          <option value="Office" <?php if ($row['title'] == 'Office') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Office</option>
          <option value="Dispatch"<?php if ($row['title'] == 'Dispatch') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Dispatch</option>
          <option value="Accounting" <?php if ($row['title'] == 'Accounting') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Accounting</option>
-         <option value="Driver - OTR"<?php if ($row['subtitle'] == 'OTR') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Driver - OTR</option>
-         <option value="Driver - Local"<?php if ($row['subtitle'] == 'Local') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Driver - Local</option>
-         <option value="Driver - Both"<?php if ($row['subtitle'] == 'Both') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Driver - Both</option>
+         <option value="Driver - OTR"<?php if ($subtitle == 'OTR') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Driver - OTR</option>
+         <option value="Driver - Local"<?php if ($subtitle == 'Local') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Driver - Local</option>
+         <option value="Driver - Both"<?php if (($subtitle == 'Driver') or ($subtitle == 'Both')) { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Driver - Both</option>
          <option value="Mechanic"<?php if ($row['title'] == 'Mechanic') { echo " selected "; }?> <?php if ($_SESSION['login'] == 2) { echo 'style="display: none;"'; }?>>Mechanic</option>
        </select> 
      </td>
