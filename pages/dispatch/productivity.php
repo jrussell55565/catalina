@@ -194,7 +194,7 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-blue">
                   <div class="widget-user-image">
-                   <img src="
+                    <p><img src="
                     <?php 
                      if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
                       if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { 
@@ -202,38 +202,44 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                       }
                      }?>" 
                    alt="User Image" width="100" height="100" class="img-circle" />
-                  <span class="fa-2x">Shipment</span></div>
+                      <span class="fa-2x">Shipments</span></p>
+                    <p><span class="fa-2x"> <?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></span></p>
+                  </div>
                   <!-- Add text below Image Removed....
                   <span class="info-box-text">Shipments</span>
                   --> 
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
+                    <!-- Need to Fix Total HWB Assigned Below, Calculating from arrived to shipper currently.... -->
+                    <li><a href="#">Total HWB Assigned PU/DEL (not working)<span class="pull-right badge bg-blue" id="shp_arrived_shipper">
+                     <?php echo round($shp_aggregate[0]['arrived_to_shipper'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
+                    </li>
                     <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper">
                      <?php echo round($shp_aggregate[0]['arrived_to_shipper'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
                     </li>
-                    <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points">
+                    <li><a href="#">Arrived Shipper Points (???)<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points">
                      <?php echo round($shp_aggregate[0]['arrived_to_shipper_points'],0) ." of ".round($shp_aggregate[0]['max_arrived_to_shipper_points'],0);?></span></a>
                     </li>
                     <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up">
                      <?php echo round($shp_aggregate[0]['picked_up'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
                     </li>
-                    <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue" id="shp_picked_up_points">
+                    <li><a href="#">Picked Up Points (???)<span class="pull-right badge bg-blue" id="shp_picked_up_points">
                      <?php echo round($shp_aggregate[0]['picked_up_points'],0) ." of ".round($shp_aggregate[0]['max_picked_up_points'],0);?></span></a>
                     </li>
                     <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee">
                      <?php echo round($shp_aggregate[0]['arrived_to_consignee'],0) ." of ".round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
                     </li>
-                    <li><a href="#">Arrived Consignee Points<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points">
+                    <li><a href="#">Arrived Consignee Points (???)<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points">
                      <?php echo round($shp_aggregate[0]['arrived_to_consignee_points'],0) ." of ".round($shp_aggregate[0]['max_arrived_to_consignee_points'],0);?></span></a>
                     </li>
                     <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered">
                      <?php echo round($shp_aggregate[0]['delivered'],0) ." of ".round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
                     </li>
-                    <li><a href="#">Delivered Points<span class="pull-right badge bg-blue" id="shp_delivered_points">
+                    <li><a href="#">Delivered Points (???)<span class="pull-right badge bg-blue" id="shp_delivered_points">
                      <?php echo round($shp_aggregate[0]['delivered_points'],0) ." of ".round($shp_aggregate[0]['max_delivered_points'],0);?></span></a>
                     </li>
-                    <li><a href="#">Accessorials Added <span class="pull-right badge bg-blue" id="shp_accessorials">
+                    <li><a href="#">Accessorials Added<span class="pull-right badge bg-blue" id="shp_accessorials">
                      <?php echo round($shp_aggregate[0]['accessorial_count'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
                     </li>
                     <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue" id="shp_accessorials_points">
@@ -255,7 +261,7 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-red">
                   <div class="widget-user-image">
-                    <img src="
+                    <p><img src="
                     <?php
                      if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
                       if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
@@ -263,7 +269,9 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                       }
                      }?>"
                     alt="User Avatar" width="100" height="100" class="img-circle">
-                  <span class="fa-2x">VIR'S</span></div>
+                      <span class="fa-2x">VIR'S</span></p>
+                    <p><span class="fa-2x"><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></span></p>
+                  </div>
                   <!-- Add text below Image Removed.... 
                   <span class="info-box-text"> VIRS</span>
                   -->
@@ -314,6 +322,7 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                      ?>
                      </span></a>
                     </li>
+
                     <li><a href="#">Post-Trip Points<span class="pull-right badge bg-blue" id="vir_posttrip_points">
                      <?php
                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
@@ -328,7 +337,38 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                      ?>
                      </span></a>
                     </li>
-                    <li><a href="#">Breakdowns <span class="pull-right badge bg-blue" id="vir_breakdown">
+
+                    <li><a href="#">Trailer Inspections<span class="pull-right badge bg-blue" id="vir_posttrip_points">
+                     <?php
+                       for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
+                           if ($vir_aggregate[$vir_i]['vir_posttrip'] > $vir_aggregate[$vir_i]['days_worked']) {
+                             echo $vir_aggregate[$vir_i]['days_worked'];
+                           }else{
+                             echo $vir_aggregate[$vir_i]['vir_posttrip'];
+                           }
+                          }
+                        }
+                     ?>
+                     </span></a>
+                    </li>
+
+                    <li><a href="#">Trailer Inspections Points<span class="pull-right badge bg-blue" id="vir_posttrip_points">
+                     <?php
+                       for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
+                           if ($vir_aggregate[$vir_i]['vir_posttrip'] > $vir_aggregate[$vir_i]['days_worked']) {
+                             echo $vir_aggregate[$vir_i]['days_worked'];
+                           }else{
+                             echo $vir_aggregate[$vir_i]['vir_posttrip'];
+                           }
+                          }
+                        }
+                     ?>
+                     </span></a>
+                    </li>
+
+                    <li><a href="#">Reported Breakdowns <span class="pull-right badge bg-blue" id="vir_breakdown">
                      <?php
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
@@ -338,6 +378,18 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                      ?>
                      </span></a>
                     </li>
+
+                    <li><a href="#">Unreported Breakdowns <span class="pull-right badge bg-blue" id="vir_breakdown">
+                     <?php
+                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
+                           echo $vir_aggregate[$vir_i]['vir_breakdown'];
+                          }
+                        }
+                     ?>
+                     </span></a>
+                    </li>
+                    
                     <li><a href="#">Breakdown Points<span class="pull-right badge bg-blue" id="vir_breakdown_points">
                      <?php
                     for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
@@ -362,14 +414,17 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
               <div class="box box-widget widget-user-2">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-purple">
-                  <div class="widget-user-image"><span class="fa-2x"><img src="
+                  <div class="widget-user-image">
+                    <p class="fa-2x"><img src="
                     <?php
                      if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
                       if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
                         echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg";
                       }
                      }?>"
-                     alt="User Avatar" width="100" height="100" class="img-circle">Productivity</span></div>
+                     alt="User Avatar" width="100" height="100" class="img-circle">Tasks</p>
+<p class="fa-2x"><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></p>
+                  </div>
                   <!-- Add text below Image Removed....
                   <span class="info-box-text"> Productivity</span>
                   -->
@@ -409,14 +464,17 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
               <div class="box box-widget widget-user-2">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-orange">
-                  <div class="widget-user-image"><img src="
+                  <div class="widget-user-image">
+                    <p><img src="
                     <?php
                      if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
                       if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
                         echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg";
                       }
                      }?>"
-                    alt="User Avatar" width="100" height="100" class="img-circle"><span class="fa-2x">Compliance</span></div>
+                    alt="User Avatar" width="100" height="100" class="img-circle"><span class="fa-2x">Compliance</span></p>
+                    <p><span class="fa-2x"><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></span></p>
+                  </div>
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
