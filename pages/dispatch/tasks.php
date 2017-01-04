@@ -442,17 +442,17 @@ if (isset($_POST['btn_update_task'])) {
                   </td>
                   <td style="padding: 5px">
                    <select class="form-control" name="task_assign_to" id="task_assign_to_<?php echo $tasks_aggregate[$j]['id'];?>" onchange="update_tasks(this);">
-                   <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
-                   <option value="<?php echo $driver_array[$i]['employee_id'];?>" <?php if ($driver_array[$i]['employee_id'] == $tasks_aggregate[$j]['assign_to']) { echo " selected "; }?> ><?php echo $driver_array[$i]['name'];?>
+                   <?php for ($i=0; $i<sizeof($all_users_array); $i++) { ?>
+                   <option value="<?php echo $all_users_array[$i]['employee_id'];?>" <?php if ($all_users_array[$i]['employee_id'] == $tasks_aggregate[$j]['assign_to']) { echo " selected "; }?> ><?php echo $all_users_array[$i]['name'];?>
                    </option>
                    <?php } ?>
                    </select>
                   </td>
                   <td style="padding: 5px">
                    <select class="form-control"  value="" name="task_assign_by" id="task_assign_by_<?php echo $tasks_aggregate[$j]['id'];?>">
-                   <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
-                   <?php if ($driver_array[$i]['employee_id'] != $tasks_aggregate[$j]['assigned_by']) { continue; } ?>
-                   <option value="<?php echo $driver_array[$i]['employee_id'];?>"><?php echo $driver_array[$i]['name'];?>
+                   <?php for ($i=0; $i<sizeof($all_users_array); $i++) { ?>
+                   <?php if ($all_users_array[$i]['employee_id'] != $tasks_aggregate[$j]['assigned_by']) { continue; } ?>
+                   <option value="<?php echo $all_users_array[$i]['employee_id'];?>"><?php echo $all_users_array[$i]['name'];?>
                    </option>
                    <?php } ?>
                    </select>
