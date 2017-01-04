@@ -154,9 +154,16 @@ if (isset($_POST['btn_update_task'])) {
             throw new Exception("Error inserting into tasks table: ".$mysqli->error);
         }
         // Send an email out to the task recipient.
+        //// Get the drivers email address
         for($i=0;$i<count($driver_array);$i++) {
           if ($driver_array[$i]['employee_id'] == $_POST['task_assign_to']) {
             $employee_email = $driver_array[$i]['email'];
+          }
+        }
+        //// Get the name of the person who created the task
+        for($i=0;$i<count($all_users_array);$i++) {
+          if ($all_users_array[$i]['employee_id'] == $_POST['task_assign_by']) {
+            $assigned_by = $all_users_array[$i]['name'];
           }
         }
         if (empty($employee_email)) {
@@ -165,7 +172,7 @@ if (isset($_POST['btn_update_task'])) {
         }
         $body = "A new task has been created for you to complete!\n";
         $body = "Please login to the driver boards to the home dash board.  Please click on Done when complete!\n";
-        $body .= "Assigned by: ".$_POST['name']."\n";
+        $body .= "Assigned by: ".$assigned_by."\n";
         $body .= "Category: ".$_POST['task_category']."\n";
         $body .= "Item: ".$_POST['task_item']."\n";
         $body .= "Sub: ".$_POST['task_subitem']."\n";
