@@ -160,6 +160,12 @@ if (isset($_POST['btn_update_task'])) {
             $employee_email = $driver_array[$i]['email'];
           }
         }
+        //// Get the employee vtext address
+        for($i=0;$i<count($driver_array);$i++) {
+          if ($driver_array[$i]['employee_id'] == $_POST['task_assign_to']) {
+            $employee_vtext = $driver_array[$i]['vtext'];
+          }
+        }
         //// Get the name of the person who created the task
         for($i=0;$i<count($all_users_array);$i++) {
           if ($all_users_array[$i]['employee_id'] == $_POST['task_assign_by']) {
@@ -181,6 +187,14 @@ if (isset($_POST['btn_update_task'])) {
         $body .= "This Task will Auto Close at midnight on the Due date, to avoid negative points please complete the task, login and submit you have completed task on the dashboards.  If you have any questions please call dispatch and ask for Liz. 520-664-9188 \n";
         $body .= "Due: ".$_POST['task_due_date']." 23:59\n";
         sendEmail($employee_email, 'New task alert', $body, 'drivers@catalinacartage.com');
+
+        // Also send a text message to the recipient
+        if (empty($employee_vtext)) {
+          // We did not find a suitable vtext address.  Throw an exception
+          throw new Exception("Unable to find a vtext address for ".$_POST['task_assign_to']);
+        }
+        $body = "You have been assigned a new Task. Please login to the driver boards to the home dash board";
+        sendEmail($employee_vtext, 'New task alert', $body);
 
     } catch (Exception $e) {
     // An exception has been thrown
