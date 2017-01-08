@@ -38,11 +38,14 @@ if (isset($_GET['driver'])) {
 
 if (isset($_GET['task_status'])) { 
     if ($_GET['task_status'] == 'open') { 
-      $task_status = 0;
+      if ($_GET['driver'] == 'all') {
+          $task_status_predicate = 'complete_user = 0 AND complete_approved = 0';
+      }else{
+          $task_status_predicate = 'complete_user = 0 OR complete_approved = 0';
+      }
     }else{ 
-      $task_status = 1;
+      $task_status_predicate = 'complete_user = 1 AND complete_approved = 1';
     }
-    $task_status_predicate = 'complete_approved = '.$task_status; 
 }else{ 
     $task_status_predicate = '1=1'; 
 }
@@ -63,6 +66,7 @@ $sql = "select id,
          from tasks
          where 1=1 and  $driver_predicate and $task_status_predicate 
          order by submit_date DESC";
+
 $tasks_aggregate = get_sql_results($sql,$mysqli);
 
 if (isset($_POST['type'])) {
