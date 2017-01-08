@@ -295,7 +295,7 @@ if (isset($_POST['btn_update_task'])) {
                   Admin Select all or jut 1 driver</span></p>
                     <select class="form-control"  value="" name="driver" required style="width:150px;">
                     <option value="null">Select Employee</option>
-                    <option value="all">-All-</option>
+                    <option value="all" <?php if (empty($_GET['driver'])) { echo " selected"; }?>>-All-</option>
                    <?php for ($i=0; $i<sizeof($all_users_array); $i++) { ?>
                    <option value=<?php echo $all_users_array[$i]['employee_id'];?> <?php if ($all_users_array[$i]['employee_id'] == $_GET['driver']) { echo " selected "; }?>>
                    <?php echo $all_users_array[$i]['name'];?>
