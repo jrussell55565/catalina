@@ -390,7 +390,7 @@ if (($trucktype == 'combo') && ($trailer_number != ''))
     '$trailer_tires_passenger_ax2rear',
     '$trailer_tires_notes',
     NULL,
-    NULL,
+    '$trucktype',
     NULL,
     '$trailer_vir_condition_tire',
     $truck_po
@@ -412,7 +412,9 @@ $body = <<<EOT
 Driver:				$driver_name
 Truck Type:			$trucktype
 Truck:				$truck_number, $truck_vir_condition
+Truck Tires:        $truck_vir_condition_tire
 Trailer:				$trailer_number, $trailer_vir_condition
+Trailer Tires:      $trailer_vir_condition_tire
 Date:				$insp_date
 Start Time:			$insp_start_time
 End Time:			$insp_end_time
