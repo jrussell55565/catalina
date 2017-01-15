@@ -116,35 +116,26 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
         <div class="box-body">
           <form class="form" name="virForm" id="virForm" method="post" action="viractions.php" onsubmit="return validateSubmit(this);">
             
-            <table width="292" border="1">
+            <table width="313" border="1">
               <tr>
-                <td colspan="5">Start Time:
+                <td colspan="4">Start Time:
                   <input name="insp_start_time" type="text" id="insp_start_time" value="<?php echo $localtime; ?>" size="8"/>
                   Date
                   <input name="insp_date" type="text" id="insp_date" value="<?php echo $localdate; ?>" size="8" readonly/>
                   <span class="active"><?php echo "$truck_number"; ?></span>
               </tr>
               <tr>
-                <td width="67">Truck
-                <td width="73"><div align="center">
+                <td width="94">Truck
+                <td width="79"><div align="center">
                   <input name="truck_number" type="text" id="truck_number" value="<?php echo $truckid; ?>" size="8" readonly />
                   <?php
-                $statement = "SELECT truck_vir_condition,date_format(insp_date,'%m/%d/%Y') from virs WHERE truck_number = $truckid ORDER BY vir_itemnum DESC LIMIT 1";
+                $statement = "SELECT truck_vir_condition from virs WHERE truck_number = $truckid ORDER BY vir_itemnum DESC LIMIT 1";
                 $record = mysql_query($statement);
                 $record = mysql_fetch_array($record);
                 $a = explode(',',$record[0]);
-                if (preg_match('/^Green/',$a[0]))
-                {
-                $status = '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
-                }elseif (preg_match('/^Yellow/',$a[0])){
-                $status = '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
-                }elseif (preg_match('/^Red/',$a[0])){
-                $status = '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
-                }
                 ?>
                 </div>
-                <td colspan="3" ><div align="center"><a href="vir_previous.php?type=truck&no=<?php echo $truckid;?>"><?php echo $status;?></a><?php echo $record[1];?></div>
-              </tr>
+                <td colspan="2" ><div align="center"><?php echo $a[0];?> on 7/1/2016</div>                </tr>
               <tr>
                 <td>Trailer
                 <td><div align="center">
@@ -152,68 +143,67 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
                   <input name="truck_odometer" type="hidden" id="truck_odometer" value="<?php echo $truckOdometer; ?>" size="8" readonly>
                 </div></td>
                 <?php
-                $statement = "SELECT trailer_vir_condition,date_format(insp_date,'%m/%d/%Y') from virs WHERE trailer_number = $trailerid ORDER BY vir_itemnum DESC LIMIT 1";
+                $statement = "SELECT trailer_vir_condition from virs WHERE trailer_number = $trailerid ORDER BY vir_itemnum DESC LIMIT 1";
                 $record = mysql_query($statement);
                 $record = mysql_fetch_array($record);
                 $a = explode(',',$record[0]);
-                if (preg_match('/^Green/',$a[0]))
-                {
-                $status = '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
-                }elseif (preg_match('/^Yellow/',$a[0])){
-                $status = '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
-                }elseif (preg_match('/^Red/',$a[0])){
-                $status = '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
-                }
                 ?>
-                <td colspan="3"><div align="center"><a href="vir_previous.php?type=trailer&no=<?php echo $trailerid;?>"><?php echo $status;?></a><?php echo $record[1];?></div>
-              </tr>
+                <td colspan="2"><div align="center"><?php echo $a[0];?> on 7/1/2016</div>                </tr>
               <tr>
-                <td colspan="5">
+                <td colspan="4">
                 <div align="center">
                     Pre Trip:
                     <input name="preorposttrip" type="radio" id="pretrip" value="vir_pretrip">
                     <label for="vir_pretrip"></label>
                     Post Trip:
                     <input type="radio" name="preorposttrip" id="posttrip" value="vir_posttrip">
-                    <label for="vir_breakdown3"></label>
+                    <label for="vir_posttrip"></label>
                 </div>
-                  <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none" id="preorpostdiv">Choose Pre/Post Trip</div>
+                  <div class="alert alert-danger" role="alert" style="padding: 1px; text-align: center; display: none" id="preorpostdiv">Choose pre/post trip or Breakdown</div>
               </tr>
               <tr>
-                <td colspan="5"><div align="center">
-                  <label for="vir_posttrip3"></label>
-                  Breakdown:
-                  <input name="preorposttrip" type="radio" id="breakdown" value="vir_breakdown">
-                </div>              </tr>
+                <td colspan="4"><div align="center">Breakdown:
+                    <input name="preorposttrip" type="radio" id="breakdown" value="vir_breakdown">
+                    <label for="vir_breakdown"></label>
+                </div>                
+              </tr>
               <tr>
-                <td colspan="5"><div align="center">Truck Type / Trailer</div>
+                <td colspan="4"><div align="center">Truck Type</div>
                   <div align="center"></div>
               </tr>
               <tr>
-                <td height="34"><div align="center"><span class="box-title"><img src="../images/semismall.gif" alt="tire"></span></div></td>
-                <td><div align="center"><span class="box-title"><img src="../images/trailersmall.gif" alt="tire"></span></div></td>
-                <td width="66"><div align="center"><span class="box-title"><img src="../images/boxtrucksmall.gif" alt="tire"></span></div></td>
-                <td width="64"><span class="box-title"><img src="../images/sprintersmall.gif" alt="tire"></span></td>
+                <td><div align="center"><span class="box-title"><img src="../images/semismall.gif" alt="tire"></span></div>
+                <td colspan="2"><div align="center"><span class="box-title"><img src="../images/boxtrucksmall.gif" alt="tire"></span></div>
+                <td width="96"><div align="center"><span class="box-title"><img src="../images/sprintersmall.gif" alt="tire"></span></div>
               </tr>
               <tr>
                 <td><div align="center">
                     <input type="radio" name="trucktype" id="trucktype_combo" value="combo">
-                  </div></td>
-                <td><div align="center">
-                    <input type="radio" name="trucktype" id="trucktype_trailer" value="trailer">
-                    </div></td>
-                <td><div align="center">
+                    <label for="type_semi"></label>
+                  </div>
+                <td colspan="2"><div align="center">
                   <input type="radio" name="trucktype" id="trucktype_boxtruck" value="boxtruck">
-                </div></td>
+                  <label for="type_boxtruck"></label>
+                  </div>
+                  <div align="center"></div>
                 <td><div align="center">
-                  <input type="radio" name="trucktype" id="trucktype_sprinter" value="sprinter">
-                </div></td>
+                    <input type="radio" name="trucktype" id="trucktype_sprinter" value="sprinter">
+                    <label for="type_sprinter"></label>
+                  </div>
               </tr>
               <tr>
-                <td colspan="5"><div align="center">Click Here for <a href="vir_previous.php">Previous VIRS</a></div>              
-                  <div align="center"></div>
-                <div align="center"></div>                
+              <td colspan="4"><div align="center"> If you are reporting vir items that have not been fixed on the truck or trailer but were previously reported in the last week, Select Option Below.</div>              
               </tr>
+              <tr>
+                <td colspan="3"><div align="center">Previously Reported
+                  <input type="radio" name="previously_reported" id="previously_reported" value="previously_reported">
+                  <label for="type_sprinter2"></label>
+                </div>
+                             
+                <td><a href="vir_previous.php">Previous VIRS</a></tr>
+              <tr>
+                <td colspan="3"><div align="center"></div>
+                <td><div align="center"></div>                </tr>
             </table>
 
         <!-- /.box-body -->
@@ -268,7 +258,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
       <!-- Default box -->
       <!--          <div class="box"> -->
       <!--Remove the div Class "box" above and add below primary collapsed -->
-      <div name="div_trailer_vir" id="div_trailer_vir" class="box box-primary collapsed-box vir trailer">
+      <div name="div_trailer_vir" id="div_trailer_vir" class="box box-primary collapsed-box vir combo">
         <div class="box-header with-border">
           <h3 class="box-title"><img src="../images/trailersmall.gif" alt="tire"> Trailer Inspection <img src="../images/trailersmall.gif" alt="tire"></h3>
         <table width="200" border="1">
@@ -598,7 +588,7 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
       <!-- Default box -->
       <!--          <div class="box"> -->
       <!--Remove the div Class "box" above and add below primary collapsed -->
-      <div name="div_trailer_tire_vir" id="div_trailer_tire_vir" class="box box-primary collapsed-box vir trailer">
+      <div name="div_trailer_tire_vir" id="div_trailer_tire_vir" class="box box-primary collapsed-box vir combo">
         <div class="box-header with-border">
           <h3 class="box-title"><img src="../images/smalltires.gif" width="25" height="25" alt="tire"> Trailer Tires <img src="../images/smalltires.gif" width="25" height="25" alt="tire"></h3>
           
@@ -1361,22 +1351,7 @@ $(document).ready(function(){
           {
             $(".vir").not(".combo").hide();
             $(".combo").show();
-            $(".trailer").show();
             $(".truckvir").show();
-            $(".virsubmit").show();
-            $(".virconfirmation").hide();
-          }else{
-            $('#preorpostdiv').css('display', 'block');
-            $(this).prop('checked', false);
-          }
-        }
-        if($(this).attr("value")=="trailer")
-        {
-          if ((document.getElementById('pretrip').checked) || (document.getElementById('posttrip').checked) || (document.getElementById('breakdown').checked))
-          {
-            $(".vir").not(".trailer").hide();
-            $(".trailer").show();
-            $(".truckvir").hide();
             $(".virsubmit").show();
             $(".virconfirmation").hide();
           }else{
@@ -1414,16 +1389,13 @@ $(document).ready(function(){
 });
 
 function validateSubmit( obj ){
-    // If we've chosen anything other than a trailer then make sure a condition is selected
-    if(!$('#trucktype_trailer').is(':checked')) { 
-        if(!$('#vir_truck_green').is(':checked') &&
-           !$('#vir_truck_yellow').is(':checked') &&
-           !$('#vir_truck_red').is(':checked'))
-        {
-          $('#generalStatus').html("Must specify truck condition")
-          $('#generalStatus').css('display', 'block');
-          return false
-        }
+    if(!$('#vir_truck_green').is(':checked') &&
+       !$('#vir_truck_yellow').is(':checked') &&
+       !$('#vir_truck_red').is(':checked'))
+    {
+      $('#generalStatus').html("Must specify truck condition")
+      $('#generalStatus').css('display', 'block');
+      return false
     }
     // Check for sprinter
     if($('#trucktype_sprinter').is(':checked'))
@@ -1460,26 +1432,6 @@ function validateSubmit( obj ){
           $('#generalStatus').css('display', 'block');
           return false
         }
-        if(!$('#vir_trailer_green').is(':checked') &&
-           !$('#vir_trailer_yellow').is(':checked') && 
-           !$('#vir_trailer_red').is(':checked'))
-        {
-           $('#generalStatus').html("Choose an option for trailer condition")
-           $('#generalStatus').css('display', 'block');
-           return false
-        }
-        if(!$('#vir_trailer_tire_green').is(':checked') &&
-           !$('#vir_trailer_tire_yellow').is(':checked') && 
-           !$('#vir_trailer_tire_red').is(':checked'))
-        {
-           $('#generalStatus').html("Choose an option for trailer tire conditions")
-           $('#generalStatus').css('display', 'block');
-           return false
-        }
-    }
-    // Now only check the following if a trailer was selected
-    if($('#trucktype_trailer').is(':checked'))
-    {
         if(!$('#vir_trailer_green').is(':checked') &&
            !$('#vir_trailer_yellow').is(':checked') && 
            !$('#vir_trailer_red').is(':checked'))

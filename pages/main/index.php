@@ -555,7 +555,7 @@ if (isset($_POST['broadcast_message']))
                           <img src="../../dist/img/server.jpg" width="51" height="41" class="contacts-list-img"><span class="direct-chat-msg right"> Completed Tasks</span>
                           <div class="contacts-list-info">
                             <span class="contacts-list-name">
-                            Driver Name Completed Task 12345 on 10/10/2016</span>
+                            Billy Bob Completed Task 12345 on 10/10/2016</span>
                             <table width="584" border="2">
                               <tr>
                                 <td width="77">Start Date</td>
@@ -580,8 +580,7 @@ if (isset($_POST['broadcast_message']))
                                 <td colspan="6">Please update your boards</td>
                               </tr>
                             </table>
-                            <span class="contacts-list-name"> <small class="contacts-list-date pull-right">/2016</small>
-                        </span></div>
+                        </div>
                           <!-- /.contacts-list-info -->
                         </a>
                       </li><!-- End Contact Item -->

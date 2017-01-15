@@ -108,11 +108,19 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
                                      } ?>
                                     </select>
                                 </div>
-                                <div class="checkbox">
+                                <div class="box">
                                   <label>
                                         <input name="AdminLogin" id="AdminLogin" type="checkbox" value="admin">Administrative Login
                                     </label>
-                              /                              </div>
+                                </div>
+
+                                <div class="box">
+                                  <input name="geo_location" type="checkbox" id="geo_location" value="geo_location" checked>
+                              Allow Geo Location
+                              </div>
+
+
+                              
                               <div class="form-group">
                                 <a href="/pages/login/forgot.php">Forgot Password</a> / <a href="../main/user_request.php">New User Form</a></div>
                               <input type="submit" class="btn btn-lg btn-success btn-block" value="Login">
