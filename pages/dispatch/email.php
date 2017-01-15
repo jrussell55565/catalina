@@ -8,6 +8,9 @@ if (empty($_POST['hawbsearch'])) { $hawb = "[blank]"; }else{ $hawb = $_POST['haw
 $clockHawb = $_POST['hdn_clock'];
 $dispatchRequest = $_POST['txt_dispatch'];
 
+# Ticket LWS-EBG-4789
+$control = $_POST['Control'];
+
 switch ($subject)
 {
 	case "Request Shipments":
@@ -38,8 +41,12 @@ switch ($subject)
     		'X-Mailer: PHP/' . phpversion();
 		break;
 	case "Email Dispatch":
+        if ($control == 'FSITUS' || $control == 'FSIBK') {
+            $to = "operations@freightservices.net";
+        }else{
+		    $to	= "dispatch@catalinacartage.com";
+        }
 		$subject = "Driver Missing HWB";
-		$to	= "dispatch@catalinacartage.com";
 		$headers = "From: $email" . "\r\n" .
     		"Reply-To: $email" . "\r\n" .
     		"CC: $email" . "\r\n" .

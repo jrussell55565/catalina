@@ -276,6 +276,7 @@ if ($allow_delivery === false) {
       </span><br>
       <input type="submit" name="btn_submit" id="btn_submit" value="Email Dispatch" class="btn btn-primary"/>
       <input type="hidden" id="hawbsearch" name="hawbsearch" value='<?php echo "$_GET[hwb]";?>' />
+      <input type="hidden" id="control" name="control" value='<?php echo $row['Control'];?>' />
     </form>
     <?php } ?>
   </div>
