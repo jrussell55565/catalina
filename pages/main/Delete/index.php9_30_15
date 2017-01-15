@@ -410,7 +410,7 @@ if (isset($_POST['broadcast_message']))
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Welcome: <span class="box-title"><?php echo "$_SESSION[drivername]"; ?></span> <a href="#">
+            Index Testing / <span class="box-title"><?php echo "$_SESSION[drivername]"; ?></span> <a href="#">
             <?php if ($_SESSION['login'] == 1) { echo "(Admin)"; }?>
             </a></h1>
 
@@ -508,11 +508,11 @@ if (isset($_POST['broadcast_message']))
               <!-- DIRECT CHAT PRIMARY -->
               <div class="box box-primary direct-chat direct-chat-primary">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Tasks</h3>
+                  <h3 class="box-title">Event Notifications</h3>
                   <div class="box-tools pull-right">
                   <!-- Total New Messages Add PHP Here Just for new messages Events today -->
                     <a href="../dispatch/tasks.php"><span data-toggle="tooltip" title="Add Tasks" class="badge bg-light-blue">Add Task</span></a>
-<button class="btn btn-box-tool" data-toggle="tooltip" title="Completed" data-widget="chat-pane-toggle"><i class="fa fa-comments"></i></button>
+<button class="btn btn-box-tool" data-toggle="tooltip" title="FutureEvents" data-widget="chat-pane-toggle"><i class="fa fa-comments"></i></button>
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 <!--                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> -->
                   </div>
@@ -552,37 +552,14 @@ if (isset($_POST['broadcast_message']))
                     <ul class="contacts-list">
                       <li>
                         <a href="link to users current stats visible public">
-                          <img src="../../dist/img/server.jpg" width="51" height="41" class="contacts-list-img"><span class="direct-chat-msg right"> Completed Tasks</span>
+                          <img class="contacts-list-img" src="../dist/img/server.jpg"><span class="direct-chat-msg right"> Upcomming Triggered Events</span>
                           <div class="contacts-list-info">
                             <span class="contacts-list-name">
-                            Driver Name Completed Task 12345 on 10/10/2016</span>
-                            <table width="584" border="2">
-                              <tr>
-                                <td width="77">Start Date</td>
-                                <td width="63">Category</td>
-                                <td width="61">Item</td>
-                                <td width="138">Sub</td>
-                                <td width="83">End Date</td>
-                                <td width="43">Points</td>
-                                <td width="89">User Resolved</td>
-                              </tr>
-                              <tr>
-                                <td>10/09/2016</td>
-                                <td>Task</td>
-                                <td>Other</td>
-                                <td>Arrived to Shipper</td>
-                                <td>10/10/2016</td>
-                                <td>-10</td>
-                                <td>No</td>
-                              </tr>
-                              <tr>
-                                <td>Task Note:</td>
-                                <td colspan="6">Please update your boards</td>
-                              </tr>
-                            </table>
-                            <span class="contacts-list-name"> <small class="contacts-list-date pull-right">/2016</small>
-                        </span></div>
-                          <!-- /.contacts-list-info -->
+                              Gilbert Huph
+                              <small class="contacts-list-date pull-right">10/28/2016</small>
+                            </span>
+                            <span class="contacts-list-msg">Work Anniversary October 2016</span>
+                          </div><!-- /.contacts-list-info -->
                         </a>
                       </li><!-- End Contact Item -->
                     </ul><!-- /.contatcts-list -->
@@ -647,7 +624,7 @@ if (isset($_POST['broadcast_message']))
 <!-- DIRECT CHAT DANGER -->
               <div class="box box-danger direct-chat direct-chat-danger">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Notifications</h3>
+                  <h3 class="box-title">Expiration Notifications</h3>
                   <div class="box-tools pull-right">
                   <!-- Total New Messages Add PHP Here -->
                     <span data-toggle="tooltip" title="Update Expirations" class="badge bg-red">Update</span>
@@ -739,14 +716,14 @@ if (isset($_POST['broadcast_message']))
                     <ul class="contacts-list">
                       <li>
                         <a href="link to users current stats visible public">
-                          <img src="../../dist/img/server.jpg" width="41" height="40" class="contacts-list-img"><span class="direct-chat-msg right"> Upcomming Events</span>
+                          <img class="contacts-list-img" src="../dist/img/server.jpg"><span class="direct-chat-msg right"> Upcomming Triggered Events</span>
                           <div class="contacts-list-info">
                             <span class="contacts-list-name">
                               Gilbert Huph
                               <small class="contacts-list-date pull-right">10/28/2016</small>
                             </span>
                             <span class="contacts-list-msg">Work Anniversary October 2016</span>
-                        </div><!-- /.contacts-list-info -->
+                          </div><!-- /.contacts-list-info -->
                         </a>
                       </li><!-- End Contact Item -->
                     </ul><!-- /.contatcts-list -->
@@ -809,7 +786,84 @@ if (isset($_POST['broadcast_message']))
 <!-- Top Row End --> 
 
 
-  <!-- ======================Broadcast Posts Section Starts here=============== --><!-- /.col --><!-- /.col --><!-- /.col -->
+  <!-- ======================Broadcast Posts Section Starts here=============== -->
+
+         <div class="row">
+           <div class="col-md-4">
+              <!-- Box Comment -->
+              <div class="box box-widget">
+                <div class='box-header with-border'>
+                  <div class='user-block'>
+                    <img src="../dist/img/server.jpg" alt="message user image" width="35" height="35" class="img-circle">
+                    <span class='username'><a href="#">System MSG</a></span>
+                    <span class='description'> @ 4:30 PM Today</span>
+                  </div><!-- /.user-block -->
+                  <div class='box-tools'>
+                    <button class='btn btn-box-tool' data-toggle='tooltip' title='Mark as read'><i class='fa fa-circle-o'></i></button>
+                    <button class='btn btn-box-tool' data-widget='collapse'><i class='fa fa-minus'></i></button>
+                    <button class='btn btn-box-tool' data-widget='remove'><i class='fa fa-times'></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class='box-body'>
+                Medical Card Expiration on 10/10/2016 Email / Text Sent to User
+                (PHP user Name)</div>
+                <div class='box-footer box-comments'><!-- /.box-comment -->
+                  <div class='box-comment'>
+
+                  </div><!-- /.box-comment -->
+                </div><!-- /.box-footer -->
+                <div class="box-footer">
+                  <form action="#" method="post">
+                          <div class="pull-left image"> <img src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; }?>" alt="User Image" width="35" height="35" class="img-circle" /> </div>
+                    <!-- .img-push is used to add margin to elements next to floating images -->
+                    <div class="img-push">
+                  <!-- Note: Not sure if the share button is a good idea.  As this is just internal and not face book. -->
+                  <button class='btn btn-default btn-xs'><i class='fa fa-share'></i> Share</button>
+                  <button class='btn btn-default btn-xs'><i class='fa fa-thumbs-o-up'></i> Like</button>
+                  <!-- Note: Only User that Posted will have the Remove Post feature / And Admin will have remove for everything -->
+                  <button class='btn btn-default btn-xs'><i class='fa fa-check-circle'></i> UpDate</button>
+                  <button class='btn btn-default btn-xs'><i class='fa fa-trash'></i> Remove</button>
+                 <!-- <span class='pull-right'>1 likes - 1 comments</span> -->
+                      <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">
+                    </div>
+                  </form>
+                </div><!-- /.box-footer -->
+             </div><!-- /.box -->
+         
+           <!-- end post insert --><!-- /.col -->
+         </div><!-- /.row -->
+
+
+
+<!-- =====================Social Widgents==================== -->
+<!--<h2 class="page-header">Social Widgets</h2>-->
+
+
+         <div class="col-md-4">
+              <!-- Widget: user widget style 1 -->
+              <div class="box box-widget widget-user-2">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-blue">
+                  <div class="widget-user-image">
+                    <img src="../dist/img/h2tyd 3.jpg" alt="User Avatar" width="50" height="50" class="img-circle">
+                    <span class='username'><a href="../pages/dispatch/projects2.php" class="fa-2x">Hector Axe</a></span>
+                  <a href="indextesting.php"><span class='description pull-right'> Goals & Projects</span></a> </div>
+                  <!-- /.widget-user-image -->
+                  <!-- Removing Name Below Added Above 
+                  <h3 class="widget-user-username">Nadia Carmichael</h3>
+                  <h5 class="widget-user-desc">Lead Developer</h5>
+                  -->
+                </div>
+                <div class="box-footer no-padding">
+                  <ul class="nav nav-stacked">
+                    <li><a href="#">Assigned Projects <span class="pull-right badge bg-blue">3</span></a></li>
+                    <li><a href="#">Tasks (From Expirations)<span class="pull-right badge bg-red">2</span></a></li>
+                    <li><a href="#">Completed <span class="pull-right badge bg-green">12</span></a></li>
+                  </ul>
+                </div>
+                </div><!-- /.box -->
+              </div><!-- /.widget-user -->
+            </div><!-- /.col --><!-- /.col --><!-- /.col -->
 
 
 
@@ -826,147 +880,61 @@ if (isset($_POST['broadcast_message']))
   
 
          <div class="row">
-           <div class="col-md-12">
+           <div class="col-md-4">
               <!-- Box Comment -->
               <div class="box box-widget">
                 <div class='box-header with-border'>
                   <div class='user-block'>
-                    <img src="../../dist/img/server.jpg" alt="message user image" width="35" height="35" class="img-circle"><span class='description'>Previous Broadcast Messages</span>
-                  </div>
-                  <!-- /.user-block -->
+                    <img src="../../dist/img/edna.jpg" alt="message user image" width="35" height="35" class="img-circle">
+                    <span class='username'><a href="#">Edna</a></span>
+                    <span class='description'> @ 4:30 PM Today</span>
+                  </div><!-- /.user-block -->
                   <div class='box-tools'>
-                    <!--<button class='btn btn-box-tool' data-toggle='tooltip' title='Mark as read'><i class='fa fa-circle-o'></i></button>-->
+                    <button class='btn btn-box-tool' data-toggle='tooltip' title='Mark as read'><i class='fa fa-circle-o'></i></button>
                     <button class='btn btn-box-tool' data-widget='collapse'><i class='fa fa-minus'></i></button>
                     <button class='btn btn-box-tool' data-widget='remove'><i class='fa fa-times'></i></button>
                   </div><!-- /.box-tools -->
                 </div><!-- /.box-header -->
-
-
-                <!---------------- Broadcast Messages Below Here Populate most current post date on top--------------->
-
-	          <hr style="height:3px;border:none;color:#333;background-color:#3c8dbc;" />
-                 <div class='box-comment'>
+                <div class='box-body'>
+                This video is kick ass.  Check it out....
+                  <iframe width="480" height="300" src="https://www.youtube.com/embed/OmnDEUD9NyI" frameborder="0" allowfullscreen alt="..." class="margin"></iframe>
+                </div>
+                <div class='box-footer box-comments'>
+                  <div class='box-comment'>
                     <!-- User image -->
                     <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="35" height="35" class="img-circle img-sm">
-                    <span class="comment-text"><span class="username"> Gilbert Huph</span></span>
-                    <span class="description">@ 2:10 PM 1/10/2017</span>
-                    <span class='pull-right text-muted'>
-                    <button class='btn btn-default btn-xs'><i class='fa fa-trash'></i> Trash</button>
-                    </span>
+                    <span class="comment-text"><span class="username"> Gilbert Huph</span>
+                    <span class='description'> @ 7:30 PM Today</span></span>
                     <div class='comment-text'>
-                  <span class="username"><span class='text-muted pull-right'></span>
                   </span><!-- /.username -->
-                  DO not PUT any more 11R Tires on the Trailers!!!!!!!!!!!!!!!!  8011 with Jason now will have 6 11R and 2 295 22.5 LPs.... Trailer needs WO to get rid of the 11R Tires </div>
-                    <!-- /.comment-text -->
+                  Hello, mon! A 14-year-old from the Solomon Islands covered Adele's "Hello" in a whole new style — reggae.  Jamaican reggae artist Conkarah and teenager Rosie Delmah posted the cover to Facebook last month and it has already received more than 5 million views...
+                    </div><!-- /.comment-text -->
                   </div><!-- /.box-comment -->
-
-
-	        <hr style="height:3px;border:none;color:#333;background-color:#3c8dbc;" />
-
                   <div class='box-comment'>
                     <!-- User image -->
                     <img src="../../dist/img/jack.jpg" alt="message user image" width="35" height="35" class="img-circle img-sm">
                     <span class="comment-text"><span class="username"> Jack Jack</span></span>
-                    <span class="description">@ 5:33 PM 12/31/2016</span>
-                    <span class='pull-right text-muted'>
-                    <button class='btn btn-default btn-xs'><i class='fa fa-trash'></i> Trash</button>
-                    </span>
                     <div class='comment-text'>
-                  <span class="username"><span class='text-muted pull-right'></span>
+                  <span class="username"><span class='text-muted pull-right'>8:08 PM Today</span>
                   </span><!-- /.username -->
-Happy New Year's!! Hello look here I'm Jack </div>
-                    <!-- /.comment-text -->
-                  </div><!-- /.box-comment -->
-
-				   <hr style="height:3px;border:none;color:#333;background-color:#3c8dbc;" />
-
-                   <div class='box-comment'>
-                    <!-- User image -->
-                    <img src="../../dist/img/bernie kropp.jpg" alt="message user image" width="35" height="35" class="img-circle img-sm">
-                    <span class="comment-text"><span class="username"> Bernie Crump</span></span>
-                    <span class="description">@ 5:33 PM 12/15/2016</span>
-                    <span class='pull-right text-muted'>
-                    <button class='btn btn-default btn-xs'><i class='fa fa-trash'></i> Trash</button>
-                    </span>
-                    <div class='comment-text'>
-                  <span class="username"><span class='text-muted pull-right'></span>
-                  </span><!-- /.username -->
-Drivers, effective immediately if you have a breakdown or need assistance with your truck/trailer please call Liz at 520-289-5889 first.  Please see email for further instruction. Thank you Liz
+LOVE this Adele cover!! These kids are crazy talented!
                     </div>
                     <!-- /.comment-text -->
                   </div><!-- /.box-comment -->
-                  
-				   <hr style="height:3px;border:none;color:#333;background-color:#3c8dbc;" />                 
-                  
-          <div class='box-comment'>
-                    <!-- User image -->
-                    <img src="../../dist/img/edna.jpg" alt="message user image" width="35" height="35" class="img-circle img-sm">
-                    <span class="comment-text"><span class="username"> Edna</span></span>
-                    <span class="description">@ 5:33 PM 12/01/2016</span>
-                    <span class='pull-right text-muted'>
-                    <button class='btn btn-default btn-xs'><i class='fa fa-trash'></i> Trash</button>
-                    </span>                    
-                    <div class='comment-text'>
-                  <span class="username"><span class='text-muted pull-right'></span>
-                  </span><!-- /.username -->
-Happy New Year's!! Here's to a safe and prosperous new year! Jack Jack
-                    </div>
-                    <!-- /.comment-text -->
-                  </div><!-- /.box-comment -->
-                  
-				   <hr style="height:3px;border:none;color:#333;background-color:#3c8dbc;" />               
-                  
-                   <div class='box-comment'>
-                    <!-- User image -->
-                    <img src="../../dist/img/frank.jpg" alt="message user image" width="35" height="35" class="img-circle img-sm">
-                    <span class="comment-text"><span class="username"> Frank</span></span>
-                    <span class="description">@ 8:45 AM 11/20/2016</span>
-                    
-                    <span class='pull-right text-muted'>
-                    <button class='btn btn-default btn-xs'><i class='fa fa-trash'></i> Trash</button>
-                    </span>                    
-                    <div class='comment-text'>
-                  <span class="username"><span class='text-muted pull-right'></span>
-                  </span><!-- /.username -->
-Heavy HP present Green Valley to Amado speed trap!!!
-                    </div>
-                    <!-- /.comment-text -->
-                  </div><!-- /.box-comment -->
-                  
-
-				   <hr style="height:3px;border:none;color:#333;background-color:#3c8dbc;" />
-                  
-                   <div class='box-comment'>
-                    <!-- User image -->
-                    <img src="../../dist/img/frozone.jpg" alt="message user image" width="35" height="35" class="img-circle img-sm">
-                    <span class="comment-text"><span class="username">Frozone</span></span>
-                    <span class="description">@ 10:51 AM 12/31/2016</span>
-                    <span class='pull-right text-muted'>
-                    <button class='btn btn-default btn-xs'><i class='fa fa-trash'></i> Trash</button>
-                    </span>                    
-                    <div class='comment-text'>
-                  <span class="username"><span class='text-muted pull-right'></span>
-                  </span><!-- /.username -->
-IFTA Trips:Begin New Month,Remember to Start New IFTA Trip Pack,Close out last Trip Pack
-                    </div>
-                    <!-- /.comment-text -->
-                  </div><!-- /.box-comment -->
-
                 </div><!-- /.box-footer -->
                 <div class="box-footer">
                   <form action="#" method="post">
-                  <!--        <div class="pull-left image"> <img src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; }?>" alt="User Image" width="35" height="35" class="img-circle" /> </div>
+                          <div class="pull-left image"> <img src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; }?>" alt="User Image" width="35" height="35" class="img-circle" /> </div>
                     <!-- .img-push is used to add margin to elements next to floating images -->
                     <div class="img-push">
-                    This is the Footer
-                   <!--Note: Not sure if the share button is a good idea.  As this is just internal and not face book. 
+                  <!-- Note: Not sure if the share button is a good idea.  As this is just internal and not face book. -->
                   <button class='btn btn-default btn-xs'><i class='fa fa-share'></i> Share</button>
                   <button class='btn btn-default btn-xs'><i class='fa fa-thumbs-o-up'></i> Like</button>
-                  <!-- Note: Only User that Posted will have the Remove Post feature / And Admin will have remove for everything 
+                  <!-- Note: Only User that Posted will have the Remove Post feature / And Admin will have remove for everything -->
                   <button class='btn btn-default btn-xs'><i class='fa fa-check-circle'></i> UpDate</button>
                   <button class='btn btn-default btn-xs'><i class='fa fa-trash'></i> Remove</button>
                   <span class='pull-right text-muted'>13 likes - 2 comments</span>
-                      <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">-->
+                      <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">
                     </div>
                   </form>
                 </div><!-- /.box-footer -->
@@ -975,7 +943,78 @@ IFTA Trips:Begin New Month,Remember to Start New IFTA Trip Pack,Close out last T
            <!-- end post insert --><!-- /.col -->
          </div><!-- /.row -->
 
-<!-- =====================End Above Post Start New Post here==================== --><!-- /.row -->
+<!-- =====================End Above Post Start New Post here==================== -->
+
+         <div class="row">
+           <div class="col-md-4">
+              <!-- Box Comment -->
+              <div class="box box-widget">
+                <div class='box-header with-border'>
+                  <div class='user-block'>
+                    <img src="../../dist/img/edna.jpg" alt="message user image" width="35" height="35" class="img-circle">
+                    <span class='username'><a href="#">Edna</a></span>
+                    <span class='description'> @ 7:30 PM Today</span>
+                  </div>
+                  <!-- /.user-block -->
+                  <div class='box-tools'>
+                    <button class='btn btn-box-tool' data-toggle='tooltip' title='Mark as read'><i class='fa fa-circle-o'></i></button>
+                    <button class='btn btn-box-tool' data-widget='collapse'><i class='fa fa-minus'></i></button>
+                    <button class='btn btn-box-tool' data-widget='remove'><i class='fa fa-times'></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class='box-body'>
+                This picture is lame.  Check it out....
+                  <img class="img-responsive pad" src="../dist/img/photo2.png" alt="Photo">
+                  <!-- Removing Original Position of Share Like Options
+                  <p>Check out this cool video. What do you guys think?</p>
+                  <button class='btn btn-default btn-xs'><i class='fa fa-share'></i> Share</button>
+                  <button class='btn btn-default btn-xs'><i class='fa fa-thumbs-o-up'></i> Like</button>
+                  <span class='pull-right text-muted'>127 likes - 3 comments</span>
+                  -->
+                </div>
+                <div class='box-footer box-comments'>
+                  <div class='box-comment'>
+                    <!-- User image -->
+                    <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="35" height="35" class="img-circle img-sm">
+                    <span class="comment-text"><span class="username"> Gilbert Huph</span>
+                    <span class='description'> @ 7:30 PM Today</span></span>
+                    <div class='comment-text'>
+                  </span><!-- /.username -->
+                  Totally Lame Agree...
+                    </div>
+                    <!-- /.comment-text -->
+                  </div><!-- /.box-comment -->
+                  <div class='box-comment'>
+                    <!-- User image -->
+                    <img src="../../dist/img/jack.jpg" alt="message user image" width="35" height="35" class="img-circle img-sm">
+                    <span class="comment-text"><span class="username"> Jack Jack</span></span>
+                    <div class='comment-text'>
+                  <span class="username"><span class='text-muted pull-right'>8:08 PM Today</span>
+                  </span><!-- /.username -->
+Those are stupid chairs!
+                    </div>
+                    <!-- /.comment-text -->
+                  </div><!-- /.box-comment -->
+                </div><!-- /.box-footer -->
+                <div class="box-footer">
+                  <form action="#" method="post">
+                          <div class="pull-left image"> <img src="<?php if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; }?>" alt="User Image" width="35" height="35" class="img-circle" /> </div>
+                    <!-- .img-push is used to add margin to elements next to floating images -->
+                    <div class="img-push">
+                  <!-- Note: Not sure if the share button is a good idea.  As this is just internal and not face book. -->
+                  <button class='btn btn-default btn-xs'><i class='fa fa-share'></i> Share</button>
+                  <button class='btn btn-default btn-xs'><i class='fa fa-thumbs-o-up'></i> Like</button>
+                  <!-- Note: Only User that Posted will have the Remove Post feature / And Admin will have remove for everything -->
+                  <button class='btn btn-default btn-xs'><i class='fa fa-trash'></i> Remove</button>
+                  <span class='pull-right text-muted'>13 likes - 2 comments</span>
+                      <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">
+                    </div>
+                  </form>
+                </div><!-- /.box-footer -->
+             </div><!-- /.box -->
+           </div><!-- /.col -->           
+           <!-- end post insert --><!-- /.col -->
+         </div><!-- /.row -->
 
 <!-- =====================End Above Post Start New Post here==================== -->
 
@@ -983,13 +1022,287 @@ IFTA Trips:Begin New Month,Remember to Start New IFTA Trip Pack,Close out last T
 
 
 <!-- =====================Social Widgents==================== -->
+<h2 class="page-header">Social Widgets</h2>
+
+          <div class="row">
+            <div class="col-md-4">
+              <!-- Widget: user widget style 1 -->
+              <div class="box box-widget widget-user-2">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-yellow">
+                  <div class="widget-user-image">
+                    <img class="img-circle" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
+                    <h3 class="widget-user-username">Nadia Carmichael</h3>
+                  </div><!-- /.widget-user-image -->
+                  <h3 class="widget-user-username">Nadia Carmichael</h3>
+                  <h5 class="widget-user-desc">Lead Developer</h5>
+                </div>
+                <div class="box-footer no-padding">
+                  <ul class="nav nav-stacked">
+                    <li><a href="#">Projects <span class="pull-right badge bg-blue">31</span></a></li>
+                    <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
+                    <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
+                    <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li>
+                  </ul>
+                </div>
+              </div><!-- /.widget-user -->
+            </div><!-- /.col -->
+            <div class="col-md-4">
+              <!-- Widget: user widget style 1 -->
+              <div class="box box-widget widget-user">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-aqua-active">
+                  <h3 class="widget-user-username">Alexander Pierce</h3>
+                  <h5 class="widget-user-desc">Founder & CEO</h5>
+                </div>
+                <div class="widget-user-image">
+                  <img class="img-circle" src="../dist/img/user1-128x128.jpg" alt="User Avatar">
+                </div>
+                <div class="box-footer">
+                  <div class="row">
+                    <div class="col-sm-4 border-right">
+                      <div class="description-block">
+                        <h5 class="description-header">3,200</h5>
+                        <span class="description-text">SALES</span>
+                      </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                    <div class="col-sm-4 border-right">
+                      <div class="description-block">
+                        <h5 class="description-header">13,000</h5>
+                        <span class="description-text">FOLLOWERS</span>
+                      </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                    <div class="col-sm-4">
+                      <div class="description-block">
+                        <h5 class="description-header">35</h5>
+                        <span class="description-text">PRODUCTS</span>
+                      </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                  </div><!-- /.row -->
+                </div>
+              </div><!-- /.widget-user -->
+            </div><!-- /.col -->
+            <div class="col-md-4">
+              <!-- Widget: user widget style 1 -->
+              <div class="box box-widget widget-user">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-black" style="background: url('../dist/img/photo1.png') center center;">
+                  <h3 class="widget-user-username">Elizabeth Pierce</h3>
+                  <h5 class="widget-user-desc">Web Designer</h5>
+                </div>
+                <div class="widget-user-image">
+                  <img class="img-circle" src="../dist/img/user3-128x128.jpg" alt="User Avatar">
+                </div>
+                <div class="box-footer">
+                  <div class="row">
+                    <div class="col-sm-4 border-right">
+                      <div class="description-block">
+                        <h5 class="description-header">3,200</h5>
+                        <span class="description-text">SALES</span>
+                      </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                    <div class="col-sm-4 border-right">
+                      <div class="description-block">
+                        <h5 class="description-header">13,000</h5>
+                        <span class="description-text">FOLLOWERS</span>
+                      </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                    <div class="col-sm-4">
+                      <div class="description-block">
+                        <h5 class="description-header">35</h5>
+                        <span class="description-text">PRODUCTS</span>
+                      </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                  </div><!-- /.row -->
+                </div>
+              </div><!-- /.widget-user -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
 
 
+
+<!-- =========================================================== -->
+
+          <h2 class="page-header">Pictures Here</h2>
+
+
+          <div class="row">
+          
+          
+          
+          
+            <div class="col-md-6">
+              <!-- Box Comment -->
+              <div class="box box-widget">
+                <div class='box-header with-border'>
+                  <div class='user-block'>
+                    <img class='img-circle' src='../dist/img/user1-128x128.jpg' alt='user image'>
+                    <span class='username'><a href="#">Edna</a></span>
+                    <span class='description'>Shared publicly - 7:30 PM Today</span>
+                  </div><!-- /.user-block -->
+                  <div class='box-tools'>
+                    <button class='btn btn-box-tool' data-toggle='tooltip' title='Mark as read'><i class='fa fa-clock-o'>2 days ago</i></button>
+                    <button class='btn btn-box-tool' data-widget='collapse'><i class='fa fa-minus'></i></button>
+                    <button class='btn btn-box-tool' data-widget='remove'><i class='fa fa-times'></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class='box-body'>
+                  <img class="img-responsive pad" src="../dist/img/photo2.png" alt="Photo">
+                  <p>I took this photo this morning. What do you guys think?</p>
+                  <button class='btn btn-default btn-xs'><i class='fa fa-share'></i> Share</button>
+                  <button class='btn btn-default btn-xs'><i class='fa fa-thumbs-o-up'></i> Like</button>
+                  <span class='pull-right text-muted'>127 likes - 3 comments</span>
+                </div><!-- /.box-body -->
+                <div class='box-footer box-comments'>
+                  <div class='box-comment'>
+                    <!-- User image -->
+                    <img class='img-circle img-sm' src='../dist/img/user3-128x128.jpg' alt='user image'>
+                    <div class='comment-text'>
+                      <span class="username">
+                        Maria Gonzales
+                        <span class='text-muted pull-right'>8:03 PM Today</span>
+                      </span><!-- /.username -->
+                      It is a long established fact that a reader will be distracted
+                      by the readable content of a page when looking at its layout.
+                    </div><!-- /.comment-text -->
+                  </div><!-- /.box-comment -->
+                  <div class='box-comment'>
+                    <!-- User image -->
+                    <img class='img-circle img-sm' src='../dist/img/user4-128x128.jpg' alt='user image'>
+                    <div class='comment-text'>
+                      <span class="username">
+                        Luna Stark
+                        <span class='text-muted pull-right'>8:03 PM Today</span>
+                      </span><!-- /.username -->
+                      It is a long established fact that a reader will be distracted
+                      by the readable content of a page when looking at its layout.
+                    </div><!-- /.comment-text -->
+                  </div><!-- /.box-comment -->
+                </div><!-- /.box-footer -->
+                <div class="box-footer">
+                  <form action="#" method="post">
+                    <img class="img-responsive img-circle img-sm" src="../dist/img/user4-128x128.jpg" alt="alt text">
+                    <!-- .img-push is used to add margin to elements next to floating images -->
+                    <div class="img-push">
+                      <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">
+                    </div>
+                  </form>
+                </div><!-- /.box-footer -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+            
+            
+            
+            
+            <div class="col-md-6">
+              <!-- Box Comment -->
+              <div class="box box-widget">
+                <div class='box-header with-border'>
+                  <div class='user-block'>
+                    <img class='img-circle' src='../dist/img/user1-128x128.jpg' alt='user image'>
+                    <span class='username'><a href="#">Jonathan Burke Jr.</a></span>
+                    <span class='description'>Shared publicly - 7:30 PM Today</span>
+                  </div><!-- /.user-block -->
+                  <div class='box-tools'>
+                    <button class='btn btn-box-tool' data-toggle='tooltip' title='Mark as read'><i class='fa fa-circle-o'></i></button>
+                    <button class='btn btn-box-tool' data-widget='collapse'><i class='fa fa-minus'></i></button>
+                    <button class='btn btn-box-tool' data-widget='remove'><i class='fa fa-times'></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class='box-body'>
+                  <!-- post text -->
+                  <p>Far far away, behind the word mountains, far from the
+                    countries Vokalia and Consonantia, there live the blind
+                    texts. Separated they live in Bookmarksgrove right at</p>
+                  <p>the coast of the Semantics, a large language ocean.
+                    A small river named Duden flows by their place and supplies
+                    it with the necessary regelialia. It is a paradisematic
+                    country, in which roasted parts of sentences fly into
+                    your mouth.</p>
+
+                  <!-- Attachment -->
+                  <div class="attachment-block clearfix">
+                    <img class="attachment-img" src="../dist/img/photo1.png" alt="attachment image">
+                    <div class="attachment-pushed">
+                      <h4 class="attachment-heading"><a href="http://www.lipsum.com/">Lorem ipsum text generator</a></h4>
+                      <div class="attachment-text">
+                        Description about the attachment can be placed here.
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry... <a href="#">more</a>
+                      </div><!-- /.attachment-text -->
+                    </div><!-- /.attachment-pushed -->
+                  </div><!-- /.attachment-block -->
+
+                  <!-- Social sharing buttons -->
+                  <button class='btn btn-default btn-xs'><i class='fa fa-share'></i> Share</button>
+                  <button class='btn btn-default btn-xs'><i class='fa fa-thumbs-o-up'></i> Like</button>
+                  <span class='pull-right text-muted'>45 likes - 2 comments</span>
+                </div><!-- /.box-body -->
+                <div class='box-footer box-comments'>
+                  <div class='box-comment'>
+                    <!-- User image -->
+                    <img class='img-circle img-sm' src='../dist/img/user3-128x128.jpg' alt='user image'>
+                    <div class='comment-text'>
+                      <span class="username">
+                        Maria Gonzales
+                        <span class='text-muted pull-right'>8:03 PM Today</span>
+                      </span><!-- /.username -->
+                      It is a long established fact that a reader will be distracted
+                      by the readable content of a page when looking at its layout.
+                    </div><!-- /.comment-text -->
+                  </div><!-- /.box-comment -->
+                  <div class='box-comment'>
+                    <!-- User image -->
+                    <img class='img-circle img-sm' src='../dist/img/user5-128x128.jpg' alt='user image'>
+                    <div class='comment-text'>
+                      <span class="username">
+                        Nora Havisham
+                        <span class='text-muted pull-right'>8:03 PM Today</span>
+                      </span><!-- /.username -->
+                      The point of using Lorem Ipsum is that it has a more-or-less
+                      normal distribution of letters, as opposed to using
+                      'Content here, content here', making it look like readable English.
+                    </div><!-- /.comment-text -->
+                  </div><!-- /.box-comment -->
+                </div><!-- /.box-footer -->
+                <div class="box-footer">
+                  <form action="#" method="post">
+                    <img class="img-responsive img-circle img-sm" src="../dist/img/user4-128x128.jpg" alt="alt text">
+                    <!-- .img-push is used to add margin to elements next to floating images -->
+                    <div class="img-push">
+                      <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">
+                    </div>
+                  </form>
+                </div><!-- /.box-footer -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+
+        </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+!-- /.content-wrapper -->
+        </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
+
+
+
+
+
 
 
 <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/footer.php');?>

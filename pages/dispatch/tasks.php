@@ -188,6 +188,7 @@ if (isset($_POST['btn_update_task'])) {
         $body .= "Sub: ".$_POST['task_subitem']."\n";
         $body .= "+/-: ".$_POST['task_pos_neg']."\n";
         $body .= "Points: ".$_POST['task_points']."\n";
+		$body .= "Notes: ".$_POST['task_notes']."\n";
         $body .= "This Task will Auto Close at midnight on the Due date, to avoid negative points please complete the task, login and submit you have completed task on the dashboards.  If you have any questions please call dispatch and ask for Liz. 520-664-9188 \n";
         $body .= "Due: ".$_POST['task_due_date']." 23:59\n";
         sendEmail($employee_email, 'New task alert', $body, 'drivers@catalinacartage.com');
