@@ -3,7 +3,7 @@ session_start();
 
 if ($_SESSION['login'] != 1)
 {
-        header('Location: /pages/login/driverlogin.php');
+        header('Location: /pages/dispatch/adminonly.php');
 }
 
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");

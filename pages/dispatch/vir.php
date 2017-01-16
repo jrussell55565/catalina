@@ -1233,14 +1233,28 @@ $truckOdometer = $_COOKIE['login_truckodometer'];
 
               </tr>
               <tr>
+                <td ><div>Take A photo and upload! Not working.<img
+             src="../images/images/take_a_photo.jpg" width="56" height="58" style="display: block; margin: 0 auto;"/></div>
+                  <div>
+                    <input id="fileToUpload" name="fileToUpload" type="file" multiple=true class="file-loading">
+                </div></td>
+              </tr>
+              <tr>
+                <td ><div align="center"></div></td>
+              </tr>
+              <tr>
                 <td ><div align="center">
-                    <input type="submit" name="submitvir" id="submitvir" value="Submit Inspection" />
-                  </div></td>
+                  <input type="submit" name="submitvir" id="submitvir" value="Submit Inspection" />
+                </div></td>
               </tr>
               <tr>
                 <td ><div align="center">You will be sent and email of this inspection! </div></td>
               </tr>
+              
             </table>
+            
+            
+            
   </form>
         </div>
         <!-- /.box-body -->

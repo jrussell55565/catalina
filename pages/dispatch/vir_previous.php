@@ -149,6 +149,98 @@ folder instead of downloading all of them to reduce the load. -->
 
 <!-- End Animated Top Menu -->
 
+
+<div class="row">
+          
+<!-- ====================box 1 in section 1========================== -->           
+          
+  <div class="col-md-3">
+              <div class="box box-default collapsed-box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Expandable</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  The body of the box
+                Expandable</div>
+                <!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+
+<!-- ====================box 2 in section 1========================== --> 
+
+  <div class="col-md-3">
+              <div class="box box-success collapsed-box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Removable</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  The body of the box
+                Removable</div>
+                <!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+
+<!-- ====================box 3 in section 1========================== --> 
+
+            <div class="col-md-3">
+              <div class="box box-warning collapsed-box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Collapsable</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  The body of the box
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+  </div><!-- /.col -->
+
+<!-- ====================box 4 in section 1========================== --> 
+
+            <div class="col-md-3">
+              <div class="box box-danger collapsed-box">
+                <div class="box-header">
+                  <h3 class="box-title">Loading state</h3>
+                </div>
+                <div class="box-body">
+                  The body of the box
+                </div><!-- /.box-body -->
+                <!-- Loading (remove the following to stop the loading)-->
+                <div class="overlay">
+                  <i class="fa fa-refresh fa-spin"></i>
+                </div>
+                <!-- end loading -->
+              </div><!-- /.box -->
+  </div><!-- /.col -->
+</div><!-- /.row -->
+
+<!-- =========================================================== -->
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div class="row">
   <div class="col-md-12">
     <div class="box">
@@ -164,6 +256,77 @@ folder instead of downloading all of them to reduce the load. -->
         </p>
       </div>
       <!-- /.box-header -->
+      
+      
+<div class="box-body no-padding">
+                  <!-- PAGE CONTENT HERE -->
+                  <!-- Default box -->
+        <div class="box box-primary collapsed-box">
+                     <div class="box-header" style="text-align: center;">
+                        <h3 class="box-title"> Search VIRS </h3>
+                        <div class="box-tools pull-right">
+                           <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"><i class="fa fa-plus"></i></button>
+                        </div>
+                        <div style="width: 50%; text-align: center; margin:auto; display: none;" id="search_alert" class="alert alert-danger" role="alert">Include a beginning AND end date.</div>
+                     </div>
+                     <div class="box-body">
+                        <form name="frm_ifta_search" method="GET" action="ifta.php" role="form">
+                           <div class="table-responsive">
+                              <table width="646" class="table table-condensed table-striped">
+                                 <tr>
+                                    <td width="111">VIR PO </td>
+                                    <td width="444"><input name="trip_search_tripnum" type="text" class="input-sm form-control" id="search_tripnum" value="" ></td>
+                                    <td width="18">&nbsp;</td>
+                                    <td width="53">&nbsp;</td>
+                                 </tr>
+                                 <tr>
+                                    <td>Unit #</td>
+                                    <td><input name="trip_search_trucknumber" type="text" class="input-sm form-control" id="trip_search_trucknumber" ></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                 </tr>
+                                 <tr>
+                                    <td>Trip Starting </td>
+                                    <td><input name="trip_search_startdate" type="text" class="input-sm form-control datepicker" id="trip_search_startdate"  data-date-format="mm/dd/yyyy"></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                 </tr>
+                                 <tr>
+                                    <td>Trip Ending</td>
+                                    <td><input name="trip_search_enddate" type="text" class="input-sm form-control datepicker" id="trip_search_enddate"  data-date-format="mm/dd/yyyy"></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                 </tr>
+                                 <tr>
+                                    <td colspan="2">
+                                       <button type="button" id="btn_display_results" name="btn_display_results" value="display" class="btn btn-primary dropdown-toggle">Display Results</button>
+                                    </td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </form>
+                        <div id="search_results">
+                        </div>
+                     </div>
+                     <!-- /.box-body -->
+                     <div class="box-footer"></div>
+                     <!-- /.box-footer-->
+        </div>
+                  <!-- /.box -->
+                  <!-- /.box-header --><!-- /.box -->
+                     <!-- END PAGE CONTENT HERE -->
+      </div>      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       <div class="box-body table-responsive">
         <table class="table table-striped ">
           <tbody>

@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
+if ($_SESSION['login'] != 1)
 {
-        header('Location: /pages/login/driverlogin.php');
+        header('Location: /pages/dispatch/adminonly.php');
 }
 
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
@@ -86,303 +86,431 @@ $role = $_SESSION['role'];
 
       
 
-<h2 class="page-header">Driver Score Calcs</h2>
+<h2 class="page-header">Master Control Pannel</h2>
 
 <?php
 // This will echo Hello World 1 line comment out
 /* Long Line Comment out 
 For multiple lines
-*/
-echo $var = 'Hello World';
+*/ 
+echo $var = 'Delete this PHP message';
 ?>  
 
 
 
-<!-- =========================================================== -->
+<!-- =============Start Index page Control Pannel======================= -->
+
+         <!-- Index page Control Pannel-->         
           <div class="row">
- <!-- ====================box 1 in section 2========================== -->            
- 
-       
-            <div class="col-md-3">
-              <div class="box box-primary">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Shipments Calculations</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+            <!-- Div Class-md-6 will give the seperation of columns...-->  <div class="col-md-12">
+            <!--<div class="box box-default collapsed-box"> -->
+              <div class="box collapsed-box">
+                <div class="box-header">
+                    <h3 class="box-title">Index  Control Pannel</h3>
+                       <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div><!-- /.box-tools -->
+                       </div>
+
                 </div><!-- /.box-header -->
                 <div class="box-body">
-                  <table width="371" border="0">
+                  <table width="810" border="1">
                     <tr>
-                      <td>Info</td>
-                      <td>Actual Points</td>
-                      <td width="127">Cat %</td>
+                      <td width="207">Broad Cast message CC</td>
+                      <td width="316">Email that CC for Broadcast MSG along with user</td>
+                      <td width="265">&nbsp;</td>
                     </tr>
                     <tr>
-                      <td width="116">Arrived Shipper</td>
-                      <td><input name="arrived_shipper_apoint" type="arrived_shipper_apoint" id="arrived_shipper_apoint" value="1" size="1"></td>
-                      <td><input name="arrived_shipper_cpoint" type="arrived_shipper_cpoint" id="arrived_shipper_cpoint" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Picked Up</td>
-                      <td width="114"><input name="picked_up_apoint" type="picked_up_apoint" id="picked_up_apoint" value="1" size="1"></td>
-                      <td><input name="picked_up_cpoint" type="picked_up_cpoint" id="picked_up_cpoint" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td width="116">Arrived Consignee</td>
-                      <td><input name="arrived_consignee_apoint" type="arrived_consignee_apoint" id="arrived_consignee_apoint" value="1" size="1"></td>
-                      <td><input name="arrived_consignee_cpoint" type="arrived_consignee_cpoint" id="arrived_consignee_cpoint" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Delivered</td>
-                      <td><input name="delivered_apoint" type="delivered_apoint" id="delivered_apoint" value="1" size="1"></td>
-                      <td><input name="delivered_cpoint" type="delivered_cpoint" id="delivered_cpoint" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td height="22">Non-Core Update</td>
-                      <td><input name="noncore_apoint" type="noncore_apoint" id="noncore_apoint" value="1" size="1"></td>
-                      <td><input name="noncore_cpoint" type="noncore_cpoint" id="noncore_cpoint" value="10" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Accessorials</td>
-                      <td><input name="accessorials_apoint" type="accessorials_apoint" id="accessorials_apoint" value="1" size="1"></td>
-                      <td><input name="accessorials_cpoint" type="accessorials_cpoint" id="accessorials_cpoint" value="10" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Category Header</td>
-                      <td colspan="2"><label for="textfield2"></label>
-                        <label for="textarea2">
-                          <input type="text" class="" value="" name='cat_head_shipments' id='cat_head_shipments' placeholder="updates DB cp_virs" style="margin-top: 5px; width: 10em;"/>
-                        </label></td>
-                    </tr>
-                    <tr>
+                      <td>Tasks Message CC</td>
+                      <td>Email that CC for Task Msg along with user</td>
                       <td>&nbsp;</td>
-                      <td colspan="2"><label for="shipments_score_export_type">
-                        <input type="submit" name="Submit5" id="Submit5" value="Update DB">
-                      </label></td>
-                    </tr>
-                  </table>
-                </div>
-                <!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- /.col -->          
-          
-
-
-<!-- ====================box 2 in section 2========================== -->  
-
-            <div class="col-md-3">
-              <div class="box box-danger">
-                <div class="box-header with-border">
-                  <h3 class="box-title">VIR Calculations</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div><!-- /.box-tools -->
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <table width="371" border="0">
-                    <tr>
-                      <td>Info</td>
-                      <td>Actual Points</td>
-                      <td width="127">Cat %</td>
                     </tr>
                     <tr>
-                      <td width="116">Days Worked</td>
-                      <td><input name="arrived_shipper_apoint2" type="arrived_shipper_apoint" id="arrived_shipper_apoint2" value="1" size="1"></td>
-                      <td><input name="arrived_shipper_cpoint2" type="arrived_shipper_cpoint" id="arrived_shipper_cpoint2" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Pre-Trips</td>
-                      <td width="114"><input name="picked_up_apoint2" type="picked_up_apoint" id="picked_up_apoint2" value="1" size="1"></td>
-                      <td><input name="picked_up_cpoint2" type="picked_up_cpoint" id="picked_up_cpoint2" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td width="116">Post Trips</td>
-                      <td><input name="arrived_consignee_apoint2" type="arrived_consignee_apoint" id="arrived_consignee_apoint2" value="1" size="1"></td>
-                      <td><input name="arrived_consignee_cpoint2" type="arrived_consignee_cpoint" id="arrived_consignee_cpoint2" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Breakdowns</td>
-                      <td><input name="delivered_apoint2" type="delivered_apoint" id="delivered_apoint2" value="1" size="1"></td>
-                      <td><input name="delivered_cpoint2" type="delivered_cpoint" id="delivered_cpoint2" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td height="22">Empty Slot</td>
-                      <td><input name="delivered_apoint5" type="delivered_apoint" id="delivered_apoint5" value="1" size="1"></td>
-                      <td><input name="delivered_apoint8" type="delivered_apoint" id="delivered_apoint8" value="1" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Empty Slot</td>
-                      <td><input name="delivered_apoint6" type="delivered_apoint" id="delivered_apoint6" value="1" size="1"></td>
-                      <td><input name="delivered_apoint9" type="delivered_apoint" id="delivered_apoint9" value="1" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Category Header</td>
-                      <td colspan="2"><label for="textfield3"></label>
-                        <label for="textarea3"></label>
-                        <input type="text" class="" value="" name='cat_head_shipments2' id='cat_head_shipments2' placeholder="updates DB cp_vir" style="margin-top: 5px; width: 10em;"/></td>
-                    </tr>
-                    <tr>
-                      <td height="26">&nbsp;</td>
-                      <td colspan="2"><label for="shipments_score_export_type"></label>                        <label for="shipments_points_freequency_select_days">
-                        <input type="submit" name="Submit" id="Submit" value="Update DB">
-                      </label></td>
-                    </tr>
-                  </table>
-                </div>
-                <!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-            
-            
-<!-- ====================box 3 in section 2========================== -->              
-            
-            
-            <div class="col-md-3">
-              <div class="box box-danger">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Productivity Calculations</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div><!-- /.box-tools -->
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <table width="371" border="0">
-                    <tr>
-                      <td>Info</td>
-                      <td>Actual Points</td>
-                      <td width="127">Cat %</td>
-                    </tr>
-                    <tr>
-                      <td width="116">Tasks</td>
-                      <td><input name="arrived_shipper_apoint4" type="arrived_shipper_apoint" id="arrived_shipper_apoint4" value="1" size="1"></td>
-                      <td><input name="arrived_shipper_cpoint4" type="arrived_shipper_cpoint" id="arrived_shipper_cpoint4" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Quiz's</td>
-                      <td width="114"><input name="picked_up_apoint4" type="picked_up_apoint" id="picked_up_apoint4" value="1" size="1"></td>
-                      <td><input name="picked_up_cpoint4" type="picked_up_cpoint" id="picked_up_cpoint4" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td width="116">Idle Time</td>
-                      <td><input name="arrived_consignee_apoint4" type="arrived_consignee_apoint" id="arrived_consignee_apoint4" value="1" size="1"></td>
-                      <td><input name="arrived_consignee_cpoint4" type="arrived_consignee_cpoint" id="arrived_consignee_cpoint4" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Compliance</td>
-                      <td><input name="delivered_apoint4" type="delivered_apoint" id="delivered_apoint4" value="1" size="1"></td>
-                      <td><input name="delivered_cpoint4" type="delivered_cpoint" id="delivered_cpoint4" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td height="22">Empty Slot</td>
-                      <td><input name="noncore_update_apoint" type="noncore_update_apoint" id="noncore_update_apoint" value="1" size="1"></td>
-                      <td><input name="noncore_cpoint4" type="noncore_cpoint" id="noncore_cpoint4" value="10" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Empty Slot</td>
-                      <td><input name="accessorials_apoint4" type="accessorials_apoint" id="accessorials_apoint4" value="1" size="1"></td>
-                      <td><input name="accessorials_cpoint4" type="accessorials_cpoint" id="accessorials_cpoint4" value="10" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Category Header</td>
-                      <td colspan="2"><label for="textfield8"></label>
-                        <label for="textarea8"></label>
-                        <input type="text" class="" value="" name='cat_head_shipments3' id='cat_head_shipments3' placeholder="updates DB cp_productivity" style="margin-top: 5px; width: 10em;"/></td>
-                    </tr>
-                    <tr>
+                      <td>Notifications CC</td>
+                      <td>Email that CC for Task Msg along with user</td>
                       <td>&nbsp;</td>
-                      <td colspan="2"><label for="shipments_score_export_type6"></label>
-                        <label for="shipments_points_freequency_select_days6">
-                          <input type="submit" name="Submit8" id="Submit8" value="Update DB">
-                        </label></td>
                     </tr>
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
-            </div><!-- /.col -->
-            
-            
-            
-<!-- ====================box 4 in section 2========================== -->            
-            
-            
-            
-            <div class="col-md-3">
-              <div class="box box-warning">
-                <div class="box-header with-border">
-                  <h3 class="box-title">CSA Calculations</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+             </div><!-- /.row -->
+</div><!-- /.dropdown --> 
+
+<!-- =============End Box Index page Control Pannel======================= -->
+
+
+
+<!-- =============Start Shipment Boards Control Pannel======================= -->
+
+         <!-- Index page Control Pannel-->         
+          <div class="row">
+            <!-- Div Class-md-6 will give the seperation of columns...-->  <div class="col-md-12">
+            <!--<div class="box box-default collapsed-box"> -->
+              <div class="box collapsed-box">
+                <div class="box-header">
+                    <h3 class="box-title">Shipment Boards Control Pannel</h3>
+                       <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div><!-- /.box-tools -->
+                       </div>
+
                 </div><!-- /.box-header -->
                 <div class="box-body">
-                  <table width="371" border="0">
+                  <table width="810" border="1">
                     <tr>
-                      <td>Info</td>
-                      <td>Actual Points</td>
-                      <td width="127">Cat %</td>
-                    </tr>
-                    <tr>
-                      <td width="116">Tasks</td>
-                      <td><input name="arrived_shipper_apoint5" type="arrived_shipper_apoint" id="arrived_shipper_apoint5" value="1" size="1"></td>
-                      <td><input name="arrived_shipper_cpoint5" type="arrived_shipper_cpoint" id="arrived_shipper_cpoint5" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Quiz's</td>
-                      <td width="114"><input name="picked_up_apoint5" type="picked_up_apoint" id="picked_up_apoint5" value="1" size="1"></td>
-                      <td><input name="picked_up_cpoint5" type="picked_up_cpoint" id="picked_up_cpoint5" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td width="116">Idle Time</td>
-                      <td><input name="arrived_consignee_apoint5" type="arrived_consignee_apoint" id="arrived_consignee_apoint5" value="1" size="1"></td>
-                      <td><input name="arrived_consignee_cpoint5" type="arrived_consignee_cpoint" id="arrived_consignee_cpoint5" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Compliance</td>
-                      <td><input name="delivered_apoint7" type="delivered_apoint" id="delivered_apoint7" value="1" size="1"></td>
-                      <td><input name="delivered_cpoint5" type="delivered_cpoint" id="delivered_cpoint5" value="20" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td height="22">Empty Slot</td>
-                      <td><input name="noncore_update_apoint2" type="noncore_update_apoint" id="noncore_update_apoint2" value="1" size="1"></td>
-                      <td><input name="noncore_cpoint2" type="noncore_cpoint" id="noncore_cpoint2" value="10" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Empty Slot</td>
-                      <td><input name="accessorials_apoint2" type="accessorials_apoint" id="accessorials_apoint2" value="1" size="1"></td>
-                      <td><input name="accessorials_cpoint2" type="accessorials_cpoint" id="accessorials_cpoint2" value="10" size="1"></td>
-                    </tr>
-                    <tr>
-                      <td>Category Header</td>
-                      <td colspan="2"><label for="textfield4"></label>
-                        <label for="textarea4"></label>
-                        <input type="text" class="" value="" name='cat_head_shipments4' id='cat_head_shipments4' placeholder="updates DB cp_csa" style="margin-top: 5px; width: 10em;"/></td>
-                    </tr>
-                    <tr>
-                      <td>&nbsp;</td>
-                      <td colspan="2"><label for="shipments_score_export_type2"></label>
-                        <label for="shipments_points_freequency_select_days2">
-                          <input type="submit" name="Submit3" id="Submit3" value="Update DB">
-                        </label></td>
+                      <td width="155">Info Here</td>
+                      <td width="200">&nbsp;</td>
+                      <td width="234">&nbsp;</td>
                     </tr>
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
-            </div><!-- /.col -->
+             </div><!-- /.row -->
+</div><!-- /.dropdown -->  
+
+<!-- =============End Shipment Boards Control Pannel======================= -->
+
+<!-- =============Start VIR Control Pannel======================= -->
+
+         <!-- Index page Control Pannel-->         
+          <div class="row">
+            <!-- Div Class-md-6 will give the seperation of columns...-->  <div class="col-md-12">
+            <!--<div class="box box-default collapsed-box"> -->
+              <div class="box collapsed-box">
+                <div class="box-header">
+                    <h3 class="box-title">VIR  Boards Control Pannel</h3>
+                       <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                       </div>
+
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <table width="810" border="1">
+                    <tr>
+                      <td width="155">Info Here</td>
+                      <td width="200">&nbsp;</td>
+                      <td width="234">&nbsp;</td>
+                    </tr>
+                  </table>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+             </div><!-- /.row -->
+</div><!-- /.dropdown -->  
+
+<!-- =============End VIR Boards Control Pannel======================= -->
 
 
-<!-- ====================End Colapse Section 2 in section========================== -->  
 
+<!-- =============Start VIR Control Pannel======================= -->
 
-          </div><!-- /.row -->
+         <!-- Index page Control Pannel-->         
+<div class="row">
+            <!-- Div Class-md-6 will give the seperation of columns...-->  <div class="col-md-12">
+            <!--<div class="box box-default collapsed-box"> -->
+              <div class="box collapsed-box">
+                <div class="box-header">
+                    <h3 class="box-title">Productivity  Boards Control Pannel</h3>
+                       <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                       </div>
+
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="box box-primary">
+                        <div class="box-header with-border">
+                          <h3 class="box-title">Shipments Calculations</h3>
+                          <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                          </div>
+                          <!-- /.box-tools -->
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                          <table width="371" border="0">
+                            <tr>
+                              <td>Info</td>
+                              <td>Actual Points</td>
+                              <td width="127">Cat % Add to 100</td>
+                            </tr>
+                            <tr>
+                              <td width="116">Arrived Shipper</td>
+                              <td><input name="arrived_shipper_apoint3" type="arrived_shipper_apoint" id="arrived_shipper_apoint3" value="1" size="1"></td>
+                              <td><input name="arrived_shipper_cpoint3" type="arrived_shipper_cpoint" id="arrived_shipper_cpoint3" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Picked Up</td>
+                              <td width="114"><input name="picked_up_apoint3" type="picked_up_apoint" id="picked_up_apoint3" value="1" size="1"></td>
+                              <td><input name="picked_up_cpoint3" type="picked_up_cpoint" id="picked_up_cpoint3" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td width="116">Arrived Consignee</td>
+                              <td><input name="arrived_consignee_apoint3" type="arrived_consignee_apoint" id="arrived_consignee_apoint3" value="1" size="1"></td>
+                              <td><input name="arrived_consignee_cpoint3" type="arrived_consignee_cpoint" id="arrived_consignee_cpoint3" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Delivered</td>
+                              <td><input name="delivered_apoint3" type="delivered_apoint" id="delivered_apoint3" value="1" size="1"></td>
+                              <td><input name="delivered_cpoint3" type="delivered_cpoint" id="delivered_cpoint3" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td height="22">Non-Core Update</td>
+                              <td><input name="noncore_apoint2" type="noncore_apoint" id="noncore_apoint2" value="1" size="1"></td>
+                              <td><input name="noncore_cpoint3" type="noncore_cpoint" id="noncore_cpoint3" value="10" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Accessorials</td>
+                              <td><input name="accessorials_apoint5" type="accessorials_apoint" id="accessorials_apoint5" value="1" size="1"></td>
+                              <td><input name="accessorials_cpoint5" type="accessorials_cpoint" id="accessorials_cpoint5" value="10" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Totals</td>
+                              <td><input name="accessorials_apoint5" type="accessorials_apoint" id="accessorials_apoint6" value="1" size="1"></td>
+                              <td><input name="accessorials_cpoint5" type="accessorials_cpoint" id="accessorials_cpoint6" value="120" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Category Header</td>
+                              <td colspan="2"><label for="textfield10"></label>
+                                <label for="textarea10">
+                                  <input type="text" class="" value="" name='cat_head_shipments6' id='cat_head_shipments6' placeholder="updates DB cp_virs" style="margin-top: 5px; width: 10em;"/>
+                                </label></td>
+                            </tr>
+                            <tr>
+                              <td>&nbsp;</td>
+                              <td colspan="2"><label for="shipments_score_export_type3">
+                                <input type="submit" name="Submit6" id="Submit6" value="Update DB">
+                              </label></td>
+                            </tr>
+                          </table>
+                        </div>
+                        <!-- /.box-body -->
+                      </div>
+                      <!-- /.box -->
+                    </div>
+                    <!-- /.col -->
+                    <!-- ====================box 2 in section 2========================== -->
+                    <div class="col-md-3">
+                      <div class="box box-danger collapsed-box">
+                        <div class="box-header with-border">
+                          <h3 class="box-title">VIR Calculations</h3>
+                          <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                          </div>
+                          <!-- /.box-tools -->
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                          <table width="371" border="0">
+                            <tr>
+                              <td>Info</td>
+                              <td>Actual Points</td>
+                              <td width="127">Cat %</td>
+                            </tr>
+                            <tr>
+                              <td width="116">Days Worked</td>
+                              <td><input name="arrived_shipper_apoint3" type="arrived_shipper_apoint" id="arrived_shipper_apoint6" value="1" size="1"></td>
+                              <td><input name="arrived_shipper_cpoint3" type="arrived_shipper_cpoint" id="arrived_shipper_cpoint6" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Pre-Trips</td>
+                              <td width="114"><input name="picked_up_apoint3" type="picked_up_apoint" id="picked_up_apoint6" value="1" size="1"></td>
+                              <td><input name="picked_up_cpoint3" type="picked_up_cpoint" id="picked_up_cpoint6" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td width="116">Post Trips</td>
+                              <td><input name="arrived_consignee_apoint3" type="arrived_consignee_apoint" id="arrived_consignee_apoint6" value="1" size="1"></td>
+                              <td><input name="arrived_consignee_cpoint3" type="arrived_consignee_cpoint" id="arrived_consignee_cpoint6" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Breakdowns</td>
+                              <td><input name="delivered_apoint3" type="delivered_apoint" id="delivered_apoint10" value="1" size="1"></td>
+                              <td><input name="delivered_cpoint3" type="delivered_cpoint" id="delivered_cpoint6" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td height="22">Empty Slot</td>
+                              <td><input name="delivered_apoint3" type="delivered_apoint" id="delivered_apoint11" value="1" size="1"></td>
+                              <td><input name="delivered_apoint3" type="delivered_apoint" id="delivered_apoint12" value="1" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Empty Slot</td>
+                              <td><input name="delivered_apoint3" type="delivered_apoint" id="delivered_apoint13" value="1" size="1"></td>
+                              <td><input name="delivered_apoint3" type="delivered_apoint" id="delivered_apoint14" value="1" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Category Header</td>
+                              <td colspan="2"><label for="textfield11"></label>
+                                <label for="textarea11"></label>
+                                <input type="text" class="" value="" name='cat_head_shipments6' id='cat_head_shipments7' placeholder="updates DB cp_vir" style="margin-top: 5px; width: 10em;"/></td>
+                            </tr>
+                            <tr>
+                              <td height="26">&nbsp;</td>
+                              <td colspan="2"><label for="shipments_score_export_type3"></label>
+                                <label for="shipments_points_freequency_select_days3">
+                                  <input type="submit" name="Submit6" id="Submit7" value="Update DB">
+                                </label></td>
+                            </tr>
+                          </table>
+                        </div>
+                        <!-- /.box-body -->
+                      </div>
+                      <!-- /.box -->
+                    </div>
+                    <!-- /.col -->
+                    <!-- ====================box 3 in section 2========================== -->
+                    <div class="col-md-3">
+                      <div class="box box-danger collapsed-box">
+                        <div class="box-header with-border">
+                          <h3 class="box-title">Productivity Calculations</h3>
+                          <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                          </div>
+                          <!-- /.box-tools -->
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                          <table width="371" border="0">
+                            <tr>
+                              <td>Info</td>
+                              <td>Actual Points</td>
+                              <td width="127">Cat %</td>
+                            </tr>
+                            <tr>
+                              <td width="116">Tasks</td>
+                              <td><input name="arrived_shipper_apoint3" type="arrived_shipper_apoint" id="arrived_shipper_apoint7" value="1" size="1"></td>
+                              <td><input name="arrived_shipper_cpoint3" type="arrived_shipper_cpoint" id="arrived_shipper_cpoint7" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Quiz's</td>
+                              <td width="114"><input name="picked_up_apoint3" type="picked_up_apoint" id="picked_up_apoint7" value="1" size="1"></td>
+                              <td><input name="picked_up_cpoint3" type="picked_up_cpoint" id="picked_up_cpoint7" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td width="116">Idle Time</td>
+                              <td><input name="arrived_consignee_apoint3" type="arrived_consignee_apoint" id="arrived_consignee_apoint7" value="1" size="1"></td>
+                              <td><input name="arrived_consignee_cpoint3" type="arrived_consignee_cpoint" id="arrived_consignee_cpoint7" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Compliance</td>
+                              <td><input name="delivered_apoint3" type="delivered_apoint" id="delivered_apoint15" value="1" size="1"></td>
+                              <td><input name="delivered_cpoint3" type="delivered_cpoint" id="delivered_cpoint7" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td height="22">Empty Slot</td>
+                              <td><input name="noncore_update_apoint3" type="noncore_update_apoint" id="noncore_update_apoint3" value="1" size="1"></td>
+                              <td><input name="noncore_cpoint3" type="noncore_cpoint" id="noncore_cpoint5" value="10" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Empty Slot</td>
+                              <td><input name="accessorials_apoint5" type="accessorials_apoint" id="accessorials_apoint7" value="1" size="1"></td>
+                              <td><input name="accessorials_cpoint5" type="accessorials_cpoint" id="accessorials_cpoint7" value="10" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Category Header</td>
+                              <td colspan="2"><label for="textfield12"></label>
+                                <label for="textarea12"></label>
+                                <input type="text" class="" value="" name='cat_head_shipments6' id='cat_head_shipments8' placeholder="updates DB cp_productivity" style="margin-top: 5px; width: 10em;"/></td>
+                            </tr>
+                            <tr>
+                              <td>&nbsp;</td>
+                              <td colspan="2"><label for="shipments_score_export_type4"></label>
+                                <label for="shipments_points_freequency_select_days4">
+                                  <input type="submit" name="Submit6" id="Submit9" value="Update DB">
+                                </label></td>
+                            </tr>
+                          </table>
+                        </div>
+                        <!-- /.box-body -->
+                      </div>
+                      <!-- /.box -->
+                    </div>
+                    <!-- /.col -->
+                    <!-- ====================box 4 in section 2========================== -->
+                    <div class="col-md-3">
+                      <div class="box box-warning collapsed-box">
+                        <div class="box-header with-border">
+                          <h3 class="box-title">CSA Calculations</h3>
+                          <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                          </div>
+                          <!-- /.box-tools -->
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                          <table width="371" border="0">
+                            <tr>
+                              <td>Info</td>
+                              <td>Actual Points</td>
+                              <td width="127">Cat %</td>
+                            </tr>
+                            <tr>
+                              <td width="116">Tasks</td>
+                              <td><input name="arrived_shipper_apoint3" type="arrived_shipper_apoint" id="arrived_shipper_apoint8" value="1" size="1"></td>
+                              <td><input name="arrived_shipper_cpoint3" type="arrived_shipper_cpoint" id="arrived_shipper_cpoint8" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Quiz's</td>
+                              <td width="114"><input name="picked_up_apoint3" type="picked_up_apoint" id="picked_up_apoint8" value="1" size="1"></td>
+                              <td><input name="picked_up_cpoint3" type="picked_up_cpoint" id="picked_up_cpoint8" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td width="116">Idle Time</td>
+                              <td><input name="arrived_consignee_apoint3" type="arrived_consignee_apoint" id="arrived_consignee_apoint8" value="1" size="1"></td>
+                              <td><input name="arrived_consignee_cpoint3" type="arrived_consignee_cpoint" id="arrived_consignee_cpoint8" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Compliance</td>
+                              <td><input name="delivered_apoint3" type="delivered_apoint" id="delivered_apoint16" value="1" size="1"></td>
+                              <td><input name="delivered_cpoint3" type="delivered_cpoint" id="delivered_cpoint8" value="20" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td height="22">Empty Slot</td>
+                              <td><input name="noncore_update_apoint3" type="noncore_update_apoint" id="noncore_update_apoint4" value="1" size="1"></td>
+                              <td><input name="noncore_cpoint3" type="noncore_cpoint" id="noncore_cpoint6" value="10" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Empty Slot</td>
+                              <td><input name="accessorials_apoint5" type="accessorials_apoint" id="accessorials_apoint8" value="1" size="1"></td>
+                              <td><input name="accessorials_cpoint5" type="accessorials_cpoint" id="accessorials_cpoint8" value="10" size="1"></td>
+                            </tr>
+                            <tr>
+                              <td>Category Header</td>
+                              <td colspan="2"><label for="textfield13"></label>
+                                <label for="textarea13"></label>
+                                <input type="text" class="" value="" name='cat_head_shipments6' id='cat_head_shipments9' placeholder="updates DB cp_csa" style="margin-top: 5px; width: 10em;"/></td>
+                            </tr>
+                            <tr>
+                              <td>&nbsp;</td>
+                              <td colspan="2"><label for="shipments_score_export_type5"></label>
+                                <label for="shipments_points_freequency_select_days5">
+                                  <input type="submit" name="Submit6" id="Submit10" value="Update DB">
+                                </label></td>
+                            </tr>
+                          </table>
+                        </div>
+                        <!-- /.box-body -->
+                      </div>
+                      <!-- /.box -->
+                    </div>
+                    <!-- /.col -->
+                    <!-- ====================End Colapse Section 2 in section========================== -->
+                  </div>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+             </div><!-- /.row -->
+            </div><!-- /.dropdown -->  
+
+<!-- =============End VIR Boards Control Pannel======================= --><!-- /.row -->
 
 
 <!-- =========================================================== -->
@@ -391,7 +519,7 @@ echo $var = 'Hello World';
           <div class="row">
             <!-- Div Class-md-6 will give the seperation of columns...-->  <div class="col-md-12">
             <!--<div class="box box-default collapsed-box"> -->
-              <div class="box">
+              <div class="box collapsed-box">
                 <div class="box-header">
                     <h3 class="box-title">Notification Settings For Productivity Categories</h3>
                        <div class="box-tools pull-right">

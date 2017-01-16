@@ -289,24 +289,23 @@ if (isset($_POST['btn_update_task'])) {
         <div class="row">
           <div class="col-lg-12 col-xs-12">
             <!-- small box -->
-            <div class="small-box bg-purple">
+            <div class="small-box bg-blue">
               <div class="inner">
                 <!-- =========================================================== -->
                 <center>
-                  <h2>Tasks | Projects | Compliance</h2>
+                  <h2>User Tasks &amp; Compliance</h2>
                 </center>
                 <center>
-                  <p>You have (PHP) Uncompleated Task(s) <span style="padding: 5px">
-                  Admin Select all or jut 1 driver</span></p>
+                  <p>
                     <select class="form-control"  value="" name="driver" required style="width:150px;">
-                    <option value="null">Select Employee</option>
-                    <option value="all" <?php if (empty($_GET['driver'])) { echo " selected"; }?>>-All-</option>
-                   <?php for ($i=0; $i<sizeof($all_users_array); $i++) { ?>
-                   <option value=<?php echo $all_users_array[$i]['employee_id'];?> <?php if ($all_users_array[$i]['employee_id'] == $_GET['driver']) { echo " selected "; }?>>
-                   <?php echo $all_users_array[$i]['name'];?>
-                   </option>
-                   <?php } ?>
-                        </select>
+                      <option value="null">Select Employee</option>
+                      <option value="all" <?php if (empty($_GET['driver'])) { echo " selected"; }?>>-All-</option>
+                      <?php for ($i=0; $i<sizeof($all_users_array); $i++) { ?>
+                      <option value=<?php echo $all_users_array[$i]['employee_id'];?> <?php if ($all_users_array[$i]['employee_id'] == $_GET['driver']) { echo " selected "; }?>>
+                        <?php echo $all_users_array[$i]['name'];?>
+                        </option>
+                      <?php } ?>
+                    </select>
                   </span>
                     Open
                     <input type="radio" name="task_status" id="opentasksprojects" value="open"
@@ -325,6 +324,7 @@ if (isset($_POST['btn_update_task'])) {
                              } 
                       ?>
                     >
+                </p>
                 </center>
                 <center>
                   <button type="submit" name="btn_search_task" class="btn btn-primary" value='search'>Search</button>
@@ -365,7 +365,7 @@ if (isset($_POST['btn_update_task'])) {
 <div class="row">
       <div class="col-lg-12 col-xs-12">
         <!-- small box -->
-        <div class="small-box bg-green">
+        <div class="small-box bg-aqua">
           <div class="inner">
             <center>
               <h2>Tasks</h2>

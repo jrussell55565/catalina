@@ -508,7 +508,7 @@ if (isset($_POST['broadcast_message']))
               <!-- DIRECT CHAT PRIMARY -->
               <div class="box box-primary direct-chat direct-chat-primary">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Tasks</h3>
+                  <h3 class="box-title">Tasks / Achievements</h3>
                   <div class="box-tools pull-right">
                   <!-- Total New Messages Add PHP Here Just for new messages Events today -->
                     <a href="../dispatch/tasks.php"><span data-toggle="tooltip" title="Add Tasks" class="badge bg-light-blue">Add Task</span></a>
@@ -524,7 +524,8 @@ if (isset($_POST['broadcast_message']))
                     <?php for($i=0;$i<count($tasks_aggregate);$i++) { ?>
                            <div class="direct-chat-msg right" id="top_level_<?php echo $tasks_aggregate[$i]['id'];?>">
                            <div class="direct-chat-info clearfix">
-                           <span class="direct-chat-name pull-left">Task Master</span>
+                           <span class="direct-chat-name pull-left">Assigned by: 
+                           <?php echo "$_SESSION[drivername]"; ?></span>
                            <span class="direct-chat-timestamp pull-right"><?php echo $tasks_aggregate[$i]['submit_date'];?></span>
                            </div>
                            <!-- /.direct-chat-info -->
@@ -551,7 +552,9 @@ if (isset($_POST['broadcast_message']))
                   <div class="direct-chat-contacts">
                     <ul class="contacts-list">
                       <li>
+                        <!-- This puts a Href link the below info on the right side of the table...... FYI
                         <a href="link to users current stats visible public">
+                        -->
                           <img src="../../dist/img/server.jpg" width="51" height="41" class="contacts-list-img"><span class="direct-chat-msg right"> Completed Tasks</span>
                           <div class="contacts-list-info">
                             <span class="contacts-list-name">
@@ -590,13 +593,32 @@ if (isset($_POST['broadcast_message']))
 
                   <ul class="contacts-list">
                       <li>
-                          <div class="contacts-list-info">
-                            <span class="contacts-list-name">
-                              Billy Bob
-                              <small class="contacts-list-date pull-right">Future Date PHP: 10/28/2016</small>
-                            </span>
-                            <span class="contacts-list-msg">Birthday in PHP Month of September</span>
-                          </div><!-- /.contacts-list-info -->
+                          <div class="contacts-list-info"><span class="contacts-list-name">Billy Bob Completed Task 12345 on 10/10/2016</span><!--<a href="remove refference link">-->
+                            <table width="584" border="2">
+                              <tr>
+                                <td width="77">Start Date</td>
+                                <td width="63">Category</td>
+                                <td width="61">Item</td>
+                                <td width="138">Sub</td>
+                                <td width="83">End Date</td>
+                                <td width="43">Points</td>
+                                <td width="89">User Resolved</td>
+                              </tr>
+                              <tr>
+                                <td>10/09/2016</td>
+                                <td>Task</td>
+                                <td>Other</td>
+                                <td>Arrived to Shipper</td>
+                                <td>10/10/2016</td>
+                                <td>-10</td>
+                                <td>No</td>
+                              </tr>
+                              <tr>
+                                <td>Task Note:</td>
+                                <td colspan="6">Please update your boards</td>
+                              </tr>
+                            </table>
+                          </a></div><!-- /.contacts-list-info -->
                         </a>
                       </li><!-- End Contact Item -->
                     </ul><!-- /.contatcts-list -->
@@ -605,13 +627,32 @@ if (isset($_POST['broadcast_message']))
 
                   <ul class="contacts-list">
                       <li>
-                          <div class="contacts-list-info">
-                            <span class="contacts-list-name">
-                              Edna
-                              <small class="contacts-list-date pull-right">Future Date PHP: 10/28/2016</small>
-                            </span>
-                            <span class="contacts-list-msg">Work Anniversary in PHP Month of Septembe</span>
-                          </div><!-- /.contacts-list-info -->
+                          <div class="contacts-list-info"><span class="contacts-list-name">Billy Bob Completed Task 12345 on 10/10/2016</span><!--<a href="remove refference link">-->
+                            <table width="584" border="2">
+                              <tr>
+                                <td width="77">Start Date</td>
+                                <td width="63">Category</td>
+                                <td width="61">Item</td>
+                                <td width="138">Sub</td>
+                                <td width="83">End Date</td>
+                                <td width="43">Points</td>
+                                <td width="89">User Resolved</td>
+                              </tr>
+                              <tr>
+                                <td>10/09/2016</td>
+                                <td>Task</td>
+                                <td>Other</td>
+                                <td>Arrived to Shipper</td>
+                                <td>10/10/2016</td>
+                                <td>-10</td>
+                                <td>No</td>
+                              </tr>
+                              <tr>
+                                <td>Task Note:</td>
+                                <td colspan="6">Please update your boards</td>
+                              </tr>
+                            </table>
+                        </a></div><!-- /.contacts-list-info -->
                         </a>
                       </li><!-- End Contact Item -->
                     </ul><!-- /.contatcts-list -->                  
@@ -620,13 +661,32 @@ if (isset($_POST['broadcast_message']))
 
                   <ul class="contacts-list">
                       <li>
-                          <div class="contacts-list-info">
-                            <span class="contacts-list-name">
-                              Edna
-                              <small class="contacts-list-date pull-right">Future Date PHP: 10/28/2016</small>
-                            </span>
-                            <span class="contacts-list-msg">Work Anniversary in PHP Month of Septembe</span>
-                          </div><!-- /.contacts-list-info -->
+                         <div class="contacts-list-info"><span class="contacts-list-name">Billy Bob Completed Task 12345 on 10/10/2016</span><!--<a href="remove refference link">-->
+                            <table width="584" border="2">
+                              <tr>
+                                <td width="77">Start Date</td>
+                                <td width="63">Category</td>
+                                <td width="61">Item</td>
+                                <td width="138">Sub</td>
+                                <td width="83">End Date</td>
+                                <td width="43">Points</td>
+                                <td width="89">User Resolved</td>
+                              </tr>
+                              <tr>
+                                <td>10/09/2016</td>
+                                <td>Task</td>
+                                <td>Other</td>
+                                <td>Arrived to Shipper</td>
+                                <td>10/10/2016</td>
+                                <td>-10</td>
+                                <td>No</td>
+                              </tr>
+                              <tr>
+                                <td>Task Note:</td>
+                                <td colspan="6">Please update your boards</td>
+                              </tr>
+                           </table>
+                        </a></div><!-- /.contacts-list-info -->
                         </a>
                       </li><!-- End Contact Item -->
                     </ul><!-- /.contatcts-list -->                  
@@ -646,7 +706,7 @@ if (isset($_POST['broadcast_message']))
 <!-- DIRECT CHAT DANGER -->
               <div class="box box-danger direct-chat direct-chat-danger">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Notifications</h3>
+                  <h3 class="box-title">Notifications / Expirations</h3>
                   <div class="box-tools pull-right">
                   <!-- Total New Messages Add PHP Here -->
                     <span data-toggle="tooltip" title="Update Expirations" class="badge bg-red">Update</span>
@@ -656,13 +716,26 @@ if (isset($_POST['broadcast_message']))
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                  <!-- Conversations are loaded here -->
+                  <!-- Expirations and Notifications Load Below...... 
+                  Pull from user DB....
+                  Status..... Active,Incactive,Disabled
+                  (On Update Send Info / Active up to midnight same day change)
+                  Role....... Employee, Admin; 
+                  (On Update Send Info / Active up to midnight same day change)
+                  Office..... Airport Code Employee is associated with
+                  (On Update Send Info / Active up to midnight same day change)
+                  
+                  
+                  
+                  
+                  
+                  -->
                   <div class="direct-chat-messages">
                     <?php for($i=0;$i<count($expiration_array);$i++) { ?>
                            <?php if ($expiration_array[$i]['driver_license_exp'] != '') {?>
                            <div class="direct-chat-msg right">
                            <div class="direct-chat-info clearfix">
-                           <span class="direct-chat-name pull-left">Admin</span>
+                           <span class="direct-chat-name pull-left">System Notification</span>
                            <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
                            </div>
                            <!-- /.direct-chat-info -->
@@ -676,7 +749,7 @@ if (isset($_POST['broadcast_message']))
                            <?php if ($expiration_array[$i]['med_card_exp'] != '') {?>
                            <div class="direct-chat-msg right">
                            <div class="direct-chat-info clearfix">
-                           <span class="direct-chat-name pull-left">Admin</span>
+                           <span class="direct-chat-name pull-left">System Notification</span>
                            <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
                            </div>
                            <!-- /.direct-chat-info -->
@@ -697,7 +770,7 @@ if (isset($_POST['broadcast_message']))
                            <?php if ($expiration_array[$i]['dob'] != '') {?>
                            <div class="direct-chat-msg right">
                            <div class="direct-chat-info clearfix">
-                           <span class="direct-chat-name pull-left">Admin</span>
+                           <span class="direct-chat-name pull-left">System Notification</span>
                            <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
                            </div>
                            <!-- /.direct-chat-info -->
@@ -718,7 +791,7 @@ if (isset($_POST['broadcast_message']))
                            <?php if ($expiration_array[$i]['tsa_sta'] == 'NF') {?>
                            <div class="direct-chat-msg right">
                            <div class="direct-chat-info clearfix">
-                           <span class="direct-chat-name pull-left">Administrator</span>
+                           <span class="direct-chat-name pull-left">System Notification</span>
                            <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
                            </div>
                            <!-- /.direct-chat-info -->
