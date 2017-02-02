@@ -4,6 +4,9 @@ session_start();
 // Include database connection settings
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 
+// Include class for ipinfodb.com
+include("$_SERVER[DOCUMENT_ROOT]/dist/php/ip2locationlite.class.php");
+
 $userName 	= trim($_POST["DriverUserName"]);
 $password 	= trim($_POST["DriverPassword"]);
 $truck_id 	= trim($_POST["TruckID"]);
@@ -12,6 +15,7 @@ $email		= trim($_POST["DriverEmail"]);
 $admin		= $_POST["AdminLogin"];
 $rental_truck    = $_POST["rentaltrucks"];
 $truck_odometer = trim($_POST["truck_odometer"]);
+$ipinfodb_api = '326013316f18900b3cb37d7df401dc5c9dd322b3285d8bdde74c7e35ce0c4d90';
 
 if ($_POST["hdn_coordinates"] == '' )
 {
@@ -137,10 +141,18 @@ if ($result = $mysqli->query($statement))
                     processErrors($errors);
                 }
             }
+            # Get the coordinates of the requester
+            $coordinates = getCoordinates($ipinfodb_api);
+            $latitude = $coordinates['latitude'];
+            $longitude = $coordinates['longitude'];
+            $message = $coordinates['message'];
+
             # Now insert the coordinates
-            $sql = "insert into coordinates (driver_id, latitude, longitude)
-               values ((select driverid from users where username = '$_SESSION[userid]'),
-                       $latitude, $longitude)";
+            $sql = "insert into coordinates (driver_id, latitude, longitude, message, employee_id)
+                    values ((select driverid from users where username = '$_SESSION[userid]'),
+                    $latitude, $longitude, $message,
+                    (select employee_id from users where username = '$_SESSION[userid]'))";
+
             try {
                 if ($mysqli->query($sql) === false)
                 {
@@ -301,5 +313,31 @@ function setCookies($login_username,$login_password,$login_truckid,$login_traile
     $timestamp = strtotime('+6 month');
     setcookie("login_username", $login_username,$timestamp,'/');
     setcookie("login_password", $login_password,$timestamp,'/');
+}
+
+function getCoordinates($ipinfodb_api) {
+    //Load the class
+    $ipLite = new ip2location_lite;
+    $ipLite->setKey($ipinfodb_api);
+ 
+    //Get errors and locations
+    try {
+        $locations = $ipLite->getCity($_SERVER['REMOTE_ADDR']);
+        if (!empty($locations) && is_array($locations)) {
+            $latitude = $locations['latitude'];
+            $longitude = $locations['longitude'];
+            $message = 'NULL';   
+        }else{
+            $errors = $ipLite->getError();
+            throw new Exception('Unable to get geolocation data: '. $errors);
+        }
+    } catch (Exception $e) {
+        $latitude = 'NULL';
+        $longitude = 'NULL';
+        $message = $e->getMessage();
+    } finally {
+        $output = array("latitude" => $latitude, "longitude" => $longitude, "message" => $message);
+        return $output;
+    }
 }
 ?>

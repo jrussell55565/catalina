@@ -38,7 +38,7 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 
 </head>
 
-<body onLoad="getLocation()">
+<body>
 
     <div class="container">
         <div class="row">
@@ -48,11 +48,8 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
                         <h3 class="panel-title">Catalina Driver Sign In</h3>
                     </div>
                     <div class="panel-body">
-                        <form role="form" id="Driverlogin" name="Driverlogin" method="post" onSubmit="return validateLogin() ; getLocation()"  action="/pages/login/processlogin.php">
+                        <form role="form" id="Driverlogin" name="Driverlogin" method="post" onSubmit="return validateLogin() ;"  action="/pages/login/processlogin.php">
                             <fieldset>
-                                <div>
-                                    <input type="hidden" id=hdn_coordinates name=hdn_coordinates value=''/>
-                                </div>
                                 <div class="form-group">
                                     <label for="DriverUserName">Username</label>
                                     <?php if (strpos($_GET['error'], 'credentials') !== false) { ?>
@@ -113,12 +110,6 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
                                         <input name="AdminLogin" id="AdminLogin" type="checkbox" value="admin">Administrative Login
                                     </label>
                                 </div>
-
-                                <div class="box">
-                                  <input name="geo_location" type="checkbox" id="geo_location" value="geo_location" checked>
-                              Allow Geo Location
-                              </div>
-
 
                               
                               <div class="form-group">

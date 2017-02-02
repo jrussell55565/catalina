@@ -37,7 +37,7 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 
 </head>
 
-<body onLoad="getLocation()">
+<body>
 
     <div class="container">
         <div class="row">
