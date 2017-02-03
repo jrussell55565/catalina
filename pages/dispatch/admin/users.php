@@ -541,7 +541,7 @@ function show_vis($object_type,$grantee) {
                         $glyphName = "top";
                         $orderStatus = 'desc';
                         $glyphStatus = "top";
-                        $orderSql = "ORDER BY drivername ASC";
+                        $orderSql = "ORDER BY fname ASC";
                         if ($_GET['sort'] == 'name')
                         {
                         if ($_GET['order'] == 'desc')
