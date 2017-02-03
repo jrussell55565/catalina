@@ -149,7 +149,7 @@ $subtitle = 'NULL';
 }
 if (empty($_POST['email'])) { $email = 'NULL'; }else{ $email = "\"$_POST[email]\"";}
 if (isset($_POST['emailEnabled']) && $_POST['emailEnabled'] == 'on') { $emailEnabled = '"1"'; }else{ $emailEnabled = '"0"';}
-if (empty($_POST['vtext'])) { $vtext = 'NULL'; }else{ $vtext = '"'.$_POST['vtext'].$_POST['VtextHelp'].'"';}
+if (empty($_POST['mobilePhone'])) { $vtext = 'NULL'; }else{ $vtext = '"'.$_POST['mobilePhone'].$_POST['VtextHelp'].'"';}
 if (isset($_POST['vtextEnabled']) && $_POST['vtextEnabled'] == 'on') { $vtextEnabled = '"1"'; }else{ $vtextEnabled = '"0"';}
 if (empty($_POST['quietTimeVal1'])) { $quiet_time_begin = 'NULL'; }else{ $quiet_time_begin = "\"$_POST[quietTimeVal1]\"";}
 if (empty($_POST['quietTimeVal2'])) { $quiet_time_end = 'NULL'; }else{ $quiet_time_end = "\"$_POST[quietTimeVal2]\"";}
@@ -309,7 +309,7 @@ eom_message = $eom_message,
 tsa_date_exp = $tsa_date_exp,
 tsa_date_change_exp = $tsa_date_change_exp
 WHERE id = $id";
-
+print $sql; exit;
 mysql_query($sql);
 # PDF Uploads
 if (! empty($_FILES["contractUpload"]["name"]))
