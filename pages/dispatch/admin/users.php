@@ -517,16 +517,26 @@ function show_vis($object_type,$grantee) {
             <div class="box">
               <div class="box-header with-border">
                 <h3 class="box-title">
-                <input name="radio" type="radio" id="activeusers" value="activeusers" checked>
-                <label for="activeusers"></label>
-                <label for="userstatus"></label>
-                Active Users /
-                <input type="radio" name="radio" id="inactiveusers" value="inactiveusers">
-                <label for="inactiveusers"></label>
-                Inactive Users /
-                <input type="radio" name="radio" id="allusers" value="allusers">
-                <label for="allusers"></label>
-                All Users</h3>
+                <label for="activeusers">
+                <input class="radio-inline" name="radio" type="radio" id="activeusers" value="activeusers" checked>
+                Active Users </label>
+
+                <label for="inactiveusers">
+                <input class="radio-inline" type="radio" name="radio" id="inactiveusers" value="inactiveusers">
+                Inactive Users </label>
+
+                <label for="allusers">
+                <input class="radio-inline" type="radio" name="radio" id="allusers" value="allusers">
+                All Users </label>
+
+                <label for="onboarding">
+                <input class="radio-inline" type="radio" name="radio" id="onboarding" value="onboarding">
+                Onboarding </label>
+
+                <label for="disabled">
+                <input class="radio-inline" type="radio" name="radio" id="disabled" value="disabled">
+                Disabled </label>
+                </h3>
                 </div><!-- /.box-header -->
                 <?
                 }
@@ -1656,21 +1666,41 @@ immediately after the control sidebar -->
 //$(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
 //});
 $(document).ready(function() {
-// Default visibility for users
-$('[name="Active"]').show();
-$('[name="Inactive"]').hide();
-$("#activeusers").click(function() {
-$('[name="Active"]').show();
-$('[name="Inactive"]').hide();
-});
-$("#inactiveusers").click(function() {
-$('[name="Active"]').hide();
-$('[name="Inactive"]').show();
-});
-$("#allusers").click(function() {
-$('[name="Active"]').show();
-$('[name="Inactive"]').show();
-});
+    // Default visibility for users
+    $('[name="Active"]').show();
+    $('[name="Inactive"]').hide();
+    $('[name="onboarding"]').hide();
+    $('[name="Disabled"]').hide();
+    $("#activeusers").click(function() {
+        $('[name="Active"]').show();
+        $('[name="Inactive"]').hide();
+        $('[name="onboarding"]').hide();
+        $('[name="Disabled"]').hide();
+    });
+    $("#inactiveusers").click(function() {
+        $('[name="Active"]').hide();
+        $('[name="Inactive"]').show();
+        $('[name="onboarding"]').hide();
+        $('[name="Disabled"]').hide();
+    });
+    $("#onboarding").click(function() {
+        $('[name="Active"]').hide();
+        $('[name="Inactive"]').hide();
+        $('[name="onboarding"]').show();
+        $('[name="Disabled"]').hide();
+    });
+    $("#disabled").click(function() {
+        $('[name="Active"]').hide();
+        $('[name="Inactive"]').hide();
+        $('[name="onboarding"]').hide();
+        $('[name="Disabled"]').show();
+    });
+    $("#allusers").click(function() {
+        $('[name="Active"]').show();
+        $('[name="Inactive"]').show();
+        $('[name="onboarding"]').show();
+        $('[name="Disabled"]').show();
+    });
 });
 function validate_user_status(i) {
 // Make sure that, when we submit, if the status is not
