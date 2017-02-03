@@ -509,14 +509,15 @@ function show_vis($object_type,$grantee) {
         }
         ?>
         <!-- End Animated Top Menu -->
-        <?php
-        if ($_SESSION['login'] != 3) {
-        ?>
+ 
         <div class="row">
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
                 <h3 class="box-title">
+       <?php
+        if ($_SESSION['login'] != 3) {
+        ?>
                 <label for="activeusers">
                 <input class="radio-inline" name="radio" type="radio" id="activeusers" value="activeusers" checked>
                 Active Users </label>
@@ -529,18 +530,19 @@ function show_vis($object_type,$grantee) {
                 <input class="radio-inline" type="radio" name="radio" id="allusers" value="allusers">
                 All Users </label>
 
-                <label for="onboarding">
-                <input class="radio-inline" type="radio" name="radio" id="onboarding" value="onboarding">
-                Onboarding </label>
-
                 <label for="disabled">
                 <input class="radio-inline" type="radio" name="radio" id="disabled" value="disabled">
                 Disabled </label>
+        <?
+        }
+        ?>
+               <label for="onboarding">
+                <input class="radio-inline" type="radio" name="radio" id="onboarding" value="onboarding">
+                Onboarding </label>
+
                 </h3>
-                </div><!-- /.box-header -->
-                <?
-                }
-                ?>
+            </div><!-- /.box-header -->
+
                 <div class="box-body table-responsive">
                   <table class="table table-striped">
                     <thead>
