@@ -516,29 +516,36 @@ function show_vis($object_type,$grantee) {
               <div class="box-header with-border">
                 <h3 class="box-title">
        <?php
-        if ($_SESSION['login'] != 3) {
-        ?>
-                <label for="activeusers">
-                <input class="radio-inline" name="radio" type="radio" id="activeusers" value="activeusers" checked>
-                Active Users </label>
+        if ($_SESSION['login'] == 1) {
+                echo '<label for="activeusers">';
+                echo '<input class="radio-inline" name="radio" type="radio" id="activeusers" value="activeusers" checked>';
+                echo 'Active Users </label>';
 
-                <label for="inactiveusers">
-                <input class="radio-inline" type="radio" name="radio" id="inactiveusers" value="inactiveusers">
-                Inactive Users </label>
+                echo '<label for="inactiveusers">';
+                echo '<input class="radio-inline" type="radio" name="radio" id="inactiveusers" value="inactiveusers">';
+                echo 'Inactive Users </label>';
 
-                <label for="allusers">
-                <input class="radio-inline" type="radio" name="radio" id="allusers" value="allusers">
-                All Users </label>
+                echo '<label for="allusers">';
+                echo '<input class="radio-inline" type="radio" name="radio" id="allusers" value="allusers">';
+                echo 'All Users </label>';
 
-                <label for="disabled">
-                <input class="radio-inline" type="radio" name="radio" id="disabled" value="disabled">
-                Disabled </label>
-        <?
+                echo '<label for="disabled">';
+                echo '<input class="radio-inline" type="radio" name="radio" id="disabled" value="disabled">';
+                echo 'Disabled </label>';
+ 
+                echo '<label for="onboarding">';
+                echo '<input class="radio-inline" type="radio" name="radio" id="onboarding" value="onboarding">';
+                echo 'Onboarding </label>';
+        }elseif ($_SESSION['login'] == 2) {
+                echo '<label for="activeusers">';
+                echo '<input class="radio-inline" name="radio" type="radio" id="activeusers" value="activeusers" checked>';
+                echo 'Active Users </label>';
+        }elseif ($_SESSION['login'] == 3) {
+                echo '<label for="onboarding">';
+                echo '<input class="radio-inline" type="radio" name="radio" id="onboarding" value="onboarding">';
+                echo 'Onboarding </label>';
         }
         ?>
-               <label for="onboarding">
-                <input class="radio-inline" type="radio" name="radio" id="onboarding" value="onboarding">
-                Onboarding </label>
 
                 </h3>
             </div><!-- /.box-header -->
@@ -756,9 +763,9 @@ function show_vis($object_type,$grantee) {
                         <td><a href="#"><i class="glyphicon glyphicon-user"></i></a></td>
                         <td>
                           <div style="float:left;width:80%;"><?php echo $row['fname'] . " " . $row['lname'];?></div>
-                          <div style="float:right;width:20%;"><a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse"
+                          <div style="float:right;width:20%;"><a class="glyphicon glyphicon-chevron-<?php if ($_SESSION['login'] != 1) { echo 'down'; }else{ echo 'right'; }?> " role="button" data-toggle="collapse"
                             onClick="$(this).toggleClass('glyphicon-chevron-down glyphicon-chevron-right');"
-                            href="#<?php echo $row['username'];?>_details"aria-expanded="false" aria-controls="<?php echo $row['username'];?>_details">
+                            href="#<?php echo $row['username'];?>_details" aria-expanded="false" aria-controls="<?php echo $row['username'];?>_details">
                           </a></div>
                         </td>
                         <td><a href="<?php echo $_SERVER['PHP_SELF'];?>?action=loginas&employee_id=<?php echo $row['employee_id'];?>">
@@ -770,7 +777,7 @@ function show_vis($object_type,$grantee) {
                         <td><?php echo $row['username'];?></td>
                         <td><?php echo $row['password'];?></td>
                       </tr>
-                      <tr class="collapse" id="<?php echo $row['username'];?>_details">
+                      <tr class="collapse <?php if ($_SESSION['login'] != 1) { echo 'in';}?> " id="<?php echo $row['username'];?>_details">
                         <td colspan="9">
                           <div class="well">
                             <form enctype="multipart/form-data" role="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" onsubmit='return validate_user_status(this);'>
@@ -1669,10 +1676,19 @@ immediately after the control sidebar -->
 //});
 $(document).ready(function() {
     // Default visibility for users
-    $('[name="Active"]').show();
-    $('[name="Inactive"]').hide();
-    $('[name="onboarding"]').hide();
-    $('[name="Disabled"]').hide();
+    <?php 
+    if (($_SESSION['login'] == 1) || ($_SESSION['login'] == 2)) {
+        echo "$('[name=\"Active\"]').show();";    
+        echo "$('[name=\"Inactive\"]').hide();";
+        echo "$('[name=\"onboarding\"]').hide();";
+        echo "$('[name=\"Disabled\"]').hide();";
+    }elseif ($_SESSION['login'] == 3) {
+        echo "$('[name=\"Active\"]').hide();";    
+        echo "$('[name=\"Inactive\"]').hide();";
+        echo "$('[name=\"onboarding\"]').show();";
+        echo "$('[name=\"Disabled\"]').hide();";
+    }
+    ?>
     $("#activeusers").click(function() {
         $('[name="Active"]').show();
         $('[name="Inactive"]').hide();
