@@ -313,12 +313,15 @@ if ($result = $mysqli->query($statement))
         } 
             
         setCookies($_SESSION['login_username'],$_SESSION['login_password'],$_SESSION['login_truckid'],$_SESSION['login_trailerid'],$_SESSION['login_rentaltruck'],$_SESSION['login_truckodometer']);
+        
         unset($_SESSION['login_username']);
         unset($_SESSION['login_password']);
         unset($_SESSION['login_truckid']);
         unset($_SESSION['login_trailerid']);
         unset($_SESSION['login_rentaltruck']);
         unset($_SESSION['login_truckodometer']);
+        unset($_SESSION['onboarding']);
+
         if ($registered_admin == 1)
         {
             $_SESSION['login'] = 1;
