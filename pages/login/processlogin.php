@@ -99,9 +99,9 @@ if (isset($_POST['register']) && ($_POST['register'] == 'true'))
     $mysqli->autocommit(FALSE);
     $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
     try {
-        $statement = "INSERT INTO users (fname, lname, email, is_activated, activation_hash, username, status) 
+        $statement = "INSERT INTO users (fname, lname, email, is_activated, activation_hash, username, status, employee_id 
                       VALUES
-                      ('$fname', '$lname', '$email', 0, '$hash', '$username', 'onboarding')";
+                      ('$fname', '$lname', '$email', 0, '$hash', '$username', 'onboarding', UUID())";
 
         if ($mysqli->query($statement) === false)
         {
