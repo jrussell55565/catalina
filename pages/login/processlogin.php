@@ -104,7 +104,7 @@ if (isset($_POST['register']) && ($_POST['register'] == 'true'))
 
     $salt = '@KowM$viHR8t';
     $hash = md5( $salt . rand(0,1000) );
-    $url = "/pages/login/processlogin.php?email=$email&hash=$hash";
+    $url = HTTP . "/pages/login/processlogin.php?email=$email&hash=$hash";
 
     // Insert a record into the users table 
     # Start TX
@@ -124,7 +124,7 @@ if (isset($_POST['register']) && ($_POST['register'] == 'true'))
         $body .= "Click on the link below to confirm your email address.\r\n";
         $body .= $url . "\r\n";
                 
-        sendEmail($email,'Verify your account',$body,null);
+        sendEmail($email,'Verify your account',$body,null,'accounting@catalinacartage.com','jobs@catalinacartage.com');
         $mysqli->commit();
         header("Location: /pages/login/register.php?return=true");
         exit;

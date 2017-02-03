@@ -53,7 +53,7 @@ function accessorials($accessorialType,$srcPage,$username)
 	echo "<tr><td><input type=hidden name=username value=$username ></td></tr>\n";
 }
 
-function sendEmail($to, $subject, $body, $cc, $from)
+function sendEmail($to, $subject, $body, $cc, $from, $bcc)
 {
   if ($from === null) {
     $from = 'drivers@catalinacartage.com';
@@ -63,6 +63,10 @@ function sendEmail($to, $subject, $body, $cc, $from)
   if (isset($cc))
   {
     $headers .= "CC: $cc\r\n";
+  }
+  if (isset($bcc))
+  {
+    $headers .= "BCC: $bcc\r\n";
   }
 	mail($to, $subject, $body, $headers);
 }
