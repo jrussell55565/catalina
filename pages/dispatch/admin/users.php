@@ -309,7 +309,7 @@ eom_message = $eom_message,
 tsa_date_exp = $tsa_date_exp,
 tsa_date_change_exp = $tsa_date_change_exp
 WHERE id = $id";
-print $sql; exit;
+
 mysql_query($sql);
 # PDF Uploads
 if (! empty($_FILES["contractUpload"]["name"]))
