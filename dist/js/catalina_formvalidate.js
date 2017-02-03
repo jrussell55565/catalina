@@ -1,3 +1,61 @@
+function validateRegistration()
+{
+  var fname = document.forms["register"]["fname"].value;
+  var lname = document.forms["register"]["lname"].value;
+  var username = document.forms["register"]["username"].value;
+  var email = document.forms["register"]["email"].value;
+  var ret_val = 0;
+
+  if (fname == null || fname == "") {
+      document.getElementById("fname_error").innerHTML = "A first name is required";
+      document.getElementById("fname_error").style.display = 'block';
+      ret_val = 1;
+  }else{
+      document.getElementById("fname_error").innerHTML = "";
+      document.getElementById("fname_error").style.display = 'none';
+      ret_val = 0;
+  }
+  if (lname == null || lname == "") {
+      document.getElementById("lname_error").innerHTML = "A last name is required";
+      document.getElementById("lname_error").style.display = 'block';
+      ret_val = 1;
+  }else{
+      document.getElementById("lname_error").innerHTML = "";
+      document.getElementById("lname_error").style.display = 'none';
+      ret_val = 0;
+  }
+  if (username == null || username == "") {
+      document.getElementById("username_error").innerHTML = "A username is required";
+      document.getElementById("username_error").style.display = 'block';
+      ret_val = 1;
+  }else{
+      document.getElementById("username_error").innerHTML = "";
+      document.getElementById("username_error").style.display = 'none';
+      ret_val = 0;
+  }
+  if (email == null || email == "") {
+      document.getElementById("email_error").innerHTML = "An email is required";
+      document.getElementById("email_error").style.display = 'block';
+      ret_val = 1;
+  }else{
+      document.getElementById("email_error").innerHTML = "";
+      document.getElementById("email_error").style.display = 'none';
+      ret_val = 0;
+
+      var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      if (! regex.test(email)) {
+          document.getElementById("email_error").innerHTML = "That doesn't appear to be a valid email address";
+          document.getElementById("email_error").style.display = 'block';
+          ret_val = 1;
+      }else{
+          document.getElementById("email_error").innerHTML = "";
+          document.getElementById("email_error").style.display = 'none';
+          ret_val = 0;
+      }
+  }
+  if (ret_val == 0) { return true; }else{ return false; }
+}
+
 function validateLogin()
 {
   var trailer=document.forms["Driverlogin"]["LoadPosition"].value

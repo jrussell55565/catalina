@@ -53,9 +53,12 @@ function accessorials($accessorialType,$srcPage,$username)
 	echo "<tr><td><input type=hidden name=username value=$username ></td></tr>\n";
 }
 
-function sendEmail($to, $subject, $body, $cc)
+function sendEmail($to, $subject, $body, $cc, $from)
 {
-  $headers = "From: drivers@catalinacartage.com" . "\r\n" .
+  if ($from === null) {
+    $from = 'drivers@catalinacartage.com';
+  } 
+  $headers = "From: $from" . "\r\n" .
              'X-Mailer: PHP/' . phpversion() . "\r\n";
   if (isset($cc))
   {

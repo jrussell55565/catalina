@@ -82,6 +82,109 @@ if (isset($_POST['forgotPassword']) && ($_POST['forgotPassword'] == 'true'))
     exit;
 }
 
+// If we're trying to sign up do this part here
+if (isset($_POST['register']) && ($_POST['register'] == 'true'))
+{
+    $fname = $mysqli->real_escape_string($_POST['fname']);
+    $lname = $mysqli->real_escape_string($_POST['lname']);
+    $username = $mysqli->real_escape_string($_POST['username']);
+    $email = $mysqli->real_escape_string($_POST['email']);
+
+    $salt = '@KowM$viHR8t';
+    $hash = md5( $salt . rand(0,1000) );
+    $url = "/pages/login/processlogin.php?email=$email&hash=$hash";
+
+    // Insert a record into the users table 
+    # Start TX
+    $mysqli->autocommit(FALSE);
+    $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+    try {
+        $statement = "INSERT INTO users (fname, lname, email, is_activated, activation_hash, username, status) 
+                      VALUES
+                      ('$fname', '$lname', '$email', 0, '$hash', '$username', 'onboarding')";
+
+        if ($mysqli->query($statement) === false)
+        {
+            throw new Exception($mysqli->error);
+        }
+        $body = "Thanks for signing up!\r\n";
+        $body .= "In order to get started you will need to activate your account.\r\n";
+        $body .= "Click on the link below to confirm your email address.\r\n";
+        $body .= $url . "\r\n";
+                
+        sendEmail($email,'Verify your account',$body,null);
+        $mysqli->commit();
+        header("Location: /pages/login/register.php?return=true");
+        exit;
+
+    } catch (Exception $e) {
+        // An exception has been thrown
+        // We must rollback the transaction
+        $detailed_message = "Unable to register.";
+        if (preg_match('/Duplicate entry \'\w+\' for key \'username\'/',$e->getMessage())) {
+            $detailed_message = 'That username appears to be taken.  Please try another.';
+        }
+        error_log($e->getMessage());
+        $url_error = urlencode($detailed_message);
+        $mysqli->rollback();
+        header("location: /pages/login/register.php?return=false&error=$url_error");
+        $mysqli->autocommit(TRUE);
+        $mysqli->close();
+        exit;
+    }
+    
+}
+
+# Here let's check if someone is trying to validate their email
+if (isset($_GET['email']) && isset($_GET['hash']))
+{
+    $email = $mysqli->real_escape_string($_GET['email']);
+    $hash = $mysqli->real_escape_string($_GET['hash']);
+    $statement = "SELECT id,username FROM users WHERE email = '$email'
+                  and activation_hash = '$hash'";
+    try {
+        if ($result = $mysqli->query($statement)) {
+            $row_cnt = $result->num_rows;
+            while($obj = $result->fetch_object()){
+                $id = $obj->id;
+                $username = $obj->username;
+            }
+            if ($row_cnt > 0) {
+                # Looks like this was a legitimate link.  Let's set is_activated = 1
+                # and redirect
+                # Start TX
+                $mysqli->autocommit(FALSE);
+                $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+                $statement = "UPDATE users SET is_activated = 1 WHERE id = $id";
+
+                if ($mysqli->query($statement) === false)
+                {
+                    throw new Exception("Error UPDATING users: ".$mysqli->error);
+                }
+                $mysqli->commit();
+                $_SESSION['onboarding'] = true;
+                $_SESSION['username'] = $username;
+            }else{
+                # This was not a legitimate activation attempt.  
+                throw new Exception("Unknown user attempted to register (email or hash not found)");
+            }
+        }else{
+            throw new Exception($mysqli->error);
+        }
+    } catch (Exception $e) {
+        error_log($e);
+        $url_error = urlencode("Unable to complete activation.  Please contact us for assistance.");
+        $mysqli->rollback();
+        header("location: /pages/login/register.php?return=false&error=$url_error");
+        $mysqli->autocommit(TRUE);
+        $mysqli->close();
+        exit;
+    } finally {
+        $result->close();
+        header("location: /pages/dispatch/admin/users.php");
+        exit;
+    }
+}
 # Now, let's see if we entered a valid username/password combination.
 // Retrieve username and password from database according to user's input
 $userName = $mysqli->real_escape_string($userName);

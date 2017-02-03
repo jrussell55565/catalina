@@ -113,7 +113,7 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 
                               
                               <div class="form-group">
-                                <a href="/pages/login/forgot.php">Forgot Password</a> / <a href="../main/user_request.php">New User Form</a></div>
+                                <a href="<?php echo HTTP;?>/pages/login/forgot.php">Forgot Password</a> / <a href="<?php echo HTTP;?>/pages/login/register.php">New User Form</a></div>
                               <input type="submit" class="btn btn-lg btn-success btn-block" value="Login">
                             </fieldset>
                         </form>
