@@ -786,6 +786,8 @@ function show_vis($object_type,$grantee) {
                                     <select class="form-control" name="status" id="status">
                                       <option value="Active" <?php if ($row['status'] == 'Active') { echo " selected "; }?>
                                       <?php echo show_vis('option',array());?>>Active</option>
+                                      <option value="Onboarding" <?php if ($row['status'] == 'onboarding') { echo " selected "; }?>
+                                      <?php echo show_vis('option',array());?>>Onboarding</option>
                                       <option value="Inactive"<?php if ($row['status'] == 'Inactive') { echo " selected "; }?>
                                       <?php echo show_vis('option',array());?>>Inactive</option>
                                       <option value="Disabled"<?php if ($row['status'] == 'Disabled') { echo " selected "; }?>
@@ -1246,6 +1248,7 @@ function show_vis($object_type,$grantee) {
                   <label for="status">Status</label>
                   <select class="form-control" name="status" id="status">
                     <option value="Active">Active</option>
+                    <option value="Onboarding">Onboarding</option>
                     <option value="Inactive">Inactive</option>
                     <option value="Disabled">Disabled</option>
                   </select>
