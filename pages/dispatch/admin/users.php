@@ -790,7 +790,7 @@ function show_vis($object_type,$grantee) {
                                   </td>
                                   <td style="padding: 5px">
                                     <label for="fname">First Name</label>
-                                    <input type="text" class="form-control" name="fname" id="fname" placeholder="" value="<?php echo $row['fname'];?>">
+                                    <input type="text" class="form-control" name="fname" id="fname" placeholder="" value="<?php echo $row['fname'];?>" required>
                                   </td>
                                   <td style="padding: 5px">
                                     <label for="mname">Middle Name</label>
@@ -798,7 +798,7 @@ function show_vis($object_type,$grantee) {
                                   </td>
                                   <td style="padding: 5px">
                                     <label for="lname">Last Name</label>
-                                    <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="<?php echo $row['lname'];?>">
+                                    <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="<?php echo $row['lname'];?>" required>
                                   </td>
                                   <td style="padding: 5px">
                                     <label for="status">Status</label>
@@ -845,7 +845,7 @@ function show_vis($object_type,$grantee) {
                                 <tr>
                                   <td style="padding: 5px">
                                     <label for="addr1">Home Addr 1</label>
-                                    <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $row['addr1'];?>">
+                                    <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="<?php echo $row['addr1'];?>" required>
                                   </td>
                                   <td style="padding: 5px">
                                     <label for="addr2">Home Addr 2</label>
@@ -853,12 +853,14 @@ function show_vis($object_type,$grantee) {
                                   </td>
                                   <td style="padding: 5px">
                                     <label for="city">Home City</label>
-                                    <input type="text" class="form-control" name="city" id="city" placeholder="" value="<?php echo $row['city'];?>">
+                                    <input type="text" class="form-control" name="city" id="city" placeholder="" value="<?php echo $row['city'];?>" required>
                                   </td>
                                   <td style="padding: 5px">
                                     <label for="state">Home State</label>
-                                    <select class="form-control" name="state" id="state">
+                                    <select class="form-control" name="state" id="state" required>
                                       <?php
+                                      // Default to AZ if no state set.
+                                      if (empty($row['state'])) { $row['state'] = 'AZ'; }
                                       foreach($us_state_abbrevs as $state) {
                                         echo "<option value=\"$state\""; if ($row['state'] == $state) { echo ' selected '; }; echo ">$state</option>";
                                       }
@@ -867,7 +869,7 @@ function show_vis($object_type,$grantee) {
                                   </td>
                                   <td style="padding: 5px">
                                     <label for="zip">Home Zip</label>
-                                    <input type="text" class="form-control" name="zip" id="zip" placeholder="" value="<?php echo $row['zipcode'];?>">
+                                    <input type="text" class="form-control" name="zip" id="zip" placeholder="" value="<?php echo $row['zipcode'];?>" required>
                                   </td>
                                   <td style="padding: 5px">
                                     <label for="jobTitle">Title</label>
@@ -894,7 +896,7 @@ function show_vis($object_type,$grantee) {
                                 <tr>
                                   <td style="padding: 5px">
                                     <label for="email">Email</label>
-                                    <input type="email" class="form-control" name="email" id="email" placeholder="" value="<?php echo $row['email'];?>">
+                                    <input type="email" class="form-control" name="email" id="email" placeholder="" value="<?php echo $row['email'];?>" required>
                                   </td>
                                   <td style="padding: 5px">
                                     <label for="emailUpdates" style="margin-top: 8px; margin-bottom: 0px;">Enable</label>
@@ -960,23 +962,23 @@ function show_vis($object_type,$grantee) {
                             <tr>
                               <td style="padding: 5px">
                                 <label for="ssn">SSN</label>
-                                <input type="text" class="form-control" name="ssn" id="ssn" placeholder="" value="<?php echo $row['ssn'];?>" <?php echo show_vis('text',array('onboarder'));?>>
+                                <input type="text" class="form-control" name="ssn" id="ssn" placeholder="" value="<?php echo $row['ssn'];?>" <?php echo show_vis('text',array('onboarder'));?> required>
                               </td>
                               <td style="padding: 5px">
                                 <label for="dob">DOB</label>
-                                <input type="text" class="form-control datepicker" name="dob" id="dob" placeholder="mm/dd/yyyy" value="<?php echo $row['dob'];?>" <?php echo show_vis('text',array('onboarder'));?>>
+                                <input type="text" class="form-control datepicker" name="dob" id="dob" placeholder="mm/dd/yyyy" value="<?php echo $row['dob'];?>" <?php echo show_vis('text',array('onboarder'));?> required>
                               </td>
                               <td style="padding: 5px">
                                 <label for="driverLicense">License No.</label>
-                                <input type="text" class="form-control" name="driverLicense" id="driverLicense" placeholder="" value="<?php echo $row['driver_license_n'];?>" <?php echo show_vis('text',array('onboarder'));?>>
+                                <input type="text" class="form-control" name="driverLicense" id="driverLicense" placeholder="" value="<?php echo $row['driver_license_n'];?>" <?php echo show_vis('text',array('onboarder'));?> required>
                               </td>
                               <td style="padding: 5px">
                                 <label for="driverLicenseExpire">License Exp.</label>
-                                <input type="text" class="form-control datepicker" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['driver_license_exp'];?>" <?php echo show_vis('text',array('onboarder'));?>>
+                                <input type="text" class="form-control datepicker" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['driver_license_exp'];?>" <?php echo show_vis('text',array('onboarder'));?> required>
                               </td>
                               <td style="padding: 5px">
                                 <label for="mobilePhone">Mobile</label>
-                                <input type="number" class="form-control" name="mobilePhone" id="mobilePhone" placeholder="" value="<?php echo $row['driverid'];?>">
+                                <input type="number" class="form-control" name="mobilePhone" id="mobilePhone" placeholder="" value="<?php echo $row['driverid'];?>" required>
                               </td>
                               <td style="padding: 5px">
                                 <label for="startDate">Start Date</label>
@@ -998,7 +1000,7 @@ function show_vis($object_type,$grantee) {
                               </td>
                               <td style="padding: 5px">
                                 <label for="password">Password</label>
-                                <input type="text" class="form-control" name="password" id="password" placeholder="" value="<?php echo $row['password'];?>">
+                                <input type="text" class="form-control" name="password" id="password" placeholder="" value="<?php echo $row['password'];?>" required>
                               </td>
                               <td style="padding: 5px">
                                 <label for="medCardExpire">Med Exp Date</label>
@@ -1006,11 +1008,11 @@ function show_vis($object_type,$grantee) {
                               </td>
                               <td style="padding: 5px">
                                 <label for="salary">Salary</label>
-                                <input type="text" class="form-control" name="salary" id="salary" placeholder="" value="<?php echo $row['salary'];?>" <?php echo show_vis('text',array('onboarder'));?>>
+                                <input type="text" class="form-control" name="salary" id="salary" placeholder="" value="<?php echo $row['salary'];?>" <?php echo show_vis('text',array('onboarder'));?> required>
                               </td>
                               <td style="padding: 5px">
                                 <label for="emergencyPhone">Emerg Phone</label>
-                                <input type="text" class="form-control" name="emergencyPhone" id="emergencyPhone" placeholder="" value="<?php echo $row['emerg_contact_phone'];?>">
+                                <input type="text" class="form-control" name="emergencyPhone" id="emergencyPhone" placeholder="" value="<?php echo $row['emerg_contact_phone'];?>" required>
                               </td>
                               <td style="padding: 5px">
                                 <label for="tsa">TSA-STA</label>
@@ -1020,7 +1022,7 @@ function show_vis($object_type,$grantee) {
                             <tr>
                               <td style="padding: 5px">
                                 <label for="emergencyContact">Emerg Contact</label>
-                                <input type="text" class="form-control" name="emergencyContact" id="emergencyContact" placeholder="" value="<?php echo $row['emerg_contact_name'];?>">
+                                <input type="text" class="form-control" name="emergencyContact" id="emergencyContact" placeholder="" value="<?php echo $row['emerg_contact_name'];?>" required>
                               </td>
                               <td style="padding: 5px" colspan="3">
                                 <label for="miscDetails">Notes</label>
@@ -1253,7 +1255,7 @@ function show_vis($object_type,$grantee) {
                 </td>
                 <td style="padding: 5px">
                   <label for="fname">First Name</label>
-                  <input type="text" class="form-control" name="fname" id="fname" placeholder="" value="">
+                  <input type="text" class="form-control" name="fname" id="fname" placeholder="" value="" required>
                 </td>
                 <td style="padding: 5px">
                   <label for="mname">Middle Name</label>
@@ -1261,7 +1263,7 @@ function show_vis($object_type,$grantee) {
                 </td>
                 <td style="padding: 5px">
                   <label for="lname">Last Name</label>
-                  <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="">
+                  <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="" required>
                 </td>
                 <td style="padding: 5px">
                   <label for="status">Status</label>
@@ -1297,7 +1299,7 @@ function show_vis($object_type,$grantee) {
               <tr>
                 <td style="padding: 5px">
                   <label for="addr1">Home Addr 1</label>
-                  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="">
+                  <input type="text" class="form-control" name="addr1" id="addr1" placeholder="" value="" required>
                 </td>
                 <td style="padding: 5px">
                   <label for="addr2">Home Addr 2</label>
@@ -1305,15 +1307,22 @@ function show_vis($object_type,$grantee) {
                 </td>
                 <td style="padding: 5px">
                   <label for="city">Home City</label>
-                  <input type="text" class="form-control" name="city" id="city" placeholder="" value="">
+                  <input type="text" class="form-control" name="city" id="city" placeholder="" value="" required>
                 </td>
                 <td style="padding: 5px">
                   <label for="state">Home State</label>
-                  <input type="text" class="form-control" name="state" id="state" placeholder="" value="">
+                  <select class="form-control" name="state" id="state" required>
+                  <?php
+                  // Default to AZ if no state set.
+                  foreach($us_state_abbrevs as $state) {
+                    echo "<option value=\"$state\""; if ('AZ' == $state) { echo ' selected '; }; echo ">$state</option>";
+                  }
+                  ?>
+                </select>
                 </td>
                 <td style="padding: 5px">
                   <label for="zip">Home Zip</label>
-                  <input type="text" class="form-control" name="zip" id="zip" placeholder="" value="">
+                  <input type="text" class="form-control" name="zip" id="zip" placeholder="" value="" required>
                 </td>
                 <td style="padding: 5px">
                   <label for="jobTitle">Title</label>
@@ -1331,7 +1340,7 @@ function show_vis($object_type,$grantee) {
               <tr>
                 <td style="padding: 5px">
                   <label for="email">Email</label>
-                  <input type="email" class="form-control" name="email" id="email" placeholder="" value="">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="" value="" required>
                 </td>
                 <td style="padding: 5px">
                   <label for="emailUpdates" style="margin-top: 8px; margin-bottom: 0px;">Enable</label>
@@ -1394,23 +1403,23 @@ function show_vis($object_type,$grantee) {
                 <tr>
                   <td style="padding: 5px">
                     <label for="ssn">SSN</label>
-                    <input type="text" class="form-control" name="ssn" id="ssn" placeholder="" value="">
+                    <input type="text" class="form-control" name="ssn" id="ssn" placeholder="" value="" required>
                   </td>
                   <td style="padding: 5px">
                     <label for="dob">DOB</label>
-                    <input type="text" class="form-control datepicker" name="dob" id="dob" placeholder="mm/dd/yyyy" value="">
+                    <input type="text" class="form-control datepicker" name="dob" id="dob" placeholder="mm/dd/yyyy" value="" required>
                   </td>
                   <td style="padding: 5px">
                     <label for="driverLicense">License No.</label>
-                    <input type="text" class="form-control" name="driverLicense" id="driverLicense" placeholder="" value="">
+                    <input type="text" class="form-control" name="driverLicense" id="driverLicense" placeholder="" value="" required>
                   </td>
                   <td style="padding: 5px">
                     <label for="driverLicenseExpire">License Exp.</label>
-                    <input type="text" class="form-control datepicker" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="">
+                    <input type="text" class="form-control datepicker" name="driverLicenseExpire" id="driverLicenseExpire" placeholder="mm/dd/yyyy" value="" required>
                   </td>
                   <td style="padding: 5px">
                     <label for="mobilePhone">Mobile</label>
-                    <input type="text" class="form-control" name="mobilePhone" id="mobilePhone" placeholder="" value="">
+                    <input type="text" class="form-control" name="mobilePhone" id="mobilePhone" placeholder="" value="" required>
                   </td>
                   <td style="padding: 5px">
                     <label for="startDate">Start Date</label>
@@ -1432,7 +1441,7 @@ function show_vis($object_type,$grantee) {
                   </td>
                   <td style="padding: 5px">
                     <label for="password">Password</label>
-                    <input type="text" class="form-control" name="password" id="password" placeholder="" value="">
+                    <input type="text" class="form-control" name="password" id="password" placeholder="" value="" required>
                   </td>
                   <td style="padding: 5px">
                     <label for="medCardExpire">Med Exp Date</label>
@@ -1440,11 +1449,11 @@ function show_vis($object_type,$grantee) {
                   </td>
                   <td style="padding: 5px">
                     <label for="salary">Salary</label>
-                    <input type="text" class="form-control" name="salary" id="salary" placeholder="" value="">
+                    <input type="text" class="form-control" name="salary" id="salary" placeholder="" value="" required>
                   </td>
                   <td style="padding: 5px">
                     <label for="emergencyPhone">Emerg Phone</label>
-                    <input type="text" class="form-control" name="emergencyPhone" id="emergencyPhone" placeholder="" value="">
+                    <input type="text" class="form-control" name="emergencyPhone" id="emergencyPhone" placeholder="" value="" required>
                   </td>
                   <td style="padding: 5px">
                     <label for="tsa">TSA-STA</label>
@@ -1454,7 +1463,7 @@ function show_vis($object_type,$grantee) {
                 <tr>
                   <td style="padding: 5px">
                     <label for="emergencyContact">Emerg Contact</label>
-                    <input type="text" class="form-control" name="emergencyContact" id="emergencyContact" placeholder="" value="">
+                    <input type="text" class="form-control" name="emergencyContact" id="emergencyContact" placeholder="" value="" required>
                   </td>
                   <td style="padding: 5px" colspan="3">
                     <label for="miscDetails">Notes</label>
