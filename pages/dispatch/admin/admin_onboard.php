@@ -25,7 +25,7 @@ if (isset($_POST['btn_submit'])){
         $sql = "DELETE FROM onboard_management WHERE id=$id";
         break;
     case "Update":
-        $sql = "UPDATE onboard_management set order_rank=\"$order_rank\", phase=\"$phase\", category=$category, position=\"$position\"  
+        $sql = "UPDATE onboard_management set order_rank=$order_rank, phase=$phase, category=\"$category\", position=\"$position\"  
           WHERE id=$id";
         break;
     case "Add":
