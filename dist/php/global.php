@@ -8,6 +8,7 @@ define('IFTA_UPLOAD',$_SERVER['DOCUMENT_ROOT']."/ifta_uploads");
 $localdate = phx_time("date");
 $localtime = phx_time("time");
 $localdateYear = phx_time("dateYear");
+$recaptcha_key = $recaptcha_key;
 
 define("BX_HAWB", "bx_hawb");
 define("BX_PUDN", "PUAgentDriverName");

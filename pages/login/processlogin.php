@@ -89,6 +89,18 @@ if (isset($_POST['register']) && ($_POST['register'] == 'true'))
     $lname = $mysqli->real_escape_string($_POST['lname']);
     $username = $mysqli->real_escape_string($_POST['username']);
     $email = $mysqli->real_escape_string($_POST['email']);
+    $recaptcha_response = $_POST['g-recaptcha-response'];
+
+    // Let's validate via recaptcha that the user is not a bot.
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = 'secret=' . $recaptcha_key . '&remoteip=' . $_SERVER['REMOTE_ADDR'] . '&response=' . $recaptcha_response;
+    $response=file_get_contents($url."?secret=".$recaptcha_key."&response=".$recaptcha_response."&remoteip=".$_SERVER['REMOTE_ADDR']);
+    $obj = json_decode($response);
+    if($obj->success == false) {
+        $url_error = urlencode("Failed recaptcha response.  Please try again");
+        header("location: /pages/login/register.php?return=false&error=$url_error");
+        exit;
+    }
 
     $salt = '@KowM$viHR8t';
     $hash = md5( $salt . rand(0,1000) );
@@ -99,7 +111,7 @@ if (isset($_POST['register']) && ($_POST['register'] == 'true'))
     $mysqli->autocommit(FALSE);
     $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
     try {
-        $statement = "INSERT INTO users (fname, lname, email, is_activated, activation_hash, username, status, employee_id 
+        $statement = "INSERT INTO users (fname, lname, email, is_activated, activation_hash, username, status, employee_id )
                       VALUES
                       ('$fname', '$lname', '$email', 0, '$hash', '$username', 'onboarding', UUID())";
 
