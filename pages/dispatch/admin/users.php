@@ -1016,7 +1016,7 @@ function show_vis($object_type,$grantee) {
                               </td>
                               <td style="padding: 5px">
                                 <label for="tsa">TSA-STA</label>
-                                <input type="text" class="form-control" name="tsa" id="tsa" placeholder="" value="<?php echo $row['tsa_sta'];?>" <?php echo show_vis('text',array('onboarder'));?>>
+                                <input type="text" class="form-control" name="tsa" id="tsa" placeholder="" value="<?php echo $row['tsa_sta'];?>" <?php echo show_vis('text',array(''));?>>
                               </td>
                             </tr>
                             <tr>
@@ -1030,11 +1030,11 @@ function show_vis($object_type,$grantee) {
                               </td>
                               <td style="padding: 5px">
                                 <label for="tsaExpire">TSA Exp. Date</label>
-                                <input type="text" class="form-control datepicker" name="tsaExpire" id="tsaExpire" placeholder="mm/dd/yyyy" value="">
+                                <input type="text" class="form-control datepicker" name="tsaExpire" id="tsaExpire" placeholder="mm/dd/yyyy" value="" <?php echo show_vis('text',array(''));?>>
                             </td>
                             <td style="padding: 5px">
                                 <label for="tsaChange">TSA Date Change Exp.</label>
-                                <input type="text" class="form-control datepicker" name="tsaChange" id="tsaChange" placeholder="mm/dd/yyyy" value="">
+                                <input type="text" class="form-control datepicker" name="tsaChange" id="tsaChange" placeholder="mm/dd/yyyy" value="" <?php echo show_vis('text',array(''));?>>
                             </td>
                             </tr>
                             <tr>
@@ -1060,7 +1060,7 @@ function show_vis($object_type,$grantee) {
                               </td>
                               <td style="padding: 5px">
                                 <label for="vir_posttrip_time">VIR Posttrip</label>
-                                <select class="form-control" name="vir_posttrip_time" id="vir_posttrip_time" data-toggle="tooltip" data-placement="top" title="PostTrip (END) will turn on your email and text messages at this time. Leaving 0:00 to 0:00 will leave messages on 24 7">
+                                <select class="form-control" name="vir_posttrip_time" id="vir_posttrip_time" data-toggle="tooltip" data-placement="top" title="PostTrip (END) will turn on your email and text messages at this time. Leaving 0:00 to 0:00 will leave messages on 24 7" >
                                   <?php
                                   foreach ($time_selectors as $t) {
                                   echo "<option value=\"$t\""; if ($row['vir_posttrip_time'] == $t) { echo " selected "; }; echo ">$t</option>";
@@ -1094,11 +1094,11 @@ function show_vis($object_type,$grantee) {
                           </table></td>
                           <td style="padding: 5px">
                             <label for="vir_pre_message">VIR Pre Message</label>
-                            <input type="text" class="form-control" name="vir_pre_message" id="vir_pre_message" placeholder="" value="<?php echo $row['vir_pretrip_message'];?>">
+                            <input type="text" class="form-control" name="vir_pre_message" id="vir_pre_message" placeholder="" value="<?php echo $row['vir_pretrip_message'];?>" <?php echo show_vis('text',array(''));?>>
                           </td>
                           <td style="padding: 5px">
                             <label for="vir_post_message">VIR Post Message</label>
-                            <input type="text" class="form-control" name="vir_post_message" id="vir_post_message" placeholder="" value="<?php echo $row['vir_posttrip_message'];?>">
+                            <input type="text" class="form-control" name="vir_post_message" id="vir_post_message" placeholder="" value="<?php echo $row['vir_posttrip_message'];?>" <?php echo show_vis('text',array(''));?>>
                           </td>
                         </tr>
                         <tr>
@@ -1173,11 +1173,11 @@ function show_vis($object_type,$grantee) {
                 <tr>
                   <td style="padding: 5px">
                     <label for="bom_message">BOM Message</label>
-                    <input type="text" class="form-control" name="bom_message" id="bom_message" placeholder="" value="<?php echo $row['bom_message'];?>">
+                    <input type="text" class="form-control" name="bom_message" id="bom_message" placeholder="" value="<?php echo $row['bom_message'];?>" <?php echo show_vis('text',array(''));?>>
                   </td>
                   <td style="padding: 5px">
                     <label for="eom_message">EOM Message</label>
-                    <input type="text" class="form-control" name="eom_message" id="eom_message" placeholder="" value="<?php echo $row['eom_message'];?>">
+                    <input type="text" class="form-control" name="eom_message" id="eom_message" placeholder="" value="<?php echo $row['eom_message'];?>" <?php echo show_vis('text',array(''));?>>
                   </td>
                 </tr>
                 <tr>
