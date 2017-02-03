@@ -136,9 +136,9 @@ if (isset($_POST['btn_submit'])){
                 </div><!-- /.box-header --><!-- ./box-body -->
                 <div class="box-footer">
                   <div id="mainContent">
-                    <table width="1021" class="table">
+                    <table class="table">
                       <tr>
-                        <td width="63">Phase</td>
+                        <td>Phase</td>
                         <td>Order</td>
                         <td>Category</td>
                         <td>Position</td>
@@ -146,10 +146,10 @@ if (isset($_POST['btn_submit'])){
                       </tr>
                       <form id="onboard_management" name="onboard_management" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
                         <tr>
-                          <td><input name="order_rank" type="text" class="form-control" id="order_rank" size="6"/></td>
-                          <td width="50"><input name="phase" type="text" class="form-control" id="phase" size="6"/></td>
-                          <td width="72"><input name="category" type="text" class="form-control" id="category" size="6"/></td>
-                          <td width="101"><select class="form-control" name="position[]" id="position" multiple="TRUE">
+                          <td><input name="order_rank" type="text" class="form-control digit_only" id="order_rank" required="true" /></td>
+                          <td><input name="phase" type="text" class="form-control digit_only" id="phase" required="true"/></td>
+                          <td><input name="category" type="text" class="form-control" id="category" required="true"/></td>
+                          <td><select class="form-control" name="position[]" id="position" required="true" multiple="TRUE">
                             <option>Office</option>
                             <option>Driver</option>
                           </select></td>
@@ -190,12 +190,12 @@ if (isset($_POST['btn_submit'])){
 	?>
                       <form id="onboard_management" name="onboard_management" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
                         <tr>
-                          <td><input type="hidden" name="id" value="<?php echo $sql_object[$i]['id'];?>">
-                            <input name="order_rank" type="text" class="form-control" id="order_rank" value="<?php echo $sql_object[$i]['order_rank'];?>" size="6">
+                          <td><input type="hidden" id="id" name="id" value="<?php echo $sql_object[$i]['id'];?>">
+                            <input name="order_rank" type="text" class="form-control digit_only" id="order_rank" value="<?php echo $sql_object[$i]['order_rank'];?>" required="true">
                           </td>
-                          <td><input name="phase" type="text" class="form-control" id="phase" value="<?php echo $sql_object[$i]['phase'];?>" size="6"></td>
-                          <td><input name="category" type="text" class="form-control" id="category" value="<?php echo $sql_object[$i]['category'];?>" size="6"></td>
-                          <td><select class="form-control" name="position[]" id="position" multiple="TRUE">
+                          <td><input name="phase" type="text" class="form-control digit_only" id="phase" value="<?php echo $sql_object[$i]['phase'];?>" required="true" ></td>
+                          <td><input name="category" type="text" class="form-control" id="category" value="<?php echo $sql_object[$i]['category'];?>" required="true"></td>
+                          <td><select class="form-control" name="position[]" id="position" multiple="TRUE" required="true">
                           <?php
                             foreach($position_array as $p) {
                               echo "<option value='$p' ";
@@ -267,5 +267,18 @@ if (isset($_POST['btn_submit'])){
 
 <!-- Demo -->
 <script src="<?php echo HTTP;?>/dist/js/demo.js" type="text/javascript"></script>
+
+<script>
+// Don't allow non-digits in mobile phone
+$(document).ready(function () {
+  //called when key is pressed in textbox
+  $(".digit_only").keypress(function (e) {
+     //if the letter is not digit then display error and don't type anything
+     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        return false;
+    }
+   });
+});
+</script>
 </body>
 </html>
