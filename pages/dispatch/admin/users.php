@@ -4,10 +4,10 @@ session_start();
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 {
-if ($_SESSION['onboarding'] != true) {
-// This person hasn't authenticated NOR are they onboarding
-header('Location: /pages/login/driverlogin.php');
-}
+    if ($_SESSION['onboarding'] != true) {
+        // This person hasn't authenticated NOR are they onboarding
+        header('Location: /pages/login/driverlogin.php');
+    }
 }
 // If we're an admin then don't restrict any visibility
 if ($_SESSION['login'] == 1) {
@@ -1731,10 +1731,10 @@ $(document).ready(function() {
 });
 function validate_user_status(i) {
 // Make sure that, when we submit, if the status is not
-// active then make sure there is a departureDate
+// active on onboarding then make sure there is a departureDate
 var my_status = $(i).find('#status').val();
 var my_departureDate = $(i).find('#departureDate').val();
-if (my_status != 'Active') {
+if (my_status != 'Active' && my_status != 'Onboarding') {
 if (my_departureDate == false) {
 alert('Termination date not entered!');
 return false;
