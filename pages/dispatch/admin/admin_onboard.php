@@ -81,8 +81,12 @@ if (isset($_POST['btn_submit'])){
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-<link rel="stylesheet" href="http://dispatch.catalinacartage.com:8080/dist/css/animate.css">
+<link rel="stylesheet" href="<?php echo HTTP;?>://dispatch.catalinacartage.com/dist/css/animate.css">
 <link href="../../dist/css/AdminLTE.css" rel="stylesheet" type="text/css">
+    
+<!-- Custom JS -->
+<script src="<?php echo HTTP;?>/dist/js/catalina_formvalidate.js"></script>
+
 </head>
 <body class="skin-blue sidebar-mini">
 <div class="wrapper">
@@ -144,10 +148,10 @@ if (isset($_POST['btn_submit'])){
                         <td>Position</td>
                         <td>Options</td>
                       </tr>
-                      <form id="onboard_management" name="onboard_management" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
+                      <form id="onboard_management" name="onboard_management" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" onSubmit="return checkUnique();">
                         <tr>
-                          <td><input name="order_rank" type="text" class="form-control digit_only" id="order_rank" required="true" /></td>
-                          <td><input name="phase" type="text" class="form-control digit_only" id="phase" required="true"/></td>
+                          <td><input name="phase" type="text" class="form-control digit_only unique_phase" id="phase" required="true"/></td>
+                          <td><input name="order_rank" type="text" class="form-control digit_only unique_order_rank" id="order_rank" required="true" /></td>
                           <td><input name="category" type="text" class="form-control" id="category" required="true"/></td>
                           <td><select class="form-control" name="position[]" id="position" required="true" multiple="TRUE">
                             <option>Office</option>
@@ -188,12 +192,14 @@ if (isset($_POST['btn_submit'])){
                 for($i=0;$i<sizeof($sql_object);$i++)
                 {
 	?>
-                      <form id="onboard_management" name="onboard_management" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
+                      <form id="onboard_management" name="onboard_management" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" onSubmit="return checkUnique();">
                         <tr>
-                          <td><input type="hidden" id="id" name="id" value="<?php echo $sql_object[$i]['id'];?>">
-                            <input name="order_rank" type="text" class="form-control digit_only" id="order_rank" value="<?php echo $sql_object[$i]['order_rank'];?>" required="true">
+                          <td><input type="hidden" id="id" name="id" value="<?php echo $sql_object[$i]['id'];?>">                            
+                            <input name="phase" type="text" class="form-control digit_only unique_phase" id="phase" value="<?php echo $sql_object[$i]['phase'];?>" required="true" >
                           </td>
-                          <td><input name="phase" type="text" class="form-control digit_only" id="phase" value="<?php echo $sql_object[$i]['phase'];?>" required="true" ></td>
+                          <td>
+                          <input name="order_rank" type="text" class="form-control digit_only unique_order_rank" id="order_rank" value="<?php echo $sql_object[$i]['order_rank'];?>" required="true">
+                          </td>
                           <td><input name="category" type="text" class="form-control" id="category" value="<?php echo $sql_object[$i]['category'];?>" required="true"></td>
                           <td><select class="form-control" name="position[]" id="position" multiple="TRUE" required="true">
                           <?php
