@@ -148,7 +148,7 @@ if (isset($_POST['btn_submit'])){
                         <td>Position</td>
                         <td>Options</td>
                       </tr>
-                      <form id="onboard_management" name="onboard_management" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" onSubmit="return checkUnique();">
+                      <form id="onboard_management" name="onboard_management" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>"">
                         <tr>
                           <td><input name="phase" type="text" class="form-control digit_only unique_phase" id="phase" required="true"/></td>
                           <td><input name="order_rank" type="text" class="form-control digit_only unique_order_rank" id="order_rank" required="true" /></td>
@@ -163,7 +163,7 @@ if (isset($_POST['btn_submit'])){
                       </form>
                       <?php                      
                       try {
-                        $statement = "select id,order_rank,phase,category,position from onboard_management order by order_rank";
+                        $statement = "select id,order_rank,phase,category,position from onboard_management order by phase,order_rank";
                         if ($result = $mysqli->query($statement)) {
                           $sql_object = array();
                           $counter = 0;
@@ -192,7 +192,7 @@ if (isset($_POST['btn_submit'])){
                 for($i=0;$i<sizeof($sql_object);$i++)
                 {
 	?>
-                      <form id="onboard_management" name="onboard_management" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" onSubmit="return checkUnique();">
+                      <form id="onboard_management" name="onboard_management" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>"">
                         <tr>
                           <td><input type="hidden" id="id" name="id" value="<?php echo $sql_object[$i]['id'];?>">                            
                             <input name="phase" type="text" class="form-control digit_only unique_phase" id="phase" value="<?php echo $sql_object[$i]['phase'];?>" required="true" >
