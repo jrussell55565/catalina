@@ -1,81 +1,73 @@
-<?php 
-function accessorials($accessorialType,$srcPage,$username)
+<?php
+function accessorials($accessorialType, $srcPage, $username)
 {
-   if ($accessorialType == 'Truck')
-   {
-      $ckPrefix = 'truck_';
-   }elseif($accessorialType == 'Trailer'){
-      $ckPrefix = 'trailer_';
-   }
+    if ($accessorialType == 'Truck') {
+        $ckPrefix = 'truck_';
+    } elseif ($accessorialType == 'Trailer') {
+        $ckPrefix = 'trailer_';
+    }
 
-	$sql = mysql_query("select * FROM accessorials WHERE acc_type = \"$accessorialType\" ORDER BY revenue_charge");
-        while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-        {
-        	echo "<tr>\n";
-                $input_type = '';
-                $input_value = '';
-                if (preg_match('/^ck_/',$row['input_type']))
-                {
-                	$visibility = '';
-                	$input_type = "type=\"checkbox\" name=\"".$ckPrefix."ck_accessorials[]\" id=\"".$ckPrefix."ck_accessorials[]\" value=\"$row[revenue_charge]\" autocomplete=\"off\"";
-                }elseif (preg_match('/^txt_/',$row['input_type'])){
-                        $visibility = '';
-                        $input_type = "type=\"text\" name=\"bx_accessorials[$row[revenue_charge]]\" id=\"bx_accessorials[$row[revenue_charge]]\"\" value=\"\"";
-                }else{
-			# If the input is hidden and the page matches then
-			# we set the input type html.  Otherwise
-			# we just skip this part.
-			if ($row['src_page'] == $srcPage)
-			{
+    $sql = mysql_query("select * FROM accessorials WHERE acc_type = \"$accessorialType\" ORDER BY revenue_charge");
+    while ($row = mysql_fetch_array($sql, MYSQL_BOTH)) {
+        echo "<tr>\n";
+        $input_type  = '';
+        $input_value = '';
+        if (preg_match('/^ck_/', $row['input_type'])) {
+            $visibility = '';
+            $input_type = "type=\"checkbox\" name=\"" . $ckPrefix . "ck_accessorials[]\" id=\"" . $ckPrefix . "ck_accessorials[]\" value=\"$row[revenue_charge]\" autocomplete=\"off\"";
+        } elseif (preg_match('/^txt_/', $row['input_type'])) {
+            $visibility = '';
+            $input_type = "type=\"text\" name=\"bx_accessorials[$row[revenue_charge]]\" id=\"bx_accessorials[$row[revenue_charge]]\"\" value=\"\"";
+        } else {
+            # If the input is hidden and the page matches then
+            # we set the input type html.  Otherwise
+            # we just skip this part.
+            if ($row['src_page'] == $srcPage) {
                 $visibility = 'hidden';
                 $input_type = "type=\"checkbox\" name=\"ck_accessorials[]\" id=\"ck_accessorials[]\" value=\"$row[revenue_charge]\" checked";
-			}else{
-				$visibility = 'hidden';
-				$input_type = "type=\"checkbox\" name=\"NULL\" id=\"NULL\"";
-			}
-                }
-                echo "<td $visibility>\n";
-                if (preg_match('/checkbox/', $input_type))
-                {
-                    echo "<div class=\"btn-group\" data-toggle=\"buttons\">";
-                    echo "<label class=\"btn btn-primary btn-sm\" $colorOverride>";
-                }
-                echo "<input $input_type/>$row[revenue_charge]\n";
-                if (preg_match('/checkbox/', $input_type))
-                {
-                    echo "</label>";
-                    echo "</div>";
-                }
-		echo "</td>\n";
-        	echo "</tr>\n";
-	}
-	# Send in a hidden field with username
-	echo "<tr><td><input type=hidden name=username value=$username ></td></tr>\n";
+            } else {
+                $visibility = 'hidden';
+                $input_type = "type=\"checkbox\" name=\"NULL\" id=\"NULL\"";
+            }
+        }
+        echo "<td $visibility>\n";
+        if (preg_match('/checkbox/', $input_type)) {
+            echo "<div class=\"btn-group\" data-toggle=\"buttons\">";
+            echo "<label class=\"btn btn-primary btn-sm\">";
+        }
+        echo "<input $input_type/>$row[revenue_charge]\n";
+        if (preg_match('/checkbox/', $input_type)) {
+            echo "</label>";
+            echo "</div>";
+        }
+        echo "</td>\n";
+        echo "</tr>\n";
+    }
+    # Send in a hidden field with username
+    echo "<tr><td><input type=hidden name=username value=$username ></td></tr>\n";
 }
 
 function sendEmail($to, $subject, $body, $cc, $from, $bcc)
 {
-  if ($from === null) {
-    $from = 'drivers@catalinacartage.com';
-  } 
-  $headers = "From: $from" . "\r\n" .
-             'X-Mailer: PHP/' . phpversion() . "\r\n";
-  if (isset($cc))
-  {
-    $headers .= "CC: $cc\r\n";
-  }
-  if (isset($bcc))
-  {
-    $headers .= "BCC: $bcc\r\n";
-  }
-	mail($to, $subject, $body, $headers);
+    if ($from === null) {
+        $from = 'drivers@catalinacartage.com';
+    }
+    $headers = "From: $from" . "\r\n" .
+    'X-Mailer: PHP/' . phpversion() . "\r\n";
+    if (isset($cc)) {
+        $headers .= "CC: $cc\r\n";
+    }
+    if (isset($bcc)) {
+        $headers .= "BCC: $bcc\r\n";
+    }
+    mail($to, $subject, $body, $headers);
 }
 
 function pageErrors($error)
 {
     $array = array(
-      "podName" => "POD Name must not be empty",
-      "pieces" => "Pieces must be greater than zero",
+        "podName" => "POD Name must not be empty",
+        "pieces"  => "Pieces must be greater than zero",
     );
 
     return ($array["$error"]);
@@ -83,7 +75,9 @@ function pageErrors($error)
 
 function rtrim_limit($str, $delim, $count = 0)
 {
-    if ($count == 0) return rtrim($str, $delim);
+    if ($count == 0) {
+        return rtrim($str, $delim);
+    }
 
     $l = strlen($delim);
     $k = 0;
@@ -95,10 +89,11 @@ function rtrim_limit($str, $delim, $count = 0)
     return $str;
 }
 
-function get_drivers($mysqli) {
-   # Get the driver names and employee_id
-   $driver_array = [];
-   $statement = "select * from
+function get_drivers($mysqli)
+{
+    # Get the driver names and employee_id
+    $driver_array = [];
+    $statement    = "select * from
    (
    select fname, lname, employee_id, email from users where title = 'Driver' AND status in ('Active','Disabled')
    union
@@ -107,42 +102,44 @@ function get_drivers($mysqli) {
    select 'Multiple' as fname, 'Drivers' as lname, 'multiple' as employee_id, 'multiple' as email from DUAL
    ) a order by fname";
 
-   $counter = 0;
-   if ($result = $mysqli->query($statement)) {
-     while($obj = $result->fetch_object()){
-       $driver_array[$counter]['employee_id'] = $obj->employee_id;
-       $driver_array[$counter]['name'] = $obj->fname. " ". $obj->lname;
-       $driver_array[$counter]['email'] = $obj->email;
-       $counter++;
-     }
-   }
-   return $driver_array;
+    $counter = 0;
+    if ($result = $mysqli->query($statement)) {
+        while ($obj = $result->fetch_object()) {
+            $driver_array[$counter]['employee_id'] = $obj->employee_id;
+            $driver_array[$counter]['name']        = $obj->fname . " " . $obj->lname;
+            $driver_array[$counter]['email']       = $obj->email;
+            $counter++;
+        }
+    }
+    return $driver_array;
 }
 
-function get_all_users($mysqli) {
-   $all_users_array = [];
-   $statement = "select fname, lname, employee_id, email, vtext from users 
+function get_all_users($mysqli)
+{
+    $all_users_array = [];
+    $statement       = "select fname, lname, employee_id, email, vtext from users
                  where status in ('Active') order by fname";
 
-   $counter = 0;
-   if ($result = $mysqli->query($statement)) {
-     while($obj = $result->fetch_object()){
-       $all_users_array[$counter]['employee_id'] = $obj->employee_id;
-       $all_users_array[$counter]['name'] = $obj->fname. " ". $obj->lname;
-       $all_users_array[$counter]['email'] = $obj->email;
-       $all_users_array[$counter]['vtext'] = $obj->vtext;
-       $counter++;
-     }
-   }
-   return $all_users_array;
+    $counter = 0;
+    if ($result = $mysqli->query($statement)) {
+        while ($obj = $result->fetch_object()) {
+            $all_users_array[$counter]['employee_id'] = $obj->employee_id;
+            $all_users_array[$counter]['name']        = $obj->fname . " " . $obj->lname;
+            $all_users_array[$counter]['email']       = $obj->email;
+            $all_users_array[$counter]['vtext']       = $obj->vtext;
+            $counter++;
+        }
+    }
+    return $all_users_array;
 }
 
-function generate_compliance_sql($emp_id,$time) {
+function generate_compliance_sql($emp_id, $time)
+{
 
-    $predicates = generate_compliance_predicate($emp_id, $time);
-    $predicate = $predicates[0];
+    $predicates     = generate_compliance_predicate($emp_id, $time);
+    $predicate      = $predicates[0];
     $time_predicate = $predicates[1];
-   
+
     $sql = "SELECT 'Total Company Points' AS basic, sum(total_points) AS total_points, sum(points_cash_value) AS points_cash_value FROM csadata
          WHERE $time_predicate
          union
@@ -158,34 +155,36 @@ function generate_compliance_sql($emp_id,$time) {
     return $sql;
 }
 
-function generate_compliance_predicate($emp_id,$time) {
+function generate_compliance_predicate($emp_id, $time)
+{
     // Do some mangling if the $emp_id = 'all'.  This specific user is from the csa.php page.
     if ($emp_id == 'all') {
         $predicate = '1=1';
-    }else{
+    } else {
         $predicate = "EMPLOYEE_ID='$emp_id'";
     }
 
-   // Set some time ranges
-   if (isset($time)) {
-       if ($time == "24") {
-           // We only want the last 24 months
-           $time_predicate = "date BETWEEN curdate() - INTERVAL 24 MONTH AND curdate()";
-       }elseif($time == "all") {
-           // Get all time
-           $time_predicate = "1=1";
-       }elseif($time == "24+1") {
-          // Get month 25 only
-          $time_predicate = "date_format(date,'%Y-%m') = date_format(curdate() - INTERVAL 25 MONTH,'%Y-%m')";
-       }
-   }else{
-       // Default to 24 months
-       $time_predicate = "date BETWEEN curdate() - INTERVAL 24 MONTH AND curdate()";
-   }
+    // Set some time ranges
+    if (isset($time)) {
+        if ($time == "24") {
+            // We only want the last 24 months
+            $time_predicate = "date BETWEEN curdate() - INTERVAL 24 MONTH AND curdate()";
+        } elseif ($time == "all") {
+            // Get all time
+            $time_predicate = "1=1";
+        } elseif ($time == "24+1") {
+            // Get month 25 only
+            $time_predicate = "date_format(date,'%Y-%m') = date_format(curdate() - INTERVAL 25 MONTH,'%Y-%m')";
+        }
+    } else {
+        // Default to 24 months
+        $time_predicate = "date BETWEEN curdate() - INTERVAL 24 MONTH AND curdate()";
+    }
 
-   return array ($predicate,$time_predicate);
+    return array($predicate, $time_predicate);
 }
-function generate_clockin_sql($emp_id,$sd,$ed) {
+function generate_clockin_sql($emp_id, $sd, $ed)
+{
     $sql = "select count(*) from days_worked
         where `DATE WORKED` between STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
         and `EMPLOYEE NUMBER` = '$emp_id'
@@ -193,7 +192,8 @@ function generate_clockin_sql($emp_id,$sd,$ed) {
     return $sql;
 }
 
-function generate_vir_sql($sd,$ed) {
+function generate_vir_sql($sd, $ed)
+{
     $sql = "select virs.employee_id, virs.vir_pretrip, virs.vir_posttrip, virs.vir_breakdown, worked.days_worked,
             coalesce(round((virs.vir_pretrip / worked.days_worked) * 100,0),0) as vir_pretrip_percent,
             coalesce(round((virs.vir_posttrip / worked.days_worked) * 100,0),0) as vir_posttrip_percent,
@@ -225,7 +225,8 @@ function generate_vir_sql($sd,$ed) {
             order by vir_total_percent desc";
     return $sql;
 }
-function generate_ship_sql($emp_id,$sd,$ed) {
+function generate_ship_sql($emp_id, $sd, $ed)
+{
     $sql = "SELECT '$emp_id'    AS 'employee_id',
              b.*,
              Round((Coalesce(b.earned_points / b.max_points, 0) * 100), 1) AS 'percentage_earned'
@@ -443,49 +444,50 @@ function generate_ship_sql($emp_id,$sd,$ed) {
 
     return $sql;
 }
-function get_sql_results($sql,$mysqli) {
-       try {
-          if ($result = $mysqli->query($sql))
-           {
-               while ($row = $result->fetch_assoc()) {
-                   $emparray[] = $row;
-               }
-               $result->close();
-           }else{
-               throw new Exception("Query error: ". $mysqli->error);
-           }
-         } catch (Exception $e) {
-           // An exception has been thrown
-           $data = array('type' => 'error', 'message' => $e->getMessage());
-           print $e->getMessage();
-           $mysqli->close();
-           exit;
-         }
-        return $emparray;
+function get_sql_results($sql, $mysqli)
+{
+    try {
+        if ($result = $mysqli->query($sql)) {
+            while ($row = $result->fetch_assoc()) {
+                $emparray[] = $row;
+            }
+            $result->close();
+        } else {
+            throw new Exception("Query error: " . $mysqli->error);
+        }
+    } catch (Exception $e) {
+        // An exception has been thrown
+        $data = array('type' => 'error', 'message' => $e->getMessage());
+        print $e->getMessage();
+        $mysqli->close();
+        exit;
+    }
+    return $emparray;
 }
 
-function run_sql($sql,$mysqli) {
-       try {
-          if ($result = $mysqli->query($sql))
-           {
-               return;
-           }else{
-               throw new Exception("Query error: ". $mysqli->error);
-           }
-         } catch (Exception $e) {
-           // An exception has been thrown
-           $data = array('type' => 'error', 'message' => $e->getMessage());
-           print $e->getMessage();
-           $mysqli->close();
-           exit;
-         }
+function run_sql($sql, $mysqli)
+{
+    try {
+        if ($result = $mysqli->query($sql)) {
+            return;
+        } else {
+            throw new Exception("Query error: " . $mysqli->error);
+        }
+    } catch (Exception $e) {
+        // An exception has been thrown
+        $data = array('type' => 'error', 'message' => $e->getMessage());
+        print $e->getMessage();
+        $mysqli->close();
+        exit;
+    }
 }
-function generate_user_csa_sql($emp_id,$time,$basic) {
+function generate_user_csa_sql($emp_id, $time, $basic)
+{
     // If the BASIC type wasn't specified then get them all
     if (empty($basic)) {
-       $basic_predicate = "1=1";
-    }else{
-       $basic_predicate = "basic = '$basic'";
+        $basic_predicate = "1=1";
+    } else {
+        $basic_predicate = "basic = '$basic'";
     }
     $sql = "SELECT date,
         basic,
@@ -502,8 +504,9 @@ function generate_user_csa_sql($emp_id,$time,$basic) {
         and $time and $basic_predicate";
     return $sql;
 }
-function generate_task_sql($sd,$ed){
-    $sql = "select assign_to,sum(number_of_tasks) tasks ,sum(number_of_points) points from 
+function generate_task_sql($sd, $ed)
+{
+    $sql = "select assign_to,sum(number_of_tasks) tasks ,sum(number_of_points) points from
        (
        select assign_to,count(*) as number_of_tasks, 0 as number_of_points from tasks
        where submit_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
@@ -519,7 +522,8 @@ function generate_task_sql($sd,$ed){
        )a group by assign_to";
     return $sql;
 }
-function generate_quiz_sql($sd,$ed) {
+function generate_quiz_sql($sd, $ed)
+{
     $sql = "SELECT cu.username,cu.employee_id,q.user_id,q.assignment_id,MAX(q.pass_score_point) AS max_score
       FROM assignments.user_quizzes q, catalina.users cu, assignments.users au
       WHERE cu.employee_id = au.comments
@@ -529,4 +533,81 @@ function generate_quiz_sql($sd,$ed) {
       ORDER BY max_score DESC";
     return $sql;
 }
-?>
+function upload_image($input_file, $target_dir, $target_name, $return_page, $sql, $file_size, $mysqli)
+{
+    // Check that the input variables are set
+    if (! (isset($input_file) || isset($target_dir) || isset($target_name) || isset($return_page) || isset($sql) || isset($file_size) || isset($mysqli))) {
+      error_log('Required input variables are not set!');
+      return;
+    }
+
+    # Image Uploads
+    if (!empty($input_file["name"])) {
+        # File upload logic
+        $target_dir  = $_SERVER['DOCUMENT_ROOT'] . $target_dir;
+        $target_file = $target_dir . $target_name;
+        $uploadOk    = 0;
+        $mysqli->autocommit(FALSE);
+        $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+
+        try {
+          // Check if image file is a actual image or fake image
+          if (! getimagesize($input_file["tmp_name"])) {
+             throw new Exception("Unable to determine if this upload is an image.", 1);   
+          }
+
+          // Check file size
+          if ($input_file["size"] > $file_size) {
+            throw new Exception("File is larger than the allowed ". $file_size, 1);
+          }
+
+          // Allow certain file formats
+          if (exif_imagetype($input_file["tmp_name"]) != IMAGETYPE_GIF
+              && exif_imagetype($input_file["tmp_name"]) != IMAGETYPE_JPEG
+              && exif_imagetype($input_file["tmp_name"]) != IMAGETYPE_PNG
+          ) {
+              throw new Exception("Uploaded file is not an allowed type (GIF, JPEG, PNG)", 1);
+          }
+
+          
+          # resize the image
+          $resizedImage = new Imagick($input_file["tmp_name"]);
+          $resizedImage->resizeImage(160, 0, Imagick::FILTER_LANCZOS, 1);
+          $resizedImage->writeImage($input_file["tmp_name"]);
+          $resizedImage->destroy();
+          if (!move_uploaded_file($input_file["tmp_name"], $target_file)) {
+              throw new Exception("Unable to move the file into ". $target_file, 1);
+          }
+
+          if ($mysqli->query($sql) === false)
+          {
+              throw new Exception($mysqli->error);
+          }        
+
+        }catch (Exception $e){
+         // An exception has been thrown
+            // We must rollback the transaction
+            error_log($e->getMessage());
+            $url_error = urlencode($e->getMessage());
+            $mysqli->rollback();
+            http_response_code(500);
+            header("location: ".$return_page."?return=false&error=".$url_error);
+            $mysqli->autocommit(TRUE);
+            $mysqli->close();
+            exit;
+        }
+        $mysqli->commit();
+    }
+}
+function reArrayFiles(&$file_post) {
+    $file_ary = array();
+    $file_count = count($file_post['name']);
+    $file_keys = array_keys($file_post);
+
+    for ($i=0; $i<$file_count; $i++) {
+        foreach ($file_keys as $key) {
+            $file_ary[$i][$key] = $file_post[$key][$i];
+        }
+    }
+    return $file_ary;
+}

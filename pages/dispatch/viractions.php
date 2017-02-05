@@ -9,6 +9,9 @@ include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
 mysql_select_db($db_name) or DIE('Database name is not available!');
 
+# setup the database connection
+$mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
+
 if (isset($_POST['vir_item']) && isset($_POST['vir_status']))
 {
 # AJAX call to update vir status
@@ -24,7 +27,7 @@ $sql = "UPDATE virs SET updated_status = \"".$_POST['vir_status']."\",
         repair_by = $repair_by,
         work_order = $work_order
         WHERE vir_itemnum = ".$_POST['vir_item'];
-        
+
 if (! mysql_query($sql))
 {
     echo('Unable to update `updated_status`' . mysql_error());
@@ -407,6 +410,37 @@ if (($trucktype == 'combo') && ($trailer_number != ''))
     $trailer_po = mysql_insert_id();
 }
 
+# Process file upload (if exists)
+if (! empty($_FILES['fileToUpload']['name'])){
+    // Get the po (truck or trailer)
+    if (is_int($truck_po)) {
+        // This is a truck, use that
+        $local_vir_itemnum = $truck_po;
+    }else{
+        $local_vir_itemnum = $trailer_po;
+    }
+
+    $file_array = reArrayFiles($_FILES['fileToUpload']);
+    $dom_name = 'fileToUpload';
+    $target_dir = '/uploads/vir/';
+
+    // Create a string to append to the email.
+    $images = null;
+
+    foreach($file_array as $file) {
+        // Grab the extension of the file
+        $path_parts = pathinfo($file["name"]);
+        $file_extension = $path_parts['extension'];
+
+        $target_name = md5($file['name']) . '.' . $file_extension;
+        $return_page = '/pages/dispatch/vir.php';
+        $sql = "INSERT INTO vir_images (vir_itemnum, image_path) VALUES (".$local_vir_itemnum.", '".HTTP . $target_dir . $target_name."')";
+        $file_size = 500000;
+        upload_image($file, $target_dir, $target_name, $return_page, $sql, $file_size, $mysqli);
+        $images .= HTTP . $target_dir . $target_name . "\n";
+    }
+}
+
 # Send the email out
 # Reset the trucktype if it's 'combo'
 ($trucktype == 'combo' ? $trucktype = 'semi' : $trucktype = $trucktype);
@@ -449,6 +483,9 @@ Trailer Tires VIR:		$trailer_vir_condition;
 Tire Notes:			$trailer_tires_notes;
 Axel 1 (Driver): 			$trailer_tires_driverside_ax1front		Axel 1 (Passenger): $trailer_tires_passenger_ax1front
 Axel 2 (Driver): 			$trailer_tires_driverside_ax2rear		Axel 2 (Passenger): $trailer_tires_passenger_ax2rear
+
+:::::::::::::Uploaded Images:::::::::::::::::::::::::::::::::::::::::::::::::::
+$images
 
 ::::::::::::::::::::::::End of Message:::::::::::::::::::::::::::::::::::::::::
 

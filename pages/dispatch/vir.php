@@ -100,13 +100,18 @@ $tire_pressure_array = array(125,120,115,110,105,100,95,90,80,85,75,70,65,60,50,
                       <div class="box">
                         <div class="box-header with-border">
                           <h3 class="box-title">Vechicle Inspection Report</h3>
+                          <?php
+                            if (isset($_GET['error'])) {
+                              echo "<br>";
+                              echo '<div style="width: 50%; text-align: center; margin:auto" class="alert alert-danger" role="alert">Error adding record: ',urldecode($_GET['error']),'</div>';
+                            }?>
                           <div class="box-tools pull-right">
                             <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                             <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
                           </div>
                         </div>
                         <div class="box-body">
-                          <form class="form" name="virForm" id="virForm" method="post" action="viractions.php" onsubmit="return validateSubmit(this);">
+                          <form enctype="multipart/form-data" class="form" name="virForm" id="virForm" method="post" action="viractions.php" onsubmit="return validateSubmit(this);">
                             <table width="292" border="1">
                               <tr>
                                 <td colspan="5">Start Time:
@@ -933,7 +938,7 @@ $tire_pressure_array = array(125,120,115,110,105,100,95,90,80,85,75,70,65,60,50,
                                                                                                                                 <td ><div>Take A photo and upload! Not working.<img
                                                                                                                                 src="../images/images/take_a_photo.jpg" width="56" height="58" style="display: block; margin: 0 auto;"/></div>
                                                                                                                                 <div>
-                                                                                                                                  <input id="fileToUpload" name="fileToUpload" type="file" multiple=true class="file-loading">
+                                                                                                                                  <input id="fileToUpload" name="fileToUpload[]" type="file" multiple="multiple" class="file-loading">
                                                                                                                                 </div></td>
                                                                                                                               </tr>
                                                                                                                               <tr>
@@ -972,9 +977,9 @@ $tire_pressure_array = array(125,120,115,110,105,100,95,90,80,85,75,70,65,60,50,
                                                                                                           <!-- /.content -->
                                                                                                         </div>
                                                                                                         <!-- /.content-wrapper -->
-                                                                                                        <?php require $_SERVER[DOCUMENT_ROOT] . '/dist/menus_sidebars_elements/footer.php';?>
+                                                                                                        <?php require $_SERVER['DOCUMENT_ROOT'] . '/dist/menus_sidebars_elements/footer.php';?>
                                                                                                         <!-- Control Sidebar -->
-                                                                                                        <?php require $_SERVER[DOCUMENT_ROOT] . '/dist/menus_sidebars_elements/r_sidebar.php';?>
+                                                                                                        <?php require $_SERVER['DOCUMENT_ROOT'] . '/dist/menus_sidebars_elements/r_sidebar.php';?>
                                                                                                         <!-- /.control-sidebar -->
                                                                                                         <!-- Add the sidebar's background. This div must be placed
                                                                                                         immediately after the control sidebar -->
