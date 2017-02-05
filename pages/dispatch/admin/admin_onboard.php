@@ -9,7 +9,16 @@ if ($_SESSION['login'] != 1)
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 
 $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
-$position_array = array('Office', 'Driver');
+
+// Get positions
+$statement = 'SELECT distinct title from users';
+$position_array = array();
+if ($result = $mysqli->query($statement)) {
+  while($obj = $result->fetch_object()){
+    array_push($position_array, $obj->title);
+  }
+  $result->close();
+}
 
 if (isset($_POST['btn_submit'])){
   // Let's update the DB with the values entered.
@@ -17,7 +26,9 @@ if (isset($_POST['btn_submit'])){
     $order_rank = $_POST['order_rank'];
     $phase = $_POST['phase'];
     $category = $_POST['category'];
+    $pdf = $_POST['pdf'];
     $position = implode('|', $_POST['position']);
+  
 
   switch ($_POST['btn_submit'])
   {
@@ -25,13 +36,14 @@ if (isset($_POST['btn_submit'])){
         $sql = "DELETE FROM onboard_management WHERE id=$id";
         break;
     case "Update":
-        $sql = "UPDATE onboard_management set order_rank=$order_rank, phase=$phase, category=\"$category\", position=\"$position\"  
+        $sql = "UPDATE onboard_management set order_rank=$order_rank, phase=$phase, category=\"$category\", position=\"$position\", pdf=\"$pdf\" 
           WHERE id=$id";
         break;
     case "Add":
-        $sql = "INSERT INTO onboard_management (order_rank,phase,category,position) VALUES ($order_rank,$phase,\"$category\",\"$position\")";
+        $sql = "INSERT INTO onboard_management (order_rank,phase,category,position,pdf) VALUES ($order_rank,$phase,\"$category\",\"$position\", \"$pdf\")";
         break;
   }
+  
   try{
     # Start TX
     $mysqli->autocommit(FALSE);
@@ -146,6 +158,7 @@ if (isset($_POST['btn_submit'])){
                         <td>Order</td>
                         <td>Category</td>
                         <td>Position</td>
+                        <td>PDF File</td>
                         <td>Options</td>
                       </tr>
                       <form id="onboard_management" name="onboard_management" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>"">
@@ -154,16 +167,20 @@ if (isset($_POST['btn_submit'])){
                           <td><input name="order_rank" type="text" class="form-control digit_only unique_order_rank" id="order_rank" required="true" /></td>
                           <td><input name="category" type="text" class="form-control" id="category" required="true"/></td>
                           <td><select class="form-control" name="position[]" id="position" required="true" multiple="TRUE">
-                            <option>Office</option>
-                            <option>Driver</option>
+                          <?php
+                            foreach($position_array as $p) {
+                              echo "<option value='$p'>$p</option>";
+                            }
+                          ?>
                           </select></td>
+                          <td><input name="pdf" type="text" class="form-control" id="pdf" required="true"/></td>
                           <td>
                            <input name="btn_submit" value="Add" type="submit" id="btn_submit" class="btn btn-primary"/>
                           </td>
                       </form>
                       <?php                      
                       try {
-                        $statement = "select id,order_rank,phase,category,position from onboard_management order by phase,order_rank";
+                        $statement = "select id,order_rank,phase,category,position,pdf from onboard_management order by phase,order_rank";
                         if ($result = $mysqli->query($statement)) {
                           $sql_object = array();
                           $counter = 0;
@@ -174,6 +191,7 @@ if (isset($_POST['btn_submit'])){
                               $sql_object[$counter]['phase'] = $obj->phase;
                               $sql_object[$counter]['category'] = $obj->category;
                               $sql_object[$counter]['position'] = $obj->position;
+                              $sql_object[$counter]['pdf'] = $obj->pdf;
                               $counter++;
                           }
                         }else{
@@ -213,6 +231,7 @@ if (isset($_POST['btn_submit'])){
                             }
                           ?>
                           </select></td>
+                          <td><input name="pdf" type="text" class="form-control" id="pdf" value = "<?php echo $sql_object[$i]['pdf'];?>" required="true"/></td>
                           <td><input name="btn_submit" value="Delete" type="submit" id="btn_submit" class="btn btn-danger"/>
                             <input name="btn_submit" value="Update" type="submit" id="btn_submit" class="btn btn-primary"/>
                             <input type="hidden" name="hdn_vir"/>
@@ -279,8 +298,12 @@ if (isset($_POST['btn_submit'])){
 $(document).ready(function () {
   //called when key is pressed in textbox
   $(".digit_only").keypress(function (e) {
-     //if the letter is not digit then display error and don't type anything
-     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+     //if the letter is not digit then don't type anything
+     // 8 == backspace
+     // 0 == who the fuck knows?
+     // 190 == period (.)
+     // <= 48 and >= 57 are 1 through 0
+     if (e.which != 8 && e.which != 0 && e.which != 190 && (e.which < 48 || e.which > 57)) {
         return false;
     }
    });

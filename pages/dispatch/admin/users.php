@@ -2,6 +2,10 @@
 session_start();
 
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
+
+# setup the database connection
+$mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
+
 if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 {
     if ($_SESSION['onboarding'] != true) {
@@ -21,6 +25,74 @@ if (isset($_SESSION['onboarding'])) {
     $_SESSION['login'] = 3;
     $restrict_onboarding = true;
 
+}
+
+# If we're an onboarder or admin then let's get the data for onboarding
+if (($_SESSION['login'] == 1) || ($_SESSION['login'] == 3))
+{
+    function get_phase_data($mysqli,$employee_id)
+    {
+        // Get the onboard_management data
+        $statement = 'SELECT om.phase, om.order_rank, om.category, om.pdf
+                      FROM onboard_management om
+                        JOIN users ON om.position REGEXP users.title
+                      WHERE users.employee_id = "'.$employee_id.'"';
+
+        $onboard_array = array();
+        $b = array();
+        if ($result = $mysqli->query($statement)) 
+        {
+            $counter = 0;
+            while($obj = $result->fetch_object()){    
+                $sql_object[$obj->phase]['order_rank'] = $obj->order_rank;
+                $sql_object[$obj->phase]['category'] = $obj->category;
+                $sql_object[$obj->phase]['pdf'] = $obj->pdf;
+                
+                array_push($onboard_array, array('phase' => $obj->phase, 
+                                            array(
+                                                'order_rank' => $obj->order_rank, 
+                                                'pdf' => $obj->pdf,
+                                                'category' => $obj->category,
+                                                )
+                                    )
+                            );
+            }
+        }
+       
+        $result->close();
+        return $onboard_array;
+    }
+
+    function get_distinct_phases($onboard_array)
+    {
+        // Construct another array with just the unique phases
+        // so we can later iterate through it.
+
+        $phase_array = array();
+        foreach($onboard_array as $k => $v){
+            $phase_array[$onboard_array[$k]['phase']] = 'phase';
+        }
+        return $phase_array;
+    }
+
+    function get_completed_onboards($mysqli,$employee_id)
+    {
+        // Now let's just find out which ones this user has completed so we can check the box if needed
+        $statement = 'select phase,category FROM onboard_users ou 
+                    WHERE employee_id = "'.$employee_id.'"
+                    and completed = 1';
+        $completed_onboards = array();
+        if ($result = $mysqli->query($statement)) 
+        {
+            $counter = 0;
+            while($obj = $result->fetch_object()){ 
+                $completed_onboards[$counter]['phase'] = $obj->phase;
+                $completed_onboards[$counter]['category'] = $obj->category;
+                $counter++;
+            }
+        }
+        return $completed_onboards;
+    }
 }
 
 // Setup states array
@@ -347,6 +419,80 @@ mysql_query($sql);
 }
 }
 }
+
+if (isset($_POST['btn_submit_onboard'])) {
+    $employee_id = $_POST['employee_id'];
+    
+    $mysqli->autocommit(FALSE);
+    $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+
+    try {
+        // Let's find out which elements are checked and which aren't
+        $sql = 'select concat_ws("|",phase,category) as category from onboard_management
+                        JOIN users on users.title REGEXP onboard_management.position
+                        where users.employee_id = "'.$employee_id.'"';
+
+        if ($result = $mysqli->query($sql)) 
+        {
+            $category_array = array();
+            while($obj = $result->fetch_object()){ 
+                array_push($category_array, $obj->category);
+            }   
+        }else{
+            throw new Exception("Error selecting catetory from onboard_management: ".$mysqli->error);
+        }
+
+        // Now we'll compare our $category_array which the employee_is a part of with what
+        // was uploaded        
+        foreach($_POST['ck_onboarding_progress'] as $i => $ck_onboarding_progress)
+        {
+            foreach($category_array as $all_categories => $specific_category)
+            {
+                if ($ck_onboarding_progress == $specific_category) 
+                {
+                    $statement =  'INSERT INTO onboard_users 
+                                (phase, category, employee_id, completed, date_created, date_updated) 
+                                VALUES ("'.explode('|', $specific_category)[0].'",
+                                "'.explode('|', $specific_category)[1].'","'.$employee_id.'",1,now(),now())
+                                ON DUPLICATE KEY UPDATE completed = 1, date_updated = now()';
+
+                    if ($mysqli->query($statement) === false)
+                    {
+                        throw new Exception("Error upserting into onboard_users: ".$mysqli->error);
+                    }
+                    unset($category_array[$all_categories]);
+                }
+            }
+        }
+        // Okay, all that's left are the categories we didn't check.  That means we'll set completed = 0
+        foreach($category_array as $all_categories => $specific_category)
+        {
+            $statement =  'INSERT INTO onboard_users 
+                            (phase, category, employee_id, completed, date_created, date_updated) 
+                            VALUES ("'.explode('|', $specific_category)[0].'",
+                            "'.explode('|', $specific_category)[1].'","'.$employee_id.'",1,now(),now())
+                            ON DUPLICATE KEY UPDATE completed = 0, date_updated = now()';
+                if ($mysqli->query($statement) === false)
+                {
+                    throw new Exception("Error upserting into onboard_users: ".$mysqli->error);
+                }
+        }
+
+        $mysqli->commit();
+     
+        }catch (Exception $e) {
+            // An exception has been thrown
+            // We must rollback the transaction
+            error_log($e->getMessage);
+            $url_error = urlencode($e->getMessage());
+            $mysqli->rollback();
+            header("location: /pages/dispatch/admin/users.php?return=false&error=$url_error");
+            $mysqli->autocommit(TRUE);
+            $mysqli->close();
+            exit;
+        }
+}
+
 // Function to show visibility of an object
 function show_vis($object_type,$grantee) {
     // Admin can view anything so we'll push him on the array
@@ -874,7 +1020,6 @@ function show_vis($object_type,$grantee) {
                                   <td style="padding: 5px">
                                     <label for="jobTitle">Title</label>
                                     <?php $foo = show_vis('option',array('onboarder'));?>
-                                    <?php error_log($foo);?>
                                     <select class="form-control" name="jobTitle" id="jobTitle">
                                       <?php
                                       if ($row['subtitle'] === null) {
@@ -1206,11 +1351,111 @@ function show_vis($object_type,$grantee) {
                   <td style="padding: 5px">
                     <button type="submit" class="btn btn-info" value="<?php echo $row['email'];?>" id="testEmail" name="testEmail" formaction="<?php echo $_SERVER['PHP_SELF']; ?>" formmethod="post">Test Email</button>
                     <button type="submit" class="btn btn-info" value="<?php echo $row['vtext'];?>" id="testVtext" name="testVtext" formaction="<?php echo $_SERVER['PHP_SELF']; ?>" formmethod="post">Test Text</button>
-                  </form>
                 </td>
               </tr>
             </table>
           </form>
+          <table>
+          <tr>
+          <td>
+          <!-- Onboarding in here -->
+          <form  class="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+              <div class="panel panel-default">
+                  <div class="panel-heading">Onboarding Details</div>
+                      <div class="panel-body">
+                          <input type="hidden" name="employee_id" value="<?php echo $row['employee_id'];?>"/>
+                          <?php
+                          
+                          $onboard_array = get_phase_data($mysqli,$row['employee_id']);
+                          $completed_onboards = get_completed_onboards($mysqli,$row['employee_id']);
+                          $phase_array = get_distinct_phases($onboard_array);
+
+                          while (list($key, $val) = each($phase_array)) 
+                          {
+                            $current_phase = $key;
+                            echo "<!-- begin phase details -->\n";
+                            echo '<a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse" href="#phase_'.$current_phase.'_details" ';
+                            echo 'onClick="$(this).toggleClass(\'glyphicon-chevron-down glyphicon-chevron-right\');" '; 
+                            echo 'aria-expanded="false" aria-controls="phase_'.$current_phase.'_details" style="padding: 10px;"></a>'."\n";
+                            echo 'Phase '.$current_phase.' '."\n";
+                            echo "<!-- begin collapse -->\n";
+                            echo '<div class="collapse" id="phase_'.$current_phase.'_details">'."\n";
+                            $counter = 0;
+                                foreach($onboard_array as $k => $v)
+                                {
+                                    $phase = $onboard_array[$k]['phase'];
+                                    if ($phase == $current_phase) 
+                                    {
+                                        foreach($v as $key => $value)
+                                        {
+                                            if (is_array($value) || is_object($value))
+                                            {
+                                                foreach($value as $inner => $way_inner)
+                                                {
+                                                    if ($inner == 'pdf') { $pdf = $way_inner; }
+                                                    if ($inner == 'category')
+                                                    {
+                                                        echo '<div class="btn-group" data-toggle="buttons">'."\n";
+                                                        echo '<label class="btn btn-primary btn-sm ';
+                                                            if (is_array($completed_onboards) || is_object($completed_onboards))
+                                                            {
+                                                                foreach($completed_onboards as $x => $onboard_is_completed)
+                                                                {
+                                                                    if (($onboard_is_completed['phase'] == $current_phase) && ($onboard_is_completed['category'] == $way_inner))
+                                                                    {
+                                                                        echo ' active ';
+                                                                    }
+                                                                }
+                                                                echo '">'."\n";
+                                                                echo '<input type="checkbox" name="ck_onboarding_progress[]" ';
+                                                                echo 'id="ck_onboarding_progress_'.$current_phase.'_'.$counter.'" value="'.$current_phase.'|'.$way_inner.'" autocomplete="off"';
+                                                                foreach($completed_onboards as $x => $onboard_is_completed)
+                                                                {
+                                                                    if (($onboard_is_completed['phase'] == $current_phase) && ($onboard_is_completed['category'] == $way_inner))
+                                                                    {
+                                                                        echo ' checked ';
+                                                                    }
+                                                                }
+                                                                echo '>'."\n"; 
+                                                                echo $way_inner;
+                                                                echo "\n".'</label>'."\n";
+
+                                                                echo '<!-- pdf download -->'."\n";
+                                                                echo '<div>'."\n";
+                                                                echo '<a href="';
+                                                                        if ($pdf != '') 
+                                                                        {
+                                                                            $url = HTTP.'/pages/onboarding/onboard_pdf/'.$pdf;
+                                                                            echo $url;
+                                                                            echo '">Download PDF</a>'."\n";
+                                                                        }else{
+                                                                            echo "#";
+                                                                            echo '">&nbsp;</a>'."\n";
+                                                                        }                                                                
+                                                                echo '</div>'."\n";
+                                                            }
+                                                        
+                                  echo '</div>'."\n";
+                                                }
+                                            }
+                                        }
+                                    }
+                                $counter++;
+                                }
+                            }
+                            echo '</div>'."\n";
+                            echo '<!-- End collapse -->'."\n";
+                            echo "<!-- end phase details -->\n";
+                          } // End of the While loop
+                          ?>
+                      </div>
+                      <input type="submit" name="btn_submit_onboard" class="btn btn-primary" value="Update" style="margin-left: 15px; margin-bottom: 5px;">
+              </div>
+          </form>
+          <!-- /Onboarding in here -->
+          </td>
+          </tr>
+          </table>
         </div>
       </td>
     </tr>

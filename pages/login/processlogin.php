@@ -152,7 +152,7 @@ if (isset($_GET['email']) && isset($_GET['hash']))
 {
     $email = $mysqli->real_escape_string($_GET['email']);
     $hash = $mysqli->real_escape_string($_GET['hash']);
-    $statement = "SELECT id,username FROM users WHERE email = '$email'
+    $statement = "SELECT id,username,employee_id FROM users WHERE email = '$email'
                   and activation_hash = '$hash'";
     try {
         if ($result = $mysqli->query($statement)) {
@@ -160,6 +160,7 @@ if (isset($_GET['email']) && isset($_GET['hash']))
             while($obj = $result->fetch_object()){
                 $id = $obj->id;
                 $username = $obj->username;
+                $employee_id = $obj->employee_id;
             }
             if ($row_cnt > 0) {
                 # Looks like this was a legitimate link.  Let's set is_activated = 1
@@ -176,6 +177,7 @@ if (isset($_GET['email']) && isset($_GET['hash']))
                 $mysqli->commit();
                 $_SESSION['onboarding'] = true;
                 $_SESSION['username'] = $username;
+                $_SESSION['employee_id'] = $employee_id;
             }else{
                 # This was not a legitimate activation attempt.  
                 throw new Exception("Unknown user attempted to register (email or hash not found)");
