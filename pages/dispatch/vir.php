@@ -1199,19 +1199,33 @@ function validateSubmit( obj ){
     }
     if($('#vir_truck_yellow').is(':checked') || $('#vir_truck_red').is(':checked'))
     {
+        // Make sure that if the status was set to yellow or red that issues were
+        // also checked.
         var truck_vir = [];
         $.each($("input[name='truck_ck_accessorials[]']:checked"), function(){
+          console.log($(this).val());
             truck_vir.push($(this).val());
         });
         if (truck_vir.length == 0)
         {
-          $('#generalStatus').html("Please select an issue when marking truck as yellow or red.")
+          $('#generalStatus').html("Please select an issue when marking truck as yellow or red.");
           $('#generalStatus').css('display', 'block');
           return false
+        }else{
+          // Make sure that if issues were checked then there are notes too.
+          if ($('#vir_notes_detailed_truck').val().length == 0) {
+            $('#generalStatus').html("Notes are required when marking a truck yellow or red.");
+            $('#generalStatus').css('display', 'block');
+            $('#vir_notes_detailed_truck').focus();
+            return false;
+          }
         }
+        
     }
     if($('#vir_trailer_yellow').is(':checked') || $('#vir_trailer_red').is(':checked'))
     {
+        // Make sure that if the status was set to yellow or red that issues were
+        // also checked.
         var trailer_vir = [];
         $.each($("input[name='trailer_ck_accessorials[]']:checked"), function(){
             trailer_vir.push($(this).val());
@@ -1221,6 +1235,14 @@ function validateSubmit( obj ){
           $('#generalStatus').html("Please select an issue when marking trailer as yellow or red.")
           $('#generalStatus').css('display', 'block');
           return false
+        }else{
+          // Make sure that if issues were checked then there are notes too.
+          if ($('#vir_notes_detailed_truck').val().length == 0) {
+            $('#generalStatus').html("Notes are required when marking a trailer yellow or red.")
+            $('#generalStatus').css('display', 'block');
+            $('#vir_notes_detailed_truck').focus();
+            return false;
+          }
         }
     }
     if($('#vir_truck_tire_yellow').is(':checked') || $('#vir_truck_tire_red').is(':checked'))
@@ -1236,6 +1258,13 @@ function validateSubmit( obj ){
             $('#generalStatus').css('display', 'block');
             return false
            }
+           // Make sure there are notes entered too
+           if ($('#truck_tires_notes_combo').val().length == 0) {
+            $('#generalStatus').html("Notes are required when marking a truck tires yellow or red.")
+            $('#generalStatus').css('display', 'block');
+            $('#truck_tires_notes_combo').focus();
+            return false;
+           }
     }
     if($('#vir_trailer_tire_yellow').is(':checked') || $('#vir_trailer_tire_red').is(':checked'))
     {
@@ -1247,6 +1276,13 @@ function validateSubmit( obj ){
             $('#generalStatus').html("Select an appropriate tire status when marking trailer tire as yellow or red.");
             $('#generalStatus').css('display', 'block');
             return false
+           }
+           // Make sure there are notes entered too
+           if ($('#trailer_tires_notes_trailer').val().length == 0) {
+            $('#generalStatus').html("Notes are required when marking a trailer tires yellow or red.")
+            $('#generalStatus').css('display', 'block');
+            $('#trailer_tires_notes_trailer').focus();
+            return false;
            }
     }
     if($('#vir_box_tire_yellow').is(':checked') || $('#vir_box_tire_red').is(':checked'))
@@ -1260,6 +1296,13 @@ function validateSubmit( obj ){
             $('#generalStatus').css('display', 'block');
             return false
            }
+           // Make sure there are notes entered too
+           if ($('#truck_tires_notes_boxtruck').val().length == 0) {
+            $('#generalStatus').html("Notes are required when marking a box truck tires yellow or red.")
+            $('#generalStatus').css('display', 'block');
+            $('#truck_tires_notes_boxtruck').focus();
+            return false;
+           }
     }
     if($('#vir_sprinter_tire_yellow').is(':checked') || $('#vir_sprinter_tire_red').is(':checked'))
     {
@@ -1272,9 +1315,16 @@ function validateSubmit( obj ){
             $('#generalStatus').css('display', 'block');
             return false
            }
+           // Make sure there are notes entered too
+           if ($('#truck_tires_notes_sprinter').val().length == 0) {
+            $('#generalStatus').html("Notes are required when marking a box truck tires yellow or red.")
+            $('#generalStatus').css('display', 'block');
+            $('#truck_tires_notes_sprinter').focus();
+            return false;
+           }
     }
 
-    return true
+    return true;
 }
 </script>
 </body>
