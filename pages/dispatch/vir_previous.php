@@ -152,85 +152,8 @@ folder instead of downloading all of them to reduce the load. -->
 <!-- End Animated Top Menu -->
 
 
-<div class="row">
-          
-<!-- ====================box 1 in section 1========================== -->           
-          
-  <div class="col-md-3">
-              <div class="box box-default collapsed-box">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Expandable</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div><!-- /.box-tools -->
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  The body of the box
-                Expandable</div>
-                <!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- /.col -->
 
-<!-- ====================box 2 in section 1========================== --> 
-
-  <div class="col-md-3">
-              <div class="box box-success collapsed-box">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Removable</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div><!-- /.box-tools -->
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  The body of the box
-                Removable</div>
-                <!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-
-<!-- ====================box 3 in section 1========================== --> 
-
-            <div class="col-md-3">
-              <div class="box box-warning collapsed-box">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Collapsable</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div><!-- /.box-tools -->
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  The body of the box
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-  </div><!-- /.col -->
-
-<!-- ====================box 4 in section 1========================== --> 
-
-            <div class="col-md-3">
-              <div class="box box-danger collapsed-box">
-                <div class="box-header">
-                  <h3 class="box-title">Loading state</h3>
-                </div>
-                <div class="box-body">
-                  The body of the box
-                </div><!-- /.box-body -->
-                <!-- Loading (remove the following to stop the loading)-->
-                <div class="overlay">
-                  <i class="fa fa-refresh fa-spin"></i>
-                </div>
-                <!-- end loading -->
-              </div><!-- /.box -->
-  </div><!-- /.col -->
-</div><!-- /.row -->
-
-<!-- =========================================================== -->
-
+ 
 
 
 
@@ -250,10 +173,10 @@ folder instead of downloading all of them to reduce the load. -->
         <h3 class="box-title">VIR</h3>
         <p>
          <label for="allvir"></label>
-         <input name="radio" type="radio" id="allvir" value="allvir">
+         <input name="radio" type="radio" id="allvir" value="allvir" <?php echo ($_GET['vir_itemnum'] ? 'checked' : null);?>>
          All
          <label for="openvir"></label>
-         <input name="radio" type="radio" id="openvir" value="openvir" checked>
+         <input name="radio" type="radio" id="openvir" value="openvir" <?php echo ($_GET['vir_itemnum'] ? null : 'checked');?>>
          Open
         </p>
       </div>
@@ -263,42 +186,49 @@ folder instead of downloading all of them to reduce the load. -->
 <div class="box-body no-padding">
                   <!-- PAGE CONTENT HERE -->
                   <!-- Default box -->
-        <div class="box box-primary collapsed-box">
+                                   <!-- Search -->
+                  <div class="box box-primary collapsed-box" style="border-bottom-color: #3c8dbc; border-bottom-style: solid;">
                      <div class="box-header" style="text-align: center;">
-                        <h3 class="box-title"> Search VIRS </h3>
+                        <h3 class="box-title"> Search VIRs </h3>
                         <div class="box-tools pull-right">
                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"><i class="fa fa-plus"></i></button>
                         </div>
-                        <div style="width: 50%; text-align: center; margin:auto; display: none;" id="search_alert" class="alert alert-danger" role="alert">Include a beginning AND end date.</div>
+                        <div style="width: 50%; text-align: center; margin:auto; display: none;" id="search_alert" class="alert alert-danger" role="alert"></div>
                      </div>
                      <div class="box-body">
                         <form name="frm_ifta_search" method="GET" action="ifta.php" role="form">
                            <div class="table-responsive">
                               <table width="646" class="table table-condensed table-striped">
                                  <tr>
-                                    <td width="111">VIR PO </td>
-                                    <td width="444"><input name="trip_search_tripnum" type="text" class="input-sm form-control" id="search_tripnum" value="" ></td>
+                                    <td width="111">VIR PO</td>
+                                    <td width="444"><input name="vir_search_po" type="text" class="input-sm form-control" id="vir_search_po" value="" ></td>
                                     <td width="18">&nbsp;</td>
                                     <td width="53">&nbsp;</td>
                                  </tr>
                                  <tr>
+                                    <td>Work Order</td>
+                                    <td><input name="vir_search_wo" type="text" class="input-sm form-control" id="vir_search_wo" value="" ></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                 </tr>
+                                 <tr>
                                     <td>Unit #</td>
-                                    <td><input name="trip_search_trucknumber" type="text" class="input-sm form-control" id="trip_search_trucknumber" ></td>
+                                    <td><input name="vir_search_un" type="text" class="input-sm form-control" id="vir_search_un" value="" ></td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                  </tr>
                                  <tr>
-                                    <td>Trip Starting </td>
-                                    <td><input name="trip_search_startdate" type="text" class="input-sm form-control datepicker" id="trip_search_startdate"  data-date-format="mm/dd/yyyy"></td>
+                                    <td>VIR Begin Date</td>
+                                    <td><input name="vir_search_sd" type="text" class="input-sm form-control datepicker" id="vir_search_sd"  data-date-format="mm/dd/yyyy"></td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                  </tr>
                                  <tr>
-                                    <td>Trip Ending</td>
-                                    <td><input name="trip_search_enddate" type="text" class="input-sm form-control datepicker" id="trip_search_enddate"  data-date-format="mm/dd/yyyy"></td>
+                                    <td>VIR End Date</td>
+                                    <td><input name="vir_search_ed" type="text" class="input-sm form-control datepicker" id="vir_search_ed"  data-date-format="mm/dd/yyyy"></td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
-                                 </tr>
+                                 </tr>                                   
                                  <tr>
                                     <td colspan="2">
                                        <button type="button" id="btn_display_results" name="btn_display_results" value="display" class="btn btn-primary dropdown-toggle">Display Results</button>
@@ -310,25 +240,10 @@ folder instead of downloading all of them to reduce the load. -->
                         <div id="search_results">
                         </div>
                      </div>
-                     <!-- /.box-body -->
-                     <div class="box-footer"></div>
-                     <!-- /.box-footer-->
-        </div>
-                  <!-- /.box -->
-                  <!-- /.box-header --><!-- /.box -->
-                     <!-- END PAGE CONTENT HERE -->
-      </div>      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+                  </div>
+
+                  <!-- / Search --> 
+
       <div class="box-body table-responsive">
         <table class="table table-striped ">
           <tbody>
@@ -336,17 +251,23 @@ folder instead of downloading all of them to reduce the load. -->
 # If non-admin logs in then only show their info
 if ($_SESSION['login'] == 2)
 {
-$restricted_predicate = "AND employee_id = '".$_SESSION['employee_id']."'";
-$max_results = 8;
+  $restricted_predicate = "AND employee_id = '".$_SESSION['employee_id']."'";
+  $max_results = 8;
+  $date_predicate = ' AND insp_date >= date(now()) - INTERVAL '.$max_results.' DAY';
 }else{
-$restricted_predicate = '';
-$max_results = 30;
+  $restricted_predicate = '';
+  $max_results = 30;
+  $date_predicate = ' AND insp_date >= date(now()) - INTERVAL '.$max_results.' DAY';
 }
 
 # Some overrides in case we got here with a specific truck/trailer type
 if (isset($_GET['type'])) {
     $truck_or_trailer_predicate = "AND " . $_GET['type'] . "_number = " . $_GET['no'];
     $max_results = 30;
+}elseif (isset($_GET['vir_itemnum'])) {
+  $truck_or_trailer_predicate = "AND vir_itemnum = ".$_GET['vir_itemnum'];
+  // We just want this record since that's what we searched for.
+  $date_predicate = ' AND 1=1';
 }else{
     $truck_or_trailer_predicate = '';
 }
@@ -371,7 +292,7 @@ $statement = "SELECT vir_itemnum, date_format(insp_date,'%m/%d/%Y') insp_date, i
                      trailer_tires_passenger_ax1front, trailer_tires_driverside_ax2rear,
                      trailer_tires_passenger_ax2rear
                FROM virs WHERE 1=1 $restricted_predicate $truck_or_trailer_predicate
-               AND insp_date >= date(now()) - INTERVAL $max_results DAY
+               $date_predicate
                $orderSql";
 
 $counter = 0;
@@ -416,11 +337,9 @@ $result->close();
 
 ?>
             <tr>
-              <td style="width: 20px;"><i class="glyphicon glyphicon-wrench"></i></td>
-              <td><?php echo "$max_results days ago";?>
-                <a class="glyphicon glyphicon-chevron-down" role="button" data-toggle="collapse"
-href="#vir_details" aria-expanded="false" aria-controls="vir_details" style="padding-left: 15px;" id="expand_chevron">
-                </a></td>
+               <?php echo ($_GET['vir_itemnum'] ? null : '<td style="width: 20px;"><i class="glyphicon glyphicon-wrench"></i></td>
+              <td> <a class="glyphicon glyphicon-chevron-down" role="button" data-toggle="collapse"
+href="#vir_details" aria-expanded="false" aria-controls="vir_details" style="padding-left: 15px;" id="expand_chevron"> </a> '.$max_results.' days ago </td>'); ?>
             </tr>
             <tr id="vir_details">
               <td colspan="9"><div class="well">
@@ -429,8 +348,9 @@ href="#vir_details" aria-expanded="false" aria-controls="vir_details" style="pad
                       <tr>
                         <th>PO</th>
                         <th>Inspection Date</th>
-                        <th>Unit <a href="?sort=unit&order=<?php echo $order_by_unit;?>">
-                                 <i class="glyphicon glyphicon-triangle-<?php echo $glyph_icon_unit;?>"></i></a></th>
+                        <th>Unit <?php echo ($_GET['vir_itemnum'] ? null : '<a href="?sort=unit&order='.$order_by_unit.'">
+                                 <i class="glyphicon glyphicon-triangle-'.$glyph_icon_unit.'"></i></a>');?>
+                        </th>
                         <th>Status</th>
                         <th>Tires</th>
                         <th>Reported</th>
@@ -438,6 +358,7 @@ href="#vir_details" aria-expanded="false" aria-controls="vir_details" style="pad
                         <th>Type</th>
                         <?php echo ($_SESSION['login'] == 1 ? '<th>Actions</th>' : null);?>
                       </tr>
+                      <! -- Looping through virs -->
                       <?php
                       for ($x=0; $x < count($virs); $x++)
                       {
@@ -590,9 +511,17 @@ if ($virs[$x]['updated_status'] == '')
                         <div class="modal-content">
                           <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Close <?php echo $virs[$x]['vir_itemnum'];?></h4>
+                            <h4 class="modal-title" id="myModalLabel"><span><div id='modalStatus_<?php echo $virs[$x]['vir_itemnum'];?>'></div> <?php echo $virs[$x]['vir_itemnum'];?></span></h4>
                           </div>
                           <div class="modal-body">
+                            <div class="row" style="padding-bottom: 5px;">
+                              <div class="col-md-4">
+                               <b>Work Order Number</b>
+                              </div>
+                              <div class="col-md-4 col-md-offset-4">
+                               <input type="text" id="work_order_<?php echo $virs[$x]['work_order'];?>" class="form-control" placeholder="Enter work order number..."/>
+                              </div>
+                            </div>
                             <div class="row" style="padding-bottom: 5px;">
                               <div class="col-md-4">
                                <b>Repair Notes</b>
@@ -633,7 +562,7 @@ if ($virs[$x]['updated_status'] == '')
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="closeVir(<?php echo $virs[$x]['vir_itemnum'];?>,$('#repair_notes_<?php echo $virs[$x]['vir_itemnum'];?>').val(),$('#cost_<?php echo $virs[$x]['vir_itemnum'];?>').val(),$('#mechanic_<?php echo $virs[$x]['vir_itemnum'];?> option:selected').text())">Save</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="closeVir($('#modalStatus_<?php echo $virs[$x]['vir_itemnum'];?>').val(),$('#repair_notes_<?php echo $virs[$x]['vir_itemnum'];?>').val(),$('#cost_<?php echo $virs[$x]['vir_itemnum'];?>').val(),$('#mechanic_<?php echo $virs[$x]['vir_itemnum'];?> option:selected').text(),$('#work_order_<?php echo $virs[$x]['vir_itemnum'];?>').val())">Save</button>
                           </div>
                         </div>
                       </div>
@@ -642,7 +571,8 @@ if ($virs[$x]['updated_status'] == '')
  
                       <!-- GENERAL MODAL -->
                     <div class="modal fade" id="modal_<?php echo $tot;?>_<?php echo $virs[$x]['vir_itemnum'];?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                      <div class="modal-dialog" role="document">
+   closeVir
+closeVir                   <div class="modal-dialog" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -819,9 +749,9 @@ immediately after the control sidebar -->
 <script src="<?php echo HTTP;?>/dist/js/demo.js" type="text/javascript">
 </script>
 <script>
-function closeVir(item,notes,cost,repaired_by)
+function closeVir(status,item,notes,cost,repaired_by,work_order)
 {
-  item_status = 'Close';
+  item_status = status;
   $.post( "viractions.php", { vir_item: item, vir_status: item_status, repair_notes: notes, repair_cost: cost, repair_by: repaired_by })
   .success(function(data) {
   x = '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
@@ -829,10 +759,16 @@ function closeVir(item,notes,cost,repaired_by)
   })
   .error(function(data) { console.log(data); });
 }
+
 function submitSelect(sel,item,modal)
 {
 if (sel.value == "Close")
 {
+  $('#modalStatus_'+item).html('Close');
+  $('#'+modal).modal('show');
+}else if(sel.value == "Work Order Created"){
+  $('#modalStatus_'+item).html('Create work order for:');
+  $('#cost_'+item).val('1');
   $('#'+modal).modal('show');
 }else{
   $.post( "viractions.php", { vir_item: item, vir_status: sel.value })
@@ -889,8 +825,13 @@ if (sel.value == "Close")
 
 $(document).ready(function() {
   // Default visibility for users
-  $('[name="closed_vir"]').hide();
-  $('[name="notclosed_vir"]').show();
+  <?php if(isset($_GET['vir_itemnum'])) { ?>
+    $('[name="closed_vir"]').show();
+    $('[name="notclosed_vir"]').show();
+  <?php }else{ ?>
+    $('[name="closed_vir"]').hide();
+    $('[name="notclosed_vir"]').show();
+  <?php } ?>
 
   $("#allvir").click(function() {
     $('[name="closed_vir"]').show();
@@ -905,6 +846,83 @@ $(document).ready(function() {
     $('[name="not_closed"]').show();
   });
 });
+
+// Ajax calls for search
+  $("#btn_display_results").click(function() {
+    // If no po was specified then make sure we enter a date range
+    if ($("#vir_search_po").val().length < 1) {
+      if ($("#vir_search_sd").val().length < 1) {
+          $("#search_alert").html('No date entered.  This may return a large amount of data!');
+         $("#search_alert").show();
+      }
+    }
+
+    // Make sure both a begin and end date are selected
+    if (($("#vir_search_sd").val().length > 1) && ($("#vir_search_ed").val().length < 1)) {
+        $("#search_alert").html('Must choose a beginning AND ending date!');
+        $("#search_alert").show();
+        return false;
+    }
+    if (($("#vir_search_sd").val().length < 1) && ($("#vir_search_ed").val().length > 1)) {
+        $("#search_alert").html('Must choose a beginning AND ending date!');
+        $("#search_alert").show();
+        return false;
+    }
+
+    function searchResults(callBack) {
+      $.ajax({
+       method: "GET",
+       url: "searchvir.php",
+       data: {
+              vir_search_po: $("#vir_search_po").val(),
+              vir_search_wo: $("#vir_search_wo").val(),
+              vir_search_un: $("#vir_search_un").val(),
+              vir_search_vd: $("#vir_search_vd").val(),
+            },
+       success: function(data, textStatus, xhr) {
+            //$('.rtnMsg').html(data);
+            myRtnA = "Success"
+            return callBack( myRtnA, data );  // return callBack() with myRtna
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            //$('.rtnMsg').html("opps: " + textStatus + " : " + errorThrown);
+            myRtnA = "Error"
+            return callBack ( myRtnA, errorThrown ); // return callBack() with myRtna
+        }
+      });
+    }
+
+    searchResults(function(myRtn, data) {
+          if (myRtn == "Success") {
+            console.log(data);
+            var output = `<table id="tbl_search_results" class="table">
+                            <tr>
+                              <td>VIR PO</td>
+                              <td>Work Order</td>
+                              <td>Unit #</td>
+                              <td>VIR Date</td>
+                           </tr>`;
+
+
+            var json = jQuery.parseJSON( data );
+            for(var i = 0; i < json.length; i++) {
+              var obj = json[i];
+               output = output + `<tr>
+                              <td><a href="<?php echo HTTP;?>/pages/dispatch/vir_previous.php?vir_itemnum=`+obj.vir_itemnum+`" target="_blank">`+obj.vir_itemnum+`</a></td>
+                              <td>`+obj.work_order+`</td>
+                              <td>`+obj.truck_number+`</td>
+                              <td>`+obj.insp_date+`</td>
+                           </tr>`;
+            }
+            output = output + '</table>';
+            $("#search_results").html(output);
+          } else {
+            console.log(data);
+            //$('.rtnMsg').html("Opps! Ajax Error");
+          }
+        });
+  });
+
 </script>
 </body>
 </html>
