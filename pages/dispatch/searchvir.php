@@ -22,7 +22,7 @@ if (!empty($vir_search_po)) {
   $predicate .= ' AND vir_itemnum = '.$vir_search_po;
 }
 if (!empty($vir_search_wo)) {
-  $predicate .= ' AND vir_workorder = '.$vir_search_wo;
+  $predicate .= ' AND work_order = '.$vir_search_wo;
 }
 if (!empty($vir_search_un)) {
   $predicate .= ' AND (truck_number = '.$vir_search_un.' OR trailer_number = '.$vir_search_un.')';

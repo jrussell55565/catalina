@@ -16,11 +16,15 @@ if (isset($_POST['vir_item']) && isset($_POST['vir_status']))
 if (! isset($_POST['repair_notes'])) { $repair_notes = "NULL"; }else{ $repair_notes = '"'.$_POST['repair_notes'].'"'; }
 if (! isset($_POST['repair_cost'])) { $repair_cost = "NULL"; }else{ $repair_cost = $_POST['repair_cost']; }
 if (! isset($_POST['repair_by'])) { $repair_by = "NULL"; }else{ $repair_by = '"'.$_POST['repair_by'].'"'; }
+if (! isset($_POST['work_order_no'])) { $work_order = "NULL"; }else{ $work_order = $_POST['work_order_no']; }
+
 $sql = "UPDATE virs SET updated_status = \"".$_POST['vir_status']."\",
         repair_notes = $repair_notes,
         repair_cost = $repair_cost,
-        repair_by = $repair_by
+        repair_by = $repair_by,
+        work_order = $work_order
         WHERE vir_itemnum = ".$_POST['vir_item'];
+        
 if (! mysql_query($sql))
 {
     echo('Unable to update `updated_status`' . mysql_error());

@@ -290,7 +290,11 @@ $statement = "SELECT vir_itemnum, date_format(insp_date,'%m/%d/%Y') insp_date, i
                      truck_tires_passenger_ax1front, truck_tires_driverside_ax2rear,
                      truck_tires_passenger_ax2rear, trailer_tires_driverside_ax1front,
                      trailer_tires_passenger_ax1front, trailer_tires_driverside_ax2rear,
-                     trailer_tires_passenger_ax2rear
+                     trailer_tires_passenger_ax2rear,
+                     repair_notes,
+                     work_order,
+                     repair_cost,
+                     repair_by
                FROM virs WHERE 1=1 $restricted_predicate $truck_or_trailer_predicate
                $date_predicate
                $orderSql";
@@ -328,6 +332,10 @@ if ($result = $mysqli->query($statement)) {
     $virs[$counter]['trailer_tires_passenger_ax1front'] = $obj->trailer_tires_passenger_ax1front;
     $virs[$counter]['trailer_tires_driverside_ax2rear'] = $obj->trailer_tires_driverside_ax2rear;
     $virs[$counter]['trailer_tires_passenger_ax2rear'] = $obj->trailer_tires_passenger_ax2rear;
+    $virs[$counter]['work_order'] = $obj->work_order;
+    $virs[$counter]['repair_notes'] = $obj->repair_notes;
+    $virs[$counter]['repair_cost'] = $obj->repair_cost;
+    $virs[$counter]['repair_by'] = $obj->repair_by;
     $counter++;
   }
 }
@@ -488,7 +496,6 @@ if ($virs[$x]['updated_status'] == '')
 }
 ?>
                                 <option <?php if($virs[$x]['updated_status'] == 'Open') { echo 'selected=selected';}?>>Open</option>
-                                <option <?php if($virs[$x]['updated_status'] == 'Work Order Created') { echo 'selected=selected';}?>>Work Order Created</option>
                                 <option <?php
                                 if(($virs[$x]['updated_status'] == 'Close') || ((preg_match('/^Green/',$virs[$x][$tot.'_vir_condition']) && (preg_match('/^Green/',$virs[$x][$tot.'_tires_overall'])))))
                                 { 
@@ -496,6 +503,7 @@ if ($virs[$x]['updated_status'] == '')
                                 }
                                 ?>
                                 >Close</option>
+                                <option <?php if($virs[$x]['updated_status'] == 'Work Order Created') { echo 'selected=selected';}?>>Work Order Created</option>
                               </select>
                             </div>
                           </form></td>
@@ -512,6 +520,7 @@ if ($virs[$x]['updated_status'] == '')
                           <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="myModalLabel"><span><div id='modalStatus_<?php echo $virs[$x]['vir_itemnum'];?>'></div> <?php echo $virs[$x]['vir_itemnum'];?></span></h4>
+                            <input type="hidden" id="hdn_<?php echo $virs[$x]['vir_itemnum'];?>" value=""/>
                           </div>
                           <div class="modal-body">
                             <div class="row" style="padding-bottom: 5px;">
@@ -519,7 +528,7 @@ if ($virs[$x]['updated_status'] == '')
                                <b>Work Order Number</b>
                               </div>
                               <div class="col-md-4 col-md-offset-4">
-                               <input type="text" id="work_order_<?php echo $virs[$x]['work_order'];?>" class="form-control" placeholder="Enter work order number..."/>
+                               <input type="text" id="work_order_<?php echo $virs[$x]['vir_itemnum'];?>" class="form-control" placeholder="Enter work order number..."/ <?php echo ($virs[$x]['work_order'] != 0 ? 'value = "'.$virs[$x]['work_order'].'"' : null);?> >
                               </div>
                             </div>
                             <div class="row" style="padding-bottom: 5px;">
@@ -527,7 +536,7 @@ if ($virs[$x]['updated_status'] == '')
                                <b>Repair Notes</b>
                               </div>
                               <div class="col-md-4 col-md-offset-4">
-                               <input type="text" id="repair_notes_<?php echo $virs[$x]['vir_itemnum'];?>" class="form-control" placeholder="Enter repair notes..."/>
+                               <input type="text" id="repair_notes_<?php echo $virs[$x]['vir_itemnum'];?>" class="form-control" placeholder="Enter repair notes..."<?php echo ($virs[$x]['repair_notes'] != '' ? 'value="'.$virs[$x]['repair_notes'].'"' : null);?> />
                               </div>
                             </div>
                             <div class="row" style="padding-bottom: 5px;">
@@ -537,7 +546,7 @@ if ($virs[$x]['updated_status'] == '')
                               <div class="col-md-4 col-md-offset-4">
                                <div class="input-group">
                                  <span class="input-group-addon">$</span>
-                                 <input type="text" id="cost_<?php echo $virs[$x]['vir_itemnum'];?>"class="form-control" aria-label="Amount (to the nearest dollar)">
+                                 <input type="text" id="cost_<?php echo $virs[$x]['vir_itemnum'];?>"class="form-control" aria-label="Amount (to the nearest dollar)"<?php echo ($virs[$x]['repair_cost'] != '' ? 'value="'.$virs[$x]['repair_cost'].'"' : null);?> />
                                  <span class="input-group-addon">.00</span>
                                </div>
                               </div>
@@ -552,7 +561,8 @@ if ($virs[$x]['updated_status'] == '')
                               for($i = 0; $i < count($mechanics); $i++)
                               {
                               ?>
-                               <option id="<?php echo $mechanic_id[$i];?>"><?php echo $mechanics[$i];?></option>
+
+                               <option id="<?php echo $mechanic_id[$i];?>" <?php echo ($virs[$x]['repair_by'] == $mechanic_id[$i] ? ' selected ' : null);?>><?php echo $mechanics[$i];?></option>
                               <?php
                               }
                               ?>
@@ -562,7 +572,7 @@ if ($virs[$x]['updated_status'] == '')
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="closeVir($('#modalStatus_<?php echo $virs[$x]['vir_itemnum'];?>').val(),$('#repair_notes_<?php echo $virs[$x]['vir_itemnum'];?>').val(),$('#cost_<?php echo $virs[$x]['vir_itemnum'];?>').val(),$('#mechanic_<?php echo $virs[$x]['vir_itemnum'];?> option:selected').text(),$('#work_order_<?php echo $virs[$x]['vir_itemnum'];?>').val())">Save</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="closeVir($('#hdn_<?php echo $virs[$x]['vir_itemnum'];?>').val(),<?php echo $virs[$x]['vir_itemnum'];?>,$('#repair_notes_<?php echo $virs[$x]['vir_itemnum'];?>').val(),$('#cost_<?php echo $virs[$x]['vir_itemnum'];?>').val(),$('#mechanic_<?php echo $virs[$x]['vir_itemnum'];?> option:selected').text(),$('#work_order_<?php echo $virs[$x]['vir_itemnum'];?>').val())">Save</button>
                           </div>
                         </div>
                       </div>
@@ -750,9 +760,8 @@ immediately after the control sidebar -->
 </script>
 <script>
 function closeVir(status,item,notes,cost,repaired_by,work_order)
-{
-  item_status = status;
-  $.post( "viractions.php", { vir_item: item, vir_status: item_status, repair_notes: notes, repair_cost: cost, repair_by: repaired_by })
+{  
+  $.post( "viractions.php", { vir_item: item, vir_status: status, repair_notes: notes, repair_cost: cost, repair_by: repaired_by, work_order_no: work_order })
   .success(function(data) {
   x = '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
   $("#updated_status_"+item).html(x);
@@ -765,9 +774,11 @@ function submitSelect(sel,item,modal)
 if (sel.value == "Close")
 {
   $('#modalStatus_'+item).html('Close');
+  $('#hdn_'+item).val('Close');
   $('#'+modal).modal('show');
 }else if(sel.value == "Work Order Created"){
   $('#modalStatus_'+item).html('Create work order for:');
+  $('#hdn_'+item).val('Work Order Created');
   $('#cost_'+item).val('1');
   $('#'+modal).modal('show');
 }else{
@@ -850,9 +861,10 @@ $(document).ready(function() {
 // Ajax calls for search
   $("#btn_display_results").click(function() {
     // If no po was specified then make sure we enter a date range
-    if ($("#vir_search_po").val().length < 1) {
+    if (($("#vir_search_po").val().length < 1) && ($("#vir_search_wo").val().length < 1)) {
       if ($("#vir_search_sd").val().length < 1) {
           $("#search_alert").html('No date entered.  This may return a large amount of data!');
+          $("#search_alert").addClass('alert-warning');
          $("#search_alert").show();
       }
     }
