@@ -197,7 +197,7 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                   </a>
                 </h4>
               </div>
-              <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+              <div id="collapseOne" class="panel-collapse collapse <?php echo ($_SESSION['login'] == 1 ? 'in' : null);?>" role="tabpanel" aria-labelledby="headingOne">
                 <div class="panel-body">
 
            <div class="col-md-3">
@@ -210,12 +210,12 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                     <?php 
                      if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
                       if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { 
-                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg"; 
+                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "/dist/img/usernophoto.jpg"; 
                       }
                      }?>" 
                    alt="User Image" width="100" height="100" class="img-circle" />
                       <span class="fa-2x">Shipments</span></p>
-                    <p><span class="fa-2x"> <?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></span></p>
+                    <div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo ($_SESSION['login'] == 1 ? 'ALL' : $_SESSION['username']);?></strong></div></div></span>
                   </div>
                   <!-- Add text below Image Removed....
                   <span class="info-box-text">Shipments</span>
@@ -277,12 +277,12 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                     <?php
                      if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
                       if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
-                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg";
+                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "/dist/img/usernophoto.jpg";
                       }
                      }?>"
                     alt="User Avatar" width="100" height="100" class="img-circle">
                       <span class="fa-2x">VIR'S</span></p>
-                    <p><span class="fa-2x"><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></span></p>
+                    <div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo ($_SESSION['login'] == 1 ? 'ALL' : $_SESSION['username']);?></strong></div></div></span>
                   </div>
                   <!-- Add text below Image Removed.... 
                   <span class="info-box-text"> VIRS</span>
@@ -431,11 +431,11 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                     <?php
                      if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
                       if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
-                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg";
+                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "/dist/img/usernophoto.jpg";
                       }
                      }?>"
                      alt="User Avatar" width="100" height="100" class="img-circle">Tasks</p>
-<p class="fa-2x"><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></p>
+<p class="fa-2x"></p><div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo ($_SESSION['login'] == 1 ? 'ALL' : $_SESSION['username']);?></strong></div></div></span>
                   </div>
                   <!-- Add text below Image Removed....
                   <span class="info-box-text"> Productivity</span>
@@ -481,11 +481,11 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                     <?php
                      if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
                       if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
-                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "dist/img/usernophoto.jpg";
+                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "/dist/img/usernophoto.jpg";
                       }
                      }?>"
                     alt="User Avatar" width="100" height="100" class="img-circle"><span class="fa-2x">Compliance</span></p>
-                    <p><span class="fa-2x"><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></span></p>
+                    <div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo ($_SESSION['login'] == 1 ? 'ALL' : $_SESSION['username']);?></strong></div></div></span>
                   </div>
                 </div>
                 <div class="box-footer no-padding">
