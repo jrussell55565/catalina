@@ -443,7 +443,7 @@ if (isset($_POST['btn_submit_onboard'])) {
         }
 
         // Now we'll compare our $category_array which the employee_is a part of with what
-        // was uploaded        
+        // was uploaded   
         foreach($_POST['ck_onboarding_progress'] as $i => $ck_onboarding_progress)
         {
             foreach($category_array as $all_categories => $specific_category)
@@ -1356,15 +1356,15 @@ function show_vis($object_type,$grantee) {
             </table>
           </form>
           <table>
-          <tr>
-          <td>
           <!-- Onboarding in here -->
           <form  class="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-              <div class="panel panel-default">
+          <tr>
+          <td>
+              <div class="panel panel-default" style="width: 500px;">
                   <div class="panel-heading">Onboarding Details</div>
-                      <div class="panel-body">
+                      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                           <input type="hidden" name="employee_id" value="<?php echo $row['employee_id'];?>"/>
-                          <?php
+                        <?php
                           
                           $onboard_array = get_phase_data($mysqli,$row['employee_id']);
                           $completed_onboards = get_completed_onboards($mysqli,$row['employee_id']);
@@ -1373,15 +1373,19 @@ function show_vis($object_type,$grantee) {
                           while (list($key, $val) = each($phase_array)) 
                           {
                             $current_phase = $key;
-                            echo "<!-- begin phase details -->\n";
-                            echo '<a class="glyphicon glyphicon-chevron-right" role="button" data-toggle="collapse" href="#phase_'.$current_phase.'_details" ';
-                            echo 'onClick="$(this).toggleClass(\'glyphicon-chevron-down glyphicon-chevron-right\');" '; 
-                            echo 'aria-expanded="false" aria-controls="phase_'.$current_phase.'_details" style="padding: 10px;"></a>'."\n";
-                            echo 'Phase '.$current_phase.' '."\n";
-                            echo "<!-- begin collapse -->\n";
-                            echo '<div class="collapse" id="phase_'.$current_phase.'_details">'."\n";
+                            echo '<div class="panel panel-default">'."\n";
+                            echo '<div class="panel-heading" role="tab" id="heading'.$current_phase.'">'."\n";
+                            echo '<h4 class="panel-title">'."\n";
+                            echo '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse'.$current_phase.'" aria-expanded="true" aria-controls="collapse'.$current_phase.'">'."\n";
+                            echo 'Phase #'.$current_phase."\n";
+                            echo '</a>'."\n";
+                            echo '</h4>'."\n";
+                            echo '</div>'."\n";
+                            echo '<div id="collapse'.$current_phase.'" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading'.$current_phase.'">'."\n";
+                            echo '<div class="panel-body">'."\n";
+                            // Specific details about the phase in here
                             $counter = 0;
-                                foreach($onboard_array as $k => $v)
+                            foreach($onboard_array as $k => $v)
                                 {
                                     $phase = $onboard_array[$k]['phase'];
                                     if ($phase == $current_phase) 
@@ -1422,12 +1426,12 @@ function show_vis($object_type,$grantee) {
 
                                                                 echo '<!-- pdf download -->'."\n";
                                                                 echo '<div>'."\n";
-                                                                echo '<a href="';
+                                                                echo '<a download href="';
                                                                         if ($pdf != '') 
                                                                         {
                                                                             $url = HTTP.'/pages/onboarding/onboard_pdf/'.$pdf;
                                                                             echo $url;
-                                                                            echo '">Download PDF</a>'."\n";
+                                                                            echo '" target="_blank" onclick="window.open(\''.$url.'\')" >Download PDF</a>'."\n";
                                                                         }else{
                                                                             echo "#";
                                                                             echo '">&nbsp;</a>'."\n";
@@ -1436,25 +1440,27 @@ function show_vis($object_type,$grantee) {
                                                             }
                                                         
                                   echo '</div>'."\n";
+                                                    }   
                                                 }
                                             }
                                         }
                                     }
                                 $counter++;
                                 }
-                            }
+                            // END phase details
                             echo '</div>'."\n";
-                            echo '<!-- End collapse -->'."\n";
-                            echo "<!-- end phase details -->\n";
-                          } // End of the While loop
-                          ?>
+                            echo '</div>'."\n";
+                            echo '</div>'."\n";
+                          }
+                        ?>
                       </div>
-                      <input type="submit" name="btn_submit_onboard" class="btn btn-primary" value="Update" style="margin-left: 15px; margin-bottom: 5px;">
-              </div>
-          </form>
+                    <input type="submit" name="btn_submit_onboard" class="btn btn-primary" value="Update" style="margin-left: 15px; margin-bottom: 5px;">
+                </div>
+          
           <!-- /Onboarding in here -->
           </td>
           </tr>
+          </form>
           </table>
         </div>
       </td>
