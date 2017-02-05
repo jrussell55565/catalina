@@ -187,6 +187,18 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
 
 
           <div class="row">
+          
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingOne">
+              <h4 class="panel-title">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Productivity Review
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
 
            <div class="col-md-3">
               <!-- Widget: user widget style 1 -->
@@ -596,7 +608,9 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                 </div>
               </div><!-- /.widget-user -->
             </div>
-
+            </div>
+          </div>
+        </div>
         </div>
 
 <!-- ======================New Section Colored Boxes============ -->
