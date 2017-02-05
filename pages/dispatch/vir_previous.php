@@ -428,103 +428,128 @@ href="#vir_details" aria-expanded="false" aria-controls="vir_details" style="pad
                     <thead>
                       <tr>
                         <th>PO</th>
+                        <th>Inspection Date</th>
                         <th>Unit <a href="?sort=unit&order=<?php echo $order_by_unit;?>">
                                  <i class="glyphicon glyphicon-triangle-<?php echo $glyph_icon_unit;?>"></i></a></th>
-                        <th>Type</th>
                         <th>Status</th>
                         <th>Tires</th>
-                        <th>Updated Status</th>
-                        <th>Insp Type</th>
                         <th>Reported</th>
-                        <?php
-if ($_SESSION['login'] == 1)
-{
-?>
-                        <th>Actions</th>
-<?php
-}
-?>
-                        <th>Inspection Date</th>
+                        <th>Updated Status</th>
+                        <th>Type</th>
+                        <?php echo ($_SESSION['login'] == 1 ? '<th>Actions</th>' : null);?>
                       </tr>
                       <?php
-for ($x=0; $x < count($virs); $x++)
-{
-echo '<!-- '.$x.'-->';
-if ($virs[$x]['truck_number'] != '')
-{
-# $tot is Truck or Trailer
-$tot = 'truck';
-}elseif($virs[$x]['trailer_number'] != '') {
-$tot = 'trailer';
-}
+                      for ($x=0; $x < count($virs); $x++)
+                      {
+                      echo '<!-- '.$x.'-->';
+                      if ($virs[$x]['truck_number'] != '')
+                      {
+                      # $tot is Truck or Trailer
+                      $tot = 'truck';
+                      }elseif($virs[$x]['trailer_number'] != '') {
+                      $tot = 'trailer';
+                      }
 
-# Set the name of the <tr> so we can show all, open, or 'not closed'
-if ((preg_match('/^Close/',$virs[$x]['updated_status'])) || ((preg_match('/^Green/',$virs[$x][$tot.'_vir_condition']) && (preg_match('/^Green/',$virs[$x][$tot.'_tires_overall'])))))
-{
-    $status = 'closed_vir';
-}else{
-    $status = 'notclosed_vir';
-}
-?>
+                      # Set the name of the <tr> so we can show all, open, or 'not closed'
+                      if ((preg_match('/^Close/',$virs[$x]['updated_status'])) || ((preg_match('/^Green/',$virs[$x][$tot.'_vir_condition']) && (preg_match('/^Green/',$virs[$x][$tot.'_tires_overall'])))))
+                      {
+                          $status = 'closed_vir';
+                      }else{
+                          $status = 'notclosed_vir';
+                      }
+                      ?>
                       <tr name="<?php echo $status;?>">
                         <td><!-- Button trigger modal -->
                           
                           <button type="button" class="btn btn-primary btn-small" data-toggle="modal" data-target="#modal_<?php echo $tot;?>_<?php echo $virs[$x]['vir_itemnum'];?>">
                           <?php echo $virs[$x]['vir_itemnum'];?>
                           </button></td>
+                       <!-- Inspection Date -->
+                          <td>
+                       <?php echo $virs[$x]['insp_date'];?>
+                       </td>
+                       <!-- / Inspection Date -->
+
+                       <!-- Unit Number -->
                         <td><?php echo $virs[$x][$tot.'_number'];?></td>
-                        <td><img src="../images/<?php if($tot == 'truck')
-{
-if ($virs[$x]['trucktype'] == "combo")
-{
-echo 'semismall.gif';
-}
-if($virs[$x]['trucktype'] == "boxtruck")
-{
-echo 'boxtrucksmall.gif';
-}
-if($virs[$x]['trucktype'] == 'sprinter')
-{
-echo 'sprintersmall.gif';
-}
-}else{
-echo 'trailersmall.gif';
-}
-?>"></img></td>
-                        <td><?php
-if (preg_match('/^Green/',$virs[$x][$tot.'_vir_condition']))
-{
-echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
-}elseif (preg_match('/^Yellow/',$virs[$x][$tot.'_vir_condition'])){
-echo '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
-}elseif (preg_match('/^Red/',$virs[$x][$tot.'_vir_condition'])){
-echo '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
-}
-?></td>
-                        <td><?php
-if (preg_match('/^Green/',$virs[$x][$tot.'_tires_overall']))
-{
-echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
-}elseif (preg_match('/^Yellow/',$virs[$x][$tot.'_tires_overall'])){
-echo '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
-}elseif (preg_match('/^Red/',$virs[$x][$tot.'_tires_overall'])){
-echo '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
-}
-?></td>
+                       <!-- / Unit Number -->
+
+                        <!-- Status -->
+                        <td>
+                        <?php
+                          if (preg_match('/^Green/',$virs[$x][$tot.'_vir_condition']))
+                          {
+                          echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
+                          }elseif (preg_match('/^Yellow/',$virs[$x][$tot.'_vir_condition'])){
+                          echo '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
+                          }elseif (preg_match('/^Red/',$virs[$x][$tot.'_vir_condition'])){
+                          echo '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
+                          }
+                        ?>
+                        </td>
+                        <!-- / Status -->
+
+                        <!-- Tires -->
+                        <td>
+                        <?php
+                          if (preg_match('/^Green/',$virs[$x][$tot.'_tires_overall']))
+                          {
+                          echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
+                          }elseif (preg_match('/^Yellow/',$virs[$x][$tot.'_tires_overall'])){
+                          echo '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
+                          }elseif (preg_match('/^Red/',$virs[$x][$tot.'_tires_overall'])){
+                          echo '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
+                          }
+                          ?>
+                          </td>
+                          <!-- / Tires -->
+
+                          <!-- Reported -->
+                        <td><?php echo $virs[$x]['driver_name'];?></td>
+                        <!-- / Reported -->
+
+
+                          <!-- Updated status -->
                         <td><div id="updated_status_<?php echo $virs[$x]['vir_itemnum'];?>">
                             <?php
-if (preg_match('/^Open/',$virs[$x]['updated_status']))
-{
-echo '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
-}elseif (preg_match('/^Work/',$virs[$x]['updated_status'])){
-echo '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
-}elseif ((preg_match('/^Close/',$virs[$x]['updated_status'])) || ((preg_match('/^Green/',$virs[$x][$tot.'_vir_condition']) && (preg_match('/^Green/',$virs[$x][$tot.'_tires_overall']))))){
-echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
-}
-?>
+                            if (preg_match('/^Open/',$virs[$x]['updated_status']))
+                            {
+                            echo '<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" style="color: #dd4b39;"></span>';
+                            }elseif (preg_match('/^Work/',$virs[$x]['updated_status'])){
+                            echo '<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" style="color: #f39c12;"></span>';
+                            }elseif ((preg_match('/^Close/',$virs[$x]['updated_status'])) || ((preg_match('/^Green/',$virs[$x][$tot.'_vir_condition']) && (preg_match('/^Green/',$virs[$x][$tot.'_tires_overall']))))){
+                            echo '<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" style="color: #00A65A;"></span>';
+                            }
+                            ?>
                           </div></td>
-                        <td><?php echo str_replace('vir_','',$virs[$x]['insp_type']);?></td>
-                        <td><?php echo $virs[$x]['driver_name'];?></td>
+                          <!-- / Updated status -->
+
+                          <!-- Type -->
+                        <td>
+                          <?php 
+                          $tot_image = '';
+                          if($tot == 'truck')
+                          {
+                          if ($virs[$x]['trucktype'] == "combo")
+                          {
+                          $tot_image = 'semismall.gif';
+                          }
+                          if($virs[$x]['trucktype'] == "boxtruck")
+                          {
+                          $tot_image = 'boxtrucksmall.gif';
+                          }
+                          if($virs[$x]['trucktype'] == 'sprinter')
+                          {
+                          $tot_image = 'sprintersmall.gif';
+                          }
+                          }else{
+                          $tot_image = 'trailersmall.gif';
+                          }
+                          ?>
+                        <img src="../images/<?php echo $tot_image;?>"></img></td>
+                        <!-- / Type -->
+                        
+
                         <?php
 if ($_SESSION['login'] == 1)
 {
@@ -556,9 +581,7 @@ if ($virs[$x]['updated_status'] == '')
                         <?php
 }
 ?>
-                       <td>
-                       <?php echo $virs[$x]['insp_date'];?>
-                       </td>
+                       
                       </tr>
                      
                       <!-- CLOSE ISSUE MODAL -->
