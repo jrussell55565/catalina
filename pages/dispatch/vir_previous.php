@@ -8,6 +8,8 @@ header('Location: /pages/login/driverlogin.php');
 
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 
+$drivername = $_SESSION['drivername'];
+
 if(isset($_GET['submit']))
 {
     mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
