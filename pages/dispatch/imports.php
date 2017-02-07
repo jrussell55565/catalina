@@ -28,7 +28,7 @@ if ($_POST['btn_csa'])
             throw new Exception('Unknown error uploading '.$_FILES['file_csa']['name']);
     }
     $statement = "load data local infile \"".$_FILES['file_csa']["tmp_name"]."\"
-               REPLACE INTO TABLE csadata FIELDS TERMINATED BY ','
+               INTO TABLE csadata FIELDS TERMINATED BY ','
                ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 LINES
                (employee_id,@v_date,state,number,level,placard_inspection,hm_inspection,basic,violation_group,code,description,out_of_service,convicted_diff_charge,violation_weight,time_weight,total_points,points_cash_value,basic_violation_inspection,last_name,first_name,co_driver_last_name,co_driver_first_name)
                SET date = str_to_date(@v_date, '%m/%d/%Y')";

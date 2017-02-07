@@ -133,56 +133,56 @@ function get_all_users($mysqli)
     return $all_users_array;
 }
 
-function generate_compliance_sql($emp_id, $time)
+function generate_aggregate_compliance_sql($sd,$ed)
 {
-
-    $predicates     = generate_compliance_predicate($emp_id, $time);
-    $predicate      = $predicates[0];
-    $time_predicate = $predicates[1];
-
-    $sql = "SELECT 'Total Company Points' AS basic, sum(total_points) AS total_points, sum(points_cash_value) AS points_cash_value FROM csadata
-         WHERE $time_predicate
-         union
-         select 'Total Points' as basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from csadata
-         where $predicate
-         and $time_predicate
-         union
-         select basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from csadata
-         where $predicate
-         and basic in ('Vehicle Maint.','HOS Compliance','No Violation','Unsafe Driving','Driver Fitness','Controlled Substances/Alcohol','Hazardous Materials (HM)','Crash Indicator')
-         and $time_predicate
-         group by basic";
+    $sql = "select coalesce(total_points,0) as total_points
+  ,coalesce(points_cash_value,0) as points_cash_value
+  ,coalesce(vehicle_maint_points,0) as vehicle_maint_points
+  ,coalesce(vehicle_maint_cash,0) as vehicle_maint_cash
+  ,coalesce(hos_compliance_points,0) as hos_compliance_points
+  ,coalesce(hos_compliance_cash,0) AS hos_compliance_cash
+  ,coalesce(no_violation_points,0) as no_violation_points
+  ,coalesce(no_violation_cash,0) as no_violation_cash
+  ,coalesce(unsafe_driving_points,0) as unsafe_driving_points
+  ,coalesce(unsafe_driving_cash,0) as unsafe_driving_cash
+  ,coalesce(driver_fitness_points,0) as driver_fitness_points
+  ,coalesce(driver_fitness_cash,0) as driver_fitness_cash
+  ,coalesce(controlled_sub_points,0) as controlled_sub_points
+  ,coalesce(controlled_sub_cash,0) as controlled_sub_cash
+  ,coalesce(hazard_points,0) as hazard_points
+  ,coalesce(hazard_cash,0) as hazard_cash
+  ,coalesce(crash_points,0) as crash_points
+  ,coalesce(crash_cash,0) as crash_cash
+  , users.employee_id FROM
+  (
+select
+  SUM(total_points)      AS total_points
+  , SUM(points_cash_value) AS points_cash_value
+  ,  sum(case when basic = 'Vehicle Maint.' then total_points else 0 end) as vehicle_maint_points
+  ,  sum(case when basic = 'Vehicle Maint.' then points_cash_value else 0 end) as vehicle_maint_cash
+  ,  sum(case when basic = 'HOS Compliance' then total_points else 0 end) as hos_compliance_points
+  ,  sum(case when basic = 'HOS Compliance' then points_cash_value else 0 end) as hos_compliance_cash
+  ,  sum(case when basic = 'No Violation' then total_points else 0 end) as no_violation_points
+  ,  sum(case when basic = 'No Violation' then points_cash_value else 0 end) as no_violation_cash
+  ,  sum(case when basic = 'Unsafe Driving' then total_points else 0 end) as unsafe_driving_points
+  ,  sum(case when basic = 'Unsafe Driving' then points_cash_value else 0 end) as unsafe_driving_cash
+  ,  sum(case when basic = 'Driver Fitness' then total_points else 0 end) as driver_fitness_points
+  ,  sum(case when basic = 'Driver Fitness' then points_cash_value else 0 end) as driver_fitness_cash
+  ,  sum(case when basic = 'Controlled Substances' then total_points else 0 end) as controlled_sub_points
+  ,  sum(case when basic = 'Controlled Substances' then points_cash_value else 0 end) as controlled_sub_cash
+  ,  sum(case when basic = 'Hazmat Compliance' then total_points else 0 end) as hazard_points
+  ,  sum(case when basic = 'Hazmat Compliance' then points_cash_value else 0 end) as hazard_cash
+  ,  sum(case when basic = 'Crash Indicator' then total_points else 0 end) as crash_points
+  ,  sum(case when basic = 'Crash Indicator' then points_cash_value else 0 end) as crash_cash
+, employee_id
+from csadata
+where import_date BETWEEN str_to_date('$sd','%Y-%m-%d') and str_to_date('$ed','%Y-%m-%d')
+  and basic in ('Vehicle Maint.','HOS Compliance','No Violation','Unsafe Driving','Driver Fitness','Controlled Substances','Hazmat Compliance','Crash Indicator')
+group by employee_id ) csa
+RIGHT JOIN users on users.employee_id = csa.employee_id";
     return $sql;
 }
 
-function generate_compliance_predicate($emp_id, $time)
-{
-    // Do some mangling if the $emp_id = 'all'.  This specific user is from the csa.php page.
-    if ($emp_id == 'all') {
-        $predicate = '1=1';
-    } else {
-        $predicate = "EMPLOYEE_ID='$emp_id'";
-    }
-
-    // Set some time ranges
-    if (isset($time)) {
-        if ($time == "24") {
-            // We only want the last 24 months
-            $time_predicate = "date BETWEEN curdate() - INTERVAL 24 MONTH AND curdate()";
-        } elseif ($time == "all") {
-            // Get all time
-            $time_predicate = "1=1";
-        } elseif ($time == "24+1") {
-            // Get month 25 only
-            $time_predicate = "date_format(date,'%Y-%m') = date_format(curdate() - INTERVAL 25 MONTH,'%Y-%m')";
-        }
-    } else {
-        // Default to 24 months
-        $time_predicate = "date BETWEEN curdate() - INTERVAL 24 MONTH AND curdate()";
-    }
-
-    return array($predicate, $time_predicate);
-}
 function generate_clockin_sql($emp_id, $sd, $ed)
 {
     $sql = "select count(*) from days_worked
@@ -194,21 +194,36 @@ function generate_clockin_sql($emp_id, $sd, $ed)
 
 function generate_vir_sql($sd, $ed)
 {
-    $sql = "select virs.employee_id, virs.vir_pretrip, virs.vir_posttrip, virs.vir_breakdown, worked.days_worked,
+    $sql = "select *,
+            round((vir_total_points / max_total_vir_points) * 100) as vir_total_percent
+          from
+            (
+            select *,
+            (CASE WHEN vir_pretrip_points > days_worked then days_worked else vir_pretrip_points END) +
+              (CASE WHEN vir_posttrip_points > days_worked then days_worked else vir_posttrip_points END) +
+              (CASE WHEN vir_breakdown > days_worked then days_worked else vir_breakdown END)  AS vir_total_points
+            FROM (
+            select virs.employee_id, virs.vir_pretrip, virs.vir_posttrip, virs.vir_breakdown, worked.days_worked,vir_additional_trailer,
+            days_worked * 2 AS max_total_vir_points,
             coalesce(round((virs.vir_pretrip / worked.days_worked) * 100,0),0) as vir_pretrip_percent,
             coalesce(round((virs.vir_posttrip / worked.days_worked) * 100,0),0) as vir_posttrip_percent,
             coalesce(round((virs.vir_breakdown / worked.days_worked) * 100,0),0) as vir_breakdown_percent,
             coalesce(round(((virs.vir_pretrip + virs.vir_posttrip) / (worked.days_worked * 2)) * 100,0),0) as vir_total_percent,
             users.username,
             users.status,
-            concat_ws(' ',users.fname,users.lname) as real_name
+            concat_ws(' ',users.fname,users.lname) as real_name,
+            round(miles,0) as miles,
+            coalesce((virs.vir_pretrip * cp_virs.pre_trip_apoint) * cp_virs.pre_trip_cpoint,0) as vir_pretrip_points,
+            coalesce((virs.vir_posttrip * cp_virs.post_trip_apoint) * cp_virs.post_trip_cpoint,0) as vir_posttrip_points,
+            coalesce((virs.vir_additional_trailer * cp_virs.add_trailer_insp_apoint) * cp_virs.add_trailer_insp_cpoint,0) as vir_additional_trailer_points
             from
             (
             select
             virs.employee_id,
-            sum(case when virs.insp_type = 'vir_pretrip' then 1 else 0 end) as vir_pretrip,
-            sum(case when virs.insp_type = 'vir_posttrip' then 1 else 0 end) as vir_posttrip,
-            sum(case when virs.insp_type = 'vir_breakdown' then 1 else 0 end) as vir_breakdown
+            coalesce(sum(case when virs.insp_type = 'vir_pretrip' then 1 else 0 end),0) as vir_pretrip,
+            coalesce(sum(case when virs.insp_type = 'vir_posttrip' then 1 else 0 end),0) as vir_posttrip,
+            coalesce(sum(case when virs.insp_type = 'vir_breakdown' then 1 else 0 end),0) as vir_breakdown,
+            coalesce(sum(CASE WHEN virs.trucktype = 'trailer'  THEN 1 else 0 end),0) as vir_additional_trailer
             from virs where insp_date between str_to_date('$sd','%Y-%m-%d') and str_to_date('$ed','%Y-%m-%d')
             group by employee_id
             ) virs ,
@@ -218,26 +233,32 @@ function generate_vir_sql($sd, $ed)
             ) worked ,
             (
             select username,employee_id,status,fname,lname from users
-            ) users
+            ) users,
+            (SELECT
+             sum(miles) as miles, employee_id
+             FROM import_gps_trips
+             GROUP BY employee_id) import_gps_trips,
+             (select * from cp_virs) cp_virs
             where virs.employee_id = worked.`employee number`
             and virs.employee_id = users.employee_id
             and users.status = 'Active'
-            order by vir_total_percent desc";
+            AND import_gps_trips.employee_id = users.employee_id ) details) mo_details";
     return $sql;
 }
 function generate_ship_sql($emp_id, $sd, $ed)
 {
     $sql = "SELECT '$emp_id'    AS 'employee_id',
              b.*,
-             Round((Coalesce(b.earned_points / b.max_points, 0) * 100), 1) AS 'percentage_earned'
+             Round((Coalesce(b.earned_points / b.max_points, 0) * 100), 0) AS 'percentage_earned'
       FROM   (
                     SELECT a.*,
-                           Round(a.arrived_to_shipper_points     + a.picked_up_points + a.arrived_to_consignee_points + a.delivered_points + a.accessorial_points + a.noncore_points, 1)                     AS 'earned_points',
-                           Round(a.max_arrived_to_shipper_points + a.max_picked_up_points + a.max_arrived_to_consignee_points + a.max_delivered_points + a.max_accessorial_points + a.max_noncore_points, 1) AS 'max_points'
+                           Round(a.arrived_to_shipper_points     + a.picked_up_points + a.arrived_to_consignee_points + a.delivered_points + a.accessorial_points + a.noncore_points, 0)                     AS 'earned_points',
+                           Round(a.max_arrived_to_shipper_points + a.max_picked_up_points + a.max_arrived_to_consignee_points + a.max_delivered_points + a.max_accessorial_points + a.max_noncore_points, 0) AS 'max_points'
                     FROM   (
                                   SELECT _a.count                                                                                                  AS 'as_puagent',
                                          _b.count                                                                                                  AS 'as_delagent',
                                          _c.count                                                                                                  AS 'as_pu_and_delagent',
+                                         (_a.count + _b.count) + _c.count                                                                          AS 'total_hwb',
                                          _a.count + _b.count + _c.count                                                                            AS 'sum_count',
                                          _a.count * 2                                                                                              AS 'puagent_required_updates',
                                          _b.count * 2                                                                                              AS 'delagent_required_updates',
@@ -444,6 +465,16 @@ function generate_ship_sql($emp_id, $sd, $ed)
 
     return $sql;
 }
+
+function get_shipment_aggregate($sd, $ed, $mysqli)
+{
+  $sql = "call shipment_productivity_stats(STR_TO_DATE('$sd','%Y-%m-%d'),STR_TO_DATE('$ed','%Y-%m-%d'));";
+  $sql .= "select * from shipment_productivity_tmp";
+
+  $output = get_multi_sql_results($sql, $mysqli);
+  return $output;
+}
+
 function get_sql_results($sql, $mysqli)
 {
     try {
@@ -465,6 +496,36 @@ function get_sql_results($sql, $mysqli)
     return $emparray;
 }
 
+function get_multi_sql_results($sql, $mysqli)
+{
+    try {
+          if ($mysqli->multi_query($sql)) {
+            do {
+            /* store first result set */
+            if ($result = $mysqli->store_result()) {
+              while ($row = $result->fetch_assoc()) {
+                  $emparray[] = $row;
+              }
+              $result->free();
+            }
+            /* print divider */
+            if ($mysqli->more_results()) {
+              printf("<!-- ----------------- -->\n");
+            }
+          } while ($mysqli->next_result());
+            return $emparray;
+        } else {
+            throw new Exception("Query error: " . $mysqli->error);
+        }
+    } catch (Exception $e) {
+        // An exception has been thrown
+        $data = array('type' => 'error', 'message' => $e->getMessage());
+        print $e->getMessage();
+        $mysqli->close();
+        exit;
+    }
+}
+
 function run_sql($sql, $mysqli)
 {
     try {
@@ -481,6 +542,7 @@ function run_sql($sql, $mysqli)
         exit;
     }
 }
+
 function generate_user_csa_sql($emp_id, $time, $basic)
 {
     // If the BASIC type wasn't specified then get them all
@@ -506,20 +568,113 @@ function generate_user_csa_sql($emp_id, $time, $basic)
 }
 function generate_task_sql($sd, $ed)
 {
-    $sql = "select assign_to,sum(number_of_tasks) tasks ,sum(number_of_points) points from
-       (
-       select assign_to,count(*) as number_of_tasks, 0 as number_of_points from tasks
-       where submit_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
-       and complete_approved = 0
-       group by assign_to
-       union
-       select assign_to, 0 as number_of_tasks, sum(points) as number_of_points from tasks
-       where submit_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
-       and complete_approved = 0
-       group by assign_to
-       union
-       select employee_id as assign_to, 0 as number_of_tasks, 0 as number_of_points from users
-       )a group by assign_to";
+    $sql = "SELECT
+  whole_shebang.*
+  , coalesce((days_worked * cp_activity.daysworked_apoint) * cp_activity.daysworked_cpoint,0) AS days_worked_points
+  , round(coalesce((miles * cp_activity.miles_apoint) * cp_activity.miles_cpoint,0),0)                 AS miles_points
+  , coalesce((tasks_completed_by_user * cp_activity.tasks_apoint) * cp_activity.tasks_cpoint,0) AS task_points
+  , coalesce((passed_quizzes * cp_activity.quiz_apoint) * cp_activity.quiz_cpoint,0)          AS quiz_points 
+  ,coalesce((idle_time * cp_activity.idle_apoint) * cp_activity.idle_cpoint,0) AS idle_time_points
+  , round(TIMESTAMPDIFF(DAY,str_to_date('2000-01-01','%Y-%m-%d'),str_to_date('2000-12-31','%Y-%m-%d')) * .675,0) as days_shoulda_worked
+FROM (
+       SELECT
+         tasks.employee_id
+         , tasks_completed_by_user
+         , tasks_all_user
+         , category
+         , coalesce(passed_quizzes,0) as passed_quizzes
+         , coalesce(all_quizzes,0) as all_quizzes
+         , days_worked
+         , round(miles,0) as miles
+         , idle_time
+         , aprox_idle_costs
+       FROM
+         (
+             (
+               SELECT
+                   assign_to                  AS employee_id
+                 , sum(CASE WHEN tasks.complete_user = 1
+                 THEN 1
+                       ELSE 0 END)            AS tasks_completed_by_user
+                 , count(tasks.complete_user) AS tasks_all_user
+                 , category
+               FROM tasks
+               WHERE submit_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') AND STR_TO_DATE('$ed','%Y-%m-%d')
+               GROUP BY assign_to
+             ) tasks
+
+             LEFT OUTER JOIN
+
+             (
+               SELECT
+                 employee_id
+                 , sum(CASE WHEN success = 1
+                 THEN 1
+                       ELSE 0 END) AS passed_quizzes
+                 , count(success)  AS all_quizzes
+               FROM assignments.user_quizzes uq
+                 JOIN assignments.v_imported_users viu
+                   ON uq.user_id = viu.UserID
+                 JOIN catalina.users
+                   ON users.username = viu.UserName
+               WHERE uq.added_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') AND STR_TO_DATE(
+                   '$ed','%Y-%m-%d') AND
+                     uq.finish_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') AND STR_TO_DATE(
+                         '$ed','%Y-%m-%d')
+               GROUP BY employee_id
+             ) quiz
+               ON quiz.employee_id = tasks.employee_id
+             LEFT OUTER JOIN
+             (
+
+               SELECT
+                   COUNT(*)          AS days_worked
+                 , `employee number` AS employee_id
+               FROM days_worked
+               WHERE worked = 1 AND
+                     `date worked` BETWEEN STR_TO_DATE('$sd',
+                                                       '%Y-%m-%d') AND STR_TO_DATE(
+                         '$ed','%Y-%m-%d')
+               GROUP BY `employee number`
+
+             ) worked
+               ON worked.employee_id = tasks.employee_id
+
+
+             LEFT OUTER JOIN
+
+             (
+               SELECT
+                 sum(
+                     miles) AS miles
+                 , employee_id
+                 ,sum(`Idle Time`) as idle_time
+               FROM
+                 import_gps_trips
+               WHERE (
+                 began BETWEEN STR_TO_DATE(
+                     '$sd',
+                     '%Y-%m-%d') AND STR_TO_DATE(
+                     '$ed',
+                     '%Y-%m-%d')
+                 AND
+                 Ended BETWEEN STR_TO_DATE(
+                     '$sd',
+                     '%Y-%m-%d') AND STR_TO_DATE(
+                     '$ed',
+                     '%Y-%m-%d'))
+               GROUP BY
+                 employee_id) miles
+               ON miles.employee_id = tasks.employee_id)
+                JOIN (
+                          select * from idle_calcs
+           ) idle_cals ON (idle_time / 60) between idle_cals.idle_from_hrs and idle_cals.idle_to_hrs
+           ) whole_shebang,
+  (
+    SELECT
+      *
+    FROM cp_activity) cp_activity";
+             
     return $sql;
 }
 function generate_quiz_sql($sd, $ed)

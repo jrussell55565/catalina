@@ -49,41 +49,37 @@ if ($_SESSION['login'] == 1)
     }else{
         $emp_id = $_SESSION['employee_id'];
     }
-    $ship_sql = generate_ship_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
-    $shp_aggregate = get_sql_results($ship_sql,$mysqli);
+#    $ship_sql = generate_ship_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+#    $shp_aggregate = get_sql_results($ship_sql,$mysqli);
   
     $vir_sql = generate_vir_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $vir_aggregate = get_sql_results($vir_sql,$mysqli);
 
     $vir_clockin_sql = generate_clockin_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $vir_clockin_aggregate = get_sql_results($vir_clockin_sql,$mysqli);
-
-    $csa_compliance_sql = generate_compliance_sql($emp_id);
-    $csa_compliance_aggregate = get_sql_results($csa_compliance_sql,$mysqli);
 }else{
     $emp_id = $_SESSION['employee_id'];
-    $ship_sql = generate_ship_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
-    $shp_aggregate = get_sql_results($ship_sql,$mysqli);
+#    $ship_sql = generate_ship_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+#    $shp_aggregate = get_sql_results($ship_sql,$mysqli);
   
     $vir_sql = generate_vir_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $vir_aggregate = get_sql_results($vir_sql,$mysqli);
 
     $vir_clockin_sql = generate_clockin_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $vir_clockin_aggregate = get_sql_results($vir_clockin_sql,$mysqli);
-
-    $csa_compliance_sql = generate_compliance_sql($emp_id);
-    $csa_compliance_aggregate = get_sql_results($csa_compliance_sql,$mysqli);
 }
 
 // We'll generate another shp_aggregate array.  This time we'll loop
 // through each employee.  This is for the stats section below.
-// Truncate the existing table
-$complete_ship_sql = "call company_shp_stats('".date('Y-m-d',$start_date)."','".date('Y-m-d',$end_date)."')";
-run_sql($complete_ship_sql,$mysqli);
-$complete_ship_sql = "select a.*, users.username from productivity_shipments a, users where a.date_start <= STR_TO_DATE('".date('Y-m-d',$start_date)."','%Y-%m-%d') 
-                      and a.date_end >= STR_TO_DATE('".date('Y-m-d',$end_date)."','%Y-%m-%d')
-                      and a.employee_id = users.employee_id ORDER BY percentage_earned desc";
-$complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
+#$complete_ship_sql = "call company_shp_stats('".date('Y-m-d',$start_date)."','".date('Y-m-d',$end_date)."')";
+#run_sql($complete_ship_sql,$mysqli);
+#$complete_ship_sql = "select a.*, users.username from productivity_shipments a, users where a.date_start <= STR_TO_DATE('".date('Y-m-d',$start_date)."','%Y-%m-%d') 
+#                      and a.date_end >= STR_TO_DATE('".date('Y-m-d',$end_date)."','%Y-%m-%d')
+#                      and a.employee_id = users.employee_id ORDER BY percentage_earned desc";
+#$complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
+
+// Generate the sql for shipments
+$shipment_aggregate = get_shipment_aggregate(date('Y-m-d',$start_date),date('Y-m-d',$end_date),$mysqli);
 
 // Generate the sql for tasks
 $task_sql = generate_task_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
@@ -92,6 +88,10 @@ $task_aggregate = get_sql_results($task_sql,$mysqli);
 // Generate the sql for quizzes
 $quiz_sql = generate_quiz_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
 $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
+
+// Generate the sql for compliance
+$compliance_sql = generate_aggregate_compliance_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+$csa_compliance_aggregate = get_sql_results($compliance_sql,$mysqli);
 
 ?>
 <!DOCTYPE html>
@@ -115,6 +115,8 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
 <link href="<?php echo HTTP;?>/dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
 <!-- Date Picker -->
 <link href="<?php echo HTTP;?>/dist/css/bootstrap-datepicker3.css" rel="stylesheet">
+<!-- Catalina -->
+<link href="<?php echo HTTP;?>/dist/css/catalina.css" rel="stylesheet">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -223,46 +225,49 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <!-- Need to Fix Total HWB Assigned Below, Calculating from arrived to shipper currently.... -->
-                    <li><a href="#">Total HWB Assigned PU/DEL (not working)<span class="pull-right badge bg-blue" id="shp_arrived_shipper">
-                     <?php echo round($shp_aggregate[0]['arrived_to_shipper'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
-                    </li>
-                    <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper">
-                     <?php echo round($shp_aggregate[0]['arrived_to_shipper'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
-                    </li>
-                    <li><a href="#">Arrived Shipper Points (???)<span class="pull-right badge bg-blue" id="shp_arrived_shipper_points">
-                     <?php echo round($shp_aggregate[0]['arrived_to_shipper_points'],0) ." of ".round($shp_aggregate[0]['max_arrived_to_shipper_points'],0);?></span></a>
-                    </li>
-                    <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up">
-                     <?php echo round($shp_aggregate[0]['picked_up'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
-                    </li>
-                    <li><a href="#">Picked Up Points (???)<span class="pull-right badge bg-blue" id="shp_picked_up_points">
-                     <?php echo round($shp_aggregate[0]['picked_up_points'],0) ." of ".round($shp_aggregate[0]['max_picked_up_points'],0);?></span></a>
-                    </li>
-                    <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee">
-                     <?php echo round($shp_aggregate[0]['arrived_to_consignee'],0) ." of ".round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
-                    </li>
-                    <li><a href="#">Arrived Consignee Points (???)<span class="pull-right badge bg-blue" id="shp_arrived_consignee_points">
-                     <?php echo round($shp_aggregate[0]['arrived_to_consignee_points'],0) ." of ".round($shp_aggregate[0]['max_arrived_to_consignee_points'],0);?></span></a>
-                    </li>
-                    <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered">
-                     <?php echo round($shp_aggregate[0]['delivered'],0) ." of ".round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
-                    </li>
-                    <li><a href="#">Delivered Points (???)<span class="pull-right badge bg-blue" id="shp_delivered_points">
-                     <?php echo round($shp_aggregate[0]['delivered_points'],0) ." of ".round($shp_aggregate[0]['max_delivered_points'],0);?></span></a>
-                    </li>
-                    <li><a href="#">Accessorials Added<span class="pull-right badge bg-blue" id="shp_accessorials">
-                     <?php echo round($shp_aggregate[0]['accessorial_count'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
-                    </li>
-                    <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue" id="shp_accessorials_points">
-                     <?php echo round($shp_aggregate[0]['accessorial_points'],0);?></span></a>
-                    </li>
-                    <li><a href="#">Other Status Change <span class="pull-right badge bg-blue" id="shp_other_status">
-                     <?php echo round($shp_aggregate[0]['misc_updates_sum'],0) ." of ".round($shp_aggregate[0]['as_puagent'],0) + round($shp_aggregate[0]['as_delagent'],0) + round($shp_aggregate[0]['as_pu_and_delagent'],0);?></span></a>
-                    </li>
-                    <li><a href="#">Other Status Change Points<span class="pull-right badge bg-blue" id="shp_other_status_points">
-                     <?php echo round($shp_aggregate[0]['misc_updates_sum'],0);?></span></a>
-                    </li>
+                  <?php for($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) { ?>
+                    <?php if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) { ?>
+                    <li><a href="#">Total HWB <span class="pull-right badge bg-blue" id="shp_arrived_shipper">
+                       <?php echo round($shipment_aggregate[$ship_i]['total_hwb'],0);?></span></a>
+                      </li>
+                      <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper">
+                       <?php echo round($shipment_aggregate[$ship_i]['arrived_to_shipper'],0);?> of <?echo round($shipment_aggregate[$ship_i]['as_puagent'],0) + round($shipment_aggregate[$ship_i]['as_pu_and_delagent'],0);?></span></a>
+                      </li>
+                      <li><a href="#">Arrived Shipper Points<span class="pull-right badge bg-blue productivity-pts" id="shp_arrived_shipper_points">
+                       <?php $cp = round($shipment_aggregate[$ship_i]['arrived_to_shipper_points'],0); $mp = round($shipment_aggregate[$ship_i]['max_arrived_to_shipper_points'],0); echo ($cp <= $mp ? $cp : $mp);?> of <?echo round($shipment_aggregate[$ship_i]['max_arrived_to_shipper_points'],0);?></span></a>
+                      </li>
+                      <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up">
+                       <?php echo round($shipment_aggregate[$ship_i]['picked_up'],0);?> of <?echo round($shipment_aggregate[$ship_i]['as_puagent'],0) + round($shipment_aggregate[$ship_i]['as_pu_and_delagent'],0);?></span></a>
+                      </li>
+                      <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue productivity-pts" id="shp_picked_up_points">
+                       <?php echo round($shipment_aggregate[$ship_i]['picked_up_points'],0);?> of <?echo round($shipment_aggregate[$ship_i]['max_picked_up_points'],0);?></span></a>
+                      </li>
+                      <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee">
+                       <?php echo round($shipment_aggregate[$ship_i]['arrived_to_consignee'],0);?> of <?echo round($shipment_aggregate[$ship_i]['as_delagent'],0) + round($shipment_aggregate[$ship_i]['as_pu_and_delagent'],0);?></span></a>
+                      </li>
+                      <li><a href="#">Arrived Consignee Points<span class="pull-right badge bg-blue productivity-pts" id="shp_arrived_consignee_points">
+                       <?php echo round($shipment_aggregate[$ship_i]['arrived_to_consignee_points'],0);?> of <?echo round($shipment_aggregate[$ship_i]['max_arrived_to_consignee_points'],0);?></span></a>
+                      </li>
+                      <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered">
+                       <?php echo round($shipment_aggregate[$ship_i]['delivered'],0);?> of <? echo round($shipment_aggregate[$ship_i]['as_delagent'],0) + round($shipment_aggregate[$ship_i]['as_pu_and_delagent'],0);?></span></a>
+                      </li>
+                      <li><a href="#">Delivered Points<span class="pull-right badge bg-blue productivity-pts" id="shp_delivered_points">
+                       <?php echo round($shipment_aggregate[$ship_i]['delivered_points'],0);?> of <?echo round($shipment_aggregate[$ship_i]['max_delivered_points'],0);?></span></a>
+                      </li>
+                      <li><a href="#">Accessorials Added<span class="pull-right badge bg-blue" id="shp_accessorials">
+                       <?php echo round($shipment_aggregate[$ship_i]['accessorial_count'],0);?> of <?echo round($shipment_aggregate[$ship_i]['as_puagent'],0) + round($shipment_aggregate[$ship_i]['as_delagent'],0) + round($shipment_aggregate[$ship_i]['as_pu_and_delagent'],0);?></span></a>
+                      </li>
+                      <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue productivity-pts" id="shp_accessorials_points">
+                       <?php echo round($shipment_aggregate[$ship_i]['accessorial_points'],0);?></span></a>
+                      </li>
+                      <li><a href="#">Other Status Change <span class="pull-right badge bg-blue" id="shp_other_status">
+                       <?php echo round($shipment_aggregate[$ship_i]['misc_updates_sum'],0);?> of <?echo round($shipment_aggregate[$ship_i]['as_puagent'],0) + round($shipment_aggregate[$ship_i]['as_delagent'],0) + round($shipment_aggregate[$ship_i]['as_pu_and_delagent'],0);?></span></a>
+                      </li>
+                      <li><a href="#">Other Status Change Points<span class="pull-right badge bg-blue productivity-pts" id="shp_other_status_points">
+                       <?php echo round($shipment_aggregate[$ship_i]['noncore_points'],0);?></span></a>
+                      </li>
+                     <?php } ?>
+                    <?php } ?>
                   </ul>
                 </div>
               </div><!-- /.widget-user -->
@@ -300,24 +305,34 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                      ?>
                      </span></a>
                     </li>
+                    <li><a href="#">Miles <span class="pull-right badge bg-blue" id="vir_days_worked">
+                     <?php
+                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
+                          if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
+                            echo $vir_aggregate[$vir_i]['miles'];
+                          }
+                        }
+                     ?>
+                     </span></a>
+                    </li>
                     <li><a href="#">Pre-Trips <span class="pull-right badge bg-blue" id="vir_pretrip">
                        <?php
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
-                            echo $vir_aggregate[$vir_i]['vir_pretrip'];
+                            echo $vir_aggregate[$vir_i]['vir_pretrip'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
                        }
                      }
                      ?>
                      </span></a>
                     </li>
-                    <li><a href="#">Pre-Trip Points<span class="pull-right badge bg-blue" id="vir_pretrip_points">
+                    <li><a href="#">Pre-Trip Points<span class="pull-right badge bg-blue productivity-pts" id="vir_pretrip_points">
                      <?php
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
-                           if ($vir_aggregate[$vir_i]['vir_pretrip'] > $vir_aggregate[$vir_i]['days_worked']) {
-                             echo $vir_aggregate[$vir_i]['days_worked'];
+                           if ($vir_aggregate[$vir_i]['vir_pretrip_points'] > $vir_aggregate[$vir_i]['days_worked']) {
+                             echo $vir_aggregate[$vir_i]['days_worked'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
                            }else{
-                             echo $vir_aggregate[$vir_i]['vir_pretrip'];
+                             echo $vir_aggregate[$vir_i]['vir_pretrip_points'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
                            }
                           }
                         } 
@@ -328,21 +343,21 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                      <?php
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
-                           echo $vir_aggregate[$vir_i]['vir_posttrip'];
+                           echo $vir_aggregate[$vir_i]['vir_posttrip'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
                           }
                         }
                      ?>
                      </span></a>
                     </li>
 
-                    <li><a href="#">Post-Trip Points<span class="pull-right badge bg-blue" id="vir_posttrip_points">
+                    <li><a href="#">Post-Trip Points<span class="pull-right badge bg-blue productivity-pts" id="vir_posttrip_points">
                      <?php
                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
-                           if ($vir_aggregate[$vir_i]['vir_posttrip'] > $vir_aggregate[$vir_i]['days_worked']) {
-                             echo $vir_aggregate[$vir_i]['days_worked'];
+                           if ($vir_aggregate[$vir_i]['vir_posttrip_points'] > $vir_aggregate[$vir_i]['days_worked']) {
+                             echo $vir_aggregate[$vir_i]['days_worked'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
                            }else{
-                             echo $vir_aggregate[$vir_i]['vir_posttrip'];
+                             echo $vir_aggregate[$vir_i]['vir_posttrip_points'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
                            }
                           }
                         }
@@ -350,14 +365,14 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                      </span></a>
                     </li>
 
-                    <li><a href="#">Trailer Inspections<span class="pull-right badge bg-blue" id="vir_posttrip_points">
+                    <li><a href="#">Additional Trailer Insp.<span class="pull-right badge bg-blue" id="vir_posttrip_points">
                      <?php
                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
-                           if ($vir_aggregate[$vir_i]['vir_posttrip'] > $vir_aggregate[$vir_i]['days_worked']) {
+                           if ($vir_aggregate[$vir_i]['vir_additional_trailer'] > $vir_aggregate[$vir_i]['days_worked']) {
                              echo $vir_aggregate[$vir_i]['days_worked'];
                            }else{
-                             echo $vir_aggregate[$vir_i]['vir_posttrip'];
+                             echo $vir_aggregate[$vir_i]['vir_additional_trailer'];
                            }
                           }
                         }
@@ -365,14 +380,14 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                      </span></a>
                     </li>
 
-                    <li><a href="#">Trailer Inspections Points<span class="pull-right badge bg-blue" id="vir_posttrip_points">
+                    <li><a href="#">Additional Trailer Insp. Points<span class="pull-right badge bg-blue productivity-pts" id="vir_posttrip_points">
                      <?php
                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
-                           if ($vir_aggregate[$vir_i]['vir_posttrip'] > $vir_aggregate[$vir_i]['days_worked']) {
-                             echo $vir_aggregate[$vir_i]['days_worked'];
+                           if ($vir_aggregate[$vir_i]['vir_additional_trailer_points'] > $vir_aggregate[$vir_i]['days_worked']) {
+                             echo $vir_aggregate[$vir_i]['days_worked'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
                            }else{
-                             echo $vir_aggregate[$vir_i]['vir_posttrip'];
+                             echo $vir_aggregate[$vir_i]['vir_additional_trailer_points'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
                            }
                           }
                         }
@@ -390,19 +405,7 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                      ?>
                      </span></a>
                     </li>
-
-                    <li><a href="#">Unreported Breakdowns <span class="pull-right badge bg-blue" id="vir_breakdown">
-                     <?php
-                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
-                          if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
-                           echo $vir_aggregate[$vir_i]['vir_breakdown'];
-                          }
-                        }
-                     ?>
-                     </span></a>
-                    </li>
-                    
-                    <li><a href="#">Breakdown Points<span class="pull-right badge bg-blue" id="vir_breakdown_points">
+                    <li><a href="#">Breakdown Points<span class="pull-right badge bg-blue productivity-pts" id="vir_breakdown_points">
                      <?php
                     for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
@@ -434,7 +437,7 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                         echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "/dist/img/usernophoto.jpg";
                       }
                      }?>"
-                     alt="User Avatar" width="100" height="100" class="img-circle">Tasks</p>
+                     alt="User Avatar" width="100" height="100" class="img-circle">Activity</p>
 <p class="fa-2x"></p><div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo ($_SESSION['login'] == 1 ? 'ALL' : $_SESSION['username']);?></strong></div></div></span>
                   </div>
                   <!-- Add text below Image Removed....
@@ -443,30 +446,105 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
+                  <li><a href="#">Days Worked <span class="pull-right badge bg-blue" id="vir_days_worked">
+                      <?php
+                        for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {
+                          if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
+                            echo $task_aggregate[$task_i]['days_worked'] .' of ' . $task_aggregate[$task_i]['days_shoulda_worked'];
+                          }
+                        }?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Days Worked Points <span class="pull-right badge bg-blue productivity-pts" id="vir_days_worked">
+                      <?php
+                        for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {
+                          if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
+                            echo $task_aggregate[$task_i]['days_worked_points'] .' of ' . $task_aggregate[$task_i]['days_shoulda_worked'];
+                          }
+                        }?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Miles <span class="pull-right badge bg-blue" id="vir_days_worked">
+                        <?php 
+                          for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {
+                          if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
+                            echo $task_aggregate[$task_i]['miles'];
+                          }
+                        }?>
+                     </span></a>
+                    </li>
+                    <li><a href="#">Miles Points<span class="pull-right badge bg-blue productivity-pts" id="vir_days_worked">
+                        <?php 
+                          for($task_i=0;$task_i<(count($task_aggregate));$task_i++) { 
+                            if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
+                              echo $task_aggregate[$task_i]['miles_points'];
+                          }
+                        }?>
+                     </span></a>
+                    </li>
                     <li><a href="#">Tasks<span class="pull-right badge bg-blue" id="prod_task">
                     <?php for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {?>
-                     <?php if ($task_aggregate[$task_i]['assign_to'] == $emp_id) { ?>
-                     <?php echo $task_aggregate[$task_i]['tasks']; ?>
+                     <?php if ($task_aggregate[$task_i]['employee_id'] == $emp_id) { ?>
+                     <?php echo $task_aggregate[$task_i]['tasks_completed_by_user'];?> of <?php echo $task_aggregate[$task_i]['tasks_all_user']; ?>
                      <?php } ?>
                     <?php } ?>
                     </span>
                      </a>
                     </li>
-                    <li><a href="#">Task Points<span class="pull-right badge bg-blue" id="prod_task_points">
+                    <li><a href="#">Task Points<span class="pull-right badge bg-blue productivity-pts" id="prod_task_points">
                     <?php for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {?>
-                    <?php if ($task_aggregate[$task_i]['assign_to'] == $emp_id) { ?>
-                     <?php echo $task_aggregate[$task_i]['tasks']; ?>
+                    <?php if ($task_aggregate[$task_i]['employee_id'] == $emp_id) { ?>
+                     <?php echo $task_aggregate[$task_i]['task_points'] . ' of '. $task_aggregate[$task_i]['tasks_completed_by_user'];?>
                      <?php } ?>
                     <?php } ?>
                     </span>
                      </a>
                     </li>
-                    <li><a href="#">Quiz<span class="pull-right badge bg-blue" id="prod_quiz"></span></a></li>
-                    <li><a href="#">Quiz Points<span class="pull-right badge bg-blue" id="prod_quit_points"></span></a></li>
-                    <li><a href="#">Idle Time<span class="pull-right badge bg-blue" id="prod_idletime"></span></a></li>
-                    <li><a href="#">Idle Time Score<span class="pull-right badge bg-blue" id="prod_idletime_points"></span></a></li>
-                    <li><a href="#">Company Compliance <span class="pull-right badge bg-blue" id="prod_company_compliance"></span></a></li>
-                    <li><a href="#">Compnay Compliance Points<span class="pull-right badge bg-blue" id="prod_company_compliance_points"></span></a></li>
+                    <li><a href="#">Quiz<span class="pull-right badge bg-blue" id="prod_task_points">
+                    <?php for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {?>
+                    <?php if ($task_aggregate[$task_i]['employee_id'] == $emp_id) { ?>
+                     <?php echo $task_aggregate[$task_i]['passed_quizzes']; ?> of <?php echo $task_aggregate[$task_i]['all_quizzes']; ?>
+                     <?php } ?>
+                    <?php } ?>
+                    </span>
+                     </a>
+                    </li>
+                    <li><a href="#">Quiz Points<span class="pull-right badge bg-blue productivity-pts" id="prod_task_points">
+                    <?php for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {?>
+                    <?php if ($task_aggregate[$task_i]['employee_id'] == $emp_id) { ?>
+                     <?php echo $task_aggregate[$task_i]['quiz_points']; ?>
+                     <?php } ?>
+                    <?php } ?>
+                    </span>
+                     </a>
+                    </li>
+                    <li><a href="#">Idle Time<span class="pull-right badge bg-blue" id="prod_task_points">
+                    <?php for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {?>
+                    <?php if ($task_aggregate[$task_i]['employee_id'] == $emp_id) { ?>
+                     <?php echo $task_aggregate[$task_i]['idle_time']; ?>
+                     <?php } ?>
+                    <?php } ?>
+                    </span>
+                     </a>
+                    </li>
+                    <li><a href="#">Idle Time Points<span class="pull-right badge bg-blue productivity-pts" id="prod_task_points">
+                    <?php for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {?>
+                    <?php if ($task_aggregate[$task_i]['employee_id'] == $emp_id) { ?>
+                     <?php echo $task_aggregate[$task_i]['idle_time_points']; ?>
+                     <?php } ?>
+                    <?php } ?>
+                    </span>
+                     </a>
+                    </li>
+                    <li><a href="#">Idle Time Cost<span class="pull-right badge bg-blue" id="prod_task_points">
+                    <?php for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {?>
+                    <?php if ($task_aggregate[$task_i]['employee_id'] == $emp_id) { ?>
+                     $<?php echo $task_aggregate[$task_i]['aprox_idle_costs']; ?>
+                     <?php } ?>
+                    <?php } ?>
+                    </span>
+                     </a>
+                    </li>
                   </ul>
                 </div>
               </div><!-- /.widget-user -->
@@ -489,122 +567,72 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                   </div>
                 </div>
                 <div class="box-footer no-padding">
+                 <?php for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) { ?>
+                  <?php if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { ?>
                   <ul class="nav nav-stacked">
                     <li><a href="#">Total Compliance Points<span class="pull-right badge bg-blue" id="csa_total_points">
-                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
-                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Total Points') {
-                        if (empty($csa_compliance_aggregate[$i]['total_points'])) { echo 0; }else{ echo $csa_compliance_aggregate[$i]['total_points']; }
-                       }
-                     }
-                     ?>
+                     
+                       <?php echo $csa_compliance_aggregate[$compliance_i]['total_points'];?>
+                     
                      </span></a>
                     </li>
                     <li><a href="#">Compliance Cash<span class="pull-right badge bg-blue" id="csa_cash">
-                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
-                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Total Points') {
-                        if (empty($csa_compliance_aggregate[$i]['points_cash_value'])){ echo 0; }else{ echo $csa_compliance_aggregate[$i]['points_cash_value']; }
-                       }
-                     }
-                     ?>
+
+                     <?php echo $csa_compliance_aggregate[$compliance_i]['points_cash_value'];?>
+
                      </span></a>
                     </li>
                     <li><a href="#">HOS Compliance<span class="pull-right badge bg-blue" id="csa_hos">
-                     <?php $found = 0; ?>
-                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
-                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'HOS Compliance') {
-                        echo $csa_compliance_aggregate[$i]['total_points'];
-                        $found = 1;
-                       }
-                     }
-                       if ($found != 1 ) { echo 0; }
-                     ?>
+                     
+                       <?php echo $csa_compliance_aggregate[$compliance_i]['hos_compliance_points'];?>
+                     
                      </span></a>
                     </li>
                     <li><a href="#">Unsafe Driving<span class="pull-right badge bg-blue" id="csa_unsafe">
-                     <?php $found = 0; ?>
-                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
-                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Unsafe Driving') {
-                        echo $csa_compliance_aggregate[$i]['total_points'];
-                        $found = 1;
-                       }
-                     }
-                       if (empty($found)) { echo 0; }
-                     ?>
+                     
+                       <?php echo $csa_compliance_aggregate[$compliance_i]['unsafe_driving_points'];?>
+
                      </span></a>
                     </li>
                     <li><a href="#">Vehicle Maint.<span class="pull-right badge bg-blue" id="csa_maint">
-                     <?php $found = 0; ?>
-                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
-                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Vehicle Maint.') {
-                        echo $csa_compliance_aggregate[$i]['total_points'];
-                        $found = 1;
-                       }
-                     }
-                       if (empty($found)) { echo 0; }
-                     ?>
+                     
+                     <?php echo $csa_compliance_aggregate[$compliance_i]['vehicle_maint_points'];?>
+
                      </span></a>
                     </li>
                     <li><a href="#">Driver Fitness<span class="pull-right badge bg-blue" id="csa_fitness">
-                     <?php $found = 0; ?>
-                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
-                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Driver Fitness') {
-                        echo $csa_compliance_aggregate[$i]['total_points'];
-                        $found = 1;
-                       }
-                     }
-                       if (empty($found)) { echo 0; }
-                     ?>
+                     
+                     <?php echo $csa_compliance_aggregate[$compliance_i]['driver_fitness_points'];?>
+
                      </span></a>
                     </li>
                     <li><a href="#">Controlled Substances/Alcohol<span class="pull-right badge bg-blue" id="csa_substance">
-                     <?php $found = 0; ?>
-                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
-                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Controlled Substances/Alcohol') {
-                        echo $csa_compliance_aggregate[$i]['total_points'];
-                        $found = 1;
-                       }
-                     }
-                       if (empty($found)) { echo 0; }
-                     ?>
+                     
+                     <?php echo $csa_compliance_aggregate[$compliance_i]['controlled_sub_points'];?>
+
                      </span></a>
                     </li>
                     <li><a href="#">Hazardous Materials (HM)<span class="pull-right badge bg-blue" id="csa_hazardous">
-                     <?php $found = 0; ?>
-                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
-                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Hazardous Materials (HM)') {
-                        echo $csa_compliance_aggregate[$i]['total_points'];
-                        $found = 1;
-                       }
-                     }
-                       if (empty($found)) { echo 0; }
-                     ?>
+                     
+                     <?php echo $csa_compliance_aggregate[$compliance_i]['hazard_points'];?>
+
                      </span></a>
                     </li>
                     <li><a href="#">Crash Indicator<span class="pull-right badge bg-blue" id="csa_crash">
-                     <?php $found = 0; ?>
-                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
-                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'Crash Indicator') {
-                        echo $csa_compliance_aggregate[$i]['total_points'];
-                        $found = 1;
-                       }
-                     }
-                       if (empty($found)) { echo 0; }
-                     ?>
+                     
+                     <?php echo $csa_compliance_aggregate[$compliance_i]['crash_points'];?>
+
                      </span></a>
                     </li>
                     <li><a href="#">No Violation<span class="pull-right badge bg-blue" id="csa_no_violation">
-                     <?php $found = 0; ?>
-                     <?php for($i=0;$i<count($csa_compliance_aggregate);$i++) { ?>
-                       <?php if ($csa_compliance_aggregate[$i]['basic'] == 'No Violation') {
-                        echo $csa_compliance_aggregate[$i]['total_points'];
-                        $found = 1;
-                       }
-                     }
-                       if (empty($found)) { echo 0; }
-                     ?>
+                     
+                     <?php echo $csa_compliance_aggregate[$compliance_i]['no_violation_points'];?>
+
                      </span></a>
                     </li>
                   </ul>
+                   <?php } ?>
+                  <?php } ?>
                 </div>
               </div><!-- /.widget-user -->
             </div>
@@ -616,12 +644,18 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
 <!-- ======================New Section Colored Boxes============ -->
           <!-- Boxes with Icon on Right side (Status box) -->
           <div class="row">
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
             <div class="col-lg-3 col-xs-6">
               <!-- small box -->
               <div class="small-box bg-blue">
                 <div class="inner">
-                  <h4 id="shp_points" style="text-align: center; font-size: 2em;">Points: <?php echo round($shp_aggregate[0]['earned_points'],2);?> of <?php echo round($shp_aggregate[0]['max_points'],2);?></h4>
-                  <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php echo round($shp_aggregate[0]['percentage_earned'],2) . "%";?></h4>
+                <?php for($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) { ?>
+                    <?php if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) { ?>
+                  <h4 id="shp_points" style="text-align: center; font-size: 2em;">Points: <?php echo round($shipment_aggregate[$ship_i]['earned_points'],2);?> of <?php echo round($shipment_aggregate[$ship_i]['max_points'],2);?></h4>
+                  <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php $pe = round($shipment_aggregate[$ship_i]['percentage_earned'],2); echo ($pe > 100 ? 100 : $pe);?>%</h4>
+                  <?php } ?>
+                 <?php } ?>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
               </div>
@@ -635,13 +669,14 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
                     for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                       if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                         $total_vir_percent = $vir_aggregate[$vir_i]['vir_total_percent'];
-                        $total_vir_points = $vir_aggregate[$vir_i]['vir_pretrip'] + $vir_aggregate[$vir_i]['vir_posttrip'] + $vir_aggregate[$vir_i]['vir_breakdown'];
+                        $total_vir_points = $vir_aggregate[$vir_i]['vir_total_points'];
                         $days_worked = $vir_aggregate[$vir_i]['days_worked'];
+                        $max_total_vir_points = $vir_aggregate[$vir_i]['max_total_vir_points'];
                       }
                     }
                  ?> 
-                  <h4 id="shp_points" style="text-align: center; font-size: 2em;">Points: <?php echo $total_vir_points;?> of <?php echo $days_worked;?></h4>
-                  <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php echo round($total_vir_percent,2) . "%";?></h4>
+                  <h4 id="vir_points" style="text-align: center; font-size: 2em;">Points: <?php echo $total_vir_points;?> of <?php echo $max_total_vir_points;?></h4>
+                  <h4 id="vir_percent" style="text-align: center; font-size: 3em;"><?php echo round($total_vir_percent,2) . "%";?></h4>
                 </div>
                </div>
             </div>
@@ -650,11 +685,11 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
               <!-- small box -->
               <div class="small-box bg-purple">
                 <div class="inner">
-                  <h3>Score <?php echo "$pu_today_count";?> 85%</h3>
-                  <p>As of PHP Select Year, Quarter, Month</p>
+                  <h4 id="task_points" style="text-align: center; font-size: 2em;">Points: <?php echo $total_vir_points;?> of <?php echo $max_total_vir_points;?></h4>
+                  <h4 id="task_percent" style="text-align: center; font-size: 3em;"><?php echo round($total_vir_percent,2) . "%";?></h4>
                 </div>
                 <div class="icon"> <i class="ion ion-person-add"></i> </div>
-                <a href="#" class="small-box-footer">More info (go to below item current page)<i class="fa fa-arrow-circle-right"></i> <i class="fa fa-arrow-circle-right"></i> </a> </div>
+              </div>
             </div>
             <!-- ./col -->
             <div class="col-lg-3 col-xs-6">
@@ -682,11 +717,15 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
             <!-- ./col -->
           </div>
           <!-- /.row -->
+          </div>
+          </div>
 
 
 
           <!-- Boxes with Icon on Right side (Status box) -->
         <div class="row">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
           <div class="col-lg-12 col-xs-6">
               <!-- small box -->
               <div class="small-box bg-green">
@@ -701,7 +740,8 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
           <!-- ./col --><!-- ./col --><!-- ./col --><!-- ./col -->
           </div>
           <!-- /.row -->
-
+          </div>
+          </div>
 
 
 
@@ -714,7 +754,9 @@ $quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
             <div class="col-md-12">
               <div class="box"><!-- /.box-header --><!-- ./box-body -->
 
-
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+            <div>
  
 
 
