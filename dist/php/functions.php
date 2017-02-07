@@ -135,7 +135,29 @@ function get_all_users($mysqli)
 
 function generate_aggregate_compliance_sql($sd,$ed)
 {
-    $sql = "select coalesce(total_points,0) as total_points
+    $sql = "select
+  total_points
+  ,(points_cash_value * cp_csa.cash_apoint) * cp_csa.cash_cpoint as points_cash_value
+  ,(vehicle_maint_points * cp_csa.vehicle_maint_apoint) * cp_csa.vehicle_maint_cpoint as vehicle_maint_points
+  ,vehicle_maint_cash
+  ,(hos_compliance_points * cp_csa.hos_compliance_apoint) * cp_csa.hos_compliance_cpoint as hos_compliance_points
+  ,hos_compliance_cash
+  ,(no_violation_points * cp_csa.no_violation_apoint) * cp_csa.no_violation_cpoint as no_violation_points
+  ,no_violation_cash
+  ,(unsafe_driving_points * cp_csa.unsafe_driving_apoint) * cp_csa.unsafe_driving_cpoint as unsafe_driving_points
+  ,unsafe_driving_cash
+  ,(driver_fitness_points * cp_csa.driver_fitness_apoint) * cp_csa.driver_fitness_cpoint as driver_fitness_points
+  ,driver_fitness_cash
+  ,(controlled_sub_points * cp_csa.controlled_substances_apoint) * cp_csa.controlled_substances_cpoint as controlled_sub_points
+  ,controlled_sub_cash
+  ,(hazard_points * cp_csa.hazmat_compliance_apoint) * cp_csa.hazmat_compliance_cpoint as hazard_points
+  ,hazard_cash
+  ,(crash_points * cp_csa.crash_indicator_apoint) * crash_indicator_cpoint as crash_points
+  ,crash_cash
+  , employee_id
+  FROM
+  (
+  select coalesce(total_points,0) as total_points
   ,coalesce(points_cash_value,0) as points_cash_value
   ,coalesce(vehicle_maint_points,0) as vehicle_maint_points
   ,coalesce(vehicle_maint_cash,0) as vehicle_maint_cash
@@ -179,7 +201,8 @@ from csadata
 where import_date BETWEEN str_to_date('$sd','%Y-%m-%d') and str_to_date('$ed','%Y-%m-%d')
   and basic in ('Vehicle Maint.','HOS Compliance','No Violation','Unsafe Driving','Driver Fitness','Controlled Substances','Hazmat Compliance','Crash Indicator')
 group by employee_id ) csa
-RIGHT JOIN users on users.employee_id = csa.employee_id";
+RIGHT JOIN users on users.employee_id = csa.employee_id) whole_shebang,
+  (select * from cp_csa) cp_csa";
     return $sql;
 }
 
@@ -568,14 +591,22 @@ function generate_user_csa_sql($emp_id, $time, $basic)
 }
 function generate_task_sql($sd, $ed)
 {
-    $sql = "SELECT
+    $sql = "select a.*, users.employee_id ,
+(
+  days_worked_points + miles_points + task_points + quiz_points + idle_time_points
+) as activity_total_points,
+ (
+    tasks_all_user + days_shoulda_worked + all_quizzes
+  ) as activity_max_points
+FROM (
+SELECT
   whole_shebang.*
-  , coalesce((days_worked * cp_activity.daysworked_apoint) * cp_activity.daysworked_cpoint,0) AS days_worked_points
-  , round(coalesce((miles * cp_activity.miles_apoint) * cp_activity.miles_cpoint,0),0)                 AS miles_points
+  , coalesce((days_worked * cp_activity.daysworked_apoint) * cp_activity.daysworked_cpoint,0)   AS days_worked_points
+  , round(coalesce((miles * cp_activity.miles_apoint) * cp_activity.miles_cpoint,0),0)          AS miles_points
   , coalesce((tasks_completed_by_user * cp_activity.tasks_apoint) * cp_activity.tasks_cpoint,0) AS task_points
-  , coalesce((passed_quizzes * cp_activity.quiz_apoint) * cp_activity.quiz_cpoint,0)          AS quiz_points 
-  ,coalesce((idle_time * cp_activity.idle_apoint) * cp_activity.idle_cpoint,0) AS idle_time_points
-  , round(TIMESTAMPDIFF(DAY,str_to_date('2000-01-01','%Y-%m-%d'),str_to_date('2000-12-31','%Y-%m-%d')) * .675,0) as days_shoulda_worked
+  , coalesce((passed_quizzes * cp_activity.quiz_apoint) * cp_activity.quiz_cpoint,0)            AS quiz_points
+  , coalesce((idle_time * cp_activity.idle_apoint) * cp_activity.idle_cpoint,0)            AS idle_time_points
+  , round(TIMESTAMPDIFF(DAY,str_to_date('$sd','%Y-%m-%d'),str_to_date('$ed','%Y-%m-%d')) * .675,0) as days_shoulda_worked
 FROM (
        SELECT
          tasks.employee_id
@@ -585,12 +616,10 @@ FROM (
          , coalesce(passed_quizzes,0) as passed_quizzes
          , coalesce(all_quizzes,0) as all_quizzes
          , days_worked
-         , round(miles,0) as miles
+         , round(miles,0) AS miles
          , idle_time
          , aprox_idle_costs
-       FROM
-         (
-             (
+       FROM ((
                SELECT
                    assign_to                  AS employee_id
                  , sum(CASE WHEN tasks.complete_user = 1
@@ -599,82 +628,49 @@ FROM (
                  , count(tasks.complete_user) AS tasks_all_user
                  , category
                FROM tasks
-               WHERE submit_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') AND STR_TO_DATE('$ed','%Y-%m-%d')
-               GROUP BY assign_to
-             ) tasks
-
-             LEFT OUTER JOIN
-
-             (
-               SELECT
-                 employee_id
-                 , sum(CASE WHEN success = 1
-                 THEN 1
-                       ELSE 0 END) AS passed_quizzes
-                 , count(success)  AS all_quizzes
-               FROM assignments.user_quizzes uq
-                 JOIN assignments.v_imported_users viu
-                   ON uq.user_id = viu.UserID
-                 JOIN catalina.users
-                   ON users.username = viu.UserName
-               WHERE uq.added_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') AND STR_TO_DATE(
-                   '$ed','%Y-%m-%d') AND
-                     uq.finish_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') AND STR_TO_DATE(
-                         '$ed','%Y-%m-%d')
-               GROUP BY employee_id
-             ) quiz
-               ON quiz.employee_id = tasks.employee_id
-             LEFT OUTER JOIN
-             (
-
-               SELECT
-                   COUNT(*)          AS days_worked
-                 , `employee number` AS employee_id
-               FROM days_worked
-               WHERE worked = 1 AND
-                     `date worked` BETWEEN STR_TO_DATE('$sd',
-                                                       '%Y-%m-%d') AND STR_TO_DATE(
-                         '$ed','%Y-%m-%d')
-               GROUP BY `employee number`
-
-             ) worked
-               ON worked.employee_id = tasks.employee_id
-
-
-             LEFT OUTER JOIN
-
-             (
-               SELECT
-                 sum(
-                     miles) AS miles
-                 , employee_id
-                 ,sum(`Idle Time`) as idle_time
-               FROM
-                 import_gps_trips
-               WHERE (
-                 began BETWEEN STR_TO_DATE(
-                     '$sd',
-                     '%Y-%m-%d') AND STR_TO_DATE(
-                     '$ed',
-                     '%Y-%m-%d')
-                 AND
-                 Ended BETWEEN STR_TO_DATE(
-                     '$sd',
-                     '%Y-%m-%d') AND STR_TO_DATE(
-                     '$ed',
-                     '%Y-%m-%d'))
-               GROUP BY
-                 employee_id) miles
-               ON miles.employee_id = tasks.employee_id)
-                JOIN (
-                          select * from idle_calcs
-           ) idle_cals ON (idle_time / 60) between idle_cals.idle_from_hrs and idle_cals.idle_to_hrs
-           ) whole_shebang,
-  (
-    SELECT
-      *
-    FROM cp_activity) cp_activity";
-             
+               WHERE submit_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
+               GROUP BY assign_to) tasks LEFT OUTER JOIN (
+                                                           SELECT
+                                                             employee_id
+                                                             , sum(CASE WHEN success = 1
+                                                             THEN 1
+                                                                   ELSE 0 END) AS passed_quizzes
+                                                             , count(success)  AS all_quizzes
+                                                           FROM assignments.user_quizzes uq
+                                                             JOIN assignments.v_imported_users viu
+                                                               ON uq.user_id = viu.UserID
+                                                             JOIN catalina.users ON users.username = viu.UserName
+                                                           WHERE uq.added_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
+                                                           GROUP BY employee_id) quiz
+           ON quiz.employee_id = tasks.employee_id
+         LEFT OUTER JOIN (
+                           SELECT
+                               COUNT(*)          AS days_worked
+                             , `employee number` AS employee_id
+                           FROM days_worked
+                           WHERE worked = 1 AND
+                                 `date worked` BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
+                           GROUP BY `employee number`) worked ON worked.employee_id = tasks.employee_id
+         LEFT OUTER JOIN (
+                           SELECT
+                              sum(miles)       AS miles
+                             , employee_id
+                             ,sum(`Idle Time`) AS idle_time
+                           FROM import_gps_trips
+                           WHERE (
+                             began BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
+                             AND Ended BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d'))
+                           GROUP BY employee_id) miles ON miles.employee_id = tasks.employee_id) JOIN (
+                                                                                                        SELECT
+                                                                                                          *
+                                                                                                        FROM
+                                                                                                          idle_calcs) idle_cals
+           ON (idle_time / 60) BETWEEN idle_cals.idle_from_hrs AND idle_cals.idle_to_hrs) whole_shebang,(
+                                                                                                          SELECT
+                                                                                                            *
+                                                                                                          FROM
+                                                                                                            cp_activity) cp_activity ) a
+          right outer join users on users.employee_id = a.employee_id";
     return $sql;
 }
 function generate_quiz_sql($sd, $ed)

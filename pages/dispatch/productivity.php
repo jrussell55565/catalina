@@ -512,7 +512,7 @@ $csa_compliance_aggregate = get_sql_results($compliance_sql,$mysqli);
                     <li><a href="#">Quiz Points<span class="pull-right badge bg-blue productivity-pts" id="prod_task_points">
                     <?php for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {?>
                     <?php if ($task_aggregate[$task_i]['employee_id'] == $emp_id) { ?>
-                     <?php echo $task_aggregate[$task_i]['quiz_points']; ?>
+                     <?php echo $task_aggregate[$task_i]['quiz_points']; ?> of <?php echo $task_aggregate[$task_i]['all_quizzes']; ?>
                      <?php } ?>
                     <?php } ?>
                     </span>
@@ -650,12 +650,17 @@ $csa_compliance_aggregate = get_sql_results($compliance_sql,$mysqli);
               <!-- small box -->
               <div class="small-box bg-blue">
                 <div class="inner">
-                <?php for($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) { ?>
-                    <?php if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) { ?>
-                  <h4 id="shp_points" style="text-align: center; font-size: 2em;">Points: <?php echo round($shipment_aggregate[$ship_i]['earned_points'],2);?> of <?php echo round($shipment_aggregate[$ship_i]['max_points'],2);?></h4>
-                  <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php $pe = round($shipment_aggregate[$ship_i]['percentage_earned'],2); echo ($pe > 100 ? 100 : $pe);?>%</h4>
-                  <?php } ?>
-                 <?php } ?>
+                <?php
+                    for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
+                      if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
+                        $total_shipment_percent = $shipment_aggregate[$ship_i]['percentage_earned'];
+                        $total_shipment_points = $shipment_aggregate[$ship_i]['earned_points'];
+                        $possible_shipment_points = $shipment_aggregate[$ship_i]['max_points'];
+                      }
+                    }
+                 ?> 
+                  <h4 id="shp_points" style="text-align: center; font-size: 2em;">Points: <?php echo round($total_shipment_points,2);?> of <?php echo round($possible_shipment_points,2);?></h4>
+                  <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php $pe = round($total_shipment_percent,2); echo ($pe > 100 ? 100 : $pe);?>%</h4>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
               </div>
@@ -671,11 +676,11 @@ $csa_compliance_aggregate = get_sql_results($compliance_sql,$mysqli);
                         $total_vir_percent = $vir_aggregate[$vir_i]['vir_total_percent'];
                         $total_vir_points = $vir_aggregate[$vir_i]['vir_total_points'];
                         $days_worked = $vir_aggregate[$vir_i]['days_worked'];
-                        $max_total_vir_points = $vir_aggregate[$vir_i]['max_total_vir_points'];
+                        $possible_vir_points = $vir_aggregate[$vir_i]['max_total_vir_points'];
                       }
                     }
                  ?> 
-                  <h4 id="vir_points" style="text-align: center; font-size: 2em;">Points: <?php echo $total_vir_points;?> of <?php echo $max_total_vir_points;?></h4>
+                  <h4 id="vir_points" style="text-align: center; font-size: 2em;">Points: <?php echo $total_vir_points;?> of <?php echo $possible_vir_points;?></h4>
                   <h4 id="vir_percent" style="text-align: center; font-size: 3em;"><?php echo round($total_vir_percent,2) . "%";?></h4>
                 </div>
                </div>
@@ -685,8 +690,16 @@ $csa_compliance_aggregate = get_sql_results($compliance_sql,$mysqli);
               <!-- small box -->
               <div class="small-box bg-purple">
                 <div class="inner">
-                  <h4 id="task_points" style="text-align: center; font-size: 2em;">Points: <?php echo $total_vir_points;?> of <?php echo $max_total_vir_points;?></h4>
-                  <h4 id="task_percent" style="text-align: center; font-size: 3em;"><?php echo round($total_vir_percent,2) . "%";?></h4>
+                <?php
+                    for($task_i=0;$task_i<count($task_aggregate);$task_i++) {
+                      if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
+                        $total_activity_points = $task_aggregate[$task_i]['activity_total_points'];
+                        $possible_activity_points = $task_aggregate[$task_i]['activity_max_points'];
+                      }
+                    }
+                 ?> 
+                  <h4 id="task_points" style="text-align: center; font-size: 2em;">Points: <?php echo $total_activity_points;?> of <?php echo $possible_activity_points;?></h4>
+                  <h4 id="task_percent" style="text-align: center; font-size: 3em;"><?php echo round(($total_activity_points / $possible_activity_points)*100,2) . "%";?></h4>
                 </div>
                 <div class="icon"> <i class="ion ion-person-add"></i> </div>
               </div>
@@ -698,18 +711,17 @@ $csa_compliance_aggregate = get_sql_results($compliance_sql,$mysqli);
                 <div class="inner">
                   <h4 id="shp_points" style="text-align: center; font-size: 2em;">Points:
                        <?php
-                       for($i=0;$i<count($csa_compliance_aggregate);$i++) {
-                         if ($csa_compliance_aggregate[$i]['basic'] == 'Total Points') {
-                            $my_total_points = $csa_compliance_aggregate[$i]['total_points'];
-                         }
-                         if ($csa_compliance_aggregate[$i]['basic'] == 'Total Company Points') {
-                            $company_total_points = $csa_compliance_aggregate[$i]['total_points'];
-                         }
-                       }
+                       for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
+                        if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) {
+                          $total_compliance_points = $csa_compliance_aggregate[$compliance_i]['total_points'] * -1;
+                          $possible_compliance_points = 0;
+                          $total_percent = ($total_compliance_points < 0 ? 0 : 100);
+                      }
+                    }
                        ?>
-                      <?php echo $my_total_points;?> of <?php echo $company_total_points; ?>
+                      <?php echo $total_compliance_points;?> of <?php echo $possible_compliance_points; ?>
                   </h4>
-                  <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php echo round($company_total_points / $my_total_points,2) . "%";?></h4>
+                  <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php echo $total_percent . "%";?></h4>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
               </div>
@@ -731,7 +743,11 @@ $csa_compliance_aggregate = get_sql_results($compliance_sql,$mysqli);
               <div class="small-box bg-green">
                 <div class="inner">
                   <center>
-                    <h3>Combined Score <?php echo "$pu_today_count";?> 75% </h3></center>
+                    <?php
+                      $sum_earned_points = ($total_shipment_points + $total_vir_points + $total_activity_points + $total_compliance_points);
+                      $sum_possible_points = ($possible_shipment_points + $possible_vir_points + $possible_activity_points + $possible_compliance_points);
+                    ?>
+                    <h3>Combined Score <?php echo "$pu_today_count";?> <?php echo round(($sum_earned_points / $sum_possible_points) * 100,0)?>%</h3></center>
                   <center><p>Total Points All Categories 150 of 200 as of Current Selection Year, Quarter, Month</p></center>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
