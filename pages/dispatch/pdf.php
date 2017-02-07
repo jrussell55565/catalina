@@ -45,10 +45,8 @@ try {
     header('Content-Type: text/plain; charset=utf-8');
     if ($header == 500) {
         http_response_code(500);
-        //header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
     }else{
         http_response_code(200);
-        //header($_SERVER['SERVER_PROTOCOL'] . ' OK', true, 200);
     }
     echo $message_output;
     exit;
