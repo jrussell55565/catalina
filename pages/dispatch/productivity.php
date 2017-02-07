@@ -695,11 +695,12 @@ $csa_compliance_aggregate = get_sql_results($compliance_sql,$mysqli);
                       if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
                         $total_activity_points = $task_aggregate[$task_i]['activity_total_points'];
                         $possible_activity_points = $task_aggregate[$task_i]['activity_max_points'];
+                        $total_percent = $task_aggregate[$task_i]['total_percent'];
                       }
                     }
                  ?> 
                   <h4 id="task_points" style="text-align: center; font-size: 2em;">Points: <?php echo $total_activity_points;?> of <?php echo $possible_activity_points;?></h4>
-                  <h4 id="task_percent" style="text-align: center; font-size: 3em;"><?php echo round(($total_activity_points / $possible_activity_points)*100,2) . "%";?></h4>
+                  <h4 id="task_percent" style="text-align: center; font-size: 3em;"><?php echo $total_percent . "%";?></h4>
                 </div>
                 <div class="icon"> <i class="ion ion-person-add"></i> </div>
               </div>
@@ -986,31 +987,29 @@ $csa_compliance_aggregate = get_sql_results($compliance_sql,$mysqli);
                       <th>Graph Score</th>
                       <th style="width: 40px">Score</th>
                     </tr>
-<?php
-for ($shp_i=0;$shp_i<count($complete_ship_aggregate);$shp_i++)
-{
-// Get our colors and width
-if ($complete_ship_aggregate[$shp_i]['percentage_earned'] >= 90) { $color = 'green'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned'];}
-if ($complete_ship_aggregate[$shp_i]['percentage_earned'] >= 70 && $complete_ship_aggregate[$shp_i]['percentage_earned'] < 90) { $color = 'blue'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned']; }
-if ($complete_ship_aggregate[$shp_i]['percentage_earned'] > 50 && $complete_ship_aggregate[$shp_i]['percentage_earned'] < 70) { $color = 'yellow'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned']; }
-if ($complete_ship_aggregate[$shp_i]['percentage_earned'] > 25 && $complete_ship_aggregate[$shp_i]['percentage_earned'] < 50) { $color = 'red'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned']; }
-if ($complete_ship_aggregate[$shp_i]['percentage_earned'] <= 25) { $color = 'black'; $percent = $complete_ship_aggregate[$shp_i]['percentage_earned']; }
+                    <?php
+                    $shipment_array = sort_array($shipment_aggregate,'percentage_earned');
+                    for ($ship_i=0;$ship_i<count($shipment_array);$ship_i++) {
+                      echo($shipment_array[$compliance_i]['percentage_earned']);
+                      if ($shipment_array[$ship_i]['percentage_earned'] >= 90) { $color = 'green'; $percent = $shipment_array[$ship_i]['percentage_earned'];}
+                      if ($shipment_array[$ship_i]['percentage_earned'] >= 70 && $shipment_array[$ship_i]['percentage_earned'] < 90) { $color = 'blue'; $percent = $shipment_array[$ship_i]['percentage_earned']; }
+                      if ($shipment_array[$ship_i]['percentage_earned'] > 50 && $shipment_array[$ship_i]['percentage_earned'] < 70) { $color = 'yellow'; $percent = $shipment_array[$ship_i]['percentage_earned']; }
+                      if ($shipment_array[$ship_i]['percentage_earned'] > 25 && $shipment_array[$ship_i]['percentage_earned'] < 50) { $color = 'red'; $percent = $shipment_array[$ship_i]['percentage_earned']; }
+                      if ($shipment_array[$ship_i]['percentage_earned'] <= 25) { $color = 'black'; $percent = $shipment_array[$ship_i]['percentage_earned']; }
 
-// If the user is over 100% then drop it to 100
-if ($complete_ship_aggregate[$shp_i]['percentage_earned'] > 100) { $percent = 100; }
-?>
-<tr>
-                 <td><?php echo $shp_i+1;?></td>
-                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $complete_ship_aggregate[$shp_i]['username'];?></td>
+                      // If the user is over 100% then drop it to 100
+                      if ($shipment_array[$ship_i]['percentage_earned'] > 100) { $percent = 100; }
+                    ?>
+                    <tr>
+                 <td><?php echo $ship_i+1;?></td>
+                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $shipment_array[$ship_i]['name'];?></td>
 
                  <td><div class="progress progress-xs progress-striped active">
                  <div class="progress-bar progress-bar-<?php echo "$color";?>" style="width: <?php echo $percent;?>%"></div>
 
-                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $percent;?></span></td>
+                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $shipment_array[$ship_i]['percentage_earned'];?></span></td>
                  </tr>
-<?php                 
-}
-?>
+                    <?php } ?>
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -1025,7 +1024,7 @@ if ($complete_ship_aggregate[$shp_i]['percentage_earned'] > 100) { $percent = 10
               <div class="box">
                 <div class="box-header">
               
-                 <h3 class="box-title">Compliance</h3>
+                 <h3 class="box-title">CSA Compliance</h3>
 <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -1039,86 +1038,22 @@ if ($complete_ship_aggregate[$shp_i]['percentage_earned'] > 100) { $percent = 10
                       <th>Graph Score</th>
                       <th style="width: 40px">Score</th>
                     </tr>
+                  <?php
+                    $compliance_array = sort_array($csa_compliance_aggregate,'total_points');
+                    for ($compliance_i=0;$compliance_i<count($compliance_array);$compliance_i++) {
+                      if ($compliance_array[$compliance_i]['total_points'] >= 1) { $color = 'black'; $percent = 100; }
+                      if ($compliance_array[$compliance_i]['total_points'] < 1) { $color = 'green'; $percent = 0; }
+                    ?>
                     <tr>
-                      <td>1.</td>
-                      <td><img src="../../dist/img/dash.jpg" alt="" width="24" height="24" class="img-circle"> Dash</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-success" style="width: 99%"></div>
-                      </div></td>
-                      <td><span class="badge bg-green">99%</span></td>
-                    </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td><img src="../../dist/img/violet.jpg" alt="" width="24" height="24" class="img-circle"> Violote</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-success" style="width: 85%"></div>
-                      </div></td>
-                      <td><span class="badge bg-green">80%</span></td>
-                    </tr>
-                    <tr>
-                      <td>3.</td>
-                      <td><img src="../../dist/img/jack.jpg" alt="" width="24" height="24" class="img-circle">Jack Jack</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-primary" style="width: 79%"></div>
-                      </div></td>
-                      <td><span class="badge bg-light-blue">79%</span></td>
-                    </tr>
-                    <tr>
-                      <td>4.</td>
-                      <td><img src="../../dist/img/edna.jpg" alt="" width="24" height="24" class="img-circle">Edna Mode</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-primary" style="width: 66%"></div>
-                      </div></td>
-                      <td><span class="badge bg-light-blue">60%</span></td>
-                    </tr>
-                    <tr>
-                      <td>5.</td>
-                      <td><img src="../../dist/img/Gilbert Huph.jpg" alt="" width="24" height="24" class="img-circle">Gilbert Huph</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-yellow" style="width: 58%"></div>
-                      </div></td>
-                      <td><span class="badge bg-yellow">59%</span></td>
-                    </tr>
-                    <tr>
-                      <td>6.</td>
-                      <td><img src="../../dist/img/syndrome.jpg" alt="" width="24" height="24" class="img-circle">Syndrome</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-yellow" style="width: 40%"></div>
-                      </div></td>
-                      <td><span class="badge bg-yellow">40%</span></td>
-                    </tr>
-                    <tr>
-                      <td>7.</td>
-                      <td><img src="../../dist/img/bernie kropp.jpg" alt="" width="24" height="24" class="img-circle"> Burnie Kropp</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 19%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">39%</span></td>
-                    </tr>
-                    <tr>
-                      <td>8.</td>
-                      <td><img src="../../dist/img/frank.jpg" alt="" width="24" height="24" class="img-circle"> Frank</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 19%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">20%</span></td>
-                    </tr>
-                    <tr>
-                      <td>9.</td>
-                      <td><img src="../../dist/img/h2tyd 3.jpg" alt="" width="24" height="24" class="img-circle"> Hector Axe</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 19%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">19%</span></td>
-                    </tr>
-                    <tr>
-                      <td>10.</td>
-                      <td><img src="../../dist/img/tony rydinger.jpg" alt="" width="24" height="24" class="img-circle"> Troy Hydinger</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 01%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">01%</span></td>
-                    </tr>
+                 <td><?php echo $compliance_i+1;?></td>
+                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $compliance_array[$compliance_i]['real_name'];?></td>
+
+                 <td><div class="progress progress-xs progress-striped active">
+                 <div class="progress-bar progress-bar-<?php echo "$color";?>" style="width: <?php echo $percent;?>%"></div>
+
+                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $compliance_array[$compliance_i]['total_points'];?></span></td>
+                 </tr>
+                    <?php } ?>
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box --><!-- /.box --><!-- /.box -->              
@@ -1181,31 +1116,30 @@ if ($complete_ship_aggregate[$shp_i]['percentage_earned'] > 100) { $percent = 10
                       <th>Graph Score</th>
                       <th style="width: 40px">Score</th>
                     </tr>
-<?php
-for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++)
-{
-// Get our colors and width
-if ($vir_aggregate[$vir_i]['vir_total_percent'] >= 90) { $color = 'green'; $percent = $vir_aggregate[$vir_i]['vir_total_percent'];}
-if ($vir_aggregate[$vir_i]['vir_total_percent'] >= 70 && $vir_aggregate[$vir_i]['vir_total_percent'] < 90) { $color = 'blue'; $percent = $vir_aggregate[$vir_i]['vir_total_percent']; }
-if ($vir_aggregate[$vir_i]['vir_total_percent'] > 50 && $vir_aggregate[$vir_i]['vir_total_percent'] < 70) { $color = 'yellow'; $percent = $vir_aggregate[$vir_i]['vir_total_percent']; }
-if ($vir_aggregate[$vir_i]['vir_total_percent'] > 25 && $vir_aggregate[$vir_i]['vir_total_percent'] < 50) { $color = 'red'; $percent = $vir_aggregate[$vir_i]['vir_total_percent']; }
-if ($vir_aggregate[$vir_i]['vir_total_percent'] <= 25) { $color = 'black'; $percent = $vir_aggregate[$vir_i]['vir_total_percent']; }
+                <?php
+                    $vir_array = sort_array($vir_aggregate,'vir_total_percent');
+                    for ($vir_i=0;$vir_i<count($vir_array);$vir_i++) {
+                      echo($vir_array[$compliance_i]['vir_total_percent']);
+                      if ($vir_array[$vir_i]['vir_total_percent'] >= 90) { $color = 'green'; $percent = $vir_array[$vir_i]['vir_total_percent'];}
+                      if ($vir_array[$vir_i]['vir_total_percent'] >= 70 && $vir_array[$vir_i]['vir_total_percent'] < 90) { $color = 'blue'; $percent = $vir_array[$vir_i]['vir_total_percent']; }
+                      if ($vir_array[$vir_i]['vir_total_percent'] > 50 && $vir_array[$vir_i]['vir_total_percent'] < 70) { $color = 'yellow'; $percent = $vir_array[$vir_i]['vir_total_percent']; }
+                      if ($vir_array[$vir_i]['vir_total_percent'] > 25 && $vir_array[$vir_i]['vir_total_percent'] < 50) { $color = 'red'; $percent = $vir_array[$vir_i]['vir_total_percent']; }
+                      if ($vir_array[$vir_i]['vir_total_percent'] <= 25) { $color = 'black'; $percent = $vir_array[$vir_i]['vir_total_percent']; }
 
-// If the user is over 100% then drop it to 100
-if ($vir_aggregate[$vir_i]['vir_total_percent'] > 100) { $percent = 100; }
-?>
-<tr>
+                      // If the user is over 100% then drop it to 100
+                      if ($vir_array[$vir_i]['vir_total_percent'] > 100) { $percent = 100; }
+                    ?>
+                    <tr>
                  <td><?php echo $vir_i+1;?></td>
-                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $vir_aggregate[$vir_i]['real_name'];?></td>
+                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $vir_array[$vir_i]['real_name'];?></td>
 
                  <td><div class="progress progress-xs progress-striped active">
                  <div class="progress-bar progress-bar-<?php echo "$color";?>" style="width: <?php echo $percent;?>%"></div>
 
-                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $percent;?></span></td>
+                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $vir_array[$vir_i]['vir_total_percent'];?></span></td>
                  </tr>
-<?php
-}
-?>
+                    <?php } ?>
+
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -1222,7 +1156,7 @@ if ($vir_aggregate[$vir_i]['vir_total_percent'] > 100) { $percent = 100; }
 
               <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">CSA Compliance</h3>
+                  <h3 class="box-title">Compliance</h3>
                   <div class="box-tools pull-right">
                   <!--          <div class="box"> -->
                   <!--Remove the div Class "box" above and add ?? to below primary collapsed -->
@@ -1238,86 +1172,28 @@ if ($vir_aggregate[$vir_i]['vir_total_percent'] > 100) { $percent = 100; }
                       <th>Graph Score</th>
                       <th style="width: 40px">Score</th>
                     </tr>
+                    <?php
+                    $compliance_array = sort_array($task_aggregate,'total_percent');
+                    for ($compliance_i=0;$compliance_i<count($compliance_array);$compliance_i++) {
+                      if ($compliance_array[$compliance_i]['total_percent'] >= 90) { $color = 'green'; $percent = $compliance_array[$compliance_i]['total_percent'];}
+                      if ($compliance_array[$compliance_i]['total_percent'] >= 70 && $compliance_array[$compliance_i]['total_percent'] < 90) { $color = 'blue'; $percent = $compliance_array[$compliance_i]['total_percent']; }
+                      if ($compliance_array[$compliance_i]['total_percent'] > 50 && $compliance_array[$compliance_i]['total_percent'] < 70) { $color = 'yellow'; $percent = $compliance_array[$compliance_i]['total_percent']; }
+                      if ($compliance_array[$compliance_i]['total_percent'] > 25 && $compliance_array[$compliance_i]['total_percent'] < 50) { $color = 'red'; $percent = $compliance_array[$compliance_i]['total_percent']; }
+                      if ($compliance_array[$compliance_i]['total_percent'] <= 25) { $color = 'black'; $percent = $compliance_array[$compliance_i]['total_percent']; }
+
+                      // If the user is over 100% then drop it to 100
+                      if ($compliance_array[$compliance_i]['total_percent'] > 100) { $percent = 100; }
+                    ?>
                     <tr>
-                      <td>1.</td>
-                      <td><img src="../../dist/img/dash.jpg" alt="" width="24" height="24" class="img-circle"> Dash</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-success" style="width: 99%"></div>
-                      </div></td>
-                      <td><span class="badge bg-green">99%</span></td>
-                    </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td><img src="../../dist/img/violet.jpg" alt="" width="24" height="24" class="img-circle"> Violote</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-success" style="width: 85%"></div>
-                      </div></td>
-                      <td><span class="badge bg-green">80%</span></td>
-                    </tr>
-                    <tr>
-                      <td>3.</td>
-                      <td><img src="../../dist/img/jack.jpg" alt="" width="24" height="24" class="img-circle">Jack Jack</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-primary" style="width: 79%"></div>
-                      </div></td>
-                      <td><span class="badge bg-light-blue">79%</span></td>
-                    </tr>
-                    <tr>
-                      <td>4.</td>
-                      <td><img src="../../dist/img/edna.jpg" alt="" width="24" height="24" class="img-circle">Edna Mode</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-primary" style="width: 66%"></div>
-                      </div></td>
-                      <td><span class="badge bg-light-blue">60%</span></td>
-                    </tr>
-                    <tr>
-                      <td>5.</td>
-                      <td><img src="../../dist/img/Gilbert Huph.jpg" alt="" width="24" height="24" class="img-circle">Gilbert Huph</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-yellow" style="width: 58%"></div>
-                      </div></td>
-                      <td><span class="badge bg-yellow">59%</span></td>
-                    </tr>
-                    <tr>
-                      <td>6.</td>
-                      <td><img src="../../dist/img/syndrome.jpg" alt="" width="24" height="24" class="img-circle">Syndrome</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-yellow" style="width: 40%"></div>
-                      </div></td>
-                      <td><span class="badge bg-yellow">40%</span></td>
-                    </tr>
-                    <tr>
-                      <td>7.</td>
-                      <td><img src="../../dist/img/bernie kropp.jpg" alt="" width="24" height="24" class="img-circle"> Burnie Kropp</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 19%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">39%</span></td>
-                    </tr>
-                    <tr>
-                      <td>8.</td>
-                      <td><img src="../../dist/img/frank.jpg" alt="" width="24" height="24" class="img-circle"> Frank</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 19%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">20%</span></td>
-                    </tr>
-                    <tr>
-                      <td>9.</td>
-                      <td><img src="../../dist/img/h2tyd 3.jpg" alt="" width="24" height="24" class="img-circle"> Hector Axe</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 19%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">19%</span></td>
-                    </tr>
-                    <tr>
-                      <td>10.</td>
-                      <td><img src="../../dist/img/tony rydinger.jpg" alt="" width="24" height="24" class="img-circle"> Troy Hydinger</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 01%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">01%</span></td>
-                    </tr>
+                 <td><?php echo $compliance_i+1;?></td>
+                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $compliance_array[$compliance_i]['real_name'];?></td>
+
+                 <td><div class="progress progress-xs progress-striped active">
+                 <div class="progress-bar progress-bar-<?php echo "$color";?>" style="width: <?php echo $percent;?>%"></div>
+
+                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $compliance_array[$compliance_i]['total_percent'];?></span></td>
+                 </tr>
+                    <?php } ?>
                   </table>
                 </div><!-- /.box-body -->
               </div>
@@ -1525,32 +1401,32 @@ $(document).ready(function(){
   <?php // If we're an admin then change the username to 'all' ?>
   <?php if ($_SESSION['login'] == 1) { $username = "all"; } ?>
 
-  get_productivity_report("<?php echo $username;?>","day");
+  // get_productivity_report("<?php echo $username;?>","day");
 
-   $("#productivity_time").change(function() {
-    $("#productivity_time option:selected").each(function() {
-      var productivity = $( this ).val();
-      // Now, set the HTML based on 'productivity'
-      if (productivity == 'day') {
-        get_productivity_report("<?php echo $username;?>","day");
-      }
-      if (productivity == 'week') {
-        get_productivity_report("<?php echo $username;?>","week");
-      }
-      if (productivity == 'month') {
-        get_productivity_report("<?php echo $username;?>","month");
-      }
-      if (productivity == 'quarter') {
-        get_productivity_report("<?php echo $username;?>","quarter");
-      }
-      if (productivity == 'year') {
-        get_productivity_report("<?php echo $username;?>","year");
-      }
-      if (productivity == 'all') {
-        get_productivity_report("<?php echo $username;?>","all");
-      }
-    });
-  });
+  //  $("#productivity_time").change(function() {
+  //   $("#productivity_time option:selected").each(function() {
+  //     var productivity = $( this ).val();
+  //     // Now, set the HTML based on 'productivity'
+  //     if (productivity == 'day') {
+  //       get_productivity_report("<?php echo $username;?>","day");
+  //     }
+  //     if (productivity == 'week') {
+  //       get_productivity_report("<?php echo $username;?>","week");
+  //     }
+  //     if (productivity == 'month') {
+  //       get_productivity_report("<?php echo $username;?>","month");
+  //     }
+  //     if (productivity == 'quarter') {
+  //       get_productivity_report("<?php echo $username;?>","quarter");
+  //     }
+  //     if (productivity == 'year') {
+  //       get_productivity_report("<?php echo $username;?>","year");
+  //     }
+  //     if (productivity == 'all') {
+  //       get_productivity_report("<?php echo $username;?>","all");
+  //     }
+  //   });
+  // });
 
 // Set the default values for the datepicker
 $("#dt_start").val('<?php echo date('m/d/y',$start_date);?>');

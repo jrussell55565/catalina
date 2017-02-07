@@ -155,6 +155,7 @@ function generate_aggregate_compliance_sql($sd,$ed)
   ,(crash_points * cp_csa.crash_indicator_apoint) * crash_indicator_cpoint as crash_points
   ,crash_cash
   , employee_id
+  ,real_name
   FROM
   (
   select coalesce(total_points,0) as total_points
@@ -175,7 +176,9 @@ function generate_aggregate_compliance_sql($sd,$ed)
   ,coalesce(hazard_cash,0) as hazard_cash
   ,coalesce(crash_points,0) as crash_points
   ,coalesce(crash_cash,0) as crash_cash
-  , users.employee_id FROM
+  , users.employee_id
+  ,concat_ws(' ',users.fname,users.lname) as real_name
+   FROM
   (
 select
   SUM(total_points)      AS total_points
@@ -217,10 +220,9 @@ function generate_clockin_sql($emp_id, $sd, $ed)
 
 function generate_vir_sql($sd, $ed)
 {
-    $sql = "select *,
-            round((vir_total_points / max_total_vir_points) * 100) as vir_total_percent
-          from
-            (
+    $sql = "select mo_details.*, u.employee_id, concat_ws(' ',u.fname,u.lname) as real_name,
+            coalesce(round((vir_total_points / max_total_vir_points) * 100),0) as vir_total_percent
+            from        (
             select *,
             (CASE WHEN vir_pretrip_points > days_worked then days_worked else vir_pretrip_points END) +
               (CASE WHEN vir_posttrip_points > days_worked then days_worked else vir_posttrip_points END) +
@@ -231,7 +233,6 @@ function generate_vir_sql($sd, $ed)
             coalesce(round((virs.vir_pretrip / worked.days_worked) * 100,0),0) as vir_pretrip_percent,
             coalesce(round((virs.vir_posttrip / worked.days_worked) * 100,0),0) as vir_posttrip_percent,
             coalesce(round((virs.vir_breakdown / worked.days_worked) * 100,0),0) as vir_breakdown_percent,
-            coalesce(round(((virs.vir_pretrip + virs.vir_posttrip) / (worked.days_worked * 2)) * 100,0),0) as vir_total_percent,
             users.username,
             users.status,
             concat_ws(' ',users.fname,users.lname) as real_name,
@@ -265,7 +266,8 @@ function generate_vir_sql($sd, $ed)
             where virs.employee_id = worked.`employee number`
             and virs.employee_id = users.employee_id
             and users.status = 'Active'
-            AND import_gps_trips.employee_id = users.employee_id ) details) mo_details";
+            AND import_gps_trips.employee_id = users.employee_id ) details) mo_details
+          right OUTER JOIN users u on u.employee_id = mo_details.employee_id";
     return $sql;
 }
 function generate_ship_sql($emp_id, $sd, $ed)
@@ -591,13 +593,17 @@ function generate_user_csa_sql($emp_id, $time, $basic)
 }
 function generate_task_sql($sd, $ed)
 {
-    $sql = "select a.*, users.employee_id ,
-(
-  days_worked_points + miles_points + task_points + quiz_points + idle_time_points
-) as activity_total_points,
+    $sql = "select mo_data.*
+    , coalesce(round((activity_total_points / activity_max_points) * 100,0),0) as total_percent
+    FROM
+      (
+    select a.*, users.employee_id ,
+coalesce(
+  days_worked_points + miles_points + task_points + quiz_points + idle_time_points,0) as activity_total_points,
  (
     tasks_all_user + days_shoulda_worked + all_quizzes
   ) as activity_max_points
+  ,concat_ws(' ',users.fname,users.lname) as real_name
 FROM (
 SELECT
   whole_shebang.*
@@ -609,7 +615,7 @@ SELECT
   , round(TIMESTAMPDIFF(DAY,str_to_date('$sd','%Y-%m-%d'),str_to_date('$ed','%Y-%m-%d')) * .675,0) as days_shoulda_worked
 FROM (
        SELECT
-         tasks.employee_id
+         tasks.employee_id as emp_id
          , tasks_completed_by_user
          , tasks_all_user
          , category
@@ -670,7 +676,7 @@ FROM (
                                                                                                             *
                                                                                                           FROM
                                                                                                             cp_activity) cp_activity ) a
-          right outer join users on users.employee_id = a.employee_id";
+          right outer join users on users.employee_id = a.emp_id ) mo_data";
     return $sql;
 }
 function generate_quiz_sql($sd, $ed)
@@ -761,4 +767,18 @@ function reArrayFiles(&$file_post) {
         }
     }
     return $file_ary;
+}
+function sort_array($my_array,$orderby){
+  $sortArray = array(); 
+  foreach($my_array as $i){ 
+    foreach($i as $key=>$value){ 
+        if(!isset($sortArray[$key])){ 
+            $sortArray[$key] = array(); 
+        } 
+        $sortArray[$key][] = $value; 
+    } 
+  }
+  $orderby = $orderby;
+  array_multisort($sortArray[$orderby],SORT_DESC,$my_array);
+  return $my_array;
 }
