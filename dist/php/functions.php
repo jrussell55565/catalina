@@ -782,3 +782,53 @@ function sort_array($my_array,$orderby){
   array_multisort($sortArray[$orderby],SORT_DESC,$my_array);
   return $my_array;
 }
+// These two should be deprecated at some point
+function generate_compliance_sql($emp_id,$time) {
+
+    $predicates = generate_compliance_predicate($emp_id, $time);
+    $predicate = $predicates[0];
+    $time_predicate = $predicates[1];
+   
+    $sql = "SELECT 'Total Company Points' AS basic, sum(total_points) AS total_points, sum(points_cash_value) AS points_cash_value FROM csadata
+         WHERE $time_predicate
+         union
+         select 'Total Points' as basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from csadata
+         where $predicate
+         and $time_predicate
+         union
+         select basic, SUM(total_points) as total_points, SUM(points_cash_value) as points_cash_value from csadata
+         where $predicate
+         and basic in ('Vehicle Maint.','HOS Compliance','No Violation','Unsafe Driving','Driver Fitness','Controlled Substances/Alcohol','Hazardous Materials (HM)','Crash Indicator')
+         and $time_predicate
+         group by basic";
+    return $sql;
+}
+
+function generate_compliance_predicate($emp_id,$time) {
+    // Do some mangling if the $emp_id = 'all'.  This specific user is from the csa.php page.
+    if ($emp_id == 'all') {
+        $predicate = '1=1';
+    }else{
+        $predicate = "EMPLOYEE_ID='$emp_id'";
+    }
+
+   // Set some time ranges
+   if (isset($time)) {
+       if ($time == "24") {
+           // We only want the last 24 months
+           $time_predicate = "date BETWEEN curdate() - INTERVAL 24 MONTH AND curdate()";
+       }elseif($time == "all") {
+           // Get all time
+           $time_predicate = "1=1";
+       }elseif($time == "24+1") {
+          // Get month 25 only
+          $time_predicate = "date_format(date,'%Y-%m') = date_format(curdate() - INTERVAL 25 MONTH,'%Y-%m')";
+       }
+   }else{
+       // Default to 24 months
+       $time_predicate = "date BETWEEN curdate() - INTERVAL 24 MONTH AND curdate()";
+   }
+
+   return array ($predicate,$time_predicate);
+}
+?>
