@@ -22,7 +22,7 @@ $tire_pressure_array = array(125,120,115,110,105,100,95,90,80,85,75,70,65,60,50,
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <title>VIR Report</title>
     <?php require $_SERVER['DOCUMENT_ROOT'] . '/dist/favicon/favicon.php';?>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.4 -->
@@ -1239,13 +1239,14 @@ function validateSubmit( obj ){
         {
           $('#generalStatus').html("Please select an issue when marking trailer as yellow or red.")
           $('#generalStatus').css('display', 'block');
+          $('#vir_notes_detailed_trailer').focus();
           return false
         }else{
           // Make sure that if issues were checked then there are notes too.
-          if ($('#vir_notes_detailed_truck').val().length == 0) {
+          if ($('#vir_notes_detailed_trailer').val().length == 0) {
             $('#generalStatus').html("Notes are required when marking a trailer yellow or red.")
             $('#generalStatus').css('display', 'block');
-            $('#vir_notes_detailed_truck').focus();
+            $('#vir_notes_detailed_trailer').focus();
             return false;
           }
         }
