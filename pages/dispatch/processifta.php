@@ -232,7 +232,7 @@ if (isset($_POST['add_ifta'])) {
     for ($i=0; $i<sizeof($id); $i++)
     {
         $file_name = $_POST['hdn_upload'][$i];
-        $file_ary = reArrayFiles($_FILES["$file_name"]);
+        $file_ary = re_array_files($_FILES["$file_name"]);
         foreach ($file_ary as $file)
         {
             if ($file["name"])
@@ -585,7 +585,7 @@ if (isset($_POST['update_ifta'])) {
     for ($i=0; $i<sizeof($id); $i++)
     {
         $file_name = $_POST['hdn_upload'][$i];
-        $file_ary = reArrayFiles($_FILES["$file_name"]);
+        $file_ary = re_array_files($_FILES["$file_name"]);
         foreach ($file_ary as $file)
         {
             if ($file["name"])
@@ -732,7 +732,7 @@ if (isset($_POST['update_ifta'])) {
 }
 exit;
 
-function reArrayFiles(&$file_post) {
+function re_array_files(&$file_post) {
 
     $file_ary = array();
     $file_count = count($file_post['name']);
