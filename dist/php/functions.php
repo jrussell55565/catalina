@@ -715,7 +715,7 @@ function upload_image($input_file, $target_dir, $target_name, $return_page, $sql
 
           // Check file size
           if ($input_file["size"] > $file_size) {
-            throw new Exception("File is larger than the allowed ". $file_size, 1);
+            throw new Exception("File is larger than the allowed ". $file_size . " bytes", 1);
           }
 
           // Allow certain file formats

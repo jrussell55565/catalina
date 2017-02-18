@@ -139,17 +139,21 @@ $bx_localtime2 = $_POST['bx_localtime2'];
 $bx_localdate2 = $_POST['bx_localdate2'];
 $submitvir = $_POST['submitvir'];
 
-foreach ($_POST['truck_ck_accessorials'] as $key => $val)
-{
-    $truck_vir_items .= $val.',';
+if (isset($_POST['truck_ck_accessorials'])){
+    foreach ($_POST['truck_ck_accessorials'] as $key => $val)
+    {
+        $truck_vir_items .= $val.',';
+    }
+    $truck_vir_items = rtrim($truck_vir_items,",");
 }
-$truck_vir_items = rtrim($truck_vir_items,",");
 
-foreach ($_POST['trailer_ck_accessorials'] as $key => $val)
-{
-    $trailer_vir_items .= $val.',';
+if (isset($_POST['trailer_ck_accessorials'])){
+    foreach ($_POST['trailer_ck_accessorials'] as $key => $val)
+    {
+        $trailer_vir_items .= $val.',';
+    }
+    $trailer_vir_items = rtrim($trailer_vir_items,",");
 }
-$trailer_vir_items = rtrim($trailer_vir_items,",");
 
 # Insert TRUCK vir:
 if ($trucktype != 'trailer')
@@ -435,7 +439,7 @@ if (! empty($_FILES['fileToUpload']['name'])){
         $target_name = md5($file['name']) . '.' . $file_extension;
         $return_page = '/pages/dispatch/vir.php';
         $sql = "INSERT INTO vir_images (vir_itemnum, image_path) VALUES (".$local_vir_itemnum.", '".HTTP . $target_dir . $target_name."')";
-        $file_size = 500000;
+        $file_size = 5000000; # 5megs
         upload_image($file, $target_dir, $target_name, $return_page, $sql, $file_size, $mysqli);
         $images .= HTTP . $target_dir . $target_name . "\n";
     }
@@ -491,6 +495,6 @@ $images
 
 EOT;
 
-sendEmail($to,$subject,$body,$_SESSION['email']);
+sendEmail($to,$subject,$body,$_SESSION['email'],null,null);
 header("Location: /pages/dispatch/vir.php");
 ?>
