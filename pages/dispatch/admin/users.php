@@ -383,6 +383,7 @@ tsa_date_change_exp = $tsa_date_change_exp
 WHERE id = $id";
 
 mysql_query($sql);
+
 # PDF Uploads
 if (! empty($_FILES["contractUpload"]["name"]))
 {
@@ -1077,8 +1078,13 @@ function show_vis($object_type,$grantee) {
                                 <label for="VtextHelp"></label>
                                 <select name="VtextHelp" id="VtextHelp" class="form-control">
                                   <?php
+                                  $x = '@' . explode("@", $row['vtext'])[1];
                                   foreach ($vtext_providers as $key => $value) {
-                                  echo "<option value=\"$key\">$value</option>";
+                                  echo "<option value=\"$key\"";
+                                  if ($x == $key){
+                                      echo " selected ";
+                                  }
+                                  echo ">$value</option>";
                                   }
                                   ?>
                                 </select>
