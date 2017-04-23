@@ -241,9 +241,11 @@ sub compare_status
 	# SELECT hawb.dueDate,hawb.pudriver,hawb.deldriver FROM hawb WHERE hawb.hawbNumber = "29826989";
 
 	$sql = "SELECT count(hawbNumber) as total FROM hawb WHERE hawbNumber = \"$hawb\"";
-        $sth = $dbh->prepare($sql) or {email_alert("Unable to find status using $hwb from table: hawb ". $$dbh->errstr)};
-        $sth->execute;
-	while (@results = $sth->fetchrow())
+    $sth = $dbh->prepare($sql) or {email_alert("Unable to find status using $hwb from table: hawb ". $$dbh->errstr)};
+    
+    $sth->execute;
+	
+    while (@results = $sth->fetchrow())
 	{
 		$hawbCount = $results[0];	
 	}
@@ -294,10 +296,18 @@ sub vtext
 
 		for my $key ( keys %destination )
 		{
-        		my $value = $destination{$key};
+            my $value = $destination{$key};
+
+            # Create a dynamic predicate based on $key.
+            my $dyn_pred;
+            if ($key == 'vtext') {
+                $dyn_pred = "curtime() not between str_to_date(quiet_time_begin,'%H:%i') and str_to_date(quiet_time_end, '%H:%i')";
+            }else{
+                $dyn_pred = "1 = 1";
+            }
 
 			# First process PU
-      			$sql_vtext_pickup = "SELECT users.$key FROM users WHERE users.driverid = \"$puAgentDriverPhone\" AND users.$value = \"1\"";
+      		$sql_vtext_pickup = "SELECT users.$key FROM users WHERE users.driverid = \"$puAgentDriverPhone\" AND users.$value = \"1\" AND $dyn_pred";
 			$sth_vtext_pickup = $dbh->prepare($sql_vtext_pickup) or {email_alert("Unable to delete $hwb from database ". $$dbh->errstr)};
 			$sth_vtext_pickup->execute;
        			if ($sth_vtext_pickup->err())
@@ -313,7 +323,7 @@ sub vtext
  			}
 			
 			# Process DEL
-      			$sql_vtext_delivery = "SELECT users.$key FROM users WHERE users.driverid = \"$delAgentDriverPhone\" AND users.$value = \"1\"";
+      		$sql_vtext_delivery = "SELECT users.$key FROM users WHERE users.driverid = \"$delAgentDriverPhone\" AND users.$value = \"1\" AND $dyn_pred";
 			$sth_vtext_delivery = $dbh->prepare($sql_vtext_delivery) or {email_alert("Unable to delete $hwb from database ". $$dbh->errstr)};
 			$sth_vtext_delivery->execute;
        			if ($sth_vtext_delivery->err())
