@@ -259,6 +259,11 @@ if (isset($_POST['broadcast_message']))
   if (isset($_POST['sendEmail'])) { $sql .= ",email"; } 
   if (isset($_POST['sendText'])) { $sql .= ",vtext"; } 
 
+  # Only send to admins if this is test.
+  if ($_SERVER['SERVER_PORT'] == 8080) {
+      $predicate .= " AND role='Admin'";
+  }
+
   $sql .= " FROM users WHERE 1=1 $predicate AND status='Active'
            AND curtime() not between str_to_date(quiet_time_begin,'%H:%i') and str_to_date(quiet_time_end, '%H:%i')";
 
