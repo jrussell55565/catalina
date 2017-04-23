@@ -8,7 +8,7 @@ use DBI;
 use Getopt::Long;
 
 # Command line variables
-our ($env, $wwwroot, $ftpusername, $ftppassword, $ftphost, $dbusername, $dbpassword, $dbname);
+our ($env, $wwwroot, $ftpusername, $ftppassword, $ftphost, $dbusername, $dbpassword, $dbname, $debug);
 GetOptions ("env=s" => \$env,
             "wwwroot=s" => \$wwwroot,
             "ftpUsername=s" => \$ftpusername,
@@ -17,6 +17,7 @@ GetOptions ("env=s" => \$env,
             "dbUsername=s" => \$dbusername,
             "dbPassword=s" => \$dbpassword,
             "dbName=s" => \$dbname,
+            "debug" => \$debug
            );
 
 if ( (!$ftpusername) ||
@@ -62,7 +63,6 @@ if (! -d $wwwroot)
 
 our @ftproot	= ("CatalinaCartage","FreightServices");
 our @list = ();
-our $debug = 0;
 
 get_file();
 
@@ -103,6 +103,7 @@ sub get_file
 			}
 
 			#Open the file, explode the string into an array and grab the PU/DEL driver info
+            debugger("Opening the file to extract pu/del driver info");
 			open FILE, "<", "$wwwroot/imports/$csv" or {email_alert("Cannot open file for reading ",$!)};
 			while (<FILE>)
 			{
@@ -145,6 +146,7 @@ sub get_file
 sub update_db
 {
 	my $file = shift;
+    debugger("Updating the dispatch table...");
 	$dbh = DBI->connect("DBI:mysql:$dbname;mysql_local_infile=1", "$dbusername", "$dbpassword") or {email_alert("Could not connect to database: $DBI::errstr")};
 	my $sth = $dbh->prepare("load data local infile \"$wwwroot/imports/$file\" 
 				REPLACE INTO TABLE dispatch FIELDS TERMINATED BY ',' 
@@ -222,7 +224,9 @@ sub compare_status
 	{email_alert("Could not connect to database to delete: $DBI::errstr")};
 
 	# First, get the status,drivers,dates from the dispatch table
+    debugger("Comparing the current list of hwb's to what we already have.");
 	$sql = "SELECT status,puAgentDriverName,delAgentDriverName,hawbDate,dueDate FROM dispatch WHERE hawbNumber = \"$hawb\"";
+    debugger($sql);
 	$sth = $dbh->prepare($sql) or {email_alert("Unable to find status using $hwb from table: dispatch ". $$dbh->errstr)};
         $sth->execute;
         while (@results = $sth->fetchrow())
@@ -236,11 +240,12 @@ sub compare_status
 
 	# Now query the hawb table for the hawbNumber.  If it doesn't exist in this table then we've never seen it before
 	# and we'll insert it and send a text.
-
+    debugger("Now query the hawb table for the hawbNumber.  If it doesn't exist in this table then we've never seen it before.");
 	# Try this.  We need a valid hawbNumber AND both a pudriver and deldriver
 	# SELECT hawb.dueDate,hawb.pudriver,hawb.deldriver FROM hawb WHERE hawb.hawbNumber = "29826989";
 
 	$sql = "SELECT count(hawbNumber) as total FROM hawb WHERE hawbNumber = \"$hawb\"";
+    debugger($sql);
     $sth = $dbh->prepare($sql) or {email_alert("Unable to find status using $hwb from table: hawb ". $$dbh->errstr)};
     
     $sth->execute;
@@ -253,10 +258,12 @@ sub compare_status
 	if ($hawbCount < 1)
 	{
 		# We have NOT seen this hawb before.
+        debugger("We have not seen this hwb before: " . $hawb);
 		insert_hawb($hawb,$dispatchStatus,$puAgent,$delAgent,$hawbDate,$dueDate);
 		return 1;
 	}else{
 		# We have seen this hawb before.  Now just compare the current hawbDate and dueDate with the existing dates.
+        debugger("We have seen this hwb before: " . $hawb);
 		$returnHawbDate = find_date("hawbDate");
 		$returnDueDate = find_date("dueDate");
 		insert_hawb($hawb,$dispatchStatus,$puAgent,$delAgent,$hawbDate,$dueDate);
@@ -297,7 +304,7 @@ sub vtext
 		for my $key ( keys %destination )
 		{
             my $value = $destination{$key};
-
+            debugger("Sending a " . $key . " message to " . $puAgentDriverPhone);
             # Create a dynamic predicate based on $key.
             my $dyn_pred;
             if ($key == 'vtext') {
@@ -308,6 +315,7 @@ sub vtext
 
 			# First process PU
       		$sql_vtext_pickup = "SELECT users.$key FROM users WHERE users.driverid = \"$puAgentDriverPhone\" AND users.$value = \"1\" AND $dyn_pred";
+            debugger($sql_vtext_pickup);
 			$sth_vtext_pickup = $dbh->prepare($sql_vtext_pickup) or {email_alert("Unable to delete $hwb from database ". $$dbh->errstr)};
 			$sth_vtext_pickup->execute;
        			if ($sth_vtext_pickup->err())
@@ -323,7 +331,9 @@ sub vtext
  			}
 			
 			# Process DEL
+            debugger("Sending a " . $key . " message to " . $delAgentDriverPhone);
       		$sql_vtext_delivery = "SELECT users.$key FROM users WHERE users.driverid = \"$delAgentDriverPhone\" AND users.$value = \"1\" AND $dyn_pred";
+            debugger($sql_vtext_delivery);
 			$sth_vtext_delivery = $dbh->prepare($sql_vtext_delivery) or {email_alert("Unable to delete $hwb from database ". $$dbh->errstr)};
 			$sth_vtext_delivery->execute;
        			if ($sth_vtext_delivery->err())
@@ -363,12 +373,13 @@ sub vtext_notify
         $smtp->data();
         $smtp->datasend("To: $toaddress\n");
         $smtp->datasend("Subject: $subject\n");
-	$smtp->datasend("reply-to: drivers\@catalinacartage.com\n");
+	    $smtp->datasend("reply-to: drivers\@catalinacartage.com\n");
         $smtp->datasend("\n");
         $smtp->datasend("$body.\n");
         $smtp->dataend();
 
         $smtp->quit;
+        debugger("Message sent to " . $toaddress);
 }
 
 sub find_date
