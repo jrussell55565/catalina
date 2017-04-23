@@ -259,7 +259,8 @@ if (isset($_POST['broadcast_message']))
   if (isset($_POST['sendEmail'])) { $sql .= ",email"; } 
   if (isset($_POST['sendText'])) { $sql .= ",vtext"; } 
 
-  $sql .= " FROM users WHERE 1=1 $predicate AND status='Active'";
+  $sql .= " FROM users WHERE 1=1 $predicate AND status='Active'
+           AND curtime() not between str_to_date(quiet_time_begin,'%H:%i') and str_to_date(quiet_time_end, '%H:%i')";
 
   $broadcast_users = get_sql_results($sql,$mysqli);
   for($broadcast_i=0;$broadcast_i<count($broadcast_users);$broadcast_i++)
