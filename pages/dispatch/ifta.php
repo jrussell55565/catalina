@@ -126,7 +126,7 @@ if ($_SESSION['login'] != 1)
                         <div style="width: 50%; text-align: center; margin:auto; display: none;" id="search_alert" class="alert alert-danger" role="alert">Include a beginning AND end date.</div>
                      </div>
                      <div class="box-body">
-                        <form name="frm_ifta_search" method="GET" action="ifta.php" role="form">
+                        <form name="frm_ifta_search" method="GET" action="searchifta.php" role="form" target="_blank"> 
                            <div class="table-responsive">
                               <table width="646" class="table table-condensed table-striped">
                                  <tr>
@@ -182,8 +182,10 @@ if ($_SESSION['login'] != 1)
                                    <td>&nbsp;</td>
                                  </tr>                                 
                                  <tr>
-                                    <td colspan="2">
+                                    <td>
                                        <button type="button" id="btn_display_results" name="btn_display_results" value="display" class="btn btn-primary dropdown-toggle">Display Results</button>
+                                    
+                                       <button type="submit" id="btn_export_results" name="btn_export_results" value="export" class="btn btn-primary dropdown-toggle">Export Results</button>
                                     </td>
                                  </tr>
                               </table>
@@ -812,8 +814,8 @@ $(document).ready(function(){
               trip_end: $("#trip_search_enddate").val(),
               trip_state: $("#trip_search_state").val(),
               trip_truck_no: $("#trip_search_trucknumber").val(),
-			  trip_state_exit: $("#trip_search_state_exit").val(),
-			  trip_state_enter: $("#trip_search_state_enter").val(),
+			        trip_state_exit: $("#trip_search_state_exit").val(),
+			        trip_state_enter: $("#trip_search_state_enter").val(),
               trip_driver: $("#trip_search_driver").val()
             },
        success: function(data, textStatus, xhr) {
@@ -847,8 +849,8 @@ $(document).ready(function(){
                               <td>Driver Name 1</td>
                               <td>Driver Name 2</td>
                               <td>Total Trip Miles</td>
-							  <td>State Exit</td>
-							  <td>State Enter</td>
+              							  <td>State Exit</td>
+              							  <td>State Enter</td>
                            </tr>`;
 
 
@@ -867,9 +869,9 @@ $(document).ready(function(){
                               <td>`+obj.driver1+`</td>
                               <td>`+obj.driver2+`</td>
                               <td>`+obj.trip_miles+`</td>
-							  <td>`+obj.trip_state_exit+`</td>
-							  <td>`+obj.trip_state_enter+`</td>
-                           </tr>`;
+							                <td>`+obj.trip_state_exit+`</td>
+							                <td>`+obj.trip_state_enter+`</td>
+                              </tr>`;
             }
             output = output + '</table>';
             $("#search_results").html(output);
@@ -1006,6 +1008,7 @@ function calculate_points(i,dom) {
       $("#"+dom).val(current_val - 1);
       $("#ifta_trip_points_awarded").val(current_val - 1);
     }
+
 }
 </script>
    </body>

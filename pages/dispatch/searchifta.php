@@ -95,6 +95,39 @@ if ($result = $mysqli->query($query)) {
 /* close connection */
 $mysqli->close();
 
-print json_encode($emparray);
+if ($_GET['btn_export_results'] == 'export') {
+  // We want to export this data to CSV
+  $fileName = time() . '.csv';
+  $fileDir = '/tmp/';
+  $header = "driver1,driver2,odo_start,odo_end,trip_miles,trip_no,truck_no,trip_start,trip_end\n";
+
+  $file = fopen($fileDir . $fileName, "w") or die("Unable to open file!");
+  file_put_contents($fileDir . $fileName, $header, FILE_APPEND | LOCK_EX);
+  
+  foreach ($emparray as $key => $value) {       
+    foreach ($value as $k => $v) {
+      $line .= $v . ",";
+    }
+    $line = rtrim($line,',');
+    file_put_contents($fileDir . $fileName, $line, FILE_APPEND | LOCK_EX);
+  
+    $line = "\n";
+    file_put_contents($fileDir . $fileName, $line, FILE_APPEND | LOCK_EX);
+    unset($line);
+  }
+  fclose($fileDir . $fileName);
+  header('Content-Description: File Transfer');
+  header('Content-Type: application/octet-stream');
+  header('Content-Disposition: attachment; filename='.basename($file));
+  header('Expires: 0');
+  header('Cache-Control: must-revalidate');
+  header('Pragma: public');
+  header('Content-Length: ' . filesize($fileDir . $fileName));
+  header ("Content-Disposition:attachment; filename=\"$fileName\"");
+  readfile($fileDir . $fileName);
+  unlink($fileDir . $fileName);
+}else{
+  print json_encode($emparray);  
+}
 
 ?>
