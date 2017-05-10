@@ -185,7 +185,7 @@ if ($_SESSION['login'] != 1)
                                     <td>
                                        <button type="button" id="btn_display_results" name="btn_display_results" value="display" class="btn btn-primary dropdown-toggle">Display Results</button>
                                     
-                                       <button type="submit" id="btn_export_results" name="btn_export_results" value="export" class="btn btn-primary dropdown-toggle">Export Results</button>
+                                       <button type="submit" id="btn_export_results" name="btn_display_results" value="export" class="btn btn-primary dropdown-toggle">Export Results</button>
                                     </td>
                                  </tr>
                               </table>

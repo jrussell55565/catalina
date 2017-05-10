@@ -16,6 +16,16 @@ if ($_GET['search_type'] == 'truck_odo')
     $query = "select max(odo_end) odo_end from ifta where truck_no=" . $_GET['truck_no'];
 
 }else{
+    // Do some _GET manipulation.  This is because I passed in different names when I created
+    // The ajax call and now I have to make it work.
+    if (isset($_GET['trip_search_tripnum'])) { $_GET['trip_no'] = $_GET['trip_search_tripnum']; }
+    if (isset($_GET['trip_search_hwbnum'])) { $_GET['hwb_no'] = $_GET['trip_search_hwbnum']; }
+    if (isset($_GET['trip_search_startdate'])) { $_GET['trip_start'] = $_GET['trip_search_startdate']; }
+    if (isset($_GET['trip_search_enddate'])) { $_GET['trip_end'] = $_GET['trip_search_enddate']; }
+    if (isset($_GET['trip_search_trucknumber'])) { $_GET['trip_truck_no'] = $_GET['trip_search_trucknumber']; }
+    if (isset($_GET['trip_search_driver'])) { $_GET['trip_driver'] = $_GET['trip_search_driver']; }
+
+
     // Transform the GET variables into sql statements
     if (isset($_GET['trip_no']) && ($_GET['trip_no'] != '')) { 
         $_GET['trip_no'] = ' ifta.trip_no = "' . $_GET['trip_no'] . '"'; 
@@ -72,7 +82,7 @@ if ($_GET['search_type'] == 'truck_odo')
               AND ". $_GET['trip_truck_no']. "
               AND ". $_GET['trip_driver']. "
               ORDER BY date_started ASC";
-    
+
 }
 
 /* check connection */
@@ -95,7 +105,8 @@ if ($result = $mysqli->query($query)) {
 /* close connection */
 $mysqli->close();
 
-if ($_GET['btn_export_results'] == 'export') {
+  error_log( $emparray );
+if ($_GET['btn_display_results'] == 'export') {
   // We want to export this data to CSV
   $fileName = time() . '.csv';
   $fileDir = '/tmp/';
