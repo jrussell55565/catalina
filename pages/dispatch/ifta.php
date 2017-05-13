@@ -858,19 +858,19 @@ $(document).ready(function(){
             for(var i = 0; i < json.length; i++) {
               var obj = json[i];
                output = output + `<tr>
-                              <td><a href="<?php echo HTTP;?>/pages/dispatch/updateifta.php?trip_no=`+obj.trip_no+`" target="_blank">`+obj.trip_no+`</a></td>
+                              <td><a href="<?php echo HTTP;?>/pages/dispatch/updateifta.php?trip_no=`+obj.ifta_trip_no+`" target="_blank">`+obj.ifta_trip_no+`</a></td>
                               <td>`+obj.hwb_no+`</td>
-                              <td>`+obj.odo_start+`</td>
-                              <td>`+obj.odo_end+`</td>
+                              <td>`+obj.ifta_odo_start+`</td>
+                              <td>`+obj.ifta_odo_end+`</td>
                               <td>Open</td>
-                              <td>`+obj.truck_no+`</td>
-                              <td>`+obj.trip_start+`</td>
-                              <td>`+obj.trip_end+`</td>
-                              <td>`+obj.driver1+`</td>
-                              <td>`+obj.driver2+`</td>
-                              <td>`+obj.trip_miles+`</td>
-							                <td>`+obj.trip_state_exit+`</td>
-							                <td>`+obj.trip_state_enter+`</td>
+                              <td>`+obj.ifta_truck_no+`</td>
+                              <td>`+obj.ifta_trip_start+`</td>
+                              <td>`+obj.ifta_trip_end+`</td>
+                              <td>`+obj.ifta_driver1+`</td>
+                              <td>`+obj.ifta_driver2+`</td>
+                              <td>`+obj.ifta_trip_miles+`</td>
+							                <td>`+obj.ifta_trip_state_exit+`</td>
+							                <td>`+obj.ifta_trip_state_enter+`</td>
                               </tr>`;
             }
             output = output + '</table>';

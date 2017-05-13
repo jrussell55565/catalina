@@ -61,18 +61,56 @@ if ($_GET['search_type'] == 'truck_odo')
     } else { 
         $_GET['trip_driver'] = ' (ifta.driver1 like "%" OR ifta.driver2 like "%")';
     }
+
+    if ($_GET['btn_display_results'] == 'export') {
+        // Dynamically pull out more records if this is an export
+        $additional_sql = ",
+                  ifta_details.trip_date as 'ifta_details.trip_date',
+                  ifta_details.hwb as 'ifta_details.hwb',
+                  ifta_details.route as 'ifta_details.route',
+                  ifta_details.st_exit as 'ifta_details.st_exit',
+                  ifta_details.st_enter as 'ifta_details.st_enter',
+                  ifta_details.state_line_odometer as 'ifta_details.state_line_odometer',
+                  ifta_details.state_miles as 'ifta_details.state_miles',
+                  ifta_fuel.trip_no as 'ifta_fuel.trip_no',
+                  ifta_fuel.trip_date as 'ifta_fuel.trip_date',
+                  ifta_fuel.fuel_gallons as 'ifta_fuel.fuel_gallons',
+                  ifta_fuel.fuel_reefer as 'ifta_fuel.fuel_reefer',
+                  ifta_fuel.fuel_other as 'ifta_fuel.fuel_other',
+                  ifta_fuel.vendor as 'ifta_fuel.vendor',
+                  ifta_fuel.city as 'ifta_fuel.city',
+                  ifta_fuel.state as 'ifta_fuel.state'";
+        $joins = "JOIN ifta_details on ifta.trip_no = ifta_details.trip_no
+                  JOIN ifta_fuel on ifta.trip_no = ifta_fuel.trip_no";
+    }else{
+        $additional_sql = '';
+        $joins = '';
+    }
     
     $query = "SELECT 
-              (SELECT concat(fname,' ',lname) from users where employee_id=driver1) as driver1,
-              (SELECT concat(fname,' ',lname) from users where employee_id=driver2) as driver2,
-              odo_start,
-              odo_end,
-              odo_end - odo_start as trip_miles,
-              ifta.trip_no,
-              truck_no,
-              date_format(date_started,'%m/%d/%Y') as trip_start,
-              date_format(date_ended,'%m/%d/%Y') as trip_end
-              FROM ifta
+                 (SELECT 
+                          CONCAT(fname, ' ', lname)
+                      FROM
+                          users
+                      WHERE
+                          employee_id = driver1) AS 'ifta_driver1',
+                  (SELECT 
+                          CONCAT(fname, ' ', lname)
+                      FROM
+                          users
+                      WHERE
+                          employee_id = driver2) AS 'ifta_driver2',
+                  ifta.odo_start as 'ifta_odo_start',
+                  ifta.odo_end as 'ifta_odo_end',
+                  ifta.odo_end - ifta.odo_start AS 'ifta_trip_miles',
+                  ifta.trip_no as 'ifta_trip_no',
+                  ifta.truck_no as 'ifta_truck_no',
+                  DATE_FORMAT(ifta.date_started, '%m/%d/%Y') AS 'ifta_trip_start',
+                  DATE_FORMAT(ifta.date_ended, '%m/%d/%Y') AS 'ifta_trip_end'
+                  " . $additional_sql . "
+              FROM
+                  ifta
+              ". $joins ."
               WHERE 1=1
               AND ". $_GET['trip_no'] ."
               AND
@@ -82,7 +120,6 @@ if ($_GET['search_type'] == 'truck_odo')
               AND ". $_GET['trip_truck_no']. "
               AND ". $_GET['trip_driver']. "
               ORDER BY date_started ASC";
-
 }
 
 /* check connection */
@@ -110,7 +147,9 @@ if ($_GET['btn_display_results'] == 'export') {
   // We want to export this data to CSV
   $fileName = time() . '.csv';
   $fileDir = '/tmp/';
-  $header = "driver1,driver2,odo_start,odo_end,trip_miles,trip_no,truck_no,trip_start,trip_end\n";
+  $header = "ifta_driver1,ifta_driver2,ifta_odo_start,ifta_odo_end,ifta_trip_miles,ifta_trip_no,ifta_truck_no,ifta_trip_start,ifta_trip_end,";
+  $header .= "ifta_details.trip_date,ifta_details.hwb,ifta_details.route,ifta_details.st_exit,ifta_details.st_enter,ifta_details.state_line_odometer,ifta_details.state_miles,";
+  $header .= "ifta_fuel.trip_no,ifta_fuel.trip_date,ifta_fuel.fuel_gallons,ifta_fuel.fuel_reefer,ifta_fuel.fuel_other,ifta_fuel.vendor,ifta_fuel.city,ifta_fuel.state\n";
 
   $file = fopen($fileDir . $fileName, "w") or die("Unable to open file!");
   file_put_contents($fileDir . $fileName, $header, FILE_APPEND | LOCK_EX);
