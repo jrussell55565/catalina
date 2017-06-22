@@ -836,7 +836,7 @@ Closed
              $state_array = array();
              $state_array = explode(",", $state);
              echo "        '$state_array[0]' : [";
-             for($i = 1; $i <= 8; $i++) {
+             for($i = 1; $i <= 9; $i++) {
                if ($state_array[$i] != '') {
                  echo "'" . $state_array[$i] . "'";
                }
