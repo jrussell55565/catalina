@@ -63,7 +63,7 @@ $role = $_SESSION['role'];
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Control Panel / <span class="box-title"><?php echo "$_SESSION[drivername]"; ?></span> <a href="#">
+            Control Panel testing/ <span class="box-title"><?php echo "$_SESSION[drivername]"; ?></span> <a href="#">
             <?php if ($_SESSION['login'] == 1) { echo "(Admin)"; }?>
             </a></h1>
 
