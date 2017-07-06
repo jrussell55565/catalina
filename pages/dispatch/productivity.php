@@ -11,6 +11,9 @@ $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
 
 # Get the driver names and employee_id
 $driver_array = get_drivers($mysqli);
+# Get all users
+$all_users_array = get_all_users($mysqli);
+$user_status_array = get_user_status($mysqli);
 
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
@@ -46,13 +49,15 @@ if ($_SESSION['login'] == 1)
 {
     if(isset($_GET['trip_search_driver'])) {
         $emp_id = $_GET['trip_search_driver'];
+        $account_status = $_GET['productivity_user_status'];
     }else{
         $emp_id = $_SESSION['employee_id'];
+        $account_status = NULL;
     }
 #    $ship_sql = generate_ship_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
 #    $shp_aggregate = get_sql_results($ship_sql,$mysqli);
   
-    $vir_sql = generate_vir_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
+    $vir_sql = generate_vir_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date),);
     $vir_aggregate = get_sql_results($vir_sql,$mysqli);
 
     $vir_clockin_sql = generate_clockin_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
@@ -170,12 +175,20 @@ $csa_compliance_aggregate = get_sql_results($compliance_sql,$mysqli);
                </div>
                <?php if ($_SESSION['login'] == 1) { ?>
                <div class="input-group" id="driver">
-                 <select class="input-sm form-control" name="trip_search_driver" id="trip_search_driver" value="" style="margin-top: 5px;">
-                  <option value="null">All Drivers</option>
-                    <?php for ($i=0; $i<sizeof($driver_array); $i++) { ?>
-                      <option value=<?php echo $driver_array[$i]['employee_id'];
-                       if ($driver_array[$i]['employee_id'] == $_GET['trip_search_driver']) { echo " selected "; } ?>
-                      ><?php echo $driver_array[$i]['name'];?></option>
+                 <select class="input-sm form-control" name="trip_search_driver" id="trip_search_driver" value="" style="margin-top: 5px;" onchange="display_status_div()">
+                  <option value="null">All Users</option>
+                    <?php for ($i=0; $i<sizeof($all_users_array); $i++) { ?>
+                      <option value=<?php echo '"' . $all_users_array[$i]['employee_id'] . '"';
+                       if ($all_users_array[$i]['employee_id'] == $_GET['trip_search_driver']) { echo " selected "; } ?>
+                      ><?php echo $all_users_array[$i]['name'];?></option>
+                    <?php } ?>
+                </select>
+               </div>
+               <div class="input-group" id="user_status">
+                 <select class="input-sm form-control" name="productivity_user_status" id="productivity_user_status" value="" style="margin-top: 5px;">                  
+                    <?php for ($i=0; $i<sizeof($user_status_array); $i++) { ?>
+                      <option value=<?php echo $user_status_array[$i]['status'];?>
+                      ><?php echo $user_status_array[$i]['status'];?></option>
                     <?php } ?>
                 </select>
                </div>
@@ -1431,6 +1444,12 @@ $(document).ready(function(){
 // Set the default values for the datepicker
 $("#dt_start").val('<?php echo date('m/d/y',$start_date);?>');
 $("#dt_end").val('<?php echo date('m/d/y',$end_date - 1);?>');
+
+// Hide the user status div on startup 
+if ($("#trip_search_driver").val() != 'null') {
+      $("#productivity_user_status").hide();
+}
+
 });
 </script>
 
@@ -1487,6 +1506,15 @@ function update_admin_shipment_info(json)
 <?php } ?>
 
 <script>
+function display_status_div()
+{
+    if ($("#trip_search_driver").val() == 'null') {
+      $("#productivity_user_status").show();
+    }else{
+      $("#productivity_user_status").hide();
+    }
+}
+
 function get_productivity_report(username,frequency)
 {
     $.ajax({

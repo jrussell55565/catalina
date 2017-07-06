@@ -133,6 +133,21 @@ function get_all_users($mysqli)
     return $all_users_array;
 }
 
+function get_user_status($mysqli)
+{
+  $user_status = [];
+  $statement = "select distinct status from users";
+
+  $counter = 0;
+    if ($result = $mysqli->query($statement)) {
+        while ($obj = $result->fetch_object()) {
+            $user_status[$counter]['status'] = $obj->status;
+            $counter++;
+        }
+    }
+    return $user_status;
+}
+
 function generate_aggregate_compliance_sql($sd,$ed)
 {
     $sql = "select
