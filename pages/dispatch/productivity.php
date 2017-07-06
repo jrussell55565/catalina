@@ -57,7 +57,7 @@ if ($_SESSION['login'] == 1)
 #    $ship_sql = generate_ship_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
 #    $shp_aggregate = get_sql_results($ship_sql,$mysqli);
   
-    $vir_sql = generate_vir_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date),);
+    $vir_sql = generate_vir_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $vir_aggregate = get_sql_results($vir_sql,$mysqli);
 
     $vir_clockin_sql = generate_clockin_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
@@ -165,7 +165,7 @@ $csa_compliance_aggregate = get_sql_results($compliance_sql,$mysqli);
 <!-- End Animated Top Menu -->  
 <div class="container">
 
-    <div class="col-sm-<?php if ($_SESSION['login'] == 1) { echo 10; }else{ echo 6; }?> pull-left well">
+    <div class="col-sm-<?php if ($_SESSION['login'] == 1) { echo 10; }else{ echo 6; }?> pull-left well" style="width: 50%;">
            <form name="frm_productivity" method="GET" action="" role="form" enctype="multipart/form-data">
               <div class="box-body">
                <div class="input-daterange input-group" id="datepicker">
