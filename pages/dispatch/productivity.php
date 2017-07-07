@@ -1461,12 +1461,24 @@ if ($_SESSION['login'] == 1)
                     ?>
                     <tr>
                  <td><?php echo $ship_i+1;?></td>
-                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $shipment_array[$ship_i]['name'];?></td>
+                 <td>
+                 <?php
+                  $all_stats_image = HTTP."/dist/img/usernophoto.jpg";
+                  foreach ($all_users_array as $key => $value) {
+                    if ($all_users_array[$key]['employee_id'] == $shipment_array[$ship_i]['employee_id']) {
+                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $all_users_array[$key]['username'] . "_avatar")) {
+                        $all_stats_image = HTTP."/dist/img/userimages/" . $all_users_array[$key]['username'] . "_avatar";
+                      }
+                    }
+                  }
+                 ?>
+                 <img src="<?php echo $all_stats_image;?>" width="24" height="24" class="img-circle">
+                 <?php echo $shipment_array[$ship_i]['name'];?></td>
 
                  <td><div class="progress progress-xs progress-striped active">
                  <div class="progress-bar progress-bar-<?php echo "$color";?>" style="width: <?php echo $percent;?>%"></div>
 
-                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $shipment_array[$ship_i]['percentage_earned'];?></span></td>
+                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $shipment_array[$ship_i]['percentage_earned'] . "%";?></span></td>
                  </tr>
                     <?php } ?>
                   </table>
