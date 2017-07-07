@@ -38,7 +38,7 @@ CREATE PROCEDURE `new_shipment_productivity_stats`(IN v_date_start VARCHAR(20), 
     
     DROP TEMPORARY TABLE IF EXISTS shipment_productivity_tmp;
     CREATE TEMPORARY TABLE shipment_productivity_tmp (
-      `id`                                    INT(11)     NOT NULL AUTO_INCREMENT,
+#       `id`                                    INT(11)     NOT NULL AUTO_INCREMENT,
       `employee_id`                           VARCHAR(50) NOT NULL,
       `as_puagent`                            DOUBLE      NOT NULL,
       `as_delagent`                           DOUBLE      NOT NULL,
@@ -70,12 +70,12 @@ CREATE PROCEDURE `new_shipment_productivity_stats`(IN v_date_start VARCHAR(20), 
       `earned_points`                         DOUBLE      NOT NULL,
       `max_points`                            DOUBLE      NOT NULL,
       `percentage_earned`                     DOUBLE      NOT NULL,
-      `name`                                  VARCHAR(50) NOT NULL,
-      PRIMARY KEY (`id`),
-      UNIQUE KEY `employee_id_uk` (`employee_id`)
+      `name`                                  VARCHAR(50) NOT NULL
+#       ,
+#       PRIMARY KEY (`id`),
+#       UNIQUE KEY `employee_id_uk` (`employee_id`)
     );
 
-   
     OPEN c1;
     READ_LOOP:
     LOOP
@@ -86,7 +86,6 @@ CREATE PROCEDURE `new_shipment_productivity_stats`(IN v_date_start VARCHAR(20), 
       THEN
         LEAVE read_loop;
       END IF;
-
 
       INSERT INTO shipment_productivity_tmp
       (
@@ -388,4 +387,6 @@ CREATE PROCEDURE `new_shipment_productivity_stats`(IN v_date_start VARCHAR(20), 
           JOIN users u ON BINARY u.employee_id = c.employee_id;
     END LOOP;
     CLOSE c1;
+
+    select * from shipment_productivity_tmp;
   END
