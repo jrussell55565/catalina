@@ -21,6 +21,7 @@ select
   ,(crash_points * cp_csa.crash_indicator_apoint) * crash_indicator_cpoint as crash_points
   ,crash_cash
   , employee_id
+  , status
   ,real_name
   FROM
   (

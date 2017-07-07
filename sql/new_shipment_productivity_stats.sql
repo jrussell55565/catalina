@@ -12,12 +12,12 @@ CREATE PROCEDURE `new_shipment_productivity_stats`(IN v_date_start VARCHAR(20), 
     CREATE TEMPORARY TABLE employee_id_tmp (
       `employee_id` VARCHAR(50)
     );
-    
+
     # Populate the employee_id_tmp table
     INSERT INTO employee_id_tmp
     SELECT employee_id
      FROM users;
-    
+
     DROP TEMPORARY TABLE IF EXISTS shipment_productivity_tmp;
     CREATE TEMPORARY TABLE shipment_productivity_tmp (
        `id`                                    INT(11)     NOT NULL AUTO_INCREMENT,
@@ -52,8 +52,8 @@ CREATE PROCEDURE `new_shipment_productivity_stats`(IN v_date_start VARCHAR(20), 
       `earned_points`                         DOUBLE      NOT NULL,
       `max_points`                            DOUBLE      NOT NULL,
       `percentage_earned`                     DOUBLE      NOT NULL,
-      `name`                                  VARCHAR(50) NOT NULL
-       ,
+      `name`                                  VARCHAR(50) NOT NULL,
+      `status`                                VARCHAR(24) NOT NULL,
        PRIMARY KEY (`id`),
        UNIQUE KEY `employee_id_uk` (`employee_id`)
     );
@@ -102,11 +102,13 @@ CREATE PROCEDURE `new_shipment_productivity_stats`(IN v_date_start VARCHAR(20), 
         `earned_points`,
         `max_points`,
         `percentage_earned`,
-        `name`
+        `name`,
+        `status`
       )
         SELECT
           c.*,
-          concat_ws(' ', u.fname, u.lname) AS name
+          concat_ws(' ', u.fname, u.lname) AS name,
+          u.status
         FROM
           (
             SELECT

@@ -8,3 +8,4 @@ SELECT cu.username,cu.employee_id,cu.status,q.user_id,q.assignment_id,MAX(q.pass
       AND q.added_date BETWEEN str_to_date(v_date_start,'%Y-%m-%d') AND str_to_date(v_date_end,'%Y-%m-%d')
       GROUP BY username, employee_id, user_id, status, assignment_id
       ORDER BY max_score DESC;
+END
