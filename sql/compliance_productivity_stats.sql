@@ -43,6 +43,7 @@ select
   ,coalesce(crash_points,0) as crash_points
   ,coalesce(crash_cash,0) as crash_cash
   , users.employee_id
+  , users.status
   ,concat_ws(' ',users.fname,users.lname) as real_name
    FROM
   (

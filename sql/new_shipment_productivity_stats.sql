@@ -1,6 +1,4 @@
-CREATE PROCEDURE `new_shipment_productivity_stats`(IN v_date_start VARCHAR(20), v_date_end VARCHAR(20),
-                                                      v_emp_id     VARCHAR(50),
-                                                      v_status     VARCHAR(24))
+CREATE PROCEDURE `new_shipment_productivity_stats`(IN v_date_start VARCHAR(20), v_date_end VARCHAR(20))
   BEGIN
 
     DECLARE l_emp_id VARCHAR(50);
@@ -16,29 +14,13 @@ CREATE PROCEDURE `new_shipment_productivity_stats`(IN v_date_start VARCHAR(20), 
     );
     
     # Populate the employee_id_tmp table
-    IF v_emp_id = 'NULL'
-    THEN
-      if v_status = 'NULL'
-      THEN
-        INSERT INTO employee_id_tmp
-        SELECT employee_id
-          FROM users;
-      ELSE
-        INSERT INTO employee_id_tmp
-        SELECT employee_id
-          FROM users
-          WHERE status IN (v_status);
-      END IF;
-    ELSE
-      INSERT INTO employee_id_tmp
-        SELECT employee_id
-          FROM users
-          WHERE employee_id = v_emp_id;
-    END IF;
+    INSERT INTO employee_id_tmp
+    SELECT employee_id
+     FROM users;
     
     DROP TEMPORARY TABLE IF EXISTS shipment_productivity_tmp;
     CREATE TEMPORARY TABLE shipment_productivity_tmp (
-#       `id`                                    INT(11)     NOT NULL AUTO_INCREMENT,
+       `id`                                    INT(11)     NOT NULL AUTO_INCREMENT,
       `employee_id`                           VARCHAR(50) NOT NULL,
       `as_puagent`                            DOUBLE      NOT NULL,
       `as_delagent`                           DOUBLE      NOT NULL,
@@ -71,9 +53,9 @@ CREATE PROCEDURE `new_shipment_productivity_stats`(IN v_date_start VARCHAR(20), 
       `max_points`                            DOUBLE      NOT NULL,
       `percentage_earned`                     DOUBLE      NOT NULL,
       `name`                                  VARCHAR(50) NOT NULL
-#       ,
-#       PRIMARY KEY (`id`),
-#       UNIQUE KEY `employee_id_uk` (`employee_id`)
+       ,
+       PRIMARY KEY (`id`),
+       UNIQUE KEY `employee_id_uk` (`employee_id`)
     );
 
     OPEN c1;

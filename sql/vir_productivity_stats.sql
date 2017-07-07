@@ -1,17 +1,11 @@
-CREATE PROCEDURE `vir_productivity_stats`(IN v_date_start VARCHAR(20), v_date_end VARCHAR(20), v_status VARCHAR(20))
+CREATE PROCEDURE `vir_productivity_stats`(IN v_date_start VARCHAR(20), v_date_end VARCHAR(20))
 
 BEGIN
-  DECLARE v_predicate VARCHAR(40);
-
-  if v_status = 'NULL' THEN
-    SET v_predicate = '1 = 1';
-  ELSE
-    SET v_predicate = CONCAT("users.status = '",v_status,"'");
-  END IF;
 
 SELECT
   mo_details.*,
   u.employee_id,
+  u.status,
   concat_ws(' ', u.fname, u.lname)                                    AS real_name,
   coalesce(round((vir_total_points / max_total_vir_points) * 100), 0) AS vir_total_percent
 FROM (
@@ -100,7 +94,6 @@ FROM (
                  FROM cp_virs) cp_virs
               WHERE virs.employee_id = worked.`employee number`
                     AND virs.employee_id = users.employee_id
-                    AND v_predicate
                     AND import_gps_trips.employee_id = users.employee_id) details) mo_details
   RIGHT OUTER JOIN users u ON u.employee_id = mo_details.employee_id;
 END;
