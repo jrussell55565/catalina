@@ -136,7 +136,7 @@ function get_all_users($mysqli)
 function get_user_status($mysqli)
 {
   $user_status = [];
-  $statement = "select distinct status from users";
+  $statement = "select distinct status from users where status is not null";
 
   $counter = 0;
     if ($result = $mysqli->query($statement)) {
@@ -233,8 +233,14 @@ function generate_clockin_sql($emp_id, $sd, $ed)
     return $sql;
 }
 
-function generate_vir_sql($sd, $ed)
+function generate_vir_sql($sd, $ed, $account_status)
 {
+    if ($account_status == 'none') {
+      $predicate = '1 = 1';
+    }else{
+      $predicate = "users.status = '$account_status'";
+    }
+
     $sql = "select mo_details.*, u.employee_id, concat_ws(' ',u.fname,u.lname) as real_name,
             coalesce(round((vir_total_points / max_total_vir_points) * 100),0) as vir_total_percent
             from        (
@@ -280,235 +286,26 @@ function generate_vir_sql($sd, $ed)
              (select * from cp_virs) cp_virs
             where virs.employee_id = worked.`employee number`
             and virs.employee_id = users.employee_id
-            and users.status = 'Active'
+            and $predicate
             AND import_gps_trips.employee_id = users.employee_id ) details) mo_details
           right OUTER JOIN users u on u.employee_id = mo_details.employee_id";
     return $sql;
 }
-function generate_ship_sql($emp_id, $sd, $ed)
-{
-    $sql = "SELECT '$emp_id'    AS 'employee_id',
-             b.*,
-             Round((Coalesce(b.earned_points / b.max_points, 0) * 100), 0) AS 'percentage_earned'
-      FROM   (
-                    SELECT a.*,
-                           Round(a.arrived_to_shipper_points     + a.picked_up_points + a.arrived_to_consignee_points + a.delivered_points + a.accessorial_points + a.noncore_points, 0)                     AS 'earned_points',
-                           Round(a.max_arrived_to_shipper_points + a.max_picked_up_points + a.max_arrived_to_consignee_points + a.max_delivered_points + a.max_accessorial_points + a.max_noncore_points, 0) AS 'max_points'
-                    FROM   (
-                                  SELECT _a.count                                                                                                  AS 'as_puagent',
-                                         _b.count                                                                                                  AS 'as_delagent',
-                                         _c.count                                                                                                  AS 'as_pu_and_delagent',
-                                         (_a.count + _b.count) + _c.count                                                                          AS 'total_hwb',
-                                         _a.count + _b.count + _c.count                                                                            AS 'sum_count',
-                                         _a.count * 2                                                                                              AS 'puagent_required_updates',
-                                         _b.count * 2                                                                                              AS 'delagent_required_updates',
-                                         _c.count * 4                                                                                              AS 'puagent_and_delagent_required_updates',
-                                         _d.count                                                                                                  AS 'core_updates_sum',
-                                         _e.count                                                                                                  AS 'misc_updates_sum',
-                                         _f.count                                                                                                  AS 'picked_up',
-                                         _g.count                                                                                                  AS 'arrived_to_shipper',
-                                         _h.count                                                                                                  AS 'delivered',
-                                         _i.count                                                                                                  AS 'arrived_to_consignee',
-                                         _j.count                                                                                                  AS 'accessorial_count',
-                                         (_cp_shipments.arrived_shipper_apoint   * _g.count) * _cp_shipments.arrived_shipper_cpoint                AS 'arrived_to_shipper_points',
-                                         (_cp_shipments.arrived_shipper_apoint   * (_a.count + _c.count)) * _cp_shipments.arrived_shipper_cpoint   AS 'max_arrived_to_shipper_points',
-                                         (_cp_shipments.picked_up_apoint         * _f.count) * _cp_shipments.picked_up_cpoint                      AS 'picked_up_points',
-                                         (_cp_shipments.picked_up_apoint         * (_a.count + _c.count)) * _cp_shipments.picked_up_cpoint         AS 'max_picked_up_points',
-                                         (_cp_shipments.arrived_consignee_apoint * _i.count) * _cp_shipments.arrived_consignee_cpoint              AS 'arrived_to_consignee_points',
-                                         (_cp_shipments.arrived_consignee_apoint * (_b.count + _c.count)) * _cp_shipments.arrived_consignee_cpoint AS 'max_arrived_to_consignee_points',
-                                         (_cp_shipments.delivered_apoint         * _h.count) * _cp_shipments.delivered_cpoint                      AS 'delivered_points',
-                                         (_cp_shipments.delivered_apoint         * (_b.count + _c.count)) * _cp_shipments.delivered_cpoint         AS 'max_delivered_points',
-                                         (_cp_shipments.accessorials_apoint      * _j.count) * _cp_shipments.accessorials_cpoint                   AS 'accessorial_points',
-                                         0                                                                                                         AS 'max_accessorial_points',
-                                         (_cp_shipments.noncore_apoint * _e.count) * _cp_shipments.noncore_cpoint                                  AS 'noncore_points',
-                                         0                                                                                                         AS 'max_noncore_points'
-                                  FROM   (
-                                                SELECT Count(*) AS count
-                                                FROM   dispatch
-                                                WHERE  (
-                                                              puagentdriverphone =
-                                                              (
-                                                                     SELECT driverid
-                                                                     FROM   users
-                                                                     WHERE  username =
-                                                                            (
-                                                                                   SELECT username
-                                                                                   FROM   users
-                                                                                   WHERE  employee_id = '$emp_id')))
-                                                AND    (
-                                                              delagentdriverphone !=
-                                                              (
-                                                                     SELECT driverid
-                                                                     FROM   users
-                                                                     WHERE  username =
-                                                                            (
-                                                                                   SELECT username
-                                                                                   FROM   users
-                                                                                   where  EMPLOYEE_ID = '$emp_id')) )
-                                                AND    Str_to_date(hawbdate, '%c/%e/%Y') BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _a,
-                                         (
-                                                SELECT Count(*) AS count
-                                                FROM   dispatch
-                                                WHERE  (
-                                                              delagentdriverphone =
-                                                              (
-                                                                     SELECT driverid
-                                                                     FROM   users
-                                                                     WHERE  username =
-                                                                            (
-                                                                                   SELECT username
-                                                                                   FROM   users
-                                                                                   WHERE  employee_id = '$emp_id')))
-                                                AND    (
-                                                              puagentdriverphone !=
-                                                              (
-                                                                     SELECT driverid
-                                                                     FROM   users
-                                                                     WHERE  username =
-                                                                            (
-                                                                                   SELECT username
-                                                                                   FROM   users
-                                                                                   WHERE  employee_id = '$emp_id')))
-                                                AND    Str_to_date(duedate, '%c/%e/%Y') BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _b,
-                                         (
-                                                SELECT Count(*) AS count
-                                                FROM   dispatch
-                                                WHERE  (
-                                                              delagentdriverphone =
-                                                              (
-                                                                     SELECT driverid
-                                                                     FROM   users
-                                                                     WHERE  username =
-                                                                            (
-                                                                                   SELECT username
-                                                                                   FROM   users
-                                                                                   WHERE  employee_id = '$emp_id')))
-                                                AND    (
-                                                              puagentdriverphone =
-                                                              (
-                                                                     SELECT driverid
-                                                                     FROM   users
-                                                                     WHERE  username =
-                                                                            (
-                                                                                   SELECT username
-                                                                                   FROM   users
-                                                                                   WHERE  employee_id = '$emp_id')))
-                                                AND    Str_to_date(hawbdate, '%c/%e/%Y') BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
-                                  and    str_to_date(duedate, '%c/%e/%Y') BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _c,
-                           (
-                                  SELECT count(*) AS count
-                                  FROM   driverexport
-                                  WHERE  updated_by =
-                                         (
-                                                SELECT drivername
-                                                FROM   users
-                                                WHERE  username =
-                                                       (
-                                                              SELECT username
-                                                              FROM   users
-                                                              WHERE  employee_id = '$emp_id'))
-                                  AND    status IN ('Picked Up' ,
-                                                    'Arrived to Shipper',
-                                                    'Delivered',
-                                                    'Arrived To Consignee')
-                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _d,
-                           (
-                                  SELECT count(*) AS count
-                                  FROM   driverexport
-                                  WHERE  updated_by =
-                                         (
-                                                SELECT drivername
-                                                FROM   users
-                                                WHERE  username =
-                                                       (
-                                                              SELECT username
-                                                              FROM   users
-                                                              WHERE  employee_id = '$emp_id'))
-                                  AND    status NOT IN ('Picked Up' ,
-                                                        'Arrived to Shipper',
-                                                        'Delivered',
-                                                        'Arrived To Consignee')
-                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _e,
-                           (
-                                  SELECT count(*) AS count
-                                  FROM   driverexport
-                                  WHERE  updated_by =
-                                         (
-                                                SELECT drivername
-                                                FROM   users
-                                                WHERE  username =
-                                                       (
-                                                              SELECT username
-                                                              FROM   users
-                                                              WHERE  employee_id = '$emp_id'))
-                                  AND    status = 'Picked Up'
-                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _f,
-                           (
-                                  SELECT count(*) AS count
-                                  FROM   driverexport
-                                  WHERE  updated_by =
-                                         (
-                                                SELECT drivername
-                                                FROM   users
-                                                WHERE  username =
-                                                       (
-                                                              SELECT username
-                                                              FROM   users
-                                                              WHERE  employee_id = '$emp_id'))
-                                  AND    status = 'Arrived to Shipper'
-                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _g,
-                           (
-                                  SELECT count(*) AS count
-                                  FROM   driverexport
-                                  WHERE  updated_by =
-                                         (
-                                                SELECT drivername
-                                                FROM   users
-                                                WHERE  username =
-                                                       (
-                                                              SELECT username
-                                                              FROM   users
-                                                              WHERE  employee_id = '$emp_id'))
-                                  AND    status = 'Delivered'
-                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _h,
-                           (
-                                  SELECT count(*) AS count
-                                  FROM   driverexport
-                                  WHERE  updated_by =
-                                         (
-                                                SELECT drivername
-                                                FROM   users
-                                                WHERE  username =
-                                                       (
-                                                              SELECT username
-                                                              FROM   users
-                                                              WHERE  employee_id = '$emp_id'))
-                                  AND    status = 'Arrived To Consignee'
-                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _i,
-                           (
-                                  SELECT count(*) AS count
-                                  FROM   driverexport
-                                  WHERE  employee_id =
-                                         (
-                                                SELECT employee_id
-                                                FROM   users
-                                                WHERE  username =
-                                                       (
-                                                              SELECT username
-                                                              FROM   users
-                                                              WHERE  employee_id = '$emp_id'))
-                                  AND    accessorials <> status
-                                  AND    date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')) _j,
-                           (
-                                  select *
-                                  FROM   cp_shipments) _cp_shipments) a) b";
 
-    return $sql;
-}
-
-function get_shipment_aggregate($sd, $ed, $mysqli)
+function get_shipment_aggregate($sd, $ed, $emp_id, $emp_status, $mysqli)
 {
-  $sql = "call shipment_productivity_stats(STR_TO_DATE('$sd','%Y-%m-%d'),STR_TO_DATE('$ed','%Y-%m-%d'));";
+  // Override for emp_id
+  $emp_id = 'none';
+  if ($emp_id == 'none') {
+    if ($emp_status == 'none') {
+
+      $sql = "CALL new_shipment_productivity_stats(STR_TO_DATE('$sd', '%Y-%m-%d'), STR_TO_DATE('$ed', '%Y-%m-%d'),'NULL','NULL');";  
+    }else{
+      $sql = "CALL new_shipment_productivity_stats(STR_TO_DATE('$sd', '%Y-%m-%d'), STR_TO_DATE('$ed', '%Y-%m-%d'),'NULL','$emp_status');";
+    } 
+  }else{   
+    $sql = "CALL new_shipment_productivity_stats(STR_TO_DATE('$sd', '%Y-%m-%d'), STR_TO_DATE('$ed', '%Y-%m-%d'),'$emp_id','NULL');";
+  }
   $sql .= "select * from shipment_productivity_tmp";
 
   $output = get_multi_sql_results($sql, $mysqli);
