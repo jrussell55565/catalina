@@ -216,11 +216,12 @@ select
   ,  sum(case when basic = 'Crash Indicator' then points_cash_value else 0 end) as crash_cash
 , employee_id
 from csadata
-where import_date BETWEEN str_to_date('$sd','%Y-%m-%d') and str_to_date('$ed','%Y-%m-%d')
+where date BETWEEN str_to_date('$sd','%Y-%m-%d') and str_to_date('$ed','%Y-%m-%d')
   and basic in ('Vehicle Maint.','HOS Compliance','No Violation','Unsafe Driving','Driver Fitness','Controlled Substances','Hazmat Compliance','Crash Indicator')
 group by employee_id ) csa
 RIGHT JOIN users on users.employee_id = csa.employee_id) whole_shebang,
   (select * from cp_csa) cp_csa";
+  
     return $sql;
 }
 
