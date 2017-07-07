@@ -117,7 +117,7 @@ function get_drivers($mysqli)
 function get_all_users($mysqli)
 {
     $all_users_array = [];
-    $statement       = "select fname, lname, employee_id, email, vtext from users
+    $statement       = "select fname, lname, employee_id, email, vtext, username from users
                  where status in ('Active') order by fname";
 
     $counter = 0;
@@ -127,6 +127,7 @@ function get_all_users($mysqli)
             $all_users_array[$counter]['name']        = $obj->fname . " " . $obj->lname;
             $all_users_array[$counter]['email']       = $obj->email;
             $all_users_array[$counter]['vtext']       = $obj->vtext;
+            $all_users_array[$counter]['username']    = $obj->username;
             $counter++;
         }
     }

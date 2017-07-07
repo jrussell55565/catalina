@@ -23,14 +23,35 @@ if ($_SESSION['login'] == 1) {
   if ($_GET['trip_search_driver'] == 'none' || !isset($_GET['trip_search_driver'])) {
     $stats_user = 'ALL';
   }else{
-    foreach ($driver_array as $key => $value) {
-      if ($driver_array[$key]['employee_id'] == $_GET['trip_search_driver']) {
-        $stats_user = $driver_array[$key]['name'];
+    foreach ($all_users_array as $key => $value) {
+      if ($all_users_array[$key]['employee_id'] == $_GET['trip_search_driver']) {
+        $stats_user = $all_users_array[$key]['name'];
       }
     }
   }
 }else{
   $stats_user = $_SESSION['employee_id'];
+}
+
+// Get the user image
+if ($_SESSION['login'] == 1) {
+  if ($_GET['trip_search_driver'] == 'none' || !isset($_GET['trip_search_driver'])) {
+    $stats_image = HTTP."/pages/dispatch/images/allusers.JPG";
+  }else{
+    $stats_image = HTTP."/dist/img/usernophoto.jpg";
+    foreach ($all_users_array as $key => $value) {      
+      if ($all_users_array[$key]['employee_id'] == $_GET['trip_search_driver']) {        
+        if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $all_users_array[$key]['username'] . "_avatar")) {          
+          $stats_image = HTTP."/dist/img/userimages/" . $all_users_array[$key]['username'] . "_avatar";          
+        }
+      }
+    }
+  }
+}else{
+  $stats_image = HTTP."/dist/img/usernophoto.jpg";
+  if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
+    $stats_image = HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";
+  }
 }
 
 // Get the current quarter if no date range was specified.
@@ -357,13 +378,7 @@ if ($_SESSION['login'] == 1)
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-blue">
                   <div class="widget-user-image">
-                    <p><img src="
-                    <?php 
-                     if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
-                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) { 
-                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "/dist/img/usernophoto.jpg"; 
-                      }
-                     }?>" 
+                    <p><img src="<?php echo $stats_image;?>" 
                    alt="User Image" width="100" height="100" class="img-circle" />
                       <span class="fa-2x">Shipments</span></p>
                     <div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo $stats_user;?></strong></div></div></span>
@@ -571,13 +586,7 @@ if ($_SESSION['login'] == 1)
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-red">
                   <div class="widget-user-image">
-                    <p><img src="
-                    <?php
-                     if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
-                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
-                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "/dist/img/usernophoto.jpg";
-                      }
-                     }?>"
+                    <p><img src="<?php echo $stats_image;?>"
                     alt="User Avatar" width="100" height="100" class="img-circle">
                       <span class="fa-2x">VIR'S</span></p>
                     <div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo $stats_user;?></strong></div></div></span>
@@ -773,13 +782,7 @@ if ($_SESSION['login'] == 1)
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-purple">
                   <div class="widget-user-image">
-                    <p class="fa-2x"><img src="
-                    <?php
-                     if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
-                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
-                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "/dist/img/usernophoto.jpg";
-                      }
-                     }?>"
+                    <p class="fa-2x"><img src="<?php echo $stats_image;?>"
                      alt="User Avatar" width="100" height="100" class="img-circle">Activity</p>
 <p class="fa-2x"></p><div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo $stats_user;?></strong></div></div></span>
                   </div>
@@ -938,13 +941,7 @@ if ($_SESSION['login'] == 1)
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-orange">
                   <div class="widget-user-image">
-                    <p><img src="
-                    <?php
-                     if ($_SESSION['login'] == 1) { echo HTTP."/pages/dispatch/images/allusers.JPG"; }else{
-                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $_SESSION['username'] . "_avatar")) {
-                        echo HTTP."/dist/img/userimages/" . $_SESSION['username'] . "_avatar";}else{ echo HTTP . "/dist/img/usernophoto.jpg";
-                      }
-                     }?>"
+                    <p><img src="<?php echo $stats_image;?>"
                     alt="User Avatar" width="100" height="100" class="img-circle"><span class="fa-2x">Compliance</span></p>
                     <div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo $stats_user;?></strong></div></div></span>
                   </div>
@@ -1230,7 +1227,7 @@ if ($_SESSION['login'] == 1)
 
 
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12" style="margin-left: 10px; width:98%;">
               <div class="box"><!-- /.box-header --><!-- ./box-body -->
 
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
