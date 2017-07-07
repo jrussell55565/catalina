@@ -18,6 +18,21 @@ $user_status_array = get_user_status($mysqli);
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
 
+// Get the stats user
+if ($_SESSION['login'] == 1) {
+  if ($_GET['trip_search_driver'] == 'none' || !isset($_GET['trip_search_driver'])) {
+    $stats_user = 'ALL';
+  }else{
+    foreach ($driver_array as $key => $value) {
+      if ($driver_array[$key]['employee_id'] == $_GET['trip_search_driver']) {
+        $stats_user = $driver_array[$key]['name'];
+      }
+    }
+  }
+}else{
+  $stats_user = $_SESSION['employee_id'];
+}
+
 // Get the current quarter if no date range was specified.
 
 $current_month = date('m');
@@ -351,7 +366,7 @@ if ($_SESSION['login'] == 1)
                      }?>" 
                    alt="User Image" width="100" height="100" class="img-circle" />
                       <span class="fa-2x">Shipments</span></p>
-                    <div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo (($_GET['trip_search_driver'] == 'none' || !isset($_GET['trip_search_driver'])) ? 'ALL' : $_SESSION['username']);?></strong></div></div></span>
+                    <div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo $stats_user;?></strong></div></div></span>
                   </div>
                   <!-- Add text below Image Removed....
                   <span class="info-box-text">Shipments</span>
@@ -362,7 +377,9 @@ if ($_SESSION['login'] == 1)
 
                     <li><a href="#">Total HWB <span class="pull-right badge bg-blue" id="shp_arrived_shipper">
                      <?php
-                        echo $shipment_aggregate['all_users']['total_hwb'];
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo $shipment_aggregate['all_users']['total_hwb'];
+                        }
                         for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                           if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
                             echo $shipment_aggregate[$ship_i]['total_hwb'];
@@ -374,7 +391,9 @@ if ($_SESSION['login'] == 1)
                   
                   <li><a href="#">Arrived Shipper <span class="pull-right badge bg-blue" id="shp_arrived_shipper">
                      <?php
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
                         echo $shipment_aggregate['all_users']['arrived_to_shipper'] . ' of ' . round($shipment_aggregate['all_users']['as_puagent'],0) + round($shipment_aggregate['all_users']['as_pu_and_delagent'],0);
+                        }
                         for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                           if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
                             echo $shipment_aggregate[$ship_i]['arrived_to_shipper'] . ' of ' . round($shipment_aggregate[$ship_i]['as_puagent'],0) + round($shipment_aggregate[$ship_i]['as_pu_and_delagent'],0);
@@ -384,11 +403,13 @@ if ($_SESSION['login'] == 1)
                      </span></a>
                     </li>
 
-                    <li><a href="#">Arrived Shipper Points <span class="pull-right badge bg-blue" id="shp_arrived_shipper">
+                    <li><a href="#">Arrived Shipper Points <span class="pull-right badge bg-green" id="shp_arrived_shipper">
                      <?php
-                        $cp = round($shipment_aggregate['all_users']['arrived_to_shipper_points'],0); 
-                        $mp = round($shipment_aggregate['all_users']['max_arrived_to_shipper_points'],0); 
-                        echo ($cp <= $mp ? $cp : $mp) .' of ' . round($shipment_aggregate['all_users']['max_arrived_to_shipper_points'],0);
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          $cp = round($shipment_aggregate['all_users']['arrived_to_shipper_points'],0); 
+                          $mp = round($shipment_aggregate['all_users']['max_arrived_to_shipper_points'],0); 
+                          echo ($cp <= $mp ? $cp : $mp) .' of ' . round($shipment_aggregate['all_users']['max_arrived_to_shipper_points'],0);
+                        }
                         for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                           if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
                             $cp = round($shipment_aggregate[$ship_i]['arrived_to_shipper_points'],0); 
@@ -403,7 +424,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Picked Up <span class="pull-right badge bg-blue" id="shp_picked_up">
                   <?php
-                        echo round($shipment_aggregate['all_users']['picked_up'],0) . ' of '. round($shipment_aggregate['all_users']['as_puagent'],0) + round($shipment_aggregate['all_users']['as_pu_and_delagent'],0);
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo round($shipment_aggregate['all_users']['picked_up'],0) . ' of '. round($shipment_aggregate['all_users']['as_puagent'],0) + round($shipment_aggregate['all_users']['as_pu_and_delagent'],0);
+                        }
                         for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                           if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
                             echo round($shipment_aggregate[$ship_i]['picked_up'],0) . ' of '. round($shipment_aggregate[$ship_i]['as_puagent'],0) + round($shipment_aggregate[$ship_i]['as_pu_and_delagent'],0);
@@ -415,7 +438,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Picked Up Points<span class="pull-right badge bg-blue productivity-pts" id="shp_picked_up_points">
                   <?php
-                        echo round($shipment_aggregate['all_users']['picked_up_points'],0) . ' of ' . round($shipment_aggregate['all_users']['max_picked_up_points'],0);
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo round($shipment_aggregate['all_users']['picked_up_points'],0) . ' of ' . round($shipment_aggregate['all_users']['max_picked_up_points'],0);
+                        }
                         for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                           if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
                             echo round($shipment_aggregate[$ship_i]['picked_up_points'],0) . ' of ' . round($shipment_aggregate[$ship_i]['max_picked_up_points'],0);
@@ -427,7 +452,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Arrived Consignee <span class="pull-right badge bg-blue" id="shp_arrived_consignee">
                   <?php
-                        echo round($shipment_aggregate['all_users']['arrived_to_consignee'],0) . ' of ' . round($shipment_aggregate['all_users']['as_delagent'],0) + round($shipment_aggregate['all_users']['as_pu_and_delagent'],0);
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo round($shipment_aggregate['all_users']['arrived_to_consignee'],0) . ' of ' . round($shipment_aggregate['all_users']['as_delagent'],0) + round($shipment_aggregate['all_users']['as_pu_and_delagent'],0);
+                        }
                         for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                           if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
                             echo round($shipment_aggregate[$ship_i]['arrived_to_consignee'],0) . ' of ' . round($shipment_aggregate[$ship_i]['as_delagent'],0) + round($shipment_aggregate[$ship_i]['as_pu_and_delagent'],0);
@@ -439,7 +466,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Arrived Consignee Points<span class="pull-right badge bg-blue productivity-pts" id="shp_arrived_consignee_points">
                   <?php
-                        echo round($shipment_aggregate['all_users']['arrived_to_consignee_points'],0) . ' of ' . round($shipment_aggregate['all_users']['max_arrived_to_consignee_points'],0);
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo round($shipment_aggregate['all_users']['arrived_to_consignee_points'],0) . ' of ' . round($shipment_aggregate['all_users']['max_arrived_to_consignee_points'],0);
+                        }
                         for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                           if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
                             echo round($shipment_aggregate[$ship_i]['arrived_to_consignee_points'],0) . ' of ' . round($shipment_aggregate[$ship_i]['max_arrived_to_consignee_points'],0);
@@ -451,7 +480,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Delivered <span class="pull-right badge bg-blue" id="shp_delivered">
                   <?php
-                        echo round($shipment_aggregate['all_users']['delivered'],0) . ' of ' . round($shipment_aggregate['all_users']['as_delagent'],0) + round($shipment_aggregate['all_users']['as_pu_and_delagent'],0);
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo round($shipment_aggregate['all_users']['delivered'],0) . ' of ' . round($shipment_aggregate['all_users']['as_delagent'],0) + round($shipment_aggregate['all_users']['as_pu_and_delagent'],0);
+                        }
                         for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                           if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
                             echo round($shipment_aggregate[$ship_i]['delivered'],0) . ' of ' . round($shipment_aggregate[$ship_i]['as_delagent'],0) + round($shipment_aggregate[$ship_i]['as_pu_and_delagent'],0);
@@ -463,7 +494,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Delivered Points<span class="pull-right badge bg-blue productivity-pts" id="shp_delivered_points">
                   <?php
-                        echo round($shipment_aggregate['all_users']['delivered_points'],0) . ' of ' . round($shipment_aggregate['all_users']['max_delivered_points'],0);
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo round($shipment_aggregate['all_users']['delivered_points'],0) . ' of ' . round($shipment_aggregate['all_users']['max_delivered_points'],0);
+                        }
                         for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                           if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
                             echo round($shipment_aggregate[$ship_i]['delivered_points'],0) . ' of ' . round($shipment_aggregate[$ship_i]['max_delivered_points'],0);
@@ -475,7 +508,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Accessorials Added<span class="pull-right badge bg-blue" id="shp_accessorials">
                   <?php
-                        echo round($shipment_aggregate['all_users']['accessorial_count'],0) . ' of ' .round($shipment_aggregate['all_users']['as_puagent'],0) + round($shipment_aggregate['all_users']['as_delagent'],0) + round($shipment_aggregate['all_users']['as_pu_and_delagent'],0);
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo round($shipment_aggregate['all_users']['accessorial_count'],0) . ' of ' .round($shipment_aggregate['all_users']['as_puagent'],0) + round($shipment_aggregate['all_users']['as_delagent'],0) + round($shipment_aggregate['all_users']['as_pu_and_delagent'],0);
+                        }
                         for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                           if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
                             echo round($shipment_aggregate[$ship_i]['accessorial_count'],0) . ' of ' .round($shipment_aggregate[$ship_i]['as_puagent'],0) + round($shipment_aggregate[$ship_i]['as_delagent'],0) + round($shipment_aggregate[$ship_i]['as_pu_and_delagent'],0);
@@ -487,7 +522,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Accessorials Added Points<span class="pull-right badge bg-blue productivity-pts" id="shp_accessorials_points">
                   <?php
-                        echo round($shipment_aggregate['all_users']['accessorial_points'],0);
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo round($shipment_aggregate['all_users']['accessorial_points'],0);
+                        }
                         for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                           if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
                             echo round($shipment_aggregate[$ship_i]['accessorial_points'],0);
@@ -499,7 +536,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Other Status Change <span class="pull-right badge bg-blue" id="shp_other_status">
                   <?php
-                        echo round($shipment_aggregate['all_users']['misc_updates_sum'],0) . ' of ' . round($shipment_aggregate['all_users']['as_puagent'],0) + round($shipment_aggregate['all_users']['as_delagent'],0) + round($shipment_aggregate['all_users']['as_pu_and_delagent'],0);
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo round($shipment_aggregate['all_users']['misc_updates_sum'],0) . ' of ' . round($shipment_aggregate['all_users']['as_puagent'],0) + round($shipment_aggregate['all_users']['as_delagent'],0) + round($shipment_aggregate['all_users']['as_pu_and_delagent'],0);
+                        }
                         for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                           if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
                             echo round($shipment_aggregate[$ship_i]['misc_updates_sum'],0) . ' of ' . round($shipment_aggregate[$ship_i]['as_puagent'],0) + round($shipment_aggregate[$ship_i]['as_delagent'],0) + round($shipment_aggregate[$ship_i]['as_pu_and_delagent'],0);
@@ -511,7 +550,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Other Status Change Points<span class="pull-right badge bg-blue productivity-pts" id="shp_other_status_points">
                   <?php
-                        echo round($shipment_aggregate['all_users']['noncore_points'],0);
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo round($shipment_aggregate['all_users']['noncore_points'],0);
+                        }
                         for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                           if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
                             echo round($shipment_aggregate[$ship_i]['noncore_points'],0);
@@ -539,7 +580,7 @@ if ($_SESSION['login'] == 1)
                      }?>"
                     alt="User Avatar" width="100" height="100" class="img-circle">
                       <span class="fa-2x">VIR'S</span></p>
-                    <div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo (($_GET['trip_search_driver'] == 'none' || !isset($_GET['trip_search_driver'])) ? 'ALL' : $_SESSION['username']);?></strong></div></div></span>
+                    <div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo $stats_user;?></strong></div></div></span>
                   </div>
                   <!-- Add text below Image Removed.... 
                   <span class="info-box-text"> VIRS</span>
@@ -549,7 +590,9 @@ if ($_SESSION['login'] == 1)
                   <ul class="nav nav-stacked">
                     <li><a href="#">Days Worked <span class="pull-right badge bg-blue" id="vir_days_worked">
                      <?php
-                        echo $vir_aggregate['all_users']['days_worked'];
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo $vir_aggregate['all_users']['days_worked'];
+                        }
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                             echo $vir_aggregate[$vir_i]['days_worked'];
@@ -560,7 +603,9 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Miles <span class="pull-right badge bg-blue" id="vir_days_worked">
                      <?php
-                        echo $vir_aggregate['all_users']['miles'];
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo $vir_aggregate['all_users']['miles'];
+                        }
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                             echo $vir_aggregate[$vir_i]['miles'];
@@ -571,7 +616,9 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Pre-Trips <span class="pull-right badge bg-blue" id="vir_pretrip">
                        <?php
-                        echo $vir_aggregate['all_users']['vir_pretrip'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo $vir_aggregate['all_users']['vir_pretrip'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
+                        }
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                             echo $vir_aggregate[$vir_i]['vir_pretrip'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
@@ -582,10 +629,12 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Pre-Trip Points<span class="pull-right badge bg-blue productivity-pts" id="vir_pretrip_points">
                      <?php
-                        if ($vir_aggregate['all_users']['vir_pretrip_points'] > $vir_aggregate[$vir_i]['days_worked']) {
-                         echo $vir_aggregate[$vir_i]['days_worked'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
-                        }else{
-                         echo $vir_aggregate[$vir_i]['vir_pretrip_points'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          if ($vir_aggregate['all_users']['vir_pretrip_points'] > $vir_aggregate[$vir_i]['days_worked']) {
+                           echo $vir_aggregate[$vir_i]['days_worked'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
+                          }else{
+                           echo $vir_aggregate[$vir_i]['vir_pretrip_points'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
+                          }
                         }
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
@@ -601,7 +650,9 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Post-Trips <span class="pull-right badge bg-blue" id="vir_posttrip">
                      <?php
-                        echo $vir_aggregate['all_users']['vir_posttrip'] . ' of ' . $vir_aggregate['all_users']['days_worked'];
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo $vir_aggregate['all_users']['vir_posttrip'] . ' of ' . $vir_aggregate['all_users']['days_worked'];
+                        }
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                            echo $vir_aggregate[$vir_i]['vir_posttrip'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
@@ -613,10 +664,12 @@ if ($_SESSION['login'] == 1)
 
                     <li><a href="#">Post-Trip Points<span class="pull-right badge bg-blue productivity-pts" id="vir_posttrip_points">
                      <?php
-                        if ($vir_aggregate['all_users']['vir_posttrip_points'] > $vir_aggregate['all_users']['days_worked']) {
-                         echo $vir_aggregate['all_users']['days_worked'] . ' of ' . $vir_aggregate['all_users']['days_worked'];
-                        }else{
-                         echo $vir_aggregate['all_users']['vir_posttrip_points'] . ' of ' . $vir_aggregate['all_users']['days_worked'];
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          if ($vir_aggregate['all_users']['vir_posttrip_points'] > $vir_aggregate['all_users']['days_worked']) {
+                           echo $vir_aggregate['all_users']['days_worked'] . ' of ' . $vir_aggregate['all_users']['days_worked'];
+                          }else{
+                           echo $vir_aggregate['all_users']['vir_posttrip_points'] . ' of ' . $vir_aggregate['all_users']['days_worked'];
+                          }
                         }
                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
@@ -633,10 +686,12 @@ if ($_SESSION['login'] == 1)
 
                     <li><a href="#">Additional Trailer Insp.<span class="pull-right badge bg-blue" id="vir_posttrip_points">
                      <?php
-                        if ($vir_aggregate['all_users']['vir_additional_trailer'] > $vir_aggregate['all_users']['days_worked']) {
-                         echo $vir_aggregate['all_users']['days_worked'];
-                        }else{
-                         echo $vir_aggregate['all_users']['vir_additional_trailer'];
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          if ($vir_aggregate['all_users']['vir_additional_trailer'] > $vir_aggregate['all_users']['days_worked']) {
+                           echo $vir_aggregate['all_users']['days_worked'];
+                          }else{
+                           echo $vir_aggregate['all_users']['vir_additional_trailer'];
+                          }
                         }
                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
@@ -653,11 +708,13 @@ if ($_SESSION['login'] == 1)
 
                     <li><a href="#">Additional Trailer Insp. Points<span class="pull-right badge bg-blue productivity-pts" id="vir_posttrip_points">
                      <?php
-                      if ($vir_aggregate['all_users']['vir_additional_trailer_points'] > $vir_aggregate['all_users']['days_worked']) {
-                         echo $vir_aggregate['all_users']['days_worked'] . ' of ' . $vir_aggregate['all_users']['days_worked'];
-                       }else{
-                         echo $vir_aggregate['all_users']['vir_additional_trailer_points'] . ' of ' . $vir_aggregate['all_users']['days_worked'];
-                       }
+                      if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                        if ($vir_aggregate['all_users']['vir_additional_trailer_points'] > $vir_aggregate['all_users']['days_worked']) {
+                           echo $vir_aggregate['all_users']['days_worked'] . ' of ' . $vir_aggregate['all_users']['days_worked'];
+                         }else{
+                           echo $vir_aggregate['all_users']['vir_additional_trailer_points'] . ' of ' . $vir_aggregate['all_users']['days_worked'];
+                         }
+                      }
                        for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                            if ($vir_aggregate[$vir_i]['vir_additional_trailer_points'] > $vir_aggregate[$vir_i]['days_worked']) {
@@ -673,7 +730,9 @@ if ($_SESSION['login'] == 1)
 
                     <li><a href="#">Reported Breakdowns <span class="pull-right badge bg-blue" id="vir_breakdown">
                      <?php
-                        echo $vir_aggregate['all_users']['vir_breakdown'];
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo $vir_aggregate['all_users']['vir_breakdown'];
+                        }
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                            echo $vir_aggregate[$vir_i]['vir_breakdown'];
@@ -684,10 +743,12 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Breakdown Points<span class="pull-right badge bg-blue productivity-pts" id="vir_breakdown_points">
                      <?php
-                     if ($vir_aggregate['all_users']['vir_breakdown'] > $vir_aggregate['all_users']['days_worked']) {
-                       echo $vir_aggregate['all_users']['days_worked'];
-                     }else{
-                       echo $vir_aggregate['all_users']['vir_breakdown'];
+                     if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                       if ($vir_aggregate['all_users']['vir_breakdown'] > $vir_aggregate['all_users']['days_worked']) {
+                         echo $vir_aggregate['all_users']['days_worked'];
+                       }else{
+                         echo $vir_aggregate['all_users']['vir_breakdown'];
+                       }
                      }
                     for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
@@ -720,7 +781,7 @@ if ($_SESSION['login'] == 1)
                       }
                      }?>"
                      alt="User Avatar" width="100" height="100" class="img-circle">Activity</p>
-<p class="fa-2x"></p><div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo (($_GET['trip_search_driver'] == 'none' || !isset($_GET['trip_search_driver'])) ? 'ALL' : $_SESSION['username']);?></strong></div></div></span>
+<p class="fa-2x"></p><div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo $stats_user;?></strong></div></div></span>
                   </div>
                   <!-- Add text below Image Removed....
                   <span class="info-box-text"> Productivity</span>
@@ -730,7 +791,9 @@ if ($_SESSION['login'] == 1)
                   <ul class="nav nav-stacked">
                   <li><a href="#">Days Worked <span class="pull-right badge bg-blue" id="vir_days_worked">
                       <?php
-                        echo $task_aggregate['all_users']['days_worked'] .' of ' . $task_aggregate['all_users']['days_shoulda_worked'];
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo $task_aggregate['all_users']['days_worked'] .' of ' . $task_aggregate['all_users']['days_shoulda_worked'];
+                        }
                         for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {
                           if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
                             echo $task_aggregate[$task_i]['days_worked'] .' of ' . $task_aggregate[$task_i]['days_shoulda_worked'];
@@ -740,7 +803,9 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Days Worked Points <span class="pull-right badge bg-blue productivity-pts" id="vir_days_worked">
                       <?php
-                        echo $task_aggregate['all_users']['days_worked_points'] .' of ' . $task_aggregate['all_users']['days_shoulda_worked'];
+                        if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                          echo $task_aggregate['all_users']['days_worked_points'] .' of ' . $task_aggregate['all_users']['days_shoulda_worked'];
+                        }
                         for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {
                           if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
                             echo $task_aggregate[$task_i]['days_worked_points'] .' of ' . $task_aggregate[$task_i]['days_shoulda_worked'];
@@ -750,7 +815,9 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Miles <span class="pull-right badge bg-blue" id="vir_days_worked">
                         <?php
-                          echo $task_aggregate['all_users']['miles']; 
+                          if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                            echo $task_aggregate['all_users']['miles']; 
+                          }
                           for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {
                           if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
                             echo $task_aggregate[$task_i]['miles'];
@@ -760,7 +827,9 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Miles Points<span class="pull-right badge bg-blue productivity-pts" id="vir_days_worked">
                         <?php 
-                          echo $task_aggregate['all_users']['miles_points'];
+                          if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                            echo $task_aggregate['all_users']['miles_points'];
+                          }
                           for($task_i=0;$task_i<(count($task_aggregate));$task_i++) { 
                             if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
                               echo $task_aggregate[$task_i]['miles_points'];
@@ -770,7 +839,9 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Tasks<span class="pull-right badge bg-blue" id="prod_task">
                     <?php 
-                      echo $task_aggregate['all_users']['tasks_completed_by_user'] . ' of ' . $task_aggregate['all_users']['tasks_all_user'];
+                      if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                        echo $task_aggregate['all_users']['tasks_completed_by_user'] . ' of ' . $task_aggregate['all_users']['tasks_all_user'];
+                      }
                       for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {
                         if ($task_aggregate[$task_i]['employee_id'] == $emp_id) { 
                           echo $task_aggregate[$task_i]['tasks_completed_by_user'] . ' of ' . $task_aggregate[$task_i]['tasks_all_user'];
@@ -781,7 +852,9 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Task Points<span class="pull-right badge bg-blue productivity-pts" id="prod_task_points">
                     <?php 
-                      echo $task_aggregate['all_users']['task_points'] . ' of '. $task_aggregate['all_users']['tasks_completed_by_user'];
+                      if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                        echo $task_aggregate['all_users']['task_points'] . ' of '. $task_aggregate['all_users']['tasks_completed_by_user'];
+                      }
                       for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {
                         if ($task_aggregate[$task_i]['employee_id'] == $emp_id) { 
                           echo $task_aggregate[$task_i]['task_points'] . ' of '. $task_aggregate[$task_i]['tasks_completed_by_user'];
@@ -792,7 +865,9 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Quiz<span class="pull-right badge bg-blue" id="prod_task_points">
                     <?php 
-                      echo $task_aggregate['all_users']['passed_quizzes'] . ' of ' . $task_aggregate['all_users']['all_quizzes'];
+                      if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                        echo $task_aggregate['all_users']['passed_quizzes'] . ' of ' . $task_aggregate['all_users']['all_quizzes'];
+                      }
                       for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {
                         if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
                           echo $task_aggregate[$task_i]['passed_quizzes'] . ' of ' . $task_aggregate[$task_i]['all_quizzes'];
@@ -803,7 +878,9 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Quiz Points<span class="pull-right badge bg-blue productivity-pts" id="prod_task_points">
                     <?php 
-                      echo $task_aggregate['all_users']['quiz_points'] . ' of ' . $task_aggregate['all_users']['all_quizzes']; 
+                      if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                        echo $task_aggregate['all_users']['quiz_points'] . ' of ' . $task_aggregate['all_users']['all_quizzes']; 
+                      }
                       for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {
                         if ($task_aggregate[$task_i]['employee_id'] == $emp_id) { 
                           echo $task_aggregate[$task_i]['quiz_points'] . ' of ' . $task_aggregate[$task_i]['all_quizzes']; 
@@ -814,7 +891,9 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Idle Time<span class="pull-right badge bg-blue" id="prod_task_points">
                     <?php 
-                      echo $task_aggregate['all_users']['idle_time']; 
+                      if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                        echo $task_aggregate['all_users']['idle_time']; 
+                      }
                       for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {
                         if ($task_aggregate[$task_i]['employee_id'] == $emp_id) { 
                           echo $task_aggregate[$task_i]['idle_time']; 
@@ -825,7 +904,9 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Idle Time Points<span class="pull-right badge bg-blue productivity-pts" id="prod_task_points">
                     <?php 
-                      echo $task_aggregate['all_users']['idle_time_points']; 
+                      if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                        echo $task_aggregate['all_users']['idle_time_points']; 
+                      }
                       for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {
                         if ($task_aggregate[$task_i]['employee_id'] == $emp_id) { 
                           echo $task_aggregate[$task_i]['idle_time_points']; 
@@ -836,7 +917,9 @@ if ($_SESSION['login'] == 1)
                     </li>
                     <li><a href="#">Idle Time Cost<span class="pull-right badge bg-blue" id="prod_task_points">
                     <?php
-                      echo $task_aggregate['all_users']['aprox_idle_costs'];  
+                      if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                        echo $task_aggregate['all_users']['aprox_idle_costs'];  
+                      }
                       for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {
                         if ($task_aggregate[$task_i]['employee_id'] == $emp_id) { 
                           echo $task_aggregate[$task_i]['aprox_idle_costs']; 
@@ -863,7 +946,7 @@ if ($_SESSION['login'] == 1)
                       }
                      }?>"
                     alt="User Avatar" width="100" height="100" class="img-circle"><span class="fa-2x">Compliance</span></p>
-                    <div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo (($_GET['trip_search_driver'] == 'none' || !isset($_GET['trip_search_driver'])) ? 'ALL' : $_SESSION['username']);?></strong></div></div></span>
+                    <div style="margin-left: 5px;"><span class="fa-2x" style="font-size:1em;"> <div><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></div><div> <strong><?php echo $stats_user;?></strong></div></div></span>
                   </div>
                 </div>
                 <div class="box-footer no-padding">
@@ -871,7 +954,9 @@ if ($_SESSION['login'] == 1)
                   
                   <li><a href="#">Total Compliance Points<span class="pull-right badge bg-blue" id="csa_total_points">
                   <?php 
-                    echo $csa_compliance_aggregate['all_users']['total_points'];
+                    if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                      echo $csa_compliance_aggregate['all_users']['total_points'];
+                    }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
                         echo $csa_compliance_aggregate[$compliance_i]['total_points'];
@@ -882,7 +967,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Compliance Cash<span class="pull-right badge bg-blue" id="csa_cash">
                   <?php 
-                    echo $csa_compliance_aggregate['all_users']['points_cash_value'];
+                    if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                      echo $csa_compliance_aggregate['all_users']['points_cash_value'];
+                    }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
                         echo $csa_compliance_aggregate[$compliance_i]['points_cash_value'];
@@ -892,8 +979,10 @@ if ($_SESSION['login'] == 1)
                     </li>
 
                   <li><a href="#">HOS Compliance<span class="pull-right badge bg-blue" id="csa_hos">
-                  <?php 
-                    echo $csa_compliance_aggregate['all_users']['hos_compliance_points'];
+                  <?php
+                    if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') { 
+                      echo $csa_compliance_aggregate['all_users']['hos_compliance_points'];
+                    }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
                         echo $csa_compliance_aggregate[$compliance_i]['hos_compliance_points'];
@@ -904,7 +993,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Unsafe Driving<span class="pull-right badge bg-blue" id="csa_unsafe">
                   <?php 
-                    echo $csa_compliance_aggregate['all_users']['unsafe_driving_points'];
+                    if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                      echo $csa_compliance_aggregate['all_users']['unsafe_driving_points'];
+                    }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
                         echo $csa_compliance_aggregate[$compliance_i]['unsafe_driving_points'];
@@ -915,7 +1006,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Vehicle Maint.<span class="pull-right badge bg-blue" id="csa_maint">
                   <?php 
-                    echo $csa_compliance_aggregate['all_users']['vehicle_maint_points'];
+                    if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                      echo $csa_compliance_aggregate['all_users']['vehicle_maint_points'];
+                    }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
                         echo $csa_compliance_aggregate[$compliance_i]['vehicle_maint_points'];
@@ -926,7 +1019,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Driver Fitness<span class="pull-right badge bg-blue" id="csa_fitness">
                   <?php 
-                    echo $csa_compliance_aggregate['all_users']['driver_fitness_points'];
+                    if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                      echo $csa_compliance_aggregate['all_users']['driver_fitness_points'];
+                    }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
                         echo $csa_compliance_aggregate[$compliance_i]['driver_fitness_points'];
@@ -936,8 +1031,10 @@ if ($_SESSION['login'] == 1)
                     </li>
 
                   <li><a href="#">Controlled Substances/Alcohol<span class="pull-right badge bg-blue" id="csa_substance">
-                  <?php 
-                    echo $csa_compliance_aggregate['all_users']['controlled_sub_points'];
+                  <?php  
+                    if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                      echo $csa_compliance_aggregate['all_users']['controlled_sub_points'];
+                    }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
                         echo $csa_compliance_aggregate[$compliance_i]['controlled_sub_points'];
@@ -948,7 +1045,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Hazardous Materials (HM)<span class="pull-right badge bg-blue" id="csa_hazardous">
                   <?php 
-                    echo $csa_compliance_aggregate['all_users']['hazard_points'];
+                    if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                      echo $csa_compliance_aggregate['all_users']['hazard_points'];
+                    }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) {
                         echo $csa_compliance_aggregate[$compliance_i]['hazard_points'];
@@ -959,7 +1058,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">Crash Indicator<span class="pull-right badge bg-blue" id="csa_crash">
                   <?php 
-                    echo $csa_compliance_aggregate['all_users']['crash_points'];
+                    if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                      echo $csa_compliance_aggregate['all_users']['crash_points'];
+                    }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
                         echo $csa_compliance_aggregate[$compliance_i]['crash_points'];
@@ -970,7 +1071,9 @@ if ($_SESSION['login'] == 1)
 
                   <li><a href="#">No Violation<span class="pull-right badge bg-blue" id="csa_no_violation">
                   <?php 
-                    echo $csa_compliance_aggregate['all_users']['no_violation_points']; 
+                    if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
+                      echo $csa_compliance_aggregate['all_users']['no_violation_points']; 
+                    }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) {
                       echo $csa_compliance_aggregate[$compliance_i]['no_violation_points']; 
