@@ -117,8 +117,9 @@ function get_drivers($mysqli)
 function get_all_users($mysqli)
 {
     $all_users_array = [];
-    $statement       = "select fname, lname, employee_id, email, vtext, username from users
-                 where status in ('Active') order by fname";
+    $statement       = "select fname, lname, employee_id, email, vtext, username, status
+                        from users
+                        order by fname";
 
     $counter = 0;
     if ($result = $mysqli->query($statement)) {
@@ -128,6 +129,7 @@ function get_all_users($mysqli)
             $all_users_array[$counter]['email']       = $obj->email;
             $all_users_array[$counter]['vtext']       = $obj->vtext;
             $all_users_array[$counter]['username']    = $obj->username;
+            $all_users_array[$counter]['status']      = $obj->status;
             $counter++;
         }
     }
@@ -149,81 +151,11 @@ function get_user_status($mysqli)
     return $user_status;
 }
 
-function generate_aggregate_compliance_sql($sd,$ed)
+function get_aggregate_compliance($sd,$ed,$mysqli)
 {
-    $sql = "select
-  total_points
-  ,(points_cash_value * cp_csa.cash_apoint) * cp_csa.cash_cpoint as points_cash_value
-  ,(vehicle_maint_points * cp_csa.vehicle_maint_apoint) * cp_csa.vehicle_maint_cpoint as vehicle_maint_points
-  ,vehicle_maint_cash
-  ,(hos_compliance_points * cp_csa.hos_compliance_apoint) * cp_csa.hos_compliance_cpoint as hos_compliance_points
-  ,hos_compliance_cash
-  ,(no_violation_points * cp_csa.no_violation_apoint) * cp_csa.no_violation_cpoint as no_violation_points
-  ,no_violation_cash
-  ,(unsafe_driving_points * cp_csa.unsafe_driving_apoint) * cp_csa.unsafe_driving_cpoint as unsafe_driving_points
-  ,unsafe_driving_cash
-  ,(driver_fitness_points * cp_csa.driver_fitness_apoint) * cp_csa.driver_fitness_cpoint as driver_fitness_points
-  ,driver_fitness_cash
-  ,(controlled_sub_points * cp_csa.controlled_substances_apoint) * cp_csa.controlled_substances_cpoint as controlled_sub_points
-  ,controlled_sub_cash
-  ,(hazard_points * cp_csa.hazmat_compliance_apoint) * cp_csa.hazmat_compliance_cpoint as hazard_points
-  ,hazard_cash
-  ,(crash_points * cp_csa.crash_indicator_apoint) * crash_indicator_cpoint as crash_points
-  ,crash_cash
-  , employee_id
-  ,real_name
-  FROM
-  (
-  select coalesce(total_points,0) as total_points
-  ,coalesce(points_cash_value,0) as points_cash_value
-  ,coalesce(vehicle_maint_points,0) as vehicle_maint_points
-  ,coalesce(vehicle_maint_cash,0) as vehicle_maint_cash
-  ,coalesce(hos_compliance_points,0) as hos_compliance_points
-  ,coalesce(hos_compliance_cash,0) AS hos_compliance_cash
-  ,coalesce(no_violation_points,0) as no_violation_points
-  ,coalesce(no_violation_cash,0) as no_violation_cash
-  ,coalesce(unsafe_driving_points,0) as unsafe_driving_points
-  ,coalesce(unsafe_driving_cash,0) as unsafe_driving_cash
-  ,coalesce(driver_fitness_points,0) as driver_fitness_points
-  ,coalesce(driver_fitness_cash,0) as driver_fitness_cash
-  ,coalesce(controlled_sub_points,0) as controlled_sub_points
-  ,coalesce(controlled_sub_cash,0) as controlled_sub_cash
-  ,coalesce(hazard_points,0) as hazard_points
-  ,coalesce(hazard_cash,0) as hazard_cash
-  ,coalesce(crash_points,0) as crash_points
-  ,coalesce(crash_cash,0) as crash_cash
-  , users.employee_id
-  ,concat_ws(' ',users.fname,users.lname) as real_name
-   FROM
-  (
-select
-  SUM(total_points)      AS total_points
-  , SUM(points_cash_value) AS points_cash_value
-  ,  sum(case when basic = 'Vehicle Maint.' then total_points else 0 end) as vehicle_maint_points
-  ,  sum(case when basic = 'Vehicle Maint.' then points_cash_value else 0 end) as vehicle_maint_cash
-  ,  sum(case when basic = 'HOS Compliance' then total_points else 0 end) as hos_compliance_points
-  ,  sum(case when basic = 'HOS Compliance' then points_cash_value else 0 end) as hos_compliance_cash
-  ,  sum(case when basic = 'No Violation' then total_points else 0 end) as no_violation_points
-  ,  sum(case when basic = 'No Violation' then points_cash_value else 0 end) as no_violation_cash
-  ,  sum(case when basic = 'Unsafe Driving' then total_points else 0 end) as unsafe_driving_points
-  ,  sum(case when basic = 'Unsafe Driving' then points_cash_value else 0 end) as unsafe_driving_cash
-  ,  sum(case when basic = 'Driver Fitness' then total_points else 0 end) as driver_fitness_points
-  ,  sum(case when basic = 'Driver Fitness' then points_cash_value else 0 end) as driver_fitness_cash
-  ,  sum(case when basic = 'Controlled Substances' then total_points else 0 end) as controlled_sub_points
-  ,  sum(case when basic = 'Controlled Substances' then points_cash_value else 0 end) as controlled_sub_cash
-  ,  sum(case when basic = 'Hazmat Compliance' then total_points else 0 end) as hazard_points
-  ,  sum(case when basic = 'Hazmat Compliance' then points_cash_value else 0 end) as hazard_cash
-  ,  sum(case when basic = 'Crash Indicator' then total_points else 0 end) as crash_points
-  ,  sum(case when basic = 'Crash Indicator' then points_cash_value else 0 end) as crash_cash
-, employee_id
-from csadata
-where date BETWEEN str_to_date('$sd','%Y-%m-%d') and str_to_date('$ed','%Y-%m-%d')
-  and basic in ('Vehicle Maint.','HOS Compliance','No Violation','Unsafe Driving','Driver Fitness','Controlled Substances','Hazmat Compliance','Crash Indicator')
-group by employee_id ) csa
-RIGHT JOIN users on users.employee_id = csa.employee_id) whole_shebang,
-  (select * from cp_csa) cp_csa";
-  
-    return $sql;
+    $sql = "CALL compliance_productivity_stats('$sd', '$ed', TRUE);";
+    $output = get_multi_sql_results($sql, $mysqli);
+    return $output;
 }
 
 function generate_clockin_sql($emp_id, $sd, $ed)
@@ -235,83 +167,80 @@ function generate_clockin_sql($emp_id, $sd, $ed)
     return $sql;
 }
 
-function generate_vir_sql($sd, $ed, $account_status)
+function get_aggregate_vir($sd, $ed, $mysqli)
 {
-    if ($account_status == 'none') {
-      $predicate = '1 = 1';
-    }else{
-      $predicate = "users.status = '$account_status'";
-    }
-
-    $sql = "select mo_details.*, u.employee_id, concat_ws(' ',u.fname,u.lname) as real_name,
-            coalesce(round((vir_total_points / max_total_vir_points) * 100),0) as vir_total_percent
-            from        (
-            select *,
-            (CASE WHEN vir_pretrip_points > days_worked then days_worked else vir_pretrip_points END) +
-              (CASE WHEN vir_posttrip_points > days_worked then days_worked else vir_posttrip_points END) +
-              (CASE WHEN vir_breakdown > days_worked then days_worked else vir_breakdown END)  AS vir_total_points
-            FROM (
-            select virs.employee_id, virs.vir_pretrip, virs.vir_posttrip, virs.vir_breakdown, worked.days_worked,vir_additional_trailer,
-            days_worked * 2 AS max_total_vir_points,
-            coalesce(round((virs.vir_pretrip / worked.days_worked) * 100,0),0) as vir_pretrip_percent,
-            coalesce(round((virs.vir_posttrip / worked.days_worked) * 100,0),0) as vir_posttrip_percent,
-            coalesce(round((virs.vir_breakdown / worked.days_worked) * 100,0),0) as vir_breakdown_percent,
-            users.username,
-            users.status,
-            concat_ws(' ',users.fname,users.lname) as real_name,
-            round(miles,0) as miles,
-            coalesce((virs.vir_pretrip * cp_virs.pre_trip_apoint) * cp_virs.pre_trip_cpoint,0) as vir_pretrip_points,
-            coalesce((virs.vir_posttrip * cp_virs.post_trip_apoint) * cp_virs.post_trip_cpoint,0) as vir_posttrip_points,
-            coalesce((virs.vir_additional_trailer * cp_virs.add_trailer_insp_apoint) * cp_virs.add_trailer_insp_cpoint,0) as vir_additional_trailer_points
-            from
-            (
-            select
-            virs.employee_id,
-            coalesce(sum(case when virs.insp_type = 'vir_pretrip' then 1 else 0 end),0) as vir_pretrip,
-            coalesce(sum(case when virs.insp_type = 'vir_posttrip' then 1 else 0 end),0) as vir_posttrip,
-            coalesce(sum(case when virs.insp_type = 'vir_breakdown' then 1 else 0 end),0) as vir_breakdown,
-            coalesce(sum(CASE WHEN virs.trucktype = 'trailer'  THEN 1 else 0 end),0) as vir_additional_trailer
-            from virs where insp_date between str_to_date('$sd','%Y-%m-%d') and str_to_date('$ed','%Y-%m-%d')
-            group by employee_id
-            ) virs ,
-            (
-            select count(*) as days_worked,`employee number` from days_worked where worked = 1 and `date worked` between str_to_date('$sd','%Y-%m-%d') and str_to_date('$ed','%Y-%m-%d')
-            group by `employee number`
-            ) worked ,
-            (
-            select username,employee_id,status,fname,lname from users
-            ) users,
-            (SELECT
-             sum(miles) as miles, employee_id
-             FROM import_gps_trips
-             GROUP BY employee_id) import_gps_trips,
-             (select * from cp_virs) cp_virs
-            where virs.employee_id = worked.`employee number`
-            and virs.employee_id = users.employee_id
-            and $predicate
-            AND import_gps_trips.employee_id = users.employee_id ) details) mo_details
-          right OUTER JOIN users u on u.employee_id = mo_details.employee_id";
-    return $sql;
+    $sql = "CALL vir_productivity_stats('$sd', '$ed', TRUE);";
+    $output = get_multi_sql_results($sql, $mysqli);
+    return $output;
 }
 
-function get_shipment_aggregate($sd, $ed, $emp_id, $emp_status, $mysqli)
+function get_shipment_aggregate($sd, $ed, $mysqli)
 {
-  // Override for emp_id
-  $emp_id = 'none';
-  if ($emp_id == 'none') {
-    if ($emp_status == 'none') {
-
-      $sql = "CALL new_shipment_productivity_stats(STR_TO_DATE('$sd', '%Y-%m-%d'), STR_TO_DATE('$ed', '%Y-%m-%d'),'NULL','NULL');";  
-    }else{
-      $sql = "CALL new_shipment_productivity_stats(STR_TO_DATE('$sd', '%Y-%m-%d'), STR_TO_DATE('$ed', '%Y-%m-%d'),'NULL','$emp_status');";
-    } 
-  }else{   
-    $sql = "CALL new_shipment_productivity_stats(STR_TO_DATE('$sd', '%Y-%m-%d'), STR_TO_DATE('$ed', '%Y-%m-%d'),'$emp_id','NULL');";
-  }
-  $sql .= "select * from shipment_productivity_tmp";
-
+  $sql = "CALL new_shipment_productivity_stats(STR_TO_DATE('$sd', '%Y-%m-%d'), STR_TO_DATE('$ed', '%Y-%m-%d'), TRUE);";  
   $output = get_multi_sql_results($sql, $mysqli);
   return $output;
+}
+
+function get_top_performers($sd,$ed,$mysqli)
+{
+    $sql = "CALL compliance_productivity_stats('$sd', '$ed', FALSE);";
+    $sql .= "CALL new_shipment_productivity_stats(STR_TO_DATE('$sd', '%Y-%m-%d'), STR_TO_DATE('$ed', '%Y-%m-%d'), FALSE);";
+    $sql .= "CALL vir_productivity_stats('$sd', '$ed', FALSE);";
+    $sql .= "CALL task_productivity_stats('$sd', '$ed', FALSE);";
+    $sql .= "CALL quiz_productivity_stats('$sd', '$ed', FALSE);";
+
+    $sql .= "SELECT
+            outer_results.employee_id,
+            coalesce(outer_results.vir_total_points, 0) AS vir_total_points,
+            outer_results.compliance_total_points,
+            outer_results.shipment_earned_points,
+            outer_results.shipment_percentage_earned,
+            outer_results.task_activity_total_points,
+            outer_results.task_total_percent,
+            coalesce(outer_results.total_points, 0)     AS total_points,
+            outer_results.total_percent,
+            outer_results.real_name,
+            outer_results.username,
+            outer_results.status
+          FROM (
+                 SELECT
+                   all_results.*,
+                   concat_ws(' ', users.fname, users.lname) AS real_name,
+                   users.username,
+                   users.status
+                 FROM (
+                        SELECT
+                          a.*,
+                          IF (a.vir_total_points + a.compliance_total_points + a.shipment_earned_points +
+                          a.task_activity_total_points = 0, NULL, a.vir_total_points + a.compliance_total_points + a.shipment_earned_points +
+                          a.task_activity_total_points) AS total_points,
+                          CASE
+                          WHEN a.vir_total_percent + a.shipment_percentage_earned + a.task_total_percent > 100
+                            THEN 100
+                          ELSE a.vir_total_percent + a.shipment_percentage_earned + a.task_total_percent
+                          END                          AS total_percent
+                        FROM (
+                               SELECT
+                                 vir.employee_id,
+                                 coalesce(vir.vir_total_points,0)       AS vir_total_points,
+                                 vir_total_percent,
+                                 compliance.total_points    AS compliance_total_points,
+                                 shipment.earned_points     AS shipment_earned_points,
+                                 shipment.percentage_earned AS shipment_percentage_earned,
+                                 task.activity_total_points AS task_activity_total_points,
+                                 task.total_percent         AS task_total_percent
+                               FROM vir_productivity_tmp vir, compliance_productivity_tmp compliance,
+                                 shipment_productivity_tmp shipment,
+                                 task_productivity_tmp task
+                               WHERE vir.employee_id = compliance.employee_id
+                                     AND vir.employee_id = shipment.employee_id
+                                     AND vir.employee_id = task.employee_id) a
+                      ) all_results
+                   JOIN users ON all_results.employee_id = users.employee_id
+                 ORDER BY total_points DESC, real_name) outer_results;";
+
+    $output = get_multi_sql_results($sql, $mysqli);
+    return $output;
 }
 
 function get_sql_results($sql, $mysqli)
@@ -405,105 +334,21 @@ function generate_user_csa_sql($emp_id, $time, $basic)
         and $time and $basic_predicate";
     return $sql;
 }
-function generate_task_sql($sd, $ed)
+function get_task_aggregate($sd, $ed, $mysqli)
 {
-    $sql = "select mo_data.*
-    , coalesce(round((activity_total_points / activity_max_points) * 100,0),0) as total_percent
-    FROM
-      (
-    select a.*, users.employee_id ,
-coalesce(
-  days_worked_points + miles_points + task_points + quiz_points + idle_time_points,0) as activity_total_points,
- (
-    tasks_all_user + days_shoulda_worked + all_quizzes
-  ) as activity_max_points
-  ,concat_ws(' ',users.fname,users.lname) as real_name
-FROM (
-SELECT
-  whole_shebang.*
-  , coalesce((days_worked * cp_activity.daysworked_apoint) * cp_activity.daysworked_cpoint,0)   AS days_worked_points
-  , round(coalesce((miles * cp_activity.miles_apoint) * cp_activity.miles_cpoint,0),0)          AS miles_points
-  , coalesce((tasks_completed_by_user * cp_activity.tasks_apoint) * cp_activity.tasks_cpoint,0) AS task_points
-  , coalesce((passed_quizzes * cp_activity.quiz_apoint) * cp_activity.quiz_cpoint,0)            AS quiz_points
-  , coalesce((idle_time * cp_activity.idle_apoint) * cp_activity.idle_cpoint,0)            AS idle_time_points
-  , round(TIMESTAMPDIFF(DAY,str_to_date('$sd','%Y-%m-%d'),str_to_date('$ed','%Y-%m-%d')) * .675,0) as days_shoulda_worked
-FROM (
-       SELECT
-         tasks.employee_id as emp_id
-         , tasks_completed_by_user
-         , tasks_all_user
-         , category
-         , coalesce(passed_quizzes,0) as passed_quizzes
-         , coalesce(all_quizzes,0) as all_quizzes
-         , days_worked
-         , round(miles,0) AS miles
-         , idle_time
-         , aprox_idle_costs
-       FROM ((
-               SELECT
-                   assign_to                  AS employee_id
-                 , sum(CASE WHEN tasks.complete_user = 1
-                 THEN 1
-                       ELSE 0 END)            AS tasks_completed_by_user
-                 , count(tasks.complete_user) AS tasks_all_user
-                 , category
-               FROM tasks
-               WHERE submit_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
-               GROUP BY assign_to) tasks LEFT OUTER JOIN (
-                                                           SELECT
-                                                             employee_id
-                                                             , sum(CASE WHEN success = 1
-                                                             THEN 1
-                                                                   ELSE 0 END) AS passed_quizzes
-                                                             , count(success)  AS all_quizzes
-                                                           FROM assignments.user_quizzes uq
-                                                             JOIN assignments.v_imported_users viu
-                                                               ON uq.user_id = viu.UserID
-                                                             JOIN catalina.users ON users.username = viu.UserName
-                                                           WHERE uq.added_date BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
-                                                           GROUP BY employee_id) quiz
-           ON quiz.employee_id = tasks.employee_id
-         LEFT OUTER JOIN (
-                           SELECT
-                               COUNT(*)          AS days_worked
-                             , `employee number` AS employee_id
-                           FROM days_worked
-                           WHERE worked = 1 AND
-                                 `date worked` BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
-                           GROUP BY `employee number`) worked ON worked.employee_id = tasks.employee_id
-         LEFT OUTER JOIN (
-                           SELECT
-                              sum(miles)       AS miles
-                             , employee_id
-                             ,sum(`Idle Time`) AS idle_time
-                           FROM import_gps_trips
-                           WHERE (
-                             began BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d')
-                             AND Ended BETWEEN STR_TO_DATE('$sd','%Y-%m-%d') and STR_TO_DATE('$ed','%Y-%m-%d'))
-                           GROUP BY employee_id) miles ON miles.employee_id = tasks.employee_id) JOIN (
-                                                                                                        SELECT
-                                                                                                          *
-                                                                                                        FROM
-                                                                                                          idle_calcs) idle_cals
-           ON (idle_time / 60) BETWEEN idle_cals.idle_from_hrs AND idle_cals.idle_to_hrs) whole_shebang,(
-                                                                                                          SELECT
-                                                                                                            *
-                                                                                                          FROM
-                                                                                                            cp_activity) cp_activity ) a
-          right outer join users on users.employee_id = a.emp_id ) mo_data";
-    return $sql;
+    $sql = "CALL task_productivity_stats('$sd', '$ed', TRUE);";
+
+    $output = get_multi_sql_results($sql, $mysqli);
+    return $output;
 }
-function generate_quiz_sql($sd, $ed)
+
+function get_quiz_aggregate($sd, $ed, $mysqli)
 {
-    $sql = "SELECT cu.username,cu.employee_id,q.user_id,q.assignment_id,MAX(q.pass_score_point) AS max_score
-      FROM assignments.user_quizzes q, catalina.users cu, assignments.users au
-      WHERE cu.employee_id = au.comments
-      AND au.userid = q.user_id
-      AND q.added_date BETWEEN str_to_date('$sd','%Y-%m-%d') AND str_to_date('$ed','%Y-%m-%d')
-      GROUP BY username, employee_id, user_id, assignment_id
-      ORDER BY max_score DESC";
-    return $sql;
+    $sql = "CALL quiz_productivity_stats('$sd', '$ed', TRUE);";
+    $output = get_multi_sql_results($sql, $mysqli);
+    return $output;
 }
+
 function upload_image($input_file, $target_dir, $target_name, $return_page, $sql, $file_size, $mysqli)
 {
     // Check that the input variables are set

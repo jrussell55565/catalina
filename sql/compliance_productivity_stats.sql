@@ -1,4 +1,4 @@
-CREATE PROCEDURE `compliance_productivity_stats`(IN v_date_start VARCHAR(20), v_date_end VARCHAR(20))
+CREATE PROCEDURE `compliance_productivity_stats`(IN v_date_start VARCHAR(20), v_date_end VARCHAR(20), v_print BOOLEAN)
   BEGIN
 
     DROP TEMPORARY TABLE IF EXISTS compliance_productivity_tmp;
@@ -144,7 +144,9 @@ CREATE PROCEDURE `compliance_productivity_stats`(IN v_date_start VARCHAR(20), v_
         (SELECT *
          FROM cp_csa) cp_csa;
 
+    if v_print is TRUE THEN
     SELECT *
-    FROM shipment_productivity_tmp;
+    FROM compliance_productivity_tmp;
+    END IF ;
 
   END

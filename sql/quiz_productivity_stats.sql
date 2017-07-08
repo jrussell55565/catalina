@@ -1,4 +1,4 @@
-CREATE PROCEDURE `quiz_productivity_stats`(IN v_date_start VARCHAR(20), v_date_end VARCHAR(20))
+CREATE PROCEDURE `quiz_productivity_stats`(IN v_date_start VARCHAR(20), v_date_end VARCHAR(20), v_print BOOLEAN)
   BEGIN
 
     DROP TEMPORARY TABLE IF EXISTS quiz_productivity_tmp;
@@ -25,7 +25,10 @@ CREATE PROCEDURE `quiz_productivity_stats`(IN v_date_start VARCHAR(20), v_date_e
       GROUP BY username, employee_id, user_id, status, assignment_id
       ORDER BY max_score DESC);
 
+    if v_print is TRUE THEN
     SELECT *
     FROM quiz_productivity_tmp;
+    END IF ;
+
   END;
 

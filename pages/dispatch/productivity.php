@@ -54,6 +54,11 @@ if ($_SESSION['login'] == 1) {
   }
 }
 
+// Set the default status
+if (!isset($_GET['productivity_user_status'])) {
+  $_GET['productivity_user_status'] = 'Active';
+}
+
 // Get the current quarter if no date range was specified.
 
 $current_month = date('m');
@@ -108,45 +113,43 @@ if ($_SESSION['login'] == 1)
         $account_status = 'none';
     }
   
-    $vir_sql = generate_vir_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date), $account_status);
-    $vir_aggregate = get_sql_results($vir_sql,$mysqli);
-
     $vir_clockin_sql = generate_clockin_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $vir_clockin_aggregate = get_sql_results($vir_clockin_sql,$mysqli);
 }else{
     $emp_id = $_SESSION['employee_id'];
   
-    $vir_sql = generate_vir_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date),'Active');
-    $vir_aggregate = get_sql_results($vir_sql,$mysqli);
-
     $vir_clockin_sql = generate_clockin_sql($emp_id,date('Y-m-d',$start_date),date('Y-m-d',$end_date));
     $vir_clockin_aggregate = get_sql_results($vir_clockin_sql,$mysqli);
 }
 
-// We'll generate another shp_aggregate array.  This time we'll loop
-// through each employee.  This is for the stats section below.
-#$complete_ship_sql = "call company_shp_stats('".date('Y-m-d',$start_date)."','".date('Y-m-d',$end_date)."')";
-#run_sql($complete_ship_sql,$mysqli);
-#$complete_ship_sql = "select a.*, users.username from productivity_shipments a, users where a.date_start <= STR_TO_DATE('".date('Y-m-d',$start_date)."','%Y-%m-%d') 
-#                      and a.date_end >= STR_TO_DATE('".date('Y-m-d',$end_date)."','%Y-%m-%d')
-#                      and a.employee_id = users.employee_id ORDER BY percentage_earned desc";
-#$complete_ship_aggregate = get_sql_results($complete_ship_sql,$mysqli);
+// Generate the sql for virs
+$vir_aggregate = get_aggregate_vir(date('Y-m-d',$start_date),date('Y-m-d',$end_date), $mysqli);
 
 // Generate the sql for tasks
-$task_sql = generate_task_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
-$task_aggregate = get_sql_results($task_sql,$mysqli);
+$task_aggregate = get_task_aggregate(date('Y-m-d',$start_date),date('Y-m-d',$end_date), $mysqli);
 
 // Generate the sql for quizzes
-$quiz_sql = generate_quiz_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
-$quiz_aggregate = get_sql_results($quiz_sql,$mysqli);
+$quiz_aggregate = get_quiz_aggregate(date('Y-m-d',$start_date),date('Y-m-d',$end_date), $mysqli);
 
 // Generate the sql for compliance
-$compliance_sql = generate_aggregate_compliance_sql(date('Y-m-d',$start_date),date('Y-m-d',$end_date));
-$csa_compliance_aggregate = get_sql_results($compliance_sql,$mysqli);
+$csa_compliance_aggregate = get_aggregate_compliance(date('Y-m-d',$start_date),date('Y-m-d',$end_date), $mysqli);
 
 // Generate the sql for shipments
-$shipment_aggregate = get_shipment_aggregate(date('Y-m-d',$start_date),date('Y-m-d',$end_date), $emp_id, $account_status, $mysqli);
+$shipment_aggregate = get_shipment_aggregate(date('Y-m-d',$start_date),date('Y-m-d',$end_date), $mysqli);
 $shipment_aggregate_all_users = [];
+
+// Create an array of top performers
+$leader_array = [];
+foreach ($all_users_array as $key => $value) {
+  for($m=0;$m<count($shipment_aggregate);$m++) {
+    $leader_array[$shipment_aggregate[$m]['employee_id']] = ["shipment_aggregate",["percentage_earned",$shipment_aggregate[$m]['percentage_earned']]];
+    $leader_array[$shipment_aggregate[$m]['employee_id']] = ["shipment_aggregate",["earned_points",$shipment_aggregate[$m]['earned_points']]];
+  }
+  #$leader_array[$all_users_array[$key]['employee_id']] = ["shipment",1];
+}
+
+ # if ($all_users_array[$key]['employee_id']
+
 // Do some array manipulation if we're looking at all users
 if ($_SESSION['login'] == 1)
 {
@@ -159,6 +162,12 @@ if ($_SESSION['login'] == 1)
     $csa_compliance_aggregate['all_users']['real_name'] = 'all_employees';
 
     for($m=0;$m<count($shipment_aggregate);$m++) {
+      // Check to see If we're looking for a specific status.
+      if (isset($_GET['productivity_user_status']) && $_GET['productivity_user_status'] != 'none' ) {                    
+        if ($shipment_aggregate[$m]['status'] != $_GET['productivity_user_status']) {
+          continue;
+        }
+      }
       $shipment_aggregate['all_users']['as_puagent'] = $shipment_aggregate['all_users']['as_puagent'] + $shipment_aggregate[$m]['as_puagent'];
       $shipment_aggregate['all_users']['as_delagent'] = $shipment_aggregate['all_users']['as_delagent'] + $shipment_aggregate[$m]['as_delagent'];    
       $shipment_aggregate['all_users']['as_pu_and_delagent'] = $shipment_aggregate['all_users']['as_pu_and_delagent'] + $shipment_aggregate[$m]['as_pu_and_delagent'];    
@@ -191,6 +200,12 @@ if ($_SESSION['login'] == 1)
       $shipment_aggregate['all_users']['percentage_earned'] = $shipment_aggregate['all_users']['percentage_earned'] + $shipment_aggregate[$m]['percentage_earned'];    
     }
     for($m=0;$m<count($vir_aggregate);$m++) {
+      // Check to see If we're looking for a specific status.
+      if (isset($_GET['productivity_user_status']) && $_GET['productivity_user_status'] != 'none' ) {                    
+        if ($vir_aggregate[$m]['status'] != $_GET['productivity_user_status']) {
+          continue;
+        }
+      }
       $vir_aggregate['all_users']['vir_pretrip'] = $vir_aggregate['all_users']['vir_pretrip'] + $vir_aggregate[$m]['vir_pretrip'];    
       $vir_aggregate['all_users']['vir_posttrip'] = $vir_aggregate['all_users']['vir_posttrip'] + $vir_aggregate[$m]['vir_posttrip'];    
       $vir_aggregate['all_users']['vir_breakdown'] = $vir_aggregate['all_users']['vir_breakdown'] + $vir_aggregate[$m]['vir_breakdown'];    
@@ -210,6 +225,12 @@ if ($_SESSION['login'] == 1)
       $vir_aggregate['all_users']['vir_total_percent'] = $vir_aggregate['all_users']['vir_total_percent'] + $vir_aggregate[$m]['vir_total_percent'];
     }
     for($m=0;$m<count($task_aggregate);$m++) {
+      // Check to see If we're looking for a specific status.
+      if (isset($_GET['productivity_user_status']) && $_GET['productivity_user_status'] != 'none' ) {                    
+        if ($task_aggregate[$m]['status'] != $_GET['productivity_user_status']) {
+          continue;
+        }
+      }
       $task_aggregate['all_users']['tasks_completed_by_user'] = $task_aggregate['all_users']['tasks_completed_by_user'] + $task_aggregate[$m]['tasks_completed_by_user'];
       $task_aggregate['all_users']['tasks_all_user'] = $task_aggregate['all_users']['tasks_all_user'] + $task_aggregate[$m]['tasks_all_user'];
       $task_aggregate['all_users']['category'] = $task_aggregate['all_users']['category'] + $task_aggregate[$m]['category'];
@@ -231,24 +252,30 @@ if ($_SESSION['login'] == 1)
       $task_aggregate['all_users']['total_percent'] = $task_aggregate['all_users']['total_percent'] + $task_aggregate[$m]['total_percent'];
     }
     for($m=0;$m<count($csa_compliance_aggregate);$m++) {
-         $csa_compliance_aggregate['all_users']['total_points'] = $csa_compliance_aggregate['all_users']['total_points'] + $csa_compliance_aggregate[$m]['total_points'];
-        $csa_compliance_aggregate['all_users']['points_cash_value'] = $csa_compliance_aggregate['all_users']['points_cash_value'] + $csa_compliance_aggregate[$m]['points_cash_value'];
-        $csa_compliance_aggregate['all_users']['vehicle_maint_points'] = $csa_compliance_aggregate['all_users']['vehicle_maint_points'] + $csa_compliance_aggregate[$m]['vehicle_maint_points'];
-        $csa_compliance_aggregate['all_users']['vehicle_maint_cash'] = $csa_compliance_aggregate['all_users']['vehicle_maint_cash'] + $csa_compliance_aggregate[$m]['vehicle_maint_cash'];
-        $csa_compliance_aggregate['all_users']['hos_compliance_points'] = $csa_compliance_aggregate['all_users']['hos_compliance_points'] + $csa_compliance_aggregate[$m]['hos_compliance_points'];
-        $csa_compliance_aggregate['all_users']['hos_compliance_cash'] = $csa_compliance_aggregate['all_users']['hos_compliance_cash'] + $csa_compliance_aggregate[$m]['hos_compliance_cash'];
-        $csa_compliance_aggregate['all_users']['no_violation_points'] = $csa_compliance_aggregate['all_users']['no_violation_points'] + $csa_compliance_aggregate[$m]['no_violation_points'];
-        $csa_compliance_aggregate['all_users']['no_violation_cash'] = $csa_compliance_aggregate['all_users']['no_violation_cash'] + $csa_compliance_aggregate[$m]['no_violation_cash'];
-        $csa_compliance_aggregate['all_users']['unsafe_driving_points'] = $csa_compliance_aggregate['all_users']['unsafe_driving_points'] + $csa_compliance_aggregate[$m]['unsafe_driving_points'];
-        $csa_compliance_aggregate['all_users']['unsafe_driving_cash'] = $csa_compliance_aggregate['all_users']['unsafe_driving_cash'] + $csa_compliance_aggregate[$m]['unsafe_driving_cash'];
-        $csa_compliance_aggregate['all_users']['driver_fitness_points'] = $csa_compliance_aggregate['all_users']['driver_fitness_points'] + $csa_compliance_aggregate[$m]['driver_fitness_points'];
-        $csa_compliance_aggregate['all_users']['driver_fitness_cash'] = $csa_compliance_aggregate['all_users']['driver_fitness_cash'] + $csa_compliance_aggregate[$m]['driver_fitness_cash'];
-        $csa_compliance_aggregate['all_users']['controlled_sub_points'] = $csa_compliance_aggregate['all_users']['controlled_sub_points'] + $csa_compliance_aggregate[$m]['controlled_sub_points'];
-        $csa_compliance_aggregate['all_users']['controlled_sub_cash'] = $csa_compliance_aggregate['all_users']['controlled_sub_cash'] + $csa_compliance_aggregate[$m]['controlled_sub_cash'];
-        $csa_compliance_aggregate['all_users']['hazard_points'] = $csa_compliance_aggregate['all_users']['hazard_points'] + $csa_compliance_aggregate[$m]['hazard_points'];
-        $csa_compliance_aggregate['all_users']['hazard_cash'] = $csa_compliance_aggregate['all_users']['hazard_cash'] + $csa_compliance_aggregate[$m]['hazard_cash'];
-        $csa_compliance_aggregate['all_users']['crash_points'] = $csa_compliance_aggregate['all_users']['crash_points'] + $csa_compliance_aggregate[$m]['crash_points'];
-        $csa_compliance_aggregate['all_users']['crash_cash'] = $csa_compliance_aggregate['all_users']['crash_cash'] + $csa_compliance_aggregate[$m]['crash_cash'];
+      // Check to see If we're looking for a specific status.
+      if (isset($_GET['productivity_user_status']) && $_GET['productivity_user_status'] != 'none' ) {                    
+        if ($csa_compliance_aggregate[$m]['status'] != $_GET['productivity_user_status']) {
+          continue;
+        }
+      }
+      $csa_compliance_aggregate['all_users']['total_points'] = $csa_compliance_aggregate['all_users']['total_points'] + $csa_compliance_aggregate[$m]['total_points'];
+      $csa_compliance_aggregate['all_users']['points_cash_value'] = $csa_compliance_aggregate['all_users']['points_cash_value'] + $csa_compliance_aggregate[$m]['points_cash_value'];
+      $csa_compliance_aggregate['all_users']['vehicle_maint_points'] = $csa_compliance_aggregate['all_users']['vehicle_maint_points'] + $csa_compliance_aggregate[$m]['vehicle_maint_points'];
+      $csa_compliance_aggregate['all_users']['vehicle_maint_cash'] = $csa_compliance_aggregate['all_users']['vehicle_maint_cash'] + $csa_compliance_aggregate[$m]['vehicle_maint_cash'];
+      $csa_compliance_aggregate['all_users']['hos_compliance_points'] = $csa_compliance_aggregate['all_users']['hos_compliance_points'] + $csa_compliance_aggregate[$m]['hos_compliance_points'];
+      $csa_compliance_aggregate['all_users']['hos_compliance_cash'] = $csa_compliance_aggregate['all_users']['hos_compliance_cash'] + $csa_compliance_aggregate[$m]['hos_compliance_cash'];
+      $csa_compliance_aggregate['all_users']['no_violation_points'] = $csa_compliance_aggregate['all_users']['no_violation_points'] + $csa_compliance_aggregate[$m]['no_violation_points'];
+      $csa_compliance_aggregate['all_users']['no_violation_cash'] = $csa_compliance_aggregate['all_users']['no_violation_cash'] + $csa_compliance_aggregate[$m]['no_violation_cash'];
+      $csa_compliance_aggregate['all_users']['unsafe_driving_points'] = $csa_compliance_aggregate['all_users']['unsafe_driving_points'] + $csa_compliance_aggregate[$m]['unsafe_driving_points'];
+      $csa_compliance_aggregate['all_users']['unsafe_driving_cash'] = $csa_compliance_aggregate['all_users']['unsafe_driving_cash'] + $csa_compliance_aggregate[$m]['unsafe_driving_cash'];
+      $csa_compliance_aggregate['all_users']['driver_fitness_points'] = $csa_compliance_aggregate['all_users']['driver_fitness_points'] + $csa_compliance_aggregate[$m]['driver_fitness_points'];
+      $csa_compliance_aggregate['all_users']['driver_fitness_cash'] = $csa_compliance_aggregate['all_users']['driver_fitness_cash'] + $csa_compliance_aggregate[$m]['driver_fitness_cash'];
+      $csa_compliance_aggregate['all_users']['controlled_sub_points'] = $csa_compliance_aggregate['all_users']['controlled_sub_points'] + $csa_compliance_aggregate[$m]['controlled_sub_points'];
+      $csa_compliance_aggregate['all_users']['controlled_sub_cash'] = $csa_compliance_aggregate['all_users']['controlled_sub_cash'] + $csa_compliance_aggregate[$m]['controlled_sub_cash'];
+      $csa_compliance_aggregate['all_users']['hazard_points'] = $csa_compliance_aggregate['all_users']['hazard_points'] + $csa_compliance_aggregate[$m]['hazard_points'];
+      $csa_compliance_aggregate['all_users']['hazard_cash'] = $csa_compliance_aggregate['all_users']['hazard_cash'] + $csa_compliance_aggregate[$m]['hazard_cash'];
+      $csa_compliance_aggregate['all_users']['crash_points'] = $csa_compliance_aggregate['all_users']['crash_points'] + $csa_compliance_aggregate[$m]['crash_points'];
+      $csa_compliance_aggregate['all_users']['crash_cash'] = $csa_compliance_aggregate['all_users']['crash_cash'] + $csa_compliance_aggregate[$m]['crash_cash'];
     }
   }
 }
@@ -343,9 +370,8 @@ if ($_SESSION['login'] == 1)
                  <select class="input-sm form-control" name="productivity_user_status" id="productivity_user_status" value="" style="margin-top: 5px;">
                     <option value='none'>All Status</option>
                     <?php for ($i=0; $i<sizeof($user_status_array); $i++) { ?>
-                      <option value=<?php echo '"' . $user_status_array[$i]['status'] . '"';
-                      if ($users_status_array[$i]['status'] == $_GET['productivity_user_status']) { echo " selected "; } ?>
-                      ><?php echo $user_status_array[$i]['status'];?></option>
+                      <option value=<?php echo '"' . $user_status_array[$i]['status'] . '"';                       
+                      if ($user_status_array[$i]['status'] == $_GET['productivity_user_status']) { echo " selected "; } ?>><?php echo $user_status_array[$i]['status'];?></option>
                     <?php } ?>
                 </select>
                </div>
@@ -1252,7 +1278,7 @@ if ($_SESSION['login'] == 1)
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                   </div>
-                </div>
+                </div>                
                 
                 <!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
@@ -1268,143 +1294,91 @@ if ($_SESSION['login'] == 1)
                       <th width="11%">Best Category</th>
                       <th width="25%">Worst Category</th>
                     </tr>
-                    <tr>
-                      <td height="30">1</td>
-                      <td><img src="../../dist/img/dash.jpg" alt="" width="24" height="24" class="img-circle"> Jack Jack</td>
+
+                <?php
+                // Get the top performers
+                $top_performers = get_top_performers(date('Y-m-d',$start_date),date('Y-m-d',$end_date), $mysqli);
+                $counter = 0;                                
+                for($z=0;$z<count($top_performers);$z++){                  
+                  // Check to see If we're looking for a specific status.
+                  if (isset($_GET['productivity_user_status']) && $_GET['productivity_user_status'] != 'none' ) {                    
+                    if ($top_performers[$z]['status'] != $_GET['productivity_user_status']) {
+                      continue;
+                    }
+                  }
+                  $counter++;
+                  if ($top_performers[$z]['total_percent'] >= 90) { $color = 'green'; $percent = $top_performers[$z]['total_percent'];}
+                  if ($top_performers[$z]['total_percent'] >= 70 && $top_performers[$z]['total_percent'] < 90) { $color = 'blue'; $percent = $top_performers[$z]['total_percent']; }
+                  if ($top_performers[$z]['total_percent'] > 50 && $top_performers[$z]['total_percent'] < 70) { $color = 'yellow'; $percent = $top_performers[$z]['total_percent']; }
+                  if ($top_performers[$z]['total_percent'] > 25 && $top_performers[$z]['total_percent'] < 50) { $color = 'red'; $percent = $top_performers[$z]['total_percent']; }
+                  if ($top_performers[$z]['total_percent'] <= 25) { $color = 'black'; $percent = $top_performers[$z]['total_percent']; }
+
+                  // Total all positive points.
+                  $positive_points = 0;
+                  $negative_points = 0;
+                  
+                  ($top_performers[$z]['vir_total_points'] > 0 ? $positive_points += $top_performers[$z]['vir_total_points'] : $negative_points += $top_performers[$z]['vir_total_points']);
+                  ($top_performers[$z]['compliance_total_points'] > 0 ? $positive_points += $top_performers[$z]['compliance_total_points'] : $negative_points += $top_performers[$z]['compliance_total_points']);
+                  ($top_performers[$z]['shipment_earned_points'] > 0 ? $positive_points += $top_performers[$z]['shipment_earned_points'] : $negative_points += $top_performers[$z]['shipment_earned_points']);
+                  ($top_performers[$z]['task_activity_total_points'] > 0 ? $positive_points += $top_performers[$z]['task_activity_total_points'] : $negative_points += $top_performers[$z]['task_activity_total_points']);
+
+                  // Which category is the best category?
+                  
+                  $sorted_array = [];
+                  foreach ($top_performers[$z] as $key => $val) {
+                    if ( (preg_match('/vir_total_points/', $key))
+                        || (preg_match('/compliance_total_points/', $key))
+                        || (preg_match('/shipment_earned_points/', $key))
+                        || (preg_match('/task_activity_total_points/', $key))
+                        || (preg_match('/quit_points/', $key)) ) {
+                      array_push($sorted_array, $val);
+                    }
+                  }
+                  arsort($sorted_array);         
+                  $best_category = reset($sorted_array);                                           
+                  $worst_category = end($sorted_array);
+                  foreach ($top_performers[$z] as $key => $val) {                    
+                    if ($val == $best_category) {                      
+                      $best_category = $key;
+                      if ($val == 0) { $best_category = 'N/A'; }
+                    }
+                    if ($val == $worst_category) {
+                      $worst_category = $key;
+                      if ($val == 0) { $worst_category = 'N/A'; }
+                    }
+                    if (preg_match('/vir/', $best_category)) { $best_category = 'VIR'; }
+                    if (preg_match('/ship/', $best_category)) { $best_category = 'Boards'; }
+                    if (preg_match('/task/', $best_category)) { $best_category = 'Tasks'; }
+                    if (preg_match('/compliance/', $best_category)) { $best_category = 'Compliance'; }
+                    if (preg_match('/quiz/', $best_category)) { $best_category = 'Quiz'; }
+
+                    if (preg_match('/vir/', $worst_category)) { $worst_category = 'VIR'; }
+                    if (preg_match('/ship/', $worst_category)) { $worst_category = 'Boards'; }
+                    if (preg_match('/task/', $worst_category)) { $worst_category = 'Tasks'; }
+                    if (preg_match('/compliance/', $worst_category)) { $worst_category = 'Compliance'; }
+                    if (preg_match('/quiz/', $worst_category)) { $worst_category = 'Quiz'; }
+                  }         
+                  $all_stats_image = HTTP."/dist/img/usernophoto.jpg";                  
+                  if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $top_performers[$z]['username'] . "_avatar")) {
+                    $all_stats_image = HTTP."/dist/img/userimages/" . $top_performers[$z]['username'] . "_avatar";
+                  }                  
+                ?>
+                  <tr>
+                      <td height="30"><?php echo $counter; ?></td>
+                      <td><img src="<?php echo $all_stats_image; ?>" alt="" width="24" height="24" class="img-circle"> <?php echo $top_performers[$z]['real_name'];?></td>
                       <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-success" style="width: 100%"></div>
+                        <div class="progress-bar progress-bar-<?php echo $color; ?>" style="width: <?php echo $top_performers[$z]['total_percent'];?>%"></div>
                       </div></td>
-                      <td><span class="badge bg-green">100%</span></td>
-                      <td><span class="badge bg-green">1800</span></td>
-                      <td><span class="badge bg-black">10</span></td>
-                      <td><span class="badge bg-purple">1790</span></td>
-                      <td><span class="label label-success">Boards</span></td>
-                      <td><span class="label label-danger">VIR</span></td>
+                      <td><span class="badge bg-<?php echo $color; ?>"><?php echo $top_performers[$z]['total_percent'];?>%</span></td>
+                      <td><span class="badge bg-green"><?php echo $positive_points; ?></span></td>
+                      <td><span class="badge bg-black"><?php echo $negative_points; ?></span></td>
+                      <td><span class="badge bg-purple"><?php echo $positive_points + $negative_points; ?></span></td>
+                      <td><span class="label label-success"><?php echo $best_category; ?></span></td>
+                      <td><span class="label label-danger"><?php echo $worst_category; ?></span></td>
                     </tr>
-                    <tr>
-                      <td>2</td>
-                      <td><img src="../../dist/img/violet.jpg" alt="" width="24" height="24" class="img-circle"> Violote</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-success" style="width: 90%"></div>
-                      </div></td>
-                      <td><span class="badge bg-green">90%</span></td>
-                      <td><span class="badge bg-green">1655</span></td>
-                      <td><span class="badge bg-black">15</span></td>
-                      <td><span class="badge bg-purple">1640</span></td>
-                      <td><span class="label label-success">Boards</span></td>
-                      <td><span class="label label-danger">VIR</span></td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td><img src="../../dist/img/jack.jpg" alt="" width="24" height="24" class="img-circle">Jack Jack</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-primary" style="width: 89%"></div>
-                      </div></td>
-                      <td><span class="badge bg-light-blue">89%</span></td>
-                      <td><span class="badge bg-green">1501</span></td>
-                      <td><span class="badge bg-black">32</span></td>
-                      <td><span class="badge bg-purple">1469</span></td>
-                      <td><span class="label label-success">Boards</span></td>
-                      <td><span class="label label-danger">VIR</span></td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td><img src="../../dist/img/edna.jpg" alt="" width="24" height="24" class="img-circle">Edna Mode</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-primary" style="width: 70%"></div>
-                      </div></td>
-                      <td><span class="badge bg-light-blue">70%</span></td>
-                      <td><span class="badge bg-green">1312</span></td>
-                      <td><span class="badge bg-black">56</span></td>
-                      <td><span class="badge bg-purple">1256</span></td>
-                      <td><span class="label label-success">Boards</span></td>
-                      <td><span class="label label-danger">VIR</span></td>
-                    </tr>
-                    <tr>
-                      <td>5</td>
-                      <td><img src="../../dist/img/Gilbert Huph.jpg" alt="" width="24" height="24" class="img-circle">Gilbert Huph</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-yellow" style="width: 69%"></div>
-                      </div></td>
-                      <td><span class="badge bg-yellow">69%</span></td>
-                      <td><span class="badge bg-green">1122</span></td>
-                      <td><span class="badge bg-black">98</span></td>
-                      <td><span class="badge bg-purple">1024</span></td>
-                      <td><span class="label label-success">Boards</span></td>
-                      <td><span class="label label-danger">VIR</span></td>
-                    </tr>
-                    <tr>
-                      <td>6</td>
-                      <td><img src="../../dist/img/syndrome.jpg" alt="" width="24" height="24" class="img-circle">Syndrome</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-yellow" style="width: 50%"></div>
-                      </div></td>
-                      <td><span class="badge bg-yellow">50%</span></td>
-                      <td><span class="badge bg-green">938</span></td>
-                      <td><span class="badge bg-black">122</span></td>
-                      <td><span class="badge bg-purple">816</span></td>
-                      <td><span class="label label-success">Boards</span></td>
-                      <td><span class="label label-danger">VIR</span></td>
-                    </tr>
-                    <tr>
-                      <td>7</td>
-                      <td><img src="../../dist/img/bernie kropp.jpg" alt="" width="24" height="24" class="img-circle"> Burnie Kropp</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 49%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">49%</span></td>
-                      <td><span class="badge bg-green">743</span></td>
-                      <td><span class="badge bg-black">155</span></td>
-                      <td><span class="badge bg-purple">588</span></td>
-                      <td><span class="label label-success">Boards</span></td>
-                      <td><span class="label label-danger">VIR</span></td>
-                    </tr>
-                    <tr>
-                      <td>8</td>
-                      <td><img src="../../dist/img/frank.jpg" alt="" width="24" height="24" class="img-circle"> Frank</td>
-                      <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-danger" style="width: 26%"></div>
-                      </div></td>
-                      <td><span class="badge bg-red">26%</span></td>
-                      <td><span class="badge bg-green">422</span></td>
-                      <td><span class="badge bg-black">187</span></td>
-                      <td><span class="badge bg-purple">235</span></td>
-                      <td><span class="label label-success">Boards</span></td>
-                      <td><span class="label label-danger">VIR</span></td>
-                    </tr>
-                    <tr>
-                      <td>9</td>
-                      <td><img src="../../dist/img/h2tyd 3.jpg" alt="" width="24" height="24" class="img-circle"> Hector Axe</td>
-                      <td>
-                      <!-- Changed CSS to Custom CSS Sytel for Grey Bar.... -->
-                      <div class="progress progress-striped active">
-                      <div class="progress-bar progress-bar-black" style="width: 25%"></div>
-                      </div>
-                      <!-- Original CSS Danger Style removed for Grey Bar
-                      <div class="progress progress-xs progress-striped active">
-                      <div class="progress-bar progress-bar-danger" style="width: 25%"></div>
-                      </div> --> 
-                      </td>
-                      <td><span class="badge bg-black">25%</span></td>
-                      <td><span class="badge bg-green">375</span></td>
-                      <td><span class="badge bg-black">234</span></td>
-                      <td><span class="badge bg-purple">141</span></td>
-                      <td><span class="label label-success">Boards</span></td>
-                      <td><span class="label label-danger">VIR</span></td>
-                    </tr>
-                    <tr>
-                      <td>10</td>
-                      <td><img src="../../dist/img/tony rydinger.jpg" alt="" width="24" height="24" class="img-circle"> Troy Hydinger</td>
-                      <td><div class="progress progress-striped active">
-                        <div class="progress-bar progress-bar-black" style="width: 1%"></div>
-                      </div></td>
-                      <td><span class="badge bg-black">1%</span></td>
-                      <td><span class="badge bg-green">303</span></td>
-                      <td><span class="badge bg-black">255</span></td>
-                      <td><span class="badge bg-purple">48</span></td>
-                      <td><span class="label label-success">Boards</span></td>
-                      <td><span class="label label-danger">VIR</span></td>
-                    </tr>
+                <?php } ?>
+                    
+
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -1412,26 +1386,12 @@ if ($_SESSION['login'] == 1)
           </div>         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
           <div class="row">
             <div class="col-md-6">
               <div class="box">
                 <div class="box-header">
 
-                    <h3 class="box-title"> Shipment Updates</h3><br><h5><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></h5>
+                    <h3 class="box-title">Shipment Updates</h3><br><h5><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></h5>
                        <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -1448,7 +1408,15 @@ if ($_SESSION['login'] == 1)
                     </tr>
                     <?php
                     $shipment_array = sort_array($shipment_aggregate,'percentage_earned');
+                    $counter = 0;
                     for ($ship_i=0;$ship_i<count($shipment_array);$ship_i++) {
+                      // Check to see If we're looking for a specific status.
+                      if (isset($_GET['productivity_user_status']) && $_GET['productivity_user_status'] != 'none' ) {                    
+                        if ($shipment_array[$ship_i]['status'] != $_GET['productivity_user_status']) {
+                          continue;
+                        }
+                      }
+                      $counter++;
                       echo($shipment_array[$compliance_i]['percentage_earned']);
                       if ($shipment_array[$ship_i]['percentage_earned'] >= 90) { $color = 'green'; $percent = $shipment_array[$ship_i]['percentage_earned'];}
                       if ($shipment_array[$ship_i]['percentage_earned'] >= 70 && $shipment_array[$ship_i]['percentage_earned'] < 90) { $color = 'blue'; $percent = $shipment_array[$ship_i]['percentage_earned']; }
@@ -1460,7 +1428,7 @@ if ($_SESSION['login'] == 1)
                       if ($shipment_array[$ship_i]['percentage_earned'] > 100) { $percent = 100; }
                     ?>
                     <tr>
-                 <td><?php echo $ship_i+1;?></td>
+                 <td><?php echo $counter;?></td>
                  <td>
                  <?php
                   $all_stats_image = HTTP."/dist/img/usernophoto.jpg";
@@ -1495,7 +1463,7 @@ if ($_SESSION['login'] == 1)
               <div class="box">
                 <div class="box-header">
               
-                 <h3 class="box-title">CSA Compliance</h3>
+                 <h3 class="box-title">Activity</h3>
 <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -1511,12 +1479,14 @@ if ($_SESSION['login'] == 1)
                     </tr>
                   <?php
                     $compliance_array = sort_array($csa_compliance_aggregate,'total_points');
+                    $counter = 0;
                     for ($compliance_i=0;$compliance_i<count($compliance_array);$compliance_i++) {
                       if ($compliance_array[$compliance_i]['total_points'] >= 1) { $color = 'black'; $percent = 100; }
                       if ($compliance_array[$compliance_i]['total_points'] < 1) { $color = 'green'; $percent = 0; }
+                      $counter++;
                     ?>
                     <tr>
-                 <td><?php echo $compliance_i+1;?></td>
+                 <td><?php echo $counter;?></td>
                  <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $compliance_array[$compliance_i]['real_name'];?></td>
 
                  <td><div class="progress progress-xs progress-striped active">
@@ -1568,7 +1538,7 @@ if ($_SESSION['login'] == 1)
             <!-- Start Left Side Box Menus -->
               <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title"> VIR</h3><br><h5><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></h5>
+                  <h3 class="box-title">VIR</h3><br><h5><?php echo date('m/d/y',$start_date) . " - " . date('m/d/y',$end_date);?></h5>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -1589,8 +1559,15 @@ if ($_SESSION['login'] == 1)
                     </tr>
                 <?php
                     $vir_array = sort_array($vir_aggregate,'vir_total_percent');
+                    $counter = 0;
                     for ($vir_i=0;$vir_i<count($vir_array);$vir_i++) {
-                      echo($vir_array[$compliance_i]['vir_total_percent']);
+                      // Check to see If we're looking for a specific status.
+                      if (isset($_GET['productivity_user_status']) && $_GET['productivity_user_status'] != 'none' ) {                    
+                        if ($vir_array[$vir_i]['status'] != $_GET['productivity_user_status']) {
+                          continue;
+                        }
+                      }
+                      $counter++;                      
                       if ($vir_array[$vir_i]['vir_total_percent'] >= 90) { $color = 'green'; $percent = $vir_array[$vir_i]['vir_total_percent'];}
                       if ($vir_array[$vir_i]['vir_total_percent'] >= 70 && $vir_array[$vir_i]['vir_total_percent'] < 90) { $color = 'blue'; $percent = $vir_array[$vir_i]['vir_total_percent']; }
                       if ($vir_array[$vir_i]['vir_total_percent'] > 50 && $vir_array[$vir_i]['vir_total_percent'] < 70) { $color = 'yellow'; $percent = $vir_array[$vir_i]['vir_total_percent']; }
@@ -1601,7 +1578,7 @@ if ($_SESSION['login'] == 1)
                       if ($vir_array[$vir_i]['vir_total_percent'] > 100) { $percent = 100; }
                     ?>
                     <tr>
-                 <td><?php echo $vir_i+1;?></td>
+                 <td><?php echo $counter;?></td>
                  <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $vir_array[$vir_i]['real_name'];?></td>
 
                  <td><div class="progress progress-xs progress-striped active">
@@ -1627,7 +1604,7 @@ if ($_SESSION['login'] == 1)
 
               <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Compliance</h3>
+                  <h3 class="box-title">CSA Compliance</h3>
                   <div class="box-tools pull-right">
                   <!--          <div class="box"> -->
                   <!--Remove the div Class "box" above and add ?? to below primary collapsed -->
@@ -1645,7 +1622,15 @@ if ($_SESSION['login'] == 1)
                     </tr>
                     <?php
                     $compliance_array = sort_array($task_aggregate,'total_percent');
+                    $counter = 0;
                     for ($compliance_i=0;$compliance_i<count($compliance_array);$compliance_i++) {
+                      // Check to see If we're looking for a specific status.
+                      if (isset($_GET['productivity_user_status']) && $_GET['productivity_user_status'] != 'none' ) {                    
+                        if ($compliance_array[$compliance_i]['status'] != $_GET['productivity_user_status']) {
+                          continue;
+                        }
+                      }
+                      $counter++;
                       if ($compliance_array[$compliance_i]['total_percent'] >= 90) { $color = 'green'; $percent = $compliance_array[$compliance_i]['total_percent'];}
                       if ($compliance_array[$compliance_i]['total_percent'] >= 70 && $compliance_array[$compliance_i]['total_percent'] < 90) { $color = 'blue'; $percent = $compliance_array[$compliance_i]['total_percent']; }
                       if ($compliance_array[$compliance_i]['total_percent'] > 50 && $compliance_array[$compliance_i]['total_percent'] < 70) { $color = 'yellow'; $percent = $compliance_array[$compliance_i]['total_percent']; }
@@ -1656,7 +1641,7 @@ if ($_SESSION['login'] == 1)
                       if ($compliance_array[$compliance_i]['total_percent'] > 100) { $percent = 100; }
                     ?>
                     <tr>
-                 <td><?php echo $compliance_i+1;?></td>
+                 <td><?php echo $counter;?></td>
                  <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $compliance_array[$compliance_i]['real_name'];?></td>
 
                  <td><div class="progress progress-xs progress-striped active">

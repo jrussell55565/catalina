@@ -1,4 +1,4 @@
-CREATE PROCEDURE `task_productivity_stats`(IN v_date_start VARCHAR(20), v_date_end VARCHAR(20))
+CREATE PROCEDURE `task_productivity_stats`(IN v_date_start VARCHAR(20), v_date_end VARCHAR(20), v_print BOOLEAN)
   BEGIN
 
     DROP TEMPORARY TABLE IF EXISTS task_productivity_tmp;
@@ -139,7 +139,9 @@ CREATE PROCEDURE `task_productivity_stats`(IN v_date_start VARCHAR(20), v_date_e
             RIGHT OUTER JOIN users ON users.employee_id = a.emp_id) mo_data
     );
 
+    if v_print is TRUE THEN
     SELECT *
     FROM task_productivity_tmp;
+    END IF ;
   END;
 
