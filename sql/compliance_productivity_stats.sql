@@ -149,49 +149,49 @@ CREATE PROCEDURE `compliance_productivity_stats`(IN v_date_start VARCHAR(20), v_
                              SUM(violation_weight)  AS current_violation_points,
                              SUM(points_cash_value) AS current_points_cash_value,
                              sum(CASE WHEN basic = 'Vehicle Maint.'
-                               THEN total_points
+                               THEN violation_weight
                                  ELSE 0 END)        AS current_vehicle_maint_points,
                              sum(CASE WHEN basic = 'Vehicle Maint.'
                                THEN points_cash_value
                                  ELSE 0 END)        AS current_vehicle_maint_cash,
                              sum(CASE WHEN basic = 'HOS Compliance'
-                               THEN total_points
+                               THEN violation_weight
                                  ELSE 0 END)        AS current_hos_compliance_points,
                              sum(CASE WHEN basic = 'HOS Compliance'
                                THEN points_cash_value
                                  ELSE 0 END)        AS current_hos_compliance_cash,
                              sum(CASE WHEN basic = 'No Violation'
-                               THEN total_points
+                               THEN violation_weight
                                  ELSE 0 END)        AS current_no_violation_points,
                              sum(CASE WHEN basic = 'No Violation'
                                THEN points_cash_value
                                  ELSE 0 END)        AS current_no_violation_cash,
                              sum(CASE WHEN basic = 'Unsafe Driving'
-                               THEN total_points
+                               THEN violation_weight
                                  ELSE 0 END)        AS current_unsafe_driving_points,
                              sum(CASE WHEN basic = 'Unsafe Driving'
                                THEN points_cash_value
                                  ELSE 0 END)        AS current_unsafe_driving_cash,
                              sum(CASE WHEN basic = 'Driver Fitness'
-                               THEN total_points
+                               THEN violation_weight
                                  ELSE 0 END)        AS current_driver_fitness_points,
                              sum(CASE WHEN basic = 'Driver Fitness'
                                THEN points_cash_value
                                  ELSE 0 END)        AS current_driver_fitness_cash,
                              sum(CASE WHEN basic = 'Controlled Substances'
-                               THEN total_points
+                               THEN violation_weight
                                  ELSE 0 END)        AS current_controlled_sub_points,
                              sum(CASE WHEN basic = 'Controlled Substances'
                                THEN points_cash_value
                                  ELSE 0 END)        AS current_controlled_sub_cash,
                              sum(CASE WHEN basic = 'Hazmat Compliance'
-                               THEN total_points
+                               THEN violation_weight
                                  ELSE 0 END)        AS current_hazard_points,
                              sum(CASE WHEN basic = 'Hazmat Compliance'
                                THEN points_cash_value
                                  ELSE 0 END)        AS current_hazard_cash,
                              sum(CASE WHEN basic = 'Crash Indicator'
-                               THEN total_points
+                               THEN violation_weight
                                  ELSE 0 END)        AS current_crash_points,
                              sum(CASE WHEN basic = 'Crash Indicator'
                                THEN points_cash_value
@@ -208,49 +208,49 @@ CREATE PROCEDURE `compliance_productivity_stats`(IN v_date_start VARCHAR(20), v_
                          SUM(violation_weight)  AS past_24m_violation_points,
                          SUM(points_cash_value) AS past_24m_points_cash_value,
                          sum(CASE WHEN basic = 'Vehicle Maint.'
-                           THEN total_points
+                           THEN violation_weight
                              ELSE 0 END)        AS past_24m_vehicle_maint_points,
                          sum(CASE WHEN basic = 'Vehicle Maint.'
                            THEN points_cash_value
                              ELSE 0 END)        AS past_24m_vehicle_maint_cash,
                          sum(CASE WHEN basic = 'HOS Compliance'
-                           THEN total_points
+                           THEN violation_weight
                              ELSE 0 END)        AS past_24m_hos_compliance_points,
                          sum(CASE WHEN basic = 'HOS Compliance'
                            THEN points_cash_value
                              ELSE 0 END)        AS past_24m_hos_compliance_cash,
                          sum(CASE WHEN basic = 'No Violation'
-                           THEN total_points
+                           THEN violation_weight
                              ELSE 0 END)        AS past_24m_no_violation_points,
                          sum(CASE WHEN basic = 'No Violation'
                            THEN points_cash_value
                              ELSE 0 END)        AS past_24m_no_violation_cash,
                          sum(CASE WHEN basic = 'Unsafe Driving'
-                           THEN total_points
+                           THEN violation_weight
                              ELSE 0 END)        AS past_24m_unsafe_driving_points,
                          sum(CASE WHEN basic = 'Unsafe Driving'
                            THEN points_cash_value
                              ELSE 0 END)        AS past_24m_unsafe_driving_cash,
                          sum(CASE WHEN basic = 'Driver Fitness'
-                           THEN total_points
+                           THEN violation_weight
                              ELSE 0 END)        AS past_24m_driver_fitness_points,
                          sum(CASE WHEN basic = 'Driver Fitness'
                            THEN points_cash_value
                              ELSE 0 END)        AS past_24m_driver_fitness_cash,
                          sum(CASE WHEN basic = 'Controlled Substances'
-                           THEN total_points
+                           THEN violation_weight
                              ELSE 0 END)        AS past_24m_controlled_sub_points,
                          sum(CASE WHEN basic = 'Controlled Substances'
                            THEN points_cash_value
                              ELSE 0 END)        AS past_24m_controlled_sub_cash,
                          sum(CASE WHEN basic = 'Hazmat Compliance'
-                           THEN total_points
+                           THEN violation_weight
                              ELSE 0 END)        AS past_24m_hazard_points,
                          sum(CASE WHEN basic = 'Hazmat Compliance'
                            THEN points_cash_value
                              ELSE 0 END)        AS past_24m_hazard_cash,
                          sum(CASE WHEN basic = 'Crash Indicator'
-                           THEN total_points
+                           THEN violation_weight
                              ELSE 0 END)        AS past_24m_crash_points,
                          sum(CASE WHEN basic = 'Crash Indicator'
                            THEN points_cash_value
