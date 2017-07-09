@@ -40,7 +40,7 @@ CREATE PROCEDURE `compliance_productivity_stats`(IN v_date_start VARCHAR(20), v_
       `past_24m_crash_points`          DOUBLE,
       `status`                         VARCHAR(50),
       `real_name`                      VARCHAR(50),
-      `inner_emp_id`                   VARCHAR(50)
+      `employee_id`                   VARCHAR(50)
     );
 
     INSERT INTO compliance_productivity_tmp
