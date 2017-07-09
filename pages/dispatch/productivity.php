@@ -152,12 +152,13 @@ foreach ($all_users_array as $key => $value) {
 
 // Do some array manipulation if we're looking at all users
 if ($_SESSION['login'] == 1)
-{
+{ 
   if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
     $shipment_aggregate['all_users']['employee_id'] = 'all_employees';
     $shipment_aggregate['all_users']['name'] = 'all_employees';
     $vir_aggregate['all_users']['username'] = 'all_employees';
     $vir_aggregate['all_users']['real_name'] = 'all_employees';
+
     $task_aggregate['all_users']['real_name'] = 'all_employees';
     $csa_compliance_aggregate['all_users']['real_name'] = 'all_employees';
 
@@ -258,24 +259,41 @@ if ($_SESSION['login'] == 1)
           continue;
         }
       }
-      $csa_compliance_aggregate['all_users']['total_points'] = $csa_compliance_aggregate['all_users']['total_points'] + $csa_compliance_aggregate[$m]['total_points'];
-      $csa_compliance_aggregate['all_users']['points_cash_value'] = $csa_compliance_aggregate['all_users']['points_cash_value'] + $csa_compliance_aggregate[$m]['points_cash_value'];
-      $csa_compliance_aggregate['all_users']['vehicle_maint_points'] = $csa_compliance_aggregate['all_users']['vehicle_maint_points'] + $csa_compliance_aggregate[$m]['vehicle_maint_points'];
-      $csa_compliance_aggregate['all_users']['vehicle_maint_cash'] = $csa_compliance_aggregate['all_users']['vehicle_maint_cash'] + $csa_compliance_aggregate[$m]['vehicle_maint_cash'];
-      $csa_compliance_aggregate['all_users']['hos_compliance_points'] = $csa_compliance_aggregate['all_users']['hos_compliance_points'] + $csa_compliance_aggregate[$m]['hos_compliance_points'];
-      $csa_compliance_aggregate['all_users']['hos_compliance_cash'] = $csa_compliance_aggregate['all_users']['hos_compliance_cash'] + $csa_compliance_aggregate[$m]['hos_compliance_cash'];
-      $csa_compliance_aggregate['all_users']['no_violation_points'] = $csa_compliance_aggregate['all_users']['no_violation_points'] + $csa_compliance_aggregate[$m]['no_violation_points'];
-      $csa_compliance_aggregate['all_users']['no_violation_cash'] = $csa_compliance_aggregate['all_users']['no_violation_cash'] + $csa_compliance_aggregate[$m]['no_violation_cash'];
-      $csa_compliance_aggregate['all_users']['unsafe_driving_points'] = $csa_compliance_aggregate['all_users']['unsafe_driving_points'] + $csa_compliance_aggregate[$m]['unsafe_driving_points'];
-      $csa_compliance_aggregate['all_users']['unsafe_driving_cash'] = $csa_compliance_aggregate['all_users']['unsafe_driving_cash'] + $csa_compliance_aggregate[$m]['unsafe_driving_cash'];
-      $csa_compliance_aggregate['all_users']['driver_fitness_points'] = $csa_compliance_aggregate['all_users']['driver_fitness_points'] + $csa_compliance_aggregate[$m]['driver_fitness_points'];
-      $csa_compliance_aggregate['all_users']['driver_fitness_cash'] = $csa_compliance_aggregate['all_users']['driver_fitness_cash'] + $csa_compliance_aggregate[$m]['driver_fitness_cash'];
-      $csa_compliance_aggregate['all_users']['controlled_sub_points'] = $csa_compliance_aggregate['all_users']['controlled_sub_points'] + $csa_compliance_aggregate[$m]['controlled_sub_points'];
-      $csa_compliance_aggregate['all_users']['controlled_sub_cash'] = $csa_compliance_aggregate['all_users']['controlled_sub_cash'] + $csa_compliance_aggregate[$m]['controlled_sub_cash'];
-      $csa_compliance_aggregate['all_users']['hazard_points'] = $csa_compliance_aggregate['all_users']['hazard_points'] + $csa_compliance_aggregate[$m]['hazard_points'];
-      $csa_compliance_aggregate['all_users']['hazard_cash'] = $csa_compliance_aggregate['all_users']['hazard_cash'] + $csa_compliance_aggregate[$m]['hazard_cash'];
-      $csa_compliance_aggregate['all_users']['crash_points'] = $csa_compliance_aggregate['all_users']['crash_points'] + $csa_compliance_aggregate[$m]['crash_points'];
-      $csa_compliance_aggregate['all_users']['crash_cash'] = $csa_compliance_aggregate['all_users']['crash_cash'] + $csa_compliance_aggregate[$m]['crash_cash'];
+      $csa_compliance_aggregate['all_users']['current_violation_points'] = $csa_compliance_aggregate['all_users']['current_violation_points'] + $csa_compliance_aggregate[$m]['current_violation_points'];
+      $csa_compliance_aggregate['all_users']['past_24m_violation_points'] = $csa_compliance_aggregate['all_users']['past_24m_violation_points'] + $csa_compliance_aggregate[$m]['past_24m_violation_points'];
+      $csa_compliance_aggregate['all_users']['current_points_cash_value'] = $csa_compliance_aggregate['all_users']['current_points_cash_value'] + $csa_compliance_aggregate[$m]['current_points_cash_value'];
+      $csa_compliance_aggregate['all_users']['current_vehicle_maint_points'] = $csa_compliance_aggregate['all_users']['current_vehicle_maint_points'] + $csa_compliance_aggregate[$m]['current_vehicle_maint_points'];
+      $csa_compliance_aggregate['all_users']['current_vehicle_maint_cash'] = $csa_compliance_aggregate['all_users']['current_vehicle_maint_cash'] + $csa_compliance_aggregate[$m]['current_vehicle_maint_cash'];
+      $csa_compliance_aggregate['all_users']['current_hos_compliance_points'] = $csa_compliance_aggregate['all_users']['current_hos_compliance_points'] + $csa_compliance_aggregate[$m]['current_hos_compliance_points'];
+      $csa_compliance_aggregate['all_users']['current_hos_compliance_cash'] = $csa_compliance_aggregate['all_users']['current_hos_compliance_cash'] + $csa_compliance_aggregate[$m]['current_hos_compliance_cash'];
+      $csa_compliance_aggregate['all_users']['current_no_violation_points'] = $csa_compliance_aggregate['all_users']['current_no_violation_points'] + $csa_compliance_aggregate[$m]['current_no_violation_points'];
+      $csa_compliance_aggregate['all_users']['current_no_violation_cash'] = $csa_compliance_aggregate['all_users']['current_no_violation_cash'] + $csa_compliance_aggregate[$m]['current_no_violation_cash'];
+      $csa_compliance_aggregate['all_users']['current_unsafe_driving_points'] = $csa_compliance_aggregate['all_users']['current_unsafe_driving_points'] + $csa_compliance_aggregate[$m]['current_unsafe_driving_points'];
+      $csa_compliance_aggregate['all_users']['current_unsafe_driving_cash'] = $csa_compliance_aggregate['all_users']['current_unsafe_driving_cash'] + $csa_compliance_aggregate[$m]['current_unsafe_driving_cash'];
+      $csa_compliance_aggregate['all_users']['current_driver_fitness_points'] = $csa_compliance_aggregate['all_users']['current_driver_fitness_points'] + $csa_compliance_aggregate[$m]['current_driver_fitness_points'];
+      $csa_compliance_aggregate['all_users']['current_driver_fitness_cash'] = $csa_compliance_aggregate['all_users']['current_driver_fitness_cash'] + $csa_compliance_aggregate[$m]['current_driver_fitness_cash'];
+      $csa_compliance_aggregate['all_users']['current_controlled_sub_points'] = $csa_compliance_aggregate['all_users']['current_controlled_sub_points'] + $csa_compliance_aggregate[$m]['current_controlled_sub_points'];
+      $csa_compliance_aggregate['all_users']['current_controlled_sub_cash'] = $csa_compliance_aggregate['all_users']['current_controlled_sub_cash'] + $csa_compliance_aggregate[$m]['current_controlled_sub_cash'];
+      $csa_compliance_aggregate['all_users']['current_hazard_points'] = $csa_compliance_aggregate['all_users']['current_hazard_points'] + $csa_compliance_aggregate[$m]['current_hazard_points'];
+      $csa_compliance_aggregate['all_users']['current_hazard_cash'] = $csa_compliance_aggregate['all_users']['current_hazard_cash'] + $csa_compliance_aggregate[$m]['current_hazard_cash'];
+      $csa_compliance_aggregate['all_users']['current_crash_points'] = $csa_compliance_aggregate['all_users']['current_crash_points'] + $csa_compliance_aggregate[$m]['current_crash_points'];
+      $csa_compliance_aggregate['all_users']['current_crash_cash'] = $csa_compliance_aggregate['all_users']['current_crash_cash'] + $csa_compliance_aggregate[$m]['current_crash_cash'];
+      $csa_compliance_aggregate['all_users']['past_24m_points_cash_value'] = $csa_compliance_aggregate['all_users']['past_24m_points_cash_value'] + $csa_compliance_aggregate[$m]['past_24m_points_cash_value'];
+      $csa_compliance_aggregate['all_users']['past_24m_vehicle_maint_points'] = $csa_compliance_aggregate['all_users']['past_24m_vehicle_maint_points'] + $csa_compliance_aggregate[$m]['past_24m_vehicle_maint_points'];
+      $csa_compliance_aggregate['all_users']['past_24m_vehicle_maint_cash'] = $csa_compliance_aggregate['all_users']['past_24m_vehicle_maint_cash'] + $csa_compliance_aggregate[$m]['past_24m_vehicle_maint_cash'];
+      $csa_compliance_aggregate['all_users']['past_24m_hos_compliance_points'] = $csa_compliance_aggregate['all_users']['past_24m_hos_compliance_points'] + $csa_compliance_aggregate[$m]['past_24m_hos_compliance_points'];
+      $csa_compliance_aggregate['all_users']['past_24m_hos_compliance_cash'] = $csa_compliance_aggregate['all_users']['past_24m_hos_compliance_cash'] + $csa_compliance_aggregate[$m]['past_24m_hos_compliance_cash'];
+      $csa_compliance_aggregate['all_users']['past_24m_no_violation_points'] = $csa_compliance_aggregate['all_users']['past_24m_no_violation_points'] + $csa_compliance_aggregate[$m]['past_24m_no_violation_points'];
+      $csa_compliance_aggregate['all_users']['past_24m_no_violation_cash'] = $csa_compliance_aggregate['all_users']['past_24m_no_violation_cash'] + $csa_compliance_aggregate[$m]['past_24m_no_violation_cash'];
+      $csa_compliance_aggregate['all_users']['past_24m_unsafe_driving_points'] = $csa_compliance_aggregate['all_users']['past_24m_unsafe_driving_points'] + $csa_compliance_aggregate[$m]['past_24m_unsafe_driving_points'];
+      $csa_compliance_aggregate['all_users']['past_24m_unsafe_driving_cash'] = $csa_compliance_aggregate['all_users']['past_24m_unsafe_driving_cash'] + $csa_compliance_aggregate[$m]['past_24m_unsafe_driving_cash'];
+      $csa_compliance_aggregate['all_users']['past_24m_driver_fitness_points'] = $csa_compliance_aggregate['all_users']['past_24m_driver_fitness_points'] + $csa_compliance_aggregate[$m]['past_24m_driver_fitness_points'];
+      $csa_compliance_aggregate['all_users']['past_24m_driver_fitness_cash'] = $csa_compliance_aggregate['all_users']['past_24m_driver_fitness_cash'] + $csa_compliance_aggregate[$m]['past_24m_driver_fitness_cash'];
+      $csa_compliance_aggregate['all_users']['past_24m_controlled_sub_points'] = $csa_compliance_aggregate['all_users']['past_24m_controlled_sub_points'] + $csa_compliance_aggregate[$m]['past_24m_controlled_sub_points'];
+      $csa_compliance_aggregate['all_users']['past_24m_controlled_sub_cash'] = $csa_compliance_aggregate['all_users']['past_24m_controlled_sub_cash'] + $csa_compliance_aggregate[$m]['past_24m_controlled_sub_cash'];
+      $csa_compliance_aggregate['all_users']['past_24m_hazard_points'] = $csa_compliance_aggregate['all_users']['past_24m_hazard_points'] + $csa_compliance_aggregate[$m]['past_24m_hazard_points'];
+      $csa_compliance_aggregate['all_users']['past_24m_hazard_cash'] = $csa_compliance_aggregate['all_users']['past_24m_hazard_cash'] + $csa_compliance_aggregate[$m]['past_24m_hazard_cash'];
+      $csa_compliance_aggregate['all_users']['past_24m_crash_points'] = $csa_compliance_aggregate['all_users']['past_24m_crash_points'] + $csa_compliance_aggregate[$m]['past_24m_crash_points'];
     }
   }
 }
@@ -819,12 +837,12 @@ if ($_SESSION['login'] == 1)
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
                   <li><a href="#">Days Worked <span class="pull-right badge bg-blue" id="vir_days_worked">
-                      <?php
+                      <?php                      
                         if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
                           echo $task_aggregate['all_users']['days_worked'] .' of ' . $task_aggregate['all_users']['days_shoulda_worked'];
                         }
                         for($task_i=0;$task_i<(count($task_aggregate));$task_i++) {
-                          if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
+                          if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {                            
                             echo $task_aggregate[$task_i]['days_worked'] .' of ' . $task_aggregate[$task_i]['days_shoulda_worked'];
                           }
                         }?>
@@ -975,27 +993,18 @@ if ($_SESSION['login'] == 1)
                 <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                   
-                  <li><a href="#">Total Compliance Points<span class="pull-right badge bg-blue" id="csa_total_points">
-                  <?php 
+                  <li><a href="#">CSA Compliance<span class="pull-right badge bg-blue" id="csa_total_points">
+                  <?php                   
                     if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
-                      echo $csa_compliance_aggregate['all_users']['total_points'];
-                    }
+                      echo "c " . $csa_compliance_aggregate['all_users']['current_violation_points']
+                      . " | t " .
+                      $csa_compliance_aggregate['all_users']['past_24m_violation_points'];
+                    }                    
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
-                        echo $csa_compliance_aggregate[$compliance_i]['total_points'];
-                      }
-                    }?>
-                  </span></a>
-                    </li>
-
-                  <li><a href="#">Compliance Cash<span class="pull-right badge bg-blue" id="csa_cash">
-                  <?php 
-                    if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
-                      echo $csa_compliance_aggregate['all_users']['points_cash_value'];
-                    }
-                    for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
-                      if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
-                        echo $csa_compliance_aggregate[$compliance_i]['points_cash_value'];
+                        echo "c " . $csa_compliance_aggregate[$compliance_i]['current_violation_points']
+                        . " | t " .
+                        $csa_compliance_aggregate[$compliance_i]['past_24m_violation_points'];
                       }
                     }?>
                   </span></a>
@@ -1004,11 +1013,15 @@ if ($_SESSION['login'] == 1)
                   <li><a href="#">HOS Compliance<span class="pull-right badge bg-blue" id="csa_hos">
                   <?php
                     if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') { 
-                      echo $csa_compliance_aggregate['all_users']['hos_compliance_points'];
+                      echo "c " . $csa_compliance_aggregate['all_users']['current_hos_compliance_points']
+                      . " | t " .
+                      $csa_compliance_aggregate['all_users']['past_24m_hos_compliance_points'];
                     }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
-                        echo $csa_compliance_aggregate[$compliance_i]['hos_compliance_points'];
+                        echo "c " . $csa_compliance_aggregate[$compliance_i]['current_hos_compliance_points']
+                        . " | t " .
+                        $csa_compliance_aggregate[$compliance_i]['past_24m_hos_compliance_points'];
                       }
                     }?>
                   </span></a>
@@ -1017,11 +1030,15 @@ if ($_SESSION['login'] == 1)
                   <li><a href="#">Unsafe Driving<span class="pull-right badge bg-blue" id="csa_unsafe">
                   <?php 
                     if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
-                      echo $csa_compliance_aggregate['all_users']['unsafe_driving_points'];
+                      echo "c " . $csa_compliance_aggregate['all_users']['current_unsafe_driving_points']
+                      . " | t " .
+                      $csa_compliance_aggregate['all_users']['past_24m_unsafe_driving_points'];
                     }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
-                        echo $csa_compliance_aggregate[$compliance_i]['unsafe_driving_points'];
+                        echo "c " . $csa_compliance_aggregate[$compliance_i]['current_unsafe_driving_points']
+                        . " | t " .
+                        $csa_compliance_aggregate[$compliance_i]['past_24m_unsafe_driving_points'];
                       }
                     }?>
                   </span></a>
@@ -1030,11 +1047,15 @@ if ($_SESSION['login'] == 1)
                   <li><a href="#">Vehicle Maint.<span class="pull-right badge bg-blue" id="csa_maint">
                   <?php 
                     if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
-                      echo $csa_compliance_aggregate['all_users']['vehicle_maint_points'];
+                      echo "c " . $csa_compliance_aggregate['all_users']['current_vehicle_maint_points']
+                      . " | t " .
+                      $csa_compliance_aggregate['all_users']['past_24m_vehicle_maint_points'];
                     }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
-                        echo $csa_compliance_aggregate[$compliance_i]['vehicle_maint_points'];
+                        echo "c " . $csa_compliance_aggregate[$compliance_i]['current_vehicle_maint_points']
+                        . " | t " .
+                        $csa_compliance_aggregate[$compliance_i]['past_24m_vehicle_maint_points'];
                       }
                     }?>
                   </span></a>
@@ -1043,37 +1064,49 @@ if ($_SESSION['login'] == 1)
                   <li><a href="#">Driver Fitness<span class="pull-right badge bg-blue" id="csa_fitness">
                   <?php 
                     if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
-                      echo $csa_compliance_aggregate['all_users']['driver_fitness_points'];
+                      echo "c " . $csa_compliance_aggregate['all_users']['current_driver_fitness_points']
+                      . " | t " .
+                      $csa_compliance_aggregate['all_users']['past_24m_driver_fitness_points'];
                     }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
-                        echo $csa_compliance_aggregate[$compliance_i]['driver_fitness_points'];
+                        echo "c " . $csa_compliance_aggregate[$compliance_i]['current_driver_fitness_points']
+                        . " | t " .
+                        $csa_compliance_aggregate[$compliance_i]['past_24m_driver_fitness_points'];
                       }
                     }?>
                   </span></a>
                     </li>
 
-                  <li><a href="#">Controlled Substances/Alcohol<span class="pull-right badge bg-blue" id="csa_substance">
+                  <li><a href="#">Controlled Substances<span class="pull-right badge bg-blue" id="csa_substance">
                   <?php  
                     if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
-                      echo $csa_compliance_aggregate['all_users']['controlled_sub_points'];
+                      echo "c " . $csa_compliance_aggregate['all_users']['current_controlled_sub_points']
+                      . " | t " .
+                      $csa_compliance_aggregate['all_users']['past_24m_controlled_sub_points'];
                     }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
-                        echo $csa_compliance_aggregate[$compliance_i]['controlled_sub_points'];
+                        echo "c " . $csa_compliance_aggregate[$compliance_i]['current_controlled_sub_points']
+                        . " | t " .
+                        $csa_compliance_aggregate[$compliance_i]['past_24m_controlled_sub_points'];
                       }
                     }?>
                   </span></a>
                     </li>
 
-                  <li><a href="#">Hazardous Materials (HM)<span class="pull-right badge bg-blue" id="csa_hazardous">
+                  <li><a href="#">HazMat<span class="pull-right badge bg-blue" id="csa_hazardous">
                   <?php 
                     if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
-                      echo $csa_compliance_aggregate['all_users']['hazard_points'];
+                      echo "c " . $csa_compliance_aggregate['all_users']['current_hazard_points']
+                      . " | t " .
+                      $csa_compliance_aggregate['all_users']['past_24m_hazard_points'];
                     }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) {
-                        echo $csa_compliance_aggregate[$compliance_i]['hazard_points'];
+                        echo "c " . $csa_compliance_aggregate[$compliance_i]['current_hazard_points']
+                        . " | t " .
+                        $csa_compliance_aggregate[$compliance_i]['past_24m_hazard_points'];
                       }
                     }?>
                   </span></a>
@@ -1082,11 +1115,15 @@ if ($_SESSION['login'] == 1)
                   <li><a href="#">Crash Indicator<span class="pull-right badge bg-blue" id="csa_crash">
                   <?php 
                     if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
-                      echo $csa_compliance_aggregate['all_users']['crash_points'];
+                      echo "c " . $csa_compliance_aggregate['all_users']['current_crash_points']
+                      . " | t " .
+                       $csa_compliance_aggregate['all_users']['past_24m_crash_points'];
                     }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) { 
-                        echo $csa_compliance_aggregate[$compliance_i]['crash_points'];
+                        echo "c " .  $csa_compliance_aggregate[$compliance_i]['current_crash_points']
+                        . " | t " .
+                         $csa_compliance_aggregate[$compliance_i]['past_24m_crash_points'];
                       }
                     }?>
                   </span></a>
@@ -1095,11 +1132,15 @@ if ($_SESSION['login'] == 1)
                   <li><a href="#">No Violation<span class="pull-right badge bg-blue" id="csa_no_violation">
                   <?php 
                     if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
-                      echo $csa_compliance_aggregate['all_users']['no_violation_points']; 
+                      echo "c " . $csa_compliance_aggregate['all_users']['current_points_cash_value'] 
+                      . " | t " . 
+                      $csa_compliance_aggregate['all_users']['past_24m_points_cash_value']; 
                     }
                     for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                       if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) {
-                      echo $csa_compliance_aggregate[$compliance_i]['no_violation_points']; 
+                      echo "c " . $csa_compliance_aggregate[$compliance_i]['current_points_cash_value']  
+                      . " | t " . 
+                      $csa_compliance_aggregate[$compliance_i]['past_24m_points_cash_value']; 
                       }
                     }?>
                   </span></a>
@@ -1194,14 +1235,33 @@ if ($_SESSION['login'] == 1)
                 <div class="inner">
                   <h4 id="shp_points" style="text-align: center; font-size: 2em;">Points:
                        <?php
-                        $total_compliance_points = $csa_compliance_aggregate['all_users']['total_points'] * -1;
+                        $total_compliance_points =
+                        $csa_compliance_aggregate['all_users']['past_24m_violation_points'] +
+                        $csa_compliance_aggregate['all_users']['past_24m_hos_compliance_points'] +
+                        $csa_compliance_aggregate['all_users']['past_24m_unsafe_driving_points'] +
+                        $csa_compliance_aggregate['all_users']['past_24m_vehicle_maint_points'] +
+                        $csa_compliance_aggregate['all_users']['past_24m_driver_fitness_points'] +
+                        $csa_compliance_aggregate['all_users']['past_24m_controlled_sub_points'] +
+                        $csa_compliance_aggregate['all_users']['past_24m_hazard_points'] +
+                        $csa_compliance_aggregate['all_users']['past_24m_crash_points'] +
+                        $csa_compliance_aggregate['all_users']['past_24m_points_cash_value'];
+
                         $possible_compliance_points = 0;
-                        $total_percent = ($total_compliance_points < 0 ? 0 : 100);
+                        $total_percent = ($total_compliance_points > 0 ? 0 : 100);
                        for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                         if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) {
-                          $total_compliance_points = $csa_compliance_aggregate[$compliance_i]['total_points'] * -1;
+                          $total_compliance_points =
+                          $csa_compliance_aggregate[$compliance_i]['past_24m_violation_points'] +
+                          $csa_compliance_aggregate[$compliance_i]['past_24m_hos_compliance_points'] +
+                          $csa_compliance_aggregate[$compliance_i]['past_24m_unsafe_driving_points'] +
+                          $csa_compliance_aggregate[$compliance_i]['past_24m_vehicle_maint_points'] +
+                          $csa_compliance_aggregate[$compliance_i]['past_24m_driver_fitness_points'] +
+                          $csa_compliance_aggregate[$compliance_i]['past_24m_controlled_sub_points'] +
+                          $csa_compliance_aggregate[$compliance_i]['past_24m_hazard_points'] +
+                          $csa_compliance_aggregate[$compliance_i]['past_24m_crash_points'] +
+                          $csa_compliance_aggregate[$compliance_i]['past_24m_points_cash_value'];
                           $possible_compliance_points = 0;
-                          $total_percent = ($total_compliance_points < 0 ? 0 : 100);
+                          $total_percent = ($total_compliance_points > 0 ? 0 : 100);
                       }
                     }
                        ?>
@@ -1298,6 +1358,7 @@ if ($_SESSION['login'] == 1)
                 <?php
                 // Get the top performers
                 $top_performers = get_top_performers(date('Y-m-d',$start_date),date('Y-m-d',$end_date), $mysqli);
+                
                 $counter = 0;                                
                 for($z=0;$z<count($top_performers);$z++){                  
                   // Check to see If we're looking for a specific status.
@@ -1478,21 +1539,39 @@ if ($_SESSION['login'] == 1)
                       <th style="width: 40px">Score</th>
                     </tr>
                   <?php
-                    $compliance_array = sort_array($csa_compliance_aggregate,'total_points');
+                    $task_array = sort_array($task_aggregate,'activity_total_points');
                     $counter = 0;
-                    for ($compliance_i=0;$compliance_i<count($compliance_array);$compliance_i++) {
-                      if ($compliance_array[$compliance_i]['total_points'] >= 1) { $color = 'black'; $percent = 100; }
-                      if ($compliance_array[$compliance_i]['total_points'] < 1) { $color = 'green'; $percent = 0; }
+                    for ($task_i=0;$task_i<count($task_array);$task_i++) {
+                      // Check to see If we're looking for a specific status.
+                      if (isset($_GET['productivity_user_status']) && $_GET['productivity_user_status'] != 'none' ) {                    
+                        if ($task_array[$task_i]['status'] != $_GET['productivity_user_status']) {
+                          continue;
+                        }
+                      }
+                      if ($task_array[$task_i]['activity_total_points'] >= 1) { $color = 'black'; $percent = 100; }
+                      if ($task_array[$task_i]['activity_total_points'] < 1) { $color = 'green'; $percent = 0; }
                       $counter++;
                     ?>
                     <tr>
                  <td><?php echo $counter;?></td>
-                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $compliance_array[$compliance_i]['real_name'];?></td>
+                 <td>
+                 <?php
+                  $all_stats_image = HTTP."/dist/img/usernophoto.jpg";
+                  foreach ($all_users_array as $key => $value) {
+                    if ($all_users_array[$key]['employee_id'] == $task_array[$task_i]['employee_id']) {
+                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $all_users_array[$key]['username'] . "_avatar")) {
+                        $all_stats_image = HTTP."/dist/img/userimages/" . $all_users_array[$key]['username'] . "_avatar";
+                      }
+                    }
+                  }
+                 ?>
+                 <img src="<?php echo $all_stats_image;?>" width="24" height="24" class="img-circle">
+                 <?php echo $task_array[$task_i]['real_name'];?></td>
 
                  <td><div class="progress progress-xs progress-striped active">
                  <div class="progress-bar progress-bar-<?php echo "$color";?>" style="width: <?php echo $percent;?>%"></div>
 
-                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $compliance_array[$compliance_i]['total_points'];?></span></td>
+                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $task_array[$task_i]['activity_total_points'];?></span></td>
                  </tr>
                     <?php } ?>
                   </table>
@@ -1579,7 +1658,18 @@ if ($_SESSION['login'] == 1)
                     ?>
                     <tr>
                  <td><?php echo $counter;?></td>
-                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $vir_array[$vir_i]['real_name'];?></td>
+                 <td><?php
+                  $all_stats_image = HTTP."/dist/img/usernophoto.jpg";
+                  foreach ($all_users_array as $key => $value) {
+                    if ($all_users_array[$key]['employee_id'] == $vir_array[$vir_i]['employee_id']) {
+                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $all_users_array[$key]['username'] . "_avatar")) {
+                        $all_stats_image = HTTP."/dist/img/userimages/" . $all_users_array[$key]['username'] . "_avatar";
+                      }
+                    }
+                  }
+                 ?>
+                 <img src="<?php echo $all_stats_image;?>" width="24" height="24" class="img-circle">
+                 <?php echo $vir_array[$vir_i]['real_name'];?></td>
 
                  <td><div class="progress progress-xs progress-striped active">
                  <div class="progress-bar progress-bar-<?php echo "$color";?>" style="width: <?php echo $percent;?>%"></div>
@@ -1620,8 +1710,8 @@ if ($_SESSION['login'] == 1)
                       <th>Graph Score</th>
                       <th style="width: 40px">Score</th>
                     </tr>
-                    <?php
-                    $compliance_array = sort_array($task_aggregate,'total_percent');
+                    <?php                    
+                    $compliance_array = sort_array($csa_compliance_aggregate,'total_points');
                     $counter = 0;
                     for ($compliance_i=0;$compliance_i<count($compliance_array);$compliance_i++) {
                       // Check to see If we're looking for a specific status.
@@ -1642,12 +1732,23 @@ if ($_SESSION['login'] == 1)
                     ?>
                     <tr>
                  <td><?php echo $counter;?></td>
-                 <td><img src="../../dist/img/dash.jpg" width="24" height="24" class="img-circle"><?php echo $compliance_array[$compliance_i]['real_name'];?></td>
+                 <td><?php
+                  $all_stats_image = HTTP."/dist/img/usernophoto.jpg";
+                  foreach ($all_users_array as $key => $value) {
+                    if ($all_users_array[$key]['employee_id'] == $compliance_array[$compliance_i]['employee_id']) {
+                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $all_users_array[$key]['username'] . "_avatar")) {
+                        $all_stats_image = HTTP."/dist/img/userimages/" . $all_users_array[$key]['username'] . "_avatar";
+                      }
+                    }
+                  }
+                 ?>
+                 <img src="<?php echo $all_stats_image;?>" width="24" height="24" class="img-circle">
+                 <?php echo $compliance_array[$compliance_i]['real_name'];?></td>
 
                  <td><div class="progress progress-xs progress-striped active">
                  <div class="progress-bar progress-bar-<?php echo "$color";?>" style="width: <?php echo $percent;?>%"></div>
 
-                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $compliance_array[$compliance_i]['total_percent'];?></span></td>
+                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $compliance_array[$compliance_i]['total_points'];?></span></td>
                  </tr>
                     <?php } ?>
                   </table>
@@ -1856,33 +1957,6 @@ $(document).ready(function(){
   // Set some default values after load
   <?php // If we're an admin then change the username to 'all' ?>
   <?php if ($_SESSION['login'] == 1) { $username = "all"; } ?>
-
-  // get_productivity_report("<?php echo $username;?>","day");
-
-  //  $("#productivity_time").change(function() {
-  //   $("#productivity_time option:selected").each(function() {
-  //     var productivity = $( this ).val();
-  //     // Now, set the HTML based on 'productivity'
-  //     if (productivity == 'day') {
-  //       get_productivity_report("<?php echo $username;?>","day");
-  //     }
-  //     if (productivity == 'week') {
-  //       get_productivity_report("<?php echo $username;?>","week");
-  //     }
-  //     if (productivity == 'month') {
-  //       get_productivity_report("<?php echo $username;?>","month");
-  //     }
-  //     if (productivity == 'quarter') {
-  //       get_productivity_report("<?php echo $username;?>","quarter");
-  //     }
-  //     if (productivity == 'year') {
-  //       get_productivity_report("<?php echo $username;?>","year");
-  //     }
-  //     if (productivity == 'all') {
-  //       get_productivity_report("<?php echo $username;?>","all");
-  //     }
-  //   });
-  // });
 
 // Set the default values for the datepicker
 $("#dt_start").val('<?php echo date('m/d/y',$start_date);?>');

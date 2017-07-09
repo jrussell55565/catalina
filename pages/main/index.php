@@ -323,28 +323,10 @@ if (isset($_POST['broadcast_message']))
     echo "<script>console.log(".$e->getMessage().");</script>";
   }
 
-  // Get the tasks assigned to the user.
-  $sql = "select id,
-                              date_format(submit_date,'%m/%d/%Y') as submit_date
-                              ,assign_to
-                              ,assigned_by
-                              ,category
-                              ,item
-                              ,subitem
-                              ,pos_neg
-                              ,notes
-                              ,date_format(due_date,'%m/%d/%Y') as due_date
-                              ,date_format(completed_date,'%m/%d/%Y') as completed_date
-                              ,points
-                              ,complete_user
-                              ,complete_approved
-         from tasks
-         where assign_to = '".$_SESSION['employee_id']."'
-         and complete_user = 0
-         and complete_approved = 0
-         order by submit_date";
-
-  $tasks_aggregate = get_sql_results($sql,$mysqli);
+  
+  // Get task info
+  $task_sql = get_task_nonaggregate('1=1', '1=1');
+  $tasks_aggregate = get_sql_results($task_sql,$mysqli);
 
   // Let's update the task (done via ajax)
   if (isset($_POST['type'])) {
@@ -527,7 +509,11 @@ if (isset($_POST['broadcast_message']))
                   <!-- Conversations are loaded here -->
                   <div class="direct-chat-messages">
                   <!-- Begin Task notifications -->
-                    <?php for($i=0;$i<count($tasks_aggregate);$i++) { ?>
+                    <?php for($i=0;$i<count($tasks_aggregate);$i++) { 
+                            if ($tasks_aggregate[$i]['assign_to'] != $_SESSION['employee_id']) {
+                              continue;
+                            }
+                    ?>
                            <div class="direct-chat-msg right" id="top_level_<?php echo $tasks_aggregate[$i]['id'];?>">
                            <div class="direct-chat-info clearfix">
                            <span class="direct-chat-name pull-left">Assigned by: 

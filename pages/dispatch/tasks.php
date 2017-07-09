@@ -49,25 +49,9 @@ if (isset($_GET['task_status'])) {
 }else{ 
     $task_status_predicate = '1=1'; 
 }
-$sql = "select id,
-                              date_format(submit_date,'%m/%d/%Y') as submit_date
-                              ,assign_to
-                              ,assigned_by
-                              ,category
-                              ,item
-                              ,subitem
-                              ,pos_neg
-                              ,notes
-                              ,date_format(due_date,'%m/%d/%Y') as due_date
-                              ,date_format(completed_date,'%m/%d/%Y') as completed_date
-                              ,points
-                              ,complete_user
-                              ,complete_approved
-         from tasks
-         where 1=1 and  $driver_predicate and $task_status_predicate 
-         order by submit_date DESC";
 
-$tasks_aggregate = get_sql_results($sql,$mysqli);
+$task_sql = get_task_nonaggregate($driver_predicate, $task_status_predicate);
+$tasks_aggregate = get_sql_results($task_sql,$mysqli);
 
 if (isset($_POST['type'])) {
     // Looks like an AJAX request.
@@ -124,6 +108,11 @@ if (isset($_POST['btn_update_task'])) {
     }else{
         $task_complete_approved = 1;
     }
+    if (empty($_POST['task_internal_only'])) { 
+        $task_internal_only = 0;
+    }else{
+        $task_internal_only = 1;
+    }
     $sql = "INSERT INTO tasks (submit_date
                               ,assign_to
                               ,assigned_by
@@ -136,7 +125,8 @@ if (isset($_POST['btn_update_task'])) {
                               ,completed_date
                               ,points
                               ,complete_user
-                              ,complete_approved)
+                              ,complete_approved
+                              ,internal_only)
                          values (
                                str_to_date('".$_POST['task_submit_date']."','%m/%d/%Y')
                                ,'".$_POST['task_assign_to']."'
@@ -151,6 +141,7 @@ if (isset($_POST['btn_update_task'])) {
                                ,".$_POST['task_points']."
                                ,$task_completed_user
                                ,$task_complete_approved
+                               ,$task_internal_only
                                )";
     try {
         if ($mysqli->query($sql) === false)
@@ -199,7 +190,10 @@ if (isset($_POST['btn_update_task'])) {
           throw new Exception("Unable to find a vtext address for ".$_POST['task_assign_to']);
         }
         $body = "You have been assigned a new Task. Please login to the driver boards to the home dash board";
-        sendEmail($employee_vtext, 'New task alert', $body);
+        // Only send the email if internal_only is a 0
+        if ($task_internal_only == 0) {
+          sendEmail($employee_vtext, 'New task alert', $body);
+        }
 
     } catch (Exception $e) {
     // An exception has been thrown
@@ -297,8 +291,7 @@ if (isset($_POST['btn_update_task'])) {
                 </center>
                 <center>
                   <p>
-                    <select class="form-control"  value="" name="driver" required style="width:150px;">
-                      <option value="null">Select Employee</option>
+                    <select class="form-control"  value="" name="driver" required style="width:150px;">                      
                       <option value="all" <?php if (empty($_GET['driver'])) { echo " selected"; }?>>-All-</option>
                       <?php for ($i=0; $i<sizeof($all_users_array); $i++) { ?>
                       <option value=<?php echo $all_users_array[$i]['employee_id'];?> <?php if ($all_users_array[$i]['employee_id'] == $_GET['driver']) { echo " selected "; }?>>
@@ -388,6 +381,7 @@ if (isset($_POST['btn_update_task'])) {
                   <td style="padding: 5px"><label for="">Task points</label></td>
                   <td style="padding: 5px"><label for="">User resolved</label></td>
                   <td style="padding: 5px"><label for="">Admin resolved</label></td>
+                  <td style="padding: 5px"><label for="">Internal only</label></td>
                 </tr>
                <form enctype="multipart/form-data" role="form" method="post" action="<?php echo HTTP . $_SERVER['PHP_SELF']; ?>">
                 <tr>
@@ -446,6 +440,7 @@ if (isset($_POST['btn_update_task'])) {
                   <td style="padding: 5px;"><input type="number" class="form-control"  value="" name="task_points" id="task_points" required></td>
                   <td style="padding: 5px;"><input type="checkbox"  value="" name="task_complete_user" id="task_complete_user" ></td>
                   <td style="padding: 5px;"><input type="checkbox"   value="" name="task_complete_approved" id="task_complete_approved"></td>
+                  <td style="padding: 5px;"><input type="checkbox"   value="" name="task_internal_only" id="task_internal_only"></td>
                 </tr>
                 <tr>
                   <td style="padding: 5px"><input type="submit" name="btn_update_task" class="btn btn-primary" value="Submit"> </td>
@@ -510,6 +505,7 @@ if (isset($_POST['btn_update_task'])) {
                   <td style="padding: 5px;"><input type="number" class="form-control"  value="<?php echo $tasks_aggregate[$j]['points'];?>" name="task_points" id="task_points_<?php echo $tasks_aggregate[$j]['id'];?>" required onchange="update_tasks(this);"></td>
                   <td style="padding: 5px;"><input type="checkbox"  <?php if ($tasks_aggregate[$j]['complete_user'] == "1") { echo ' checked '; }?> name="task_complete_user" id="task_complete_user_<?php echo $tasks_aggregate[$j]['id'];?>" onchange="update_tasks(this);"></td>
                   <td style="padding: 5px;"><input type="checkbox"  <?php if ($tasks_aggregate[$j]['complete_approved'] == "1") { echo ' checked '; }?> name="task_complete_approved" id="task_complete_approved_<?php echo $tasks_aggregate[$j]['id'];?>" onchange="update_tasks(this);"></td>
+                  <td style="padding: 5px;"><input type="checkbox"  <?php if ($tasks_aggregate[$j]['internal_only'] == "1") { echo ' checked '; }?> name="task_internal_only" id="task_internal_only_<?php echo $tasks_aggregate[$j]['id'];?>" onchange="update_tasks(this);"></td>
                 </tr>
                 <?php } ?>
               </table>
@@ -617,7 +613,7 @@ function update_tasks(i) {
      var my_hdn_val = $(i).parent().parent().find('input[type=hidden]').val();
 
      // Do some munging if it's a checkbox (because val() doesn't reflect if it's checked)
-     if (my_col == 'task_complete_user' || my_col == 'task_complete_approved'){ 
+     if (my_col == 'task_complete_user' || my_col == 'task_complete_approved' || my_col == 'task_internal_only'){ 
        //console.log($("#"+my_col.prop('checked')));
        if($("#"+my_id).prop("checked") == true) {
          my_val = "1";

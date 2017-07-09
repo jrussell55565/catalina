@@ -159,6 +159,11 @@ $vtext_providers = array(
 "@msg.fi.google.com" => "Google FI",
 "@mms.mycricket.com" => "Cricket",
 );
+
+// Get task info
+$task_sql = get_task_nonaggregate('1=1', '1=1');
+$tasks_aggregate = get_sql_results($task_sql,$mysqli);
+
 mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
 mysql_select_db($db_name) or DIE('Database name is not available!');
 $username = $_SESSION['userid'];
@@ -1362,9 +1367,9 @@ function show_vis($object_type,$grantee) {
             </table>
           </form>
           <table>
-          <!-- Onboarding in here -->
-          <form  class="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+          <!-- Onboarding in here -->          
           <tr>
+          <form  class="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
           <td>
               <div class="panel panel-default" style="width: 500px;">
                   <div class="panel-heading">Onboarding Details</div>
@@ -1461,12 +1466,60 @@ function show_vis($object_type,$grantee) {
                         ?>
                       </div>
                     <input type="submit" name="btn_submit_onboard" class="btn btn-primary" value="Update" style="margin-left: 15px; margin-bottom: 5px;">
-                </div>
-          
-          <!-- /Onboarding in here -->
+                </div>       
           </td>
-          </tr>
-          </form>
+          </form>          
+          </tr>  
+          <!-- /Onboarding in here -->
+          <tr>
+          <td>
+                <div class="panel panel-default" style="width: 500px; display: table-cell; vertical-align: top; ">
+                  <div class="panel-heading">Tasks</div>
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                      <input type="hidden" name="employee_id" value="<?php echo $row['employee_id'];?>"/>
+                      <?php
+                      for($task_i=0;$task_i<count($tasks_aggregate);$task_i++){
+                        if ($tasks_aggregate[$task_i]['assign_to'] == $row['employee_id']) {
+                            // Looks like this user has tasks.
+                            ?>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Start Date</th>
+                                        <th>Category</th>
+                                        <th>Item</th>
+                                        <th>Sub</th>
+                                        <th>End Date</th>
+                                        <th>Points</th>
+                                        <th>User Resolved</th>
+                                        <th>Internal Only</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><?php echo $tasks_aggregate[$task_i]['submit_date']; ?></td>
+                                        <td><?php echo $tasks_aggregate[$task_i]['category']; ?></td>
+                                        <td><?php echo $tasks_aggregate[$task_i]['item']; ?></td>
+                                        <td><?php echo $tasks_aggregate[$task_i]['subitem']; ?></td>
+                                        <td><?php echo $tasks_aggregate[$task_i]['due_date']; ?></td>
+                                        <td><?php echo $tasks_aggregate[$task_i]['points']; ?></td>
+                                        <td><?php echo ($tasks_aggregate[$task_i]['complete_user'] = 0 ? 'No' : 'Yes'); ?></td>
+                                        <td><?php echo ($tasks_aggregate[$task_i]['internal_only'] = 0 ? 'No' : 'Yes'); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a target="_blank" href="<?php echo HTTP;?>/pages/dispatch/tasks.php?task=<?php echo $tasks_aggregate[$task_i]['id'];?>">Task Note</a>:</td>
+                                        <td colspan="6"><?php echo $tasks_aggregate[$task_i]['notes']; ?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                      <?php
+                        }
+                      }
+                      ?>
+                    </div>
+                </div>              
+          </td>
+          </tr>                                        
           </table>
         </div>
       </td>

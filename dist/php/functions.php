@@ -202,42 +202,35 @@ function get_top_performers($sd,$ed,$mysqli)
             outer_results.real_name,
             outer_results.username,
             outer_results.status
-          FROM (
-                 SELECT
-                   all_results.*,
-                   concat_ws(' ', users.fname, users.lname) AS real_name,
-                   users.username,
-                   users.status
-                 FROM (
-                        SELECT
-                          a.*,
-                          IF (a.vir_total_points + a.compliance_total_points + a.shipment_earned_points +
-                          a.task_activity_total_points = 0, NULL, a.vir_total_points + a.compliance_total_points + a.shipment_earned_points +
-                          a.task_activity_total_points) AS total_points,
-                          CASE
-                          WHEN a.vir_total_percent + a.shipment_percentage_earned + a.task_total_percent > 100
-                            THEN 100
-                          ELSE a.vir_total_percent + a.shipment_percentage_earned + a.task_total_percent
-                          END                          AS total_percent
-                        FROM (
-                               SELECT
-                                 vir.employee_id,
-                                 coalesce(vir.vir_total_points,0)       AS vir_total_points,
-                                 vir_total_percent,
-                                 compliance.total_points    AS compliance_total_points,
-                                 shipment.earned_points     AS shipment_earned_points,
-                                 shipment.percentage_earned AS shipment_percentage_earned,
-                                 task.activity_total_points AS task_activity_total_points,
-                                 task.total_percent         AS task_total_percent
-                               FROM vir_productivity_tmp vir, compliance_productivity_tmp compliance,
-                                 shipment_productivity_tmp shipment,
-                                 task_productivity_tmp task
-                               WHERE vir.employee_id = compliance.employee_id
-                                     AND vir.employee_id = shipment.employee_id
-                                     AND vir.employee_id = task.employee_id) a
-                      ) all_results
-                   JOIN users ON all_results.employee_id = users.employee_id
-                 ORDER BY total_points DESC, real_name) outer_results;";
+          FROM (SELECT
+                  all_results.*,
+                  concat_ws(' ', users.fname, users.lname) AS real_name,
+                  users.username,
+                  users.status
+                FROM (SELECT
+                        a.*,
+                        IF(a.vir_total_points + a.compliance_total_points + a.shipment_earned_points +
+                           a.task_activity_total_points = 0, NULL,
+                           a.vir_total_points + a.compliance_total_points + a.shipment_earned_points +
+                           a.task_activity_total_points)                                                   AS total_points,
+                        CASE WHEN a.vir_total_percent + a.shipment_percentage_earned + a.task_total_percent > 100
+                          THEN 100
+                        ELSE a.vir_total_percent + a.shipment_percentage_earned + a.task_total_percent END AS total_percent
+                      FROM (SELECT
+                              vir.employee_id,
+                              coalesce(vir.vir_total_points, 0)                AS vir_total_points,
+                              coalesce(vir_total_percent, 0)                   AS vir_total_percent,
+                              coalesce(compliance.current_violation_points, 0) AS compliance_total_points,
+                              coalesce(shipment.earned_points, 0)              AS shipment_earned_points,
+                              coalesce(shipment.percentage_earned, 0)          AS shipment_percentage_earned,
+                              coalesce(task.activity_total_points, 0)          AS task_activity_total_points,
+                              coalesce(task.total_percent, 0)                  AS task_total_percent
+                            FROM vir_productivity_tmp vir, compliance_productivity_tmp compliance,
+                              shipment_productivity_tmp shipment, task_productivity_tmp task
+                            WHERE vir.employee_id = compliance.employee_id AND vir.employee_id = shipment.employee_id AND
+                                  vir.employee_id = task.employee_id) a) all_results
+                  JOIN users ON all_results.employee_id = users.employee_id
+                ORDER BY total_points DESC, real_name) outer_results;";
 
     $output = get_multi_sql_results($sql, $mysqli);
     return $output;
@@ -337,9 +330,31 @@ function generate_user_csa_sql($emp_id, $time, $basic)
 function get_task_aggregate($sd, $ed, $mysqli)
 {
     $sql = "CALL task_productivity_stats('$sd', '$ed', TRUE);";
-
     $output = get_multi_sql_results($sql, $mysqli);
     return $output;
+}
+
+function get_task_nonaggregate($driver_predicate, $task_status_predicate) 
+{
+  $sql = "select id,
+            date_format(submit_date,'%m/%d/%Y') as submit_date
+            ,assign_to
+            ,assigned_by
+            ,category
+            ,item
+            ,subitem
+            ,pos_neg
+            ,notes
+            ,date_format(due_date,'%m/%d/%Y') as due_date
+            ,date_format(completed_date,'%m/%d/%Y') as completed_date
+            ,points
+            ,complete_user
+            ,complete_approved
+            ,internal_only
+         from tasks
+         where 1=1 and  $driver_predicate and $task_status_predicate 
+         order by submit_date DESC";
+  return $sql;
 }
 
 function get_quiz_aggregate($sd, $ed, $mysqli)
