@@ -1380,8 +1380,7 @@ function show_vis($object_type,$grantee) {
                       <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                           <input type="hidden" name="employee_id" value="<?php echo $row['employee_id'];?>"/>
                         <?php                          
-                          $onboard_array = get_phase_data($mysqli,$row['employee_id']);
-                          var_dump($onboard_array);
+                          $onboard_array = get_phase_data($mysqli,$row['employee_id']);                          
                           $completed_onboards = get_completed_onboards($mysqli,$row['employee_id']);
                           $phase_array = get_distinct_phases($onboard_array);
 
