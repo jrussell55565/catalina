@@ -190,47 +190,57 @@ function get_top_performers($sd,$ed,$mysqli)
     $sql .= "CALL quiz_productivity_stats('$sd', '$ed', FALSE);";
 
     $sql .= "SELECT
-            outer_results.employee_id,
-            coalesce(outer_results.vir_total_points, 0) AS vir_total_points,
-            outer_results.compliance_total_points,
-            outer_results.shipment_earned_points,
-            outer_results.shipment_percentage_earned,
-            outer_results.task_activity_total_points,
-            outer_results.task_total_percent,
-            coalesce(outer_results.total_points, 0)     AS total_points,
-            outer_results.total_percent,
-            outer_results.real_name,
-            outer_results.username,
-            outer_results.status
-          FROM (SELECT
-                  all_results.*,
-                  concat_ws(' ', users.fname, users.lname) AS real_name,
-                  users.username,
-                  users.status
-                FROM (SELECT
-                        a.*,
-                        IF(a.vir_total_points + a.compliance_total_points + a.shipment_earned_points +
-                           a.task_activity_total_points = 0, NULL,
-                           a.vir_total_points + a.compliance_total_points + a.shipment_earned_points +
-                           a.task_activity_total_points)                                                   AS total_points,
-                        CASE WHEN a.vir_total_percent + a.shipment_percentage_earned + a.task_total_percent > 100
-                          THEN 100
-                        ELSE a.vir_total_percent + a.shipment_percentage_earned + a.task_total_percent END AS total_percent
-                      FROM (SELECT
-                              vir.employee_id,
-                              coalesce(vir.vir_total_points, 0)                AS vir_total_points,
-                              coalesce(vir_total_percent, 0)                   AS vir_total_percent,
-                              coalesce(compliance.current_violation_points, 0) AS compliance_total_points,
-                              coalesce(shipment.earned_points, 0)              AS shipment_earned_points,
-                              coalesce(shipment.percentage_earned, 0)          AS shipment_percentage_earned,
-                              coalesce(task.activity_total_points, 0)          AS task_activity_total_points,
-                              coalesce(task.total_percent, 0)                  AS task_total_percent
-                            FROM vir_productivity_tmp vir, compliance_productivity_tmp compliance,
-                              shipment_productivity_tmp shipment, task_productivity_tmp task
-                            WHERE vir.employee_id = compliance.employee_id AND vir.employee_id = shipment.employee_id AND
-                                  vir.employee_id = task.employee_id) a) all_results
-                  JOIN users ON all_results.employee_id = users.employee_id
-                ORDER BY total_points DESC, real_name) outer_results;";
+  outer_results.employee_id,
+  coalesce(outer_results.vir_total_points, 0)                                                    AS vir_total_points,
+  outer_results.compliance_total_points,
+  outer_results.shipment_earned_points,
+  outer_results.shipment_percentage_earned,
+  outer_results.task_activity_total_points,
+  outer_results.task_total_percent,
+  coalesce(outer_results.total_points, 0)                                                        AS total_points,
+  outer_results.total_percent,
+  outer_results.real_name,
+  outer_results.username,
+  outer_results.status,
+  round(coalesce((outer_results.vir_total_percent + outer_results.compliance_total_points +
+            outer_results.shipment_percentage_earned + outer_results.task_total_percent) / 4, 0),0) AS combined_percent
+FROM (SELECT
+        all_results.*,
+        concat_ws(' ', users.fname, users.lname) AS real_name,
+        users.username,
+        users.status
+      FROM (SELECT
+              a.*,
+              IF(a.vir_total_points + a.compliance_total_points + a.shipment_earned_points +
+                 a.task_activity_total_points = 0, NULL,
+                 a.vir_total_points + a.compliance_total_points + a.shipment_earned_points +
+                 a.task_activity_total_points)                                                   AS total_points,
+              CASE WHEN a.vir_total_percent + a.shipment_percentage_earned + a.task_total_percent > 100
+                THEN 100
+              ELSE a.vir_total_percent + a.shipment_percentage_earned + a.task_total_percent END AS total_percent
+            FROM (SELECT
+                    vir.employee_id,
+                    coalesce(vir.vir_total_points, 0) AS vir_total_points,
+                    coalesce(vir_total_percent,
+                             0)                       AS vir_total_percent,
+                    coalesce(compliance.current_violation_points + compliance.past_24m_violation_points,
+                             0)                       AS compliance_total_points,
+                    coalesce(shipment.earned_points,
+                             0)                       AS shipment_earned_points,
+                    coalesce(shipment.percentage_earned,
+                             0)                       AS shipment_percentage_earned,
+                    coalesce(task.activity_total_points,
+                             0)                       AS task_activity_total_points,
+                    coalesce((task.activity_total_points /
+                              ((task.activity_max_points + task.days_worked) * cp_csa.miles_daily_multiplier) * 100),
+                             0)                       AS task_total_percent
+                  FROM vir_productivity_tmp vir, compliance_productivity_tmp compliance,
+                    shipment_productivity_tmp shipment, task_productivity_tmp task, cp_csa
+                  WHERE vir.employee_id = compliance.employee_id AND vir.employee_id = shipment.employee_id AND
+                        vir.employee_id = task.employee_id) a) all_results
+        JOIN users ON all_results.employee_id = users.employee_id
+      ORDER BY total_points DESC, real_name) outer_results
+ORDER BY combined_percent DESC ;";
 
     $output = get_multi_sql_results($sql, $mysqli);
     return $output;

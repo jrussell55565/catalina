@@ -59,8 +59,10 @@ if (!isset($_GET['productivity_user_status'])) {
   $_GET['productivity_user_status'] = 'Active';
 }
 
-// Get the current quarter if no date range was specified.
+// Query the cp_csa table to figure out the values we need for the compliance data
+$cp_csa_values = get_sql_results("select * from cp_csa",$mysqli);
 
+// Get the current quarter if no date range was specified.
 $current_month = date('m');
 $current_year = date('Y');
 if($current_month>=1 && $current_month<=3)
@@ -918,11 +920,11 @@ if ($_SESSION['login'] == 1)
                     <li><a href="#">Miles Points<span class="pull-right badge bg-blue productivity-pts" id="vir_days_worked">
                         <?php 
                           if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
-                            echo $task_aggregate['all_users']['miles_points'] . " of " . $task_aggregate['all_users']['days_worked'] * 400;
+                            echo $task_aggregate['all_users']['miles_points'] . " of " . $task_aggregate['all_users']['days_worked'] * $cp_csa_values[0]['miles_daily_multiplier'];
                           }
                           for($task_i=0;$task_i<(count($task_aggregate));$task_i++) { 
                             if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
-                              echo $task_aggregate[$task_i]['miles_points']. " of " . $task_aggregate[$task_i]['days_worked'] * 400;
+                              echo $task_aggregate[$task_i]['miles_points']. " of " . $task_aggregate[$task_i]['days_worked'] * $cp_csa_values[0]['miles_daily_multiplier'];
                           }
                         }?>
                      </span></a>
@@ -1207,9 +1209,10 @@ if ($_SESSION['login'] == 1)
               <div class="small-box bg-blue">
                 <div class="inner">
                 <?php
-                    $total_shipment_percent = $shipment_aggregate['all_users']['percentage_earned'];
                     $total_shipment_points = $shipment_aggregate['all_users']['earned_points'];
                     $possible_shipment_points = $shipment_aggregate['all_users']['max_points'];
+                    // override the total percent for all_users                    
+                    $total_shipment_percent = round(($shipment_aggregate['all_users']['earned_points'] / $shipment_aggregate['all_users']['max_points']) * 100,0);
                     for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                       if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
                         $total_shipment_percent = $shipment_aggregate[$ship_i]['percentage_earned'];
@@ -1229,11 +1232,12 @@ if ($_SESSION['login'] == 1)
               <!-- small box -->
               <div class="small-box bg-red">
                 <div class="inner">
-                <?php
-                    $total_vir_percent = $vir_aggregate['all_users']['vir_total_percent'];
+                <?php                    
                     $total_vir_points = $vir_aggregate['all_users']['vir_total_points'];
                     $days_worked = $vir_aggregate['all_users']['days_worked'];
                     $possible_vir_points = $vir_aggregate['all_users']['max_total_vir_points'];
+                    // override the total percent for all_users
+                    $total_vir_percent = round(($vir_aggregate['all_users']['vir_total_points'] / $vir_aggregate['all_users']['max_total_vir_points']) * 100,0);
                     for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                       if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
                         $total_vir_percent = $vir_aggregate[$vir_i]['vir_total_percent'];
@@ -1255,20 +1259,18 @@ if ($_SESSION['login'] == 1)
                 <div class="inner">
                 <?php
                      $total_activity_points = $task_aggregate['all_users']['activity_total_points'];
-                    $possible_activity_points = $task_aggregate['all_users']['activity_max_points'] + $task_aggregate['all_users']['days_worked'] * 400;
-                    //$total_percent = $task_aggregate['all_users']['total_percent'];
-                    $total_percent = round(($total_activity_points / $possible_activity_points) * 100,0);
+                    $possible_activity_points = $task_aggregate['all_users']['activity_max_points'] + $task_aggregate['all_users']['days_worked'] * $cp_csa_values[0]['miles_daily_multiplier'];
+                    $task_total_percent = round(($total_activity_points / $possible_activity_points) * 100,0);
                     for($task_i=0;$task_i<count($task_aggregate);$task_i++) {
                       if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
                         $total_activity_points = $task_aggregate[$task_i]['activity_total_points'];
-                        $possible_activity_points = $task_aggregate[$task_i]['activity_max_points'] + $task_aggregate[$task_i]['days_worked'] * 400;
-                        //$total_percent = $task_aggregate[$task_i]['total_percent'];
-                        $total_percent = round(($total_activity_points / $possible_activity_points) * 100 ,0);
+                        $possible_activity_points = $task_aggregate[$task_i]['activity_max_points'] + $task_aggregate[$task_i]['days_worked'] * $cp_csa_values[0]['miles_daily_multiplier'];
+                        $task_total_percent = round(($total_activity_points / $possible_activity_points) * 100 ,0);
                       }
                     }
                  ?> 
                   <h4 id="task_points" style="text-align: center; font-size: 2em;">Points: <?php echo $total_activity_points;?> of <?php echo $possible_activity_points;?></h4>
-                  <h4 id="task_percent" style="text-align: center; font-size: 3em;"><?php echo $total_percent . "%";?></h4>
+                  <h4 id="task_percent" style="text-align: center; font-size: 3em;"><?php echo $task_total_percent . "%";?></h4>
                 </div>
                 <div class="icon"> <i class="ion ion-person-add"></i> </div>
               </div>
@@ -1278,41 +1280,41 @@ if ($_SESSION['login'] == 1)
               <!-- small box -->
               <div class="small-box bg-orange">
                 <div class="inner">
-                  <h4 id="shp_points" style="text-align: center; font-size: 2em;">Points:
+                  <h4 id="csa_points" style="text-align: center; font-size: 2em;">
                        <?php
-                        $total_compliance_points =
-                        $csa_compliance_aggregate['all_users']['past_24m_violation_points'] +
-                        $csa_compliance_aggregate['all_users']['past_24m_hos_compliance_points'] +
-                        $csa_compliance_aggregate['all_users']['past_24m_unsafe_driving_points'] +
-                        $csa_compliance_aggregate['all_users']['past_24m_vehicle_maint_points'] +
-                        $csa_compliance_aggregate['all_users']['past_24m_driver_fitness_points'] +
-                        $csa_compliance_aggregate['all_users']['past_24m_controlled_sub_points'] +
-                        $csa_compliance_aggregate['all_users']['past_24m_hazard_points'] +
-                        $csa_compliance_aggregate['all_users']['past_24m_crash_points'] +
-                        $csa_compliance_aggregate['all_users']['past_24m_points_cash_value'];
+                        $total_compliance_points_24 =
+                        $csa_compliance_aggregate['all_users']['past_24m_violation_points'];
+
+                        $total_compliance_percent_24 = round(($total_compliance_points_24 / $cp_csa_values[0]['csa_24m_all']) * 100,0);
+                        
+                        $total_compliance_points_current =
+                        $csa_compliance_aggregate['all_users']['current_violation_points'];
+
+                        $total_compliance_percent_current = round(($total_compliance_points_current / $cp_csa_values[0]['csa_q_all']) * 100,0);
 
                         $possible_compliance_points = 0;
                         $total_percent = ($total_compliance_points > 0 ? 0 : 100);
                        for($compliance_i=0;$compliance_i<count($csa_compliance_aggregate);$compliance_i++) {
                         if ($csa_compliance_aggregate[$compliance_i]['employee_id'] == $emp_id) {
-                          $total_compliance_points =
-                          $csa_compliance_aggregate[$compliance_i]['past_24m_violation_points'] +
-                          $csa_compliance_aggregate[$compliance_i]['past_24m_hos_compliance_points'] +
-                          $csa_compliance_aggregate[$compliance_i]['past_24m_unsafe_driving_points'] +
-                          $csa_compliance_aggregate[$compliance_i]['past_24m_vehicle_maint_points'] +
-                          $csa_compliance_aggregate[$compliance_i]['past_24m_driver_fitness_points'] +
-                          $csa_compliance_aggregate[$compliance_i]['past_24m_controlled_sub_points'] +
-                          $csa_compliance_aggregate[$compliance_i]['past_24m_hazard_points'] +
-                          $csa_compliance_aggregate[$compliance_i]['past_24m_crash_points'] +
-                          $csa_compliance_aggregate[$compliance_i]['past_24m_points_cash_value'];
+                          $total_compliance_points_24 =
+                          $csa_compliance_aggregate[$compliance_i]['past_24m_violation_points'];
+
+                          $total_compliance_percent_24 = round(($total_compliance_points_24 / $cp_csa_values[0]['csa_24m_individual']) * 100,0);                          
+
+                          $total_compliance_points_current =
+                          $csa_compliance_aggregate[$compliance_i]['current_violation_points'];                        
+
+                          $total_compliance_percent_current = round(($total_compliance_points_current / $cp_csa_values[0]['csa_q_individual']) * 100,0);
+
                           $possible_compliance_points = 0;
                           $total_percent = ($total_compliance_points > 0 ? 0 : 100);
                       }
                     }
                        ?>
-                      <?php echo $total_compliance_points;?> of <?php echo $possible_compliance_points; ?>
+                      <?php echo  $total_compliance_percent_current."% | ". $total_compliance_percent_24."%";?>
                   </h4>
-                  <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php echo $total_percent . "%";?></h4>
+                  <?php $total_compliance_percent_both = ($total_compliance_percent_current + $total_compliance_percent_24 / 2);?>
+                  <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php echo  round($total_compliance_percent_both,0) . "%";?></h4>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
               </div>
@@ -1334,11 +1336,11 @@ if ($_SESSION['login'] == 1)
               <div class="small-box bg-green">
                 <div class="inner">
                   <center>
-                    <?php
-                      $sum_earned_points = ($total_shipment_points + $total_vir_points + $total_activity_points + $total_compliance_points);
+                    <?php                      
+                      $sum_earned_percent = ($total_shipment_percent + $total_vir_percent + $task_total_percent + $total_compliance_percent_both);
                       $sum_possible_points = ($possible_shipment_points + $possible_vir_points + $possible_activity_points + $possible_compliance_points);
                     ?>
-                    <h3>Combined Score <?php echo ($sum_earned_points / 4);?>%</h3></center>
+                    <h3>Combined Score <?php echo round(($sum_earned_percent / 4),0);?>%</h3></center>
                   <center><p>Total Points All Categories 150 of 200 as of Current Selection Year, Quarter, Month</p></center>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
@@ -1413,11 +1415,11 @@ if ($_SESSION['login'] == 1)
                     }
                   }
                   $counter++;
-                  if ($top_performers[$z]['total_percent'] >= 90) { $color = 'green'; $percent = $top_performers[$z]['total_percent'];}
-                  if ($top_performers[$z]['total_percent'] >= 70 && $top_performers[$z]['total_percent'] < 90) { $color = 'blue'; $percent = $top_performers[$z]['total_percent']; }
-                  if ($top_performers[$z]['total_percent'] > 50 && $top_performers[$z]['total_percent'] < 70) { $color = 'yellow'; $percent = $top_performers[$z]['total_percent']; }
-                  if ($top_performers[$z]['total_percent'] > 25 && $top_performers[$z]['total_percent'] < 50) { $color = 'red'; $percent = $top_performers[$z]['total_percent']; }
-                  if ($top_performers[$z]['total_percent'] <= 25) { $color = 'black'; $percent = $top_performers[$z]['total_percent']; }
+                  if ($top_performers[$z]['combined_percent'] >= 90) { $color = 'green'; $percent = $top_performers[$z]['combined_percent'];}
+                  if ($top_performers[$z]['combined_percent'] >= 70 && $top_performers[$z]['combined_percent'] < 90) { $color = 'blue'; $percent = $top_performers[$z]['combined_percent']; }
+                  if ($top_performers[$z]['combined_percent'] > 50 && $top_performers[$z]['combined_percent'] < 70) { $color = 'yellow'; $percent = $top_performers[$z]['combined_percent']; }
+                  if ($top_performers[$z]['combined_percent'] > 25 && $top_performers[$z]['combined_percent'] < 50) { $color = 'red'; $percent = $top_performers[$z]['combined_percent']; }
+                  if ($top_performers[$z]['combined_percent'] <= 25) { $color = 'black'; $percent = $top_performers[$z]['combined_percent']; }
 
                   // Total all positive points.
                   $positive_points = 0;
@@ -1454,13 +1456,13 @@ if ($_SESSION['login'] == 1)
                     }
                     if (preg_match('/vir/', $best_category)) { $best_category = 'VIR'; }
                     if (preg_match('/ship/', $best_category)) { $best_category = 'Boards'; }
-                    if (preg_match('/task/', $best_category)) { $best_category = 'Tasks'; }
+                    if (preg_match('/task/', $best_category)) { $best_category = 'Activity'; }
                     if (preg_match('/compliance/', $best_category)) { $best_category = 'Compliance'; }
                     if (preg_match('/quiz/', $best_category)) { $best_category = 'Quiz'; }
 
                     if (preg_match('/vir/', $worst_category)) { $worst_category = 'VIR'; }
                     if (preg_match('/ship/', $worst_category)) { $worst_category = 'Boards'; }
-                    if (preg_match('/task/', $worst_category)) { $worst_category = 'Tasks'; }
+                    if (preg_match('/task/', $worst_category)) { $worst_category = 'Activity'; }
                     if (preg_match('/compliance/', $worst_category)) { $worst_category = 'Compliance'; }
                     if (preg_match('/quiz/', $worst_category)) { $worst_category = 'Quiz'; }
                   }         
@@ -1473,9 +1475,9 @@ if ($_SESSION['login'] == 1)
                       <td height="30"><?php echo $counter; ?></td>
                       <td><img src="<?php echo $all_stats_image; ?>" alt="" width="24" height="24" class="img-circle"> <?php echo $top_performers[$z]['real_name'];?></td>
                       <td><div class="progress progress-xs progress-striped active">
-                        <div class="progress-bar progress-bar-<?php echo $color; ?>" style="width: <?php echo $top_performers[$z]['total_percent'];?>%"></div>
+                        <div class="progress-bar progress-bar-<?php echo $color; ?>" style="width: <?php echo $top_performers[$z]['combined_percent'];?>%"></div>
                       </div></td>
-                      <td><span class="badge bg-<?php echo $color; ?>"><?php echo $top_performers[$z]['total_percent'];?>%</span></td>
+                      <td><span class="badge bg-<?php echo $color; ?>"><?php echo $top_performers[$z]['combined_percent'];?>%</span></td>
                       <td><span class="badge bg-green"><?php echo $positive_points; ?></span></td>
                       <td><span class="badge bg-black"><?php echo $negative_points; ?></span></td>
                       <td><span class="badge bg-purple"><?php echo $positive_points + $negative_points; ?></span></td>
