@@ -152,8 +152,8 @@ Flag  notification:  <span class="label label-danger">
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
-                <div class="pull-left"> <a href="<?php echo HTTP; ?><?php echo HTTP;?>/pages/dispatch/admin/users.php" class="btn btn-primary btn-flat" style="background-color: #5cb85c;">Profile</a> </div>
-                <div class="pull-right"> <a href="<?php echo HTTP; ?><?php echo HTTP;?>/pages/login/logout.php" class="btn btn-primary btn-flat" style="background-color: #5cb85c;">Sign out</a> </div>
+                <div class="pull-left"> <a href="<?php echo HTTP; ?>/pages/dispatch/admin/users.php" class="btn btn-primary btn-flat" style="background-color: #5cb85c;">Profile</a> </div>
+                <div class="pull-right"> <a href="<?php echo HTTP; ?>/pages/login/logout.php" class="btn btn-primary btn-flat" style="background-color: #5cb85c;">Sign out</a> </div>
               </li>
             </ul>
           </li>
