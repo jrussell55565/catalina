@@ -178,29 +178,33 @@ while(my @data = $sth->fetchrow_array)
     # Process drivers license.
     if (($drivers_license_exp != '') && ($dl_tte == $date_lookup)) {
       $subject = "Drivers license for " . $real_name . $verbiage;
-      vtext_notify($email,$subject);    
-      vtext_notify($vtext,$subject);    
+      $body = "Expiration data on file. $drivers_license_exp";
+      vtext_notify($email,$subject,$body);    
+      vtext_notify($vtext,$subject,$body);    
     }
 
     # Process med card.
     if (($med_exp != '') && ($med_tte == $date_lookup)) {
       $subject = "Medical card for " . $real_name . $verbiage;
-      vtext_notify($email,$subject);
-      vtext_notify($vtext,$subject);    
+      $body = "Expiration data on file. $med_exp";
+      vtext_notify($email,$subject,$body);    
+      vtext_notify($vtext,$subject,$body);    
     }
 
     # Process tsa
     if (($tsa_exp != '') && ($tsa_exp == $date_lookup)) {
       $subject = "TSA for " . $real_name . $verbiage;
-      vtext_notify($email,$subject);
-      vtext_notify($vtext,$subject);    
+      $body = "Expiration data on file. $tsa_exp";
+      vtext_notify($email,$subject,$body);    
+      vtext_notify($vtext,$subject,$body);    
     }
 
     # Process tsa_change
     if (($tsa_change_exp != '') && ($tsa_change_exp == $date_lookup)) {
       $subject = "TSA change for " . $real_name . $verbiage;
-      vtext_notify($email,$subject);
-      vtext_notify($vtext,$subject);    
+      $body = "Expiration data on file. $tsa_change_exp";
+      vtext_notify($email,$subject,$body);    
+      vtext_notify($vtext,$subject,$body);    
     }
   }      
 }
@@ -242,6 +246,7 @@ sub vtext_notify
 {
         my $toaddress = shift;
         my $subject = shift;
+        my $body = shift;
 
         $smtp = Net::SMTP->new('localhost');
 
@@ -252,9 +257,8 @@ sub vtext_notify
         $smtp->data();
         $smtp->datasend("To: $toaddress\n");
         $smtp->datasend("Subject: $subject\n");
-        $smtp->datasend("reply-to: drivers\@catalinacartage.com\n");
         $smtp->datasend("\n");
-        $smtp->datasend("Expiration data on file.\n");
+        $smtp->datasend("$body\n");
         $smtp->dataend();
 
         $smtp->quit;
