@@ -1,6 +1,6 @@
   <header class="main-header">
     <!-- Logo -->
-    <a href="/pages/main/index.php" class="logo">
+    <a href="<?php echo HTTP;?>/pages/main/index.php" class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
     <span class="logo-mini"><b>CD</b></span>
     <!-- logo for regular state and mobile devices -->
@@ -93,7 +93,7 @@ Flag  notification:  <span class="label label-danger">
                 <!-- inner menu: contains the actual data -->
                 <ul class="menu">
                   <li><!-- Task item -->
-                    <a href="/pages/dispatch/orders.php">
+                    <a href="<?php echo HTTP;?>/pages/dispatch/orders.php">
                     <h3> Pick Ups Today <?php echo "$pu_today_count";?> <small class="pull-right">0%</small> </h3>
                     <div class="progress progress-xs">
                       <div class="progress-bar progress-bar-aqua" style="width: 0%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"> <span class="sr-only">0% Complete</span> </div>
@@ -101,7 +101,7 @@ Flag  notification:  <span class="label label-danger">
                     </a> </li>
                   <!-- end task item -->
                   <li><!-- Task item -->
-                    <a href="/pages/dispatch/orders.php">
+                    <a href="<?php echo HTTP;?>/pages/dispatch/orders.php">
                     <h3> Deliveries Today <?php echo "$del_today_count";?> <small class="pull-right">0%</small> </h3>
                     <div class="progress progress-xs">
                       <div class="progress-bar progress-bar-green" style="width: 0%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"> <span class="sr-only">0% Complete</span> </div>
@@ -146,14 +146,14 @@ Flag  notification:  <span class="label label-danger">
               </li>
               <!-- Menu Body -->
               <li class="user-body">
-                <div class="col-xs-4 text-center"> <a href="/pages/dispatch/orders.php"> Loads</a> </div>
-                <div class="col-xs-4 text-center"> <a href="/pages/dispatch/admin/users.php">Users</a></div>
+                <div class="col-xs-4 text-center"> <a href="<?php echo HTTP;?>/pages/dispatch/orders.php"> Loads</a> </div>
+                <div class="col-xs-4 text-center"> <a href="<?php echo HTTP;?>/pages/dispatch/admin/users.php">Users</a></div>
                 <div class="col-xs-4 text-center"> <a href="#"> Stats</a></div>
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
-                <div class="pull-left"> <a href="<?php echo HTTP; ?>/pages/dispatch/admin/users.php" class="btn btn-primary btn-flat" style="background-color: #5cb85c;">Profile</a> </div>
-                <div class="pull-right"> <a href="<?php echo HTTP; ?>/pages/login/logout.php" class="btn btn-primary btn-flat" style="background-color: #5cb85c;">Sign out</a> </div>
+                <div class="pull-left"> <a href="<?php echo HTTP; ?><?php echo HTTP;?>/pages/dispatch/admin/users.php" class="btn btn-primary btn-flat" style="background-color: #5cb85c;">Profile</a> </div>
+                <div class="pull-right"> <a href="<?php echo HTTP; ?><?php echo HTTP;?>/pages/login/logout.php" class="btn btn-primary btn-flat" style="background-color: #5cb85c;">Sign out</a> </div>
               </li>
             </ul>
           </li>
