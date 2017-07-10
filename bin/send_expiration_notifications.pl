@@ -242,18 +242,19 @@ sub vtext_notify
 {
         my $toaddress = shift;
         my $subject = shift;
-        
+
         $smtp = Net::SMTP->new('localhost');
 
         $smtp->mail('drivers@catalinacartage.com');
         $smtp->to("$toaddress");
-        $smtp->cc("dispatch@catalinacartage.com");
+        $smtp->cc('dispatch@catalinacartage.com');
 
         $smtp->data();
         $smtp->datasend("To: $toaddress\n");
         $smtp->datasend("Subject: $subject\n");
         $smtp->datasend("reply-to: drivers\@catalinacartage.com\n");
         $smtp->datasend("\n");
+        $smtp->datasend("Expiration data on file.\n");
         $smtp->dataend();
 
         $smtp->quit;
