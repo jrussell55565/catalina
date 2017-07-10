@@ -670,7 +670,7 @@ if ($_SESSION['login'] == 1)
                     <li><a href="#">Pre-Trips <span class="pull-right badge bg-blue" id="vir_pretrip">
                        <?php
                         if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
-                          echo $vir_aggregate['all_users']['vir_pretrip'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
+                          echo $vir_aggregate['all_users']['vir_pretrip'] . ' of ' . $vir_aggregate['all_users']['days_worked'];
                         }
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                           if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
@@ -683,10 +683,10 @@ if ($_SESSION['login'] == 1)
                     <li><a href="#">Pre-Trip Points<span class="pull-right badge bg-blue productivity-pts" id="vir_pretrip_points">
                      <?php
                         if (!isset($_GET['trip_search_driver']) || $_GET['trip_search_driver'] == 'none') {
-                          if ($vir_aggregate['all_users']['vir_pretrip_points'] > $vir_aggregate[$vir_i]['days_worked']) {
-                           echo $vir_aggregate[$vir_i]['days_worked'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
+                          if ($vir_aggregate['all_users']['vir_pretrip_points'] > $vir_aggregate['all_users']['days_worked']) {
+                           echo $vir_aggregate['all_users']['days_worked'] . ' of ' . $vir_aggregate['all_users']['days_worked'];
                           }else{
-                           echo $vir_aggregate[$vir_i]['vir_pretrip_points'] . ' of ' . $vir_aggregate[$vir_i]['days_worked'];
+                           echo $vir_aggregate['all_users']['vir_pretrip_points'] . ' of ' . $vir_aggregate['all_users']['days_worked'];
                           }
                         }
                         for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
@@ -1293,7 +1293,7 @@ if ($_SESSION['login'] == 1)
                       $sum_earned_points = ($total_shipment_points + $total_vir_points + $total_activity_points + $total_compliance_points);
                       $sum_possible_points = ($possible_shipment_points + $possible_vir_points + $possible_activity_points + $possible_compliance_points);
                     ?>
-                    <h3>Combined Score <?php echo "$pu_today_count";?> <?php echo round(($sum_earned_points / $sum_possible_points) * 100,0)?>%</h3></center>
+                    <h3>Combined Score <?php echo ($sum_earned_points / 4);?>%</h3></center>
                   <center><p>Total Points All Categories 150 of 200 as of Current Selection Year, Quarter, Month</p></center>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
@@ -1358,7 +1358,7 @@ if ($_SESSION['login'] == 1)
                 <?php
                 // Get the top performers
                 $top_performers = get_top_performers(date('Y-m-d',$start_date),date('Y-m-d',$end_date), $mysqli);
-                
+
                 $counter = 0;                                
                 for($z=0;$z<count($top_performers);$z++){                  
                   // Check to see If we're looking for a specific status.
@@ -1538,7 +1538,7 @@ if ($_SESSION['login'] == 1)
                       <th>Graph Score</th>
                       <th style="width: 40px">Score</th>
                     </tr>
-                  <?php
+                  <?php                  
                     $task_array = sort_array($task_aggregate,'activity_total_points');
                     $counter = 0;
                     for ($task_i=0;$task_i<count($task_array);$task_i++) {
@@ -1721,14 +1721,14 @@ if ($_SESSION['login'] == 1)
                         }
                       }
                       $counter++;
-                      if ($compliance_array[$compliance_i]['total_percent'] >= 90) { $color = 'green'; $percent = $compliance_array[$compliance_i]['total_percent'];}
-                      if ($compliance_array[$compliance_i]['total_percent'] >= 70 && $compliance_array[$compliance_i]['total_percent'] < 90) { $color = 'blue'; $percent = $compliance_array[$compliance_i]['total_percent']; }
-                      if ($compliance_array[$compliance_i]['total_percent'] > 50 && $compliance_array[$compliance_i]['total_percent'] < 70) { $color = 'yellow'; $percent = $compliance_array[$compliance_i]['total_percent']; }
-                      if ($compliance_array[$compliance_i]['total_percent'] > 25 && $compliance_array[$compliance_i]['total_percent'] < 50) { $color = 'red'; $percent = $compliance_array[$compliance_i]['total_percent']; }
-                      if ($compliance_array[$compliance_i]['total_percent'] <= 25) { $color = 'black'; $percent = $compliance_array[$compliance_i]['total_percent']; }
-
-                      // If the user is over 100% then drop it to 100
-                      if ($compliance_array[$compliance_i]['total_percent'] > 100) { $percent = 100; }
+                      if ($compliance_array[$compliance_i]['current_violation_points'] <= 0) 
+                        { 
+                          $color = 'green'; 
+                          $percent = 100;
+                        }else{
+                          $color = 'black'; 
+                          $percent = 0;
+                        }                      
                     ?>
                     <tr>
                  <td><?php echo $counter;?></td>
@@ -1748,7 +1748,7 @@ if ($_SESSION['login'] == 1)
                  <td><div class="progress progress-xs progress-striped active">
                  <div class="progress-bar progress-bar-<?php echo "$color";?>" style="width: <?php echo $percent;?>%"></div>
 
-                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $compliance_array[$compliance_i]['total_points'];?></span></td>
+                 <td><span class="badge bg-<?php echo $color;?>"><?php echo $compliance_array[$compliance_i]['current_violation_points'];?></span></td>
                  </tr>
                     <?php } ?>
                   </table>

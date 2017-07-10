@@ -15,232 +15,8 @@ $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
 $role = $_SESSION['role'];
 
-?>
-
-<?php
-                     $sql = "SELECT
-                      total_today.counts   AS total_today_count,
-                      pu_today.counts      AS pu_today_count,
-                      del_today.counts     AS del_today_count,
-                      total_alltime.counts AS total_alltime_count,
-                      pu_alltime.counts    AS pu_alltime_count,
-                      del_alltime.counts   AS del_alltime_count,
-                      archived.counts      AS archived_count,
-                      virs_daily.count     AS virs_daily_count,
-                      virs_weekly.count    AS virs_weekly_count
-                    FROM
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          AND str_to_date(hawbDate,'%c/%e/%Y') = CURDATE()
-                          AND deleted                          =\"F\"
-                          AND archived                         =\"F\"
-                          )
-                        OR
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username =\"$username\"
-                            )
-                          AND str_to_date(dueDate,'%c/%e/%Y') = CURDATE()
-                          AND deleted                         =\"F\"
-                          AND archived                        =\"F\"
-                          )
-                      )
-                      total_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          puAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND str_to_date(hawbDate,'%c/%e/%Y') = DATE(now())
-                        AND deleted                          =\"F\"
-                        AND archived                         =\"F\"
-                        AND deleted                          =\"F\"
-                        AND archived                         =\"F\"
-                      )
-                      pu_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          delAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND str_to_date(dueDate,'%c/%e/%Y') = DATE(now())
-                        AND deleted                         =\"F\"
-                        AND archived                        =\"F\"
-                        AND deleted                         =\"F\"
-                        AND archived                        =\"F\"
-                      )
-                      del_today,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          OR puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      total_alltime,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          puAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      pu_alltime,
-                      (
-                        SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          delAgentDriverPhone=
-                          (
-                            SELECT
-                              driverid
-                            FROM
-                              users
-                            WHERE
-                              username=\"$username\"
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"F\"
-                      )
-                      del_alltime,
-                      (
-                      SELECT
-                          COUNT(*) AS counts
-                        FROM
-                          dispatch
-                        WHERE
-                          (
-                            delAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          OR puAgentDriverPhone=
-                            (
-                              SELECT
-                                driverid
-                              FROM
-                                users
-                              WHERE
-                                username=\"$username\"
-                            )
-                          )
-                        AND deleted =\"F\"
-                        AND archived=\"T\"
-                      )
-                      archived,
-                     (
-                      SELECT
-                          COUNT(*) AS count
-                        FROM
-                          virs
-                        WHERE
-                        driver_name=\"$username\"
-                        AND insp_date = date(now())
-                      ) virs_daily,
-                      (
-                      SELECT
-                          COUNT(*) AS count
-                        FROM
-                          virs
-                        WHERE
-                        driver_name=\"$username\"
-                        AND insp_date BETWEEN date(now()) AND date(now()) - INTERVAL 8 DAY
-                      ) virs_weekly";
-
-                      $sql = mysql_query($sql);
-                      while ($row = mysql_fetch_array($sql, MYSQL_BOTH))
-                      {
-                        $total_today_count   = $row['total_today_count'];
-                        $pu_today_count      = $row['pu_today_count'];
-                        $del_today_count     = $row['del_today_count'];
-                        $total_alltime_count = $row['total_alltime_count'];
-                        $pu_alltime_count    = $row['pu_alltime_count'];
-                        $del_alltime_count   = $row['del_alltime_count'];
-                        $archived_count      = $row['archived_count'];
-                        $virs_daily_count    = $row['virs_daily_count'];
-                        $virs_weekly_count   = $row['virs_weekly_count'];
-                      }
-                      mysql_free_result($sql);
+// Get the notes for each task
+$task_note_array = get_sql_results("select id, task_id, note from task_notes order by created_date desc ,id asc",$mysqli);
 
 if (isset($_POST['broadcast_message']))
 {
@@ -513,17 +289,36 @@ if (isset($_POST['broadcast_message']))
                             if ($tasks_aggregate[$i]['assign_to'] != $_SESSION['employee_id']) {
                               continue;
                             }
+                            if (($_SESSION['login'] != 1) && ($tasks_aggregate[$i]['internal_only'] == 1))
+                            {
+                              // Skip if we are not admin and it's internal_only == 1
+                              continue;
+                            }
+                            if ($tasks_aggregate[$i]['complete_user'] != 0) {
+                              // Only show complete_user == 0
+                              continue;
+                            }                            
+                            // Get the notes
+                            $note = null;
+                            for($note_i=0;$note_i<count($task_note_array);$note_i++){
+                              if ($task_note_array[$note_i]['task_id'] == $tasks_aggregate[$i]['id']) {
+                                // This is the note we're looking for 
+                                $note = $task_note_array[$note_i]['note'];
+                                continue;
+                              }
+
+                            }
                     ?>
                            <div class="direct-chat-msg right" id="top_level_<?php echo $tasks_aggregate[$i]['id'];?>">
                            <div class="direct-chat-info clearfix">
                            <span class="direct-chat-name pull-left">Assigned by: 
-                           <?php echo "$_SESSION[drivername]"; ?></span>
+                           <?php echo $tasks_aggregate[$i]['assigned_by'];; ?></span>
                            <span class="direct-chat-timestamp pull-right"><?php echo $tasks_aggregate[$i]['submit_date'];?></span>
                            </div>
                            <!-- /.direct-chat-info -->
                            <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
                            <!-- /.direct-chat-img -->
-                         <div class="direct-chat-text"><?php echo $tasks_aggregate[$i]['notes']?><br><span style="font-size:.8em;">Due: <?php echo $tasks_aggregate[$i]['due_date'];?></span></div>
+                         <div class="direct-chat-text"><?php echo $note;?><br><span style="font-size:.8em;">Due: <?php echo $tasks_aggregate[$i]['due_date'];?></span></div>
                          <table border="0">
                          <tr>
                           <td>
@@ -1079,164 +874,6 @@ IFTA Trips:Begin New Month,Remember to Start New IFTA Trip Pack,Close out last T
 <script src="<?php echo HTTP;?>/dist/js/app.min.js" type="text/javascript"></script>
 <!-- ChartJS -->
 <script src="<?php echo HTTP;?>/dist/js/Chart.min.js"></script>
-<script>
-// Get context with jQuery - using jQuery's .get() method.
-var ctx = $("#dispatchChart").get(0).getContext("2d");
-// This will get the first returned node in the jQuery collection.
-<?php
-# Create array with months.
-$sql = "select monthname(str_to_date(pu_month,'%m-%y')),sum(pickups) from
-(
-SELECT
-date_format(str_to_date(hawbDate,'%c/%e/%Y'),'%m-%y') pu_month,
-sum(CASE monthname(str_to_date(hawbDate,'%c/%e/%Y'))
-WHEN 'January' THEN 1
-WHEN 'February' THEN 1
-WHEN 'March' THEN 1
-WHEN 'April' THEN 1
-WHEN 'May' THEN 1
-WHEN 'June' THEN 1
-WHEN 'July' THEN 1
-WHEN 'August' THEN 1
-WHEN 'September' THEN 1
-WHEN 'Octover' THEN 1
-WHEN 'November' THEN 1
-WHEN 'December' THEN 1
-ELSE 0
-END) AS pickups
-FROM
-    dispatch
-WHERE
-
-    puAgentDriverPhone = (SELECT 
-            driverid
-        FROM
-            users
-        WHERE
-            username = \"$username\")           
-AND 
-str_to_date(hawbDate,'%c/%e/%Y') > DATE(now()) - INTERVAL 12 MONTH
-group by pu_month
-UNION ALL
-SELECT
-date_format(str_to_date(dueDate,'%c/%e/%Y'),'%m-%y') pu_month,
-sum(CASE monthname(str_to_date(dueDate,'%c/%e/%Y'))
-WHEN 'January' THEN 1
-WHEN 'February' THEN 1
-WHEN 'March' THEN 1
-WHEN 'April' THEN 1
-WHEN 'May' THEN 1
-WHEN 'June' THEN 1
-WHEN 'July' THEN 1
-WHEN 'August' THEN 1
-WHEN 'September' THEN 1
-WHEN 'October' THEN 1
-WHEN 'November' THEN 1
-WHEN 'December' THEN 1
-ELSE 0
-END) AS pickups
-FROM
-    dispatch
-WHERE
-
-    delAgentDriverPhone = (SELECT 
-            driverid
-        FROM
-            users
-        WHERE
-            username = \"$username\")           
-AND 
-str_to_date(dueDate,'%c/%e/%Y') > DATE(now()) - INTERVAL 12 MONTH
-group by pu_month
-) foo
-group by pu_month
-order by pu_month DESC";
-
-$months = array();
-$dispatch_number = array();
-$result = mysql_query($sql);
-while ($row = mysql_fetch_array($result,MYSQL_BOTH))
-{
-  array_push($months,"'$row[0]'");
-  array_push($dispatch_number,$row[1]);
-}
-mysql_free_result($result);
-
-$months =  rtrim(implode(',',$months),',');
-$dispatch_number =  rtrim(implode(',',$dispatch_number),',');
-?>
-var data = {
-    labels: [<?php echo $months;?>],
-    datasets: [
-        {
-            label: "Dispatched",
-            fillColor: "rgba(220,220,220,0.2)",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(220,220,220,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [<?php echo $dispatch_number;?>]
-        },
-<?php
-$sql = "SELECT
-monthname(date) pu_month,
-SUM(CASE monthname(date)
-WHEN 'January' THEN 1
-WHEN 'February' THEN 1
-WHEN 'March' THEN 1
-WHEN 'April' THEN 1
-WHEN 'May' THEN 1
-WHEN 'June' THEN 1
-WHEN 'July' THEN 1
-WHEN 'August' THEN 1
-WHEN 'September' THEN 1
-WHEN 'October' THEN 1
-WHEN 'November' THEN 1
-WHEN 'December' THEN 1
-ELSE 0
-END) AS pickups
-FROM
-    driverexport
-WHERE employee_id =
-(select employee_id from users where username = \"$username\")
-AND
-date > DATE(now()) - INTERVAL 12 MONTH
-AND
-(status = 'Picked Up' OR status = 'Delivered')
-group by pu_month
-order by date DESC";
-
-$months = array();
-$dispatch_number = array();
-$result = mysql_query($sql);
-while ($row = mysql_fetch_array($result,MYSQL_BOTH))
-{
-  array_push($months,"'$row[0]'");
-  array_push($dispatch_number,$row[1]);
-}
-mysql_free_result($result);
-
-$months =  rtrim(implode(',',$months),',');
-$dispatch_number =  rtrim(implode(',',$dispatch_number),',');
-?>
-       {
-            label: "Updated",
-            fillColor: "rgba(151,187,205,0.2)",
-            strokeColor: "rgba(151,187,205,1)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: [<?php echo $dispatch_number;?>]
-        },
-    ]
-};
-var myLineChart = new Chart(ctx).Line(data, {
-});
-x = myLineChart.generateLegend();
-$("#js-legend").html(x);
-</script>
 
 <script>
 function update_task(i) {
@@ -1245,10 +882,10 @@ function update_task(i) {
     my_id = $(i).attr('id');
 
     $("#top_level_"+my_db_id).hide();
-    $.post( "<?php echo $_SERVER['PHP_SELF'];?>", { id: my_db_id, type: 'ajax' })
+    $.post( "<?php echo HTTP."/pages/dispatch/tasks.php";?>", { id: my_db_id, ajax_complete_task: 'ajax' })
     .done(function(data, textStatus, request) { 
       var objData = jQuery.parseJSON(data); 
-      if (objData.failure) { $("#top_level_"+my_db_id).show();}
+      $("#top_level_"+my_db_id).show();
      })
     .fail(function(data, textStatus, request) { console.log(data); });
 }

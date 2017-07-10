@@ -28,72 +28,70 @@ if (isset($_SESSION['onboarding'])) {
 }
 
 # If we're an onboarder or admin then let's get the data for onboarding
-if (($_SESSION['login'] == 1) || ($_SESSION['login'] == 3))
+function get_phase_data($mysqli,$employee_id)
 {
-    function get_phase_data($mysqli,$employee_id)
+    // Get the onboard_management data
+    $statement = 'SELECT om.phase, om.order_rank, om.category, om.pdf
+                  FROM onboard_management om
+                    JOIN users ON om.position REGEXP users.title
+                  WHERE users.employee_id = "'.$employee_id.'"';
+
+    $onboard_array = array();
+    $b = array();
+    if ($result = $mysqli->query($statement)) 
     {
-        // Get the onboard_management data
-        $statement = 'SELECT om.phase, om.order_rank, om.category, om.pdf
-                      FROM onboard_management om
-                        JOIN users ON om.position REGEXP users.title
-                      WHERE users.employee_id = "'.$employee_id.'"';
-
-        $onboard_array = array();
-        $b = array();
-        if ($result = $mysqli->query($statement)) 
-        {
-            $counter = 0;
-            while($obj = $result->fetch_object()){    
-                $sql_object[$obj->phase]['order_rank'] = $obj->order_rank;
-                $sql_object[$obj->phase]['category'] = $obj->category;
-                $sql_object[$obj->phase]['pdf'] = $obj->pdf;
-                
-                array_push($onboard_array, array('phase' => $obj->phase, 
-                                            array(
-                                                'order_rank' => $obj->order_rank, 
-                                                'pdf' => $obj->pdf,
-                                                'category' => $obj->category,
-                                                )
-                                    )
-                            );
-            }
+        $counter = 0;
+        while($obj = $result->fetch_object()){    
+            $sql_object[$obj->phase]['order_rank'] = $obj->order_rank;
+            $sql_object[$obj->phase]['category'] = $obj->category;
+            $sql_object[$obj->phase]['pdf'] = $obj->pdf;
+            
+            array_push($onboard_array, array('phase' => $obj->phase, 
+                                        array(
+                                            'order_rank' => $obj->order_rank, 
+                                            'pdf' => $obj->pdf,
+                                            'category' => $obj->category,
+                                            )
+                                )
+                        );
         }
-       
-        $result->close();
-        return $onboard_array;
     }
-
-    function get_distinct_phases($onboard_array)
-    {
-        // Construct another array with just the unique phases
-        // so we can later iterate through it.
-
-        $phase_array = array();
-        foreach($onboard_array as $k => $v){
-            $phase_array[$onboard_array[$k]['phase']] = 'phase';
-        }
-        return $phase_array;
-    }
-
-    function get_completed_onboards($mysqli,$employee_id)
-    {
-        // Now let's just find out which ones this user has completed so we can check the box if needed
-        $statement = 'select phase,category FROM onboard_users ou 
-                    WHERE employee_id = "'.$employee_id.'"
-                    and completed = 1';
-        $completed_onboards = array();
-        if ($result = $mysqli->query($statement)) 
-        {
-            $counter = 0;
-            while($obj = $result->fetch_object()){ 
-                $completed_onboards[$counter]['phase'] = $obj->phase;
-                $completed_onboards[$counter]['category'] = $obj->category;
-                $counter++;
-            }
-        }
-        return $completed_onboards;
-    }
+   
+    $result->close();
+    return $onboard_array;
 }
+
+function get_distinct_phases($onboard_array)
+{
+    // Construct another array with just the unique phases
+    // so we can later iterate through it.
+
+    $phase_array = array();
+    foreach($onboard_array as $k => $v){
+        $phase_array[$onboard_array[$k]['phase']] = 'phase';
+    }
+    return $phase_array;
+}
+
+function get_completed_onboards($mysqli,$employee_id)
+{
+    // Now let's just find out which ones this user has completed so we can check the box if needed
+    $statement = 'select phase,category FROM onboard_users ou 
+                WHERE employee_id = "'.$employee_id.'"
+                and completed = 1';
+    $completed_onboards = array();
+    if ($result = $mysqli->query($statement)) 
+    {
+        $counter = 0;
+        while($obj = $result->fetch_object()){ 
+            $completed_onboards[$counter]['phase'] = $obj->phase;
+            $completed_onboards[$counter]['category'] = $obj->category;
+            $counter++;
+        }
+    }
+    return $completed_onboards;
+}
+
 
 // Setup states array
 $us_state_abbrevs = array('AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY');
@@ -1366,8 +1364,12 @@ function show_vis($object_type,$grantee) {
               </tr>
             </table>
           </form>
-          <table>
-          <!-- Onboarding in here -->          
+          <table>          
+          <!-- Onboarding in here --> 
+          <?php
+          if (($_SESSION['login'] == 1) || ($_SESSION['login'] == 3))
+          {
+          ?>         
           <tr>
           <form  class="form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
           <td>
@@ -1375,9 +1377,9 @@ function show_vis($object_type,$grantee) {
                   <div class="panel-heading">Onboarding Details</div>
                       <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                           <input type="hidden" name="employee_id" value="<?php echo $row['employee_id'];?>"/>
-                        <?php
-                          
+                        <?php                          
                           $onboard_array = get_phase_data($mysqli,$row['employee_id']);
+                          var_dump($onboard_array);
                           $completed_onboards = get_completed_onboards($mysqli,$row['employee_id']);
                           $phase_array = get_distinct_phases($onboard_array);
 
@@ -1470,16 +1472,25 @@ function show_vis($object_type,$grantee) {
           </td>
           </form>          
           </tr>  
+          <?php
+            }
+            ?>
           <!-- /Onboarding in here -->
+          <!-- tasks in here -->
           <tr>
           <td>
                 <div class="panel panel-default" style="width: 500px; display: table-cell; vertical-align: top; ">
                   <div class="panel-heading">Tasks</div>
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                       <input type="hidden" name="employee_id" value="<?php echo $row['employee_id'];?>"/>
-                      <?php
+                      <?php                                            
                       for($task_i=0;$task_i<count($tasks_aggregate);$task_i++){
                         if ($tasks_aggregate[$task_i]['assign_to'] == $row['employee_id']) {
+                            // Skip this if we're not an admin and internal_only ==1
+                            if (($_SESSION['login'] != 1) && ($tasks_aggregate[$task_i]['internal_only'] == 1))
+                            {
+                                continue;
+                            }
                             // Looks like this user has tasks.
                             ?>
                             <table class="table">
@@ -1503,8 +1514,8 @@ function show_vis($object_type,$grantee) {
                                         <td><?php echo $tasks_aggregate[$task_i]['subitem']; ?></td>
                                         <td><?php echo $tasks_aggregate[$task_i]['due_date']; ?></td>
                                         <td><?php echo $tasks_aggregate[$task_i]['points']; ?></td>
-                                        <td><?php echo ($tasks_aggregate[$task_i]['complete_user'] = 0 ? 'No' : 'Yes'); ?></td>
-                                        <td><?php echo ($tasks_aggregate[$task_i]['internal_only'] = 0 ? 'No' : 'Yes'); ?></td>
+                                        <td><?php echo ($tasks_aggregate[$task_i]['complete_user'] == 0 ? 'No' : 'Yes'); ?></td>
+                                        <td><?php echo ($tasks_aggregate[$task_i]['internal_only'] == 0 ? 'No' : 'Yes'); ?></td>
                                     </tr>
                                     <tr>
                                         <td><a target="_blank" href="<?php echo HTTP;?>/pages/dispatch/tasks.php?task=<?php echo $tasks_aggregate[$task_i]['id'];?>">Task Note</a>:</td>
@@ -1519,7 +1530,8 @@ function show_vis($object_type,$grantee) {
                     </div>
                 </div>              
           </td>
-          </tr>                                        
+          </tr>
+          <!-- /tasks in here -->                                        
           </table>
         </div>
       </td>

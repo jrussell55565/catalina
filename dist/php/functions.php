@@ -336,24 +336,28 @@ function get_task_aggregate($sd, $ed, $mysqli)
 
 function get_task_nonaggregate($driver_predicate, $task_status_predicate) 
 {
-  $sql = "select id,
-            date_format(submit_date,'%m/%d/%Y') as submit_date
-            ,assign_to
-            ,assigned_by
-            ,category
-            ,item
-            ,subitem
-            ,pos_neg
-            ,notes
-            ,date_format(due_date,'%m/%d/%Y') as due_date
-            ,date_format(completed_date,'%m/%d/%Y') as completed_date
-            ,points
-            ,complete_user
-            ,complete_approved
-            ,internal_only
-         from tasks
-         where 1=1 and  $driver_predicate and $task_status_predicate 
-         order by submit_date DESC";
+  $sql = "select tasks.id,
+            date_format(tasks.submit_date,'%m/%d/%Y') as submit_date
+            ,tasks.assign_to
+            ,tasks.assigned_by
+            ,tasks.category
+            ,tasks.item
+            ,tasks.subitem
+            ,tasks.pos_neg
+            ,date_format(tasks.due_date,'%m/%d/%Y') as due_date
+            ,date_format(tasks.completed_date,'%m/%d/%Y') as completed_date
+            ,tasks.points
+            ,tasks.complete_user
+            ,tasks.complete_approved
+            ,tasks.internal_only
+            ,concat_ws(' ', users.fname, users.lname) as real_name
+            ,concat_ws(' ', u.fname, u.lname) as assigned_by
+            ,users.username
+           from tasks
+        JOIN users on users.employee_id = tasks.assign_to
+        JOIN users u on u.employee_id = tasks.assigned_by
+          where 1=1 and  $driver_predicate and $task_status_predicate 
+          order by submit_date, id asc";
   return $sql;
 }
 

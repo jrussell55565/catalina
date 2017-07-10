@@ -24,26 +24,26 @@ CREATE PROCEDURE `vir_productivity_stats`(IN v_date_start VARCHAR(20), v_date_en
       `vir_total_percent`             DOUBLE
     );
     INSERT INTO vir_productivity_tmp (
-        SELECT
-      mo_details.vir_pretrip,
-      mo_details.vir_posttrip,
-      mo_details.vir_breakdown,
-      mo_details.days_worked,
-      mo_details.vir_additional_trailer,
-      mo_details.max_total_vir_points,
-      mo_details.vir_pretrip_percent,
-      mo_details.vir_posttrip_percent,
-      mo_details.vir_breakdown_percent,
-      mo_details.username,
-      mo_details.miles,
-      mo_details.vir_pretrip_points,
-      mo_details.vir_posttrip_points,
-      mo_details.vir_additional_trailer_points,
-      mo_details.vir_total_points,
-      u.employee_id,
-      u.status,
-      concat_ws(' ', u.fname, u.lname)                                    AS real_name,
-      coalesce(round((vir_total_points / max_total_vir_points) * 100), 0) AS vir_total_percent
+      SELECT
+        coalesce(mo_details.vir_pretrip, 0)                                 AS vir_pretrip,
+        coalesce(mo_details.vir_posttrip, 0)                                AS vir_posttrip,
+        coalesce(mo_details.vir_breakdown, 0)                               AS vir_breakdown,
+        coalesce(mo_details.days_worked, 0)                                 AS days_worked,
+        coalesce(mo_details.vir_additional_trailer, 0)                      AS vir_additional_trailer,
+        coalesce(mo_details.max_total_vir_points, 0)                        AS max_total_vir_points,
+        coalesce(mo_details.vir_pretrip_percent, 0)                         AS vir_pretrip_percent,
+        coalesce(mo_details.vir_posttrip_percent, 0)                        AS vir_posttrip_percent,
+        coalesce(mo_details.vir_breakdown_percent, 0)                       AS vir_breakdown_percent,
+        coalesce(mo_details.username, 0)                                    AS username,
+        coalesce(mo_details.miles, 0)                                       AS miles,
+        coalesce(mo_details.vir_pretrip_points, 0)                          AS vir_pretrip_points,
+        coalesce(mo_details.vir_posttrip_points, 0)                         AS vir_posttrip_points,
+        coalesce(mo_details.vir_additional_trailer_points, 0)               AS vir_additional_trailer_points,
+        coalesce(mo_details.vir_total_points, 0)                            AS vir_total_points,
+        u.employee_id,
+        u.status,
+        concat_ws(' ', u.fname, u.lname)                                    AS real_name,
+        coalesce(round((vir_total_points / max_total_vir_points) * 100), 0) AS vir_total_percent
       FROM (
              SELECT
                *,
@@ -136,10 +136,11 @@ CREATE PROCEDURE `vir_productivity_stats`(IN v_date_start VARCHAR(20), v_date_en
         RIGHT OUTER JOIN users u ON u.employee_id = mo_details.employee_id
     );
 
-    if v_print is TRUE THEN
-    SELECT *
-    FROM vir_productivity_tmp;
-    END IF ;
+    IF v_print IS TRUE
+    THEN
+      SELECT *
+      FROM vir_productivity_tmp;
+    END IF;
 
   END;
 
