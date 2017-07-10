@@ -15,7 +15,7 @@ if ($_GET['search_type'] == 'truck_odo')
     // Let's just search for the odometer for the truck
     $query = "select max(odo_end) odo_end from ifta where truck_no=" . $_GET['truck_no'];
 
-}else{
+}else{    
     // Do some _GET manipulation.  This is because I passed in different names when I created
     // The ajax call and now I have to make it work.
     if (isset($_GET['trip_search_tripnum'])) { $_GET['trip_no'] = $_GET['trip_search_tripnum']; }
@@ -37,6 +37,12 @@ if ($_GET['search_type'] == 'truck_odo')
         $_GET['hwb_no'] = ' ifta.hwb_no = "' . $_GET['hwb_no'] . '"'; 
     } else { 
         $_GET['hwb_no'] = ' ifta.hwb_no like "%"';
+    }
+
+    if ($_GET['trip_state'] != 'none') { 
+        $_GET['trip_state'] = '( ifta.location_start like "%' . $_GET['trip_state'] . '%" OR ifta.location_end like "%' . $_GET['trip_state'] . '%")'; 
+    } else { 
+        $_GET['trip_state'] = '( ifta.location_start like "%" OR ifta.location_end like "%")'; 
     }
     
     // Don't set a trip_date value if we left off a beginning date
@@ -106,7 +112,9 @@ if ($_GET['search_type'] == 'truck_odo')
                   ifta.trip_no as 'ifta_trip_no',
                   ifta.truck_no as 'ifta_truck_no',
                   DATE_FORMAT(ifta.date_started, '%m/%d/%Y') AS 'ifta_trip_start',
-                  DATE_FORMAT(ifta.date_ended, '%m/%d/%Y') AS 'ifta_trip_end'
+                  DATE_FORMAT(ifta.date_ended, '%m/%d/%Y') AS 'ifta_trip_end',
+                  ifta.location_start,
+                  ifta.location_end
                   " . $additional_sql . "
               FROM
                   ifta
@@ -119,6 +127,7 @@ if ($_GET['search_type'] == 'truck_odo')
               )
               AND ". $_GET['trip_truck_no']. "
               AND ". $_GET['trip_driver']. "
+              #AND ". $_GET['trip_state']. "
               ORDER BY date_started ASC";
 }
 

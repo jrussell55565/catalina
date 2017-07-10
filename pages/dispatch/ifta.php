@@ -161,7 +161,8 @@ if ($_SESSION['login'] != 1)
                                  </tr>
                                  <tr>
                                     <td>State Exit/Enter</td>
-                                   <td><select class="input-sm form-control" name="txt_state_enter_details[]" id="trip_search_state" value="">
+                                   <td><select class="input-sm form-control" name="txt_state_enter_details" id="trip_search_state" value="">
+                                     <option value='none'>Choose State...</option>
                                      <?php
                                           foreach ($us_state_abbrevs as $state) { ?>
                                      <option><?php echo $state;?></option>
@@ -814,8 +815,6 @@ $(document).ready(function(){
               trip_end: $("#trip_search_enddate").val(),
               trip_state: $("#trip_search_state").val(),
               trip_truck_no: $("#trip_search_trucknumber").val(),
-			        trip_state_exit: $("#trip_search_state_exit").val(),
-			        trip_state_enter: $("#trip_search_state_enter").val(),
               trip_driver: $("#trip_search_driver").val()
             },
        success: function(data, textStatus, xhr) {
