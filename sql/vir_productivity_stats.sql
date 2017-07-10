@@ -21,7 +21,8 @@ CREATE PROCEDURE `vir_productivity_stats`(IN v_date_start VARCHAR(20), v_date_en
       `employee_id`                   VARCHAR(50),
       `status`                        VARCHAR(50),
       `real_name`                     VARCHAR(50),
-      `vir_total_percent`             DOUBLE
+      `vir_total_percent`             DOUBLE,
+      `days_shoulda_worked`           DOUBLE
     );
     INSERT INTO vir_productivity_tmp (
       SELECT
@@ -43,7 +44,12 @@ CREATE PROCEDURE `vir_productivity_stats`(IN v_date_start VARCHAR(20), v_date_en
         u.employee_id,
         u.status,
         concat_ws(' ', u.fname, u.lname)                                    AS real_name,
-        coalesce(round((vir_total_points / max_total_vir_points) * 100), 0) AS vir_total_percent
+        coalesce(round((vir_total_points / max_total_vir_points) * 100), 0) AS vir_total_percent,
+        round(
+                                        TIMESTAMPDIFF(DAY, str_to_date(v_date_start, '%Y-%m-%d'),
+                                                      str_to_date(v_date_end, '%Y-%m-%d')) *
+                                        .675,
+                                        0)                               AS days_shoulda_worked
       FROM (
              SELECT
                *,
