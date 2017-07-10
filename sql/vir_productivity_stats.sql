@@ -133,6 +133,15 @@ CREATE PROCEDURE `vir_productivity_stats`(IN v_date_start VARCHAR(20), v_date_en
                          sum(miles) AS miles,
                          employee_id
                        FROM import_gps_trips
+                        WHERE (
+                                                                     began BETWEEN STR_TO_DATE(v_date_start,
+                                                                                               '%Y-%m-%d') AND STR_TO_DATE(
+                                                                         v_date_end,
+                                                                         '%Y-%m-%d')
+                                                                     AND Ended BETWEEN STR_TO_DATE(v_date_start,
+                                                                                                   '%Y-%m-%d') AND STR_TO_DATE(
+                                                                         v_date_end,
+                                                                         '%Y-%m-%d'))
                        GROUP BY employee_id) import_gps_trips,
                       (SELECT *
                        FROM cp_virs) cp_virs
