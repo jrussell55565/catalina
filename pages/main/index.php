@@ -62,32 +62,71 @@ if (isset($_POST['broadcast_message']))
   try {
     // If I'm an admin we'll get all users, else just get the current user
     if ($_SESSION['login'] == 1) { $predicate = 'where 1 = 1'; }else{ $predicate = 'where username="'.$_SESSION['username'].'"'; }
-    $statement = "
-    select max(username) as username 
-	,max(employee_id) as employee_id 
-    ,max(DRIVER_LICENSE_EXP) as driver_license_exp 
-    ,max(MED_CARD_EXP) as med_card_exp ,max(TSA_STA) as tsa_sta from
-    (
-	select USERNAME,EMPLOYEE_ID,DRIVER_LICENSE_EXP,null as MED_CARD_EXP, null as TSA_STA from users 
-      where STATUS='Active' and DRIVER_LICENSE_EXP between current_date and current_date + interval 30 day
-    
-	union
-    select USERNAME,EMPLOYEE_ID,null as DRIVER_LICENSE_EXP,MED_CARD_EXP, null as TSA_STA from users 
-      where STATUS='Active' and MED_CARD_EXP between current_date and current_date + interval 30 day
-    
-	union
-    select USERNAME,EMPLOYEE_ID,null as DRIVER_LICENSE_EXP,null as MED_CARD_EXP, coalesce(TSA_STA,'NF') from users where STATUS='Active' and (TSA_STA is null or TSA_STA = '')
-    ) a $predicate group by a.username order by a.username";
+    $statement = "SELECT *
+                  FROM (
+                         SELECT
+                           username                     AS username,
+                           employee_id                  AS employee_id,
+                           date_format(driver_license_exp,'%m/%d/%Y') as driver_license_exp,
+                           date_format(med_card_exp,'%m/%d/%Y') as med_card_exp,
+                           tsa_issue,
+                           concat_ws(' ', fname, lname) AS real_name
+                         FROM
+                           (
+                             SELECT
+                               fname,
+                               lname,
+                               USERNAME,
+                               EMPLOYEE_ID,
+                               DRIVER_LICENSE_EXP,
+                               NULL AS MED_CARD_EXP,
+                               NULL AS tsa_issue
+                             FROM users
+                             WHERE STATUS = 'Active' AND (DRIVER_LICENSE_EXP BETWEEN current_date AND current_date + INTERVAL 30 DAY
+                                                          OR DRIVER_LICENSE_EXP < current_date) AND status = 'Active'
+                             UNION
+                             SELECT
+                               fname,
+                               lname,
+                               USERNAME,
+                               EMPLOYEE_ID,
+                               NULL AS DRIVER_LICENSE_EXP,
+                               MED_CARD_EXP,
+                               NULL AS tsa_issue
+                             FROM users
+                             WHERE STATUS = 'Active' AND (MED_CARD_EXP BETWEEN current_date AND current_date + INTERVAL 30 DAY
+                                                          OR MED_CARD_EXP < current_date) AND status = 'Active'
+                             UNION
+                             SELECT
+                               fname,
+                               lname,
+                               USERNAME,
+                               EMPLOYEE_ID,
+                               NULL AS DRIVER_LICENSE_EXP,
+                               NULL AS MED_CARD_EXP,
+                               CASE WHEN tsa_date_exp is not null then 1 END as tsa_issue
+                             FROM users
+                             WHERE STATUS = 'Active' AND (TSA_STA IS NOT NULL AND (
+                               tsa_date_exp IS NOT NULL OR tsa_date_exp BETWEEN current_date AND current_date + INTERVAL 30 DAY OR
+                               tsa_date_exp < current_date) OR (tsa_date_change_exp IS NOT NULL OR
+                                                                tsa_date_change_exp BETWEEN current_date AND current_date +
+                                                                                                             INTERVAL 30 DAY OR
+                                                                tsa_date_change_exp < current_date))
+                           ) a
+                         WHERE 1 = 1
+                         GROUP BY a.username
+                         ORDER BY a.username) result_set";
 
     if ($result = $mysqli->query($statement)) {
       $counter = 0;
       while($obj = $result->fetch_object()){
+        $expiration_array[$counter]['real_name'] = $obj->real_name;
         $expiration_array[$counter]['username'] = $obj->username;
         $expiration_array[$counter]['employee_id'] = $obj->employee_id;
         $expiration_array[$counter]['driver_license_exp'] = $obj->driver_license_exp;
         $expiration_array[$counter]['med_card_exp'] = $obj->med_card_exp;
 		$expiration_array[$counter]['dob'] = $obj->dob;
-        $expiration_array[$counter]['tsa_sta'] = $obj->tsa_sta;
+        $expiration_array[$counter]['tsa_issue'] = $obj->tsa_issue;
         $counter++;
       }
 
@@ -272,7 +311,24 @@ if (isset($_POST['broadcast_message']))
               <!-- DIRECT CHAT PRIMARY -->
               <div class="box box-primary direct-chat direct-chat-primary">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Tasks / Achievements</h3>
+                  <?php
+                  $open_tasks = 0;
+                  for($i=0;$i<count($tasks_aggregate);$i++) {
+                    if ($_SESSION['login'] != 1) {
+                      if ($tasks_aggregate[$i]['assign_to'] != $_SESSION['employee_id']) {
+                        continue;
+                      }
+                      if ($tasks_aggregate[$i]['internal_only'] == 1) {
+                        continue;
+                      }                      
+                    }
+                    if ($tasks_aggregate[$i]['complete_user'] != 0) {
+                      continue;
+                    }                    
+                    $open_tasks++;
+                  }
+                  ?>
+                  <h3 class="box-title">Tasks <?php echo $open_tasks; ?></h3>
                   <div class="box-tools pull-right">
                   <!-- Total New Messages Add PHP Here Just for new messages Events today -->
                     <a href="../dispatch/tasks.php"><span data-toggle="tooltip" title="Add Tasks" class="badge bg-light-blue">Add Task</span></a>
@@ -285,19 +341,22 @@ if (isset($_POST['broadcast_message']))
                   <!-- Conversations are loaded here -->
                   <div class="direct-chat-messages">
                   <!-- Begin Task notifications -->
-                    <?php for($i=0;$i<count($tasks_aggregate);$i++) { 
-                            if ($tasks_aggregate[$i]['assign_to'] != $_SESSION['employee_id']) {
-                              continue;
+                    <?php for($i=0;$i<count($tasks_aggregate);$i++) {
+                            // If we're admin we want to view a different set of tasks (all tasks)
+                            if ($_SESSION['login'] != 1) {                            
+                              if ($tasks_aggregate[$i]['assign_to'] != $_SESSION['employee_id']) {
+                                continue;
+                              }
+                              if ($tasks_aggregate[$i]['internal_only'] == 1)
+                              {
+                                // Skip if we are not admin and it's internal_only == 1
+                                continue;
+                              }
+                              if ($tasks_aggregate[$i]['complete_user'] != 0) {
+                                // Only show complete_user == 0
+                                continue;
+                              }                            
                             }
-                            if (($_SESSION['login'] != 1) && ($tasks_aggregate[$i]['internal_only'] == 1))
-                            {
-                              // Skip if we are not admin and it's internal_only == 1
-                              continue;
-                            }
-                            if ($tasks_aggregate[$i]['complete_user'] != 0) {
-                              // Only show complete_user == 0
-                              continue;
-                            }                            
                             // Get the notes
                             $note = null;
                             for($note_i=0;$note_i<count($task_note_array);$note_i++){
@@ -306,17 +365,22 @@ if (isset($_POST['broadcast_message']))
                                 $note = $task_note_array[$note_i]['note'];
                                 continue;
                               }
-
-                            }
+                            }                                                        
                     ?>
                            <div class="direct-chat-msg right" id="top_level_<?php echo $tasks_aggregate[$i]['id'];?>">
                            <div class="direct-chat-info clearfix">
-                           <span class="direct-chat-name pull-left">Assigned by: 
-                           <?php echo $tasks_aggregate[$i]['assigned_by'];; ?></span>
+                           <?php
+                           if ($_SESSION['login'] != 1) {
+                              $assign_words  = "Assigned by " . $tasks_aggregate[$i]['assigned_by'];                            
+                           }else{
+                              $assign_words  = "Assigned to " . $tasks_aggregate[$i]['real_name'] . " by " . $tasks_aggregate[$i]['assigned_by'];    
+                           }                           
+                           ?>
+                           <span class="direct-chat-name pull-left"><?php echo $assign_words; ?></span>
                            <span class="direct-chat-timestamp pull-right"><?php echo $tasks_aggregate[$i]['submit_date'];?></span>
                            </div>
                            <!-- /.direct-chat-info -->
-                           <img src="../../dist/img/Gilbert Huph.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
+                           <img src="../../dist/img/server.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
                            <!-- /.direct-chat-img -->
                          <div class="direct-chat-text"><?php echo $note;?><br><span style="font-size:.8em;">Due: <?php echo $tasks_aggregate[$i]['due_date'];?></span></div>
                          <table border="0">
@@ -517,18 +581,17 @@ if (isset($_POST['broadcast_message']))
                   
                   
                   -->
-                  <div class="direct-chat-messages">
+                  <div class="direct-chat-messages">                  
                     <?php for($i=0;$i<count($expiration_array);$i++) { ?>
                            <?php if ($expiration_array[$i]['driver_license_exp'] != '') {?>
                            <div class="direct-chat-msg right">
                            <div class="direct-chat-info clearfix">
-                           <span class="direct-chat-name pull-left">System Notification</span>
-                           <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
+                           <span class="direct-chat-name pull-left">System Notification</span>                           
                            </div>
                            <!-- /.direct-chat-info -->
                            <img src="../../dist/img/server.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
                            <!-- /.direct-chat-img -->
-                         <div class="direct-chat-text">Drivers license expires on <?php echo $expiration_array[$i]['driver_license_exp']?>  for <?php echo $expiration_array[$i]['username']?> </div>
+                         <div class="direct-chat-text">Drivers license expires on <?php echo $expiration_array[$i]['driver_license_exp']?>  for <?php echo $expiration_array[$i]['real_name']?> </div>
                          <!-- /.direct-chat-text -->
                          </div>
                          <!-- /.direct-chat-msg -->
@@ -536,55 +599,39 @@ if (isset($_POST['broadcast_message']))
                            <?php if ($expiration_array[$i]['med_card_exp'] != '') {?>
                            <div class="direct-chat-msg right">
                            <div class="direct-chat-info clearfix">
-                           <span class="direct-chat-name pull-left">System Notification</span>
-                           <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
+                           <span class="direct-chat-name pull-left">System Notification</span>                           
                            </div>
                            <!-- /.direct-chat-info -->
                            <img src="../../dist/img/server.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
                            <!-- /.direct-chat-img -->
-                         <div class="direct-chat-text">Medical card expires <?php echo $expiration_array[$i]['med_card_exp']?> for <?php echo $expiration_array[$i]['username']?></div>
+                         <div class="direct-chat-text">Medical card expires <?php echo $expiration_array[$i]['med_card_exp']?> for <?php echo $expiration_array[$i]['real_name']?></div>
                          <!-- /.direct-chat-text -->
                          </div>
-
-
-
-
-
-
-
 
                          <?php } ?>
                            <?php if ($expiration_array[$i]['dob'] != '') {?>
                            <div class="direct-chat-msg right">
                            <div class="direct-chat-info clearfix">
                            <span class="direct-chat-name pull-left">System Notification</span>
-                           <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
                            </div>
                            <!-- /.direct-chat-info -->
                            <img src="../../dist/img/server.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
                            <!-- /.direct-chat-img -->
-                         <div class="direct-chat-text">Happy B Day <?php echo $expiration_array[$i]['dob']?> for <?php echo $expiration_array[$i]['username']?></div>
+                         <div class="direct-chat-text">Happy B Day <?php echo $expiration_array[$i]['dob']?> for <?php echo $expiration_array[$i]['real_name']?></div>
                          <!-- /.direct-chat-text -->
                          </div>
-
-
-
-
-
-
                          
                          <!-- /.direct-chat-msg -->
                          <?php } ?>
-                           <?php if ($expiration_array[$i]['tsa_sta'] == 'NF') {?>
+                           <?php if ($expiration_array[$i]['tsa_issue'] == 1) {?>
                            <div class="direct-chat-msg right">
                            <div class="direct-chat-info clearfix">
                            <span class="direct-chat-name pull-left">System Notification</span>
-                           <span class="direct-chat-timestamp pull-right"><?php echo time();?></span>
                            </div>
                            <!-- /.direct-chat-info -->
                            <img src="../../dist/img/server.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
                            <!-- /.direct-chat-img -->
-                         <div class="direct-chat-text">No TSA number entered for <?php echo $expiration_array[$i]['username']?></div>
+                         <div class="direct-chat-text">Problem found with TSA for <?php echo $expiration_array[$i]['real_name']?></div>
                          <!-- /.direct-chat-text -->
                          </div>
                          <!-- /.direct-chat-msg -->
@@ -883,8 +930,8 @@ function update_task(i) {
 
     $("#top_level_"+my_db_id).hide();
     $.post( "<?php echo HTTP."/pages/dispatch/tasks.php";?>", { id: my_db_id, ajax_complete_task: 'ajax' })
-    .done(function(data, textStatus, request) { 
-      var objData = jQuery.parseJSON(data); 
+    .done(function(data, textStatus, request) {      
+      console.log('succes'); 
       $("#top_level_"+my_db_id).show();
      })
     .fail(function(data, textStatus, request) { console.log(data); });

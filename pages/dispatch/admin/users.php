@@ -883,6 +883,8 @@ function show_vis($object_type,$grantee) {
                       emerg_contact_name,
                       emerg_contact_phone,
                       tsa_sta,
+                      date_format(tsa_date_exp,'%m/%d/%Y') as tsa_date_exp,
+                      date_format(tsa_date_change_exp,'%m/%d/%Y') as tsa_date_change_exp,
                       contract,
                       fuelcard,
                       ts_name,
@@ -1184,11 +1186,11 @@ function show_vis($object_type,$grantee) {
                               </td>
                               <td style="padding: 5px">
                                 <label for="tsaExpire">TSA Exp. Date</label>
-                                <input type="text" class="form-control datepicker" name="tsaExpire" id="tsaExpire" placeholder="mm/dd/yyyy" value="" <?php echo show_vis('text',array(''));?>>
+                                <input type="text" class="form-control datepicker" name="tsaExpire" id="tsaExpire" placeholder="mm/dd/yyyy" value="<?php echo $row['tsa_date_exp'];?>" <?php echo show_vis('text',array(''));?>>
                             </td>
                             <td style="padding: 5px">
                                 <label for="tsaChange">TSA Date Change Exp.</label>
-                                <input type="text" class="form-control datepicker" name="tsaChange" id="tsaChange" placeholder="mm/dd/yyyy" value="" <?php echo show_vis('text',array(''));?>>
+                                <input type="text" class="form-control datepicker" name="tsaChange" id="tsaChange" placeholder="mm/dd/yyyy" value="<?php echo $row['tsa_date_change_exp'];?>" <?php echo show_vis('text',array(''));?>>
                             </td>
                             </tr>
                             <tr>

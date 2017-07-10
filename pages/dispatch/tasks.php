@@ -29,7 +29,7 @@ if (isset($_POST['ajax_complete_task'])){
   $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
 
   try {    
-    if ($mysqli->query($update_task) === false)
+    if ($mysqli->query($delete_sql) === false)
     {
         throw new Exception("Error updating task: ".$mysqli->error);
     }
@@ -616,7 +616,7 @@ $task_item_subitem = array_unique($task_item_subitem);
                                                           <option value="1">
                                                           Yes
                                                           </option>
-                                                          <option value="0">
+                                                          <option value="0" selected="true">
                                                           No
                                                           </option>
                                                         </select>         
@@ -638,7 +638,7 @@ $task_item_subitem = array_unique($task_item_subitem);
                                                     </tr>                                                                                                                      
                                                     <tr class="warning">
                                                       <td colspan="2">                                                          
-                                                        <input type="textarea" name="new_note" id="new_note">
+                                                        <input type="textarea" name="new_note" id="new_note" required="true">
                                                       </td>
                                                     </tr>                                                    
                                                     </tbody>
