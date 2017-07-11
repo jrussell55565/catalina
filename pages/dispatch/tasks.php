@@ -240,11 +240,11 @@ if (isset($_POST['btn_add_task'])) {
     if ($internal_only == 1) {
       // Override the address
       $employee_email = 'dispatch@catalinacartage.com';
-      $employee_vtext = 'dispatch@catalinacartage.com';
+      sendEmail($employee_email, 'New task alert', $body, 'drivers@catalinacartage.com');
+    }else{
+      sendEmail($employee_email, 'New task alert', $body, 'drivers@catalinacartage.com');
+      sendEmail($employee_vtext, 'New task alert', $body);
     }
-    sendEmail($employee_email, 'New task alert', $body, 'drivers@catalinacartage.com');
-    sendEmail($employee_vtext, 'New task alert', $body);
-
   } catch (Exception $e) {
     // An exception has been thrown
     // We must rollback the transaction
