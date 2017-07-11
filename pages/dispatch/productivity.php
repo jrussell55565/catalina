@@ -1211,11 +1211,11 @@ if ($_SESSION['login'] == 1)
                 <?php
                     $total_shipment_points = $shipment_aggregate['all_users']['earned_points'];
                     $possible_shipment_points = $shipment_aggregate['all_users']['max_points'];
-                    // override the total percent for all_users                    
+                    // override the total percent for all_users                                        
                     $total_shipment_percent = round(($shipment_aggregate['all_users']['earned_points'] / $shipment_aggregate['all_users']['max_points']) * 100,0);
                     for ($ship_i=0;$ship_i<count($shipment_aggregate);$ship_i++) {
                       if ($shipment_aggregate[$ship_i]['employee_id'] == $emp_id) {
-                        $total_shipment_percent = $shipment_aggregate[$ship_i]['percentage_earned'];
+                        $total_shipment_percent = ($shipment_aggregate[$ship_i]['percentage_earned'] > 100 ? 100 : $shipment_aggregate[$ship_i]['percentage_earned']);
                         $total_shipment_points = $shipment_aggregate[$ship_i]['earned_points'];
                         $possible_shipment_points = $shipment_aggregate[$ship_i]['max_points'];
                       }
@@ -1240,7 +1240,7 @@ if ($_SESSION['login'] == 1)
                     $total_vir_percent = round(($vir_aggregate['all_users']['vir_total_points'] / $vir_aggregate['all_users']['max_total_vir_points']) * 100,0);
                     for ($vir_i=0;$vir_i<count($vir_aggregate);$vir_i++) {
                       if ($vir_aggregate[$vir_i]['employee_id'] == $emp_id) {
-                        $total_vir_percent = $vir_aggregate[$vir_i]['vir_total_percent'];
+                        $total_vir_percent = ($vir_aggregate[$vir_i]['vir_total_percent'] > 100 ? 100 : $vir_aggregate[$vir_i]['vir_total_percent']);
                         $total_vir_points = $vir_aggregate[$vir_i]['vir_total_points'];
                         $days_worked = $vir_aggregate[$vir_i]['days_worked'];
                         $possible_vir_points = $vir_aggregate[$vir_i]['max_total_vir_points'];
@@ -1258,14 +1258,15 @@ if ($_SESSION['login'] == 1)
               <div class="small-box bg-purple">
                 <div class="inner">
                 <?php
-                     $total_activity_points = $task_aggregate['all_users']['activity_total_points'];
-                    $possible_activity_points = $task_aggregate['all_users']['activity_max_points'] + $task_aggregate['all_users']['days_worked'] * $cp_csa_values[0]['miles_daily_multiplier'];
+                     $total_activity_points = round($task_aggregate['all_users']['activity_total_points'],0);
+                    $possible_activity_points = ($task_aggregate['all_users']['activity_max_points'] + $task_aggregate['all_users']['days_worked']) * $cp_csa_values[0]['miles_daily_multiplier'];
                     $task_total_percent = round(($total_activity_points / $possible_activity_points) * 100,0);
                     for($task_i=0;$task_i<count($task_aggregate);$task_i++) {
-                      if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {
-                        $total_activity_points = $task_aggregate[$task_i]['activity_total_points'];
-                        $possible_activity_points = $task_aggregate[$task_i]['activity_max_points'] + $task_aggregate[$task_i]['days_worked'] * $cp_csa_values[0]['miles_daily_multiplier'];
-                        $task_total_percent = round(($total_activity_points / $possible_activity_points) * 100 ,0);
+                      if ($task_aggregate[$task_i]['employee_id'] == $emp_id) {                        
+                        $total_activity_points = round($task_aggregate[$task_i]['activity_total_points'],0);
+                        $possible_activity_points = ($task_aggregate[$task_i]['activity_max_points'] + $task_aggregate[$task_i]['days_worked']) * $cp_csa_values[0]['miles_daily_multiplier'];
+                        $task_total_percent = round(($total_activity_points / $possible_activity_points) * 100 ,0);                        
+                        $task_total_percent = ($task_total_percent > 100 ? 100 : $task_total_percent);
                       }
                     }
                  ?> 
@@ -1313,7 +1314,7 @@ if ($_SESSION['login'] == 1)
                        ?>
                       <?php echo  $total_compliance_percent_current."% | ". $total_compliance_percent_24."%";?>
                   </h4>
-                  <?php $total_compliance_percent_both = ($total_compliance_percent_current + $total_compliance_percent_24 / 2);?>
+                  <?php $total_compliance_percent_both = ($total_compliance_percent_current + $total_compliance_percent_24 / 2);?>                  
                   <h4 id="shp_percent" style="text-align: center; font-size: 3em;"><?php echo  round($total_compliance_percent_both,0) . "%";?></h4>
                 </div>
                 <div class="icon"> <i class="fa fa-cog fa-spin"></i> </div>
@@ -1337,7 +1338,7 @@ if ($_SESSION['login'] == 1)
                 <div class="inner">
                   <center>
                     <?php                      
-                      $sum_earned_percent = ($total_shipment_percent + $total_vir_percent + $task_total_percent + $total_compliance_percent_both);
+                      $sum_earned_percent = ($total_shipment_percent + $total_vir_percent + $task_total_percent + $total_compliance_percent_both);                      
                       $sum_possible_points = ($possible_shipment_points + $possible_vir_points + $possible_activity_points + $possible_compliance_points);
                     ?>
                     <h3>Combined Score <?php echo round(($sum_earned_percent / 4),0);?>%</h3></center>
