@@ -97,65 +97,22 @@ function get_completed_onboards($mysqli,$employee_id)
 $us_state_abbrevs = array('AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY');
 $time_selectors = array('00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00');
 $vtext_providers = array(
+"@sms.alltelwireless.com" => "AllTel",
 "@txt.att.net" => "AT&T Txt",
-"@mms.att.net" => "AT&T MMS",
-"@cingularme.com" => "Cingular",
 "@myboostmobile.com" => "Boost Mobile",
+"@mobile.celloneusa.com" => "Cellular One",
+"@text.cellonenation.net" => "Cellular One",
+"@cingularme.com" => "Cingluar",
+"@mms.cricketwireless.net" => "Cricket",
+"@mymetropcs.com" => "Metro PCS",
 "@messaging.nextel.com" => "Nextel",
+"@pcsone.net" => "PCS ONE",
 "@messaging.sprintpcs.com" => "Sprint PCS",
-"@pm.sprint.com" => "Sprint Smart",
 "@tmomail.net" => "T-Moblile",
 "@email.uscc.net" => "Us Cellular",
 "@vtext.com" => "Verizon",
-"@vzwpix.com" => "Verizon MMS",
 "@vmobl.com" => "Virgin Mobile ",
-"@mmst5.tracfone.com" => "Tracefone",
-"@vtext.com" => "Verizon",
-"@page.att.net" => "AT&T Page",
-"@cingularme.com" => "Cingular ",
-"@mymetropcs.com" => "Metro PCS",
-"@qwestmp.com" => "Quest",
-"@cingularme.com" => "Cingluar",
-"@cingularme.com" => "Cingular",
-"@messaging.nextel.com" => "Nextel",
-"@sms.airtelmontana.com" => "Airtel Montana",
-"@msg.acsalaska.com" => "Alaska Comm",
-"@cellcom.quiktxt.com" => "Cellcom",
-"@mobile.celloneusa.com" => "Cellular One",
-"@text.cellonenation.net" => "Cellular One",
-"@cwemail.com" => "Centennial Wireless",
-"@sms.mycricket.com" => "Cricket",
-"@cspire1.com" => "C-Spire",
-"@msg.gci.net" => "General Comm Inc",
-"@msg.gci.net" => "Globalstar",
-"@msg.globalstarusa.com" => "Helio",
-"@ivctext.com" => "Illinois Valley Cell",
-"@msg.iridium.com" => "Iridium",
-"@orange.pl" => "Orange Polska",
-"@tms.suncom.com" => "Seuncom",
-"@sms.thumbcellular.com" => "Thumb Cellular",
-"@sms.alltelwireless.com" => "AllTel",
-"@sms.bluecell.com" => "Bluegrass Cellular",
-"@messaging.centurytel.net" => "Century Tel",
-"@mobile.att.net" => "Cincinnati Bell",
-"@corrwireless.net" => "Corr Wireless Comm",
-"@mobile.dobson.net" => "Dobson Cellular Systems",
-"@mobile.cellularone.com" => "Dobson Cellular One",
-"@inlandlink.com" => "Inland Cellular",
-"@metropcs.sms.us" => "Metro PCS",
-"@clearlydigital.com" => "Midwest Wireless",
-"@pcsone.net" => "PCS ONE",
-"@msg.pioneerenidcellular.com" => "Pioneer Enid Cell",
-"@voicestream.net" => "Powertel",
-"@sms.pscel.com" => "Public Service Cell",
-"@typetalk.ruralcellular.com" => "Rural Cell",
-"@csouth1.com" => "Telepak Cell South",
 "@voicestream.net" => "Voicestream",
-"@sms.wcc.net" => "West Central Wireless",
-"@cellularonewest.com" => "Western Wireless",
-"@viaerosms.com" => "Viaero",
-"@msg.fi.google.com" => "Google FI",
-"@mms.mycricket.com" => "Cricket",
 );
 
 // Get task info
@@ -189,11 +146,24 @@ header("Location: /pages/main/index.php");
 # we'll send out a test message
 if (isset($_POST['testVtext']))
 {
-sendEmail($_POST['testVtext'],"Testing Vtext","This is a test message.",null,null);
+sendEmail($_POST['testVtext'],"VText Testing","Reply to this text message if you have received this text.  Thank you, Catalina Cartage.",null,null);
 }
 if (isset($_POST['testEmail']))
 {
-sendEmail($_POST['testEmail'],"Testing Vtext","This is a test message.",null,null);
+sendEmail($_POST['testEmail'],"Testing Email Broadcast","This is a Test Message from Catalina Cartage Dashboard. \r\n
+The Dashboard is used to send emails to you when shipments arrive to your boards.
+If you also recieved a text message to your phone, shipments also will be alerted to you via text. \r\n
+The Dashboard is also used to send out broadcast messages to your email from other employees to advise of any road conditions, or other company related information. \r\n
+The Dashboard will also send out any vehicle inspections that are you complete. \r\n
+The Dashboard will also send out any completed IFTA trip packs. \r\n
+The Dashboard will also send out any onboarding items that are not complete. \r\n
+The Dashboard will also sent out any task items that need to be completed. \r\n
+As a FYI, if you are with Boost Mobile or Cricket, we suggest to get a different cell service as the text messaging services are not very reliable. \r\n
+Please feel free to contact us with any concerns. \r\n
+TUS Dispatch: 520-664-9188  \r\n
+PHX Dispatch: 602-454-0310. \r\n
+Please don't forget to reply to message that you have recieved successfully. \r\n
+Thank you. \r\n",null,null);
 }
 # Let's do some form processing
 if(isset($_POST['submit']))
@@ -1494,7 +1464,7 @@ function show_vis($object_type,$grantee) {
                             }
                             // Looks like this user has tasks.
                             ?>
-                            <table class="table">
+                            <table class="table" border="0">
                                 <thead>
                                     <tr>
                                         <th>Start Date</th>
