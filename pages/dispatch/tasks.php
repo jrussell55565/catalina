@@ -227,7 +227,7 @@ if (isset($_POST['btn_add_task'])) {
     $body .= "+/-: ".$pos_neg."\n";
     $body .= "Points: ".$points."\n";
     $body .= "Notes: ".$new_note."\n";
-    $body .= "This Task will Auto Close at midnight on the Due date, to avoid negative points please complete the task, login and submit you have completed task on the dashboards.  If you have any questions please call dispatch and ask for Liz. 520-664-9188 \n";
+    $body .= "I don't think this section is sending anything for emails.........\n";
     $body .= "Due: ".$due_date." 23:59\n";
 
     // Also send a text message to the recipient
@@ -235,15 +235,27 @@ if (isset($_POST['btn_add_task'])) {
       // We did not find a suitable vtext address.  Throw an exception
       throw new Exception("Unable to find a vtext address for ".$_POST['task_assign_to']);
     }
-    $body = "You have been assigned a new Task. Please login to the driver boards to the home dash board";
+    $body = "You have been assigned a new Task. Please login to the driver boards to the home dash board. \n";
+	// Jaime Added this because the above selections for email items were not sending.
+	$body .= "Task ID: ".$task_id."\n";
+	$body .= "Assigned by: ".$assigned_by."\n";
+    $body .= "Category: ".$category."\n";
+    $body .= "Item: ".$item."\n";
+    $body .= "Sub: ".$subitem."\n";
+    $body .= "+/-: ".$pos_neg."\n";
+    $body .= "Points: ".$points."\n";
+    $body .= "Notes: ".$new_note."\n";
+    $body .= "Please call dispatch if you have any questions 520-664-9188.  This task has been added to your user profile also.  Thank you. \n";
+	
     // Only send the email if internal_only is a 0
     if ($internal_only == 1) {
       // Override the address
       $employee_email = 'dispatch@catalinacartage.com';
-      sendEmail($employee_email, 'New task alert', $body, 'drivers@catalinacartage.com');
+      sendEmail($employee_email, 'New Task Alert', $body, 'drivers@catalinacartage.com');
     }else{
-      sendEmail($employee_email, 'New task alert', $body, 'drivers@catalinacartage.com');
-      sendEmail($employee_vtext, 'New task alert', $body);
+		// Need to add the task_id to the subject line......
+      sendEmail($employee_email, 'New Task Alert', $body, 'drivers@catalinacartage.com');
+      sendEmail($employee_vtext, 'New Task Alert', $body);
     }
   } catch (Exception $e) {
     // An exception has been thrown
@@ -310,7 +322,8 @@ $task_item_subitem = array_unique($task_item_subitem);
 <head>
 <BASE href="http://dispatch.catalinacartage.com">
 <meta charset="UTF-8">
-<title>Productivity</title>
+<title>Tasks</title>
+<link rel="shortcut icon" href="/dist/favicon/gears.ico" type="image/x-icon" />
 <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 <!-- Bootstrap 3.3.4 -->
 <link href="<?php echo HTTP;?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -348,7 +361,7 @@ $task_item_subitem = array_unique($task_item_subitem);
 
           <ol class="breadcrumb">
             <li><a href="/pages/main/index.php"><i class="fa fa-home"></i> Home</a></li>
-            <li class="active">Test page</li>
+            <li class="active">Tasks</li>
           </ol>
         </section>
 
