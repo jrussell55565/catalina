@@ -343,8 +343,9 @@ if (isset($_POST['broadcast_message']))
                   <!-- Begin Task notifications -->
                     <?php for($i=0;$i<count($tasks_aggregate);$i++) {
                             // If we're admin we want to view a different set of tasks (all tasks)
-                            if ($_SESSION['login'] != 1) {                            
+                            if ($_SESSION['login'] != 1) {                                
                               if ($tasks_aggregate[$i]['assign_to'] != $_SESSION['employee_id']) {
+                                // If it's not my task then continue.                          
                                 continue;
                               }
                               if ($tasks_aggregate[$i]['internal_only'] == 1)
@@ -356,6 +357,12 @@ if (isset($_POST['broadcast_message']))
                                 // Only show complete_user == 0
                                 continue;
                               }                            
+                            }else{
+                              // I am an admin.  I want to see tasks that are open and closed by user.
+                              if ($tasks_aggregate[$i]['complete_approved'] == 1) {
+                                // This task has been closed by an admin. I don't want to see it.
+                                continue;
+                              }
                             }
                             // Get the notes
                             $note = null;
