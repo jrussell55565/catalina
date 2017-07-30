@@ -225,7 +225,32 @@ if ($allow_delivery === false) {
               <input type="submit" class="btn btn-danger btn-sm" id="btn_pickedUp"
                             value="Picked Up" <?php echo $disabledButton; echo $disable_pickup_btn;?>>
               </input>
+            </form>        
+          </td
+          >
+          <td><form method="GET" action="outfordelivery.php">
+              <input type="hidden" id="hwb" name="hwb"
+                           value="<?php echo $row['hawbNumber'];?>">
+              <input type="hidden" id="recordid" name="recordid"
+                            value="<?php echo $row['recordID'];?>">
+              <input type="submit" class="btn btn-danger btn-sm" id="btn_Out_For_Delivery"
+                            value="Out for Delivery" <?php echo $disabledButton; echo $disable_delivery_btn;?>>
+              </input>
             </form>
+          </td>
+        </tr>
+        <tr>
+          <td><form method="GET" action="dropped.php">
+              <input type="hidden" id="hwb" name="hwb"
+                           value="<?php echo $row['hawbNumber'];?>">
+              <input type="hidden" id="recordid" name="recordid"
+                            value="<?php echo $row['recordID'];?>">
+                            
+<!-- Research btn_pickedUP_ Add status for FSIBK and FSITUS  -->                            
+              <input type="submit" class="btn btn-danger btn-sm" id="btn_Dropped"
+                            value="Dropped" <?php echo $disabledButton; echo $disable_pickup_btn;?>>
+              </input>
+            </form> 
           </td>
           <td><form method="GET" action="delconfirmed.php">
             <input type="hidden" id="hwb" name="hwb"
@@ -250,15 +275,16 @@ if ($allow_delivery === false) {
                 </div>
                 <!-- /btn-group -->
                 <select class="form-control" name="sel_quickStatus" id="sel_quickStatus">
-                  <option selected>Dropped</option>
-                  <option>Freight At Dock</option>
-                  <option>Trailer Dropped</option>
+                  <option selected>Trailer Dropped PU</option>
+                  <option>Trailer Dropped DEL</option>
                   <option>On Dock PHX</option>
                   <option>On Dock TUS</option>
                   <option>In Transit</option>
-                  <option>Refused</option>
-                  <option>Reject PU DEL</option>
-                  <option>Accept PU DEL</option>
+                  <option>Mechanical Breakdown</option>
+                  <option>Accept PU</option>
+                  <option>Reject PU</option>
+                  <option>Accept DEL</option>
+                  <option>Reject DEL</option>
                 </select>
               </div>
               <div>
