@@ -98,10 +98,10 @@ if (isset($_POST['forgotPassword']) && ($_POST['forgotPassword'] == 'true'))
 // If we're trying to sign up do this part here
 if (isset($_POST['register']) && ($_POST['register'] == 'true'))
 {
-    $fname = $mysqli->real_escape_string($_POST['fname']);
-    $lname = $mysqli->real_escape_string($_POST['lname']);
-    $username = $mysqli->real_escape_string($_POST['username']);
-    $email = $mysqli->real_escape_string($_POST['email']);
+    $fname = trim($mysqli->real_escape_string($_POST['fname']));
+    $lname = trim($mysqli->real_escape_string($_POST['lname']));
+    $username = trim($mysqli->real_escape_string($_POST['username']));
+    $email = trim($mysqli->real_escape_string($_POST['email']));
     $recaptcha_response = $_POST['g-recaptcha-response'];
 
     // Let's validate via recaptcha that the user is not a bot.
