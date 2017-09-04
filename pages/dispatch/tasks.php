@@ -184,6 +184,7 @@ if (isset($_POST['btn_add_task'])) {
     }
     // Get the id of the last insert
     $task_id = $mysqli->insert_id;
+
     if (sizeof($new_note) > 0) {
       // Let's insert the new note
       $insert_note = "insert into task_notes (task_id, note) values 
@@ -218,17 +219,6 @@ if (isset($_POST['btn_add_task'])) {
       // We did not find a suitable email address.  Throw an exception
       throw new Exception("Unable to find an email address for ".$_POST['task_assign_to']);
     }
-    $body = "A new task has been created for you to complete!\n";
-    $body = "Please login to the driver boards to the home dash board.  Please click on Done when complete!\n";
-    $body .= "Assigned by: ".$assigned_by."\n";
-    $body .= "Category: ".$category."\n";
-    $body .= "Item: ".$item."\n";
-    $body .= "Sub: ".$subitem."\n";
-    $body .= "+/-: ".$pos_neg."\n";
-    $body .= "Points: ".$points."\n";
-    $body .= "Notes: ".$new_note."\n";
-    $body .= "I don't think this section is sending anything for emails.........\n";
-    $body .= "Due: ".$due_date." 23:59\n";
 
     // Also send a text message to the recipient
     if (empty($employee_vtext)) {
@@ -236,16 +226,15 @@ if (isset($_POST['btn_add_task'])) {
       throw new Exception("Unable to find a vtext address for ".$_POST['task_assign_to']);
     }
     $body = "You have been assigned a new Task. Please login to the driver boards to the home dash board. \n";
-	// Jaime Added this because the above selections for email items were not sending.
-	$body .= "Task ID: ".$task_id."\n";
-	$body .= "Assigned by: ".$assigned_by."\n";
+  	$body .= "Task ID: ".$task_id."\n";
+  	$body .= "Assigned by: ".$assigned_by."\n";
     $body .= "Category: ".$category."\n";
     $body .= "Item: ".$item."\n";
     $body .= "Sub: ".$subitem."\n";
     $body .= "+/-: ".$pos_neg."\n";
     $body .= "Points: ".$points."\n";
     $body .= "Notes: ".$new_note."\n";
-    $body .= "Please call dispatch if you have any questions 520-664-9188.  This task has been added to your user profile also.  Thank you. \n";
+    $body .= "Please call dispatch if you have any questions 520-664-9188.  This task has been added to your user profile also.  Thank you. \n";    
 	
     // Only send the email if internal_only is a 0
     if ($internal_only == 1) {
