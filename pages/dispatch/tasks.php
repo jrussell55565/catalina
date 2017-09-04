@@ -243,8 +243,8 @@ if (isset($_POST['btn_add_task'])) {
       sendEmail($employee_email, 'New Task Alert', $body, 'drivers@catalinacartage.com');
     }else{
 		// Need to add the task_id to the subject line......
-      sendEmail($employee_email, 'New Task Alert', $body, 'drivers@catalinacartage.com');
-      sendEmail($employee_vtext, 'New Task Alert', $body);
+      sendEmail($employee_email, 'New Task Alert ('.$task_id.')', $body, 'drivers@catalinacartage.com');
+      sendEmail($employee_vtext, 'New Task Alert ('.$task_id.')', $body);
     }
   } catch (Exception $e) {
     // An exception has been thrown
