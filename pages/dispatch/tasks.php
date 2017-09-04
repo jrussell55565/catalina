@@ -267,6 +267,7 @@ if (isset($_POST['btn_add_task'])) {
     header("location: /pages/dispatch/tasks.php?error=$url_error");
     exit;
   }
+  header("location: /pages/dispatch/tasks.php");
 }
 
 // Get the existing rows from the task table
