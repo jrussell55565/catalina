@@ -1,6 +1,7 @@
 <?php
 // Inialize session
 session_start();
+
 // Include database connection settings
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
 
@@ -53,31 +54,43 @@ if (mysqli_connect_errno()) {
 # First, if we've gotten here via the forgotPassword page then we'll just 
 # validate and skip the rest
 if (isset($_POST['forgotPassword']) && ($_POST['forgotPassword'] == 'true'))
-{
+{    
     $forgottenUser = $mysqli->real_escape_string($_POST['DriverUserName']);
     $statement = "SELECT username,email,password FROM users WHERE 
                   lower(username) = lower('" . $forgottenUser . "')
                   or
                   lower(email) = lower('" . $forgottenUser . "')";
 
-     if ($result = $mysqli->query($statement)) 
-     {
-         $rows = mysqli_stmt_store_result($statement);
-         if ($rows == 1)
-         {
-             while ($row = mysqli_fetch_assoc($result))
-             {
-                 $forgottenUser = $row['username'];
-                 $forgottenEmail = $row['email'];
-                 $password = $row['password'];
-                 sendEmail('dispatch@catalinacartage.com',"Password Request","$forgottenUser has forgotten their current username or password.\r\n
-                 Username: $forgottenUser\r\n
-                 Email: $forgottenEmail\r\n
-                 Password: $password\r\n");
+    if ($stmt = $mysqli->prepare($statement)) {
+        /* execute query */
+        $stmt->execute();
+
+        /* store result */
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {            
+            $stmt->bind_result($username, $email, $password);
+            while ($stmt->fetch()) {            
+                 $forgottenUser = $username;
+                 $forgottenEmail = $email;
+                 $password = $password;
+
+                 $body = "$forgottenUser has forgotten their current username or password.\r\n";
+                 $body .= "Username: $forgottenUser\r\n";
+                 $body .= "Email: $forgottenEmail\r\n";
+                 $body .= "Password: $password\r\n";
+                 
+                 sendEmail('dispatch@catalinacartage.com',"Password Request",$body,null,null,null);
              }
-         }
+        }
+
+        /* free result */
+        $stmt->free_result();
+
+        /* close statement */
+        $stmt->close();
     }
-    $result->close();
+     
     header("Location: /pages/login/forgot.php?return=true");
     exit;
 }
