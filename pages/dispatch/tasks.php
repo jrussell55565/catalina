@@ -283,6 +283,9 @@ if (isset($_GET['search']) && $_GET['search'] == 'true')
   }elseif ($_GET['task_status'] == 'closed') {
     $task_status_predicate = 'complete_user = 1 AND complete_approved = 1';
   }
+} else {
+  // The default, only get the Active employees
+  $driver_predicate = 'users.status = "Active"';
 }
 
 $task_sql = get_task_nonaggregate($driver_predicate, $task_status_predicate);
