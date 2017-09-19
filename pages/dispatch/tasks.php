@@ -1,10 +1,9 @@
 <?php
 session_start();
 
-// Admins only.
-if ($_SESSION['login'] != 1)
+if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
 {
-        header('Location: /pages/dispatch/adminonly.php');
+        header('Location: /pages/login/driverlogin.php');
 }
 
 include("$_SERVER[DOCUMENT_ROOT]/dist/php/global.php");
@@ -42,6 +41,37 @@ if (isset($_POST['ajax_complete_task'])){
     $mysqli->close();
     header('HTTP/1.1 400 Bad Request');
     header('Content-Type: application/json; charset=UTF-8');
+    exit;
+  }
+}
+
+if (isset($_POST['btn_ack_task'])) {
+  // This is a user acknowledging that they read their tasks
+  $id = $_POST['btn_ack_task'];
+
+  $update_task = "update tasks set
+    user_ack = 1
+    where id = $id";
+  
+    
+  # Start TX
+  $mysqli->autocommit(FALSE);
+  $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+
+  try {    
+    if ($mysqli->query($update_task) === false)
+    {
+        throw new Exception("Error updating task: ".$mysqli->error);
+    }
+    $mysqli->commit();
+  } catch (Exception $e) {
+    // An exception has been thrown
+    // We must rollback the transaction
+    $url_error = urlencode($e->getMessage());
+    $mysqli->rollback();
+    $mysqli->autocommit(TRUE);
+    $mysqli->close();
+    header("location: /pages/dispatch/tasks.php?error=$url_error");
     exit;
   }
 }
@@ -265,7 +295,7 @@ if (isset($_POST['btn_add_task'])) {
 
 // Defaults
 $driver_predicate = '1=1';
-$task_status_predicate = 'complete_user = 0 AND complete_approved = 0';
+$task_status_predicate = 'complete_user = 0 AND complete_approved = 0';  
 
 // Overrides
 if (isset($_GET['search']) && $_GET['search'] == 'true')
@@ -284,8 +314,13 @@ if (isset($_GET['search']) && $_GET['search'] == 'true')
     $task_status_predicate = 'complete_user = 1 AND complete_approved = 1';
   }
 } else {
-  // The default, only get the Active employees
-  $driver_predicate = 'users.status = "Active"';
+  // If we're a non-admin we only get to see our tasks (and they can't be internal_only)
+  if ($_SESSION['login'] == 2) {
+    $driver_predicate = "assign_to = '".$_SESSION['employee_id']."' and internal_only = 0";  
+  }else{
+    // The default, only get the Active employees
+    $driver_predicate = 'users.status = "Active"';
+  }
 }
 
 $task_sql = get_task_nonaggregate($driver_predicate, $task_status_predicate);
@@ -366,6 +401,7 @@ $task_item_subitem = array_unique($task_item_subitem);
 
 
           <!-- Top Box Centered Full sized window -->
+          <?php if ($_SESSION['login'] == 1) { ?>
           <div class="row">
             <div class="col-xs-12">
               <div class="box collapsed collapsed-box">
@@ -440,10 +476,12 @@ $task_item_subitem = array_unique($task_item_subitem);
               </div><!-- /.box -->
             </div>
           </div>         
+          <?php } ?>
          <!-- Top Box Full sized window Close Out-->   
           
 <!-------------------- Add task -->
- <div class="row">
+          <?php if ($_SESSION['login'] == 1) { ?>
+          <div class="row">
             <div class="col-xs-12">
               <div class="box collapsed collapsed-box">
                 <div class="box-header">
@@ -669,7 +707,7 @@ $task_item_subitem = array_unique($task_item_subitem);
                 <!-- /User tasks -->
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
-            
+          <?php } ?>  
           <!-------------------- /Add task -->
 
 
@@ -959,9 +997,21 @@ $task_item_subitem = array_unique($task_item_subitem);
                                         </div>
                                     </div>
                                     <div class="panel-footer">
+                                          <?php if ($_SESSION['login'] == 1) { ?>
                                           <button class="btn btn-sm btn-active" type="submit" id="btn_update_task" name="btn_update_task"
                                                     data-toggle="tooltip" value="<?php echo $tasks_aggregate[$task_i]['id'];?>"
                                                     data-original-title="Save changes"><i class="glyphicon glyphicon-floppy-disk"></i></button>
+                                          <?php }else{ ?>
+                                            <?php if ($tasks_aggregate[$task_i]['user_ack'] == 0) { // User has not acked this task?>
+                                              <button class="btn btn-sm btn-danger" type="submit" id="btn_ack_task" name="btn_ack_task"
+                                                    data-toggle="tooltip" value="<?php echo $tasks_aggregate[$task_i]['id'];?>"
+                                                    data-original-title="Mark task as read"><i class="glyphicon glyphicon-star-empty"></i>Unread</button>
+                                            <?php }else{ ?>
+                                              <button class="btn btn-sm btn-primary" type="submit" id="btn_ack_task" name="btn_ack_task"
+                                                    data-toggle="tooltip" value="<?php echo $tasks_aggregate[$task_i]['id'];?>"
+                                                    data-original-title="Task has been read" disabled><i class="glyphicon glyphicon-star"></i>Read</button>
+                                            <?php } ?>  
+                                          <?php } ?>
                                           <span class="pull-right">
                                             <?php if ($tasks_aggregate[$task_i]['internal_only'] == 1) { echo "<strong>Internal</strong>"; } ?>
                                             <?php if ($tasks_aggregate[$task_i]['internal_only'] == 0) { echo "<strong>Public</strong>"; } ?>

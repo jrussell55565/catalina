@@ -412,6 +412,7 @@ function get_task_nonaggregate($driver_predicate, $task_status_predicate)
             ,tasks.complete_user
             ,tasks.complete_approved
             ,tasks.internal_only
+            ,tasks.user_ack
             ,concat_ws(' ', users.fname, users.lname) as real_name
             ,concat_ws(' ', u.fname, u.lname) as assigned_by
             ,users.username
@@ -419,7 +420,7 @@ function get_task_nonaggregate($driver_predicate, $task_status_predicate)
         JOIN users on users.employee_id = tasks.assign_to
         JOIN users u on u.employee_id = tasks.assigned_by
           where 1=1 and  $driver_predicate and $task_status_predicate 
-          order by submit_date, id asc";
+          order by submit_date, id asc";          
   return $sql;
 }
 

@@ -164,6 +164,21 @@ if (isset($_POST['broadcast_message']))
   exit;
  }
 
+  // If I'm not an admin then get the tasks that aren't acked
+  if ($_SESSION['login'] == 2){
+    $tasks_non_acked = get_sql_results("select id,date_format(due_date,'%m/%d/%Y') as due_date,
+    category,item,subitem from tasks where assign_to = '".$_SESSION['employee_id']."' and user_ack = 0
+    and internal_only = 0",$mysqli);
+    if (sizeof($tasks_non_acked) > 0) {
+      // This means we have un-acked tasks we need to show
+      $show_unacked_tasks = 1;
+    }else{
+      $show_unacked_tasks = 0;
+    }    
+  }else{
+    $show_unacked_tasks = 0;
+  }
+
   $mysqli->close();
 ?>
 
@@ -730,7 +745,55 @@ if (isset($_POST['broadcast_message']))
 <!-- =========================================================== -->
 
 
+<!-- Modal used for showing un-acked tasks -->
+<div id="taskModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">        
+        <h4 class="modal-title">Unread Tasks</h4>
+      </div>
+      <div class="modal-body">      
+          <h2>The following tasks are unread</h2>        
+          <table class="table">
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>category</th>
+                <th>item</th>
+                <th>subitem</th>
+                <th>due date</th>              
+              </tr>
+            </thead>
+            <tbody>
+            <?php
+              for ($i=0; $i < sizeof($tasks_non_acked); $i++) { 
+            ?>
+              <tr>
+                <td><?php echo $tasks_non_acked[$i]['id'];?></td>
+                <td><?php echo $tasks_non_acked[$i]['category'];?></td>
+                <td><?php echo $tasks_non_acked[$i]['item'];?></td>
+                <td><?php echo $tasks_non_acked[$i]['subitem'];?></td>
+                <td><?php echo $tasks_non_acked[$i]['due_date'];?></td>              
+              </tr>
+            <?php
+              }
+            ?>
+            </tbody>
+          </table>
+      </div>
+      <div class="modal-footer">
+        <h4>Click on the button to read your tasks.</h4>
+        
+        <a href="<?php echo HTTP;?>/pages/dispatch/tasks.php">
+        <button type="button" class="btn btn-default">View Tasks</button>        
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 
 <!-- =====================End Above Post Start New Post here==================== -->
@@ -944,6 +1007,17 @@ function update_task(i) {
     .fail(function(data, textStatus, request) { console.log(data); });
 }
 </script>
+
+
+<?php if ($show_unacked_tasks == 1) { ?>
+  <script type="text/javascript">
+    // Show the tasks modal if we have unacked tasks
+    $("#taskModal").modal({
+    backdrop: 'static',
+    keyboard: false
+    });
+  </script>      
+<?php } ?>
 
 </body>
 </html>
