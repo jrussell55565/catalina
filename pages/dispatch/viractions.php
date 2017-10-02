@@ -436,7 +436,7 @@ if (! empty($_FILES['fileToUpload']['name'])){
         $path_parts = pathinfo($file["name"]);
         $file_extension = $path_parts['extension'];
 
-        $target_name = md5($file['name']) . '.' . $file_extension;
+        $target_name = md5($file['name']) . '_' . time() . '.' . $file_extension;
         $return_page = '/pages/dispatch/vir.php';
         $sql = "INSERT INTO vir_images (vir_itemnum, image_path) VALUES (".$local_vir_itemnum.", '".HTTP . $target_dir . $target_name."')";
         $file_size = 5000000; # 5megs
