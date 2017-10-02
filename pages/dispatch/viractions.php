@@ -415,7 +415,9 @@ if (($trucktype == 'combo') && ($trailer_number != ''))
 }
 
 # Process file upload (if exists)
-if (! empty($_FILES['fileToUpload']['name'])){
+// Set the default value of the $images var
+$images = "Driver uploaded no images.";
+if ($_FILES['fileToUpload']['size'][0] > 0){
     // Get the po (truck or trailer)
     if (is_int($truck_po)) {
         // This is a truck, use that
@@ -431,14 +433,14 @@ if (! empty($_FILES['fileToUpload']['name'])){
     // Create a string to append to the email.
     $images = null;
 
-    foreach($file_array as $file) {
+    foreach($file_array as $file) {        
         // Grab the extension of the file
         $path_parts = pathinfo($file["name"]);
         $file_extension = $path_parts['extension'];
 
         $target_name = md5($file['name']) . '_' . time() . '.' . $file_extension;
         $return_page = '/pages/dispatch/vir.php';
-        $sql = "INSERT INTO vir_images (vir_itemnum, image_path) VALUES (".$local_vir_itemnum.", '".HTTP . $target_dir . $target_name."')";
+        $sql = "INSERT INTO vir_images (vir_itemnum, image_path) VALUES (".$local_vir_itemnum.", '".HTTP . $target_dir . $target_name."')";        
         $file_size = 5000000; # 5megs
         upload_image($file, $target_dir, $target_name, $return_page, $sql, $file_size, $mysqli);
         $images .= HTTP . $target_dir . $target_name . "\n";
