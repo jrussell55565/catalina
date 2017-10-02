@@ -935,7 +935,7 @@ $tire_pressure_array = array(125,120,115,110,105,100,95,90,80,85,75,70,65,60,50,
                                                                                                                                 <td ><!-- /.Please insert running current time here  On submit us that date time -->
                                                                                                                               </tr>
                                                                                                                               <tr>
-                                                                                                                                <td ><div>Take A photo and upload! Not working.<img
+                                                                                                                                <td ><div>Take A photo and upload!.<img
                                                                                                                                 src="../images/images/take_a_photo.jpg" width="56" height="58" style="display: block; margin: 0 auto;"/></div>
                                                                                                                                 <div>
                                                                                                                                   <input id="fileToUpload" name="fileToUpload[]" type="file" multiple="multiple" class="file-loading">
