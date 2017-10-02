@@ -6,6 +6,12 @@ if (($_SESSION['login'] != 2) && ($_SESSION['login'] != 1))
         header('Location: /pages/login/driverlogin.php');
 }
 
+// Make sure we don't have unread tasks:
+if ($_SESSION['tasks_non_acked'] == 1) {
+  // Send back to index.php
+  header('Location: /pages/main/index.php');
+}
+
 include($_SERVER['DOCUMENT_ROOT']."/dist/php/global.php");
 mysql_connect($db_hostname, $db_username, $db_password) or DIE('Connection to host is failed, perhaps the service is down!');
 mysql_select_db($db_name) or DIE('Database name is not available!');

@@ -169,14 +169,24 @@ if (isset($_POST['broadcast_message']))
     $tasks_non_acked = get_sql_results("select id,date_format(due_date,'%m/%d/%Y') as due_date,
     category,item,subitem from tasks where assign_to = '".$_SESSION['employee_id']."' and user_ack = 0
     and internal_only = 0",$mysqli);
-    if (sizeof($tasks_non_acked) > 0) {
-      // This means we have un-acked tasks we need to show
+    if (sizeof($tasks_non_acked) > 0) {      
+      // This means we have un-acked tasks we need to show      
       $show_unacked_tasks = 1;
+      // Let's get the notes for this task too
+      for ($i=0; $i < sizeof($tasks_non_acked); $i++) {         
+        // Create an array with a key value of our task id        
+        $task_notes = get_sql_results("select note from task_notes where task_id=".$tasks_non_acked[$i]['id']. " limit 1",$mysqli);
+        $tasks_non_acked[$i]['note'] = implode('', $task_notes[0]);
+      }  
+      // Set a session var so we can redirect back to here to force people to view their tasks.
+      $_SESSION['tasks_non_acked'] = 1;
     }else{
       $show_unacked_tasks = 0;
+      $_SESSION['tasks_non_acked'] = 0;
     }    
   }else{
     $show_unacked_tasks = 0;
+    $_SESSION['tasks_non_acked'] = 0;
   }
 
   $mysqli->close();
@@ -756,26 +766,27 @@ if (isset($_POST['broadcast_message']))
       </div>
       <div class="modal-body">      
           <h2>The following tasks are unread</h2>        
-          <table class="table">
-            <thead>
-              <tr>
-                <th>id</th>
-                <th>category</th>
-                <th>item</th>
-                <th>subitem</th>
-                <th>due date</th>              
-              </tr>
-            </thead>
+          <table class="table table-responsive">           
             <tbody>
             <?php
               for ($i=0; $i < sizeof($tasks_non_acked); $i++) { 
             ?>
               <tr>
-                <td><?php echo $tasks_non_acked[$i]['id'];?></td>
-                <td><?php echo $tasks_non_acked[$i]['category'];?></td>
-                <td><?php echo $tasks_non_acked[$i]['item'];?></td>
-                <td><?php echo $tasks_non_acked[$i]['subitem'];?></td>
-                <td><?php echo $tasks_non_acked[$i]['due_date'];?></td>              
+                <td><strong>Task</strong></td><td><?php echo $tasks_non_acked[$i]['id'];?></td>
+              </tr>
+              <tr>                
+                <td><strong>cat.</strong></td><td><?php echo $tasks_non_acked[$i]['category'];?></td>
+                <td><strong>due</strong></td><td><?php echo $tasks_non_acked[$i]['due_date'];?></td>              
+              </tr>
+              <tr>
+                <td><strong>item</strong></td><td><?php echo $tasks_non_acked[$i]['item'];?></td>
+                <td><strong>sub</strong></td><td colspan="2"><?php echo $tasks_non_acked[$i]['subitem'];?></td>                
+              </tr>
+              <tr>
+                <td><strong>notes</strong></td>
+              </tr>
+              <tr>
+                <td colspan="4"><?php echo $tasks_non_acked[$i]['note'];?></td>
               </tr>
             <?php
               }
