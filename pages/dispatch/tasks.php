@@ -748,8 +748,7 @@ $task_item_subitem = array_unique($task_item_subitem);
                   array_push($task_users, $tasks_aggregate[$i]['real_name']);
                 }                
                 $task_users = array_unique($task_users);                
-                // Now loop through the users array to create the outer box
-                
+                // Now loop through the users array to create the outer box               
                 foreach ($task_users as $task_users_i => $task_users_name) {
                   $task_users_name_replaced = str_replace(" ","_",$task_users_name);
                 ?>                
@@ -757,9 +756,22 @@ $task_item_subitem = array_unique($task_item_subitem);
                  <div class="well col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
                         <div class="row user-row">
                             <div class="col-xs-3 col-sm-2 col-md-1 col-lg-1">
+                                <?php
+                                  // Loop through the tasks_aggregate array.  I need to do this to find the username of the user we're on now
+                                  $user_photo = HTTP."dist/img/usernophoto.jpg";                                  
+                                  for ($task_aggregate_picture_index=0; $task_aggregate_picture_index < sizeof($tasks_aggregate); $task_aggregate_picture_index++) { 
+                                    if ($tasks_aggregate[$task_aggregate_picture_index]['real_name'] == $task_users_name) {
+                                      if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/".$tasks_aggregate[$task_aggregate_picture_index]['username']."_avatar")){
+                                        $user_photo = HTTP."/dist/img/userimages/".$tasks_aggregate[$task_aggregate_picture_index]['username']."_avatar";
+                                      } else {
+                                        $user_photo = HTTP."dist/img/usernophoto.jpg";
+                                      }
+                                    }
+                                  }
+                                ?>
                                 <img class="img-circle"
-                                     src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=50"
-                                     alt="User Pic">
+                                     src="<?php echo $user_photo; ?>"
+                                     alt="User Pic" width="35" height="35">
                             </div>
                             <div class="col-xs-8 col-sm-9 col-md-10 col-lg-10">
                                 <strong><?php echo $task_users_name; ?></strong><br>                                
