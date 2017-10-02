@@ -470,7 +470,7 @@ function upload_image($input_file, $target_dir, $target_name, $return_page, $sql
           
           # resize the image
           $resizedImage = new Imagick($input_file["tmp_name"]);
-          $resizedImage->resizeImage(160, 0, Imagick::FILTER_LANCZOS, 1);
+          $resizedImage->resizeImage(600, 0, Imagick::FILTER_LANCZOS, 1);
           $resizedImage->writeImage($input_file["tmp_name"]);
           $resizedImage->destroy();
           if (!move_uploaded_file($input_file["tmp_name"], $target_file)) {
