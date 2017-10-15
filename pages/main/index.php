@@ -115,7 +115,8 @@ if (isset($_POST['broadcast_message']))
                            ) a
                          WHERE 1 = 1
                          GROUP BY a.username
-                         ORDER BY a.username) result_set";
+                         ORDER BY a.username) result_set
+                         $predicate";
 
     if ($result = $mysqli->query($statement)) {
       $counter = 0;
