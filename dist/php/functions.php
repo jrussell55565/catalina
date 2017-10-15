@@ -114,11 +114,11 @@ function get_drivers($mysqli)
     return $driver_array;
 }
 
-function get_all_users($mysqli)
+function get_all_users($mysqli, $status = '%')
 {
     $all_users_array = [];
     $statement       = "select fname, lname, employee_id, email, vtext, username, status
-                        from users
+                        from users where status like '$status'
                         order by fname";
 
     $counter = 0;

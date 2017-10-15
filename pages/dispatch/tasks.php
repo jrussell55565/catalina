@@ -11,7 +11,7 @@ $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
 
 // General users array
 $driver_array = get_drivers($mysqli);
-$all_users_array = get_all_users($mysqli);
+$all_users_array = get_all_users($mysqli,'Active');
 
 $username = $_SESSION['userid'];
 $drivername = $_SESSION['drivername'];
