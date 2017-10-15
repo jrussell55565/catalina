@@ -393,12 +393,6 @@ $task_item_subitem = array_unique($task_item_subitem);
           </ol>
         </section>
 
-<!-- Animated Top Menu Insert PHP Reference to /wwwlive/dist/menus_sidebars_elements  -->
-
-<?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/topmenuanimation.php');?>
-
-<!-- End Animated Top Menu -->  
-
 
           <!-- Top Box Centered Full sized window -->
           <?php if ($_SESSION['login'] == 1) { ?>
