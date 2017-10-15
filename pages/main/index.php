@@ -776,11 +776,15 @@ if (isset($_POST['broadcast_message']))
                 <td><strong>Task</strong></td><td><?php echo $tasks_non_acked[$i]['id'];?></td>
               </tr>
               <tr>                
-                <td><strong>cat.</strong></td><td><?php echo $tasks_non_acked[$i]['category'];?></td>
-                <td><strong>due</strong></td><td><?php echo $tasks_non_acked[$i]['due_date'];?></td>              
+                <td><strong>cat.</strong></td><td><?php echo $tasks_non_acked[$i]['category'];?></td>                             
               </tr>
               <tr>
-                <td><strong>item</strong></td><td><?php echo $tasks_non_acked[$i]['item'];?></td>
+                <td><strong>due</strong></td><td><?php echo $tasks_non_acked[$i]['due_date'];?></td> 
+              </tr>
+              <tr>
+                <td><strong>item</strong></td><td><?php echo $tasks_non_acked[$i]['item'];?></td>                
+              </tr>
+              <tr>
                 <td><strong>sub</strong></td><td colspan="2"><?php echo $tasks_non_acked[$i]['subitem'];?></td>                
               </tr>
               <tr>
