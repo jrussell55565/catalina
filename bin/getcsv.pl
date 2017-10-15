@@ -308,7 +308,7 @@ sub vtext
             # Create a dynamic predicate based on $key.
             my $dyn_pred;
             if ($key eq 'vtext') {
-                $dyn_pred = "curtime() not between str_to_date(quiet_time_begin,'%H:%i') and str_to_date(quiet_time_end, '%H:%i')";
+                $dyn_pred = "curtime() <= str_to_date(quiet_time_begin,'%H:%i') and curtime() >= str_to_date(quiet_time_end, '%H:%i')";
             }else{
                 $dyn_pred = "1 = 1";
             }
