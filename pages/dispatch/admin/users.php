@@ -1467,6 +1467,7 @@ function show_vis($object_type,$grantee) {
                             <table class="table" border="0">
                                 <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Start Date</th>
                                         <th>Category</th>
                                         <th>Item</th>
@@ -1479,6 +1480,7 @@ function show_vis($object_type,$grantee) {
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td><?php echo $tasks_aggregate[$task_i]['id']; ?></td>
                                         <td><?php echo $tasks_aggregate[$task_i]['submit_date']; ?></td>
                                         <td><?php echo $tasks_aggregate[$task_i]['category']; ?></td>
                                         <td><?php echo $tasks_aggregate[$task_i]['item']; ?></td>
@@ -1487,10 +1489,23 @@ function show_vis($object_type,$grantee) {
                                         <td><?php echo $tasks_aggregate[$task_i]['points']; ?></td>
                                         <td><?php echo ($tasks_aggregate[$task_i]['complete_user'] == 0 ? 'No' : 'Yes'); ?></td>
                                         <td><?php echo ($tasks_aggregate[$task_i]['internal_only'] == 0 ? 'No' : 'Yes'); ?></td>
-                                    </tr>
+                                    </tr>                                    
                                     <tr>
-                                        <td><a target="_blank" href="<?php echo HTTP;?>/pages/dispatch/tasks.php?task=<?php echo $tasks_aggregate[$task_i]['id'];?>">Task Note</a>:</td>
-                                        <td colspan="6"><?php echo $tasks_aggregate[$task_i]['notes']; ?></td>
+                                        <?php
+                                            # Get the notes for the task
+                                            $note_sql = "select note,date_format(created_date,'%m/%d/%Y') as created_date 
+                                            from task_notes where id = ".$tasks_aggregate[$task_i]['id'];                                            
+                                            $notes = get_sql_results($note_sql,$mysqli);
+                                            if ( sizeof($notes) > 0 ) {
+                                                echo "<tr>\n";
+                                                echo '<td><a target="_blank" href="'.HTTP.'/pages/dispatch/tasks.php?task='.$tasks_aggregate[$task_i]['id'].'">Task Note</a>:</td>'."\n";
+                                                echo "</tr>\n";
+                                            }
+                                            for ($note_detail=0; $note_detail < sizeof($notes); $note_detail++) {
+                                                echo '<td colspan="1">'.$notes[$note_detail]['created_date']."</td>\n";
+                                                echo '<td colspan="7">'.$notes[$note_detail]['note']."</td>\n";
+                                            }
+                                        ?>                                        
                                     </tr>
                                 </tbody>
                             </table>
