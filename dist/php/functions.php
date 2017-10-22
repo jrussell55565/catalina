@@ -572,4 +572,61 @@ function generate_compliance_predicate($emp_id,$time) {
 
    return array ($predicate,$time_predicate);
 }
+
+function notify_anniversary($employee_id) {
+  $sql = 'select a.username, a.vtext, a.email, a.start_dt, a.anniversary,
+    CASE
+    WHEN a.anniversary = 90 THEN "Congratulations, you have made is past your 90 Day Evaluation Period!"
+    WHEN a.anniversary = 1 THEN concat(concat("Congratulations, It is your Yearly work anniversary!  You have been here ",a.anniversary)," year.  Thank you for being part of our team.")
+    ELSE concat(concat("Congratulations, It is your Yearly work anniversary!  You have been here ",a.anniversary)," years.  Thank you for being part of our team.")
+    END as notification,
+    a.employee_id
+    from (
+    SELECT
+        username,
+        vtext,
+        email,
+        start_dt,
+        CASE
+        WHEN start_dt = curdate() - INTERVAL 90 DAY
+        THEN 90
+        WHEN start_dt = curdate() - INTERVAL 1 YEAR
+        THEN 1
+        WHEN start_dt = curdate() - INTERVAL 2 YEAR
+        THEN 2
+        WHEN start_dt = curdate() - INTERVAL 3 YEAR
+        THEN 3
+        WHEN start_dt = curdate() - INTERVAL 4 YEAR
+        THEN 4
+        WHEN start_dt = curdate() - INTERVAL 5 YEAR
+        THEN 5
+        WHEN start_dt = curdate() - INTERVAL 6 YEAR
+        THEN 6
+        WHEN start_dt = curdate() - INTERVAL 7 YEAR
+        THEN 7
+        WHEN start_dt = curdate() - INTERVAL 8 YEAR
+        THEN 8
+        WHEN start_dt = curdate() - INTERVAL 9 YEAR
+        THEN 9
+        WHEN start_dt = curdate() - INTERVAL 10 YEAR
+        THEN 10
+        WHEN start_dt = curdate() - INTERVAL 11 YEAR
+        THEN 11
+        WHEN start_dt = curdate() - INTERVAL 12 YEAR
+        THEN 12
+        WHEN start_dt = curdate() - INTERVAL 13 YEAR
+        THEN 13
+        WHEN start_dt = curdate() - INTERVAL 14 YEAR
+        THEN 14
+        WHEN start_dt = curdate() - INTERVAL 15 YEAR
+        THEN 15
+        END AS anniversary,
+      employee_id
+    FROM catalina_test.users
+    WHERE status = "Active"
+    ) a WHERE a.anniversary IS NOT NULL
+    AND a.employee_id = "'.$employee_id.'"';
+
+    return $sql;
+}
 ?>

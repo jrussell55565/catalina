@@ -190,6 +190,10 @@ if (isset($_POST['broadcast_message']))
     $_SESSION['tasks_non_acked'] = 0;
   }
 
+  // Get notifications
+  $notify_anniversary_sql = notify_anniversary($_SESSION['employee_id']);
+  $notify_anniversary = get_sql_results($notify_anniversary_sql, $mysqli);
+
   $mysqli->close();
 ?>
 
@@ -615,6 +619,18 @@ if (isset($_POST['broadcast_message']))
                   
                   -->
                   <div class="direct-chat-messages">                  
+                    <?php if ($notify_anniversary[0]['notification'] != '') {?>
+                    <div class="direct-chat-msg right">
+                           <div class="direct-chat-info clearfix">
+                           <span class="direct-chat-name pull-left">System Notification</span>                           
+                           </div>
+                           <!-- /.direct-chat-info -->
+                           <img src="../../dist/img/server.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
+                           <!-- /.direct-chat-img -->
+                         <div class="direct-chat-text"><?php echo $notify_anniversary[0]['notification'];?> </div>
+                         <!-- /.direct-chat-text -->
+                         </div>
+                    <?php } ?>
                     <?php for($i=0;$i<count($expiration_array);$i++) { ?>
                            <?php if ($expiration_array[$i]['driver_license_exp'] != '') {?>
                            <div class="direct-chat-msg right">
