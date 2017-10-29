@@ -573,13 +573,17 @@ function generate_compliance_predicate($emp_id,$time) {
    return array ($predicate,$time_predicate);
 }
 
-function notify_anniversary($employee_id) {
+function notify_anniversary($predicate) {
   $sql = 'select a.username, a.vtext, a.email, a.start_dt, a.anniversary,
     CASE
     WHEN a.anniversary = 90 THEN "Congratulations, you have made is past your 90 Day Evaluation Period!"
     WHEN a.anniversary = 1 THEN concat(concat("Congratulations, It is your Yearly work anniversary!  You have been here ",a.anniversary)," year.  Thank you for being part of our team.")
     ELSE concat(concat("Congratulations, It is your Yearly work anniversary!  You have been here ",a.anniversary)," years.  Thank you for being part of our team.")
     END as notification,
+      CASE
+    WHEN a.anniversary = 90 THEN "day"
+    WHEN a.anniversary = 1 THEN "year"
+    END as period,
     a.employee_id
     from (
     SELECT
@@ -625,8 +629,20 @@ function notify_anniversary($employee_id) {
     FROM catalina_test.users
     WHERE status = "Active"
     ) a WHERE a.anniversary IS NOT NULL
-    AND a.employee_id = "'.$employee_id.'"';
+    AND '.$predicate;
 
     return $sql;
+}
+
+function notify_birthday($predicate) {
+  $sql = "SELECT
+    username,
+    DATE_FORMAT(dob, '%m/%d/%Y') AS dob,
+    employee_id
+    FROM users
+    WHERE date_format(dob, '%m-%d') = date_format(curdate(), '%m-%d')
+    AND $predicate";
+
+  return $sql;
 }
 ?>

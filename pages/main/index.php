@@ -190,9 +190,14 @@ if (isset($_POST['broadcast_message']))
     $_SESSION['tasks_non_acked'] = 0;
   }
 
+  if ($_SESSION['login'] == 1) { $predicate = '1 = 1'; }else{ $predicate = 'employee_id="'.$_SESSION['employee_id'].'"'; }
   // Get notifications
-  $notify_anniversary_sql = notify_anniversary($_SESSION['employee_id']);
+  $notify_anniversary_sql = notify_anniversary($predicate);
   $notify_anniversary = get_sql_results($notify_anniversary_sql, $mysqli);
+
+  // Get birthday
+  $notify_birthday_sql = notify_birthday($predicate);
+  $notify_birthday = get_sql_results($notify_birthday_sql, $mysqli);
 
   $mysqli->close();
 ?>
@@ -618,18 +623,44 @@ if (isset($_POST['broadcast_message']))
                   
                   
                   -->
-                  <div class="direct-chat-messages">                  
-                    <?php if ($notify_anniversary[0]['notification'] != '') {?>
-                    <div class="direct-chat-msg right">
-                           <div class="direct-chat-info clearfix">
-                           <span class="direct-chat-name pull-left">System Notification</span>                           
+                  <div class="direct-chat-messages">                    
+                    <?php for($i=0;$i<count($notify_anniversary);$i++) { ?>                                      
+                      <?php if ($notify_anniversary[0]['notification'] != '') {?>
+                      <?php if ($_SESSION['login'] == 1) { 
+                          $message = "Today is the ".$notify_anniversary[$i]['anniversary']." ".$notify_anniversary[$i]['period']." anniversary for ".$notify_anniversary[$i]['username'];
+                        }else{
+                          $message = $notify_anniversary[$i]['notification'];
+                        }?>
+                      <div class="direct-chat-msg right">
+                             <div class="direct-chat-info clearfix">
+                             <span class="direct-chat-name pull-left">System Notification</span>                           
+                             </div>
+                             <!-- /.direct-chat-info -->
+                             <img src="../../dist/img/server.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
+                             <!-- /.direct-chat-img -->
+                           <div class="direct-chat-text"><?php echo $message;?> </div>
+                           <!-- /.direct-chat-text -->
                            </div>
-                           <!-- /.direct-chat-info -->
-                           <img src="../../dist/img/server.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
-                           <!-- /.direct-chat-img -->
-                         <div class="direct-chat-text"><?php echo $notify_anniversary[0]['notification'];?> </div>
-                         <!-- /.direct-chat-text -->
-                         </div>
+                      <?php } ?>
+                    <?php } ?>
+                    <?php for($i=0;$i<count($notify_birthday);$i++) { ?>                  
+                      <?php if ($notify_birthday[0]['dob'] != '') {?>
+                      <?php if ($_SESSION['login'] == 1) { 
+                          $message = "Today is the birthday of ".$notify_birthday[$i]['username'];
+                        }else{
+                          $message = "Happy Birthday!";
+                        }?>
+                      <div class="direct-chat-msg right">
+                             <div class="direct-chat-info clearfix">
+                             <span class="direct-chat-name pull-left">System Notification</span>                           
+                             </div>
+                             <!-- /.direct-chat-info -->
+                             <img src="../../dist/img/server.jpg" alt="message user image" width="37" height="32" class="direct-chat-img">
+                             <!-- /.direct-chat-img -->
+                           <div class="direct-chat-text"><?php echo $message;?> </div>
+                           <!-- /.direct-chat-text -->
+                           </div>
+                      <?php } ?>
                     <?php } ?>
                     <?php for($i=0;$i<count($expiration_array);$i++) { ?>
                            <?php if ($expiration_array[$i]['driver_license_exp'] != '') {?>
