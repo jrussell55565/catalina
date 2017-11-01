@@ -45,15 +45,23 @@ if (isset($_POST['ajax_complete_task'])){
   }
 }
 
-if (isset($_POST['btn_ack_task'])) {
+if (isset($_POST['btn_ack_task'])) {  
   // This is a user acknowledging that they read their tasks
   $id = $_POST['btn_ack_task'];
 
   $update_task = "update tasks set
-    user_ack = 1
+    user_ack = 1, complete_user = 1
     where id = $id";
   
-    
+  $new_note = $_POST['new_note'];
+  if ($new_note != '') {
+    // Let's insert the new note
+    $insert_note = "insert into task_notes (task_id, note) values 
+    ($id, '$new_note')";
+  }else{
+    $insert_note = "SELECT 1 FROM DUAL";
+  }
+
   # Start TX
   $mysqli->autocommit(FALSE);
   $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
@@ -62,6 +70,10 @@ if (isset($_POST['btn_ack_task'])) {
     if ($mysqli->query($update_task) === false)
     {
         throw new Exception("Error updating task: ".$mysqli->error);
+    }
+    if ($mysqli->query($insert_note) === false)
+    {
+        throw new Exception("Error inserting note for task: ".$mysqli->error);
     }
     $mysqli->commit();
   } catch (Exception $e) {
@@ -115,10 +127,12 @@ if (isset($_POST['btn_update_task'])) {
     assigned_by = '$assign_by'
     where id = $id";
 
-  if (sizeof($new_note) > 0) {
+  if ($new_note != '') {
     // Let's insert the new note
     $insert_note = "insert into task_notes (task_id, note) values 
     ($id, '$new_note')";
+  }else{
+    $insert_note = "SELECT 1 FROM DUAL";
   }
     
   # Start TX
@@ -132,7 +146,7 @@ if (isset($_POST['btn_update_task'])) {
     }
     if ($mysqli->query($insert_note) === false)
     {
-        throw new Exception("Error updating task: ".$mysqli->error);
+        throw new Exception("Error inserting note for task: ".$mysqli->error);
     }
     $mysqli->commit();
   } catch (Exception $e) {
@@ -327,7 +341,7 @@ $task_sql = get_task_nonaggregate($driver_predicate, $task_status_predicate);
 $tasks_aggregate = get_sql_results($task_sql,$mysqli);
 
 // Get the notes for each task
-$task_note_array = get_sql_results("select id, task_id, note from task_notes",$mysqli);
+$task_note_array = get_sql_results("select note.id, note.task_id, note.note, date_format(note.created_date, '%m/%d/%y') as created_date from task_notes note",$mysqli);
 
 // Get the tasks_items
 $task_items_array = get_sql_results("select * from tasks_items",$mysqli);
@@ -752,13 +766,13 @@ $task_item_subitem = array_unique($task_item_subitem);
                             <div class="col-xs-3 col-sm-2 col-md-1 col-lg-1">
                                 <?php
                                   // Loop through the tasks_aggregate array.  I need to do this to find the username of the user we're on now
-                                  $user_photo = HTTP."dist/img/usernophoto.jpg";                                  
+                                  $user_photo = HTTP."/dist/img/usernophoto.jpg";                                  
                                   for ($task_aggregate_picture_index=0; $task_aggregate_picture_index < sizeof($tasks_aggregate); $task_aggregate_picture_index++) { 
                                     if ($tasks_aggregate[$task_aggregate_picture_index]['real_name'] == $task_users_name) {
                                       if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/".$tasks_aggregate[$task_aggregate_picture_index]['username']."_avatar")){
                                         $user_photo = HTTP."/dist/img/userimages/".$tasks_aggregate[$task_aggregate_picture_index]['username']."_avatar";
                                       } else {
-                                        $user_photo = HTTP."dist/img/usernophoto.jpg";
+                                        $user_photo = HTTP."/dist/img/usernophoto.jpg";
                                       }
                                     }
                                   }
@@ -774,6 +788,15 @@ $task_item_subitem = array_unique($task_item_subitem);
                                 <i class="glyphicon glyphicon-chevron-down text-muted"></i>
                             </div>
                         </div>
+                        <div class="box-body table-responsive cyruxx_<?php echo $task_users_name_replaced; ?>" style="display: none;">
+                        <table class="table table-striped ">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Cat</th>                            
+                            <th>Item</th>
+                            <?php if ($_SESSION == 1) { echo '<th>Visibility</th>';}?>                     
+                          </tr>
                         <?php
                         // Loop through the tasks_aggregate array to pull out all the task info for this user                        
                         reset($tasks_aggregate);                        
@@ -781,256 +804,278 @@ $task_item_subitem = array_unique($task_item_subitem);
                         {                                                    
                           if ($tasks_aggregate[$task_i]['real_name'] != $task_users_name) {                                                      
                             continue;
-                          }                          
+                          }
                         ?>
-                        <form id="frm_update_task" method="post" action="<?php echo HTTP . $_SERVER['PHP_SELF']; ?>">
-                        <div class="row user-infos cyruxx_<?php echo $task_users_name_replaced; ?>">
+                          <tr name="<?php echo $status;?>">
+                          <td><!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary btn-small" data-toggle="modal" data-target="#modal_<?php echo $tasks_aggregate[$task_i]['id'];?>">
+                            <?php echo $tasks_aggregate[$task_i]['id'];?>
+                            </button>
+                          </td>
+                          <td>
+                            <?php echo $tasks_aggregate[$task_i]['category'];?>
+                          </td>
+                          <td>
+                            <?php echo $tasks_aggregate[$task_i]['item'];?>
+                          </td>
+                          <?php if ($_SESSION == 1) { echo "<td>".$tasks_aggregate[$task_i]['internal_only']."</td>";}?>           
+                          </tr>
+                           <!-- GENERAL MODAL -->
+                           <form id="frm_update_task" method="post" action="<?php echo HTTP . $_SERVER['PHP_SELF']; ?>">
+                            <div class="modal fade" id="modal_<?php echo $tasks_aggregate[$task_i]['id'];?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Details for <?php echo $tasks_aggregate[$task_i]['id'];?></h4>
+                                  </div>
+                                  <div class="modal-body">
+                                    <div class="row" style="margin-bottom: 5px;">
+                                      <div class="col-md-4">
+                                        Assigned by:
+                                      </div>
+                                      <div class="col-md-6">
+                                        <select class="form-control"  value="" name="task_assign_by" 
+                                            id="task_assign_by_<?php echo $tasks_aggregate[$task_i]['id'];?>">
+                                           <?php for ($i=0; $i<sizeof($all_users_array); $i++) { ?>                                            
+                                             <?php if ($all_users_array[$i]['employee_id'] != $_SESSION['employee_id']) { 
+                                                continue; 
+                                              } ?>
+                                              <option value="<?php echo $all_users_array[$i]['employee_id'];?>"
+                                             <?php if ($all_users_array[$i]['name'] == $tasks_aggregate[$task_i]['assigned_by']) { echo ' selected '; }?>
+                                             ><?php echo $all_users_array[$i]['name'];?>                                             
+                                           <?php } ?>
+                                           </option>
+                                        </select>
+                                      </div>
+                                    </div>
 
-                            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xs-offset-0 col-sm-offset-0 col-md-offset-1 col-lg-offset-1">
-                                
-                                <div class="panel panel-primary">
-                                    <div class="panel-heading dropdown-deets fooz" style="padding-bottom: 25px;"  data-for='.taskdeets_<?php echo $tasks_aggregate[$task_i]['id']; ?>'>
-                                    <span>
-                                      <span class="pull-left">
-                                        <?php
-                                        if ($tasks_aggregate[$task_i]['complete_approved'] == 1) {
-                                          $status = 'closed';
-                                        }elseif ($tasks_aggregate[$task_i]['complete_approved'] == 0 && $tasks_aggregate[$task_i]['complete_user'] == 1) {
-                                          $status = 'in progress';
-                                        }else{
-                                          $status = 'open';
-                                        }
-                                        ?>
-                                        <h3 class="panel-title"><?php echo $tasks_aggregate[$task_i]['subitem'];?> [<?php echo $status; ?>]</h3>
-                                      </span>
-                                      <span class="pull-right">
-                                        <i class="glyphicon glyphicon-chevron-down"></i>
-                                      </span>
-                                    </span>
-                                    </div>                                    
-                                
-                                    <div class="panel-body user-infos taskdeets_<?php echo $tasks_aggregate[$task_i]['id']; ?>">
-                                        <div class="row">
+                                    <div class="row" style="margin-bottom: 5px;">
+                                      <div class="col-md-4">
+                                        Category
+                                      </div>
+                                      <div class="col-md-6">
+                                       <select class="form-control"  value="" name="task_category" 
+                                          id="task_category_<?php echo $tasks_aggregate[$task_i]['id'];?>">
+                                            <?php foreach ($task_cat_item as $key => $value)                                                                     
+                                            {
+                                            ?>
+                                              <option value="<?php echo $value;?>" <?php if ($tasks_aggregate[$task_i]['category'] == $value) { echo " selected "; } ?>>
+                                              <?php echo $value; ?>
+                                              </option>
                                             <?php
-                                            $user_image = HTTP."/dist/img/usernophoto.jpg";
-                                            if (file_exists($_SERVER['DOCUMENT_ROOT']."/dist/img/userimages/" . $tasks_aggregate[$task_i]['username'] . "_avatar")) {
-                                              $user_image = HTTP."/dist/img/userimages/" . $tasks_aggregate[$task_i]['username'] . "_avatar";
                                             }
                                             ?>
-                                            <div class="col-md-3 col-lg-3 hidden-xs hidden-sm">
-                                                <img class="img-circle"
-                                                     src="<?php echo $user_image;?>"
-                                                     alt="User Pic">
-                                            </div>
-                                            <div class="col-xs-2 col-sm-2 hidden-md hidden-lg">
-                                                <img class="img-circle"
-                                                     src="<?php echo $user_image;?>"
-                                                     alt="User Pic">
-                                            </div>                                           
-                                            <div class=" col-md-9 col-lg-9 hidden-xs hidden-sm">
-                                                <strong>Task: <?php echo $tasks_aggregate[$task_i]['id'];?></strong><br>
-                                                <table class="table table-user-information">
-                                                    <tbody>
-                                                    <tr>
-                                                        <td>Assigned by:</td>
-                                                        <td>
-                                                          <select class="form-control"  value="" name="task_assign_by" id="task_assign_by_<?php echo $tasks_aggregate[$task_i]['id'];?>">
-                                                           <?php for ($i=0; $i<sizeof($all_users_array); $i++) { ?>
-                                                           <option value="<?php echo $all_users_array[$i]['employee_id'];?>"
-                                                           <?php if ($all_users_array[$i]['employee_id'] != $_SESSION['employee_id']) { continue; } ?>
-                                                           <?php if ($all_users_array[$i]['name'] == $tasks_aggregate[$task_i]['assigned_by']) { echo ' selected '; }?>
-                                                           ><?php echo $all_users_array[$i]['name'];?>
-                                                           </option>
-                                                           <?php } ?>
-                                                           </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Category:</td>
-                                                        <td>
-                                                        <select class="form-control"  value="" name="task_category" 
-                                                        id="task_category_<?php echo $tasks_aggregate[$task_i]['id'];?>">
-                                                          <?php foreach ($task_cat_item as $key => $value)                                                                     
-                                                          {
-                                                          ?>
-                                                            <option value="<?php echo $value;?>" <?php if ($tasks_aggregate[$task_i]['category'] == $value) { echo " selected "; } ?>>
-                                                            <?php echo $value; ?>
-                                                            </option>
-                                                          <?php
-                                                          }
-                                                          ?>
-                                                        </select>                                                         
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Item:</td>
-                                                        <td>
-                                                        <select class="form-control"  value="" name="task_item" 
-                                                        id="task_item_<?php echo $tasks_aggregate[$task_i]['id'];?>">
-                                                          <?php foreach ($task_item_item as $key => $value)                                                                     
-                                                          {
-                                                          ?>
-                                                            <option value="<?php echo $value;?>" <?php if ($tasks_aggregate[$task_i]['item'] == $value) { echo " selected "; } ?>>
-                                                            <?php echo $value; ?>
-                                                            </option>
-                                                          <?php
-                                                          }
-                                                          ?>
-                                                        </select>        
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Subitem:</td>
-                                                        <td>
-                                                          <select class="form-control"  value="" name="task_subitem"                                                         
-                                                          id="task_subitem_<?php echo $tasks_aggregate[$task_i]['id'];?>">
-                                                          <?php foreach ($task_item_subitem as $key => $value)                                                                     
-                                                          {
-                                                          ?>
-                                                            <option value="<?php echo $value;?>" <?php if ($tasks_aggregate[$task_i]['subitem'] == $value) { echo " selected "; } ?>>
-                                                            <?php echo $value; ?>
-                                                            </option>
-                                                          <?php
-                                                          }
-                                                          ?>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Pos | Neg:</td>
-                                                        <td>
-                                                        <select class="form-control"  value="" name="task_pos_neg" 
-                                                        id="task_pos_neg_<?php echo $tasks_aggregate[$task_i]['id'];?>">
-                                                          <option value="positive" <?php if ($tasks_aggregate[$task_i]['pos_neg'] == 'positive') { echo " selected "; } ?>>
-                                                          +
-                                                          </option>
-                                                          <option value="negative" <?php if ($tasks_aggregate[$task_i]['pos_neg'] == 'negative') { echo " selected "; } ?>>
-                                                          -
-                                                          </option>
-                                                        </select>                                                                                                       
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Points:</td>
-                                                        <td>                                                        
-                                                          <input type="number" class="form-control"  
-                                                          value="<?php echo $tasks_aggregate[$task_i]['points'];?>" 
-                                                          name="task_points" id="task_points_<?php echo $tasks_aggregate[$task_i]['id'];?>" required>                                                            
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Due:</td>
-                                                        <td>                                                        
-                                                          <input type="text" class="input-sm form-control datepicker" name="task_due_date" 
-                                                          id="task_due_date_<?php echo $tasks_aggregate[$task_i]['id'];?>" data-date-format="mm/dd/yyyy"/ 
-                                                          value="<?php echo $tasks_aggregate[$task_i]['due_date']; ?>">
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Completed:</td>
-                                                        <td>                                                        
-                                                          <input type="text" class="input-sm form-control datepicker" name="task_completed_date" 
-                                                          id="task_completed_date_<?php echo $tasks_aggregate[$task_i]['id'];?>" data-date-format="mm/dd/yyyy"/ 
-                                                          value="<?php echo $tasks_aggregate[$task_i]['completed_date']; ?>">
-                                                        </td>
-                                                    </tr>
-                                                     <tr>
-                                                        <td>Completed by user:</td>
-                                                        <td>                                                        
-                                                          <select class="form-control"  value="" name="task_completed_user" 
-                                                          id="task_completed_user_<?php echo $tasks_aggregate[$task_i]['id'];?>">
-                                                          <option value="1" <?php if ($tasks_aggregate[$task_i]['complete_user'] == 1) { echo " selected "; } ?>>
-                                                          Yes
-                                                          </option>
-                                                          <option value="0" <?php if ($tasks_aggregate[$task_i]['complete_user'] == 0) { echo " selected "; } ?>>
-                                                          No
-                                                          </option>
-                                                        </select>         
-                                                        </td>
-                                                    </tr>
-                                                     <tr>
-                                                        <td>Completed by admin:</td>
-                                                        <td>                                                        
-                                                          <select class="form-control"  value="" name="task_completed_admin" 
-                                                          id="task_completed_admin_<?php echo $tasks_aggregate[$task_i]['id'];?>">
-                                                          <option value="1" <?php if ($tasks_aggregate[$task_i]['complete_admin'] == 0) { echo " selected "; } ?>>
-                                                          Yes
-                                                          </option>
-                                                          <option value="0" <?php if ($tasks_aggregate[$task_i]['complete_admin'] == 0) { echo " selected "; } ?>>
-                                                          No
-                                                          </option>
-                                                        </select>         
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td>Task visibility:</td>
-                                                      <td>
-                                                        <select class="form-control"  value="" name="task_visibility" 
-                                                        id="task_visibility_<?php echo $tasks_aggregate[$task_i]['id'];?>">
-                                                          <option value="1" <?php if ($tasks_aggregate[$task_i]['internal_only'] == 1) { echo " selected "; } ?>>
-                                                          Internal Only
-                                                          </option>
-                                                          <option value="0" <?php if ($tasks_aggregate[$task_i]['internal_only'] == 0) { echo " selected "; } ?>>
-                                                          Public
-                                                          </option>
-                                                        </select>                                                         
-                                                      </td>
-                                                    </tr>                                                                                                      
-                                                    <?php
-                                                    for($notes_i=0;$notes_i<count($task_note_array);$notes_i++)
-                                                    {
-                                                      if ($task_note_array[$notes_i]['task_id'] != $tasks_aggregate[$task_i]['id'])
-                                                      {
-                                                        continue;
-                                                      }
-                                                      ?>
-                                                      <tr class="warning">
-                                                        <td colspan="2">
-                                                          <?php echo $task_note_array[$notes_i]['note'];?>
-                                                          <input type="hidden" name="hdn_note" value="<?php echo $task_note_array[$notes_i]['id'];?>">
-                                                        </td>
-                                                      </tr>                                                      
-                                                    <?php
-                                                    }
-                                                    ?>     
-                                                    <tr class="warning">
-                                                      <td colspan="2">                                                          
-                                                        <input type="textarea" name="new_note" id="new_note_<?php echo $tasks_aggregate[$task_i]['id'];?>">
-                                                      </td>
-                                                    </tr>                                                    
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                        </select>   
+                                      </div>
                                     </div>
-                                    <div class="panel-footer">
-                                          <?php if ($_SESSION['login'] == 1) { ?>
-                                          <button class="btn btn-sm btn-active" type="submit" id="btn_update_task" name="btn_update_task"
-                                                    data-toggle="tooltip" value="<?php echo $tasks_aggregate[$task_i]['id'];?>"
-                                                    data-original-title="Save changes"><i class="glyphicon glyphicon-floppy-disk"></i></button>
-                                          <?php }else{ ?>
-                                            <?php if ($tasks_aggregate[$task_i]['user_ack'] == 0) { // User has not acked this task?>
-                                              <button class="btn btn-sm btn-danger" type="submit" id="btn_ack_task" name="btn_ack_task"
-                                                    data-toggle="tooltip" value="<?php echo $tasks_aggregate[$task_i]['id'];?>"
-                                                    data-original-title="Mark task as read"><i class="glyphicon glyphicon-star-empty"></i>Unread</button>
-                                            <?php }else{ ?>
-                                              <button class="btn btn-sm btn-primary" type="submit" id="btn_ack_task" name="btn_ack_task"
-                                                    data-toggle="tooltip" value="<?php echo $tasks_aggregate[$task_i]['id'];?>"
-                                                    data-original-title="Task has been read" disabled><i class="glyphicon glyphicon-star"></i>Read</button>
-                                            <?php } ?>  
-                                          <?php } ?>
-                                          <span class="pull-right">
-                                            <?php if ($tasks_aggregate[$task_i]['internal_only'] == 1) { echo "<strong>Internal</strong>"; } ?>
-                                            <?php if ($tasks_aggregate[$task_i]['internal_only'] == 0) { echo "<strong>Public</strong>"; } ?>
-                                          </span>
+                                    
+                                    <div class="row" style="margin-bottom: 5px;">
+                                      <div class="col-md-4">
+                                        Item
+                                      </div>
+                                      <div class="col-md-6">
+                                       <select class="form-control"  value="" name="task_item" 
+                                          id="task_item_<?php echo $tasks_aggregate[$task_i]['id'];?>">
+                                            <?php foreach ($task_item_item as $key => $value)                                                                     
+                                            {
+                                            ?>
+                                              <option value="<?php echo $value;?>" <?php if ($tasks_aggregate[$task_i]['item'] == $value) { echo " selected "; } ?>>
+                                              <?php echo $value; ?>
+                                              </option>
+                                            <?php
+                                            }
+                                            ?>
+                                          </select> 
+                                      </div>
                                     </div>
+                                   
+                                    <div class="row" style="margin-bottom: 5px;">
+                                      <div class="col-md-4">
+                                        Subitem
+                                      </div>
+                                      <div class="col-md-6">
+                                       <select class="form-control"  value="" name="task_subitem"                                                    
+                                            id="task_subitem_<?php echo $tasks_aggregate[$task_i]['id'];?>">
+                                            <?php foreach ($task_item_subitem as $key => $value)                                                                     
+                                            {
+                                            ?>
+                                              <option value="<?php echo $value;?>" <?php if ($tasks_aggregate[$task_i]['subitem'] == $value) { echo " selected "; } ?>>
+                                              <?php echo $value; ?>
+                                              </option>
+                                            <?php
+                                            }
+                                            ?>
+                                          </select> 
+                                      </div>
+                                    </div>
+
+                                    <div class="row" style="margin-bottom: 5px;">
+                                      <div class="col-md-4">
+                                        Pos | Neg
+                                      </div>
+                                      <div class="col-md-6">
+                                       <select class="form-control"  value="" name="task_pos_neg" 
+                                        id="task_pos_neg_<?php echo $tasks_aggregate[$task_i]['id'];?>">
+                                          <option value="positive" <?php if ($tasks_aggregate[$task_i]['pos_neg'] == 'positive') { echo " selected "; } ?>>
+                                          +
+                                          </option>
+                                          <option value="negative" <?php if ($tasks_aggregate[$task_i]['pos_neg'] == 'negative') { echo " selected "; } ?>>
+                                          -
+                                          </option>
+                                        </select>          
+                                      </div>
+                                    </div>
+
+                                    <div class="row" style="margin-bottom: 5px;">
+                                      <div class="col-md-4">
+                                        Points
+                                      </div>
+                                      <div class="col-md-6">
+                                       <input type="number" class="form-control"  
+                                          value="<?php echo $tasks_aggregate[$task_i]['points'];?>" 
+                                          name="task_points" id="task_points_<?php echo $tasks_aggregate[$task_i]['id'];?>" required>        
+                                      </div>
+                                    </div>
+
+                                    <div class="row" style="margin-bottom: 5px;">
+                                      <div class="col-md-4">
+                                        Due
+                                      </div>
+                                      <div class="col-md-6">
+                                        <input type="text" class="input-sm form-control datepicker" name="task_due_date" 
+                                          id="task_due_date_<?php echo $tasks_aggregate[$task_i]['id'];?>" data-date-format="mm/dd/yyyy"/ 
+                                          value="<?php echo $tasks_aggregate[$task_i]['due_date']; ?>">        
+                                      </div>
+                                    </div>
+
+                                    <?php
+                                    // This is only visible to admins
+                                    if ($_SESSION['login'] == 1) { ?>
+                                    <div class="row" style="margin-bottom: 5px;">
+                                      <div class="col-md-4">
+                                        Completed
+                                      </div>
+                                      <div class="col-md-6">
+                                         <input type="text" class="input-sm form-control datepicker" name="task_completed_date" 
+                                          id="task_completed_date_<?php echo $tasks_aggregate[$task_i]['id'];?>" data-date-format="mm/dd/yyyy"/ 
+                                          value="<?php echo $tasks_aggregate[$task_i]['completed_date']; ?>">
+                                      </div>
+                                    </div>
+                                    <?php } ?>
+
+                                    <?php
+                                    // This is only visible to admins
+                                    if ($_SESSION['login'] == 1) { ?>
+                                    <div class="row" style="margin-bottom: 5px;">
+                                      <div class="col-md-4">
+                                        Completed by user
+                                      </div>
+                                      <div class="col-md-6">
+                                         <select class="form-control"  value="" name="task_completed_user" 
+                                          id="task_completed_user_<?php echo $tasks_aggregate[$task_i]['id'];?>">
+                                          <option value="1" <?php if ($tasks_aggregate[$task_i]['complete_user'] == 1) { echo " selected "; } ?>>
+                                          Yes
+                                          </option>
+                                          <option value="0" <?php if ($tasks_aggregate[$task_i]['complete_user'] == 0) { echo " selected "; } ?>>
+                                          No
+                                          </option>
+                                        </select>  
+                                      </div>
+                                    </div>
+                                    <?php } ?>
+
+                                    <?php
+                                    // This is only visible to admins
+                                    if ($_SESSION['login'] == 1) { ?>
+                                    <div class="row" style="margin-bottom: 5px;">
+                                      <div class="col-md-4">
+                                        Completed by admin
+                                      </div>
+                                      <div class="col-md-6">
+                                          <select class="form-control"  value="" name="task_completed_admin" 
+                                            id="task_completed_admin_<?php echo $tasks_aggregate[$task_i]['id'];?>">
+                                            <option value="1" <?php if ($tasks_aggregate[$task_i]['complete_admin'] == 0) { echo " selected "; } ?>>
+                                            Yes
+                                            </option>
+                                            <option value="0" <?php if ($tasks_aggregate[$task_i]['complete_admin'] == 0) { echo " selected "; } ?>>
+                                            No
+                                            </option>
+                                          </select>         
+                                      </div>
+                                    </div>
+                                    <?php } ?>
+
+                                    <?php
+                                    // This is only visible to admins
+                                    if ($_SESSION['login'] == 1) { ?>
+                                    <div class="row" style="margin-bottom: 5px;">
+                                      <div class="col-md-4">
+                                        Task visibility
+                                      </div>
+                                      <div class="col-md-6">
+                                          <select class="form-control"  value="" name="task_visibility" 
+                                            id="task_visibility_<?php echo $tasks_aggregate[$task_i]['id'];?>">
+                                              <option value="1" <?php if ($tasks_aggregate[$task_i]['internal_only'] == 1) { echo " selected "; } ?>>
+                                              Internal Only
+                                              </option>
+                                              <option value="0" <?php if ($tasks_aggregate[$task_i]['internal_only'] == 0) { echo " selected "; } ?>>
+                                              Public
+                                              </option>
+                                            </select>         
+                                      </div>
+                                    </div>
+                                    <?php } ?>
+
+
+                                    <div class="row" style="margin-bottom: 5px;">
+                                      <div class="col-md-4">
+                                        Notes
+                                      </div>
+                                        <div class="col-md-6 bg-warning">
+                                          <?php
+                                            for($notes_i=0;$notes_i<count($task_note_array);$notes_i++)
+                                            {
+                                              if ($task_note_array[$notes_i]['task_id'] != $tasks_aggregate[$task_i]['id'])
+                                              {
+                                                continue;
+                                              }
+                                              echo $task_note_array[$notes_i]['created_date'].": ";
+                                              echo $task_note_array[$notes_i]['note']."<br>\n";
+                                          ?>
+                                         <?php
+                                            }
+                                          ?>                                          
+                                        </div>   
+                                    </div>
+
+                                  </div>
+                                  <div class="modal-footer">
+                                    <span class="pull-left">
+                                      <?php
+                                      // This is only visible to non-admins since admins don't set user-completed
+                                      if ($_SESSION['login'] == 2) {
+                                        if ($tasks_aggregate[$task_i]['complete_user'] == 0) {
+                                          // This user has not marked this complete
+                                        ?>
+                                        <button class="btn btn-danger" type="submit" id="btn_ack_task" name="btn_ack_task" value="<?php echo $tasks_aggregate[$task_i]['id'];?>">Mark read & complete</button>
+                                        <?php } ?>
+                                      <?php }else{ ?>
+                                      <button type="submit" class="btn btn-primary" id="btn_update_task" name="btn_update_task" value="<?php echo $tasks_aggregate[$task_i]['id'];?>">Update</button>
+                                      <?php } ?>                                      
+                                      <input type="textarea" name="new_note" id="new_note_<?php echo $tasks_aggregate[$task_i]['id'];?>" placeholder="Add new note here." style='margin-left: 5px;'></span>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  </div>
                                 </div>
+                              </div>
                             </div>
-                        </div>
-                        </form>
+                          </form>
+                         <!-- /MODAL -->                                            
                         <?php
                         }
                         ?>
-
+                          </table>                           
+                        </div>
                       </div>
                     </div>
                                         
