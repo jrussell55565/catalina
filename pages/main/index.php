@@ -420,9 +420,9 @@ if (isset($_POST['broadcast_message']))
                            <div class="direct-chat-info clearfix">
                            <?php
                            if ($_SESSION['login'] != 1) {
-                              $assign_words  = "Task " . $tasks_aggregate[$i]['id'] . " Assigned by " . $tasks_aggregate[$i]['assigned_by'];                            
+                              $assign_words  = "<a href=".HTTP."/pages/dispatch/tasks.php?taskid=".$tasks_aggregate[$i]['id'].">Task " . $tasks_aggregate[$i]['id'] . "</a> Assigned by " . $tasks_aggregate[$i]['assigned_by'];                            
                            }else{
-                              $assign_words  = "Task " . $tasks_aggregate[$i]['id'] . " Assigned to " . $tasks_aggregate[$i]['real_name'] . " by " . $tasks_aggregate[$i]['assigned_by'];    
+                              $assign_words  = "<a href=".HTTP."/pages/dispatch/tasks.php?taskid=".$tasks_aggregate[$i]['id'].">Task " . $tasks_aggregate[$i]['id'] . "</a> Assigned to " . $tasks_aggregate[$i]['real_name'] . " by " . $tasks_aggregate[$i]['assigned_by'];    
                            }                           
                            ?>
                            <span class="direct-chat-name pull-left"><?php echo $assign_words; ?></span>
@@ -853,13 +853,14 @@ if (isset($_POST['broadcast_message']))
             </tbody>
           </table>
       </div>
-      <div class="modal-footer">
-        <h4>Click on the button to read your tasks.</h4>
-        
-        <a href="<?php echo HTTP;?>/pages/dispatch/tasks.php">
-        <button type="button" class="btn btn-default">View Tasks</button>        
-        </a>
-      </div>
+      
+        <div class="modal-footer"  style="text-align:left;">
+          <span class="pull-left"><h4>Click on the button to read your tasks.</h4>      
+          <a href="<?php echo HTTP;?>/pages/dispatch/tasks.php">
+          <button type="button" class="btn btn-default">View Tasks</button>        
+          </a></span>
+        </div>
+      
     </div>
 
   </div>

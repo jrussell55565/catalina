@@ -1201,8 +1201,23 @@ $(document).ready(function() {
 
 
     $('[data-toggle="tooltip"]').tooltip();
-    
+  
+  
+
 });
+</script>
+
+<script type="text/javascript">
+$(window).load(function()
+{
+  <?php 
+  // If we have $_GET['taskid'] set then just show the modal
+  if (isset($_GET['taskid'])) {    
+    //echo "$('#modal_".$_GET['taskid']."').modal('show');\n";
+  }
+  ?>
+});
+
 </script>
 <!-- Date Picker -->
 <script src="<?php echo HTTP;?>/dist/js/bootstrap-datepicker.js"></script>
