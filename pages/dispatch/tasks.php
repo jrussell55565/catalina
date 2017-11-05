@@ -369,6 +369,7 @@ $task_cat_item = array_unique($task_cat_item);
 $task_item_item = array_unique($task_item_item);
 $task_item_subitem = array_unique($task_item_subitem);
 
+$today = date("m/d/y");
 ?>
 <!DOCTYPE html>
 <html>
@@ -1056,12 +1057,19 @@ $task_item_subitem = array_unique($task_item_subitem);
                                           ?>
                                          <?php
                                             }
-                                          ?>                                          
-                                        </div>   
+                                          ?>                                                                                    
+                                        </div>                                           
                                     </div>
+                                    <div class="row" style="margin-bottom: 5px;">
+                                      <div class="col-md-4">
+                                        &nbsp;
+                                      </div>
+                                      <div class="col-md-6">
+                                    <input type="textarea" name="new_note" id="new_note_<?php echo $tasks_aggregate[$task_i]['id'];?>" placeholder="Add new note here." style='width: 100%;'>
+                                      </div>
 
                                   </div>
-                                  <div class="modal-footer">
+                                  <div class="modal-footer">\                                    
                                     <span class="pull-left">
                                       <?php
                                       // This is only visible to non-admins since admins don't set user-completed
@@ -1070,13 +1078,14 @@ $task_item_subitem = array_unique($task_item_subitem);
                                           // This user has not marked this complete
                                         ?>
                                         <button class="btn btn-primary" type="submit" id="btn_ack_task" name="btn_ack_task" value="<?php echo $tasks_aggregate[$task_i]['id'];?>">Mark acknowledged</button>
-                                        <button class="btn btn-danger" type="submit" id="btn_complete_task" name="btn_complete_task" value="<?php echo $tasks_aggregate[$task_i]['id'];?>">Mark read & complete</button>
+                                        <button class="btn btn-danger" type="submit" id="btn_complete_task" name="btn_complete_task" value="<?php echo $tasks_aggregate[$task_i]['id'];?>">Mark complete</button>
                                         <?php } ?>
                                       <?php }else{ ?>
                                       <button type="submit" class="btn btn-primary" id="btn_update_task" name="btn_update_task" value="<?php echo $tasks_aggregate[$task_i]['id'];?>">Update</button>
                                       <?php } ?>                                      
-                                      <input type="textarea" name="new_note" id="new_note_<?php echo $tasks_aggregate[$task_i]['id'];?>" placeholder="Add new note here." style='margin-left: 5px;'></span>
+                                      </span>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    
                                   </div>
                                 </div>
                               </div>
@@ -1214,7 +1223,11 @@ $(document).ready(function() {
 
     $('[data-toggle="tooltip"]').tooltip();
   
-  
+  // If we click 'mark read and complete' then a note is required
+  $("#btn_complete_task").on( "click", function() {
+    task_id = $("#btn_complete_task").val();    
+    $("#new_note_"+task_id).prop('required',true);        
+  });
 
 });
 </script>
@@ -1242,6 +1255,8 @@ datesDisabled: '0',
 todayHighlight: true,
 });
 </script>
+
+
 
 </body>
 </html>
