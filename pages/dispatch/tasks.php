@@ -1069,7 +1069,7 @@ $today = date("m/d/y");
                                       </div>
 
                                   </div>
-                                  <div class="modal-footer">\                                    
+                                  <div class="modal-footer">                                   
                                     <span class="pull-left">
                                       <?php
                                       // This is only visible to non-admins since admins don't set user-completed
