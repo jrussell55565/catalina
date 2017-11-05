@@ -51,16 +51,16 @@ if ( (isset($_POST['btn_ack_task'])) || (isset($_POST['btn_complete_task'])) ) {
     $id = $_POST['btn_ack_task'];
 
     $update_task = "update tasks set
-      user_ack = 1,
+      user_ack = 1
       where id = $id";
   }
-  
+
   if (isset($_POST['btn_complete_task'])){
     // This is a user acknowledging that they read their tasks
     $id = $_POST['btn_complete_task'];
 
     $update_task = "update tasks set
-      user_complete = 1,
+      complete_user = 1
       where id = $id";
   }
 
@@ -1070,7 +1070,7 @@ $task_item_subitem = array_unique($task_item_subitem);
                                           // This user has not marked this complete
                                         ?>
                                         <button class="btn btn-primary" type="submit" id="btn_ack_task" name="btn_ack_task" value="<?php echo $tasks_aggregate[$task_i]['id'];?>">Mark acknowledged</button>
-                                        <button class="btn btn-danger" type="submit" id="btn_ack_task" name="btn_ack_task" value="<?php echo $tasks_aggregate[$task_i]['id'];?>">Mark read & complete</button>
+                                        <button class="btn btn-danger" type="submit" id="btn_complete_task" name="btn_complete_task" value="<?php echo $tasks_aggregate[$task_i]['id'];?>">Mark read & complete</button>
                                         <?php } ?>
                                       <?php }else{ ?>
                                       <button type="submit" class="btn btn-primary" id="btn_update_task" name="btn_update_task" value="<?php echo $tasks_aggregate[$task_i]['id'];?>">Update</button>
