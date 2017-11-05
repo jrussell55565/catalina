@@ -330,7 +330,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'true')
 } else {
   // If we're a non-admin we only get to see our tasks (and they can't be internal_only)
   if ($_SESSION['login'] == 2) {
-    $driver_predicate = "assign_to = '".$_SESSION['employee_id']."' and internal_only = 0";  
+    $driver_predicate = "assign_to = '".$_SESSION['employee_id']."' and internal_only = 0 AND complete_user = 0";  
   }else{
     // The default, only get the Active employees
     $driver_predicate = 'users.status = "Active"';
