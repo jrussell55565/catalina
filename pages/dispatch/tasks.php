@@ -309,7 +309,7 @@ if (isset($_POST['btn_add_task'])) {
 
 // Defaults
 $driver_predicate = '1=1';
-$task_status_predicate = 'complete_user = 0 AND complete_approved = 0';  
+$task_status_predicate = 'complete_approved = 0';  
 
 // Overrides
 if (isset($_GET['search']) && $_GET['search'] == 'true')
