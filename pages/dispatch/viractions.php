@@ -14,26 +14,28 @@ $mysqli = new mysqli($db_hostname, $db_username, $db_password, $db_name);
 
 if (isset($_POST['vir_item']) && isset($_POST['vir_status']))
 {
-# AJAX call to update vir status
-## Let's see if we are trying to close the ticket
-if (! isset($_POST['repair_notes'])) { $repair_notes = "NULL"; }else{ $repair_notes = '"'.$_POST['repair_notes'].'"'; }
-if (! isset($_POST['repair_cost'])) { $repair_cost = "NULL"; }else{ $repair_cost = $_POST['repair_cost']; }
-if (! isset($_POST['repair_by'])) { $repair_by = "NULL"; }else{ $repair_by = '"'.$_POST['repair_by'].'"'; }
-if (! isset($_POST['work_order_no'])) { $work_order = "NULL"; }else{ $work_order = $_POST['work_order_no']; }
+    # AJAX call to update vir status
+    ## Let's see if we are trying to close the ticket
+    if (! isset($_POST['repair_notes'])) { $repair_notes = "NULL"; }else{ $repair_notes = '"'.$_POST['repair_notes'].'"'; }
+    if (! isset($_POST['repair_cost'])) { $repair_cost = "NULL"; }else{ $repair_cost = $_POST['repair_cost']; }
+    if (! isset($_POST['repair_by'])) { $repair_by = "NULL"; }else{ $repair_by = '"'.$_POST['repair_by'].'"'; }
+    if (! isset($_POST['work_order_no'])) { $work_order = "NULL"; }else{ $work_order = $_POST['work_order_no']; }
 
-$sql = "UPDATE virs SET updated_status = \"".$_POST['vir_status']."\",
-        repair_notes = $repair_notes,
-        repair_cost = $repair_cost,
-        repair_by = $repair_by,
-        work_order = $work_order
-        WHERE vir_itemnum = ".$_POST['vir_item'];
+    $sql = "UPDATE virs SET updated_status = \"".$_POST['vir_status']."\",
+            repair_notes = $repair_notes,
+            repair_cost = $repair_cost,
+            repair_by = $repair_by,
+            work_order = $work_order
+            WHERE vir_itemnum = ".$_POST['vir_item'];
 
-if (! mysql_query($sql))
-{
-    echo('Unable to update `updated_status`' . mysql_error());
+    if (! mysql_query($sql))
+    {
+        echo('Unable to update `updated_status`' . mysql_error());
+    }
+    exit;
 }
-exit;
-}
+
+// POST from vir.php
 
 # USER info
 $statement = 'SELECT employee_id,fname,lname from users where username = "'.$_SESSION['userid'].'"';
@@ -417,7 +419,18 @@ if (($trucktype == 'combo') && ($trailer_number != ''))
 # Process file upload (if exists)
 // Set the default value of the $images var
 $images = "Driver uploaded no images.";
-if ($_FILES['fileToUpload']['size'][0] > 0){
+
+// Validate whether we uploaded or not
+$foundFile = 0;
+for ($i=0; $i < sizeof($_FILES["fileToUpload"]); $i++) { 
+    if (! empty($_FILES["fileToUpload"]["name"][$i]))
+    {
+        $foundFile = $foundFile + 1;
+    }
+}
+
+// If we found files...
+if ($foundFile > 0) {    
     // Get the po (truck or trailer)
     if (is_int($truck_po)) {
         // This is a truck, use that
