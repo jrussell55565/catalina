@@ -45,7 +45,7 @@ sub get_birthdays
         my $to = $row[1];
         my $subject = "Happy Birthday!";
         my $body = "Happy Birthday, ".$row[4];
-        vtext_notify($to, $subject, $body);
+        vtext_notify($to, $subject, $body, $row[2]);
     }
 
     $dbh->disconnect();
@@ -87,6 +87,7 @@ sub vtext_notify
         my $toaddress = shift;
         my $subject = shift;
         my $body = shift;
+        my $cc = shift;
 
         $smtp = Net::SMTP->new('localhost');
 
@@ -97,6 +98,7 @@ sub vtext_notify
         $smtp->data();
         $smtp->datasend("To: $toaddress\n");
         $smtp->datasend("Subject: $subject\n");
+        $smtp->datasend("CC: $cc\n");
         $smtp->datasend("\n");
         $smtp->datasend("$body\n");
         $smtp->dataend();
