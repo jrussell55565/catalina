@@ -45,14 +45,25 @@ if (isset($_POST['ajax_complete_task'])){
   }
 }
 
-if (isset($_POST['btn_ack_task'])) {  
-  // This is a user acknowledging that they read their tasks
-  $id = $_POST['btn_ack_task'];
+if ( (isset($_POST['btn_ack_task'])) || (isset($_POST['btn_complete_task'])) ) {  
+  if (isset($_POST['btn_ack_task'])){
+    // This is a user acknowledging that they read their tasks
+    $id = $_POST['btn_ack_task'];
 
-  $update_task = "update tasks set
-    user_ack = 1, complete_user = 1
-    where id = $id";
+    $update_task = "update tasks set
+      user_ack = 1,
+      where id = $id";
+  }
   
+  if (isset($_POST['btn_complete_task'])){
+    // This is a user acknowledging that they read their tasks
+    $id = $_POST['btn_complete_task'];
+
+    $update_task = "update tasks set
+      user_complete = 1,
+      where id = $id";
+  }
+
   $new_note = $_POST['new_note'];
   if ($new_note != '') {
     // Let's insert the new note
@@ -1058,6 +1069,7 @@ $task_item_subitem = array_unique($task_item_subitem);
                                         if ($tasks_aggregate[$task_i]['complete_user'] == 0) {
                                           // This user has not marked this complete
                                         ?>
+                                        <button class="btn btn-primary" type="submit" id="btn_ack_task" name="btn_ack_task" value="<?php echo $tasks_aggregate[$task_i]['id'];?>">Mark acknowledged</button>
                                         <button class="btn btn-danger" type="submit" id="btn_ack_task" name="btn_ack_task" value="<?php echo $tasks_aggregate[$task_i]['id'];?>">Mark read & complete</button>
                                         <?php } ?>
                                       <?php }else{ ?>
