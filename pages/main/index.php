@@ -349,21 +349,28 @@ if (isset($_POST['broadcast_message']))
                   <?php
                   $open_tasks = 0;
                   for($i=0;$i<count($tasks_aggregate);$i++) {
-                    if ($_SESSION['login'] != 1) {
+                    if ($_SESSION['login'] == 1) {
+                      // I'm an admin. I want to see anything that is complete_approved = 0
+                      if ($tasks_aggregate[$i]['complete_approved'] == 0) {
+                        $open_tasks++;
+                      } 
+                    }else{
+                      // I'm a non admin, I only want to see my tasks, and my tasks that are
+                      // open (complete_user) and my tasks that are public
                       if ($tasks_aggregate[$i]['assign_to'] != $_SESSION['employee_id']) {
                         continue;
                       }
                       if ($tasks_aggregate[$i]['internal_only'] == 1) {
                         continue;
                       }                      
-                    }
-                    if ($tasks_aggregate[$i]['complete_user'] != 0) {
-                      continue;
-                    }                    
-                    $open_tasks++;
+                      if ($tasks_aggregate[$i]['complete_user'] != 0) {
+                        continue;
+                      } 
+                      $open_tasks++;
+                    }                      
                   }
                   ?>
-                  <h3 class="box-title">Tasks <?php echo $open_tasks; ?></h3>
+                  <h3 class="box-title">Tasks: <?php echo $open_tasks; ?></h3>
                   <div class="box-tools pull-right">
                   <!-- Total New Messages Add PHP Here Just for new messages Events today -->
                     <a href="../dispatch/tasks.php"><span data-toggle="tooltip" title="Add Tasks" class="badge bg-light-blue">Add Task</span></a>
