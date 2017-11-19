@@ -1123,7 +1123,7 @@ $today = date("m/d/y");
 
 
 
-
+</div>
 <?php require($_SERVER['DOCUMENT_ROOT'].'/dist/menus_sidebars_elements/footer.php');?>
 
 <!-- Control Sidebar -->
@@ -1210,14 +1210,14 @@ $(document).ready(function() {
     $("#new_note_"+task_id).prop('required',true);        
   });
 
-  <?php 
-  // If we have $_GET['taskid'] set then just show the modal
-  if (isset($_GET['taskid'])) {
-  ?>
-    //$("#modal_288").modal('show');
-    //echo "$('#modal_".$_GET['taskid']."').modal('show');\n";
-    console.log('here');
   <?php
+  if (isset($_GET['search'])) { 
+      // Show the box and modal if this is a GET request.
+      echo "$(\"#box_".$_GET['search_employee']."\").show();\n";    
+      if (isset($_GET['taskid'])) {    
+        // Show the box and modal if this is a GET request.      
+        echo "$(\"#modal_".$_GET['taskid']."\").modal('show');\n";
+      } 
   }
   ?>
 

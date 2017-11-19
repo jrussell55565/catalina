@@ -420,10 +420,11 @@ if (isset($_POST['broadcast_message']))
                            <div class="direct-chat-info clearfix">
                            <?php
                            if ($_SESSION['login'] != 1) {
-                              $assign_words  = "<a href=".HTTP."/pages/dispatch/tasks.php?taskid=".$tasks_aggregate[$i]['id'].">Task " . $tasks_aggregate[$i]['id'] . "</a> Assigned by " . $tasks_aggregate[$i]['assigned_by'];                            
+                              $assign_words  = "<a href=".HTTP."/pages/dispatch/tasks.php?taskid=".$tasks_aggregate[$i]['id']."&search_employee=".$tasks_aggregate[$i]['assign_to']."&task_status=all&search=true>Task " . $tasks_aggregate[$i]['id'] . "</a> Assigned by " . $tasks_aggregate[$i]['assigned_by'];                            
                            }else{
-                              $assign_words  = "<a href=".HTTP."/pages/dispatch/tasks.php?taskid=".$tasks_aggregate[$i]['id'].">Task " . $tasks_aggregate[$i]['id'] . "</a> Assigned to " . $tasks_aggregate[$i]['real_name'] . " by " . $tasks_aggregate[$i]['assigned_by'];    
-                           }                           
+                              $assign_words  = "<a href=".HTTP."/pages/dispatch/tasks.php?taskid=".$tasks_aggregate[$i]['id']."&search_employee=".$tasks_aggregate[$i]['assign_to']."&task_status=all&search=true>Task " . $tasks_aggregate[$i]['id'] . "</a> Assigned to " . $tasks_aggregate[$i]['real_name'] . " by " . $tasks_aggregate[$i]['assigned_by'];    
+                           }       
+                                               
                            ?>
                            <span class="direct-chat-name pull-left"><?php echo $assign_words; ?></span>
                            <span class="direct-chat-timestamp pull-right"><?php echo $tasks_aggregate[$i]['submit_date'];?></span>
