@@ -140,6 +140,7 @@ if (isset($_POST['btn_update_task'])) {
 
   if ($new_note != '') {
     // Let's insert the new note
+    $new_note = $mysqli->real_escape_string($new_note);
     $insert_note = "insert into task_notes (task_id, note) values 
     ($id, '$new_note')";
   }else{
@@ -242,6 +243,7 @@ if (isset($_POST['btn_add_task'])) {
 
     if (sizeof($new_note) > 0) {
       // Let's insert the new note
+      $new_note = $mysqli->real_escape_string($new_note);
       $insert_note = "insert into task_notes (task_id, note) values 
       ($task_id, '$new_note')";
     }    
@@ -765,12 +767,14 @@ $today = date("m/d/y");
                 $task_users = [];
                 for($i=0;$i<count($tasks_aggregate);$i++)
                 {
-                  array_push($task_users, $tasks_aggregate[$i]['real_name']);
-                }                
+                  #array_push($task_users, $tasks_aggregate[$i]['real_name']);
+                  array_push($task_users,array('real_name'=>$tasks_aggregate[$i]['real_name'],'employee_id' => $tasks_aggregate[$i]['assign_to']));
+                } 
                 $task_users = array_unique($task_users);                
-                // Now loop through the users array to create the outer box               
-                foreach ($task_users as $task_users_i => $task_users_name) {
-                  $task_users_name_replaced = str_replace(" ","_",$task_users_name);
+                // Now loop through the users array to create the outer box
+                for($i=0;$i<count($task_users);$i++) {
+                $task_users_name = $task_users[$i]['real_name'];
+                $task_employee_id = $task_users[$i]['employee_id'];
                 ?>                
                 <div class="container">
                  <div class="well col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
@@ -796,11 +800,11 @@ $today = date("m/d/y");
                             <div class="col-xs-8 col-sm-9 col-md-10 col-lg-10">
                                 <strong><?php echo $task_users_name; ?></strong><br>                                
                             </div>
-                            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 dropdown-user" data-for=".cyruxx_<?php echo $task_users_name_replaced; ?>">
+                            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 dropdown-user" data-for=".cyruxx_<?php echo $task_employee_id; ?>">
                                 <i class="glyphicon glyphicon-chevron-down text-muted"></i>
                             </div>
                         </div>
-                        <div class="box-body table-responsive cyruxx_<?php echo $task_users_name_replaced; ?>" style="display: none;">
+                        <div class="box-body table-responsive cyruxx_<?php echo $task_employee_id; ?>" style="display: none;" id="box_<?php echo $task_employee_id;?>">
                         <table class="table table-striped ">
                         <thead>
                           <tr>
@@ -1110,30 +1114,7 @@ $today = date("m/d/y");
             </div>
           </div>         
          <!-- Top Box Full sized window Close Out-->      
-
-        
-        
          
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
 
@@ -1229,21 +1210,20 @@ $(document).ready(function() {
     $("#new_note_"+task_id).prop('required',true);        
   });
 
-});
-</script>
-
-<script type="text/javascript">
-$(window).load(function()
-{
   <?php 
   // If we have $_GET['taskid'] set then just show the modal
-  if (isset($_GET['taskid'])) {    
+  if (isset($_GET['taskid'])) {
+  ?>
+    //$("#modal_288").modal('show');
     //echo "$('#modal_".$_GET['taskid']."').modal('show');\n";
+    console.log('here');
+  <?php
   }
   ?>
-});
 
+});
 </script>
+
 <!-- Date Picker -->
 <script src="<?php echo HTTP;?>/dist/js/bootstrap-datepicker.js"></script>
 <script>
